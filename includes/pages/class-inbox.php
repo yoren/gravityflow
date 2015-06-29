@@ -1,0 +1,113 @@
+<?php
+
+if ( ! class_exists( 'GFForms' ) ) {
+	die();
+}
+
+
+class Gravity_Flow_Inbox {
+
+	public static function display( $admin_ui ){
+		global $current_user;
+
+		$field_filters[] = array(
+			'key'   => 'workflow_user_id_' . $current_user->ID,
+			'value' => 'pending',
+		);
+		$user_roles = gravity_flow()->get_user_roles();
+		foreach ( $user_roles as $user_role ) {
+			$field_filters[] = array(
+				'key'   => 'workflow_role_' . $user_role,
+				'value' => 'pending',
+			);
+		}
+
+		$field_filters['mode'] = 'any';
+
+		$search_criteria['field_filters'] = $field_filters;
+		$search_criteria['status'] = 'active';
+
+		$entries = GFAPI::get_entries( 0, $search_criteria );
+
+
+		if ( sizeof( $entries ) > 0 ) {
+			?>
+
+			<table id="gravityflow-inbox" class="widefat" cellspacing="0" style="border:0px;">
+				<thead>
+				<tr>
+					<th data-label="<?php esc_html_e( 'ID', 'gravityflow' ); ?>"><?php esc_html_e( 'ID', 'gravityflow' ); ?></th>
+					<th><?php esc_html_e( 'Form', 'gravityflow' ); ?></th>
+					<th><?php esc_html_e( 'Submitted by', 'gravityflow' ); ?></th>
+					<th><?php esc_html_e( 'Step', 'gravityflow' ); ?></th>
+					<th><?php esc_html_e( 'Submitted', 'gravityflow' ); ?></th>
+				</tr>
+				</thead>
+
+				<tbody class="list:user user-list">
+				<?php
+				foreach ( $entries as $entry ) {
+					$form = GFAPI::get_form( $entry['form_id'] );
+					$user = get_user_by( 'id', (int) $entry['created_by'] );
+					$name = $user ? $user->display_name : $entry['ip'];
+					$base_url = $admin_ui ? admin_url( 'admin.php?page=gravityflow-inbox&' ) : 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}/{$_SERVER['REQUEST_URI']}?";
+					$url_entry = sprintf( '%sview=entry&id=%d&lid=%d', $base_url, $entry['form_id'], $entry['id'] );
+					$link = "<a href='{$url_entry}'>%s</a>";
+					?>
+					<tr>
+						<td data-label="<?php esc_html_e( 'ID', 'gravityflow' ); ?>">
+							<?php
+							printf( $link, $entry['id'] );
+							?>
+						</td>
+						<td data-label="<?php esc_html_e( 'Form', 'gravityflow' ); ?>">
+							<?php
+							printf( $link, $form['title'] );
+							?>
+						</td>
+						<td data-label="<?php esc_html_e( 'Submitted by', 'gravityflow' ); ?>">
+							<?php
+							printf( $link, $name );
+
+							?>
+						</td>
+						<td data-label="<?php esc_html_e( 'Step', 'gravityflow' ); ?>">
+							<?php
+							if ( isset(  $entry['workflow_step'] ) ) {
+								$step = gravity_flow()->get_step( $entry['workflow_step'] );
+								if ( $step ) {
+									printf( $link, $step->get_name() );
+								}
+							}
+
+							?>
+						</td>
+						<td data-label="<?php esc_html_e( 'Submitted', 'gravityflow' ); ?>">
+							<?php
+
+							printf ( $link, GFCommon::format_date( $entry['date_created'] ) );
+							?>
+						</td>
+					</tr>
+				<?php
+				}
+				?>
+				</tbody>
+			</table>
+
+		<?php
+		} else {
+			?>
+				<div id="gravityflow-no-pending-tasks-container">
+					<div id="gravityflow-no-pending-tasks-content">
+						<i class="fa fa-check-circle-o gravityflow-inbox-check"></i>
+						<br /><br />
+						<?php esc_html_e( "No pending tasks", 'gravityflow' ); ?>
+					</div>
+
+				</div>
+			<?php
+		}
+	}
+
+}

@@ -1,0 +1,204 @@
+/* The little triangle indicator */
+.gravityflow-input-required {
+    width: 10em;
+    height: 6em;
+    position: relative;
+}
+
+.gravityflow-input-required::before,
+.gravityflow-input-required::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-color: transparent;
+    border-style: solid;
+}
+
+.gravityflow-input-required::before {
+    border-width: 0.5em;
+    border-left-color: #ccc;
+    border-top-color: #ccc;
+}
+
+.gravityflow-input-required::after {
+    border-radius: 0.1em;
+    border-width: 0.6em;
+    border-left-color: #0c0;
+    border-top-color: #0c0;
+}
+
+/* Notes */
+
+.gravityflow-note-avatar{
+    float: left;
+    width: 84px;
+    text-align:center;
+    padding-right:10px;
+}
+
+
+.gravityflow-note-body-wrap{
+    border: 1px solid #E0E0E0;
+    margin-left: 100px;
+    padding: 10px;
+    display:block;
+}
+
+.gravityflow-note-body{
+    line-height: 1.3em;
+    overflow: auto;
+    width: 100%;
+    word-wrap: break-word;
+    display:block;
+}
+
+.gravityflow-note-header:before,
+.gravityflow-note-header:after {
+    content: "";
+    display: table;
+    line-height: 0;
+}
+
+.gravityflow-note-header:after{
+    clear: both;
+}
+
+.gravityflow-note-title{
+    float: left;
+    margin-bottom:0.5em;
+    font-size:1.2em;
+    color:#939FA5;
+}
+.gravityflow-note-title a {
+    font-weight:bold;
+    text-decoration: none;
+}
+
+.gravityflow-note-body{
+    overflow-y: hidden;
+    display: block;
+}
+
+.gravityflow-note-meta{
+    color: #939FA5;
+    float: right;
+    font-size: 11px;
+    text-align: right;
+    display: block;
+}
+
+.gravityflow-note-body-wrap{
+    background-color:#FFF;
+}
+
+.gravityflow-note-user{
+    background-color:#FFF8DC;
+}
+
+/* Notes */
+
+#gravityflow-add-note-container{
+    float:right;
+}
+
+.gravityflow-note{
+
+    margin:20px 0 30px;
+
+    width:100%;
+}
+#gravityflow-note-content{
+    padding:10px;
+    float:left;
+    position: relative;
+}
+
+.gravityflow-notes-checkbox{
+    width:20px;
+    display:table-cell;
+    vertical-align:top;
+    padding:15px 0 0 5px;
+
+}
+
+#gravityflow-note-new{
+    width: 100%;
+    display: table;
+}
+
+/*
+.gravityflow-note-body-wrap{
+    margin: 0 20px 0 74px;
+    padding: 20px;
+    display:block;
+}
+*/
+.gravityflow-note-body{
+    line-height: 1.3em;
+    overflow: auto;
+    width: 100%;
+    word-wrap: break-word;
+    display:block;
+}
+
+.gravityflow-note-header:before,
+.gravityflow-note-header:after
+{
+    content: "";
+    display: table;
+    line-height: 0;
+}
+
+.gravityflow-note-header:after{
+    clear: both;
+}
+
+.gravityflow-note-title{
+    float: left;
+    margin-bottom:0.5em;
+    font-size:1.2em;
+    color:#939FA5;
+}
+.gravityflow-note-title a {
+    font-weight:bold;
+    text-decoration: none;
+}
+
+.gravityflow-note-body{
+    overflow-y: hidden;
+    display: block;
+}
+
+.gravityflow-note-meta{
+    color: #939FA5;
+    float: right;
+    font-size: 11px;
+    text-align: right;
+    display: block;
+}
+
+#gravityflow-admin-action{
+    width:170px;
+
+}
+
+
+@media screen and (max-width: 850px) {
+    .has-right-sidebar #post-body {
+        clear: left;
+        float: right;
+        width: 100%;
+        margin-right: 0;
+    }
+    .has-right-sidebar .inner-sidebar{
+        width:100%;
+    }
+
+    .has-right-sidebar #post-body-content {
+        margin-right: 0!important;
+    }
+
+
+
+}

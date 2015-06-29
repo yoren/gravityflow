@@ -1,0 +1,108 @@
+.repeater-buttons{
+    display:inline-block;
+}
+.gform-routing-users,
+.gform-routing-field{
+    width:100%;
+	min-width:150px;
+}
+.gform-routing-operator{
+    width:120px;
+}
+.gform-routing-value{
+    width:190px;
+}
+
+.mt-_gaddon_setting_assignee_notification_message,
+.mt-_gaddon_setting_rejection_notification_message,
+.mt-_gaddon_setting_approval_notification_message,
+.mt-_gaddon_setting_assignee_notification_message {
+    float: right;
+    position: relative;
+    right: 15px;
+    top: 90px;
+}
+
+#wp-_gaddon_setting_assignee_notification_message-wrap,
+#wp-_gaddon_setting_rejection_notification_message-wrap,
+#wp-_gaddon_setting_approval_notification_message-wrap,
+#wp-_gaddon_setting_assignee_notification_message-wrap {
+    margin-right: 15px;
+}
+
+.gform-routing-row{
+    vertical-align: top;
+}
+
+#assignees,
+#editable_fields,
+#editable_fields{
+    width:18em;
+    height:10em;
+}
+
+table.gforms_form_settings th{
+    border-left: 0;
+    padding-left: 0!important;
+}
+
+table.gforms_form_settings tr.gravityflow_sub_setting th{
+    border-left: 1px dashed #dfdfdf;
+    padding-left: 10px!important;
+}
+
+table.gforms_form_settings tr.gravityflow_sub_setting td{
+    padding-left: 10px;
+}
+
+table.gform-routings thead th{
+    padding: 0;
+}
+
+table.gform-routings tr.gform-routing-row td{
+    vertical-align: top;
+}
+
+table.gform-routings tr.gform-routing-row td .repeater-buttons{
+    white-space: nowrap;
+}
+
+.ui-tabs-nav{
+    background-color:#f6fbfd !important;
+}
+
+.gravityflow-tab-checked{
+    color:green;
+}
+
+.gravityflow-tab-field{
+    margin-bottom: 20px;
+}
+
+.gravityflow-tab-field-label{
+    margin-bottom: 4px;
+}
+
+.gravityflow-user-routing{
+    border:1px solid #EEE;
+    padding: 10px;
+}
+
+.ms-container{
+    width:550px!important;
+}
+
+.gform-routing-input-field{
+    width:100%;
+}
+
+#gaddon-setting-row-step_type td label{
+	display:inline-block;
+	width:150px;
+	padding-right:10px;
+	padding-bottom:10px;
+}
+
+.gravityflow-schedule-type-container{
+    margin:5px 0 5px 0;
+}

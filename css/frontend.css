@@ -1,0 +1,512 @@
+.has-right-sidebar .inner-sidebar {
+    display: block;
+}
+.inner-sidebar {
+    clear: right;
+    display: none;
+    float: right;
+    position: relative;
+
+}
+table.entry-detail-view {
+    width:100%;
+    border:0;
+    table-layout: fixed;
+}
+table.entry-detail-view th,
+table.entry-detail-view td{
+    border-right:0;
+}
+.postbox {
+    min-width: 200px;
+    position: relative;
+    width:100%;
+}
+.has-right-sidebar #post-body-content {
+    float: none;
+
+    width: auto;
+}
+#post-body-content, .edit-form-section {
+    margin-bottom: 20px;
+}
+
+.has-right-sidebar #post-body {
+    clear: left;
+    float: left;
+
+    width: 100%;
+    margin-right: -260px;
+   padding-right: 260px;
+}
+
+.gravityflow_workflow_wrap{
+    font-size:14px;
+}
+
+
+.gravityflow_workflow_wrap h3{
+    font-size:1.2em;
+    margin:10px;
+}
+
+.gravityflow_workflow_wrap h4{
+    margin:0;
+}
+
+.gravityflow_workflow_wrap h4{
+    font-size:1em;
+}
+
+.gravityflow_workflow_wrap button,
+.gravityflow_workflow_wrap input,
+.gravityflow_workflow_wrap select {
+    padding:4px;
+}
+
+.inner-sidebar .postbox {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #e5e5e5;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+    min-width: 225px;
+    position: relative;
+    width:200px;
+    font-size:11px;
+}
+.postbox, .stuffbox {
+    line-height: 1;
+    margin-bottom: 20px;
+    padding: 0;
+}
+.inner-sidebar hr {
+    margin:10px;
+}
+
+.inner-sidebar .button{
+    background: #f7f7f7 none repeat scroll 0 0;
+    border-color: #cccccc;
+    box-shadow: 0 1px 0 #fff inset, 0 1px 0 rgba(0, 0, 0, 0.08);
+    color: #555;
+    vertical-align: top;
+
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 11px;
+    height: 28px;
+    line-height: 26px;
+    margin: 0;
+    padding: 0 10px 1px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.inner-sidebar input[type=radio]{
+    margin-right:5px;
+    white-space: nowrap;
+}
+#gravityflow-note{
+    margin-top:5px;
+}
+
+
+thead tr {background: #FFF}
+tr:nth-child(even) {background: #f9f9f9}
+tr:nth-child(odd) {background: #FFF}
+
+table#gravityflow-inbox {border-collapse:collapse;}
+table#gravityflow-inbox td {display:table-cell;padding:0px;}
+table#gravityflow-inbox td a {text-decoration:none!important; display:block; padding:10px; height:100%; border-bottom:none;}
+
+#gravityflow-no-pending-tasks-container{
+
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+
+    height:400px;
+    text-align:center;
+}
+#gravityflow-no-pending-tasks-content{
+    color: silver;
+    font-size: 2em;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.gravityflow-inbox-check{
+    font-size: 5em;
+}
+
+table.entry-products col.entry-products-col3,
+table.entry-products col.entry-products-col4{
+    width:20%
+}
+
+.wp-core-ui .notice.is-dismissible {
+    padding-right: 38px;
+    position: relative;
+}
+.wrap .notice, .wrap div.updated, .wrap div.error, .media-upload-form .notice, .media-upload-form div.error {
+    margin: 5px 0 15px;
+}
+.wrap .notice, .wrap div.updated, .wrap div.error, .media-upload-form .notice, .media-upload-form div.error {
+    margin: 5px 0 15px;
+}
+.notice-success, div.updated {
+    border-color: #7ad03a;
+}
+
+#gravityflow-admin-action{
+    width:140px;
+}
+
+.has-right-sidebar .inner-sidebar{
+    width:250px;
+}
+
+.inner-sidebar .postbox{
+    width:100%;
+}
+
+@media screen and (max-width: 700px) {
+    .has-right-sidebar #post-body {
+        clear: left;
+        float: right;
+        width: 100%;
+    }
+    .has-right-sidebar .inner-sidebar{
+        width:100%;
+    }
+
+    table#gravityflow-inbox {
+        border: 0;
+        width:100%;
+    }
+
+    table#gravityflow-inbox thead {
+        display: none;
+    }
+
+    table#gravityflow-inbox tr {
+        margin-bottom: 10px;
+        display: block;
+        border-bottom: 2px solid #ddd;
+    }
+
+    table#gravityflow-inbox td {
+
+        display: block!important;
+        text-align: right;
+        font-size: 13px;
+        border-bottom: 1px dotted #ccc;
+        border-left: 1px dotted #ccc;
+    }
+
+    table#gravityflow-inbox td:last-child {
+        border-bottom: 0;
+    }
+
+    table#gravityflow-inbox td:before {
+        content: attr(data-label);
+        float: left;
+        text-transform: uppercase;
+        font-weight: bold;
+        padding:5px;
+    }
+
+    .has-right-sidebar #post-body {
+        margin-right: 0;
+        padding-right: 0;
+    }
+
+    table#gravityflow-inbox th[data-label="ID"],
+    table#gravityflow-inbox td[data-label="ID"] {
+        width:100%!important;
+        border-top:1px solid #ddd !important;
+    }
+
+}
+
+div.gf_entry_wrap {
+    position: relative;
+}
+
+table#gravityflow-inbox th[data-label="ID"],
+table#gravityflow-inbox td[data-label="ID"] {
+    width:70px;
+    border-left:1px solid #ddd;
+}
+
+table#gravityflow-inbox th,{
+    border-top:1px solid #ddd !important;
+}
+
+
+table#gravityflow-inbox{
+    border-top:1px solid #ddd!important;
+}
+
+#gravityflow-admin-action{
+    padding: 2px;
+    line-height: 28px;
+    height: 28px;
+    vertical-align: middle;
+}
+
+input.small-text{
+	width: 50px;
+}
+
+.tablenav-pages .current-page {
+	padding-top: 0;
+	text-align: center;
+}
+
+/**** STATUS PAGE ****/
+
+/* Bulk Actions */
+.tablenav-pages a {
+	font-weight: 600;
+	margin-right: 1px;
+	padding: 0 2px;
+}
+.tablenav-pages .current-page {
+	padding-top: 0;
+	text-align: center;
+}
+.tablenav-pages .next-page {
+	margin-left: 2px;
+}
+
+.tablenav a.button-secondary {
+	display: block;
+	margin: 3px 8px 0 0;
+}
+
+.tablenav {
+	clear: both;
+	height: 30px;
+	margin: 6px 0 4px;
+	vertical-align: middle;
+}
+
+.tablenav.themes {
+	max-width: 98%;
+}
+
+.tablenav .tablenav-pages {
+	float: right;
+	display: block;
+	cursor: default;
+	height: 30px;
+	color: #555;
+	line-height: 30px;
+	font-size: 12px;
+}
+
+.tablenav .no-pages,
+.tablenav .one-page .pagination-links {
+	display: none;
+}
+
+.tablenav .tablenav-pages a,
+.tablenav-pages span.current  {
+	text-decoration: none;
+	padding: 3px 6px;
+}
+
+.tablenav .tablenav-pages a {
+	padding: 0 10px 3px;
+	background: #eee;
+	background: rgba( 0, 0, 0, 0.05 );
+	font-size: 16px;
+	font-weight: normal;
+}
+
+.tablenav .tablenav-pages a:hover,
+.tablenav .tablenav-pages a:focus {
+	color: #fff;
+	background: #00a0d2;
+}
+
+.tablenav .tablenav-pages a.disabled,
+.tablenav .tablenav-pages a.disabled:hover,
+.tablenav .tablenav-pages a.disabled:focus,
+.tablenav .tablenav-pages a.disabled:active {
+	color: #a0a5aa;
+	background: #eee;
+	background: rgba( 0, 0, 0, 0.05 );
+}
+
+.tablenav .displaying-num {
+	margin-right: 2px;
+	color: #777;
+	font-size: 12px;
+	font-style: italic;
+}
+
+.tablenav .actions {
+	overflow: hidden;
+	padding: 2px 8px 0 0;
+}
+
+.wp-filter .actions {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.tablenav .delete {
+	margin-right: 20px;
+}
+
+
+.subsubsub {
+	list-style: none;
+	margin: 8px 0 0;
+	padding: 0;
+	font-size: 13px;
+	float: left;
+	color: #666;
+}
+
+.subsubsub a {
+	line-height: 2;
+	padding: .2em;
+	text-decoration: none;
+}
+
+.subsubsub a .count,
+.subsubsub a.current .count {
+	color: #999;
+	font-weight: normal;
+}
+
+.subsubsub a.current {
+	font-weight: 600;
+	border: none;
+}
+
+.subsubsub li {
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	white-space: nowrap;
+}
+
+.button, .button-secondary {
+	background: #f7f7f7 none repeat scroll 0 0;
+	border-color: #cccccc;
+	box-shadow: 0 1px 0 #fff inset, 0 1px 0 rgba(0, 0, 0, 0.08);
+	color: #555;
+	vertical-align: top;
+}
+
+
+.button, .button-secondary {
+	border-radius: 3px;
+	border-style: solid;
+	border-width: 1px;
+	box-sizing: border-box;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 13px;
+	height: 28px;
+	line-height: 26px;
+	margin: 0;
+	padding: 0 10px 1px;
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+input.medium-text.datepicker{
+	width:70px!important;
+}
+
+table.wp-list-table.entries {border-collapse:collapse;}
+
+
+
+table.wp-list-table.entries td a,
+table.wp-list-table.entries td .gravityflow-empty
+{text-decoration:none!important; display:block; padding:10px; height:100%; border-bottom:none;}
+
+table.wp-list-table.entries th[data-label="ID"],
+table.wp-list-table.entries td[data-label="ID"] {
+	width:70px;
+	border-left:1px solid #ddd;
+}
+
+.check-column{
+	width:30px;
+}
+
+
+@media screen and (max-width: 700px) {
+	.has-right-sidebar #post-body {
+		clear: left;
+		float: right;
+		width: 100%;
+	}
+	.has-right-sidebar .inner-sidebar{
+		width:100%;
+	}
+
+	table.wp-list-table.entries {
+		border: 0;
+		width:100%;
+	}
+
+	table.wp-list-table.entries thead,
+	table.wp-list-table.entries tfoot{
+		display: none;
+	}
+
+	table.wp-list-table.entries tr {
+		margin-bottom: 10px;
+		display: block;
+		border-bottom: 2px solid #ddd;
+	}
+
+	table.wp-list-table.entries th,
+	table.wp-list-table.entries td {
+
+		display: block!important;
+		text-align: right;
+		font-size: 13px;
+		border-bottom: 1px dotted #ccc;
+		border-left: 1px dotted #ccc;
+	}
+
+	table.wp-list-table.entries td:last-child {
+		border-bottom: 0;
+	}
+
+	table.wp-list-table.entries th:before,
+	table.wp-list-table.entries td:before {
+		content: attr(data-label);
+		float: left;
+		text-transform: uppercase;
+		font-weight: bold;
+		padding:5px;
+	}
+
+	.has-right-sidebar #post-body {
+		margin-right: 0;
+		padding-right: 0;
+	}
+
+	table.wp-list-table.entries th,
+	table.wp-list-table.entries td[data-label="ID"] {
+		width:100%!important;
+	}
+
+	table.wp-list-table.entries th{
+		border-top:1px solid #ddd !important;
+	}
+
+}

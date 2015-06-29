@@ -1,0 +1,112 @@
+-------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-6
+	- Added the status page to the shortcode and added the page attribute to the gravityflow shortcode.
+	Examples:
+		- [gravityflow page="inbox"]
+		- [gravityflow page="status"]
+	- Added Gravity_Flow_API to provide the basis of a future-proof way for developers to interact with a Gravity Flow installation. See http://inlinedocs.gravityflow.io for the class documentation.
+	- Updated installation process to redirect to the settings page / installation wizard after single plugin activation.
+    - Fixed an issue with the step configuration page where the minified JavaScript doesn't load correctly causing the functionality in the page to break.
+
+-------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-5
+    - Added filters on the status page.
+    - Added the schedule setting to all steps. Supports specific date and delay offset (hours, days or weeks) from the time the step is triggered. This is particularly useful for the Notification Step to drip feed a series of emails over a period of time.
+    - Added the "Workflow: notification step" notification event for notifications that are added specifically for the Workflow Notification Step.
+    - Added the workflow_approve_token and workflow_reject_token merge tags to the approval assign email so custom links can be constructed.
+    - Added the gravityflow_notification filter so the emails can be modified before they're sent.
+    - Added the gravityflow_workflow_detail_display_field filter.
+    - Updated the styles for the front-end inbox list to be more responsive.
+    - Updated the styles for the front-end detail page to be more responsive.
+    - Updated all CSS and JS to use minified versions.
+    - Fixed an issue with the Workflow Notification Step where the notification selection is ignored.
+    - Fixed an issue with the workflow Notification Step where the Notification's conditional logic is ignored.
+    - Fixed an intermittent issue with license activation.
+    - Removed the gravityflow_entry_detail_display_field filter. Replaced with gravityflow_workflow_detail_display_field filter.
+
+-------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-4
+    - Added the [gravityflow] shortcode so the inbox can be displayed in WordPress pages.
+    - Added settings to the Assignee Field: Show Users, Show Roles and Show Fields. Note: existing assignee field settings need to be re-saved.
+    - Added support for the Campaign Monitor Add-On.
+    - Added workflow admin action: Send to Step so that admins can skip steps or force an entry through a workflow.
+    - Added entry count to the step list - links to the filtered entry list.
+    - Added a warning to the step settings when a step has entries.
+    - Added unsaved changes warning to the step settings.
+    - Added the gravityflow_assignee_field_roles to allow the list of roles to be filtered in the Assignee Field.
+    	Example to remove roles:
+    	add_filter( 'gravityflow_assignee_field_roles', '__return_false' );
+
+    - Added the gravityflow_assignee_field_users to allow the list of roles to be filtered in the Assignee Field.
+		Example to remove users:
+    	add_filter( 'gravityflow_assignee_field_users', '__return_false' );
+
+	- Added the gravityflow_assignee_field_fields filter to allow the list of fields to be filtered in the Assignee Field.
+		Example to remove all fields:
+    	add_filter( 'gravityflow_assignee_field_fields', '__return_false' );
+    - Added the gravityflow_approval_token_expiration_days filter to allow the approval token life to be extended.
+    	Example:
+    	add_filter('gravityflow_approval_token_expiration_days', 'sh_gravityflow_approval_token_expiration_days');
+        function sh_gravityflow_approval_token_expiration_days(){
+        	return 5;
+        }
+    - Added the gravityflow_workflow_detail_admin_actions capability to allow administrators to decide who can perform admin actions such as restarting and cancelling the workflow.
+
+    - Updated emails to use the site title as the from name.
+    - Updated minimum Gravity Forms version requirement to 1.9.6
+    - Updated Step Type setting to be disabled after saving.
+    - Updated Step Type setting to refresh the page when selected. This is required to simplify the handling of the settings.
+    - Updated the notifications settings to be required.
+    - Updated the step settings to add and remove assignees for pending entries if the assignee settings are updated.
+
+    - Fixed an issue with the Rejection mail when the email to field contains a user who is not assigned to the step.
+    - Fixed an issue with the {workflow_note} merge tag not working.
+    - Fixed an issue with the restart workflow admin action when non-interactive steps are first in the list.
+    - Fixed an issue with the dates in the inbox and status pages where the date doesn't display with the correct timezone.
+
+    - Removed the Feed Workflow step and promoted each feed to its own step type.
+
+-------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-3
+    - Added the Webhook Workflow Step.
+    - Added the Notification Workflow Step.
+    - Added Feed Workflow Step for integration with supported feed-based add-ons.
+    - Added support for the User Registration Add-On
+    - Added support for the MailChimp Add-On.
+    - Added support for the Zapier Add-On.
+    - Added support for the Emma Add-On.
+    - Added the gravityflow_title_entry_detail filter.
+        Example:
+        add_action( 'gravityflow_title_entry_detail', 'sh_gravityflow_title_entry_detail', 10, 3 );
+        function sh_gravityflow_title_entry_detail( $title, $form, $entry ) {
+            $title = 'PO # ' . $entry['id'];
+            return $title;
+        }
+    - Added an admin meta box on the workflow detail page to allow admins to perform housekeeping tasks:
+        - Cancel the Workflow
+        - Restart the workflow step (resends the assignee notifications for the current step)
+        - Restart the entire Workflow (resends assignee notifications for the first step)
+    - Fixed notifications from Gravity Forms for workflow step events
+
+-------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-2
+    - Added secure one-click approve/reject link merge tags to the approval assignee notification. Links require authentication and expire after 24 hours.
+    - Added the entry ID to the inbox and status lists
+    - Added background updates for bug fixes and security enhancements. Enabled by default on new installations.
+    - Added an installation Wizard to guide the initial setup of the settings.
+    - Added a print button to the entry detail page
+    - Added bulk print to the status list
+    - Added the filter gravityflow_workflow_detail_display_field to allow fields to be filtered on the Workflow detail page.
+        Example:
+        add_filter( 'gravityflow_workflow_detail_display_field', 'sh_gravityflow_workflow_detail_display_field', 10, 5 );
+        function sh_gravityflow_workflow_detail_display_field( $display, $field, $form, $entry, $current_step ) {
+            if ( $form['id'] == 93 && $field->id == 4 && $current_step && $current_step->get_id() == 88 ) {
+                $display = false;
+            }
+            return $display;
+        }
+
+    - Updated the UI for approval notifications
+
+Version 1.0-beta-1
+    - All new!
