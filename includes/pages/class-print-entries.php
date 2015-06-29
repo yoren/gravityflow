@@ -111,7 +111,7 @@ class Gravity_Flow_Print_Entries {
 				echo '<form>';
 				$gravity_flow = gravity_flow();
 				$current_step = $gravity_flow->get_current_step( $form, $entry );
-				require_once( $gravity_flow->get_base_path() . '/includes/class-entry-detail.php' );
+				require_once( $gravity_flow->get_base_path() . '/includes/pages/class-entry-detail.php' );
 				Gravity_Flow_Entry_Detail::entry_detail_grid( $form, $entry, false, array(), $current_step );
 
 				echo '</form>';
