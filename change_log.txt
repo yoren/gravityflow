@@ -1,4 +1,8 @@
 -------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-6.1
+	- Fixed an issue with the print function.
+
+-------------------------------------------------------------------------------------------------------------------
 Version 1.0-beta-6
 	- Added the status page to the shortcode and added the page attribute to the gravityflow shortcode.
 	Examples:
