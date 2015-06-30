@@ -265,19 +265,27 @@ input.small-text{
 .tablenav-pages .current-page {
 	padding-top: 0;
 	text-align: center;
+    width: 20px!important;
 }
 
 /**** STATUS PAGE ****/
+
+.subsubsub li a,
+.pagination-links a{
+    border-bottom: 0;
+}
 
 /* Bulk Actions */
 .tablenav-pages a {
 	font-weight: 600;
 	margin-right: 1px;
 	padding: 0 2px;
+
 }
 .tablenav-pages .current-page {
 	padding-top: 0;
 	text-align: center;
+    width: 20px;
 }
 .tablenav-pages .next-page {
 	margin-left: 2px;
@@ -424,11 +432,10 @@ input.small-text{
 }
 
 input.medium-text.datepicker{
-	width:70px!important;
+	width:90px!important;
 }
 
 table.wp-list-table.entries {border-collapse:collapse;}
-
 
 
 table.wp-list-table.entries td a,
