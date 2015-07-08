@@ -92,8 +92,6 @@ if ( class_exists( 'GFForms' ) ) {
 			add_action( 'gform_register_init_scripts', array( $this, 'filter_gform_register_init_scripts' ), 10, 3 );
 
 			add_filter( 'auto_update_plugin', array( $this, 'maybe_auto_update' ), 10, 2 );
-
-
 		}
 
 		public function init_admin() {
@@ -107,6 +105,8 @@ if ( class_exists( 'GFForms' ) ) {
 			add_action( 'gform_field_standard_settings', array( $this, 'field_settings' ), 10, 2 );
 
 			add_action( 'admin_enqueue_scripts', array( $this, 'action_admin_enqueue_scripts' ) );
+
+			add_filter( $this->_slug . '_feed_actions', array( $this, 'filter_feed_actions' ), 10, 3 );
 		}
 
 		public function init_ajax() {
@@ -240,7 +240,7 @@ if ( class_exists( 'GFForms' ) ) {
 							'query' => 'page=gravityflow-status',
 						),
 					),
-					'strings' =>  array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) )
+					'strings' => array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) )
 				),
 				array(
 					'handle'  => 'gf_routing_setting',
@@ -305,7 +305,7 @@ if ( class_exists( 'GFForms' ) ) {
 				}
 			}
 
-			return "gformInitChosenFields('" . implode( ',', $chosen_fields ) . "','" . esc_attr( apply_filters( "gform_dropdown_no_results_text_{$form['id']}", apply_filters( 'gform_dropdown_no_results_text', __( 'No results matched', 'gravityforms' ), $form['id'] ), $form['id'] ) ) . "');";
+			return "gformInitChosenFields('" . implode( ',', $chosen_fields ) . "','" . esc_attr( apply_filters( "gform_dropdown_no_results_text_{$form['id']}", apply_filters( 'gform_dropdown_no_results_text', __( 'No results matched', 'gravityflow' ), $form['id'] ), $form['id'] ) ) . "');";
 		}
 
 		public function has_enhanced_dropdown( $form ) {
@@ -326,7 +326,7 @@ if ( class_exists( 'GFForms' ) ) {
 		public function feed_list_title() {
 			$url = add_query_arg( array( 'fid' => '0' ) );
 
-			return esc_html__( 'Workflow Steps', 'gravityflow' ) . " <a class='add-new-h2' href='{$url}'>" . __( 'Add New' , 'gravityforms' ) . '</a>';
+			return esc_html__( 'Workflow Steps', 'gravityflow' ) . " <a class='add-new-h2' href='{$url}'>" . __( 'Add New' , 'gravityflow' ) . '</a>';
 		}
 
 		public function styles() {
@@ -396,10 +396,8 @@ if ( class_exists( 'GFForms' ) ) {
 					'src'     => $this->get_base_url() . "/css/feed-list{$min}.css",
 					'version' => $this->_version,
 					'enqueue' => array(
-						array(
-							array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow' ),
-						),
-					)
+						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow' ),
+					),
 				),
 				array(
 					'handle'  => 'gravityflow_multi_select_css',
@@ -556,11 +554,11 @@ if ( class_exists( 'GFForms' ) ) {
 				'fields' => array(
 					array(
 						'name'     => 'step_name',
-						'label'    => __( 'Name', 'gravityformsworkflow' ),
+						'label'    => __( 'Name', 'gravityflow' ),
 						'type'     => 'text',
 						'class'    => 'medium',
 						'required' => true,
-						'tooltip'  => '<h6>' . __( 'Name', 'gravityforms' ) . '</h6>' . __( 'Enter a name to uniquely identify this step.', 'gravityforms' )
+						'tooltip'  => '<h6>' . __( 'Name', 'gravityflow' ) . '</h6>' . __( 'Enter a name to uniquely identify this step.', 'gravityflow' )
 					),
 					array(
 						'name'  => 'description',
@@ -844,31 +842,6 @@ if ( class_exists( 'GFForms' ) ) {
 			}
 
 			return $assignee_status_by_entry;
-		}
-
-
-		public function prefix_step_settings_fields( $fields, $type ) {
-			foreach ( $fields as &$field ) {
-				if ( isset( $field['id'] ) ) {
-					$field['id'] = $type . '_' . $field['id'];
-				}
-				$field['name'] = $type . '_' . $field['name'];
-				if ( isset( $field['choices'] ) && is_array( $field['choices'] ) ) {
-					foreach ( $field['choices'] as &$choice ) {
-						if ( isset( $choice['name'] ) ) {
-							$choice['name'] = $type . '_' . $choice['name'];
-						}
-					}
-				}
-				if ( isset( $field['tabs'] ) ) {
-					foreach ( $field['tabs'] as &$tab ) {
-						if ( isset( $tab['fields'] ) ) {
-							$tab['fields'] = $this->prefix_step_settings_fields( $tab['fields'], $type );
-						}
-					}
-				}
-			}
-			return $fields;
 		}
 
 		public function filter_gform_entries_field_value( $value, $form_id, $field_id, $entry ){
@@ -1194,8 +1167,8 @@ if ( class_exists( 'GFForms' ) ) {
 		 */
 		function feed_list_columns() {
 			return array(
-				'step_name' => __( 'Step name', 'gravityformsworkflow' ),
-				'step_type' => 'Step Type',
+				'step_name' => __( 'Step name', 'gravityflow' ),
+				'step_type' => esc_html__( 'Step Type', 'gravityflow' ),
 				'entry_count' => esc_html__( 'Entries', 'gravityflow' ),
 			);
 		}
@@ -1213,7 +1186,7 @@ if ( class_exists( 'GFForms' ) ) {
 
 		public function feed_list_no_item_message() {
 			$url = add_query_arg( array( 'fid' => 0 ) );
-			return sprintf( __( "You don't have any steps configured. Let's go %screate one%s!", 'gravityformsworkflow' ), "<a href='" . esc_url( $url ) . "'>", '</a>' );
+			return sprintf( __( "You don't have any steps configured. Let's go %screate one%s!", 'gravityflow' ), "<a href='" . esc_url( $url ) . "'>", '</a>' );
 		}
 
 
@@ -1376,7 +1349,7 @@ if ( class_exists( 'GFForms' ) ) {
 						<?php
 						if ( ! empty( $lead['created_by'] ) && $usermeta = get_userdata( $lead['created_by'] ) ) {
 							?>
-							<?php _e( 'Submitted by', 'gravityforms' ); ?>:
+							<?php _e( 'Submitted by', 'gravityflow' ); ?>:
 							<?php echo esc_html( $usermeta->display_name ) ?>
 							<br /><br />
 						<?php
@@ -1648,7 +1621,7 @@ if ( class_exists( 'GFForms' ) ) {
 			$setting_tabs = array(
 				array(
 					'name' => 'settings',
-					'label' => __( 'Settings', 'gravityforms' ),
+					'label' => __( 'Settings', 'gravityflow' ),
 					'callback' => array( $this, 'app_settings_tab' )
 				),
 			);
@@ -1656,7 +1629,7 @@ if ( class_exists( 'GFForms' ) ) {
 			$setting_tabs = apply_filters( 'gform_addon_app_settings_menu_' . $this->_slug, $setting_tabs );
 
 			if ( $this->current_user_can_any( $this->_capabilities_uninstall ) ) {
-				$setting_tabs[] = array( 'name' => 'uninstall', 'label' => __( 'Uninstall', 'gravityforms' ), 'callback' => array( $this, 'app_settings_uninstall_tab' ) );
+				$setting_tabs[] = array( 'name' => 'uninstall', 'label' => __( 'Uninstall', 'gravityflow' ), 'callback' => array( $this, 'app_settings_uninstall_tab' ) );
 			}
 
 			ksort( $setting_tabs, SORT_NUMERIC );
@@ -1766,8 +1739,8 @@ if ( class_exists( 'GFForms' ) ) {
 							'horizontal' => true,
 							'default_value' => false,
 							'choices' => array(
-								array( 'label' => __( 'On', 'gravityforms' ), 'value' => true ),
-								array( 'label' => __( 'Off', 'gravityforms' ), 'value' => false ),
+								array( 'label' => __( 'On', 'gravityflow' ), 'value' => true ),
+								array( 'label' => __( 'Off', 'gravityflow' ), 'value' => false ),
 							)
 						),
 					),
@@ -1971,6 +1944,7 @@ if ( class_exists( 'GFForms' ) ) {
 				}
 
 				if ( $feedback ) {
+					GFCache::flush();
 					$check_view_entry_permissions = false;
 					$entry = GFAPI::get_entry( $entry_id ); // refresh entry
 
@@ -2522,7 +2496,7 @@ if ( class_exists( 'GFForms' ) ) {
 				?>
 
 				<li class="gravityflow_setting_assignees field_setting">
-					<?php esc_html_e( 'Assignees', 'gravityforms' ); ?><br />
+					<?php esc_html_e( 'Assignees', 'gravityflow' ); ?><br />
 					<div>
 						<input type="checkbox" id="gravityflow-assignee-field-show-users"
 						       onclick="var value = jQuery(this).is(':checked'); SetFieldProperty('gravityflowAssigneeFieldShowUsers', value);" />
@@ -2657,6 +2631,21 @@ AND m.meta_value='queued'";
 					wp_safe_redirect( $url );
 				}
 			}
+		}
+
+		public function filter_feed_actions( $action_links, $item, $column ) {
+
+			if ( empty ( $action_links  ) ) {
+				return $action_links;
+			}
+			$feed_id = $item['id'];
+			$current_step = $this->get_step( $feed_id );
+			$entry_count = $current_step->entry_count();
+
+			if ( $entry_count > 0 ) {
+				unset( $action_links['delete'] );
+			}
+			return $action_links;
 		}
 	}
 
