@@ -120,7 +120,7 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 
 		$step1_id = $this->_add_user_input_step();
 
-		$settings['step_name'] = 'Approval 2';
+		$settings['step_name'] = 'User Input 2';
 
 		$step2_id = $this->_add_user_input_step( $settings );
 
@@ -321,6 +321,50 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 		$final_status = $this->api->get_status( $entry );
 
 		$this->assertEquals( 'approved', $final_status );
+	}
+
+
+	function test_assignee_field(){
+		$form = GFAPI::get_form( $this->form_id );
+		$assignee_field_properties_json = '{"type":"workflow_assignee_select","id":6,"label":"Assignee","adminLabel":"","isRequired":false,"size":"medium","errorMessage":"","inputs":null,"formId":93,"pageNumber":1,"choices":"","conditionalLogic":"","displayOnly":"","labelPlacement":"","descriptionPlacement":"","subLabelPlacement":"","placeholder":"","multipleFiles":false,"maxFiles":"","calculationFormula":"","calculationRounding":"","enableCalculation":"","disableQuantity":false,"displayAllCategories":false,"inputMask":false,"inputMaskValue":"","allowsPrepopulate":false,"gravityflowAssigneeFieldShowUsers":true,"gravityflowAssigneeFieldShowRoles":true,"gravityflowAssigneeFieldShowFields":true,"cssClass":""}';
+		$assignee_field_properties = json_decode( $assignee_field_properties_json, true );
+		$assignee_field_properties['id'] = 999;
+		$assignee_field = new Gravity_Flow_Field_Assignee_Select( $assignee_field_properties );
+		$form['fields'][] = $assignee_field;
+		GFAPI::update_form( $form );
+
+		$step_settings = array(
+			'assignees' => array( 'assignee_field|999' ),
+		);
+		$step1_id = $this->_add_user_input_step( $step_settings );
+
+		$this->_create_entries();
+		$entries = GFAPI::get_entries( $this->form_id );
+		$entry = $entries[0];
+
+		$entry_id = $entry['id'];
+		$entry[999] = 'user_id|1';
+		GFAPI::update_entry( $entry );
+
+		// simulate submission
+		gravity_flow()->maybe_process_feed( $entry, $form );
+
+		$this->api->process_workflow( $entry_id );
+
+		$entry = GFAPI::get_entry( $entry_id );
+
+		// Check status
+		$status = $this->api->get_status( $entry );
+		$this->assertEquals( 'pending', $status );
+
+		// Complete
+		$step1 = $this->api->get_step( $step1_id, $entry );
+		$step1->update_user_status( 1, 'complete' );
+		$this->api->process_workflow( $entry_id );
+
+		// Check status
+		$status = $this->api->get_status( $entry );
+		$this->assertEquals( 'complete', $status );
 	}
 
 
