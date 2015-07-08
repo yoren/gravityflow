@@ -1,0 +1,8 @@
+[main]
+host = https://www.transifex.com
+
+[gravityflow.gravityflow]
+file_filter = languages/gravityflow-<lang>.po
+source_file = languages/gravityflow.pot
+source_lang = en_US
+type = PO
