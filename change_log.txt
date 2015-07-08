@@ -1,4 +1,18 @@
 -------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-6.4
+	- Fixed and issue with the user input step where re-assignment doesn't happen if the step is still in progress.
+	- Fixed debug warnings on the status page when no feeds have been configured.
+	- Removed the delete action from the step list for steps with entries so entries don't get orphaned. Either delete the entries or cancel the workflow for each of the entries.
+
+-------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-6.3
+	- Added French translation.
+
+-------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-6.2
+	- Fixed some style issues with the status shortcode.
+
+-------------------------------------------------------------------------------------------------------------------
 Version 1.0-beta-6.1
 	- Fixed an issue with the print function.
 
