@@ -37,7 +37,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 	}
 
 	public function get_form_editor_field_title() {
-		return __( 'Assignee', 'gravityforms' );
+		return __( 'Assignee', 'gravityflow' );
 	}
 
 	public function get_choices( $value ) {

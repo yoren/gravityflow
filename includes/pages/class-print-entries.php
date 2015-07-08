@@ -55,7 +55,7 @@ class Gravity_Flow_Print_Entries {
 		sort( $entry_ids );
 
 		if ( empty( $entry_ids ) ) {
-			die( esc_html__( 'Form Id and Lead Id are required parameters.', 'gravityforms' ) );
+			die( esc_html__( 'Form Id and Lead Id are required parameters.', 'gravityflow' ) );
 		}
 
 
@@ -76,7 +76,7 @@ class Gravity_Flow_Print_Entries {
 			<title>
 				<?php
 				$entry_count = count( $entry_ids );
-				$title       = $entry_count > 1 ? esc_html__( 'Bulk Print', 'gravityforms' ) : esc_html__( 'Entry # ', 'gravityforms' ) . $entry_ids[0];
+				$title       = $entry_count > 1 ? esc_html__( 'Bulk Print', 'gravityflow' ) : esc_html__( 'Entry # ', 'gravityflow' ) . $entry_ids[0];
 				$title       = apply_filters( 'gravityflow_page_title_print_entry', $title, $entry_count );
 				echo esc_html( $title );
 				?>

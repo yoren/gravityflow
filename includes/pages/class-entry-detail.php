@@ -20,7 +20,7 @@ class Gravity_Flow_Entry_Detail {
 		<script type="text/javascript">
 
 			function DeleteFile(leadId, fieldId, deleteButton) {
-				if (confirm(<?php echo json_encode( __( "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete", 'gravityforms' ) ); ?>)) {
+				if (confirm(<?php echo json_encode( __( "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete", 'gravityflow' ) ); ?>)) {
 					var fileIndex = jQuery(deleteButton).parent().index();
 					var mysack = new sack("<?php echo admin_url( 'admin-ajax.php' )?>");
 					mysack.execute = 1;
@@ -31,7 +31,7 @@ class Gravity_Flow_Entry_Detail {
 					mysack.setVar("field_id", fieldId);
 					mysack.setVar("file_index", fileIndex);
 					mysack.onError = function () {
-						alert(<?php echo json_encode( __( 'Ajax error while deleting file.', 'gravityforms' ) ) ?>)
+						alert(<?php echo json_encode( __( 'Ajax error while deleting file.', 'gravityflow' ) ) ?>)
 					};
 					mysack.runAJAX();
 
@@ -83,7 +83,7 @@ class Gravity_Flow_Entry_Detail {
 
 			<?php if ( $admin_ui ) :	?>
 			<h2 class="gf_admin_page_title">
-				<span><?php echo esc_html__( 'Workflow Entry #', 'gravityflow' ) . absint( $entry['id'] ); ?></span><span class="gf_admin_page_subtitle"><span class="gf_admin_page_formid">ID: <?php echo absint( $form['id'] ); ?></span><span class='gf_admin_page_formname'><?php esc_html_e( 'Workflow Form Name', 'gravityforms' ) ?>: <?php esc_html_e( $form['title'] ); ?></span></span>
+				<span><?php echo esc_html__( 'Workflow Entry #', 'gravityflow' ) . absint( $entry['id'] ); ?></span><span class="gf_admin_page_subtitle"><span class="gf_admin_page_formid">ID: <?php echo absint( $form['id'] ); ?></span><span class='gf_admin_page_formname'><?php esc_html_e( 'Workflow Form', 'gravityflow' ) ?>: <?php esc_html_e( $form['title'] ); ?></span></span>
 
 			</h2>
 			<?php endif; ?>
@@ -147,11 +147,11 @@ class Gravity_Flow_Entry_Detail {
 						<div class="detail-view-print">
 							<a href="javascript:;"
 							   onclick="var notes_qs = jQuery('#gform_print_notes').is(':checked') ? '&notes=1' : ''; var url='<?php echo admin_url( 'admin-ajax.php' )?>?action=gravityflow_print_entries&lid=<?php echo absint( $entry['id'] ); ?>' + notes_qs; printPage(url);"
-							   class="button"><?php esc_html_e( 'Print', 'gravityforms' ) ?></a>
+							   class="button"><?php esc_html_e( 'Print', 'gravityflow' ) ?></a>
 
 								<input type="checkbox" name="print_notes" value="print_notes" checked="checked"
 								       id="gform_print_notes"/>
-								<label for="print_notes"><?php esc_html_e( 'include timeline', 'gravityforms' ) ?></label>
+								<label for="print_notes"><?php esc_html_e( 'include timeline', 'gravityflow' ) ?></label>
 
 						</div>
 						<!-- end print button -->
@@ -184,7 +184,7 @@ class Gravity_Flow_Entry_Detail {
 								?>
 								<div class="postbox">
 									<h3>
-										<label for="name"><?php esc_html_e( 'Timeline', 'gravityforms' ); ?></label>
+										<label for="name"><?php esc_html_e( 'Timeline', 'gravityflow' ); ?></label>
 									</h3>
 
 
@@ -265,7 +265,7 @@ class Gravity_Flow_Entry_Detail {
 			<tr>
 				<th id="details">
 					<?php
-					$title = sprintf( '%s : %s %s', esc_html( $form['title'] ), __( 'Entry # ', 'gravityforms' ), absint( $entry['id'] ) );
+					$title = sprintf( '%s : %s %s', esc_html( $form['title'] ), __( 'Entry # ', 'gravityflow' ), absint( $entry['id'] ) );
 					echo apply_filters( 'gravityflow_title_entry_detail', $title, $form, $entry );
 					?>
 				</th>
@@ -274,7 +274,7 @@ class Gravity_Flow_Entry_Detail {
 					if ( $allow_display_empty_fields ) {
 						?>
 						<input type="checkbox" id="gentry_display_empty_fields" <?php echo $display_empty_fields ? "checked='checked'" : '' ?> onclick="ToggleShowEmptyFields();" />&nbsp;&nbsp;
-						<label for="gentry_display_empty_fields"><?php _e( 'show empty fields', 'gravityforms' ) ?></label>
+						<label for="gentry_display_empty_fields"><?php _e( 'show empty fields', 'gravityflow' ) ?></label>
 					<?php
 					}
 					?>
@@ -375,7 +375,7 @@ class Gravity_Flow_Entry_Detail {
 				if ( ! empty( $products['products'] ) ) {
 					?>
 					<tr>
-						<td colspan="2" class="entry-view-field-name"><?php echo apply_filters( "gform_order_label_{$form_id}", apply_filters( 'gform_order_label', __( 'Order', 'gravityforms' ), $form_id ), $form_id ) ?></td>
+						<td colspan="2" class="entry-view-field-name"><?php echo apply_filters( "gform_order_label_{$form_id}", apply_filters( 'gform_order_label', __( 'Order', 'gravityflow' ), $form_id ), $form_id ) ?></td>
 					</tr>
 					<tr>
 						<td colspan="2" class="entry-view-field-value lastrow">
@@ -387,10 +387,10 @@ class Gravity_Flow_Entry_Detail {
 									<col class="entry-products-col4" />
 								</colgroup>
 								<thead>
-								<th scope="col"><?php echo apply_filters( "gform_product_{$form_id}", apply_filters( 'gform_product', __( 'Product', 'gravityforms' ), $form_id ), $form_id ); ?></th>
-								<th scope="col" class="textcenter"><?php echo esc_html( apply_filters( "gform_product_qty_{$form_id}", apply_filters( 'gform_product_qty', __( 'Qty', 'gravityforms' ), $form_id ), $form_id ) ); ?></th>
-								<th scope="col"><?php echo esc_html( apply_filters( "gform_product_unitprice_{$form_id}", apply_filters( 'gform_product_unitprice', __( 'Unit Price', 'gravityforms' ), $form_id ), $form_id ) ); ?></th>
-								<th scope="col"><?php echo esc_html( apply_filters( "gform_product_price_{$form_id}", apply_filters( 'gform_product_price', __( 'Price', 'gravityforms' ), $form_id ), $form_id ) ); ?></th>
+								<th scope="col"><?php echo apply_filters( "gform_product_{$form_id}", apply_filters( 'gform_product', __( 'Product', 'gravityflow' ), $form_id ), $form_id ); ?></th>
+								<th scope="col" class="textcenter"><?php echo esc_html( apply_filters( "gform_product_qty_{$form_id}", apply_filters( 'gform_product_qty', __( 'Qty', 'gravityflow' ), $form_id ), $form_id ) ); ?></th>
+								<th scope="col"><?php echo esc_html( apply_filters( "gform_product_unitprice_{$form_id}", apply_filters( 'gform_product_unitprice', __( 'Unit Price', 'gravityflow' ), $form_id ), $form_id ) ); ?></th>
+								<th scope="col"><?php echo esc_html( apply_filters( "gform_product_price_{$form_id}", apply_filters( 'gform_product_price', __( 'Price', 'gravityflow' ), $form_id ), $form_id ) ); ?></th>
 								</thead>
 								<tbody>
 								<?php
@@ -450,7 +450,7 @@ class Gravity_Flow_Entry_Detail {
 									<?php
 									}
 									?>
-									<td class="textright grandtotal"><?php _e( 'Total', 'gravityforms' ) ?></td>
+									<td class="textright grandtotal"><?php _e( 'Total', 'gravityflow' ) ?></td>
 									<td class="grandtotal_amount"><?php echo GFCommon::to_money( $total, $entry['currency'] ) ?></td>
 								</tr>
 								</tfoot>
