@@ -218,7 +218,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	}
 
 	function get_bulk_actions() {
-		$bulk_actions = array( 'print' => esc_html__( 'Print', 'gravityforms' ) );
+		$bulk_actions = array( 'print' => esc_html__( 'Print', 'gravityflow' ) );
 		return $bulk_actions;
 	}
 
@@ -273,7 +273,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$form_clause = ' AND l.form_id=' . absint( $args['form-id'] );
 		} else {
 			$form_ids = $this->get_workflow_form_ids();
-			$form_clause = ' AND l.form_id IN(' . join( ',', $form_ids ) . ')';
+			$form_clause = ( ! empty( $form_ids ) ) ? ' AND l.form_id IN(' . join( ',', $form_ids ) . ')' : '';
 		}
 
 		$start_clause = '';
