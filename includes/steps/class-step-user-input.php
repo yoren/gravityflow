@@ -300,8 +300,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 					$this->update_assignee_status( $role, 'role', 'complete' );
 				}
 
-				$this->maybe_adjust_assignment();
 			}
+			$this->maybe_adjust_assignment();
 
 			$feedback = $new_status == 'complete' ?  __( 'Entry updated and step complete.', 'gravityflow' ) : __( 'Entry updated.', 'gravityflow' );
 
@@ -481,7 +481,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				<br />
 				<div style="text-align:right;">
 				<?php
-				$button_text      = __( 'Update', 'gravityforms' );
+				$button_text      = __( 'Update', 'gravityflow' );
 				$update_button_id = 'gravityflow_update_button';
 				$button_click     = "jQuery('#action').val('update'); jQuery('#entry_form').submit(); return false;";
 				$update_button    = '<input id="' . $update_button_id . '" disabled="disabled" class="button button-large button-primary" type="submit" tabindex="4" value="' . $button_text . '" name="save" onclick="' . $button_click . '"/>';
@@ -565,7 +565,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		$is_admin = $is_form_editor || $is_entry_detail;
 
 		if ( $is_admin && ! GFCommon::current_user_can_any( 'gravityforms_edit_entries' ) ) {
-			die( __( "You don't have adequate permission to edit entries.", 'gravityforms' ) );
+			die( __( "You don't have adequate permission to edit entries.", 'gravityflow' ) );
 		}
 
 		$lead_detail_table = GFFormsModel::get_lead_details_table_name();
