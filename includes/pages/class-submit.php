@@ -5,7 +5,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 }
 
 class Gravity_Flow_Submit {
-	public static function list_page( $form_ids ) {
+	public static function list_page( $form_ids, $is_admin ) {
 
 		if ( empty( $form_ids ) ) {
 			esc_html_e( "You haven't submitted any workflow forms yet.", 'gravityflow' );
@@ -20,7 +20,13 @@ class Gravity_Flow_Submit {
 			}
 			$title       = sprintf( '<div class="gravityflow-initiate-form-title">%s</div>', rgar( $form, 'title' ) );
 			$description = sprintf( '<div class="gravityflow-initiate-form-description">%s</div>', rgar( $form, 'description' ) );
-			$url = admin_url( 'admin.php?page=gravityflow-submit&id=' . absint( $form_id ) );
+			$form_id = absint( $form_id );
+			$url = $is_admin ? admin_url( 'admin.php?page=gravityflow-submit&id=' . $form_id ) : add_query_arg( array(
+				'page' => 'gravityflow-submit',
+				'id'   => $form_id,
+			) );
+
+
 			$block = sprintf( '<a href="%s"><div class="panel">%s%s</div></a>', $url, $title, $description );
 			$items[]     = sprintf( '<li id="gravityflow-initiate-form-%d">%s</li>', $form_id, $block );
 		}

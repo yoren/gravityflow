@@ -1,6 +1,8 @@
 -------------------------------------------------------------------------------------------------------------------
 Version 1.0-beta-7
 	- Added steps to form duplication process. When a form is duplicated the steps will get duplicated too.
+	- Added the submit page to the shortcode:
+	    - [gravityflow page="submit"]
 	- Added support for the GRAVITY_FLOW_LICENSE_KEY constant.
 	- Added French translation.
 	- Fixed a permissions issue in the print functionality.

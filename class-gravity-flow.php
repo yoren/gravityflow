@@ -1860,36 +1860,41 @@ if ( class_exists( 'GFForms' ) ) {
 				return;
 			}
 
+			$this->submit_page( true );
+		}
+
+		public function submit_page( $admin_ui ){
 			?>
 			<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_submit">
+				<?php if ( $admin_ui ) :	?>
+				<h2 class="gf_admin_page_title">
+					<span><?php esc_html_e( 'Submit a Workflow Form', 'gravityflow' ); ?></span>
 
-			<h2 class="gf_admin_page_title">
-				<span><?php esc_html_e( 'Submit a Workflow Form', 'gravityflow' ); ?></span>
-
-			</h2>
-			<?php
-			$this->toolbar();
-			require_once( $this->get_base_path() . '/includes/pages/class-submit.php' );
-			if ( isset( $_GET['id'] ) ) {
-				$form_id = absint( $_GET['id'] );
-				Gravity_Flow_Submit::form( $form_id );
-			} else {
-				$settings = $this->get_app_settings();
-				$settings = $settings ? $settings : array();
-				$form_ids = array();
-				foreach ( $settings as $key => $setting ) {
-					if ( $setting == 1 ) {
-						$form_id = str_replace( 'publish_form_', '', $key );
-						$form_ids[] = absint( $form_id );
+				</h2>
+				<?php
+					$this->toolbar();
+				endif;
+				require_once( $this->get_base_path() . '/includes/pages/class-submit.php' );
+				if ( isset( $_GET['id'] ) ) {
+					$form_id = absint( $_GET['id'] );
+					Gravity_Flow_Submit::form( $form_id );
+				} else {
+					$settings = $this->get_app_settings();
+					$settings = $settings ? $settings : array();
+					$form_ids = array();
+					foreach ( $settings as $key => $setting ) {
+						if ( $setting == 1 ) {
+							$form_id = str_replace( 'publish_form_', '', $key );
+							$form_ids[] = absint( $form_id );
+						}
 					}
+
+					Gravity_Flow_Submit::list_page( $form_ids , $admin_ui );
 				}
 
-				Gravity_Flow_Submit::list_page( $form_ids );
-			}
-
-			?>
+				?>
 			</div>
-			<?php
+		<?php
 		}
 
 		public function maybe_display_installation_wizard(){
@@ -1920,7 +1925,7 @@ if ( class_exists( 'GFForms' ) ) {
 				return;
 			}
 
-			$this->inbox_page( true, true );
+			$this->inbox_page( true );
 		}
 
 		public function inbox_page( $admin_ui = true ) {
@@ -2245,6 +2250,11 @@ if ( class_exists( 'GFForms' ) ) {
 
 					ob_start();
 					$this->inbox_page( $display_title = false, $display_toolbar = false );
+					return ob_get_clean();
+					break;
+				case 'submit' :
+					ob_start();
+					$this->submit_page( false );
 					return ob_get_clean();
 					break;
 				case 'status' :
