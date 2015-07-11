@@ -1,20 +1,17 @@
 -------------------------------------------------------------------------------------------------------------------
-Version 1.0-beta-6.4
+Version 1.0-beta-7
+	- Added steps to form duplication process. When a form is duplicated the steps will get duplicated too.
+	- Added support for the GRAVITY_FLOW_LICENSE_KEY constant.
+	- Added French translation.
+	- Fixed a permissions issue in the print functionality.
+	- Fixed some warnings and inaccurate counts when displaying orphaned entries.
 	- Fixed and issue with the user input step where re-assignment doesn't happen if the step is still in progress.
 	- Fixed debug warnings on the status page when no feeds have been configured.
-	- Removed the delete action from the step list for steps with entries so entries don't get orphaned. Either delete the entries or cancel the workflow for each of the entries.
-
--------------------------------------------------------------------------------------------------------------------
-Version 1.0-beta-6.3
-	- Added French translation.
-
--------------------------------------------------------------------------------------------------------------------
-Version 1.0-beta-6.2
+	- Fixed a style issue with the front-end detail page.
 	- Fixed some style issues with the status shortcode.
-
--------------------------------------------------------------------------------------------------------------------
-Version 1.0-beta-6.1
 	- Fixed an issue with the print function.
+	- Removed the license key and background updates settings from the settings page on multisite installations when the key is set in the GRAVITY_FLOW_LICENSE_KEY constant.
+	- Removed the delete action from the step list for steps with entries so entries don't get orphaned. Either delete the entries or cancel the workflow for each of the entries.
 
 -------------------------------------------------------------------------------------------------------------------
 Version 1.0-beta-6
