@@ -107,6 +107,9 @@ if ( class_exists( 'GFForms' ) ) {
 			add_action( 'admin_enqueue_scripts', array( $this, 'action_admin_enqueue_scripts' ) );
 
 			add_filter( $this->_slug . '_feed_actions', array( $this, 'filter_feed_actions' ), 10, 3 );
+
+			add_action( 'gform_post_form_duplicated', array( $this, 'action_gform_post_form_duplicated' ), 10, 2 );
+
 		}
 
 		public function init_ajax() {
@@ -123,10 +126,15 @@ if ( class_exists( 'GFForms' ) ) {
 
 		public function upgrade( $previous_version ) {
 			if ( empty( $previous_version ) ) {
-				update_option( 'gravityflow_pending_installation', true );
 				$settings = $this->get_app_settings();
+				if ( defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ) {
+					$settings['license_key'] = GRAVITY_FLOW_LICENSE_KEY;
+				} else {
+					update_option( 'gravityflow_pending_installation', true );
+				}
 				$settings['background_updates'] = true;
 				$this->update_app_settings( $settings );
+
 			} elseif ( version_compare( $previous_version, '1.0-beta-3.5', '<' ) ) {
 				$this->upgrade_feed_settings();
 			}
@@ -1717,8 +1725,10 @@ if ( class_exists( 'GFForms' ) ) {
 				);
 			}
 
-			return array(
-				array(
+			$settings = array();
+
+			if ( ! is_multisite() || ( is_multisite() && is_main_site() && ! defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ) ) {
+				$settings[] = array(
 					'title'  => 'Settings',
 					'fields' => array(
 						array(
@@ -1744,28 +1754,31 @@ if ( class_exists( 'GFForms' ) ) {
 							)
 						),
 					),
-				),
-				array(
-					'title'  => esc_html__( 'Published Workflow Forms', 'gravityflow' ),
-					'description' => esc_html__( 'Select the forms you wish to publish on the Submit page.', 'gravityflow' ),
-					'fields' => $published_forms_fields,
-				),
-				array(
-					'id'     => 'save_button',
-					'fields' => array(
-						array(
-							'id'       => 'save_button',
-							'name' => 'save_button',
-							'type'     => 'save',
-							'value'    => __( 'Update Step Settings', 'gravityflow' ),
-							'messages' => array(
-								'success' => __( 'Settings updated successfully', 'gravityflow' ),
-								'error'   => __( 'There was an error while saving the step settings', 'gravityflow' )
-							)
-						),
-					)
+				);
+			}
+
+			$settings[] = array(
+				'title'       => esc_html__( 'Published Workflow Forms', 'gravityflow' ),
+				'description' => esc_html__( 'Select the forms you wish to publish on the Submit page.', 'gravityflow' ),
+				'fields'      => $published_forms_fields,
+			);
+			$settings[] = array(
+				'id'     => 'save_button',
+				'fields' => array(
+					array(
+						'id'       => 'save_button',
+						'name'     => 'save_button',
+						'type'     => 'save',
+						'value'    => __( 'Update Settings', 'gravityflow' ),
+						'messages' => array(
+							'success' => __( 'Settings updated successfully', 'gravityflow' ),
+							'error'   => __( 'There was an error while saving the settings', 'gravityflow' )
+						)
+					),
 				)
 			);
+
+			return $settings;
 
 		}
 
@@ -2647,6 +2660,16 @@ AND m.meta_value='queued'";
 			}
 			return $action_links;
 		}
+
+		public function action_gform_post_form_duplicated( $form_id, $new_id ) {
+
+			$feeds = $this->get_feeds( $form_id );
+
+			foreach ( $feeds as $feed ) {
+				GFAPI::add_feed( $new_id, $feed['meta'], 'gravityflow' );
+			}
+		}
+
 	}
 
 }
