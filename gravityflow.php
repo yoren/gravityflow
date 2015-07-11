@@ -3,7 +3,7 @@
 Plugin Name: Gravity Flow Beta
 Plugin URI: http://gravityflow.io
 Description: Build Workflow Applications with Gravity Forms.
-Version: 1.0-beta-6.4
+Version: 1.0-beta-7
 Author: Steve Henty
 Author URI: http://www.stevenhenty.com
 License: GPL-3.0+
@@ -25,7 +25,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-define( 'GRAVITY_FLOW_VERSION', '1.0-beta-6.4' );
+define( 'GRAVITY_FLOW_VERSION', '1.0-beta-7' );
 
 define( 'GRAVITY_FLOW_EDD_STORE_URL', 'https://gravityflow.io' );
 
@@ -85,9 +85,14 @@ function gravityflow_edd_plugin_updater() {
 
 	$gravity_flow = gravity_flow();
 	if ( $gravity_flow ) {
-		$settings = gravity_flow()->get_app_settings();
 
-		$license_key = trim( rgar( $settings, 'license_key' ) );
+		if ( defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ) {
+			$license_key = GRAVITY_FLOW_LICENSE_KEY;
+		} else {
+			$settings = gravity_flow()->get_app_settings();
+
+			$license_key = trim( rgar( $settings, 'license_key' ) );
+		}
 
 		$edd_updater = new Gravity_Flow_EDD_SL_Plugin_Updater( GRAVITY_FLOW_EDD_STORE_URL, __FILE__, array(
 			'version'   => GRAVITY_FLOW_VERSION,
