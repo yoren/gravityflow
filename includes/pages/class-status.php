@@ -12,16 +12,16 @@ class Gravity_Flow_Status {
 		$action_url = $is_admin ?  admin_url( 'admin.php?page=gravityflow-status' ) : 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}/{$_SERVER['REQUEST_URI']}?";
 		?>
 		<form id="gravityflow-status-filter" method="GET" action="<?php echo esc_url( $action_url ) ?>">
-		<input type="hidden" name="page" value="gravityflow-status" />
-		<?php
-		$table->views();
-		$table->filters();
-		$table->prepare_items();
-		$table->display();
-		?>
+			<input type="hidden" name="page" value="gravityflow-status" />
+			<?php
+			$table->views();
+			$table->filters();
+			$table->prepare_items();
+			$table->display();
+			?>
 
 		</form>
-		<?php
+	<?php
 	}
 }
 
@@ -134,7 +134,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 						}
 					}
 					?>
-			</select>
+				</select>
 				<label for="start-date"><?php esc_html_e( 'Start:', 'gravityflow' ); ?></label>
 				<input type="text" id="start-date" name="start-date" class="datepicker medium-text ymd_dash" value="<?php echo $start_date; ?>" placeholder="yyyy/mm/dd"/>
 				<label for="end-date"><?php esc_html_e( 'End:', 'gravityflow' ); ?></label>
@@ -201,7 +201,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$step = gravity_flow()->get_step( $step_id );
 			$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
 
-			$label = esc_html( $step->get_name() );
+			$label = $step ? esc_html( $step->get_name() ) : '';
 			$link = "<a href='{$url_entry}'>$label</a>";
 			echo $link;
 		} else{
@@ -273,7 +273,15 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$form_clause = ' AND l.form_id=' . absint( $args['form-id'] );
 		} else {
 			$form_ids = $this->get_workflow_form_ids();
-			$form_clause = ( ! empty( $form_ids ) ) ? ' AND l.form_id IN(' . join( ',', $form_ids ) . ')' : '';
+
+			if ( empty ( $form_ids ) ) {
+				$results = new stdClass();
+				$results->pending = 0;
+				$results->complete = 0;
+				$results->cancelled = 0;
+				return $results;
+			}
+			$form_clause = ' AND l.form_id IN(' . join( ',', $form_ids ) . ')';
 		}
 
 		$start_clause = '';
@@ -471,5 +479,3 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	}
 
 } //class
-
-
