@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow Beta 1.0-beta-7\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2015-07-11 09:26:31+00:00\n"
+"POT-Creation-Date: 2015-07-11 12:14:32+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -194,7 +194,7 @@ msgid "Submitted by"
 msgstr ""
 
 #: class-gravity-flow.php:1370 class-gravity-flow.php:1597
-#: class-gravity-flow.php:2082 includes/pages/class-status.php:242
+#: class-gravity-flow.php:2087 includes/pages/class-status.php:242
 #: includes/steps/class-step-user-input.php:531
 msgid "Status"
 msgstr ""
@@ -231,11 +231,11 @@ msgstr ""
 msgid "Workflow complete"
 msgstr ""
 
-#: class-gravity-flow.php:1577 class-gravity-flow.php:2054
+#: class-gravity-flow.php:1577 class-gravity-flow.php:2059
 msgid "Inbox"
 msgstr ""
 
-#: class-gravity-flow.php:1588 class-gravity-flow.php:2068
+#: class-gravity-flow.php:1588 class-gravity-flow.php:2073
 msgid "Submit"
 msgstr ""
 
@@ -312,94 +312,94 @@ msgstr ""
 msgid "There was an error while saving the settings"
 msgstr ""
 
-#: class-gravity-flow.php:1867
+#: class-gravity-flow.php:1871
 msgid "Submit a Workflow Form"
 msgstr ""
 
-#: class-gravity-flow.php:1935
+#: class-gravity-flow.php:1940
 msgid "Oops! We could not locate your entry."
 msgstr ""
 
-#: class-gravity-flow.php:1982
+#: class-gravity-flow.php:1987
 msgid "Workflow Inbox"
 msgstr ""
 
-#: class-gravity-flow.php:2016
+#: class-gravity-flow.php:2021
 msgid "Workflow Status"
 msgstr ""
 
-#: class-gravity-flow.php:2056
+#: class-gravity-flow.php:2061
 msgid "Your inbox of pending tasks"
 msgstr ""
 
-#: class-gravity-flow.php:2070
+#: class-gravity-flow.php:2075
 msgid "Submit a Workflow"
 msgstr ""
 
-#: class-gravity-flow.php:2084
+#: class-gravity-flow.php:2089
 msgid "Your workflows"
 msgstr ""
 
-#: class-gravity-flow.php:2108
+#: class-gravity-flow.php:2113
 msgid "Workflow cancelled."
 msgstr ""
 
-#: class-gravity-flow.php:2115
+#: class-gravity-flow.php:2120
 msgid "Workflow Step restarted."
 msgstr ""
 
-#: class-gravity-flow.php:2124
+#: class-gravity-flow.php:2129
 msgid "Workflow restarted."
 msgstr ""
 
-#: class-gravity-flow.php:2139
+#: class-gravity-flow.php:2144
 msgid "Sent to step: %s"
 msgstr ""
 
-#: class-gravity-flow.php:2490 includes/steps/class-step-feed-mailchimp.php:13
+#: class-gravity-flow.php:2500 includes/steps/class-step-feed-mailchimp.php:13
 msgid "MailChimp"
 msgstr ""
 
-#: class-gravity-flow.php:2491 includes/steps/class-step-feed-emma.php:13
+#: class-gravity-flow.php:2501 includes/steps/class-step-feed-emma.php:13
 msgid "Emma"
 msgstr ""
 
-#: class-gravity-flow.php:2492 includes/steps/class-step-feed-zapier.php:12
+#: class-gravity-flow.php:2502 includes/steps/class-step-feed-zapier.php:12
 msgid "Zapier"
 msgstr ""
 
-#: class-gravity-flow.php:2493
+#: class-gravity-flow.php:2503
 #: includes/steps/class-step-feed-user-registration.php:14
 msgid "User Registration"
 msgstr ""
 
-#: class-gravity-flow.php:2512
+#: class-gravity-flow.php:2522
 msgid "Assignees"
 msgstr ""
 
-#: class-gravity-flow.php:2517
+#: class-gravity-flow.php:2527
 msgid "Show Users"
 msgstr ""
 
-#: class-gravity-flow.php:2525
+#: class-gravity-flow.php:2535
 msgid "Show Roles"
 msgstr ""
 
-#: class-gravity-flow.php:2533
+#: class-gravity-flow.php:2543
 msgid "Show Fields"
 msgstr ""
 
-#: class-gravity-flow.php:2628
+#: class-gravity-flow.php:2638
 msgid "Gravity Flow Settings"
 msgstr ""
 
-#: class-gravity-flow.php:2632
+#: class-gravity-flow.php:2642
 msgid ""
 "%sThis operation deletes ALL Gravity Flow settings%s. If you continue, you "
 "will NOT be able to retrieve these settings."
 msgstr ""
 
-#: class-gravity-flow.php:2636
+#: class-gravity-flow.php:2646
 msgid ""
 "Warning! ALL Gravity Flow settings will be deleted. This cannot be undone. "
 "'OK' to delete, 'Cancel' to stop"
