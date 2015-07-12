@@ -34,6 +34,7 @@ table { border-collapse: collapse; }
 }
 
 th.check-column,
+td.check-column,
 .tablenav.top,
 .tablenav.bottom{
     display:none;
