@@ -328,98 +328,180 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return $step_status;
 	}
 
+	public function is_valid_token( $token ){
+
+		$token_json = base64_decode( $token );
+		$token_array = json_decode( $token_json, true );
+
+		if ( empty( $token_array ) ) {
+			return false;
+		}
+
+		$timestamp = $token_array['timestamp'];
+		$user_id = $token_array['user_id'];
+		$new_status = $token_array['new_status'];
+		$entry_id = $token_array['entry_id'];
+		$sig = $token_array['sig'];
+
+
+		$expiration_days = apply_filters( 'gravityflow_approval_token_expiration_days', 1 );
+
+		$i = wp_nonce_tick();
+
+		$is_valid = false;
+
+		for ( $n = 1; $n <= $expiration_days; $n++ ) {
+			$sig_key = sprintf( '%s|%s|%s|%s|%s|%s', $i, $this->get_id(), $timestamp, $entry_id, $user_id, $new_status );
+			$verification_sig     = substr( wp_hash( $sig_key ),  -12, 10 );
+			if ( hash_equals( $verification_sig, $sig ) ) {
+				$is_valid = true;
+				break;
+			}
+			$i--;
+		}
+		return $is_valid;
+	}
+
+	/**
+	 * @deprecated  deprecated since version 1.0-beta-7
+	 *
+	 * @param $token
+	 * @param $user_id
+	 * @param $new_status
+	 *
+	 * @return bool
+	 */
+	public function is_valid_token_deprecated ($token, $user_id, $new_status){
+		$expiration_days = apply_filters( 'gravityflow_approval_token_expiration_days', 1 );
+
+		$i = wp_nonce_tick();
+
+		$is_valid = false;
+
+		$step_status_key = 'gravityflow_approval_new_status_step_' . $this->get_id();
+
+		for ( $n = 1; $n <= $expiration_days; $n++ ) {
+			$token_key = sprintf( '%s|%s|%s|%s', $i, $step_status_key, $user_id, $new_status );
+			$verification_token     = substr( wp_hash( $token_key ),  -12, 10 );
+			if ( hash_equals( $verification_token, $token ) ) {
+				$is_valid = true;
+				break;
+			}
+			$i--;
+		}
+		return $is_valid;
+	}
+
 	public function maybe_process_status_update( $form, $entry ){
 		$feedback = false;
 		$step_status_key = 'gravityflow_approval_new_status_step_' . $this->get_id();
-		if ( isset( $_REQUEST[ $step_status_key ] ) || isset( $_GET['gworkflow_token'] ) ) {
+		if ( isset( $_REQUEST[ $step_status_key ] ) || isset( $_GET['gworkflow_token'] ) || isset( $_GET['gflow_token'] ) ) {
 			global $current_user;
 			if ( isset( $_POST['_wpnonce'] ) && check_admin_referer( 'gravityflow_approvals_' . $this->get_id() ) ) {
 				$new_status = rgpost( $step_status_key );
 			} else {
 				$gworkflow_token = rgget( 'gworkflow_token' );
+				$gflow_token = rgget( 'gflow_token' );
 				$new_status      = rgget( 'new_status' );
-				if ( ! $new_status || ! $gworkflow_token ) {
+
+				if ( ! $gflow_token && ! $gworkflow_token ) {
 					return false;
 				}
 
-				$expiration_days = apply_filters( 'gravityflow_approval_token_expiration_days', 1 );
+				if ( $gflow_token ) {
+					$token_json = base64_decode( $gflow_token );
+					$token_array = json_decode( $token_json, true );
 
-				$i = wp_nonce_tick();
-
-				$valid_token = false;
-
-				for ( $n = 1; $n <= $expiration_days; $n++ ) {
-					$token_key = sprintf( '%s|%s|%s|%s', $i, $step_status_key, $current_user->ID, $new_status );
-					$token     = substr( wp_hash( $token_key ),  -12, 10 );
-					if ( hash_equals( $token, $gworkflow_token ) ) {
-						$valid_token = true;
-						break;
+					if ( empty( $token_array ) ) {
+						return false;
 					}
-					$i--;
+
+					$new_status = $token_array['new_status'];
+					if ( empty( $new_status ) ) {
+						return false;
+					}
 				}
-				if ( ! $valid_token ) {
+
+				$valid_token = $this->is_valid_token( $gflow_token );
+
+				$valid_token_deprecated = $this->is_valid_token_deprecated( $gworkflow_token, $current_user->ID, $new_status );
+
+				if ( ! ( $valid_token || $valid_token_deprecated ) ) {
 					return false;
 				}
+
 			}
 
-			if ( ! in_array( $new_status, array( 'pending', 'approved', 'rejected' ) ) ) {
-				return false;
-			}
+			$feedback = $this->process_status_update( $current_user->ID , $new_status, $form );
 
-			$current_user_status = $this->get_user_status( $current_user->ID );
+		}
+		return $feedback;
+	}
 
-			$current_role_status = false;
-			$role = false;
-			foreach ( gravity_flow()->get_user_roles() as $role ) {
-				$current_role_status = $this->get_role_status( $role );
-				if ( $current_role_status == 'pending' ) {
-					break;
-				}
-			}
-			if ( $current_user_status == 'pending' ) {
-				$this->update_assignee_status( $current_user->ID, 'user_id', $new_status );
-			}
+	public function process_status_update( $user_id, $new_status, $form ){
+		$feedback = false;
 
+		if ( ! in_array( $new_status, array( 'pending', 'approved', 'rejected' ) ) ) {
+			return $feedback;
+		}
+
+		$current_user_status = $this->get_user_status( $user_id );
+
+		if ( $current_user_status != 'pending' ) {
+			return esc_html__( 'The status could not be changed because this step has already been processed.', 'gravityflow' );
+		}
+
+		$current_role_status = false;
+		$role = false;
+		foreach ( gravity_flow()->get_user_roles() as $role ) {
+			$current_role_status = $this->get_role_status( $role );
 			if ( $current_role_status == 'pending' ) {
-				$this->update_assignee_status( $role, 'role', $new_status );
+				break;
+			}
+		}
+		if ( $current_user_status == 'pending' ) {
+			$this->update_assignee_status( $user_id, 'user_id', $new_status );
+		}
+
+		if ( $current_role_status == 'pending' ) {
+			$this->update_assignee_status( $role, 'role', $new_status );
+		}
+
+		$note = '';
+		if ( $new_status == 'approved' ) {
+			$note = $this->get_name() . ': ' . __( 'Approved.', 'gravityflow' );
+			$this->send_approval_notification();
+
+		} elseif ( $new_status == 'rejected' ) {
+			$note = $this->get_name() . ': ' . __( 'Rejected.', 'gravityflow' );
+			$this->send_rejection_notification();
+		}
+		if ( ! empty( $note ) ) {
+			$user = get_user_by( 'id', $user_id );
+			$note     = sprintf( $note, $user->display_name );
+			$user_note = rgpost( 'gravityflow_note' );
+			if ( ! empty( $user_note ) ) {
+				$note .= sprintf( "\n%s: %s", __( 'Note', 'gravityflow' ), $user_note );
 			}
 
+			$this->add_note( $note );
+		}
 
-			$note = '';
-			if ( $new_status == 'approved' ) {
-				$note = $this->get_name() . ': ' . __( 'Approved.', 'gravityflow' );
-				$this->send_approval_notification();
-
-			} elseif ( $new_status == 'rejected' ) {
-				$note = $this->get_name() . ': ' . __( 'Rejected.', 'gravityflow' );
-				$this->send_rejection_notification();
-			}
-			if ( ! empty( $note ) ) {
-				$note     = sprintf( $note, $current_user->display_name );
-				$user_note = rgpost( 'gravityflow_note' );
-				if ( ! empty( $user_note ) ) {
-					$note .= sprintf( "\n%s: %s", __( 'Note', 'gravityflow' ), $user_note );
-				}
-
-				$this->add_note( $note );
-			}
-
-			// keep????
-			$status = $this->get_status();
-			$this->update_step_status( $status );
-			$entry = $this->refresh_entry();
+		// keep????
+		$status = $this->get_status();
+		$this->update_step_status( $status );
+		$entry = $this->refresh_entry();
 
 
-			GFAPI::send_notifications( $form, $entry, 'workflow_approval' );
+		GFAPI::send_notifications( $form, $entry, 'workflow_approval' );
 
-			switch ( $new_status ) {
-				case 'approved':
-					$feedback = __( 'Entry Approved', 'gravityflow' );
-					break;
-				case 'rejected':
-					$feedback = __( 'Entry Rejected', 'gravityflow' );
-					break;
-			}
+		switch ( $new_status ) {
+			case 'approved':
+				$feedback = __( 'Entry Approved', 'gravityflow' );
+				break;
+			case 'rejected':
+				$feedback = __( 'Entry Rejected', 'gravityflow' );
+				break;
 		}
 		return $feedback;
 	}
@@ -646,25 +728,44 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	public function replace_variables($text, $user_id){
 		$comment = rgpost( 'gravityflow_note' );
 		$text = str_replace( '{workflow_note}', $comment, $text );
-		$status_key = 'gravityflow_approval_new_status_step_' . $this->get_id();
 
+		$entry_id = $this->get_entry_id();
 		$i = wp_nonce_tick();
-		$token_key = sprintf( '%s|%s|%s|%s', $i, $status_key, $user_id, 'approved' );
-		$token     = substr( wp_hash( $token_key ),  -12, 10 );
+		$timestamp = $this->get_timestamp();
+		$sig_key = sprintf( '%s|%s|%s|%s|%s|%s', $i, $this->get_id(), $timestamp, $entry_id, $user_id, 'approved' );
+		$sig     = substr( wp_hash( $sig_key ),  -12, 10 );
+		$token_array = array(
+			'sig'        => $sig,
+			'step_id'    => $this->get_id(),
+			'timestamp'  => $this->get_timestamp(),
+			'user_id'    => $user_id,
+			'entry_id' => $this->get_entry_id(),
+			'new_status' => 'approved',
+		);
+		$token = base64_encode( json_encode( $token_array ) );
 
 		$text = str_replace( '{workflow_approve_token}', $token, $text );
 
-		$approve_url = sprintf( 'admin.php?page=gravityflow-inbox&view=entry&id=%d&lid=%d&new_status=approved&gworkflow_token=%s', $this->get_form_id(), $this->get_entry_id(), $token );
-		$approve_link = sprintf( '<a href="%s">%s</a>', admin_url( $approve_url ), esc_html__( 'Approve' ) );
+		$approve_url = sprintf( 'admin.php?page=gravityflow-inbox&view=entry&id=%d&lid=%d&gflow_token=%s', $this->get_form_id(), $this->get_entry_id(), $token );
+		$approve_link = sprintf( '<a href="%s">%s</a>', admin_url( $approve_url ), esc_html__( 'Approve', 'gravityflow' ) );
 		$text = str_replace( '{workflow_approve_link}', $approve_link, $text );
 
-		$token_key = sprintf( '%s|%s|%s|%s', $i, $status_key, $user_id, 'rejected' );
-		$token     = substr( wp_hash( $token_key ),  -12, 10 );
+		$sig_key = sprintf( '%s|%s|%s|%s|%s|%s', $i, $this->get_id(), $timestamp, $entry_id, $user_id, 'rejected' );
+		$sig     = substr( wp_hash( $sig_key ),  -12, 10 );
+		$token_array = array(
+			'sig'        => $sig,
+			'step_id'    => $this->get_id(),
+			'timestamp'  => $this->get_timestamp(),
+			'user_id'    => $user_id,
+			'entry_id' => $this->get_entry_id(),
+			'new_status' => 'approved',
+		);
+		$token = base64_encode( json_encode( $token_array ) );
 
 		$text = str_replace( '{workflow_reject_token}', $token, $text );
 
-		$reject_url = sprintf( 'admin.php?page=gravityflow-inbox&view=entry&id=%d&lid=%d&new_status=rejected&gworkflow_token=%s', $this->get_form_id(), $this->get_entry_id(), $token );
-		$reject_link = sprintf( '<a href="%s">%s</a>', admin_url( $reject_url ), esc_html__( 'Reject' ) );
+		$reject_url = sprintf( 'admin.php?page=gravityflow-inbox&view=entry&id=%d&lid=%d&gflow_token=%s', $this->get_form_id(), $this->get_entry_id(), $token );
+		$reject_link = sprintf( '<a href="%s">%s</a>', admin_url( $reject_url ), esc_html__( 'Reject', 'gravityflow' ) );
 		$text = str_replace( '{workflow_reject_link}', $reject_link, $text );
 		return $text;
 	}

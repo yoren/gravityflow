@@ -59,6 +59,8 @@ if ( class_exists( 'GFForms' ) ) {
 			return self::$_instance;
 		}
 
+		private $_custom_page_content = null;
+
 		private function __clone() {
 		} /* do nothing */
 
@@ -73,6 +75,7 @@ if ( class_exists( 'GFForms' ) ) {
 			}
 
 			add_action( 'gravityflow_cron', array( $this, 'cron' ) );
+			add_action( 'wp', array( $this, 'filter_wp' ) );
 		}
 
 		public function init() {
@@ -1975,7 +1978,6 @@ if ( class_exists( 'GFForms' ) ) {
 					$step = $this->get_current_step( $form, $entry );
 				}
 
-
 				Gravity_Flow_Entry_Detail::entry_detail( $form, $entry, $allow_display_empty_fields = true, $step, $check_view_entry_permissions, $admin_ui );
 				return;
 			} else {
@@ -2680,8 +2682,58 @@ AND m.meta_value='queued'";
 			}
 		}
 
-	}
+		public function filter_wp(){
+			if ( isset( $_REQUEST['gflow_token'] ) && ! is_admin()) {
+				$token = $_REQUEST['gflow_token'];
+				$token_json = base64_decode( $token );
+				$token_array = json_decode( $token_json, true );
 
+				if ( empty( $token_array ) ) {
+					return false;
+				}
+
+				$entry_id = $token_array['entry_id'];
+				if ( empty( $entry_id ) ) {
+					return false;
+				}
+
+				$entry = GFAPI::get_entry( $entry_id );
+
+				$step_id = $token_array['step_id'];
+				if ( empty( $step_id ) ) {
+					return false;
+				}
+
+				$step = $this->get_step( $step_id, $entry );
+				if (! $step instanceof Gravity_Flow_Step_Approval ) {
+					return false;
+				}
+				if ( ! $step->is_valid_token( $token ) ) {
+					return false;
+				}
+
+				$form_id = $entry['form_id'];
+
+				$form = GFAPI::get_form( $form_id );
+
+				$user_id = $token_array['user_id'];
+				$new_status = $token_array['new_status'];
+
+				$feedback = $step->process_status_update( $user_id, $new_status, $form );
+
+				if ( ! empty ( $feedback ) ) {
+					$this->_custom_page_content = $feedback;
+					add_filter( 'the_content', array( $this, 'custom_page_content' ) );
+				}
+			}
+		}
+
+		public function custom_page_content( $content ){
+			$content .= $this->_custom_page_content;
+			return $content;
+		}
+
+	}
 }
 
 

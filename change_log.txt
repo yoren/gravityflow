@@ -12,6 +12,7 @@ Version 1.0-beta-7
 	- Fixed a style issue with the front-end detail page.
 	- Fixed some style issues with the status shortcode.
 	- Fixed an issue with the print function.
+	- Updated the one-click approval token processing so that authentication is not required.
 	- Removed the license key and background updates settings from the settings page on multisite installations when the key is set in the GRAVITY_FLOW_LICENSE_KEY constant.
 	- Removed the delete action from the step list for steps with entries so entries don't get orphaned. Either delete the entries or cancel the workflow for each of the entries.
 

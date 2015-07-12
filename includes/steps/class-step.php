@@ -396,6 +396,12 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return $schedule_timestamp;
 	}
 
+	public function get_timestamp(){
+		$entry = $this->get_entry();
+
+		return $entry['workflow_timestamp'];
+	}
+
 
 	/**
 	 * Process the step. For example, assign to a user, send to a service or send a notification. Return (bool) $complete.
