@@ -231,7 +231,10 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 		switch ( $type ) {
 			case 'select' :
-				$approvers = $this->assignees;
+				$approvers =  $this->assignees;
+				if ( empty( $approvers ) || ! is_array( $approvers ) ) {
+					$approvers = array();
+				}
 				break;
 			case 'field' :
 				$entry = $this->get_entry();
@@ -243,6 +246,8 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					foreach ( $routings as $routing ) {
 						$approvers[] = rgar( $routing, 'assignee' );
 					}
+				} else {
+					$approvers = array();
 				}
 
 				break;
