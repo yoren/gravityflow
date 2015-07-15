@@ -1,11 +1,13 @@
 (function (GravityFlow, $) {
 
     $(document).ready(function () {
+
+        if ( $('table.wp-list-table tbody tr').length == 1 ) {
+            return;
+        }
         var sortHandleMarkup = '<td class="sort-column"><i class="fa fa-bars feed-sort-handle"></i></td>';
         $('.wp-list-table thead tr, .wp-list-table tfoot tr').append('<th class="sort-column"></th>');
         $('.wp-list-table tbody tr').append(sortHandleMarkup);
-
-
 
         $('.wp-list-table tbody').addClass('gwf-reorder-mode')
             .sortable({
