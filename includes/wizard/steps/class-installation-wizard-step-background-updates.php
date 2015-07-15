@@ -43,7 +43,7 @@ class Gravity_Flow_Installation_Wizard_Step_Background_Updates extends Gravity_F
 			</label>
 		</div>
 		<div id="accept_terms_container" style="display:none;">
-			<div class="notice notice-error inline">
+			<div style="background: #fff none repeat scroll 0 0;box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);padding: 1px 12px;border-left: 4px solid #dd3d36;margin: 5px 0 15px;display: inline-block;">
 
 				<h3><i class="fa fa-exclamation-triangle gf_invalid"></i> <?php _e( 'Are you sure?', 'gravityflow' ); ?>
 				</h3>
