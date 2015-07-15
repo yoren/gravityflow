@@ -1,4 +1,11 @@
 -------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-7.1
+    - Added support for the form_id shortcode attribute to constrain the status page to a specific form.
+	- Fixed a debug warning on some versions of PHP.
+	- Fixed an issue with the conditional logic of the first step.
+	- Removed the sorting icon from step lists with only one step.
+
+-------------------------------------------------------------------------------------------------------------------
 Version 1.0-beta-7
 	- Added steps to form duplication process. When a form is duplicated the steps will get duplicated too.
 	- Added the submit page to the shortcode:
@@ -7,7 +14,7 @@ Version 1.0-beta-7
 	- Added French translation.
 	- Fixed a permissions issue in the print functionality.
 	- Fixed some warnings and inaccurate counts when displaying orphaned entries.
-	- Fixed and issue with the user input step where re-assignment doesn't happen if the step is still in progress.
+	- Fixed an issue with the user input step where re-assignment doesn't happen if the step is still in progress.
 	- Fixed debug warnings on the status page when no feeds have been configured.
 	- Fixed a style issue with the front-end detail page.
 	- Fixed some style issues with the status shortcode.
