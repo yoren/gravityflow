@@ -127,6 +127,10 @@ if ( class_exists( 'GFForms' ) ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_scripts' ), 10 );
 		}
 
+		public function setup(){
+			parent::setup();
+		}
+
 		public function upgrade( $previous_version ) {
 			if ( empty( $previous_version ) ) {
 				$settings = $this->get_app_settings();
@@ -580,7 +584,7 @@ if ( class_exists( 'GFForms' ) ) {
 					$step_type_setting,
 					array(
 						'name'           => 'condition',
-						'tooltip'        => "Build the conditional logic that should be applied to this step before it's allowed to be processed.",
+						'tooltip'        => "Build the conditional logic that should be applied to this step before it's allowed to be processed. If an entry does not meet the conditions of this step it will fall on to the next step in the list.",
 						'label'          => 'Condition',
 						'type'           => 'feed_condition',
 						'checkbox_label' => 'Enable Condition for this step',
@@ -2014,11 +2018,15 @@ if ( class_exists( 'GFForms' ) ) {
 			$this->status_page();
 		}
 
-		public function status_page( $is_admin_ui = true ) {
+		public function status_page( $args = array() ) {
+			$defaults = array(
+				'display_header' => true,
+			);
+			$args = array_merge( $defaults, $args );
 			?>
 			<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_inbox">
 
-				<?php if ( $is_admin_ui ) : ?>
+				<?php if ( $args['display_header'] ) : ?>
 					<h2 class="gf_admin_page_title">
 						<span><?php esc_html_e( 'Workflow Status', 'gravityflow' ); ?></span>
 
@@ -2029,7 +2037,7 @@ if ( class_exists( 'GFForms' ) ) {
 				endif;
 
 				require_once( $this->get_base_path() . '/includes/pages/class-status.php' );
-				Gravity_Flow_Status::display( $is_admin_ui );
+				Gravity_Flow_Status::display( $args );
 				?>
 			</div>
 		<?php
@@ -2113,14 +2121,14 @@ if ( class_exists( 'GFForms' ) ) {
 						gform_update_meta( $entry_id, 'workflow_final_status', 'cancelled' );
 						gform_delete_meta( $entry_id, 'workflow_step' );
 						$feedback = esc_html__( 'Workflow cancelled.',  'gravityflow' );
-						$this->add_note( $entry_id, $feedback );
+						$this->add_timeline_note( $entry_id, $feedback );
 
 						break;
 					case 'restart_step':
 						if ( $current_step ) {
 							$current_step->start();
 							$feedback = esc_html__( 'Workflow Step restarted.',  'gravityflow' );
-							$this->add_note( $entry_id, $feedback );
+							$this->add_timeline_note( $entry_id, $feedback );
 						}
 
 					break;
@@ -2129,7 +2137,7 @@ if ( class_exists( 'GFForms' ) ) {
 							$current_step->end();
 						}
 						$feedback = esc_html__( 'Workflow restarted.',  'gravityflow' );
-						$this->add_note( $entry_id, $feedback );
+						$this->add_timeline_note( $entry_id, $feedback );
 						gform_update_meta( $entry_id, 'workflow_final_status', 'pending' );
 						gform_update_meta( $entry_id, 'workflow_step', false );
 						$this->process_workflow( $form, $entry_id );
@@ -2144,7 +2152,7 @@ if ( class_exists( 'GFForms' ) ) {
 					}
 					$new_step = $this->get_step( $step_id, $entry );
 					$feedback = sprintf( esc_html__( 'Sent to step: %s',  'gravityflow' ), $new_step->get_name() );
-					$this->add_note( $entry_id, $feedback );
+					$this->add_timeline_note( $entry_id, $feedback );
 					gform_update_meta( $entry_id, 'workflow_final_status', 'pending' );
 					$new_step->start();
 					$this->process_workflow( $form, $entry_id );
@@ -2228,13 +2236,16 @@ if ( class_exists( 'GFForms' ) ) {
 			$steps = $this->get_steps( $form_id, $entry );
 			foreach ( $steps as $step ) {
 				if ( $step->is_active() ) {
-					return $step;
+					$form = GFAPI::get_form( $form_id );
+					if ( $step->is_condition_met( $form ) ) {
+						return $step;
+					}
 				}
 			}
 			return false;
 		}
 
-		public function shortcode(  $atts, $content = null ) {
+		public function shortcode( $atts, $content = null ) {
 
 			if ( ! is_user_logged_in() ) {
 				return;
@@ -2242,6 +2253,7 @@ if ( class_exists( 'GFForms' ) ) {
 
 			$a = shortcode_atts( array(
 				'page' => 'inbox',
+				'form_id' => null,
 			), $atts );
 
 
@@ -2273,7 +2285,18 @@ if ( class_exists( 'GFForms' ) ) {
 						}
 						require_once( ABSPATH .'wp-admin/includes/template.php');
 						ob_start();
-						$this->status_page( false );
+
+						$args = array(
+							'base_url' => remove_query_arg( array( 'entry-id', 'form-id', 'start-date', 'end-date', '_wpnonce', '_wp_http_referer', 'action', 'action2' ) ),
+							'detail_base_url' => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
+							'display_header' => false,
+							'action_url' => 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}/{$_SERVER['REQUEST_URI']}?",
+							'constraint_filters' => array(
+								'form_id' => 1
+							)
+						);
+
+						$this->status_page( $args );
 						return ob_get_clean();
 					}
 
@@ -2432,7 +2455,7 @@ if ( class_exists( 'GFForms' ) ) {
 			parent::uninstall();
 		}
 
-		public function add_note( $entry_id, $note, $user_id = false, $user_name = false ){
+		public function add_timeline_note( $entry_id, $note, $user_id = false, $user_name = false ){
 			global $current_user;
 			if ( $user_id === false ) {
 				$user_id = $current_user->ID;
