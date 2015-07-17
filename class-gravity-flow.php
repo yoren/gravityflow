@@ -1192,8 +1192,8 @@ if ( class_exists( 'GFForms' ) ) {
 			$form_id = rgget( 'id' );
 			$form_id = absint( $form_id );
 			$step = $this->get_step( $item['id'] );
-			$step_id = $step->get_id();
-			$count = $step->entry_count();
+			$step_id = $step ? $step->get_id() : 0;
+			$count = $step ? $step->entry_count() : 0;
 			$url = admin_url( 'admin.php?page=gf_entries&view=entries&id='. $form_id . '&field_id=workflow_step&operator=is&s=' . $step_id );
 			$link = sprintf( '<a href="%s">%d</a>', $url, $count );
 			return $link;
@@ -1932,10 +1932,18 @@ if ( class_exists( 'GFForms' ) ) {
 				return;
 			}
 
-			$this->inbox_page( true );
+			$this->inbox_page();
 		}
 
-		public function inbox_page( $admin_ui = true ) {
+		public function inbox_page( $args = array() ) {
+
+			$defaults = array(
+				'display_empty_fields' => true,
+				'check_permissions' => true,
+				'show_header' => true,
+			);
+
+			$args = array_merge( $defaults, $args );
 
 			if ( rgget( 'view' ) == 'entry' ) {
 
@@ -1955,8 +1963,6 @@ if ( class_exists( 'GFForms' ) ) {
 
 				$step = $this->get_current_step( $form, $entry );
 
-				$check_view_entry_permissions = true;
-
 				$feedback = $this->maybe_process_admin_action( $form, $entry );
 
 				if ( empty( $feedback ) && $step ) {
@@ -1970,7 +1976,7 @@ if ( class_exists( 'GFForms' ) ) {
 
 				if ( $feedback ) {
 					GFCache::flush();
-					$check_view_entry_permissions = false;
+					$args['check_permissions'] = false;
 					$entry = GFAPI::get_entry( $entry_id ); // refresh entry
 
 					?>
@@ -1982,24 +1988,22 @@ if ( class_exists( 'GFForms' ) ) {
 					$step = $this->get_current_step( $form, $entry );
 				}
 
-				Gravity_Flow_Entry_Detail::entry_detail( $form, $entry, $allow_display_empty_fields = true, $step, $check_view_entry_permissions, $admin_ui );
+				Gravity_Flow_Entry_Detail::entry_detail( $form, $entry, $step, $args );
 				return;
 			} else {
 
 				?>
 				<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_detail">
-					<?php if ( $admin_ui ) :	?>
+					<?php if ( $args['show_header'] ) :	?>
 						<h2 class="gf_admin_page_title">
 							<span><?php esc_html_e( 'Workflow Inbox', 'gravityflow' ); ?></span>
 						</h2>
-					<?php endif; ?>
 					<?php
-					if ( $admin_ui ) {
 						$this->toolbar();
-					}
+					endif;
 
 					require_once( $this->get_base_path() . '/includes/pages/class-inbox.php' );
-					Gravity_Flow_Inbox::display( $admin_ui );
+					Gravity_Flow_Inbox::display( $args );
 
 					?>
 				</div>
@@ -2090,8 +2094,6 @@ if ( class_exists( 'GFForms' ) ) {
 					'priority'     => 1000,
 				);
 			}
-
-
 
 			$menu_items['status'] = array(
 				'label'          => __( 'Status', 'gravityflow' ),
@@ -2247,23 +2249,30 @@ if ( class_exists( 'GFForms' ) ) {
 
 		public function shortcode( $atts, $content = null ) {
 
-			if ( ! is_user_logged_in() ) {
-				return;
-			}
-
 			$a = shortcode_atts( array(
 				'page' => 'inbox',
 				'form_id' => null,
+				'display_all' => null,
+				'allow_anonymous' => false,
 			), $atts );
 
+			$a['display_all'] = strtolower( $a['display_all'] ) == 'true' ? true : false;
+			$a['allow_anonymous'] = strtolower( $a['allow_anonymous'] ) == 'true' ? true : false;
+
+			if ( ! $a['allow_anonymous'] && ! is_user_logged_in() ) {
+				return;
+			}
 
 			switch ( $a['page'] ) {
 				case 'inbox' :
 					wp_enqueue_script( 'gravityflow_entry_detail' );
 					wp_enqueue_script( 'gravityflow_status_list' );
-
+					$args = array(
+						'show_header' => false,
+						'detail_base_url' => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
+					);
 					ob_start();
-					$this->inbox_page( $display_title = false, $display_toolbar = false );
+					$this->inbox_page( $args );
 					return ob_get_clean();
 					break;
 				case 'submit' :
@@ -2277,10 +2286,17 @@ if ( class_exists( 'GFForms' ) ) {
 
 					if ( rgget( 'view' ) ) {
 						ob_start();
-						$this->inbox_page( $display_title = false, $display_toolbar = false );
+
+						$args = array(
+							'show_header' => false,
+							'detail_base_url' => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
+							'check_permissions' => ! ( ( $a['allow_anonymous'] && $a['display_all'] ) || ( ! $a['allow_anonymous'] && ! $a['display_all'] ) ),
+						);
+
+						$this->inbox_page( $args );
 						return ob_get_clean();
 					} else {
-						if( ! class_exists('WP_Screen') ) {
+						if ( ! class_exists( 'WP_Screen' ) ) {
 							require_once( ABSPATH . 'wp-admin/includes/screen.php' );
 						}
 						require_once( ABSPATH .'wp-admin/includes/template.php');
@@ -2290,11 +2306,16 @@ if ( class_exists( 'GFForms' ) ) {
 							'base_url' => remove_query_arg( array( 'entry-id', 'form-id', 'start-date', 'end-date', '_wpnonce', '_wp_http_referer', 'action', 'action2' ) ),
 							'detail_base_url' => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
 							'display_header' => false,
-							'action_url' => 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}/{$_SERVER['REQUEST_URI']}?",
+							'action_url' => 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}?",
 							'constraint_filters' => array(
-								'form_id' => 1
-							)
+								'form_id' => $a['form_id'],
+							),
+							'display_all' => $a['display_all'],
 						);
+
+						if ( ! is_user_logged_in() && $a['allow_anonymous'] ) {
+							$args['bulk_actions'] = array();
+						}
 
 						$this->status_page( $args );
 						return ob_get_clean();
@@ -2688,9 +2709,9 @@ AND m.meta_value='queued'";
 			}
 			$feed_id = $item['id'];
 			$current_step = $this->get_step( $feed_id );
-			$entry_count = $current_step->entry_count();
+			$entry_count = $current_step ? $current_step->entry_count() : false;
 
-			if ( $entry_count > 0 ) {
+			if ( $entry_count && $entry_count > 0 ) {
 				unset( $action_links['delete'] );
 			}
 			return $action_links;
