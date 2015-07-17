@@ -7,8 +7,17 @@ if ( ! class_exists( 'GFForms' ) ) {
 
 class Gravity_Flow_Inbox {
 
-	public static function display( $admin_ui ){
+	public static function display( $args ){
 		global $current_user;
+
+		$defaults = array(
+			'display_empty_fields' => true,
+			'check_permissions' => true,
+			'detail_base_url' => admin_url( 'admin.php?page=gravityflow-inbox&view=entry' ),
+		);
+
+		$args = array_merge( $defaults, $args );
+
 
 		$field_filters[] = array(
 			'key'   => 'workflow_user_id_' . $current_user->ID,
@@ -28,7 +37,6 @@ class Gravity_Flow_Inbox {
 		$search_criteria['status'] = 'active';
 
 		$entries = GFAPI::get_entries( 0, $search_criteria );
-
 
 		if ( sizeof( $entries ) > 0 ) {
 			?>
@@ -50,8 +58,9 @@ class Gravity_Flow_Inbox {
 					$form = GFAPI::get_form( $entry['form_id'] );
 					$user = get_user_by( 'id', (int) $entry['created_by'] );
 					$name = $user ? $user->display_name : $entry['ip'];
-					$base_url = $admin_ui ? admin_url( 'admin.php?page=gravityflow-inbox&' ) : 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}/{$_SERVER['REQUEST_URI']}?";
-					$url_entry = sprintf( '%sview=entry&id=%d&lid=%d', $base_url, $entry['form_id'], $entry['id'] );
+					$base_url = $args['detail_base_url'];
+					$url_entry = $base_url . sprintf( '&id=%d&lid=%d', $entry['form_id'], $entry['id'] );
+					$url_entry = esc_url( $url_entry );
 					$link = "<a href='{$url_entry}'>%s</a>";
 					?>
 					<tr>

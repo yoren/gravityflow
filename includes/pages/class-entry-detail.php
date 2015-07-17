@@ -9,11 +9,22 @@ class Gravity_Flow_Entry_Detail {
 	/**
 	 * @param $form
 	 * @param $entry
-	 * @param bool $allow_display_empty_fields
-	 * @param array $editable_fields
-	 * @param Gravity_Flow_Step $current_step
+	 * @param null|Gravity_Flow_Step $current_step
+	 * @param array $args
 	 */
-	public static function entry_detail( $form, $entry, $allow_display_empty_fields = false, $current_step = null, $check_view_entry_permissions = true, $admin_ui = true ){
+	public static function entry_detail( $form, $entry, $current_step = null, $args  = array() ){
+
+		$defaults = array(
+			'display_empty_fields' => true,
+			'check_permissions' => true,
+			'show_header' => true,
+		);
+
+		$args = array_merge( $defaults, $args );
+
+		$display_empty_fields = (bool) $args['display_empty_fields'];
+		$check_view_entry_permissions = (bool) $args['check_permissions'];
+		$show_header = (bool) $args['show_header'];
 
 		?>
 
@@ -81,28 +92,24 @@ class Gravity_Flow_Entry_Detail {
 
 		<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_detail">
 
-			<?php if ( $admin_ui ) :	?>
+			<?php if ( $show_header ) :	?>
 			<h2 class="gf_admin_page_title">
 				<span><?php echo esc_html__( 'Workflow Entry #', 'gravityflow' ) . absint( $entry['id'] ); ?></span><span class="gf_admin_page_subtitle"><span class="gf_admin_page_formid">ID: <?php echo absint( $form['id'] ); ?></span><span class='gf_admin_page_formname'><?php esc_html_e( 'Workflow Form', 'gravityflow' ) ?>: <?php esc_html_e( $form['title'] ); ?></span></span>
 
 			</h2>
-			<?php endif; ?>
 
-			<?php
-			if ( $admin_ui ) :
-			?>
-				<div id="gf_form_toolbar">
-					<ul id="gf_form_toolbar_links">
+			<div id="gf_form_toolbar">
+				<ul id="gf_form_toolbar_links">
 
-						<?php
+					<?php
 
-						$menu_items = gravity_flow()->get_toolbar_menu_items();
+					$menu_items = gravity_flow()->get_toolbar_menu_items();
 
-						echo GFForms::format_toolbar_menu_items( $menu_items );
+					echo GFForms::format_toolbar_menu_items( $menu_items );
 
-						?>
-					</ul>
-				</div>
+					?>
+				</ul>
+			</div>
 
 			<?php
 			endif;
@@ -141,6 +148,8 @@ class Gravity_Flow_Entry_Detail {
 					<div id="side-info-column" class="inner-sidebar">
 						<?php
 						gravity_flow()->workflow_entry_detail_status_box( $form, $entry );
+
+						if ( is_user_logged_in() || $check_view_entry_permissions ) :
 						?>
 
 						<!-- begin print button -->
@@ -156,6 +165,7 @@ class Gravity_Flow_Entry_Detail {
 						</div>
 						<!-- end print button -->
 
+						<?php endif; ?>
 					</div>
 
 					<div id="post-body" class="has-sidebar">
@@ -178,7 +188,7 @@ class Gravity_Flow_Entry_Detail {
 							$can_update = $current_step && ( $current_user_status == 'pending' || $current_role_status == 'pending' );
 							$editable_fields = $can_update ? $current_step->get_editable_fields() : array();
 
-							self::entry_detail_grid( $form, $entry, true, $editable_fields, $current_step );
+							self::entry_detail_grid( $form, $entry, $display_empty_fields, $editable_fields, $current_step );
 
 							do_action( 'gravityflow_entry_detail', $form, $entry );
 								?>

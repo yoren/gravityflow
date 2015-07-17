@@ -79,6 +79,10 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 	public $constraint_filters = array();
 
+	public $display_all;
+
+	public $bulk_actions;
+
 	function __construct( $args = array() ) {
 		$default_args = array(
 			'singular' => __( 'entry', 'gravityflow' ),
@@ -88,15 +92,19 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			'detail_base_url' => admin_url( 'admin.php?page=gravityflow-inbox&view=entry' ),
 			'constraint_filters' => array(),
 			'screen' => 'gravityflow-status',
+			'display_all' => GFAPI::current_user_can_any( 'gravityflow_status_view_all' ),
+			'bulk_actions' => array( 'print' => esc_html__( 'Print', 'gravityflow' ) ),
 		);
 
-		$args = array_merge( $default_args, $args );
+		$args = wp_parse_args( $args, $default_args );
 
 		parent::__construct( $args );
 
 		$this->base_url = $args['base_url'];
 		$this->detail_base_url = $args['detail_base_url'];
 		$this->constraint_filters = $args['constraint_filters'];
+		$this->display_all = $args['display_all'];
+		$this->bulk_actions = $args['bulk_actions'];
 		$this->set_counts();
 	}
 
@@ -227,7 +235,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$label = $step ? esc_html( $step->get_name() ) : '';
 			$link = "<a href='{$url_entry}'>$label</a>";
 			echo $link;
-		} else{
+		} else {
 			echo '<span class="gravityflow-empty">&nbsp;</span>';
 		}
 	}
@@ -241,7 +249,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	}
 
 	function get_bulk_actions() {
-		$bulk_actions = array( 'print' => esc_html__( 'Print', 'gravityflow' ) );
+		$bulk_actions = $this->bulk_actions;
 		return $bulk_actions;
 	}
 
@@ -345,7 +353,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		}
 
 		$user_id_clause = '';
-		if ( ! GFAPI::current_user_can_any( 'gravityflow_status_view_all' ) ) {
+		if ( ! $this->display_all ) {
 			$user = wp_get_current_user();
 			$user_id_clause = $wpdb->prepare( ' AND created_by=%d' , $user->ID );
 		}
@@ -449,7 +457,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$search_criteria['start_date'] = $filter_args['start-date'];
 		}
 		if ( ! empty( $filter_args['end-date'] ) ) {
-			$search_criteria['end_date'] =  $filter_args['end-date'] ;
+			$search_criteria['end_date'] = $filter_args['end-date'] ;
 		}
 
 		if ( ! empty( $_GET['entry-id'] ) ) {
@@ -474,7 +482,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			}
 		}
 
-		if (  empty( $filter_args['display_all'] ) && ! GFAPI::current_user_can_any( 'gravityflow_status_view_all' ) ) {
+		if ( ! $this->display_all ) {
 			$search_criteria['field_filters'][] = array(
 				'key'   => 'created_by',
 				'value' => $current_user->ID,
@@ -485,8 +493,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		$order = ( ! empty( $_GET['order'] ) ) ? $_GET['order'] : 'desc';
 
-		$user             = get_current_user_id();
-		if (function_exists( 'get_current_screen' ) ) {
+		$user = get_current_user_id();
+		if ( function_exists( 'get_current_screen' ) ) {
 			$screen           = get_current_screen();
 			if ( $screen ) {
 				$option = $screen->get_option( 'per_page', 'option' );
