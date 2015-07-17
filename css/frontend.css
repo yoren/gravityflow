@@ -117,9 +117,26 @@ thead tr {background: #FFF}
 tr:nth-child(even) {background: #f9f9f9}
 tr:nth-child(odd) {background: #FFF}
 
-table#gravityflow-inbox {border-collapse:collapse;}
-table#gravityflow-inbox td {display:table-cell;padding:0px;}
-table#gravityflow-inbox td a {text-decoration:none!important; display:block; padding:10px; height:100%; border-bottom:none;}
+table#gravityflow-inbox {
+    border-collapse:collapse;
+    width:100%;
+}
+table#gravityflow-inbox th{
+    display:table-cell;
+    padding: 10px;
+    border-right:0;
+}
+table#gravityflow-inbox td {
+    padding: 0;
+    border-right:0;
+}
+table#gravityflow-inbox td a {
+    text-decoration:none!important;
+    display:block;
+    padding:10px;
+    height:100%;
+    border-bottom:none;
+}
 
 #gravityflow-no-pending-tasks-container{
 
@@ -239,7 +256,7 @@ div.gf_entry_wrap {
 table#gravityflow-inbox th[data-label="ID"],
 table#gravityflow-inbox td[data-label="ID"] {
     width:70px;
-    border-left:1px solid #ddd;
+    /*border-left:1px solid #ddd;*/
 }
 
 table#gravityflow-inbox th,{
@@ -315,6 +332,10 @@ input.small-text{
 	color: #555;
 	line-height: 30px;
 	font-size: 12px;
+}
+
+.tablenav-pages{
+    white-space: nowrap;
 }
 
 .tablenav .no-pages,
@@ -435,8 +456,21 @@ input.medium-text.datepicker{
 	width:90px!important;
 }
 
-table.wp-list-table.entries {border-collapse:collapse;}
+label.screen-reader-text{
+    position: absolute;
+    margin: -1px;
+    padding: 0;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    border: 0;
+}
 
+table.wp-list-table.entries {
+    border-collapse:collapse;
+    width:100%;
+}
 
 table.wp-list-table.entries td a,
 table.wp-list-table.entries td .gravityflow-empty
@@ -445,7 +479,7 @@ table.wp-list-table.entries td .gravityflow-empty
 table.wp-list-table.entries th[data-label="ID"],
 table.wp-list-table.entries td[data-label="ID"] {
 	width:70px;
-	border-left:1px solid #ddd;
+	/*border-left:1px solid #ddd;*/
 }
 
 .check-column{
@@ -487,6 +521,7 @@ table.wp-list-table.entries td[data-label="ID"] {
 		font-size: 13px;
 		border-bottom: 1px dotted #ccc;
 		border-left: 1px dotted #ccc;
+        border-right: 1px dotted #ccc;
 	}
 
 	table.wp-list-table.entries td:last-child {
@@ -515,5 +550,6 @@ table.wp-list-table.entries td[data-label="ID"] {
 	table.wp-list-table.entries th{
 		border-top:1px solid #ddd !important;
 	}
+
 
 }
