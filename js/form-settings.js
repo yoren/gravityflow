@@ -378,7 +378,17 @@
             return mergeTags;
         }
 
-        mergeTags['other'].tags.push({tag: '{workflow_note}', label: 'Workflow Note'});
+        var tags = [];
+        tags.push({tag: '{workflow_entry_link}', label: 'Entry Link'});
+        tags.push({tag: '{workflow_entry_url}', label: 'Entry URL'});
+        tags.push({tag: '{workflow_note}', label: 'Note'});
+
+        mergeTags['gravityflow'] = {
+            label: 'Workflow',
+            tags: tags
+        };
+
+        return mergeTags;
 
     }
 
@@ -392,6 +402,8 @@
         }
 
         var tags = [];
+        tags.push({tag: '{workflow_entry_link}', label: 'Entry Link'});
+        tags.push({tag: '{workflow_entry_url}', label: 'Entry URL'});
         tags.push({tag: '{workflow_approve_link}', label: 'Approve Link'});
         tags.push({tag: '{workflow_reject_link}', label: 'Reject Link'});
         tags.push({tag: '{workflow_approve_token}', label: 'Approve Token'});
