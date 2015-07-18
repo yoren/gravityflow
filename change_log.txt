@@ -1,6 +1,22 @@
 -------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-7.3
+    - Added the {workflow_entry_link} and {workflow_entry_url} merge tags to the assignee and approval emails.
+    - Updated the user input step to display the 'complete' radio button as selected by default instead of the 'in progress' button.
+    - Fixed an issue with step re-assignment when changing assignee settings in a step.
+    - Fixed an issue with duplicate step assignment when a user is assigned to multiple routing conditions.
+
+-------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-7.2
+    - Added support for the display_all shortcode attribute to allow override of the gravityflow_status_view_all capability and display all entries in the status page. Optionally combine with the form_id attribute to constrain the results.
+        Example: [gravityflow page="status" display_all="true"]
+    - Added support for the allow_anonymous shortcode attribute to allow anonymous access to the status list. Use together with the display_all attribute.
+        Example: [gravityflow page="status" allow_anonymous="true" display_all="true"]
+    - Fixing some styles in both the inbox and status pages.
+
+-------------------------------------------------------------------------------------------------------------------
 Version 1.0-beta-7.1
     - Added support for the form_id shortcode attribute to constrain the status page to a specific form.
+        Example: [gravityflow page="status" form_id="1"]
 	- Fixed a debug warning on some versions of PHP.
 	- Fixed an issue with the conditional logic of the first step.
 	- Removed the sorting icon from step lists with only one step.
