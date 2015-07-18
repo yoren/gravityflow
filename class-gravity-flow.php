@@ -735,7 +735,7 @@ if ( class_exists( 'GFForms' ) ) {
 			);
 			$current_step_id = $this->get_current_feed_id();
 			$form_id = absint( rgget( 'id' ) );
-			$current_step = $this->get_step( $form_id, $current_step_id );
+			$current_step = $this->get_step( $current_step_id );
 
 			$entry_count = $current_step->entry_count();
 
