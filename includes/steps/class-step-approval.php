@@ -231,7 +231,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 		switch ( $type ) {
 			case 'select' :
-				$approvers =  $this->assignees;
+				$approvers = $this->assignees;
 				if ( empty( $approvers ) || ! is_array( $approvers ) ) {
 					$approvers = array();
 				}
@@ -242,27 +242,26 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				break;
 			case 'routing' :
 				$routings = $this->routing;
+				$entry = $this->get_entry();
 				if ( is_array( $routings ) ) {
 					foreach ( $routings as $routing ) {
-						$approvers[] = rgar( $routing, 'assignee' );
+						$assignee = rgar( $routing, 'assignee' );
+						if ( in_array( $assignee, $approvers ) ) {
+							continue;
+						}
+						if ( $entry ) {
+							if ( $user_is_assignee = $this->evaluate_routing_rule( $routing ) ) {
+								$approvers[] = $assignee;
+							}
+						} else {
+							$approvers[] = $assignee;
+						}
 					}
 				} else {
 					$approvers = array();
 				}
 
 				break;
-		}
-
-		$entry = $this->get_entry();
-
-		if ( $entry ) {
-			$required_approvers = array();
-			foreach ( $approvers as $approver ) {
-				if ( $this->is_approval_required( $approver ) ) {
-					$required_approvers[] = $approver;
-				}
-			}
-			$approvers = $required_approvers;
 		}
 
 		return $approvers;
@@ -731,6 +730,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	}
 
 	public function replace_variables($text, $user_id){
+		$text = parent::replace_variables( $text, $user_id );
 		$comment = rgpost( 'gravityflow_note' );
 		$text = str_replace( '{workflow_note}', $comment, $text );
 
