@@ -402,7 +402,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return $entry['workflow_timestamp'];
 	}
 
-
 	/**
 	 * Process the step. For example, assign to a user, send to a service or send a notification. Return (bool) $complete.
 	 *
@@ -480,13 +479,19 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 	/**
 	 * Override this method to replace merge tags.
+	 * Important: call the parent method first.
+	 * $text = parent::replace_variables( $text, $user_id );
 	 *
 	 * @param $text
 	 * @param $user_id
 	 *
 	 * @return mixed
 	 */
-	public function replace_variables($text, $user_id){
+	public function replace_variables( $text, $user_id ){
+		$entry_url = admin_url( sprintf( 'admin.php?page=gravityflow-inbox&view=entry&id=%d&lid=%d', $this->get_form_id(), $this->get_entry_id() ) );
+		$entry_link = sprintf( '<a href="%s">%s</a>', $entry_url, esc_html__( 'Entry', 'gravityflow' ) );
+		$text = str_replace( '{workflow_entry_link}', $entry_link, $text );
+		$text = str_replace( '{workflow_entry_url}', $entry_url, $text );
 		return $text;
 	}
 
