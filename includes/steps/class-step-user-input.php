@@ -475,8 +475,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				<textarea id="gravityflow-note" style="width:100%;" rows="4" class="wide" name="gravityflow_note"></textarea>
 				<br /><br />
 				<div>
-					<label for="gravityflow_in_progress"><input type="radio" id="gravityflow_in_progress" name="gravityflow_status" value="in_progress" checked="checked"/><?php esc_html_e( 'In progress', 'gravityflow' ); ?></label>&nbsp;&nbsp;
-					<label for="gravityflow_complete"><input type="radio" id="gravityflow_complete" name="gravityflow_status" value="complete" /><?php esc_html_e( 'Complete', 'gravityflow' ); ?></label>
+					<label for="gravityflow_in_progress"><input type="radio" id="gravityflow_in_progress" name="gravityflow_status" value="in_progress" /><?php esc_html_e( 'In progress', 'gravityflow' ); ?></label>&nbsp;&nbsp;
+					<label for="gravityflow_complete"><input type="radio" id="gravityflow_complete" name="gravityflow_status" value="complete" checked="checked"/><?php esc_html_e( 'Complete', 'gravityflow' ); ?></label>
 				</div>
 				<br />
 				<div style="text-align:right;">
@@ -670,6 +670,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	}
 
 	public function replace_variables($text, $user_id){
+		$text = parent::replace_variables( $text, $user_id );
 		$comment = rgpost( 'gravityflow_note' );
 		$text = str_replace( '{workflow_note}', $comment, $text );
 
