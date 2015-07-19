@@ -262,7 +262,7 @@ class Gravity_Flow_Entry_Detail {
 			$display_empty_fields = rgget( 'gf_display_empty_fields', $_COOKIE );
 		}
 
-		$display_empty_fields = (bool) apply_filters( 'gform_entry_detail_grid_display_empty_fields', $display_empty_fields, $form, $entry );
+		$display_empty_fields = (bool) apply_filters( 'gravityflow_entry_detail_grid_display_empty_fields', $display_empty_fields, $form, $entry );
 
 		?>
 
