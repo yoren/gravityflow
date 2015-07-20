@@ -67,7 +67,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				array(
 					'name'     => 'unanimous_approval',
 					'label'    => __( 'Approval Policy', 'gravityflow' ),
-					'tooltip'   => __( 'Define how approvals should be processed. If all assignees must approve then the entry will require unanimous approval before the step can be completed. If the step is assign to a role only one user in that role needs to approve.', 'gravityflow' ),
+					'tooltip'   => __( 'Define how approvals should be processed. If all assignees must approve then the entry will require unanimous approval before the step can be completed. If the step is assigned to a role only one user in that role needs to approve.', 'gravityflow' ),
 					'type'     => 'radio',
 					'default_value' => false,
 					'choices' => array(
@@ -451,10 +451,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 		$current_user_status = $this->get_user_status( $user_id );
 
-		if ( $current_user_status != 'pending' ) {
-			return esc_html__( 'The status could not be changed because this step has already been processed.', 'gravityflow' );
-		}
-
 		$current_role_status = false;
 		$role = false;
 		foreach ( gravity_flow()->get_user_roles() as $role ) {
@@ -463,6 +459,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				break;
 			}
 		}
+
+		if ( $current_user_status != 'pending' && $current_role_status != 'pending' ) {
+			return esc_html__( 'The status could not be changed because this step has already been processed.', 'gravityflow' );
+		}
+
 		if ( $current_user_status == 'pending' ) {
 			$this->update_assignee_status( $user_id, 'user_id', $new_status );
 		}
