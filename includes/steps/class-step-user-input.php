@@ -53,6 +53,24 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 					'type'  => 'routing',
 				),
 				array(
+					'id' => 'assignee_policy',
+					'name'     => 'assignee_policy',
+					'label'    => __( 'Assignee Policy', 'gravityflow' ),
+					'tooltip'   => __( 'Define how this step should be processed. If all assignees must complete this step then the entry will require input from every assignee before the step can be completed. If the step is assigned to a role only one user in that role needs to complete the step.', 'gravityflow' ),
+					'type'     => 'radio',
+					'default_value' => 'all',
+					'choices' => array(
+						array(
+							'label' => __( 'At least one assignee must complete this step', 'gravityflow' ),
+							'value' => 'any',
+						),
+						array(
+							'label' => __( 'All assignees must complete this step', 'gravityflow' ),
+							'value' => 'all',
+						),
+					),
+				),
+				array(
 					'name'    => 'assignee_notification_enabled',
 					'label'   => 'Email',
 					'type'    => 'checkbox',
@@ -179,7 +197,15 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		foreach ( $assignee_details as $assignee_detail ) {
 			$assignee = $assignee_detail['assignee'];
 			$user_status = $this->get_assignee_status( $assignee );
-			if ( empty( $user_status ) || $user_status == 'pending' ) {
+
+			if ( $this->type == 'select' && $this->assignee_policy == 'any' ) {
+				if ( $user_status == 'complete' ) {
+					$step_status = 'complete';
+					break;
+				} else {
+					$step_status = 'pending';
+				}
+			} else if ( empty( $user_status ) || $user_status == 'pending' ) {
 				$step_status = 'pending';
 			}
 		}

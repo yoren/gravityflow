@@ -273,7 +273,7 @@
 
     function toggleType(showType) {
         var fields = {
-            select: ['assignees\\[\\]', 'editable_fields\\[\\]', 'unanimous_approval'],
+            select: ['assignees\\[\\]', 'editable_fields\\[\\]', 'unanimous_approval', 'assignee_policy'],
             routing: ['routing']
         };
 
@@ -347,6 +347,7 @@
             'assignees\\[\\]',
             'editable_fields\\[\\]',
             'routing',
+            'assignee_policy',
             'assignee_notification_message'
 
         ];
