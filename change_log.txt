@@ -1,4 +1,12 @@
 -------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-8.2
+    - Added the Assignee Policy setting to the User Input step.
+
+-------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-8.1
+    - Fixed an issue with the approval step when assigned to roles where the workflow doesn't progress.
+
+-------------------------------------------------------------------------------------------------------------------
 Version 1.0-beta-8
     - Added the {workflow_entry_link} and {workflow_entry_url} merge tags to the assignee and approval emails.
     - Added support for the display_all shortcode attribute to allow override of the gravityflow_status_view_all capability and display all entries in the status page. Optionally combine with the form_id attribute to constrain the results.
