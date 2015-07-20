@@ -1,9 +1,9 @@
 # Copyright 2015-2015 Steven Henty.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Flow Beta 1.0-beta-7.3\n"
+"Project-Id-Version: Gravity Flow Beta 1.0-beta-8.2\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2015-07-18 11:52:52+00:00\n"
+"POT-Creation-Date: 2015-07-20 10:54:44+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -166,7 +166,7 @@ msgid "Status:"
 msgstr ""
 
 #: class-gravity-flow.php:1277 includes/pages/class-status.php:125
-#: includes/steps/class-step-user-input.php:479
+#: includes/steps/class-step-user-input.php:505
 #: includes/steps/class-step.php:141
 msgid "Complete"
 msgstr ""
@@ -195,7 +195,7 @@ msgstr ""
 
 #: class-gravity-flow.php:1377 class-gravity-flow.php:1604
 #: class-gravity-flow.php:2099 includes/pages/class-status.php:273
-#: includes/steps/class-step-user-input.php:531
+#: includes/steps/class-step-user-input.php:557
 msgid "Status"
 msgstr ""
 
@@ -649,8 +649,8 @@ msgstr ""
 msgid ""
 "Define how approvals should be processed. If all assignees must approve "
 "then the entry will require unanimous approval before the step can be "
-"completed. If the step is assign to a role only one user in that role needs "
-"to approve."
+"completed. If the step is assigned to a role only one user in that role "
+"needs to approve."
 msgstr ""
 
 #: includes/steps/class-step-approval.php:75
@@ -687,7 +687,7 @@ msgstr ""
 #: includes/steps/class-step-approval.php:101
 #: includes/steps/class-step-approval.php:126
 #: includes/steps/class-step-approval.php:173
-#: includes/steps/class-step-user-input.php:61
+#: includes/steps/class-step-user-input.php:79
 #: includes/wizard/steps/class-installation-wizard-step-background-updates.php:96
 msgid "Enabled"
 msgstr ""
@@ -749,56 +749,56 @@ msgstr ""
 msgid "Entry {entry_id} has been approved"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:455
+#: includes/steps/class-step-approval.php:464
 msgid ""
 "The status could not be changed because this step has already been "
 "processed."
 msgstr ""
 
-#: includes/steps/class-step-approval.php:476
+#: includes/steps/class-step-approval.php:477
 msgid "Approved."
 msgstr ""
 
-#: includes/steps/class-step-approval.php:480
+#: includes/steps/class-step-approval.php:481
 msgid "Rejected."
 msgstr ""
 
-#: includes/steps/class-step-approval.php:488
-#: includes/steps/class-step-approval.php:583
-#: includes/steps/class-step-user-input.php:312
+#: includes/steps/class-step-approval.php:489
+#: includes/steps/class-step-approval.php:584
+#: includes/steps/class-step-user-input.php:338
 msgid "Note"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:504
+#: includes/steps/class-step-approval.php:505
 msgid "Entry Approved"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:507
+#: includes/steps/class-step-approval.php:508
 msgid "Entry Rejected"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:518
+#: includes/steps/class-step-approval.php:519
 msgid "Pending Approval"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:553
-#: includes/steps/class-step-user-input.php:419
+#: includes/steps/class-step-approval.php:554
+#: includes/steps/class-step-user-input.php:445
 msgid "Role"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:558
-#: includes/steps/class-step-user-input.php:412
-#: includes/steps/class-step-user-input.php:531
+#: includes/steps/class-step-approval.php:559
+#: includes/steps/class-step-user-input.php:438
+#: includes/steps/class-step-user-input.php:557
 msgid "User"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:591
-#: includes/steps/class-step-approval.php:755
+#: includes/steps/class-step-approval.php:592
+#: includes/steps/class-step-approval.php:756
 msgid "Approve"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:595
-#: includes/steps/class-step-approval.php:773
+#: includes/steps/class-step-approval.php:596
+#: includes/steps/class-step-approval.php:774
 msgid "Reject"
 msgstr ""
 
@@ -827,7 +827,7 @@ msgid "Create"
 msgstr ""
 
 #: includes/steps/class-step-feed-user-registration.php:42
-#: includes/steps/class-step-user-input.php:484
+#: includes/steps/class-step-user-input.php:510
 msgid "Update"
 msgstr ""
 
@@ -871,23 +871,43 @@ msgstr ""
 msgid "Editable fields"
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:306
+#: includes/steps/class-step-user-input.php:58
+msgid "Assignee Policy"
+msgstr ""
+
+#: includes/steps/class-step-user-input.php:59
+msgid ""
+"Define how this step should be processed. If all assignees must complete "
+"this step then the entry will require input from every assignee before the "
+"step can be completed. If the step is assigned to a role only one user in "
+"that role needs to complete the step."
+msgstr ""
+
+#: includes/steps/class-step-user-input.php:64
+msgid "At least one assignee must complete this step"
+msgstr ""
+
+#: includes/steps/class-step-user-input.php:68
+msgid "All assignees must complete this step"
+msgstr ""
+
+#: includes/steps/class-step-user-input.php:332
 msgid "Entry updated and step complete."
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:306
+#: includes/steps/class-step-user-input.php:332
 msgid "Entry updated."
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:472
+#: includes/steps/class-step-user-input.php:498
 msgid "Notes"
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:478
+#: includes/steps/class-step-user-input.php:504
 msgid "In progress"
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:568
+#: includes/steps/class-step-user-input.php:594
 msgid "You don't have adequate permission to edit entries."
 msgstr ""
 
