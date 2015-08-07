@@ -95,6 +95,8 @@ if ( class_exists( 'GFForms' ) ) {
 			add_action( 'gform_register_init_scripts', array( $this, 'filter_gform_register_init_scripts' ), 10, 3 );
 
 			add_filter( 'auto_update_plugin', array( $this, 'maybe_auto_update' ), 10, 2 );
+
+			add_filter( 'gform_enqueue_scripts' , array( $this, 'filter_gform_enqueue_scripts'), 10, 2 );
 		}
 
 		public function init_admin() {
@@ -248,7 +250,7 @@ if ( class_exists( 'GFForms' ) ) {
 				array(
 					'handle'  => 'gravityflow_status_list',
 					'src'     => $this->get_base_url() . "/js/status-list{$min}.js",
-					'deps'    => array( 'jquery' ),
+					'deps'    => array( 'jquery', 'gform_field_filter' ),
 					'version' => $this->_version,
 					'enqueue' => array(
 						array(
@@ -263,7 +265,8 @@ if ( class_exists( 'GFForms' ) ) {
 					'deps'    => array( 'jquery' ),
 					'version' => $this->_version,
 					'enqueue' => array(
-						array( 'admin_page' => array( 'form_settings' ) ),
+						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=_notempty_' ),
+						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=0' ),
 					),
 					'strings' => array(
 						'accounts'     => $users,
@@ -290,14 +293,29 @@ if ( class_exists( 'GFForms' ) ) {
 				if ( $shortcode_found ) {
 					$this->enqueue_form_scripts();
 					$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
+
 					wp_enqueue_script( 'gravityflow_entry_detail', $this->get_base_url() . "/js/entry-detail{$min}.js", array( 'jquery' ), $this->_version );
 					wp_enqueue_script( 'gravityflow_status_list', $this->get_base_url() . "/js/status-list{$min}.js",  array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'gform_datepicker_init' ), $this->_version );
+					wp_enqueue_script( 'gform_field_filter', GFCommon::get_base_url() . "/js/gf_field_filter{$min}.js",  array( 'jquery', 'gform_datepicker_init' ), $this->_version );
 					wp_enqueue_script( 'gravityflow_frontend', $this->get_base_url() . "/js/frontend{$min}.js",  array(), $this->_version );
 					wp_enqueue_style( 'gform_admin',  GFCommon::get_base_url() . "/css/admin{$min}.css", null, $this->_version );
 					wp_enqueue_style( 'gravityflow_entry_detail',  $this->get_base_url() . "/css/entry-detail{$min}.css", null, $this->_version );
 					wp_enqueue_style( 'gravityflow_frontend_css', $this->get_base_url() . "/css/frontend{$min}.css", null, $this->_version );
 					wp_enqueue_style( 'gravityflow_status', $this->get_base_url() . "/css/status{$min}.css", null, $this->_version );
 					wp_localize_script( 'gravityflow_status_list', 'gravityflow_status_list_strings', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
+					GFCommon::maybe_output_gf_vars();
+				}
+			}
+		}
+
+		public function filter_gform_enqueue_scripts( $form, $is_ajax ){
+
+			if ( $this->has_enhanced_dropdown( $form ) ) {
+				wp_enqueue_script( 'gform_gravityforms' );
+				if ( wp_script_is( 'chosen', 'registered' ) ) {
+					wp_enqueue_script( 'chosen' );
+				} else {
+					wp_enqueue_script( 'gform_chosen' );
 				}
 			}
 		}
@@ -459,7 +477,7 @@ if ( class_exists( 'GFForms' ) ) {
 				$role_choices[] = array( 'value' => 'role|' . $role, 'label' => $name );
 			}
 
-			$args            = apply_filters( 'gform_filters_get_users', array( 'number' => 200 ) );
+			$args            = apply_filters( 'gravityflow_get_user_args', array( 'number' => 200 ) );
 			$accounts        = get_users( $args );
 			$account_choices = array();
 			foreach ( $accounts as $account ) {
@@ -1234,6 +1252,8 @@ if ( class_exists( 'GFForms' ) ) {
 
 			$step_choices = array();
 
+			$workflow_final_status_options = array();
+
 			foreach ( $steps as $step ) {
 
 				if (  empty ( $step ) || ! $step->is_active() ) {
@@ -1244,8 +1264,8 @@ if ( class_exists( 'GFForms' ) ) {
 				$step_name = $step->get_name();
 				$step_choices[] = array( 'value' => $step_id, 'text' => $step_name );
 
-				$final_status_options = $step->get_final_status_config();
-				foreach ( $final_status_options as $final_status_option ) {
+				$ste_final_status_options = $step->get_final_status_config();
+				foreach ( $ste_final_status_options as $final_status_option ) {
 					$status_choices[] = array(
 						'value' => $final_status_option['status'],
 						'text' => $final_status_option['status_label'],
@@ -1263,9 +1283,19 @@ if ( class_exists( 'GFForms' ) ) {
 						'choices'   => $status_choices,
 					)
 				);
+
+				$workflow_final_status_options = array_merge( $workflow_final_status_options, $status_choices );
 			}
 
 			if ( ! empty( $steps ) ) {
+
+				// Remove duplicates
+				$workflow_final_status_options = array_map( 'unserialize', array_unique( array_map( 'serialize', $workflow_final_status_options ) ) );
+
+				$workflow_final_status_options[] = array(
+					'value' => 'pending',
+					'text'  => __( 'Pending', 'gravityflow' )
+				);
 
 				$entry_meta['workflow_final_status'] = array(
 					'label'                      => 'Final Status',
@@ -1274,7 +1304,7 @@ if ( class_exists( 'GFForms' ) ) {
 					'is_default_column'          => true, // this column will be displayed by default on the entry list
 					'filter'                     => array(
 						'operators' => array( 'is', 'isnot' ),
-						'choices'   => array( array( 'value' => 'complete', 'text' => __( 'Complete', 'gravityflow' ) ) ),
+						'choices'   => $workflow_final_status_options,
 					)
 				);
 
@@ -1343,6 +1373,14 @@ if ( class_exists( 'GFForms' ) ) {
 			$current_step = $this->get_current_step( $form, $entry );
 
 			$lead = $entry;
+
+			$entry_id = absint( $lead['id'] );
+
+			$entry_id_link = $entry_id;
+
+			if ( GFAPI::current_user_can_any( 'gravityforms_view_entries' ) ) {
+				$entry_id_link = '<a href="' . admin_url( 'admin.php?page=gf_entries&view=entry&id=' . absint( $form['id'] ) . '&lid=' . absint( $entry['id'] ) ) . '">' . $entry_id . '</a>';
+			}
 			?>
 			<div class="postbox">
 				<h3 class="hndle" style="cursor:default;">
@@ -1351,7 +1389,7 @@ if ( class_exists( 'GFForms' ) ) {
 
 				<div id="submitcomment" class="submitbox">
 					<div id="minor-publishing" style="padding:10px;">
-						<?php esc_html_e( 'Entry Id', 'gravityflow' ); ?>: <?php echo absint( $lead['id'] ) ?><br /><br />
+						<?php esc_html_e( 'Entry Id', 'gravityflow' ); ?>: <?php echo $entry_id_link ?><br /><br />
 						<?php esc_html_e( 'Submitted', 'gravityflow' ); ?>: <?php echo esc_html( GFCommon::format_date( $lead['date_created'], true, 'Y/m/d' ) ) ?>
 						<?php
 						$last_updated = date( 'Y-m-d H:i:s', $lead['workflow_timestamp'] );
@@ -1438,7 +1476,6 @@ if ( class_exists( 'GFForms' ) ) {
 
 			<?php endif; ?>
 
-
 		<?php
 		}
 
@@ -1464,8 +1501,11 @@ if ( class_exists( 'GFForms' ) ) {
 
 					$current_step->entry_detail_status_box( $form );
 				}
-
 				?>
+				<div style="padding:10px;">
+					<a href="<?php echo admin_url( 'admin.php?page=gravityflow-inbox&view=entry&id=' . absint( $form['id'] ) . '&lid=' . absint( $entry['id'] ) ); ?>" ><?php esc_html_e( 'View' ); ?></a>
+				</div>
+
 			</div>
 		<?php
 		}
@@ -2610,6 +2650,15 @@ if ( class_exists( 'GFForms' ) ) {
 		public function enqueue_form_scripts(){
 			$form = $this->get_current_form();
 			require_once( GFCommon::get_base_path() . '/form_display.php');
+
+			if ( $this->has_enhanced_dropdown( $form ) ) {
+				if ( wp_script_is( 'chosen', 'registered' ) ) {
+					wp_enqueue_script( 'chosen' );
+				} else {
+					wp_enqueue_script( 'gform_chosen' );
+				}
+			}
+
 			GFFormDisplay::enqueue_form_scripts( $form );
 		}
 
@@ -2749,7 +2798,7 @@ AND m.meta_value='queued'";
 				}
 
 				$step = $this->get_step( $step_id, $entry );
-				if (! $step instanceof Gravity_Flow_Step_Approval ) {
+				if ( ! $step instanceof Gravity_Flow_Step_Approval ) {
 					return false;
 				}
 				if ( ! $step->is_valid_token( $token ) ) {
