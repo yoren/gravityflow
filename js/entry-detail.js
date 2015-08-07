@@ -22,8 +22,23 @@ function setPrint () {
     this.contentWindow.__container__ = this;
     this.contentWindow.onbeforeunload = closePrint;
     this.contentWindow.onafterprint = closePrint;
-    this.contentWindow.focus(); // Required for IE
-    this.contentWindow.print();
+    this.contentWindow.focus();
+
+    var ms_ie = false;
+    var ua = window.navigator.userAgent;
+    var old_ie = ua.indexOf('MSIE ');
+    var new_ie = ua.indexOf('Trident/');
+
+    if ((old_ie > -1) || (new_ie > -1)) {
+        ms_ie = true;
+    }
+
+    if ( ms_ie ) {
+        this.contentWindow.document.execCommand('print', false, null);
+    } else {
+        this.contentWindow.print();
+    }
+
 }
 
 function printPage (sURL) {
@@ -36,3 +51,4 @@ function printPage (sURL) {
     oHiddFrame.src = sURL;
     document.body.appendChild(oHiddFrame);
 }
+
