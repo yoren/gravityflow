@@ -242,15 +242,15 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				break;
 			case 'routing' :
 				$routings = $this->routing;
-				$entry = $this->get_entry();
 				if ( is_array( $routings ) ) {
+					$entry = $this->get_entry();
 					foreach ( $routings as $routing ) {
 						$assignee = rgar( $routing, 'assignee' );
 						if ( in_array( $assignee, $approvers ) ) {
 							continue;
 						}
 						if ( $entry ) {
-							if ( $user_is_assignee = $this->evaluate_routing_rule( $routing ) ) {
+							if ( $this->evaluate_routing_rule( $routing ) ) {
 								$approvers[] = $assignee;
 							}
 						} else {
@@ -265,32 +265,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		}
 
 		return $approvers;
-	}
-
-	public function is_approval_required( $approver ) {
-
-		$type = $this->type;
-
-		if ( $type != 'routing' ) {
-			return true;
-		}
-
-		$required = false;
-
-		if ( $type == 'routing' ) {
-			$routings = $this->routing;
-			foreach ( $routings as $routing ) {
-				if ( $approver != $routing['assignee'] ) {
-					continue;
-				}
-				if ( $this->evaluate_routing_rule( $routing ) ) {
-					$required = true;
-					break;
-				}
-			}
-		}
-
-		return $required;
 	}
 
 	public function is_complete() {
