@@ -28,6 +28,9 @@
 #entry-id{
     padding:3px;
 }
-#gravityflow-form-select{
+#gravityflow-form-select,
+#entry-id,
+#gravityflow-status-date-filters,
+#entry_filters{
     vertical-align: top;
 }
