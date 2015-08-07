@@ -897,6 +897,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 */
 	public function evaluate_routing_rule( $routing_rule ) {
 
+		gravity_flow()->log_debug( __METHOD__ . '(): rule:' . print_r( $routing_rule, true ) );
+
 		$entry = $this->get_entry();
 
 		$form_id = $this->get_form_id();
@@ -912,6 +914,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$field_value    = empty( $entry ) ? GFFormsModel::get_field_value( $source_field, array() ) : GFFormsModel::get_lead_field_value( $entry, $source_field );
 			$is_value_match = GFFormsModel::is_value_match( $field_value, $routing_rule['value'], $routing_rule['operator'], $source_field, $routing_rule, $form );
 		}
+
+		gravity_flow()->log_debug( __METHOD__ . '(): is_match:' . print_r( $is_value_match, true ) );
 
 		return $is_value_match;
 	}
