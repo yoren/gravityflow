@@ -9,7 +9,7 @@
         $('.wp-list-table thead tr, .wp-list-table tfoot tr').append('<th class="sort-column"></th>');
         $('.wp-list-table tbody tr').append(sortHandleMarkup);
 
-        $('.wp-list-table tbody').addClass('gwf-reorder-mode')
+        $('.wp-list-table tbody').addClass('gravityflow-reorder-mode')
             .sortable({
 
                 tolerance: "pointer",
@@ -17,7 +17,6 @@
                 helper: fixHelperModified,
                 handle: '.feed-sort-handle',
                 update: function(event, ui){
-
 
                     var $feedIds = $(".wp-list-table tbody .check-column input[type=checkbox]");
 
@@ -52,10 +51,10 @@
 
 var fixHelperModified = function(e, tr) {
     var $originals = tr.children();
+    console.log('originals: ' + $originals.length);
     var $helper = tr.clone();
-    $helper.children().each(function(index)
-    {
-        jQuery(this).width($originals.eq(index).width())
+    $helper.children().each(function(index) {
+        jQuery(this).width($originals.eq(index).width());
     });
     return $helper;
 };

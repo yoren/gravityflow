@@ -2,7 +2,6 @@ table { border-collapse: collapse; }
 .ui-sortable-helper {
     background-color: white!important;
 
-
     -webkit-box-shadow: 6px 6px 28px -9px rgba(0,0,0,0.75);
     -moz-box-shadow: 6px 6px 28px -9px rgba(0,0,0,0.75);
     box-shadow: 6px 6px 28px -9px rgba(0,0,0,0.75);
@@ -32,10 +31,10 @@ table { border-collapse: collapse; }
     cursor: move;
     padding: 10px;
 }
-
+.step-drop-zone td:first-child,
 th.check-column,
 td.check-column,
 .tablenav.top,
 .tablenav.bottom{
-    display:none;
+    display: none;
 }
