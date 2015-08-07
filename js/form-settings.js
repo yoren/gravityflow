@@ -4,7 +4,7 @@
 
         if(window['gformInitDatepicker']) {gformInitDatepicker();}
 
-        $('#assignees, #editable_fields, #rejection_notification_users, #approval_notification_users').multiSelect();
+        $('#assignees, #editable_fields, #rejection_notification_users, #approval_notification_users, #workflow_notification_users').multiSelect();
 
         var gravityFlowIsDirty = false, gravityFlowSubmitted = false;
 
@@ -64,11 +64,23 @@
             toggleApprovalNotificationType(this.value);
         });
 
+
+
         var approvalNotificationEnabled = $('#approval_notification_enabled').prop('checked');
         toggleApprovalNotificationSettings(approvalNotificationEnabled);
         $('#approval_notification_enabled').click(function () {
             toggleApprovalNotificationSettings(this.checked);
         });
+
+		$('#gaddon-setting-row-workflow_notification_type input[type=radio]').click(function () {
+			toggleWorkflowNotificationType(this.value);
+		});
+
+		var workflowNotificationEnabled = $('#workflow_notification_enabled').prop('checked');
+		toggleWorkflowNotificationSettings(workflowNotificationEnabled);
+		$('#workflow_notification_enabled').click(function () {
+			toggleWorkflowNotificationSettings(this.checked);
+		});
 
         GravityFlowFeedSettings.getUsersMarkup = function (propertyName) {
             var i, n, account,
@@ -245,7 +257,46 @@
 
         $approvalNotificationRoutingSetting.gfRoutingSetting(approvalNotificationOptions);
 
-        if (window.gform) {
+
+		// Workflow Notification Routing
+
+		var $workflowNotificationRoutingSetting = $('#gform_user_routing_setting_workflow_notification_routing');
+
+		var workflowNotificationRoutingJSON = $('#workflow_notification_routing').val();
+
+		var workflow_notification_routing_items = workflowNotificationRoutingJSON ? $.parseJSON(workflowNotificationRoutingJSON) : null;
+
+		if (!workflow_notification_routing_items) {
+			workflow_notification_routing_items = [{
+				assignee: gf_routing_setting_strings['accounts'][0]['choices'][0]['value'],
+				fieldId: '0',
+				operator: 'is',
+				value: '',
+				type: '',
+			}];
+			$('#workflow_notification_routing').val($.toJSON(workflow_notification_routing_items));
+		}
+
+		var workflowNotificationOptions = {
+			fieldName: $workflowNotificationRoutingSetting.data('field_name'),
+			fieldId: $workflowNotificationRoutingSetting.data('field_id'),
+			settings: gf_routing_setting_strings['fields'],
+			accounts: gf_routing_setting_strings['accounts'],
+			imagesURL: gf_vars.baseUrl + "/images",
+			items: workflow_notification_routing_items,
+			callbacks: {
+				addNewTarget: function (obj, target) {
+					var str = GravityFlowFeedSettings.getUsersMarkup('assignee');
+					return str;
+				}
+			}
+		};
+
+		$workflowNotificationRoutingSetting.gfRoutingSetting(workflowNotificationOptions);
+
+		//-----
+
+		if (window.gform) {
             gform.addFilter('gform_merge_tags', GravityFlowFeedSettings.gravityflow_add_merge_tags);
         }
 
@@ -270,6 +321,14 @@
         };
         toggleFields(fields, showType, true);
     }
+
+	function toggleWorkflowNotificationType(showType) {
+		var fields = {
+			select: ['workflow_notification_users\\[\\]', 'workflow_notification_message'],
+			routing: ['workflow_notification_routing', 'workflow_notification_message']
+		};
+		toggleFields(fields, showType, false);
+	}
 
     function toggleType(showType) {
         var fields = {
@@ -327,6 +386,17 @@
         }
     }
 
+	function toggleWorkflowNotificationSettings(enabled) {
+		var $workflowNotificationType = $('#gaddon-setting-row-workflow_notification_type');
+		$workflowNotificationType.toggle(enabled);
+		if (enabled) {
+			var selected = $workflowNotificationType.find('input[type=radio]:checked').val();
+			toggleWorkflowNotificationType(selected);
+		} else {
+			toggleWorkflowNotificationType('off');
+		}
+	}
+
     function setSubSettings() {
         var subSettings = [
             'routing',
@@ -342,13 +412,19 @@
             'approval_notification_users\\[\\]',
             'approval_notification_user_field',
             'approval_notification_routing',
-            '_approval_notification_message',
+            'approval_notification_message',
+
+			'workflow_notification_type',
+			'workflow_notification_users\\[\\]',
+			'workflow_notification_user_field',
+			'workflow_notification_routing',
+			'workflow_notification_message',
 
             'assignees\\[\\]',
             'editable_fields\\[\\]',
             'routing',
             'assignee_policy',
-            'assignee_notification_message'
+            'assignee_notification_message',
 
         ];
         for (var i = 0; i < subSettings.length; i++) {

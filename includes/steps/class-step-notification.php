@@ -25,15 +25,60 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 			);
 		}
 
+		$account_choices = gravity_flow()->get_users_as_choices();
+
 		return array(
 			'title'  => 'Notification',
 			'fields' => array(
 				array(
 					'name' => 'notification',
-					'label' => esc_html__( 'Select Notifications', 'gravityflow' ),
+					'label' => esc_html__( 'Gravity Forms Notifications', 'gravityflow' ),
 					'type' => 'checkbox',
-					'required' => true,
+					'required' => false,
 					'choices' => $choices,
+				),
+				array(
+					'name'    => 'workflow_notification_enabled',
+					'label'   => __( 'Workflow notification', 'gravityflow' ),
+					'tooltip'   => __( 'Enable this setting to send an email when the entry is rejected.', 'gravityflow' ),
+					'type'    => 'checkbox',
+					'choices' => array(
+						array(
+							'label'         => __( 'Enabled', 'gravityflow' ),
+							'name'          => 'workflow_notification_enabled',
+							'default_value' => false,
+						),
+					)
+				),
+				array(
+					'name'    => 'workflow_notification_type',
+					'label'   => __( 'Send To', 'gravityflow' ),
+					'type'       => 'radio',
+					'default_value' => 'select',
+					'horizontal' => true,
+					'choices'    => array(
+						array( 'label' => __( 'Select Users', 'gravityflow' ), 'value' => 'select' ),
+						array( 'label' => __( 'Configure Routing', 'gravityflow' ), 'value' => 'routing' ),
+					),
+				),
+				array(
+					'id'       => 'workflow_notification_users',
+					'name'    => 'workflow_notification_users[]',
+					'label'   => __( 'Select User', 'gravityflow' ),
+					'size'     => '8',
+					'multiple' => 'multiple',
+					'type'     => 'select',
+					'choices'  => $account_choices,
+				),
+				array(
+					'name'  => 'workflow_notification_routing',
+					'label' => __( 'Routing', 'gravityflow' ) ,
+					'type'  => 'user_routing',
+				),
+				array(
+					'name'  => 'workflow_notification_message',
+					'label' => __( 'Message', 'gravityflow' ),
+					'type'  => 'visual_editor',
 				),
 			),
 		);
@@ -59,7 +104,49 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 			}
 		}
 
+		$this->send_workflow_notification();
+
 		return true;
+	}
+
+	public function send_workflow_notification(){
+
+		if ( ! $this->workflow_notification_enabled ) {
+			return;
+		}
+
+		$assignees = array();
+
+		$notification_type = $this->workflow_notification_type;
+
+		switch ( $notification_type ) {
+			case 'select' :
+				$assignees = $this->workflow_notification_users;
+				break;
+			case 'routing' :
+				$routings = $this->workflow_notification_routing;
+				if ( is_array( $routings ) ) {
+					foreach ( $routings as $routing ) {
+						if ( $user_is_assignee = $this->evaluate_routing_rule( $routing ) ) {
+							$assignees[] = rgar( $routing, 'assignee' );
+						}
+					}
+				}
+
+				break;
+		}
+
+		if ( empty( $assignees ) ) {
+			return;
+		}
+
+		$body = $this->workflow_notification_message;
+
+		$this->send_notifications( $assignees, $body );
+
+		$note = esc_html__( 'Sent Notification' );
+		$this->add_note( $note );
+
 	}
 
 }
