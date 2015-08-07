@@ -32,7 +32,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 			'duplicate_setting',
 			'description_setting',
 			'css_class_setting',
-			'gravityflow_setting_assignees'
+			'gravityflow_setting_assignees',
 		);
 	}
 
@@ -52,6 +52,8 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 	public function get_assignees_as_choices( $value, $include_users = true, $include_roles = true, $include_fields = true  ) {
 		global $wp_roles;
 
+		$form_id = $this->formId;
+
 		$optgroups = array();
 
 		if ( $include_users ) {
@@ -62,7 +64,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 				$account_choices[] = array( 'value' => 'user_id|' . $account->ID, 'text' => $account->display_name );
 			}
 
-			$account_choices = apply_filters( 'gravityflow_assignee_field_users', $account_choices );
+			$account_choices = apply_filters( 'gravityflow_assignee_field_users', $account_choices, $form_id );
 
 			$optgroups = array();
 
@@ -131,6 +133,11 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
 		$html = '';
 
+		if ( ! empty( $this->placeholder ) ) {
+			$selected = empty( $value ) ? "selected='selected'" : '';
+			$html = sprintf( "<option value='' %s class='gf_placeholder'>%s</option>", $selected, esc_html( $this->placeholder ) );
+		}
+
 		foreach ( $optgroups as $optgroup ) {
 			$html .= sprintf( '<optgroup label="%s">%s</optgroup>', $optgroup['label'], $optgroup['choices'] );
 		}
@@ -145,14 +152,12 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 		return $value;
 	}
 
-	// Uncomment when 1.9.9.9 is released
-	/*
+
 	public function get_value_merge_tag( $value, $input_id, $entry, $form, $modifier, $raw_value, $url_encode, $esc_html, $format, $nl2br ) {
 		$value = $this->get_display_name( $value );
 
 		return $value;
 	}
-	*/
 
 	public function get_value_entry_detail( $value, $currency = '', $use_text = false, $format = 'html', $media = 'screen' ) {
 
