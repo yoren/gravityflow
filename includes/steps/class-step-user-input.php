@@ -93,6 +93,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 	public function get_assignees() {
 
+		$assignees = array();
+
 		$assignee_details = array();
 
 		$input_type = $this->type;
@@ -117,57 +119,37 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			case 'routing' :
 				$routings = $this->routing;
 				if ( is_array( $routings ) ) {
+					$entry = $this->get_entry();
 					foreach ( $routings as $routing ) {
-						$assignee_details[] = array(
-							'assignee'  => rgar( $routing, 'assignee' ),
-							'editable_fields' => rgar( $routing, 'editable_fields' ),
-						);
+						$assignee = rgar( $routing, 'assignee' );
+						if ( in_array( $assignee, $assignees ) ) {
+							continue;
+						}
+						if ( $entry ) {
+
+							if ( $this->evaluate_routing_rule( $routing ) ) {
+								$assignee_details[] = array(
+									'assignee'  => rgar( $routing, 'assignee' ),
+									'editable_fields' => rgar( $routing, 'editable_fields' ),
+								);
+								$assignees[] = rgar( $routing, 'assignee' );
+							}
+						} else {
+							$assignee_details[] = array(
+								'assignee'  => rgar( $routing, 'assignee' ),
+								'editable_fields' => rgar( $routing, 'editable_fields' ),
+							);
+							$assignees[] = rgar( $routing, 'assignee' );
+						}
 					}
 				}
 
 				break;
 		}
 
-		$entry = $this->get_entry();
-
-		if ( $entry ) {
-			$required_assignees = array();
-			foreach ( $assignee_details as $assignee_detail ) {
-				$assignee = $assignee_detail['assignee'];
-				if ( $this->is_input_required( $assignee ) ) {
-					$required_assignees[] = $assignee_detail;
-				}
-			}
-			$assignee_details = $required_assignees;
-		}
+		gravity_flow()->log_debug( __METHOD__ . '(): assignee details: ' . print_r( $assignee_details, true ) );
 
 		return $assignee_details;
-	}
-
-	public function is_input_required( $assignee ) {
-
-		$input_type = $this->type;
-
-		if ( $input_type != 'routing' ) {
-			return true;
-		}
-
-		$required = false;
-
-		if ( $input_type == 'routing' ) {
-			$routings = $this->routing;
-			foreach ( $routings as $routing ) {
-				if ( $assignee != $routing['assignee'] ) {
-					continue;
-				}
-				if ( $this->evaluate_routing_rule( $routing ) ) {
-					$required = true;
-					break;
-				}
-			}
-		}
-
-		return $required;
 	}
 
 	public function is_complete(){
@@ -325,11 +307,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				if ( $current_role_status == 'pending' ) {
 					$this->update_assignee_status( $role, 'role', 'complete' );
 				}
-
 			}
 			$this->maybe_adjust_assignment();
 
-			$feedback = $new_status == 'complete' ?  __( 'Entry updated and step complete.', 'gravityflow' ) : __( 'Entry updated.', 'gravityflow' );
+			$feedback = $new_status == 'complete' ?  __( 'Entry updated and marked complete.', 'gravityflow' ) : __( 'Entry updated - in progress.', 'gravityflow' );
 
 			$note = sprintf( '%s: %s', $this->get_name(), $feedback );
 
@@ -351,9 +332,15 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	}
 
 	public function maybe_adjust_assignment(){
+
+		gravity_flow()->log_debug( __METHOD__ . '(): Starting' );
+
 		$input_type = $this->type;
 
-		if ( $input_type == 'field' ) {
+		// todo: implement select type
+
+		if ( $input_type == 'field' ) { // Deprecated
+
 			$entry = $this->get_entry();
 			$entry_id = $this->get_entry_id();
 
@@ -362,6 +349,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			$cache_key = 'GFFormsModel::get_lead_field_value_' . $entry_id . '_' . $this->assignee_field;
 			GFCache::flush( $cache_key );
 			if ( $assignee_status === false ) {
+
+				gravity_flow()->log_debug( __METHOD__ . '(): reassigning to current user: ' );
+
 				// Remove the current user
 				$this->remove_assignee();
 
@@ -370,20 +360,38 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				// todo: send notification
 			}
 		} elseif ( $input_type == 'routing' ) {
+			$new_assignees = array();
 			$routings = $this->routing;
 			$entry_id = $this->get_entry_id();
 			foreach ( $routings as $routing ) {
 				$assignee = $routing['assignee'];
+
+				gravity_flow()->log_debug( __METHOD__ . '(): assignee: ' . $assignee );
+
 				$assignee_status = $this->get_assignee_status( $assignee );
+
+				gravity_flow()->log_debug( __METHOD__ . '(): assignee status: ' . $assignee_status );
+
 				$cache_key = 'GFFormsModel::get_lead_field_value_' . $entry_id . '_' . $routing['fieldId'];
+
 				GFCache::flush( $cache_key );
+
 				$user_is_assignee = $this->evaluate_routing_rule( $routing );
+
+				if ( $user_is_assignee ) {
+					$new_assignees[] = $assignee;
+				}
+
+				gravity_flow()->log_debug( __METHOD__ . '(): user is assignee: ' . $user_is_assignee );
+
 				if ( $assignee_status === false && $user_is_assignee ) {
 					// The user has been added.
+					gravity_flow()->log_debug( __METHOD__ . '(): adding assignee: ' . print_r( $assignee, true) );
 					$this->update_assignee_status( $assignee, false, 'pending' );
 					// todo: send notification
-				} elseif ( $assignee !== false && ! $user_is_assignee ) {
+				} elseif ( $assignee !== false && ! $user_is_assignee && ! in_array( $assignee, $new_assignees ) ) {
 					// The user has been removed.
+					gravity_flow()->log_debug( __METHOD__ . '(): removing assignee: ' . print_r( $assignee, true) );
 					$this->remove_assignee( $assignee );
 					// todo: send notification
 				}
@@ -413,8 +421,13 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				<?php
 				$assignee_details = $this->get_assignees();
 
+				gravity_flow()->log_debug( __METHOD__ . '(): assignee details: ' . print_r( $assignee_details, true ) );
+
 				$editable_fields = array();
 				foreach ( $assignee_details as $assignee_detail ) {
+
+					gravity_flow()->log_debug( __METHOD__ . '(): showing status for: ' . print_r( $assignee_detail, true ) );
+
 					$assignee = $assignee_detail['assignee'];
 					list( $assignee_type, $assignee_id) = explode( '|', $assignee );
 
@@ -430,7 +443,14 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 						$assignee_type = 'user_id';
 					}
 
+					gravity_flow()->log_debug( __METHOD__ . '(): assignee id: ' . $assignee_id );
+
+					gravity_flow()->log_debug( __METHOD__ . '(): getting status for assignee: ' . $assignee );
+
 					$user_status = $this->get_assignee_status( $assignee );
+
+					gravity_flow()->log_debug( __METHOD__ . '(): assignee status: ' . $user_status );
+
 					if ( ! empty( $user_status ) ) {
 						if ( $assignee_type == 'user_id' ) {
 							$user_info = get_user_by( 'id', $assignee_id );
@@ -584,7 +604,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	public static function save_entry( $form, &$lead, $editable_fields ) {
 		global $wpdb;
 
-		GFCommon::log_debug( 'GFFormsModel::save_lead(): Saving entry.' );
+		gravity_flow()->log_debug( __METHOD__ . '(): Saving entry.' );
 
 		$is_form_editor = GFCommon::is_form_editor();
 		$is_entry_detail = GFCommon::is_entry_detail();
@@ -645,7 +665,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				continue;
 			}
 
-			GFCommon::log_debug( "GFFormsModel::save_lead(): Saving field {$field->label}(#{$field->id} - {$field->type})." );
+			gravity_flow()->log_debug( __METHOD__ . "(): Saving field {$field->label}(#{$field->id} - {$field->type})." );
 
 			if ( $field->type == 'post_category' ) {
 				$field = GFCommon::add_categories_as_choices( $field, '' );
@@ -666,7 +686,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		if ( ! empty( $calculation_fields ) ) {
 			foreach ( $calculation_fields as $calculation_field ) {
 
-				GFCommon::log_debug( "GFFormsModel::save_lead(): Saving calculated field {$calculation_field->label}(#{$calculation_field->id} - {$calculation_field->type})." );
+				gravity_flow()->log_debug( __METHOD__ . "(): Saving calculated field {$calculation_field->label}(#{$calculation_field->id} - {$calculation_field->type})." );
 
 				$inputs = $calculation_field->get_entry_inputs();
 
@@ -688,7 +708,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		//saving total field as the last field of the form.
 		if ( ! empty( $total_fields ) ) {
 			foreach ( $total_fields as $total_field ) {
-				GFCommon::log_debug( 'GFFormsModel::save_lead(): Saving total field.' );
+				gravity_flow()->log_debug( __METHOD__ . '(): Saving total field.' );
 				GFFormsModel::save_input( $form, $total_field, $lead, $current_fields, $total_field->id );
 				GFFormsModel::refresh_lead_field_value( $lead['id'], $total_field['id'] );
 			}
