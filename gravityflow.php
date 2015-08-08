@@ -3,7 +3,7 @@
 Plugin Name: Gravity Flow Beta
 Plugin URI: http://gravityflow.io
 Description: Build Workflow Applications with Gravity Forms.
-Version: 1.0-beta-8.2
+Version: 1.0-beta-9
 Author: Steve Henty
 Author URI: http://www.stevenhenty.com
 License: GPL-3.0+
@@ -25,13 +25,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-define( 'GRAVITY_FLOW_VERSION', '1.0-beta-8.2' );
+define( 'GRAVITY_FLOW_VERSION', '1.0-beta-9' );
 
 define( 'GRAVITY_FLOW_EDD_STORE_URL', 'https://gravityflow.io' );
 
 define( 'GRAVITY_FLOW_EDD_ITEM_NAME', 'Gravity Flow Beta' );
 
-register_activation_hook(__FILE__, array( 'Gravity_Flow_Bootstrap', 'after_activation'));
+register_activation_hook( __FILE__, array( 'Gravity_Flow_Bootstrap', 'after_activation' ) );
 
 
 add_action( 'gform_loaded', array( 'Gravity_Flow_Bootstrap', 'load' ), 1 );
