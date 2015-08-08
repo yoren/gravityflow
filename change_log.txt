@@ -1,9 +1,15 @@
 -------------------------------------------------------------------------------------------------------------------
-Version 1.0-beta-8.2
+Version 1.0-beta-9
+    - Added field filters to the status page.
+    - Added workflow notification settings to the notification step.
+    - Added a link to the Gravity Forms entry detail page from the Workflow detail page.
+    - Added a link to the Workflow page from the Gravity Forms entry detail page.
     - Added the Assignee Policy setting to the User Input step.
-
--------------------------------------------------------------------------------------------------------------------
-Version 1.0-beta-8.1
+    - Fixed an issue with the print function on IE.
+    - Fixed an issue with the step ordering UI.
+    - Fixed issues with the user input step where step assignment is duplicated or lost when a user is assigned to multiple routing conditions.
+    - Fixed an issue with the assignee field merge tag where the name is not displayed.
+    - Fixed an issue with the Zapier Add-On integration where the Zapier step doesn't appear in the step configuration.
     - Fixed an issue with the approval step when assigned to roles where the workflow doesn't progress.
 
 -------------------------------------------------------------------------------------------------------------------
