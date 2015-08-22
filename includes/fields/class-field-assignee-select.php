@@ -57,7 +57,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 		$optgroups = array();
 
 		if ( $include_users ) {
-			$args            = apply_filters( 'gravityflow_assignee_field_get_user_args', array( 'number' => 200 ) );
+			$args            = apply_filters( 'gravityflow_get_users_args_assignee_field', array( 'number' => 300 ) );
 			$accounts        = get_users( $args );
 			$account_choices = array();
 			foreach ( $accounts as $account ) {

@@ -1,4 +1,33 @@
 -------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-10
+    - Added support for assigning steps to an email field. Access is protected via a unique URL that expires after 30 days. Use the gravityflow_email_token_expiration_days to modify. Shortcode required. Use in combination with the {workflow_entry_link:page_id=[ID]} merge tag in the assignee email. SSL recommended. Not suitable for sensitive data.
+    - Added support for inbox access for email field assignees.
+    - Added support for sending workflow emails to addresses in an email field.
+    - Added the activity page for detailed logging.
+    - Added assignee status info to the status column of the status page. Filter by form to activate.
+    - Added a column for each assignee to the status page. Filter by form and step to activate.
+    - Added the page_id attribute to the {workflow_entry_link} merge tag. Example, {workflow_entry_link:page_id=[ID]}
+    - Added the text attribute to the {workflow_entry_link} merge tag. Example, {workflow_entry_link: text="View Vacation Request"}
+    - Added the "Default update status" setting to the user input step.
+    - Added the gravityflow_get_users_args_assignee_field filter to allow the user query to be modified for the assignee field.
+        Example:
+        add_filter( 'gravityflow_get_users_args_assignee_field', 'sh_gravityflow_get_users_args_assignee_field');
+        function sh_gravityflow_get_users_args_assignee_field( $args ) {
+            return array( 'number' => 500 ); // default is 300
+        }
+    - Added the gravityflow_get_users_args filter to allow the user query to be modified for the settings.
+        Example:
+        add_filter( 'gravityflow_assignee_field_get_users_args', 'sh_gravityflow_assignee_field_get_users_args');
+        function sh_gravityflow_assignee_field_get_users_args( $args ) {
+            return array( 'number' => 500 ); // default is 300
+        }
+    - Updated the way the one click approval links and tokens work. Tokens now have a default lifetime of 2 days and can now be used to access multiple steps and the inbox. The gravityflow_approval_token_expiration_days filter is still used to modify the lifetime. The old tokens will continue to work but new tokens will be generated automatically using the new method. The workflow_approve_token and workflow_reject_token merge tags are now deprecated and will be removed before the launch of 1.0 - please change them to use the workflow_entry_link or workflow_entry_url merge tag. The gflow_token, gworkflow_token URL parameters are also deprecated.
+    - Fixed an issue with the reassignment of entries when the entry values change during a user input step.
+    - Fixed an issue in the Gravity Forms entry detail page when the entry is updated.
+    - Fixed an issue with the processing of the approval token in the front-end where the entry gets approved but the step doesn't complete.
+    - Fixed an issue with the reject token.
+
+-------------------------------------------------------------------------------------------------------------------
 Version 1.0-beta-9
     - Added field filters to the status page.
     - Added workflow notification settings to the notification step.

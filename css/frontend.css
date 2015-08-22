@@ -565,3 +565,15 @@ table.wp-list-table.entries td[data-label="ID"] {
 .gform-field-filter input{
     width: 150px;
 }
+
+#minor-publishing ul{
+    margin: 0;
+}
+
+#minor-publishing ul li{
+    list-style-type: none;
+    margin: 0 0 10px 0;
+}
+#minor-publishing h4 {
+    margin-bottom:10px;
+}

@@ -18,25 +18,34 @@ class Gravity_Flow_Inbox {
 
 		$args = array_merge( $defaults, $args );
 
-
-		$field_filters[] = array(
-			'key'   => 'workflow_user_id_' . $current_user->ID,
-			'value' => 'pending',
-		);
-		$user_roles = gravity_flow()->get_user_roles();
-		foreach ( $user_roles as $user_role ) {
-			$field_filters[] = array(
-				'key'   => 'workflow_role_' . $user_role,
-				'value' => 'pending',
-			);
+		if ( $current_user->ID > 0 ) {
+			$filter_key = 'user_id_' . $current_user->ID;
+		} elseif ( $token = gravity_flow()->decode_access_token() ) {
+			$filter_key = 'email_' . gravity_flow()->parse_token_assignee( $token )->get_id();
 		}
 
-		$field_filters['mode'] = 'any';
+		$entries = array();
 
-		$search_criteria['field_filters'] = $field_filters;
-		$search_criteria['status'] = 'active';
+		if ( ! empty( $filter_key ) ) {
+			$field_filters[] = array(
+				'key'   => 'workflow_' . $filter_key,
+				'value' => 'pending',
+			);
+			$user_roles = gravity_flow()->get_user_roles();
+			foreach ( $user_roles as $user_role ) {
+				$field_filters[] = array(
+					'key'   => 'workflow_role_' . $user_role,
+					'value' => 'pending',
+				);
+			}
 
-		$entries = GFAPI::get_entries( 0, $search_criteria );
+			$field_filters['mode'] = 'any';
+
+			$search_criteria['field_filters'] = $field_filters;
+			$search_criteria['status'] = 'active';
+
+			$entries = GFAPI::get_entries( 0, $search_criteria );
+		}
 
 		if ( sizeof( $entries ) > 0 ) {
 			?>
@@ -60,23 +69,23 @@ class Gravity_Flow_Inbox {
 					$name = $user ? $user->display_name : $entry['ip'];
 					$base_url = $args['detail_base_url'];
 					$url_entry = $base_url . sprintf( '&id=%d&lid=%d', $entry['form_id'], $entry['id'] );
-					$url_entry = esc_url( $url_entry );
-					$link = "<a href='{$url_entry}'>%s</a>";
+					$url_entry = esc_url_raw( $url_entry );
+					$link = "<a href='%s'>%s</a>";
 					?>
 					<tr>
 						<td data-label="<?php esc_html_e( 'ID', 'gravityflow' ); ?>">
 							<?php
-							printf( $link, $entry['id'] );
+							printf( $link, $url_entry, $entry['id'] );
 							?>
 						</td>
 						<td data-label="<?php esc_html_e( 'Form', 'gravityflow' ); ?>">
 							<?php
-							printf( $link, $form['title'] );
+							printf( $link, $url_entry, $form['title'] );
 							?>
 						</td>
 						<td data-label="<?php esc_html_e( 'Submitted by', 'gravityflow' ); ?>">
 							<?php
-							printf( $link, $name );
+							printf( $link, $url_entry, $name );
 
 							?>
 						</td>
@@ -85,7 +94,7 @@ class Gravity_Flow_Inbox {
 							if ( isset(  $entry['workflow_step'] ) ) {
 								$step = gravity_flow()->get_step( $entry['workflow_step'] );
 								if ( $step ) {
-									printf( $link, $step->get_name() );
+									printf( $link, $url_entry, $step->get_name() );
 								}
 							}
 
@@ -94,7 +103,7 @@ class Gravity_Flow_Inbox {
 						<td data-label="<?php esc_html_e( 'Submitted', 'gravityflow' ); ?>">
 							<?php
 
-							printf ( $link, GFCommon::format_date( $entry['date_created'] ) );
+							printf ( $link, $url_entry, GFCommon::format_date( $entry['date_created'] ) );
 							?>
 						</td>
 					</tr>

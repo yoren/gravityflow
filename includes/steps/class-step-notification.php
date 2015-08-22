@@ -121,7 +121,11 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 
 		switch ( $notification_type ) {
 			case 'select' :
-				$assignees = $this->workflow_notification_users;
+				if ( is_array( $this->workflow_notification_users ) ) {
+					foreach ( $this->approval_notification_users as $assignee_key ) {
+						$assignees[] = new Gravity_Flow_Assignee( $assignee_key, $this );
+					}
+				}
 				break;
 			case 'routing' :
 				$routings = $this->workflow_notification_routing;

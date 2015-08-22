@@ -79,7 +79,6 @@ class Gravity_Flow_Step_Multi_Feed extends Gravity_Flow_Step {
 				$setting_key = $slug . '_feed_' . $feed['id'];
 				if ( $this->{$setting_key} ) {
 					if ( gravity_flow()->is_feed_condition_met( $feed, $form, $entry ) ) {
-
 						$this->process_add_on_feed( $feed_add_on, $feed );
 						$label = $this->get_add_on_feed_label( $feed_add_on, $feed );
 						$note = sprintf( esc_html__( 'Feed processed: %s', 'gravityflow' ), $label );

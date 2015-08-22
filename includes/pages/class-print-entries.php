@@ -118,12 +118,16 @@ class Gravity_Flow_Print_Entries {
 				if ( $entry['created_by'] != $current_user->ID ) {
 					$user_status = false;
 					if ( $current_step ) {
-						$user_status = $current_step->get_user_status( $current_user->ID );
+						$user_status = $current_step->get_user_status();
+						gravity_flow()->log_debug( __METHOD__ . '() - user status = ' . $user_status );
 
 						if ( ! $user_status ) {
 							$user_roles = gravity_flow()->get_user_roles();
 							foreach ( $user_roles as $user_role ) {
 								$user_status = $current_step->get_role_status( $user_role );
+								if ( $user_status ) {
+									break;
+								}
 							}
 						}
 					}

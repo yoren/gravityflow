@@ -121,10 +121,11 @@ class Gravity_Flow_Entry_Detail {
 				if ( $entry['created_by'] != $current_user->ID ) {
 					$user_status = false;
 					if ( $current_step ) {
-						$user_status = $current_step->get_user_status( $current_user->ID );
+						$user_status = $current_step->get_user_status();
 
 						if ( ! $user_status ) {
 							$user_roles = gravity_flow()->get_user_roles();
+
 							foreach ( $user_roles as $user_role ) {
 								$user_status = $current_step->get_role_status( $user_role );
 							}
@@ -174,19 +175,23 @@ class Gravity_Flow_Entry_Detail {
 
 							do_action( 'gravityflow_entry_detail_content_before', $form, $entry );
 
-							$current_user_status = $current_step ? $current_step->get_user_status() : false;
-							$current_role_status = false;
+							$editable_fields = array();
+
 							if ( $current_step ) {
-								foreach ( gravity_flow()->get_user_roles() as $role ) {
-									$current_role_status = $current_step->get_role_status( $role );
-									if ( $current_role_status == 'pending' ) {
-										break;
+								$current_user_status = $current_step->get_user_status();
+								$current_role_status = false;
+								if ( $current_step ) {
+									foreach ( gravity_flow()->get_user_roles() as $role ) {
+										$current_role_status = $current_step->get_role_status( $role );
+										if ( $current_role_status == 'pending' ) {
+											break;
+										}
 									}
 								}
-							}
 
-							$can_update = $current_step && ( $current_user_status == 'pending' || $current_role_status == 'pending' );
-							$editable_fields = $can_update ? $current_step->get_editable_fields() : array();
+								$can_update = $current_step && ( $current_user_status == 'pending' || $current_role_status == 'pending' );
+								$editable_fields = $can_update ? $current_step->get_editable_fields() : array();
+							}
 
 							self::entry_detail_grid( $form, $entry, $display_empty_fields, $editable_fields, $current_step );
 

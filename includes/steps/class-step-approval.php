@@ -223,6 +223,10 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return $this->next_step_id;
 	}
 
+	/**
+	 *
+	 * @return Gravity_Flow_Assignee[]
+	 */
 	public function get_assignees() {
 
 		$approvers = array();
@@ -231,34 +235,29 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 		switch ( $type ) {
 			case 'select' :
-				$approvers = $this->assignees;
-				if ( empty( $approvers ) || ! is_array( $approvers ) ) {
-					$approvers = array();
+				if ( is_array( $this->assignees ) ) {
+					foreach ( $this->assignees as $assignee_key ) {
+						$approvers[] = new Gravity_Flow_Assignee( $assignee_key, $this );
+					}
 				}
-				break;
-			case 'field' :
-				$entry = $this->get_entry();
-				$approvers = array( rgar( $entry, $this->assignee_field ) );
 				break;
 			case 'routing' :
 				$routings = $this->routing;
 				if ( is_array( $routings ) ) {
 					$entry = $this->get_entry();
 					foreach ( $routings as $routing ) {
-						$assignee = rgar( $routing, 'assignee' );
-						if ( in_array( $assignee, $approvers ) ) {
+						$assignee_key = rgar( $routing, 'assignee' );
+						if ( in_array( $assignee_key, $approvers ) ) {
 							continue;
 						}
 						if ( $entry ) {
 							if ( $this->evaluate_routing_rule( $routing ) ) {
-								$approvers[] = $assignee;
+								$approvers[] = new Gravity_Flow_Assignee( $assignee_key, $this );
 							}
 						} else {
-							$approvers[] = $assignee;
+							$approvers[] = new Gravity_Flow_Assignee( $assignee_key, $this );
 						}
 					}
-				} else {
-					$approvers = array();
 				}
 
 				break;
@@ -285,7 +284,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 		foreach ( $approvers as $approver ) {
 
-			$approver_status = $this->get_assignee_status( $approver );
+			$approver_status = $approver->get_status();
 
 			if ( $approver_status == 'rejected' ) {
 				$step_status = 'rejected';
@@ -373,11 +372,18 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	public function maybe_process_status_update( $form, $entry ){
 		$feedback = false;
 		$step_status_key = 'gravityflow_approval_new_status_step_' . $this->get_id();
-		if ( isset( $_REQUEST[ $step_status_key ] ) || isset( $_GET['gworkflow_token'] ) || isset( $_GET['gflow_token'] ) ) {
+		if ( isset( $_REQUEST[ $step_status_key ] ) || isset( $_GET['gworkflow_token'] ) || isset( $_GET['gflow_token'] )|| $token = gravity_flow()->decode_access_token() ) {
 			global $current_user;
 			if ( isset( $_POST['_wpnonce'] ) && check_admin_referer( 'gravityflow_approvals_' . $this->get_id() ) ) {
 				$new_status = rgpost( $step_status_key );
+
+				if ( $token = gravity_flow()->decode_access_token() ) {
+					$assignee = new Gravity_Flow_Assignee( sanitize_text_field( $token['sub'] ), $this );
+				} else {
+					$assignee = new Gravity_Flow_Assignee( 'user_id|' . $current_user->ID, $this );
+				}
 			} else {
+				// deprecated
 				$gworkflow_token = rgget( 'gworkflow_token' );
 				$gflow_token = rgget( 'gflow_token' );
 				$new_status      = rgget( 'new_status' );
@@ -408,22 +414,32 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					return false;
 				}
 
+				$assignee = new Gravity_Flow_Assignee( 'user_id|' . $current_user->ID, $this );
+
 			}
 
-			$feedback = $this->process_status_update( $current_user->ID , $new_status, $form );
+			$feedback = $this->process_status_update( $assignee, $new_status, $form );
 
 		}
 		return $feedback;
 	}
 
-	public function process_status_update( $user_id, $new_status, $form ){
+	/**
+	 * @param Gravity_Flow_Assignee $assignee
+	 * @param $new_status
+	 * @param $form
+	 *
+	 * @return bool|string|void
+	 *
+	 */
+	public function process_status_update( $assignee, $new_status, $form ){
 		$feedback = false;
 
 		if ( ! in_array( $new_status, array( 'pending', 'approved', 'rejected' ) ) ) {
 			return $feedback;
 		}
 
-		$current_user_status = $this->get_user_status( $user_id );
+		$current_user_status = $assignee->get_status();
 
 		$current_role_status = false;
 		$role = false;
@@ -439,14 +455,15 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		}
 
 		if ( $current_user_status == 'pending' ) {
-			$this->update_assignee_status( $user_id, 'user_id', $new_status );
+			$assignee->update_status( $new_status );
 		}
 
 		if ( $current_role_status == 'pending' ) {
-			$this->update_assignee_status( $role, 'role', $new_status );
+			$this->update_role_status( $role, $new_status );
 		}
 
 		$note = '';
+
 		if ( $new_status == 'approved' ) {
 			$note = $this->get_name() . ': ' . __( 'Approved.', 'gravityflow' );
 			$this->send_approval_notification();
@@ -455,15 +472,15 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			$note = $this->get_name() . ': ' . __( 'Rejected.', 'gravityflow' );
 			$this->send_rejection_notification();
 		}
+
 		if ( ! empty( $note ) ) {
-			$user = get_user_by( 'id', $user_id );
-			$note     = sprintf( $note, $user->display_name );
+
 			$user_note = rgpost( 'gravityflow_note' );
 			if ( ! empty( $user_note ) ) {
 				$note .= sprintf( "\n%s: %s", __( 'Note', 'gravityflow' ), $user_note );
 			}
-
-			$this->add_note( $note );
+			$user_id = ( $assignee->get_type() == 'user_id' ) ? $assignee->get_id() : 0;
+			$this->add_note( $note, $user_id, $assignee->get_display_name() );
 		}
 
 		// keep????
@@ -495,11 +512,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$reject_icon          = '<i class="fa fa-times" style="color:red"></i>';
 		$approval_step_status = $this->is_complete( $entry );
 		if ( $approval_step_status == 'approved' ) {
-			$status = $approve_icon . ' Approved';
+			$status = $approve_icon . ' ' . __( 'Approved', 'gravityflow' );
 		} elseif ( $approval_step_status == 'rejected' ) {
-			$status = $reject_icon . ' Rejected';
+			$status = $reject_icon . ' ' . __( 'Rejected', 'gravityflow' );
 		} elseif ( $approval_step_status == 'queued' ) {
-			$status = 'Queued';
+			$status = __( 'Queued', 'gravityflow' );
 		}
 		?>
 
@@ -511,24 +528,21 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				<?php
 				$assignees = $this->get_assignees();
 				foreach ( $assignees as $assignee ) {
-					$user_approval_status = $this->get_assignee_status( $assignee );
+					$user_approval_status = $assignee->get_status();
 					$status_label = $this->get_status_label( $user_approval_status );
 					if ( ! empty( $user_approval_status ) ) {
-						list( $assignee_type, $assignee_id ) = rgexplode( '|', $assignee, 2 );
-						if ( $assignee_type == 'assignee_field' ) {
-							$entry       = $this->get_entry();
-							$assignee_id = rgar( $entry, $assignee_id );
-							list( $assignee_type, $assignee_id ) = rgexplode( '|', $assignee_id, 2 );
-						} elseif ( $assignee_type == 'entry' ) {
-							$entry       = $this->get_entry();
-							$assignee_id = rgar( $entry, $assignee_id );
+						$assignee_type = $assignee->get_type();
+						if ( $assignee_type == 'email' ) {
+							echo sprintf( '<li>%s: %s (%s)</li>', esc_html__( 'Email', 'gravityflow' ), $assignee->get_id(),  $status_label );
+							continue;
 						}
+
 						if ( $assignee_type == 'role' ) {
-							$role_name = translate_user_role( $assignee_id );
+							$role_name = translate_user_role( $assignee->get_id() );
 							echo sprintf( '<li>%s: %s (%s)</li>', esc_html__( 'Role', 'gravityflow' ), $role_name,  $status_label );
 
 						} else {
-							$user = get_user_by( 'id', $assignee_id );
+							$user = get_user_by( 'id', $assignee->get_id() );
 
 							echo sprintf( '<li>%s: %s (%s)</li>', esc_html__( 'User', 'gravityflow' ), $user->display_name,  $status_label );
 						}
@@ -538,7 +552,9 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			</ul>
 			<div>
 				<?php
-				$user_approval_status = $this->get_user_status( $current_user->ID );
+
+				$user_approval_status = $this->get_user_status();
+
 				$role_approval_status = false;
 				foreach ( gravity_flow()->get_user_roles() as $role ) {
 					$role_approval_status = $this->get_role_status( $role );
@@ -592,16 +608,13 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				<?php
 				$assignees = $this->get_assignees();
 				foreach ( $assignees as $assignee ) {
-					$user_approval_status = $this->get_assignee_status( $assignee );
+					$user_approval_status = $assignee->get_status();
 					if ( ! empty( $user_approval_status ) ) {
-						list( $assignee_type, $assignee_id ) = rgexplode( '|', $assignee, 2 );
-						if ( $assignee_type == 'assignee_field' ) {
-							$entry       = $this->get_entry();
-							$assignee_id = rgar( $entry, $assignee_id );
-							list( $assignee_type, $assignee_id ) = rgexplode( '|', $assignee_id, 2 );
-						} elseif ( $assignee_type == 'entry' ) {
-							$entry       = $this->get_entry();
-							$assignee_id = rgar( $entry, $assignee_id );
+						$assignee_type = $assignee->get_type();
+						$assignee_id = $assignee->get_id();
+						if ( $assignee_type == 'email' ) {
+							echo '<li>' . $assignee_id . ': ' . $user_approval_status . '</li>';
+							continue;
 						}
 						if ( $assignee_type == 'role' ) {
 							$users = get_users( array( 'role' => $assignee_id ) );
@@ -634,18 +647,19 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 		switch ( $notification_type ) {
 			case 'select' :
-				$assignees = $this->approval_notification_users;
-				break;
-			case 'field' :
-				$entry = $this->get_entry();
-				$assignees = array( rgar( $entry, $this->approval_notification_user_field ) );
+				if ( is_array( $this->approval_notification_users ) ) {
+					foreach ( $this->approval_notification_users as $assignee_key ) {
+						$assignees[] = new Gravity_Flow_Assignee( $assignee_key, $this );
+					}
+				}
+
 				break;
 			case 'routing' :
 				$routings = $this->approval_notification_routing;
 				if ( is_array( $routings ) ) {
 					foreach ( $routings as $routing ) {
 						if ( $user_is_assignee = $this->evaluate_routing_rule( $routing ) ) {
-							$assignees[] = rgar( $routing, 'assignee' );
+							$assignees[] = new Gravity_Flow_Assignee( rgar( $routing, 'assignee' ), $this );
 						}
 					}
 				}
@@ -677,16 +691,12 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			case 'select' :
 				$assignees = $this->rejection_notification_users;
 				break;
-			case 'field' :
-				$entry = $this->get_entry();
-				$assignees = array( rgar( $entry, $this->rejection_notification_user_field ) );
-				break;
 			case 'routing' :
 				$routings = $this->rejection_notification_routing;
 				if ( is_array( $routings ) ) {
 					foreach ( $routings as $routing ) {
 						if ( $user_is_assignee = $this->evaluate_routing_rule( $routing ) ) {
-							$assignees[] = rgar( $routing, 'assignee' );
+							$assignees[] = new Gravity_Flow_Assignee( rgar( $routing, 'assignee' ), $this );
 						}
 					}
 				}
@@ -704,52 +714,160 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 	}
 
-	public function replace_variables($text, $user_id){
-		$text = parent::replace_variables( $text, $user_id );
+	/**
+	 * @param $text
+	 * @param Gravity_Flow_Assignee $assignee
+	 *
+	 * @return mixed
+	 */
+	public function replace_variables( $text, $assignee ){
+		$text = parent::replace_variables( $text, $assignee );
 		$comment = rgpost( 'gravityflow_note' );
 		$text = str_replace( '{workflow_note}', $comment, $text );
 
-		$entry_id = $this->get_entry_id();
-		$i = wp_nonce_tick();
-		$timestamp = $this->get_timestamp();
-		$sig_key = sprintf( '%s|%s|%s|%s|%s|%s', $i, $this->get_id(), $timestamp, $entry_id, $user_id, 'approved' );
-		$sig     = substr( wp_hash( $sig_key ),  -12, 10 );
-		$token_array = array(
-			'sig'        => $sig,
+		$expiration_days = apply_filters( 'gravityflow_approval_token_expiration_days', 2 );
+
+		$expiration_str = '+' . (int) $expiration_days . ' days';
+
+		$expiration_timestamp = strtotime( $expiration_str );
+
+		$scopes = array(
+			'pages' => array( 'inbox' ),
 			'step_id'    => $this->get_id(),
-			'timestamp'  => $this->get_timestamp(),
-			'user_id'    => $user_id,
+			'entry_timestamp'  => $this->get_entry_timestamp(),
 			'entry_id' => $this->get_entry_id(),
-			'new_status' => 'approved',
+			'action' => 'approve',
 		);
-		$token = base64_encode( json_encode( $token_array ) );
 
-		$text = str_replace( '{workflow_approve_token}', $token, $text );
+		$approve_token = gravity_flow()->generate_access_token( $assignee, $scopes, $expiration_timestamp );
 
-		$approve_url = sprintf( 'admin.php?page=gravityflow-inbox&view=entry&id=%d&lid=%d&gflow_token=%s', $this->get_form_id(), $this->get_entry_id(), $token );
-		$approve_link = sprintf( '<a href="%s">%s</a>', admin_url( $approve_url ), esc_html__( 'Approve', 'gravityflow' ) );
-		$text = str_replace( '{workflow_approve_link}', $approve_link, $text );
+		$text = str_replace( '{workflow_approve_token}', $approve_token, $text );
 
-		$sig_key = sprintf( '%s|%s|%s|%s|%s|%s', $i, $this->get_id(), $timestamp, $entry_id, $user_id, 'rejected' );
-		$sig     = substr( wp_hash( $sig_key ),  -12, 10 );
-		$token_array = array(
-			'sig'        => $sig,
-			'step_id'    => $this->get_id(),
-			'timestamp'  => $this->get_timestamp(),
-			'user_id'    => $user_id,
-			'entry_id' => $this->get_entry_id(),
-			'new_status' => 'approved',
-		);
-		$token = base64_encode( json_encode( $token_array ) );
 
-		$text = str_replace( '{workflow_reject_token}', $token, $text );
+		preg_match_all( '/{workflow_approve_url(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
+		if ( is_array( $matches ) ) {
+			foreach ( $matches as $match ) {
+				$full_tag       = $match[0];
+				$options_string = isset( $match[2] ) ? $match[2] : '';
+				$options        = shortcode_parse_atts( $options_string );
 
-		$reject_url = sprintf( 'admin.php?page=gravityflow-inbox&view=entry&id=%d&lid=%d&gflow_token=%s', $this->get_form_id(), $this->get_entry_id(), $token );
-		$reject_link = sprintf( '<a href="%s">%s</a>', admin_url( $reject_url ), esc_html__( 'Reject', 'gravityflow' ) );
-		$text = str_replace( '{workflow_reject_link}', $reject_link, $text );
+				$a = shortcode_atts(
+					array(
+						'page_id' => 'admin',
+					), $options
+				);
+
+				$approve_url = $this->get_entry_url( $a['page_id'], $assignee, $approve_token );
+
+				$text = str_replace( $full_tag, $approve_url, $text );
+			}
+		}
+
+		preg_match_all( '/{workflow_approve_link(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
+		if ( is_array( $matches ) ) {
+			foreach ( $matches as $match ) {
+				$full_tag       = $match[0];
+				$options_string = isset( $match[2] ) ? $match[2] : '';
+				$options        = shortcode_parse_atts( $options_string );
+
+				$a = shortcode_atts(
+					array(
+						'page_id' => 'admin',
+					), $options
+				);
+
+				$approve_url = $this->get_entry_url( $a['page_id'], $assignee, $approve_token );
+				$approve_link = sprintf( '<a href="%s">%s</a>', $approve_url, esc_html__( 'Approve', 'gravityflow' ) );
+				$text = str_replace( $full_tag, $approve_link, $text );
+			}
+		}
+
+		$scopes['action'] = 'reject';
+
+		$reject_token = gravity_flow()->generate_access_token( $assignee, $scopes, $expiration_timestamp );
+
+		$text = str_replace( '{workflow_reject_token}', $reject_token, $text );
+
+		preg_match_all( '/{workflow_reject_url(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
+		if ( is_array( $matches ) ) {
+			foreach ( $matches as $match ) {
+				$full_tag       = $match[0];
+				$options_string = isset( $match[2] ) ? $match[2] : '';
+				$options        = shortcode_parse_atts( $options_string );
+
+				$a = shortcode_atts(
+					array(
+						'page_id' => 'admin',
+					), $options
+				);
+
+				$reject_url = $this->get_entry_url( $a['page_id'], $assignee, $reject_token );
+				$text = str_replace( $full_tag, $reject_url, $text );
+			}
+		}
+
+		preg_match_all( '/{workflow_reject_link(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
+		if ( is_array( $matches ) ) {
+			foreach ( $matches as $match ) {
+				$full_tag       = $match[0];
+				$options_string = isset( $match[2] ) ? $match[2] : '';
+				$options        = shortcode_parse_atts( $options_string );
+
+				$a = shortcode_atts(
+					array(
+						'page_id' => 'admin',
+					), $options
+				);
+
+				$reject_url = $this->get_entry_url( $a['page_id'], $assignee, $reject_token );
+				$reject_link = sprintf( '<a href="%s">%s</a>', $reject_url, esc_html__( 'Reject', 'gravityflow' ) );
+				$text = str_replace( $full_tag, $reject_link, $text );
+			}
+		}
+
 		return $text;
 	}
 
+	/**
+	 * Provides a way for a step to process a token action before anything else. If feedback is returned it is displayed and nothing else with be rendered.
+	 *
+	 * @param $action
+	 * @param $token
+	 * @param $form
+	 * @param $entry
+	 *
+	 * @return bool|string|void|WP_Error
+	 */
+	public function maybe_process_token_action( $action, $token, $form, $entry ){
+		if ( ! in_array( $action, array( 'approve', 'reject' ) ) ) {
+			return false;
+		}
+
+		$entry_id = rgars( $token, 'scopes/entry_id' );
+		if ( empty( $entry_id ) || $entry_id != $entry['id'] ) {
+			return new WP_Error( 'incorrect_entry_id', esc_html__( 'Error: incorrect entry.', 'gravityflow' ) );
+		}
+
+		$step_id = rgars( $token, 'scopes/step_id' );
+		if ( empty( $step_id ) || $step_id != $this->get_id() ) {
+			return new WP_Error( 'step_already_processed', esc_html__( 'Error: step already processed.', 'gravityflow' ) );
+		}
+
+		$assignee_key = sanitize_text_field( $token['sub'] );
+		$assignee = new Gravity_Flow_Assignee( $assignee_key, $this );
+		$new_status = false;
+		switch ( $token['scopes']['action'] ) {
+			case 'approve' :
+				$new_status = 'approved';
+				break;
+			case 'reject' :
+				$new_status = 'rejected';
+				break;
+		}
+		$feedback = $this->process_status_update( $assignee , $new_status, $form );
+
+		return $feedback;
+	}
 
 }
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Approval() );
