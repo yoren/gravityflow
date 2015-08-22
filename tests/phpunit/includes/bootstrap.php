@@ -111,7 +111,7 @@ update_option( 'active_plugins', $plugins_to_active );
 GFForms::setup( true );
 GFForms::loaded();
 
-
+gravity_flow()->setup();
 
 
 

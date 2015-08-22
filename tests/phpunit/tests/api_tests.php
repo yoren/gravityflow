@@ -362,6 +362,9 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 		$step1->update_user_status( 1, 'complete' );
 		$this->api->process_workflow( $entry_id );
 
+		// Refresh entry
+		$entry = GFAPI::get_entry( $entry_id );
+
 		// Check status
 		$status = $this->api->get_status( $entry );
 		$this->assertEquals( 'complete', $status );
@@ -418,6 +421,7 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 			'step_type' => 'user_input',
 			'feed_condition_logic_conditional_logic' => '0',
 			'feed_condition_conditional_logic_object' => array(),
+			'approval_policy' => 'any',
 			'type' => 'select',
 			'assignees' => array( 'user_id|1' ),
 			'routing' => array(),
