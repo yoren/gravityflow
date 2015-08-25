@@ -99,6 +99,16 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 					'label' => 'Message',
 					'type'  => 'visual_editor',
 				),
+				array(
+					'name' => 'resend_assignee_email',
+					'label' => __( 'Send reminder', 'gravityflow' ),
+					'type' => 'checkbox_and_text',
+					'text' => array(
+						'default_value' => 7,
+						'before_input' => __( 'Resend the assignee email after', 'gravityflow' ),
+						'after_input' => ' ' . __( 'day(s)', 'gravityflow' )
+					)
+				),
 			)
 		);
 	}
@@ -160,7 +170,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				break;
 		}
 
-		gravity_flow()->log_debug( __METHOD__ . '(): assignee details: ' . print_r( $assignee_details, true ) );
+		gravity_flow()->log_debug( __METHOD__ . '(): assignees: ' . print_r( $assignees, true ) );
 
 		return $assignee_details;
 	}

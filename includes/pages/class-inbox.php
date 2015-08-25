@@ -7,13 +7,14 @@ if ( ! class_exists( 'GFForms' ) ) {
 
 class Gravity_Flow_Inbox {
 
-	public static function display( $args ){
+	public static function display( $args ) {
 		global $current_user;
 
 		$defaults = array(
 			'display_empty_fields' => true,
-			'check_permissions' => true,
-			'detail_base_url' => admin_url( 'admin.php?page=gravityflow-inbox&view=entry' ),
+			'check_permissions'    => true,
+			'form_id'              => 0,
+			'detail_base_url'      => admin_url( 'admin.php?page=gravityflow-inbox&view=entry' ),
 		);
 
 		$args = array_merge( $defaults, $args );
@@ -26,12 +27,14 @@ class Gravity_Flow_Inbox {
 
 		$entries = array();
 
+		$form_id = 0;
+
 		if ( ! empty( $filter_key ) ) {
 			$field_filters[] = array(
 				'key'   => 'workflow_' . $filter_key,
 				'value' => 'pending',
 			);
-			$user_roles = gravity_flow()->get_user_roles();
+			$user_roles      = gravity_flow()->get_user_roles();
 			foreach ( $user_roles as $user_role ) {
 				$field_filters[] = array(
 					'key'   => 'workflow_role_' . $user_role,
@@ -42,9 +45,11 @@ class Gravity_Flow_Inbox {
 			$field_filters['mode'] = 'any';
 
 			$search_criteria['field_filters'] = $field_filters;
-			$search_criteria['status'] = 'active';
+			$search_criteria['status']        = 'active';
 
-			$entries = GFAPI::get_entries( 0, $search_criteria );
+			$form_ids = $args['form_id'] ? $args['form_id'] : gravity_flow()->get_workflow_form_ids();
+
+			$entries = GFAPI::get_entries( $form_ids, $search_criteria );
 		}
 
 		if ( sizeof( $entries ) > 0 ) {
@@ -58,19 +63,32 @@ class Gravity_Flow_Inbox {
 					<th><?php esc_html_e( 'Submitted by', 'gravityflow' ); ?></th>
 					<th><?php esc_html_e( 'Step', 'gravityflow' ); ?></th>
 					<th><?php esc_html_e( 'Submitted', 'gravityflow' ); ?></th>
+					<?php
+					if ( $args['form_id'] ) {
+						$form = GFAPI::get_form( $args['form_id'] );
+						if ( isset( $form['fields'] ) && is_array( $form['fields'] ) ) {
+							foreach ( $form['fields'] as $field ) {
+								/* @var GF_Field $field */
+								$label = GFCommon::get_label( $field );
+								echo '<th>' . esc_html( $label ) . '</th>';
+							}
+						}
+					}
+
+					?>
 				</tr>
 				</thead>
 
 				<tbody class="list:user user-list">
 				<?php
 				foreach ( $entries as $entry ) {
-					$form = GFAPI::get_form( $entry['form_id'] );
-					$user = get_user_by( 'id', (int) $entry['created_by'] );
-					$name = $user ? $user->display_name : $entry['ip'];
-					$base_url = $args['detail_base_url'];
+					$form      = GFAPI::get_form( $entry['form_id'] );
+					$user      = get_user_by( 'id', (int) $entry['created_by'] );
+					$name      = $user ? $user->display_name : $entry['ip'];
+					$base_url  = $args['detail_base_url'];
 					$url_entry = $base_url . sprintf( '&id=%d&lid=%d', $entry['form_id'], $entry['id'] );
 					$url_entry = esc_url_raw( $url_entry );
-					$link = "<a href='%s'>%s</a>";
+					$link      = "<a href='%s'>%s</a>";
 					?>
 					<tr>
 						<td data-label="<?php esc_html_e( 'ID', 'gravityflow' ); ?>">
@@ -91,7 +109,7 @@ class Gravity_Flow_Inbox {
 						</td>
 						<td data-label="<?php esc_html_e( 'Step', 'gravityflow' ); ?>">
 							<?php
-							if ( isset(  $entry['workflow_step'] ) ) {
+							if ( isset( $entry['workflow_step'] ) ) {
 								$step = gravity_flow()->get_step( $entry['workflow_step'] );
 								if ( $step ) {
 									printf( $link, $url_entry, $step->get_name() );
@@ -103,9 +121,26 @@ class Gravity_Flow_Inbox {
 						<td data-label="<?php esc_html_e( 'Submitted', 'gravityflow' ); ?>">
 							<?php
 
-							printf ( $link, $url_entry, GFCommon::format_date( $entry['date_created'] ) );
+							printf( $link, $url_entry, GFCommon::format_date( $entry['date_created'] ) );
 							?>
 						</td>
+
+						<?php
+						if ( $args['form_id'] ) {
+							if ( isset( $form['fields'] ) && is_array( $form['fields'] ) ) {
+								$columns = RGFormsModel::get_grid_columns( $form_id, true );
+								foreach ( $form['fields'] as $field ) {
+									/* @var GF_Field $field */
+									?>
+									<td data-label="<?php echo esc_attr( GFCommon::get_label( $field ) ); ?>">
+										<?php echo $field->get_value_entry_list( rgar( $entry, $field->id ), $entry, $field->id, $columns, $form ); ?>
+									</td>
+								<?php
+								}
+							}
+						}
+
+						?>
 					</tr>
 				<?php
 				}
@@ -116,16 +151,15 @@ class Gravity_Flow_Inbox {
 		<?php
 		} else {
 			?>
-				<div id="gravityflow-no-pending-tasks-container">
-					<div id="gravityflow-no-pending-tasks-content">
-						<i class="fa fa-check-circle-o gravityflow-inbox-check"></i>
-						<br /><br />
-						<?php esc_html_e( "No pending tasks", 'gravityflow' ); ?>
-					</div>
-
+			<div id="gravityflow-no-pending-tasks-container">
+				<div id="gravityflow-no-pending-tasks-content">
+					<i class="fa fa-check-circle-o gravityflow-inbox-check"></i>
+					<br/><br/>
+					<?php esc_html_e( "No pending tasks", 'gravityflow' ); ?>
 				</div>
-			<?php
+
+			</div>
+		<?php
 		}
 	}
-
 }

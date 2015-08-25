@@ -84,12 +84,8 @@ class Gravity_Flow_Assignee {
 	 */
 	public function get_status(){
 
-		$assignee_type = $this->get_type();
-
-		$assignee_id = $this->get_id();
-
 		$entry_id = $this->step->get_entry_id();
-		$key = $this->get_status_key( $assignee_id, $assignee_type );
+		$key = $this->get_status_key();
 		$cache_key = $entry_id . '_' . $key;
 		global $_gform_lead_meta;
 		unset( $_gform_lead_meta[ $cache_key ] );
@@ -99,12 +95,9 @@ class Gravity_Flow_Assignee {
 	/**
 	 * Returns the status key. Defaults to this assignee.
 	 *
-	 * @param string|bool $assignee_id
-	 * @param string|bool $assignee_type
-	 *
 	 * @return string
 	 */
-	public function get_status_key( $assignee_id = false, $assignee_type = false ){
+	public function get_status_key(){
 		if ( empty( $assignee_id ) ) {
 			$assignee_id = $this->get_id();
 		}
@@ -118,11 +111,7 @@ class Gravity_Flow_Assignee {
 
 	public function update_status( $new_assignee_status = false ) {
 
-		$assignee_type = $this->get_type();
-
-		$assignee_id = $this->get_id();
-
-		$key = $this->get_status_key( $assignee_id, $assignee_type );
+		$key = $this->get_status_key();
 
 		$assignee_status_timestamp = gform_get_meta( $this->step->get_entry_id(), $key . '_timestamp' );
 
@@ -159,8 +148,40 @@ class Gravity_Flow_Assignee {
 	 */
 	public function get_status_timestamp(){
 
-		$key = $this->get_status_key( $this->get_id(), $this->get_type() );
-		return gform_get_meta( $this->step->get_entry_id(), $key );
+		$status_key = $this->get_status_key();
+		$timestamp_key = $status_key . '_timestamp';
+
+		return gform_get_meta( $this->step->get_entry_id(), $timestamp_key );
+	}
+
+	/**
+	 * Returns the status timestamp.
+	 *
+	 * @return bool|mixed
+	 */
+	public function get_reminder_timestamp(){
+
+		$status_key = $this->get_status_key();
+		$timestamp_key = $status_key . '_reminder_timestamp';
+
+		return gform_get_meta( $this->step->get_entry_id(), $timestamp_key );
+	}
+
+	/**
+	 * Returns the status timestamp.
+	 *
+	 * @return bool|mixed
+	 */
+	public function set_reminder_timestamp( $timestamp = false ){
+
+		if ( empty( $timestamp ) ) {
+			$timestamp = time();
+		}
+
+		$status_key = $this->get_status_key();
+		$timestamp_key = $status_key . '_reminder_timestamp';
+
+		gform_update_meta( $this->step->get_entry_id(), $timestamp_key, $timestamp );
 	}
 
 	public function log_event( $status, $duration = 0) {

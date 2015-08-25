@@ -32,11 +32,13 @@
             $assigneeNotificationMessage = $('#gaddon-setting-tab-field-assignee_notification_message');
         $assigneeNotificationEnabled.click(function () {
             $assigneeNotificationMessage.fadeToggle('normal');
+            $('#gaddon-setting-tab-field-resend_assignee_email').fadeToggle();
             $('#gaddon-setting-tab-tab_assignee_notification i.gravityflow-tab-checked').toggle();
             $('#gaddon-setting-tab-tab_assignee_notification i.gravityflow-tab-unchecked').toggle();
         });
         var assigneeNotificationChecked = $assigneeNotificationEnabled.prop('checked');
         $assigneeNotificationMessage.toggle(assigneeNotificationChecked);
+        $('#gaddon-setting-tab-field-resend_assignee_email').toggle( assigneeNotificationChecked );
         $('#gaddon-setting-tab-tab_assignee_notification i.gravityflow-tab-checked').toggle(assigneeNotificationChecked);
         $('#gaddon-setting-tab-tab_assignee_notification i.gravityflow-tab-unchecked').toggle(!assigneeNotificationChecked);
 
@@ -403,6 +405,7 @@
             'assignees\\[\\]',
             'unanimous_approval',
             'assignee_notification_message',
+            'resend_assignee_email',
             'rejection_notification_type',
             'rejection_notification_users\\[\\]',
             'rejection_notification_user_field',

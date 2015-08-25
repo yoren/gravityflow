@@ -98,7 +98,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 									'type'    => 'checkbox',
 									'choices' => array(
 										array(
-											'label'         => __( 'Enabled', 'gravityflow' ),
+											'label'         => __( 'Enable', 'gravityflow' ),
 											'name'          => 'assignee_notification_enabled',
 											'default_value' => false,
 										),
@@ -109,6 +109,16 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 									'label' => __( 'Message to Assignee(s)', 'gravityflow' ),
 									'type'  => 'visual_editor',
 									'default_value' => __( 'A new entry is pending your approval. Please check your Workflow Inbox.', 'gravityflow' )
+								),
+								array(
+									'name' => 'resend_assignee_email',
+									'label' => __( 'Send reminder', 'gravityflow' ),
+									'type' => 'checkbox_and_text',
+									'text' => array(
+										'default_value' => 7,
+										'before_input' => __( 'Resend the assignee email after', 'gravityflow' ),
+										'after_input' => ' ' . __( 'day(s)', 'gravityflow' )
+									)
 								),
 							)
 						),
@@ -123,7 +133,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 									'type'    => 'checkbox',
 									'choices' => array(
 										array(
-											'label'         => __( 'Enabled', 'gravityflow' ),
+											'label'         => __( 'Enable', 'gravityflow' ),
 											'name'          => 'rejection_notification_enabled',
 											'default_value' => false,
 										),
@@ -170,7 +180,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 									'type'    => 'checkbox',
 									'choices' => array(
 										array(
-											'label'         => __( 'Enabled', 'gravityflow' ),
+											'label'         => __( 'Enable', 'gravityflow' ),
 											'name'          => 'approval_notification_enabled',
 											'default_value' => false,
 										),
@@ -689,7 +699,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 		switch ( $notification_type ) {
 			case 'select' :
-				$assignees = $this->rejection_notification_users;
+				if ( is_array( $this->rejection_notification_users ) ) {
+					foreach ( $this->rejection_notification_users as $assignee_key ) {
+						$assignees[] = new Gravity_Flow_Assignee( $assignee_key, $this );
+					}
+				}
 				break;
 			case 'routing' :
 				$routings = $this->rejection_notification_routing;

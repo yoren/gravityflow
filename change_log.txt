@@ -1,4 +1,17 @@
 -------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-10.3
+    - Fixed an issue with the emails to email fields.
+
+-------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-10.2
+    - Removed redirect to settings page after activation.
+
+-------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-10.1
+    - Added the 'Send reminder' setting to the asssignee email tab.
+    - Fixed an issue with the sending of some notifications.
+
+-------------------------------------------------------------------------------------------------------------------
 Version 1.0-beta-10
     - Added support for assigning steps to an email field. Access is protected via a unique URL that expires after 30 days. Use the gravityflow_email_token_expiration_days to modify. Shortcode required. Use in combination with the {workflow_entry_link:page_id=[ID]} merge tag in the assignee email. SSL recommended. Not suitable for sensitive data.
     - Added support for inbox access for email field assignees.

@@ -132,7 +132,7 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 				if ( is_array( $routings ) ) {
 					foreach ( $routings as $routing ) {
 						if ( $user_is_assignee = $this->evaluate_routing_rule( $routing ) ) {
-							$assignees[] = rgar( $routing, 'assignee' );
+							$assignees[] = new Gravity_Flow_Assignee( rgar( $routing, 'assignee' ), $this );
 						}
 					}
 				}

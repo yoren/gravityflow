@@ -971,8 +971,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$form = $this->get_form();
 
 			if ( $assignee_type == 'email' ) {
-				$entry       = $this->get_entry();
-				$email = rgar( $entry, $assignee_id );
+				$email = $assignee_id;
 				$notification['id']      = 'workflow_step_' . $this->get_id() . '_email_' . $email;
 				$notification['name']    = $notification['id'];
 				$notification['to']      = $email;

@@ -83,8 +83,6 @@ if ( class_exists( 'GFForms' ) ) {
 		public function init() {
 			parent::init();
 
-			$this->maybe_redirect_after_activation();
-
 			remove_filter( 'gform_entry_post_save', array( $this, 'maybe_process_feed' ), 10 );
 
 			add_filter( 'gform_entry_post_save', array( $this, 'maybe_process_feed' ), 8, 2 );
@@ -1211,6 +1209,77 @@ PRIMARY KEY  (id)
 				})(jQuery);
 			</script>
 			<?php
+		}
+
+		function settings_checkbox_and_text( $field, $echo = true ){
+			// prepare checkbox
+
+			$checkbox_input = rgars( $field, 'checkbox' );
+
+			$checkbox_field = array(
+				'type'       => 'checkbox',
+				'name'       => $field['name'] . 'Enable',
+				'label'      => esc_html__( 'Enable', 'gravityforms' ),
+				'horizontal' => true,
+				'value'      => '1',
+				'choices'    => false,
+				'tooltip'    => false,
+			);
+
+			$checkbox_field = wp_parse_args( $checkbox_input, $checkbox_field );
+
+			// prepare textbox
+
+			$text_input = rgars( $field, 'text' );
+			$is_enabled   = $this->get_setting( $checkbox_field['name'] );
+
+			$text_field = array(
+				'name'    => $field['name'] . 'Value',
+				'type'    => 'select',
+				'class'   => '',
+				'tooltip' => false,
+			);
+
+			$text_field['class'] .= ' ' . $text_field['name'];
+
+			$text_field = wp_parse_args( $text_input, $text_field );
+
+			// a little more with the checkbox
+			if ( empty( $checkbox_field['choices'] ) ) {
+				$checkbox_field['choices'] = array(
+					array(
+						'name'          => $checkbox_field['name'],
+						'label'         => $checkbox_field['label'],
+						'onchange'      => sprintf( "( function( $, elem ) {
+						$( elem ).parents( 'td' ).css( 'position', 'relative' );
+						if( $( elem ).prop( 'checked' ) ) {
+							$( '%1\$s' ).fadeIn();
+						} else {
+							$( '%1\$s' ).fadeOut();
+						}
+					} )( jQuery, this );",
+							"#{$text_field['name']}Span" )
+					)
+				);
+			}
+
+			// get markup
+
+			$html = sprintf(
+				'%s <br /><span id="%s" class="%s">%s %s %s</span>',
+				$this->settings_checkbox( $checkbox_field, false ),
+				$text_field['name'] . 'Span',
+				$is_enabled ? '' : 'hidden',
+				esc_html( rgar($text_field, 'before_input') ),
+				$this->settings_text( $text_field, false ),
+				$text_field['tooltip'] ? gform_tooltip( $text_field['tooltip'], rgar( $text_field, 'tooltip_class' ) . ' tooltip ' . $text_field['name'], true ) : ''
+			);
+
+			if ( $echo ) {
+				echo $html;
+			}
+
+			return $html;
 		}
 
 		function settings_visual_editor( $field ) {
@@ -2554,6 +2623,7 @@ PRIMARY KEY  (id)
 			$a = shortcode_atts( array(
 				'page' => 'inbox',
 				'form_id' => null,
+				'field_ids' => '',
 				'display_all' => null,
 				'allow_anonymous' => false,
 			), $atts );
@@ -2576,6 +2646,7 @@ PRIMARY KEY  (id)
 					wp_enqueue_script( 'gravityflow_entry_detail' );
 					wp_enqueue_script( 'gravityflow_status_list' );
 					$args = array(
+						'form_id' => $a['form_id'],
 						'show_header' => false,
 						'detail_base_url' => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
 					);
@@ -2976,6 +3047,16 @@ PRIMARY KEY  (id)
 
 		public function cron(){
 			$this->log_debug( __METHOD__ . '() Starting cron.' );
+
+			$this->maybe_process_queued_entries();
+			$this->maybe_send_assignee_reminders();
+
+		}
+
+		public function maybe_process_queued_entries(){
+
+			$this->log_debug( __METHOD__ . '(): starting' );
+
 			$form_ids = $this->get_workflow_form_ids();
 
 			if ( empty( $form_ids  ) ) {
@@ -3015,7 +3096,71 @@ AND m.meta_value='queued'";
 					}
 				}
 			}
+		}
 
+		public function maybe_send_assignee_reminders(){
+
+			$this->log_debug( __METHOD__ . '(): starting' );
+
+			$form_ids = $this->get_workflow_form_ids();
+
+			$this->log_debug( __METHOD__ . '(): workflow form IDs: ' . print_r( $form_ids, true ) );
+
+			foreach ( $form_ids as $form_id ) {
+				$steps = $this->get_steps( $form_id );
+				foreach ( $steps as $step ) {
+					if ( ! $step || ! $step instanceof Gravity_Flow_Step ) {
+						$this->log_debug( __METHOD__ . '(): step not a step!  ' . print_r( $step ) );
+						continue;
+					}
+
+					if ( ! ( $step->assignee_notification_enabled && $step->resend_assignee_emailEnable && $step->resend_assignee_emailValue > 0 ) ) {
+						continue;
+					}
+
+					$this->log_debug( __METHOD__ . '(): checking assignees for all the entries on step ' . $step->get_id() );
+
+					$criteria = array(
+						'status' => 'active',
+						'field_filters' => array(
+							array(
+								'key' => 'workflow_step',
+								'value' => $step->get_id(),
+							),
+						)
+					);
+					// Criteria: step active
+					$entries = GFAPI::get_entries( $form_id, $criteria );
+
+					$this->log_debug( __METHOD__ . '(): count entries on step ' . $step->get_id() . ' = ' . count( $entries ) );
+
+					foreach ( $entries as $entry ) {
+						$current_step = $this->get_step( $entry['workflow_step'], $entry );
+						$assignees = $current_step->get_assignees();
+						foreach ( $assignees as $assignee ) {
+							$assignee_status = $assignee->get_status();
+							if ( $assignee_status == 'pending' ) {
+								$assignee_timestamp = $assignee->get_status_timestamp();
+								$trigger_timestamp = $assignee_timestamp + ( (int) $step->resend_assignee_emailValue * DAY_IN_SECONDS );
+								$reminder_timestamp = $assignee->get_reminder_timestamp();
+								if ( time() > $trigger_timestamp && $reminder_timestamp == false ) {
+									$this->log_debug( __METHOD__ . '(): assignee_timestamp: ' . $assignee_timestamp . ' - ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $assignee_timestamp ), 'F j, Y H:i:s' ) );
+									$this->log_debug( __METHOD__ . '(): trigger_timestamp: ' . $trigger_timestamp  . ' - ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $trigger_timestamp ), 'F j, Y H:i:s' ) );
+									$step->send_assignee_notification( $assignee );
+									$assignee->set_reminder_timestamp();
+									$this->log_debug( __METHOD__ . '(): sent reminder about entry ' . $entry['id'] . ' to ' . $assignee->get_key() );
+								}
+								if ( time() > $trigger_timestamp && $reminder_timestamp !== false ){
+									$this->log_debug( __METHOD__ . '(): not sending reminder to ' . $assignee->get_key() . ' for entry ' . $entry['id'] . ' because it was already sent: ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $reminder_timestamp ), 'F j, Y H:i:s' ) );
+								}
+								if ( time() < $trigger_timestamp && $reminder_timestamp == false ){
+									$this->log_debug( __METHOD__ . '(): reminder to ' . $assignee->get_key() .' for entry ' . $entry['id'] . ' is scheduled for ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $trigger_timestamp ), 'F j, Y H:i:s' ) );
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 
 		public function app_settings_title() {
@@ -3028,16 +3173,6 @@ AND m.meta_value='queued'";
 
 		public function uninstall_confirm_message() {
 			return __( "Warning! ALL Gravity Flow settings will be deleted. This cannot be undone. 'OK' to delete, 'Cancel' to stop", 'gravityflow' );
-		}
-
-		public function maybe_redirect_after_activation() {
-			if ( get_option( 'gravityflow_do_activation_redirect', false ) ) {
-				update_option( 'gravityflow_do_activation_redirect', false );
-				if ( ! isset( $_GET['activate-multi'] ) ) {
-					$url = admin_url( 'admin.php?page=gravityflow_settings' );
-					wp_safe_redirect( $url );
-				}
-			}
 		}
 
 		public function filter_feed_actions( $action_links, $item, $column ) {
