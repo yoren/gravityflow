@@ -46,7 +46,8 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 		$include_roles = (bool) $this->gravityflowAssigneeFieldShowRoles;
 		$include_fields = (bool) $this->gravityflowAssigneeFieldShowFields;
 
-		return $this->get_assignees_as_choices( $value, $include_users, $include_roles, $include_fields );
+		$choices = $this->get_assignees_as_choices( $value, $include_users, $include_roles, $include_fields );
+		return $choices;
 	}
 
 	public function get_assignees_as_choices( $value, $include_users = true, $include_roles = true, $include_fields = true  ) {
@@ -57,14 +58,14 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 		$optgroups = array();
 
 		if ( $include_users ) {
-			$args            = apply_filters( 'gravityflow_get_users_args_assignee_field', array( 'number' => 300 ) );
+			$args            = apply_filters( 'gravityflow_get_users_args_assignee_field', array( 'number' => 300, 'orderby' => 'display_name' ) );
 			$accounts        = get_users( $args );
 			$account_choices = array();
 			foreach ( $accounts as $account ) {
 				$account_choices[] = array( 'value' => 'user_id|' . $account->ID, 'text' => $account->display_name );
 			}
 
-			$account_choices = apply_filters( 'gravityflow_assignee_field_users', $account_choices, $form_id );
+			$account_choices = apply_filters( 'gravityflow_assignee_field_users', $account_choices, $form_id, $this );
 
 			$optgroups = array();
 
@@ -89,7 +90,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 				$role_choices[] = array( 'value' => 'role|' . $role, 'text' => $name );
 			}
 
-			$role_choices = apply_filters( 'gravityflow_assignee_field_roles', $role_choices );
+			$role_choices = apply_filters( 'gravityflow_assignee_field_roles', $role_choices, $form_id, $this );
 
 			if ( ! empty( $role_choices ) ) {
 				$roles_opt_group = new GF_Field();
@@ -116,7 +117,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 					),
 				);
 
-				$fields_choices = apply_filters( 'gravityflow_assignee_field_fields', $fields_choices );
+				$fields_choices = apply_filters( 'gravityflow_assignee_field_fields', $fields_choices, $form_id, $this );
 
 				if ( ! empty( $fields_choices ) ) {
 					$fields_opt_group = new GF_Field();

@@ -1,4 +1,14 @@
 <?php
+/**
+ * Gravity Flow Step Notification
+ *
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow_Step_Notification
+ * @copyright   Copyright (c) 2015, Steven Henty
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
@@ -86,6 +96,11 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 
 	function process(){
 
+		if ( class_exists( 'GFPDF_Core' ) ) {
+			global $gfpdf;
+			$gfpdf = new GFPDF_Core();
+		}
+
 		$entry = $this->get_entry();
 
 		$form = $this->get_form();
@@ -122,7 +137,7 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 		switch ( $notification_type ) {
 			case 'select' :
 				if ( is_array( $this->workflow_notification_users ) ) {
-					foreach ( $this->approval_notification_users as $assignee_key ) {
+					foreach ( $this->workflow_notification_users as $assignee_key ) {
 						$assignees[] = new Gravity_Flow_Assignee( $assignee_key, $this );
 					}
 				}

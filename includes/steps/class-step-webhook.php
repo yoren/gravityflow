@@ -1,4 +1,14 @@
 <?php
+/**
+ * Gravity Flow Step Webhook
+ *
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow_Step_Webhook
+ * @copyright   Copyright (c) 2015, Steven Henty
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
@@ -37,8 +47,8 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 							'value' => 'get',
 						),
 						array(
-							'label' => 'UPDATE',
-							'value' => 'update',
+							'label' => 'PUT',
+							'value' => 'put',
 						),
 						array(
 							'label' => 'DELETE',
@@ -108,23 +118,39 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 		$url = $this->url;
 
-		if ( $this->format == 'json' ) {
-			$headers = array( 'Content-type' => 'application/json' );
-			$body    = json_encode( $entry );
-		} else {
-			$headers = array();
-			$body    = $entry;
+		$this->log_debug( __METHOD__ . '() - url before replacing variables: ' . $url );
+
+		$url = GFCommon::replace_variables( $url, $this->get_form(), $entry, true, false, false, 'text' );
+
+		$this->log_debug( __METHOD__ . '() - url after replacing variables: ' . $url );
+
+		$method = strtoupper( $this->method );
+
+		$body = null;
+
+		$headers = array();
+
+		if ( in_array( $method, array( 'POST', 'PUT' ) ) ) {
+			if ( $this->format == 'json' ) {
+				$headers = array( 'Content-type' => 'application/json' );
+				$body    = json_encode( $entry );
+			} else {
+				$headers = array();
+				$body    = $entry;
+			}
 		}
 
 		$response = wp_remote_request( $url, array(
-			'method'      => strtoupper( $this->method ),
+			'method'      => $method,
 			'timeout'     => 45,
 			'redirection' => 3,
-			'blocking'    => false,
+			'blocking'    => true,
 			'headers'     => $headers,
 			'body'        => $body,
 			'cookies'     => array()
 		) );
+
+		$this->log_debug( __METHOD__ . '() - response: ' . print_r( $response, true ) );
 
 		if ( is_wp_error( $response ) ) {
 			$step_status = 'error';

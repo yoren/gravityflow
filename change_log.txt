@@ -1,15 +1,32 @@
 -------------------------------------------------------------------------------------------------------------------
-Version 1.0-beta-10.3
-    - Fixed an issue with the emails to email fields.
+Version 1.0-beta-11.3
+    - Added support for Canvas theme.
+    - Fixed an issue with the paging in the status shortcode
 
 -------------------------------------------------------------------------------------------------------------------
-Version 1.0-beta-10.2
-    - Removed redirect to settings page after activation.
+Version 1.0-beta-11.2
+    - Added merge tag support for the URL in the web
 
 -------------------------------------------------------------------------------------------------------------------
-Version 1.0-beta-10.1
+Version 1.0-beta-11.1
+    - Updated the assignee field to return the users ordered by display name.
+
+-------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-11
+    - Added the admin icon.
     - Added the 'Send reminder' setting to the asssignee email tab.
+    - Added the $field object as the third parameter to the gravityflow_assignee_field_{type} filters.
+    - Added support for the Gravity PDF extension in Gravity Forms notifications.
+    - Added the 'fields' shortcode attribute to the shortcode to allow fields to be displayed in the inbox and status lists. Separate field IDs by a comma. Only works when the 'form' attribute is set.
+        Example: [gravityflow page="status" form="159" fields="1,2"]
+    - Fixed an issue with the workflow notification when the select users option is active where the emails are not sent.
+    - Fixed the active toolbar class.
+    - Fixed a typo on the status page.
+    - Fixed an issue with the emails to email fields.
     - Fixed an issue with the sending of some notifications.
+    - Removed redirect to settings page after activation.
+    - Removed the form_id shortcode attribute and replaced it with the form attribute.
+
 
 -------------------------------------------------------------------------------------------------------------------
 Version 1.0-beta-10

@@ -10,10 +10,14 @@ class Gravity_Flow_Inbox {
 	public static function display( $args ) {
 		global $current_user;
 
+		$filter = apply_filters( 'gravityflow_inbox_filter', array( 'form_id' => 0, 'start_date' => '', 'end_date' => '' ) );
+		$field_ids = apply_filters( 'gravityflow_inbox_fields', array() );
+
 		$defaults = array(
 			'display_empty_fields' => true,
 			'check_permissions'    => true,
-			'form_id'              => 0,
+			'form_id'              => rgar( $filter, 'form_id' ),
+			'field_ids'              => $field_ids,
 			'detail_base_url'      => admin_url( 'admin.php?page=gravityflow-inbox&view=entry' ),
 		);
 
@@ -64,13 +68,15 @@ class Gravity_Flow_Inbox {
 					<th><?php esc_html_e( 'Step', 'gravityflow' ); ?></th>
 					<th><?php esc_html_e( 'Submitted', 'gravityflow' ); ?></th>
 					<?php
-					if ( $args['form_id'] ) {
+					if ( $args['form_id'] && is_array( $args['field_ids'] ) ) {
 						$form = GFAPI::get_form( $args['form_id'] );
 						if ( isset( $form['fields'] ) && is_array( $form['fields'] ) ) {
 							foreach ( $form['fields'] as $field ) {
 								/* @var GF_Field $field */
-								$label = GFCommon::get_label( $field );
-								echo '<th>' . esc_html( $label ) . '</th>';
+								if ( in_array( $field->id, $args['field_ids'] ) ) {
+									$label = GFCommon::get_label( $field );
+									echo '<th>' . esc_html( $label ) . '</th>';
+								}
 							}
 						}
 					}
@@ -126,11 +132,14 @@ class Gravity_Flow_Inbox {
 						</td>
 
 						<?php
-						if ( $args['form_id'] ) {
+						if ( $args['form_id'] && is_array( $args['field_ids'] ) ) {
 							if ( isset( $form['fields'] ) && is_array( $form['fields'] ) ) {
 								$columns = RGFormsModel::get_grid_columns( $form_id, true );
 								foreach ( $form['fields'] as $field ) {
 									/* @var GF_Field $field */
+									if ( ! in_array( $field->id, $args['field_ids'] ) ) {
+										continue;
+									}
 									?>
 									<td data-label="<?php echo esc_attr( GFCommon::get_label( $field ) ); ?>">
 										<?php echo $field->get_value_entry_list( rgar( $entry, $field->id ), $entry, $field->id, $columns, $form ); ?>

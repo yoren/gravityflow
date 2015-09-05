@@ -64,14 +64,14 @@ class Gravity_Flow_Support {
 			</style>
 
 			<h2 class="gf_admin_page_title">
-				<span><?php esc_html_e( 'Beta Support', 'gravityflow' ); ?></span>
+				<span><?php esc_html_e( 'Support', 'gravityflow' ); ?></span>
 
 			</h2>
 			<p>
-				Thanks for trying Gravity Flow. Please remember that it's not currently ready for a production environment. I need as much feedback as possible so I can get it production-ready so please, don't hold back, send me everything little issue that comes up and every feature request you can think of.
+				<?php esc_html_e( 'Please check the documentation before submitting a support request', 'gravityflow' ); ?>
 			</p>
 			<p>
-				Steve
+				<a href="http://docs.gravityflow.io">http://docs.gravityflow.io</a>
 			</p>
 			<hr />
 
@@ -83,46 +83,44 @@ class Gravity_Flow_Support {
 				<div class="beta_feedback_form">
 
 					<label for="gravityflow_name">
-						Name
+						<?php esc_html_e( 'Name', 'gravityflow' ); ?>
 					</label>
 
 					<input id="gravityflow_name" type="text" class="regular-text" name="gravityflow_name" value="<?php echo $user->display_name; ?>"/>
 
-
 					<label for="gravityflow_email">
-						Email
+						<?php esc_html_e( 'Email', 'gravityflow' ); ?>
 					</label>
 
 					<input id="gravityflow_email" type="email" class="regular-text" name="gravityflow_email" value="<?php echo get_option( 'admin_email' ); ?>"/>
 
 					<label for="gravityflow_subject_suggestion">
 						<input id="gravityflow_subject_suggestion" type="radio" name="gravityflow_subject" value="suggestion" checked="checked"/>
-						General comment or suggestion
+						<?php esc_html_e( 'General comment or suggestion', 'gravityflow' ); ?>
 					</label>
 
 					<label for="gravityflow_subject_feature_request">
 						<input id="gravityflow_subject_feature_request" type="radio" name="gravityflow_subject" value="feature request"/>
-						Feature request
+						<?php esc_html_e( 'Feature request', 'gravityflow' ); ?>
 					</label>
 
 
 					<label for="gravityflow_subject_bug_report">
 						<input id="gravityflow_subject_bug_report" type="radio" name="gravityflow_subject" value="bug report"/>
-						Bug report
+						<?php esc_html_e( 'Bug report', 'gravityflow' ); ?>
 					</label>
 
 					<label for="gravityflow_description">
-						Suggestion or steps to reproduce the issue.
+						<?php esc_html_e( 'Suggestion or steps to reproduce the issue.', 'gravityflow' ); ?>
 					</label>
 
 					<textarea id="gravityflow_description" name="gravityflow_description" class="widefat" cols="50" rows="10"></textarea>
 					<label>
 						<input type="checkbox" name="gravityflow_debug_info" value="1" checked="checked"/>
-						Send debugging information. (This includes system information, active plugins, forms and workflow steps. No entry data will be sent.)
+						<?php esc_html_e( 'Send debugging information. (This includes some system information, active plugins, forms and workflow steps. No entry data will be sent.)', 'gravityflow' ); ?>
 					</label>
 					</br /><br />
-					<input id="gravityflow_send" type="submit" class="button button-primary button-large" name="gravityflow_send_feedback" value="Send" />
-
+					<input id="gravityflow_send" type="submit" class="button button-primary button-large" name="gravityflow_send_feedback" value="<?php esc_html_e( 'Send', 'gravityflow' ); ?>" />
 
 				</div>
 			</form>

@@ -24,7 +24,7 @@ table.entry-detail-view td{
 }
 .has-right-sidebar #post-body-content {
     float: none;
-
+    margin-right: 280px;
     width: auto;
 }
 #post-body-content, .edit-form-section {
@@ -34,17 +34,15 @@ table.entry-detail-view td{
 .has-right-sidebar #post-body {
     clear: left;
     float: left;
-
     width: 100%;
-    margin-right: -260px;
-   padding-right: 260px;
+    margin-right: -2000px;
 }
 
 .gravityflow_workflow_wrap{
     font-size:14px;
 }
 
-
+.gravityflow_workflow_wrap .postbox h3,
 .gravityflow_workflow_wrap h3{
     font-size:1.2em;
     margin:10px;
@@ -62,6 +60,7 @@ table.entry-detail-view td{
 .gravityflow_workflow_wrap input,
 .gravityflow_workflow_wrap select {
     padding:4px;
+    width: auto;
 }
 
 .inner-sidebar .postbox {
@@ -86,7 +85,7 @@ table.entry-detail-view td{
     background: #f7f7f7 none repeat scroll 0 0;
     border-color: #cccccc;
     box-shadow: 0 1px 0 #fff inset, 0 1px 0 rgba(0, 0, 0, 0.08);
-    color: #555;
+    color: #555 !important;
     vertical-align: top;
 
     border-radius: 3px;
@@ -290,6 +289,10 @@ input.small-text{
 .subsubsub li a,
 .pagination-links a{
     border-bottom: 0;
+}
+
+#gravityflow-form-select{
+    max-width: 200px;
 }
 
 /* Bulk Actions */

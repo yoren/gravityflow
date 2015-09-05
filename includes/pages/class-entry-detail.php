@@ -94,8 +94,8 @@ class Gravity_Flow_Entry_Detail {
 
 			<?php if ( $show_header ) :	?>
 			<h2 class="gf_admin_page_title">
-				<span><?php echo esc_html__( 'Workflow Entry #', 'gravityflow' ) . absint( $entry['id'] ); ?></span><span class="gf_admin_page_subtitle"><span class="gf_admin_page_formid">ID: <?php echo absint( $form['id'] ); ?></span><span class='gf_admin_page_formname'><?php esc_html_e( 'Workflow Form', 'gravityflow' ) ?>: <?php esc_html_e( $form['title'] ); ?></span></span>
-
+				<img width="45" height="22" src="<?php echo gravity_flow()->get_base_url(); ?>/images/gravityflow-icon-blue-grad.svg" style="margin-right:5px;"/>
+				<span><?php echo esc_html__( 'Workflow Entry #', 'gravityflow' ) . absint( $entry['id'] ); ?></span><span class="gf_admin_page_subtitle"><span class='gf_admin_page_formname'><?php esc_html_e( 'Workflow Form', 'gravityflow' ) ?>: <?php esc_html_e( $form['title'] ); ?></span></span>
 			</h2>
 
 			<div id="gf_form_toolbar">

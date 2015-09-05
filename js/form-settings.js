@@ -486,8 +486,6 @@
         tags.push({tag: '{workflow_entry_url}', label: 'Entry URL'});
         tags.push({tag: '{workflow_approve_link}', label: 'Approve Link'});
         tags.push({tag: '{workflow_reject_link}', label: 'Reject Link'});
-        tags.push({tag: '{workflow_approve_token}', label: 'Approve Token'});
-        tags.push({tag: '{workflow_reject_token}', label: 'Reject Token'});
 
         mergeTags['gravityflow'] = {
             label: 'Workflow',

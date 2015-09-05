@@ -1,4 +1,14 @@
 <?php
+/**
+ * Gravity Flow Step User Input
+ *
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow_Step_User_Input
+ * @copyright   Copyright (c) 2015, Steven Henty
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
