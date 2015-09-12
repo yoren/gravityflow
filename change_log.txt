@@ -1,28 +1,13 @@
 -------------------------------------------------------------------------------------------------------------------
-Version 1.0-beta-11.6
+Version 1.0-beta-12
     - Added the reports page.
-
--------------------------------------------------------------------------------------------------------------------
-Version 1.0-beta-11.5
+    - Added the minute(s) unit to the schedule offset step setting.
+    - Added merge tag support for the URL setting in the webhook step.
+    - Updated the assignee field to return the users ordered by display name.
     - Fixed an issue with the step delay.
     - Fixed an issue with the activity page where a warning is displayed if the step no longer exists.
-
--------------------------------------------------------------------------------------------------------------------
-Version 1.0-beta-11.4
-    - Added the minute(s) unit to the schedule offset step setting.
-
--------------------------------------------------------------------------------------------------------------------
-Version 1.0-beta-11.3
     - Fixed an issue with the styles for the shortcode in some themes.
     - Fixed an issue with the paging in the status shortcode.
-
--------------------------------------------------------------------------------------------------------------------
-Version 1.0-beta-11.2
-    - Added merge tag support for the URL setting in the webhook step.
-
--------------------------------------------------------------------------------------------------------------------
-Version 1.0-beta-11.1
-    - Updated the assignee field to return the users ordered by display name.
 
 -------------------------------------------------------------------------------------------------------------------
 Version 1.0-beta-11
