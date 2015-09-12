@@ -318,16 +318,31 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$entry_id = $this->get_entry_id();
 		gform_update_meta( $entry_id , 'workflow_step', $step_id );
 
+		$step_timestamp = $this->get_step_timestamp();
+		if ( empty ( $step_timestamp ) ) {
+			gform_update_meta( $entry_id, 'workflow_step_' . $this->get_id() . '_timestamp', time() );
+			$this->refresh_entry();
+		}
+
+		$status = $this->get_status();
+		$this->log_debug( __METHOD__ . '() - Step status before processing: ' . $status );
+
+
 		if ( $this->scheduled && ! $this->validate_schedule() ) {
-			$this->log_debug( __METHOD__ . '() - Step queued: ' . $this->get_name() );
-			$this->update_step_status( 'queued' );
+			if ( $status == 'queued' ) {
+				$this->log_debug( __METHOD__ . '() - Step still queued: ' . $this->get_name() );
+			} else {
+				$this->update_step_status( 'queued' );
+				$this->refresh_entry();
+				$this->log_event( 'queued' );
+				$this->log_debug( __METHOD__ . '() - Step queued: ' . $this->get_name() );
+			}
 			$complete = false;
 		} else {
 			$this->log_debug( __METHOD__ . '() - Starting step: ' . $this->get_name() );
+			gform_update_meta( $entry_id, 'workflow_step_' . $this->get_id() . '_timestamp', time() );
 
 			$this->update_step_status();
-
-			gform_update_meta( $this->get_entry_id(), 'workflow_step_' . $this->get_id() . '_timestamp', time() );
 
 			$this->refresh_entry();
 
@@ -365,6 +380,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 		$schedule_timestamp = $this->get_schedule_timestamp();
 
+		$time_now = time();
+
 		return time() >= $schedule_timestamp;
 	}
 
@@ -382,11 +399,14 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 		$entry = $this->get_entry();
 
-		$entry_timestamp = $entry['workflow_timestamp'];
+		$entry_timestamp = $this->get_step_timestamp();
 
 		$schedule_timestamp = $entry_timestamp;
 
 		switch ( $this->schedule_delay_unit ) {
+			case 'minutes' :
+				$schedule_timestamp += ( MINUTE_IN_SECONDS * $this->schedule_delay_offset );
+				break;
 			case 'hours' :
 				$schedule_timestamp += ( HOUR_IN_SECONDS * $this->schedule_delay_offset );
 				break;
@@ -879,7 +899,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		foreach ( $assignees as $assignee ) {
 			$assignee->remove();
 		}
-
+		$this->log_debug( __METHOD__ . '() - ending step ' . $this->get_id() );
 		$this->log_event( 'ended', $status, $duration );
 	}
 
@@ -889,7 +909,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return bool
 	 */
 	public function is_complete(){
-		return true;
+		$status = $this->get_status();
+		return $status == 'complete';
 	}
 
 	/**

@@ -290,7 +290,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	public function is_complete() {
 		$status = $this->get_status();
 
-		return $status != 'pending';
+		return ! in_array( $status, array( 'pending', 'queued' ) );
 	}
 
 	public function get_status(){

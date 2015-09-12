@@ -47,6 +47,7 @@ if ( class_exists( 'GFForms' ) ) {
 			'gravityflow_inbox',
 			'gravityflow_status',
 			'gravityflow_status_view_all',
+			'gravityflow_reports',
 			'gravityflow_activity',
 			'gravityflow_workflow_detail_admin_actions',
 		);
@@ -61,6 +62,7 @@ if ( class_exists( 'GFForms' ) ) {
 			'gravityflow_inbox',
 			'gravityflow_status',
 			'gravityflow_activity',
+			'gravityflow_reports',
 		);
 		protected $_capabilities_uninstall = 'gravityflow_uninstall';
 
@@ -82,13 +84,14 @@ if ( class_exists( 'GFForms' ) ) {
 			// Pending GF support for import hooks
 			//add_filter( 'gform_export_form', array( $this, 'filter_gform_export_form' ) );
 			parent::pre_init();
-
+			add_filter( 'cron_schedules', array( $this, 'filter_cron_schedule' ) );
 			if ( ! wp_next_scheduled( 'gravityflow_cron' ) ) {
-				wp_schedule_event( time(), 'hourly', 'gravityflow_cron' );
+				wp_schedule_event( time(), 'fifteen_minutes', 'gravityflow_cron' );
 			}
 
 			add_action( 'gravityflow_cron', array( $this, 'cron' ) );
 			add_action( 'wp', array( $this, 'filter_wp' ) );
+
 		}
 
 		public function init() {
@@ -107,9 +110,9 @@ if ( class_exists( 'GFForms' ) ) {
 
 			add_filter( 'auto_update_plugin', array( $this, 'maybe_auto_update' ), 10, 2 );
 
-			add_filter( 'gform_enqueue_scripts' , array( $this, 'filter_gform_enqueue_scripts'), 10, 2 );
+			add_filter( 'gform_enqueue_scripts', array( $this, 'filter_gform_enqueue_scripts' ), 10, 2 );
 
-			add_action('wp_login', array( $this, 'filter_wp_login'), 10, 2);
+			add_action( 'wp_login', array( $this, 'filter_wp_login' ), 10, 2 );
 		}
 
 		public function init_admin() {
@@ -325,6 +328,23 @@ PRIMARY KEY  (id)
 						'input_fields' => $input_fields,
 					)
 				),
+				array(
+					'handle'  => 'google_charts',
+					'src'     => 'https://www.google.com/jsapi',
+					'version' => $this->_version,
+					'enqueue' => array(
+						array( 'query' => 'page=gravityflow-reports', ),
+					)
+				),
+				array(
+					'handle'  => 'gravityflow_reports',
+					'src'     => $this->get_base_url() . "/js/reports{$min}.js",
+					'version' => $this->_version,
+					'deps' => array( 'jquery', 'google_charts' ),
+					'enqueue' => array(
+						array( 'query' => 'page=gravityflow-reports', ),
+					)
+				),
 			);
 
 			return array_merge( parent::scripts(), $scripts );
@@ -441,6 +461,9 @@ PRIMARY KEY  (id)
 							'query'      => 'page=gravityflow-status',
 						),
 						array(
+							'query'      => 'page=gravityflow-reports',
+						),
+						array(
 							'query'      => 'page=gravityflow-activity',
 						),
 					)
@@ -549,7 +572,7 @@ PRIMARY KEY  (id)
 				$role_choices[] = array( 'value' => 'role|' . $role, 'label' => $name );
 			}
 
-			$args            = apply_filters( 'gravityflow_get_users_args', array( 'number' => 300 ) );
+			$args            = apply_filters( 'gravityflow_get_users_args', array( 'number' => 300, 'orderby' => 'display_name' ) );
 			$accounts        = get_users( $args );
 			$account_choices = array();
 			foreach ( $accounts as $account ) {
@@ -1120,7 +1143,12 @@ PRIMARY KEY  (id)
 			$unit_field = array(
 				'name' => 'schedule_delay_unit',
 				'label' => esc_html__( 'Schedule', 'gravityflow' ),
+				'default_value' => 'hours',
 				'choices' => array(
+					array(
+						'label' => esc_html__( 'Minutes(s)', 'gravityflow' ),
+						'value' => 'minutes',
+					),
 					array(
 						'label' => esc_html__( 'Hour(s)', 'gravityflow' ),
 						'value' => 'hours',
@@ -1735,6 +1763,10 @@ PRIMARY KEY  (id)
 
 		public function get_current_step( $form, $entry ) {
 
+			if ( ! isset ( $entry['workflow_step'] ) ) {
+				return false;
+			}
+
 			if ( $entry['workflow_step'] === 0 ) {
 				$step = $this->get_first_step( $form['id'], $entry );
 			} else {
@@ -1866,6 +1898,14 @@ PRIMARY KEY  (id)
 				'callback' => array( $this, 'support' )
 			);
 			$menu_items[] = $support_item;
+
+			$reports_item = array(
+				'name' => 'gravityflow-reports',
+				'label' => esc_html__( 'Reports', 'gravityflow' ),
+				'permission' => 'gravityflow_reports',
+				'callback' => array( $this, 'reports' )
+			);
+			$menu_items[] = $reports_item;
 
 			$activity_item = array(
 				'name' => 'gravityflow-activity',
@@ -2382,7 +2422,7 @@ PRIMARY KEY  (id)
 		}
 
 		/**
-		 * Displays the Inbox UI
+		 * Displays the Activity UI
 		 */
 		public function activity() {
 
@@ -2419,6 +2459,47 @@ PRIMARY KEY  (id)
 			</div>
 		<?php
 		}
+
+		/**
+		 * Displays the Reports UI
+		 */
+		public function reports() {
+
+			if ( $this->maybe_display_installation_wizard() ) {
+				return;
+			}
+
+			$this->reports_page();
+		}
+
+		public function reports_page( $args = array() ) {
+			$defaults = array(
+				'display_header' => true,
+			);
+			$args = array_merge( $defaults, $args );
+			?>
+			<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_reports">
+
+				<?php if ( $args['display_header'] ) : ?>
+					<h2 class="gf_admin_page_title">
+						<img width="45" height="22" src="<?php echo gravity_flow()->get_base_url(); ?>/images/gravityflow-icon-blue-grad.svg" style="margin-right:5px;"/>
+
+						<span><?php esc_html_e( 'Workflow Reports', 'gravityflow' ); ?></span>
+
+					</h2>
+
+					<?php $this->toolbar(); ?>
+				<?php
+				endif;
+
+				require_once( $this->get_base_path() . '/includes/pages/class-reports.php' );
+				Gravity_Flow_Reports::display( $args );
+				?>
+			</div>
+		<?php
+		}
+
+
 
 		public function toolbar(){
 			?>
@@ -2482,15 +2563,26 @@ PRIMARY KEY  (id)
 				'priority'       => 800,
 			);
 
-			$menu_items['activiy'] = array(
+			$menu_items['reports'] = array(
+				'label'          => __( 'Reports', 'gravityflow' ),
+				'icon'           => '<i class="fa fa fa-bar-chart-o fa-lg"></i>',
+				'title'          => __( 'Reports', 'gravityflow' ),
+				'url'            => '?page=gravityflow-reports',
+				'menu_class'     => 'gf_form_toolbar_settings',
+				'link_class'   => ( rgget( 'page' ) == 'gravityflow-reports' ) ? $active_class : $not_active_class,
+				'capabilities'   => 'gravityflow_reports',
+				'priority'       => 700,
+			);
+
+			$menu_items['activity'] = array(
 				'label'          => __( 'Activity', 'gravityflow' ),
-				'icon'           => '<i class="fa fa fa-database fa-lg"></i>',
+				'icon'           => '<i class="fa fa fa-list fa-lg"></i>',
 				'title'          => __( 'Activity', 'gravityflow' ),
 				'url'            => '?page=gravityflow-activity',
 				'menu_class'     => 'gf_form_toolbar_settings',
 				'link_class'   => ( rgget( 'page' ) == 'gravityflow-activity' ) ? $active_class : $not_active_class,
 				'capabilities'   => 'gravityflow_activity',
-				'priority'       => 700,
+				'priority'       => 600,
 			);
 
 			return $menu_items;
@@ -2587,36 +2679,53 @@ PRIMARY KEY  (id)
 			$entry = GFAPI::get_entry( $entry_id );
 			if ( isset( $entry['workflow_step'] ) ) {
 
+				$this->log_debug( __METHOD__ . '() - processing. entry id ' . $entry_id );
+
 				$step_id = $entry['workflow_step'];
 
 				if ( empty( $step_id ) && ( empty( $entry['workflow_final_status'] ) || $entry['workflow_final_status'] == 'pending') ) {
+					$this->log_debug( __METHOD__ . '() - not yet started workflow. starting.' );
 					// Starting workflow
 					$form_id = absint( $form['id'] );
 					$step = $this->get_first_step( $form_id, $entry );
 					$this->log_event( 'workflow', 'started', $form['id'], $entry_id );
-					$step->start();
+					if ( $step ) {
+						$step->start();
+						$this->log_debug( __METHOD__ . '() - started.' );
+					} else {
+						$this->log_debug( __METHOD__ . '() - no first step.' );
+					}
 				} else {
+					$this->log_debug( __METHOD__ . '() - resuming workflow.' );
 					$step = $this->get_step( $step_id, $entry );
 				}
 
 				$step_complete = false;
+
 				if ( $step ) {
-					$step_complete = $step->end_if_complete();
 					$step_id = $step->get_id();
+					$step_complete = $step->end_if_complete();
+					$this->log_debug( __METHOD__ . '() - step ' . $step_id . ' complete: ' . ( $step_complete ? 'yes' : 'no' ) );
 				}
 
 				while ( $step_complete && $step ) {
+
+					$this->log_debug( __METHOD__ . '() - getting next step.' );
+
 					$step = $this->get_next_step( $step, $entry, $form );
 					$step_complete = false;
 					if ( $step ) {
-						$step->start();
 						$step_id = $step->get_id();
-						$step_complete = $step->end_if_complete();
+						$step_complete = $step->start();
+						if ( $step_complete ) {
+							$step->end();
+						}
 					}
 					$entry['workflow_step'] = $step_id;
 				}
 
 				if ( $step == false ) {
+					$this->log_debug( __METHOD__ . '() - ending workflow.' );
 					gform_delete_meta( $entry_id, 'workflow_step' );
 					$step_status = gform_get_meta( $entry_id, 'workflow_step_status_' . $step_id );
 					gform_update_meta( $entry_id, 'workflow_final_status', $step_status );
@@ -2627,6 +2736,7 @@ PRIMARY KEY  (id)
 					do_action( 'gravityflow_workflow_complete', $entry_id, $form, $step_status );
 					GFAPI::send_notifications( $form, $entry, 'workflow_complete' );
 				} else {
+					$this->log_debug( __METHOD__ . '() - not ending workflow.' );
 					$step_id = $step->get_id();
 					gform_update_meta( $entry_id, 'workflow_step', $step_id );
 				}
@@ -3574,6 +3684,17 @@ AND m.meta_value='queued'";
 			}
 
 		}
+
+		function filter_cron_schedule( $schedules ) {
+			$schedules['fifteen_minutes'] = array(
+				'interval' => 5 * MINUTE_IN_SECONDS,
+				'display'  => esc_html__( 'Every Fifteen Minutes' ),
+			);
+
+			return $schedules;
+		}
+
+
 	}
 }
 

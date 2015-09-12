@@ -1,11 +1,24 @@
 -------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-11.6
+    - Added the reports page.
+
+-------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-11.5
+    - Fixed an issue with the step delay.
+    - Fixed an issue with the activity page where a warning is displayed if the step no longer exists.
+
+-------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-11.4
+    - Added the minute(s) unit to the schedule offset step setting.
+
+-------------------------------------------------------------------------------------------------------------------
 Version 1.0-beta-11.3
-    - Added support for Canvas theme.
-    - Fixed an issue with the paging in the status shortcode
+    - Fixed an issue with the styles for the shortcode in some themes.
+    - Fixed an issue with the paging in the status shortcode.
 
 -------------------------------------------------------------------------------------------------------------------
 Version 1.0-beta-11.2
-    - Added merge tag support for the URL in the web
+    - Added merge tag support for the URL setting in the webhook step.
 
 -------------------------------------------------------------------------------------------------------------------
 Version 1.0-beta-11.1
@@ -26,7 +39,6 @@ Version 1.0-beta-11
     - Fixed an issue with the sending of some notifications.
     - Removed redirect to settings page after activation.
     - Removed the form_id shortcode attribute and replaced it with the form attribute.
-
 
 -------------------------------------------------------------------------------------------------------------------
 Version 1.0-beta-10

@@ -185,12 +185,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		return $assignee_details;
 	}
 
-	public function is_complete(){
-		$status = $this->get_status();
-
-		return $status == 'complete';
-	}
-
 	public function get_next_step_id(){
 		if ( isset( $this->next_step_id ) ) {
 			return $this->next_step_id;

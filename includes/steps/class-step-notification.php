@@ -114,7 +114,7 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 					continue;
 				}
 				GFCommon::send_notification( $notification, $form, $entry );
-				$note = sprintf( esc_html__( 'Sent Notification: %s' ), $notification['name'] );
+				$note = sprintf( esc_html__( 'Sent Notification: %s', 'gravityflow' ), $notification['name'] );
 				$this->add_note( $note );
 			}
 		}
@@ -163,7 +163,7 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 
 		$this->send_notifications( $assignees, $body );
 
-		$note = esc_html__( 'Sent Notification' );
+		$note = esc_html__( 'Sent Notification: ', 'gravityflow' ) . $this->get_name();
 		$this->add_note( $note );
 
 	}

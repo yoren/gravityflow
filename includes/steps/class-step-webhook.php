@@ -54,7 +54,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 							'label' => 'DELETE',
 							'value' => 'delete',
 						),
-					)
+					),
 				),
 				array(
 					'name' => 'format',
@@ -70,7 +70,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 							'label' => 'FORM',
 							'value' => 'form',
 						),
-					)
+					),
 				),
 				/* later
 				array(
@@ -105,9 +105,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 	function process(){
 
-		$result = $this->send_webhook();
-
-		$this->add_note( $result, 0, 'webhook' );
+		$this->send_webhook();
 
 		return true;
 	}
@@ -157,6 +155,9 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		} else {
 			$step_status = 'success';
 		}
+
+		$note = esc_html__( 'Webhook sent. Url: ' . $url );
+		$this->add_note( $note, 0, 'webhook' );
 
 		return $step_status;
 	}

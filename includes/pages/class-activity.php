@@ -97,8 +97,10 @@ class Gravity_Flow_Activity_List {
 							<?php
 							if ( $event->feed_id ) {
 								$step = gravity_flow()->get_step( $event->feed_id );
-								$step_name = $step->get_name();
-								echo esc_html( $step_name );
+								if ( $step ) {
+									$step_name = $step->get_name();
+									echo esc_html( $step_name );
+								}
 							}
 
 							?>
