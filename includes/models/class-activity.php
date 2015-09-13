@@ -32,6 +32,9 @@ class Gravity_Flow_Activity {
 		$table   = self::get_activity_log_table_name();
 
 		$form_ids = self::get_form_ids();
+		if ( empty ( $form_ids ) ) {
+			return false;
+		}
 		$in_str_arr    = array_fill( 0, count( $form_ids ), '%d' );
 		$in_str        = join( ',', $in_str_arr );
 		$form_id_clause = $wpdb->prepare( "AND form_id IN ($in_str)", $form_ids );
@@ -151,6 +154,9 @@ GROUP BY assignee_id, assignee_type", $start_date );
 		$table   = self::get_activity_log_table_name();
 
 		$form_ids = self::get_form_ids();
+		if ( empty ( $form_ids ) ) {
+			return false;
+		}
 		$in_str_arr    = array_fill( 0, count( $form_ids ), '%d' );
 		$in_str        = join( ',', $in_str_arr );
 		$form_id_clause = $wpdb->prepare( "AND form_id IN ($in_str)", $form_ids );

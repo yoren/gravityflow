@@ -488,9 +488,9 @@ class Gravity_Flow_Reports {
 	public static function category_drop_down( $selected_value, $echo = true ) {
 		$m = array();
 		$m[] = '<select id="gravityflow-reports-category" name="category" style="display:none;">';
+		$m[] = sprintf( '<option value="month" %s>%s</option>', selected( $selected_value, 'month', false ), esc_html__( 'Month', 'gravityflow' ) );
 		$m[] = sprintf( '<option value="assignee" %s >%s</option>', selected( $selected_value, 'assignee', false ), esc_html__( 'Assignee', 'gravityflow' ) );
 		$m[] = sprintf( '<option value="step" %s >%s</option>', selected( $selected_value, 'step', false ), esc_html__( 'Step', 'gravityflow' ) );
-		$m[] = sprintf( '<option value="month" %s>%s</option>', selected( $selected_value, 'month', false ), esc_html__( 'Month', 'gravityflow' ) );
 		$m[] = '</select>';
 
 		$html = join( '', $m );

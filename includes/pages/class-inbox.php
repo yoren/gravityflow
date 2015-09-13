@@ -53,7 +53,9 @@ class Gravity_Flow_Inbox {
 
 			$form_ids = $args['form_id'] ? $args['form_id'] : gravity_flow()->get_workflow_form_ids();
 
-			$entries = GFAPI::get_entries( $form_ids, $search_criteria );
+			if ( ! empty( $form_ids ) ) {
+				$entries = GFAPI::get_entries( $form_ids, $search_criteria );
+			}
 		}
 
 		if ( sizeof( $entries ) > 0 ) {
