@@ -140,6 +140,7 @@ if ( class_exists( 'GFForms' ) ) {
 
 			add_action( 'wp_ajax_gravityflow_print_entries', array( $this, 'ajax_print_entries' ) );
 			add_action( 'wp_ajax_nopriv_gravityflow_print_entries', array( $this, 'ajax_print_entries' ) );
+			add_action( 'wp_ajax_rg_delete_file', array( 'RGForms', 'delete_file' ) );
 		}
 
 		public function init_frontend(){
@@ -295,6 +296,7 @@ PRIMARY KEY  (id)
 					'handle'  => 'gravityflow_entry_detail',
 					'src'     => $this->get_base_url() . "/js/entry-detail{$min}.js",
 					'version' => $this->_version,
+					'deps'    => array( 'jquery', 'sack' ),
 					'enqueue' => array(
 						array(
 							'query' => 'page=gravityflow-inbox',
@@ -359,8 +361,8 @@ PRIMARY KEY  (id)
 				if ( $shortcode_found ) {
 					$this->enqueue_form_scripts();
 					$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
-
-					wp_enqueue_script( 'gravityflow_entry_detail', $this->get_base_url() . "/js/entry-detail{$min}.js", array( 'jquery' ), $this->_version );
+					wp_enqueue_script( 'sack', "/wp-includes/js/tw-sack$min.js", array(), '1.6.1' );
+					wp_enqueue_script( 'gravityflow_entry_detail', $this->get_base_url() . "/js/entry-detail{$min}.js", array( 'jquery', 'sack' ), $this->_version );
 					wp_enqueue_script( 'gravityflow_status_list', $this->get_base_url() . "/js/status-list{$min}.js",  array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'gform_datepicker_init' ), $this->_version );
 					wp_enqueue_script( 'gform_field_filter', GFCommon::get_base_url() . "/js/gf_field_filter{$min}.js",  array( 'jquery', 'gform_datepicker_init' ), $this->_version );
 					wp_enqueue_script( 'gravityflow_frontend', $this->get_base_url() . "/js/frontend{$min}.js",  array(), $this->_version );
@@ -2765,19 +2767,45 @@ PRIMARY KEY  (id)
 				'fields' => '',
 				'display_all' => null,
 				'allow_anonymous' => false,
+				'title' => '',
 			), $atts );
 
 			if ( $a['form_id'] > 0 ) {
 				$a['form'] = $a['form_id'];
 			}
 
-			$a['display_all'] = strtolower( $a['display_all'] ) == 'true' ? true : false;
+			$a['title'] = sanitize_text_field( $a['title'] );
+
+			if ( is_null( $a['display_all'] ) ) {
+				$a['display_all'] = GFAPI::current_user_can_any( 'gravityflow_status_view_all' );
+				$this->log_debug( __METHOD__ . '() - display_all set by capabilities: ' . $a['display_all'] );
+			} else {
+				$a['display_all'] = strtolower( $a['display_all'] ) == 'true' ? true : false;
+				$this->log_debug( __METHOD__ . '() - display_all overridden: ' . $a['display_all'] );
+			}
+
 			$a['allow_anonymous'] = strtolower( $a['allow_anonymous'] ) == 'true' ? true : false;
 
 			if ( ! $a['allow_anonymous'] && ! is_user_logged_in() ) {
 				if ( ! $this->validate_access_token() ) {
 					return;
 				}
+			}
+
+			$entry_id = absint( rgget( 'lid' ) );
+
+			if ( ! empty( $a['form'] ) && ! empty( $entry_id ) ) {
+				// Support for multiple shortcodes on the same page
+				$entry = GFAPI::get_entry( $entry_id );
+				if ( $entry['form_id'] !== $a['form'] ) {
+					return;
+				}
+			}
+
+			$html = '';
+
+			if ( ! empty( $a['title'] ) ) {
+				$html .= sprintf( '<h3>%s</h3>', $a['title'] );
 			}
 
 			switch ( $a['page'] ) {
@@ -2793,12 +2821,12 @@ PRIMARY KEY  (id)
 
 					ob_start();
 					$this->inbox_page( $args );
-					return ob_get_clean();
+					$html .= ob_get_clean();
 					break;
 				case 'submit' :
 					ob_start();
 					$this->submit_page( false );
-					return ob_get_clean();
+					$html .= ob_get_clean();
 					break;
 				case 'status' :
 					wp_enqueue_script( 'gravityflow_entry_detail' );
@@ -2814,7 +2842,7 @@ PRIMARY KEY  (id)
 						);
 
 						$this->inbox_page( $args );
-						return ob_get_clean();
+						$html .= ob_get_clean();
 					} else {
 						if ( ! class_exists( 'WP_Screen' ) ) {
 							require_once( ABSPATH . 'wp-admin/includes/screen.php' );
@@ -2839,11 +2867,13 @@ PRIMARY KEY  (id)
 						}
 
 						$this->status_page( $args );
-						return ob_get_clean();
+						$html .= ob_get_clean();
 					}
 
 					break;
 			}
+
+			return $html;
 
 		}
 
@@ -3144,6 +3174,10 @@ PRIMARY KEY  (id)
 
 		public function enqueue_form_scripts(){
 			$form = $this->get_current_form();
+
+			if ( empty ( $form ) ) {
+				return;
+			}
 			require_once( GFCommon::get_base_path() . '/form_display.php');
 
 			if ( $this->has_enhanced_dropdown( $form ) ) {
@@ -3687,7 +3721,7 @@ AND m.meta_value='queued'";
 
 		function filter_cron_schedule( $schedules ) {
 			$schedules['fifteen_minutes'] = array(
-				'interval' => 5 * MINUTE_IN_SECONDS,
+				'interval' => 15 * MINUTE_IN_SECONDS,
 				'display'  => esc_html__( 'Every Fifteen Minutes' ),
 			);
 
