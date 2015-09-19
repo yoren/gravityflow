@@ -1,4 +1,18 @@
 -------------------------------------------------------------------------------------------------------------------
+Version 1.0-beta-13
+    - Added support for multiple shortcodes filtered by form on the same page of the same type.
+        For example:
+           [gravityflow title="Form 1" form="1" page="inbox"]
+           [gravityflow title="Form 2" form="2" page="inbox"]
+    - Added support the title shortcode attribute.
+        For example:
+            [gravityflow title="Inbox" page="inbox"]
+    - Added multi-input fields support for the status page.
+    - Added support for displaying multi-input fields as columns in the inbox and status shortcodes with the fields attribute. For example, to add the first and last name values of a name field with an ID of 1 you'd use fields="1.3,1.6" in the shortcode attribute.
+    - Fixed an issue with the file upload file on the shortcode workflow entry detail page where the file could not be deleted by some roles.
+    - Fixed an issue with the status shortcode where the gravityflow_status_view_all capability is ignored.
+
+-------------------------------------------------------------------------------------------------------------------
 Version 1.0-beta-12.2
     - Updated the reports page to display form activity by month by default.
 
