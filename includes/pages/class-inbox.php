@@ -54,7 +54,11 @@ class Gravity_Flow_Inbox {
 			$form_ids = $args['form_id'] ? $args['form_id'] : gravity_flow()->get_workflow_form_ids();
 
 			if ( ! empty( $form_ids ) ) {
-				$entries = GFAPI::get_entries( $form_ids, $search_criteria );
+				$paging = array(
+					'page_size' => 150,
+				);
+				$total_count = 0;
+				$entries = GFAPI::get_entries( $form_ids, $search_criteria, null, $paging, $total_count );
 			}
 		}
 
@@ -71,14 +75,13 @@ class Gravity_Flow_Inbox {
 					<th><?php esc_html_e( 'Submitted', 'gravityflow' ); ?></th>
 					<?php
 					if ( $args['form_id'] && is_array( $args['field_ids'] ) ) {
-						$form = GFAPI::get_form( $args['form_id'] );
-						if ( isset( $form['fields'] ) && is_array( $form['fields'] ) ) {
-							foreach ( $form['fields'] as $field ) {
-								/* @var GF_Field $field */
-								if ( in_array( $field->id, $args['field_ids'] ) ) {
-									$label = GFCommon::get_label( $field );
-									echo '<th>' . esc_html( $label ) . '</th>';
-								}
+						$columns = RGFormsModel::get_grid_columns( $args['form_id'], true );
+						$field_ids = array_keys( $columns );
+						foreach ( $args['field_ids'] as $field_id ) {
+							$field_id = trim( $field_id );
+							if ( in_array( $field_id, $field_ids ) ) {
+								$field_info = $columns[ $field_id ];
+								echo '<th>' .  esc_html( $field_info['label'] ) . '</th>';
 							}
 						}
 					}
@@ -136,15 +139,19 @@ class Gravity_Flow_Inbox {
 						<?php
 						if ( $args['form_id'] && is_array( $args['field_ids'] ) ) {
 							if ( isset( $form['fields'] ) && is_array( $form['fields'] ) ) {
-								$columns = RGFormsModel::get_grid_columns( $form_id, true );
-								foreach ( $form['fields'] as $field ) {
+								$field_ids = array_keys( $columns );
+								foreach ( $args['field_ids'] as $field_id ) {
 									/* @var GF_Field $field */
-									if ( ! in_array( $field->id, $args['field_ids'] ) ) {
+									if ( ! in_array( $field_id, $field_ids ) ) {
 										continue;
 									}
+									$field_id = trim( $field_id );
+									$field_info = $columns[ $field_id ];
+									$value = rgar( $entry, $field_id );
+									$field = GFFormsModel::get_field( $form, $field_id );
 									?>
-									<td data-label="<?php echo esc_attr( GFCommon::get_label( $field ) ); ?>">
-										<?php echo $field->get_value_entry_list( rgar( $entry, $field->id ), $entry, $field->id, $columns, $form ); ?>
+									<td data-label="<?php echo esc_attr( $field_info['label'] ); ?>">
+										<?php echo $field->get_value_entry_list( $value, $entry, $field_id, $columns, $form ); ?>
 									</td>
 								<?php
 								}

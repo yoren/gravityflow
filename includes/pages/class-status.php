@@ -484,13 +484,13 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		if ( ! empty( $args['form-id'] ) && ! empty( $this->field_ids ) ) {
 
-			$form = GFAPI::get_form( $args['form-id'] );
-			if ( isset( $form['fields'] ) && is_array( $form['fields'] ) ) {
-				foreach ( $form['fields'] as $field ) {
-					/* #var GF_Field $field */
-					if ( in_array( $field->id, $this->field_ids ) ) {
-						$columns[ $field->id ] = GFCommon::get_label( $field );
-					}
+			$grid_columns = RGFormsModel::get_grid_columns( $args['form-id'], true );
+			$field_ids = array_keys( $grid_columns );
+			foreach ( $this->field_ids as $field_id ) {
+				$field_id = trim( $field_id );
+				if ( in_array( $field_id, $field_ids ) ) {
+					$field_info = $grid_columns[ $field_id ];
+					$columns[ $field_id ] = $field_info['label'];
 				}
 			}
 		}
@@ -779,7 +779,12 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		$sorting = array( 'key' => $orderby, 'direction' => $order );
 
+		gravity_flow()->log_debug( __METHOD__ . '(): search criteria: ' . print_r( $search_criteria, true ) );
+
 		$entries     = GFAPI::get_entries( $form_ids, $search_criteria, $sorting, $paging, $total_count );
+
+		gravity_flow()->log_debug( __METHOD__ . '(): count entries: ' . count( $entries ) );
+		gravity_flow()->log_debug( __METHOD__ . '(): total count: ' . $total_count );
 
 		$this->pagination_args = array(
 			'total_items' => $total_count,
