@@ -10,9 +10,7 @@ class Gravity_Flow_Installation_Wizard_Step_Complete extends Gravity_Flow_Instal
 
 		$forms = GFFormsModel::get_forms();
 		?>
-
 		<script>
-
 			(function($) {
 				$(document).ready(function () {
 					$('#add_workflow_step').click(function(){
@@ -20,7 +18,6 @@ class Gravity_Flow_Installation_Wizard_Step_Complete extends Gravity_Flow_Instal
 						return false;
 					})
 				});
-
 			})( jQuery );
 		</script>
 
