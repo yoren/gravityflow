@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
 "POT-Creation-Date: 2015-09-13 07:55:39+00:00\n"
-"PO-Revision-Date: 2015-09-16 15:56+0000\n"
+"PO-Revision-Date: 2015-09-25 09:44+0000\n"
 "Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
 "Language-Team: French (France) (http://www.transifex.com/gravityflow/gravityflow/language/fr_FR/)\n"
 "MIME-Version: 1.0\n"
@@ -72,7 +72,7 @@ msgstr "Nom"
 
 #: class-gravity-flow.php:714
 msgid "Enter a name to uniquely identify this step."
-msgstr "Merci de saisir un nom unique pour cette étape"
+msgstr "Merci de saisir un nom unique pour cette étape."
 
 #: class-gravity-flow.php:733 class-gravity-flow.php:1132
 #: class-gravity-flow.php:1139 class-gravity-flow.php:1145
@@ -83,7 +83,7 @@ msgstr "Programmation"
 msgid ""
 "Scheduling a step will queue entries and prevent them from starting this "
 "step until the specified date or until the delay period has elapsed."
-msgstr ""
+msgstr "La programmation d'une étape metta en file d'attente les entrées et empêchera de commencer cette étape tant que la date spécifiée ou que le temps de délai ne soit passé."
 
 #: class-gravity-flow.php:763
 msgid "Step settings updated. %sBack to the list%s or %sAdd another step%s."
@@ -104,8 +104,8 @@ msgid ""
 msgid_plural ""
 "There are %s entries currently on this step. These entries may be affected "
 "if the settings are changed."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Il y a actuellement %s entrée dans cette étape. Cette entrée pourraient être affectée si les réglages étaient modifiés."
+msgstr[1] "Il y a actuellement %s entrées dans cette étape. Ces entrées pourraient être affectées si les réglages étaient modifiés."
 
 #: class-gravity-flow.php:1104
 msgid "Schedule this step"
@@ -146,13 +146,13 @@ msgstr "Débuter cette étape"
 
 #: class-gravity-flow.php:1200
 msgid "after the workflow step is triggered."
-msgstr ""
+msgstr "après que l'étape du workflow soit déclenché."
 
 #: class-gravity-flow.php:1270 includes/steps/class-step-approval.php:112
 #: includes/steps/class-step-approval.php:147
 #: includes/steps/class-step-approval.php:194
 msgid "Enable"
-msgstr ""
+msgstr "Activer"
 
 #: class-gravity-flow.php:1368
 msgid "Workflow Complete"
@@ -333,7 +333,7 @@ msgid ""
 "Set this to ON to allow Gravity Flow to download and install bug fixes and "
 "security updates automatically in the background. Requires a valid license "
 "key."
-msgstr ""
+msgstr "Sélectionnez ON pour autoriser Gravity Flow à télécharger et installer des patchs de corrections et de sécurité automatiquement en arrière plan. Cette option nécessite une clé de licence valide."
 
 #: class-gravity-flow.php:2111
 msgid "On"
@@ -353,7 +353,7 @@ msgstr "Sélectionnez le formulaire que vous désirez publier sur la page Créat
 
 #: class-gravity-flow.php:2131
 msgid "Update Settings"
-msgstr ""
+msgstr "Mise à jour des réglages"
 
 #: class-gravity-flow.php:2133
 msgid "Settings updated successfully"
@@ -361,7 +361,7 @@ msgstr "Réglages enregistrés avec succès"
 
 #: class-gravity-flow.php:2134
 msgid "There was an error while saving the settings"
-msgstr ""
+msgstr "Une erreur s'est produite lors de l'enregistrement de vos réglages."
 
 #: class-gravity-flow.php:2232
 msgid "Submit a Workflow Form"
@@ -369,11 +369,11 @@ msgstr "Envoyer un formulaire"
 
 #: class-gravity-flow.php:2309
 msgid "Oops! We could not locate your entry."
-msgstr ""
+msgstr "Oups ! Nous ne trouvons votre entrée."
 
 #: class-gravity-flow.php:2326
 msgid "Error: This URL is no longer valid."
-msgstr ""
+msgstr "Erreur&nbsp;: cette URL n&rsquo;est plus valide."
 
 #: class-gravity-flow.php:2373
 msgid "Workflow Inbox"
@@ -385,11 +385,11 @@ msgstr "Etat du workflow"
 
 #: class-gravity-flow.php:2448
 msgid "Workflow Activity"
-msgstr ""
+msgstr "Activité du workflow"
 
 #: class-gravity-flow.php:2487
 msgid "Workflow Reports"
-msgstr ""
+msgstr "Rapports de workflow"
 
 #: class-gravity-flow.php:2532
 msgid "Your inbox of pending tasks"
@@ -417,7 +417,7 @@ msgstr "Workflow redémarré."
 
 #: class-gravity-flow.php:2643
 msgid "Sent to step: %s"
-msgstr ""
+msgstr "Envoyez à l'étape : %s"
 
 #: class-gravity-flow.php:3081 includes/steps/class-step-feed-mailchimp.php:23
 msgid "MailChimp"
@@ -434,71 +434,71 @@ msgstr "Zapier"
 #: class-gravity-flow.php:3084
 #: includes/steps/class-step-feed-user-registration.php:24
 msgid "User Registration"
-msgstr ""
+msgstr "Enregistrement d'utilisateur"
 
 #: class-gravity-flow.php:3103
 msgid "Assignees"
-msgstr ""
+msgstr "Assignés"
 
 #: class-gravity-flow.php:3108
 msgid "Show Users"
-msgstr ""
+msgstr "Afficher les utilisateurs"
 
 #: class-gravity-flow.php:3116
 msgid "Show Roles"
-msgstr ""
+msgstr "Afficher les rôles"
 
 #: class-gravity-flow.php:3124
 msgid "Show Fields"
-msgstr ""
+msgstr "Afficher les champs"
 
 #: class-gravity-flow.php:3302
 msgid "Gravity Flow Settings"
-msgstr ""
+msgstr "Réglages Gravity Flow"
 
 #: class-gravity-flow.php:3306
 msgid ""
 "%sThis operation deletes ALL Gravity Flow settings%s. If you continue, you "
 "will NOT be able to retrieve these settings."
-msgstr ""
+msgstr "%sCette opération supprime TOUS les réglages de Gravity Flow%s. Si vous continuez, vous ne serez PLUS en mesure de les récupérer."
 
 #: class-gravity-flow.php:3310
 msgid ""
 "Warning! ALL Gravity Flow settings will be deleted. This cannot be undone. "
 "'OK' to delete, 'Cancel' to stop"
-msgstr ""
+msgstr "Attention&nbsp;! TOUS les réglages de Gravity Flow seront supprimés. Cela ne peut pas être annulé. « OK » pour supprimer, « Annuler » pour arrêter."
 
 #: class-gravity-flow.php:3626
 msgid "%d year"
 msgid_plural "%d years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d année"
+msgstr[1] "%d années"
 
 #: class-gravity-flow.php:3630
 msgid "%d month"
 msgid_plural "%d months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d mois"
+msgstr[1] "%d mois"
 
 #: class-gravity-flow.php:3634
 msgid "%dd"
-msgstr ""
+msgstr "%dd"
 
 #: class-gravity-flow.php:3638
 msgid "%dh"
-msgstr ""
+msgstr "%dh"
 
 #: class-gravity-flow.php:3642
 msgid "%dm"
-msgstr ""
+msgstr "%dm"
 
 #: class-gravity-flow.php:3646
 msgid "%ds"
-msgstr ""
+msgstr "%ds"
 
 #: class-gravity-flow.php:3691
 msgid "Every Fifteen Minutes"
-msgstr ""
+msgstr "Toutes les 15 minutes"
 
 #: includes/EDD_SL_Plugin_Updater.php:177
 msgid ""
@@ -529,11 +529,11 @@ msgstr "Assigné"
 
 #: includes/pages/class-activity.php:20 includes/pages/class-reports.php:44
 msgid "You don't have permission to view this page"
-msgstr ""
+msgstr "Vous n'avez pas les droits nécessaires pour afficher cette page."
 
 #: includes/pages/class-activity.php:32
 msgid "Event ID"
-msgstr ""
+msgstr "ID de l'évènement"
 
 #: includes/pages/class-activity.php:34 includes/pages/class-activity.php:63
 #: includes/pages/class-inbox.php:68 includes/pages/class-inbox.php:107
@@ -543,7 +543,7 @@ msgstr "Formulaire"
 
 #: includes/pages/class-activity.php:35 includes/pages/class-activity.php:68
 msgid "Entry ID"
-msgstr ""
+msgstr "ID de l'entrée"
 
 #: includes/pages/class-activity.php:36 includes/pages/class-activity.php:73
 msgid "Type"
@@ -552,7 +552,7 @@ msgstr "Type"
 #: includes/pages/class-activity.php:37 includes/pages/class-activity.php:78
 #: includes/pages/class-activity.php:108
 msgid "Event"
-msgstr ""
+msgstr "Évènement"
 
 #: includes/pages/class-activity.php:38 includes/pages/class-activity.php:96
 #: includes/pages/class-inbox.php:70 includes/pages/class-inbox.php:118
@@ -572,7 +572,7 @@ msgstr "ID"
 
 #: includes/pages/class-activity.php:132
 msgid "Waiting for workflow activity"
-msgstr ""
+msgstr "En attente d'activité du workflow"
 
 #: includes/pages/class-entry-detail.php:34
 msgid "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete"
@@ -580,7 +580,7 @@ msgstr "Voulez-vous supprimer ce fichier? 'Annuler' pour stopper. 'OK' pour supp
 
 #: includes/pages/class-entry-detail.php:45
 msgid "Ajax error while deleting file."
-msgstr ""
+msgstr "Erreur Ajax lors de la suppression du fichier."
 
 #: includes/pages/class-entry-detail.php:98
 msgid "Workflow Entry #"
@@ -660,7 +660,7 @@ msgstr "Imprimer"
 
 #: includes/pages/class-reports.php:67 includes/pages/class-reports.php:510
 msgid "Filter"
-msgstr ""
+msgstr "Filtrer"
 
 #: includes/pages/class-reports.php:121 includes/pages/class-reports.php:173
 #: includes/pages/class-reports.php:225 includes/pages/class-reports.php:287
@@ -689,7 +689,7 @@ msgstr "Formulaires"
 
 #: includes/pages/class-reports.php:138 includes/pages/class-reports.php:190
 msgid "Workflows completed and average duration"
-msgstr ""
+msgstr "Workflows terminés et durée moyenne"
 
 #: includes/pages/class-reports.php:179 includes/pages/class-reports.php:410
 #: includes/pages/class-reports.php:491
@@ -704,35 +704,35 @@ msgstr "Terminé"
 
 #: includes/pages/class-reports.php:247
 msgid "Step completed and average duration"
-msgstr ""
+msgstr "Étape terminée et durée moyenne"
 
 #: includes/pages/class-reports.php:309 includes/pages/class-reports.php:369
 msgid "Step completed and average duration by assignee"
-msgstr ""
+msgstr "Étape terminée et la durée moyenne par assigné"
 
 #: includes/pages/class-reports.php:426
 msgid "Workflows completed and average duration by month"
-msgstr ""
+msgstr "Workflows terminés et la durée moyenne par mois"
 
 #: includes/pages/class-reports.php:456
 msgid "Select A Workflow Form"
-msgstr ""
+msgstr "Sélectionnez un formulaire de workflow"
 
 #: includes/pages/class-reports.php:474
 msgid "Last 12 months"
-msgstr ""
+msgstr "Les 12 derniers mois"
 
 #: includes/pages/class-reports.php:475
 msgid "Last 6 months"
-msgstr ""
+msgstr "Les 6 derniers mois"
 
 #: includes/pages/class-reports.php:476
 msgid "Last 3 months"
-msgstr ""
+msgstr "Les 3 derniers mois"
 
 #: includes/pages/class-reports.php:519
 msgid "All Steps"
-msgstr ""
+msgstr "Toutes les étapes"
 
 #: includes/pages/class-status.php:110
 msgid "entry"
@@ -772,7 +772,7 @@ msgstr "Fin&nbsp;:"
 
 #: includes/pages/class-status.php:250
 msgid "Clear Filter"
-msgstr ""
+msgstr "Vider le filtre"
 
 #: includes/pages/class-status.php:253
 msgid "Search"
@@ -780,19 +780,19 @@ msgstr "Rechercher"
 
 #: includes/pages/class-status.php:475
 msgid "Checkbox"
-msgstr ""
+msgstr "Case à cocher"
 
 #: includes/pages/class-status.php:481
 msgid "Submitter"
-msgstr ""
+msgstr "Créateur"
 
 #: includes/pages/class-status.php:716
 msgid "Select"
-msgstr ""
+msgstr "Sélectionner"
 
 #: includes/pages/class-support.php:71
 msgid "Please check the documentation before submitting a support request"
-msgstr ""
+msgstr "Veuillez consulter la documentation avant de soumettre une demande de support."
 
 #: includes/pages/class-support.php:92
 #: includes/steps/class-step-approval.php:557
@@ -803,25 +803,25 @@ msgstr "E-mail"
 
 #: includes/pages/class-support.php:99
 msgid "General comment or suggestion"
-msgstr ""
+msgstr "Commentaire générale ou une suggestion"
 
 #: includes/pages/class-support.php:104
 msgid "Feature request"
-msgstr ""
+msgstr "Demande de fonctionnalité"
 
 #: includes/pages/class-support.php:110
 msgid "Bug report"
-msgstr ""
+msgstr "Rapport de bug"
 
 #: includes/pages/class-support.php:114
 msgid "Suggestion or steps to reproduce the issue."
-msgstr ""
+msgstr "Suggestion ou les étapes pour reproduire le problème."
 
 #: includes/pages/class-support.php:120
 msgid ""
 "Send debugging information. (This includes some system information, active "
 "plugins, forms and workflow steps. No entry data will be sent.)"
-msgstr ""
+msgstr "Envoyer des informations de débogage. (Cela comprend des informations système, les extensions activées, les formulaires et les étapes du workflow. Aucune donnée d'entrée ne sera envoyée)."
 
 #: includes/pages/class-support.php:123
 msgid "Send"
@@ -900,7 +900,7 @@ msgid ""
 " the entry will require unanimous approval before the step can be completed."
 " If the step is assigned to a role only one user in that role needs to "
 "approve."
-msgstr ""
+msgstr "Définit comment les approbations doivent être traitées. Si tous les assignés doivent approuver alors l'entrée devra être approuvée à l'unanimité avant que l&rsquo;étape puisse être terminée. Si l'étape est assigné à rôle alors un seul utilisateur avec ce rôle suffira pour l&rsquo;approuver."
 
 #: includes/steps/class-step-approval.php:86
 msgid "At least one assignee must approve"
@@ -940,17 +940,17 @@ msgstr "Message aux personnes désignées"
 #: includes/steps/class-step-approval.php:122
 msgid ""
 "A new entry is pending your approval. Please check your Workflow Inbox."
-msgstr ""
+msgstr "Une nouvelle entrée attend votre approbation. Veuillez jetez un œil à votre boîte de reception de workflow."
 
 #: includes/steps/class-step-approval.php:126
 #: includes/steps/class-step-user-input.php:114
 msgid "Send reminder"
-msgstr ""
+msgstr "Envoyer le rappel"
 
 #: includes/steps/class-step-approval.php:130
 #: includes/steps/class-step-user-input.php:118
 msgid "Resend the assignee email after"
-msgstr ""
+msgstr "Renvoyer l'email à l'assigné après"
 
 #: includes/steps/class-step-approval.php:131
 #: includes/steps/class-step-user-input.php:119
@@ -1014,7 +1014,7 @@ msgstr "La demande {entry_id} a été approuvée"
 msgid ""
 "The status could not be changed because this step has already been "
 "processed."
-msgstr ""
+msgstr "L&rsquo;état ne peut pas être changé car cette étape a déjà été traitée."
 
 #: includes/steps/class-step-approval.php:489
 msgid "Approved."
@@ -1071,11 +1071,11 @@ msgstr "Rejeter"
 
 #: includes/steps/class-step-approval.php:873
 msgid "Error: incorrect entry."
-msgstr ""
+msgstr "Erreur : entrée incorrecte."
 
 #: includes/steps/class-step-approval.php:878
 msgid "Error: step already processed."
-msgstr ""
+msgstr "Erreur&nbsp;: étape déjà traitée."
 
 #: includes/steps/class-step-feed-add-on.php:79
 #: includes/steps/class-step-feed-add-on.php:89
@@ -1094,7 +1094,7 @@ msgstr "Feed processed: %s"
 
 #: includes/steps/class-step-feed-campaign-monitor.php:23
 msgid "Campaign Monitor"
-msgstr ""
+msgstr "Campaign Monitor"
 
 #: includes/steps/class-step-feed-user-registration.php:52
 #: includes/steps/class-step-multi-feed.php:187
@@ -1162,7 +1162,7 @@ msgstr "Champs modifiables"
 
 #: includes/steps/class-step-user-input.php:68
 msgid "Assignee Policy"
-msgstr ""
+msgstr "Politique des assignés"
 
 #: includes/steps/class-step-user-input.php:69
 msgid ""
@@ -1170,23 +1170,23 @@ msgid ""
 "this step then the entry will require input from every assignee before the "
 "step can be completed. If the step is assigned to a role only one user in "
 "that role needs to complete the step."
-msgstr ""
+msgstr "Définit comment cette étape doit être traitée. Si tous les assignés doivent terminer cette étape alors l'entrée nécessitera une intervention de chacun avant que l&rsquo;étape puisse être terminée. Si l'étape est assigné à rôle alors un seul utilisateur avec ce rôle suffira pour la terminer."
 
 #: includes/steps/class-step-user-input.php:74
 msgid "At least one assignee must complete this step"
-msgstr ""
+msgstr "Au moins un assigné doit terminer l'étape."
 
 #: includes/steps/class-step-user-input.php:78
 msgid "All assignees must complete this step"
-msgstr ""
+msgstr "Tous les assignés doivent terminer cette étape."
 
 #: includes/steps/class-step-user-input.php:86
 msgid "Default update status"
-msgstr ""
+msgstr "État par défaut de la mise à jour"
 
 #: includes/steps/class-step-user-input.php:87
 msgid "The default value for the status on the workflow detail page"
-msgstr ""
+msgstr "La valeur par défaut des états sur la page des détails du workflow."
 
 #: includes/steps/class-step-user-input.php:91
 #: includes/steps/class-step-user-input.php:517
@@ -1195,15 +1195,15 @@ msgstr "En cours"
 
 #: includes/steps/class-step-user-input.php:337
 msgid "Entry updated and marked complete."
-msgstr ""
+msgstr "Donnée mise à jour et marquée terminée."
 
 #: includes/steps/class-step-user-input.php:337
 msgid "Entry updated - in progress."
-msgstr ""
+msgstr "Entrée mise à jour - en cours."
 
 #: includes/steps/class-step-user-input.php:395
 msgid "Pending Input"
-msgstr ""
+msgstr "Entrée en attente"
 
 #: includes/steps/class-step-user-input.php:511
 msgid "Notes"
@@ -1223,7 +1223,7 @@ msgstr "URL du webhook"
 
 #: includes/steps/class-step-webhook.php:37
 msgid "Request Method"
-msgstr ""
+msgstr "Méthode de requête"
 
 #: includes/steps/class-step-webhook.php:61
 msgid "Format"
@@ -1260,11 +1260,11 @@ msgid ""
 "Note for Beta users: you may want to deactivate background options and "
 "manage updates manually because some changes may require require "
 "reconfiguration of your steps and settings."
-msgstr ""
+msgstr "Remarque pour les utilisateurs de la bêta&nbsp;: vous pouvez désactiver les options en tache de fond et gérer les mises à jour manuellement parce que certaines modifications peuvent nécessiter une reconfiguration de vos étapes et de vos réglages."
 
 #: includes/wizard/steps/class-installation-wizard-step-background-updates.php:36
 msgid "Keep background updates enabled"
-msgstr ""
+msgstr "Garder les mises à jour en aarrière plan activées"
 
 #: includes/wizard/steps/class-installation-wizard-step-background-updates.php:42
 msgid "Turn off background updates"
@@ -1280,7 +1280,7 @@ msgid ""
 " security enhancements. We only recommend doing this if you are experienced "
 "at managing a WordPress site and accept the risks involved in manually "
 "keeping your WordPress site updated."
-msgstr ""
+msgstr "En désactivant les mises à jour en arrière plan votre site ne peut pas obtenir les corrections de bugs critiques et les améliorations de sécurité. Nous vous recommandons de le faire uniquement si vous êtes expérimenté dans la gestion d'un site WordPress et que vous accepter les risques liés au mises à jour manuelles de votre site WordPress."
 
 #: includes/wizard/steps/class-installation-wizard-step-background-updates.php:57
 msgid "I Understand and Accept the Risk"
@@ -1319,7 +1319,7 @@ msgstr "Vous n'avez pas de formulaire créé pour le workflow? %sCréez un formu
 #: includes/wizard/steps/class-installation-wizard-step-complete.php:91
 msgid ""
 "%sCreate a Form%s and then add your Workflow steps in the Form Settings."
-msgstr "%sCréez un formulaire%s puis ajoutez les étapes du workflow dans les paramètres."
+msgstr "%sCréez un formulaire%s puis ajoutez les étapes du workflow dans les paramètres du formulaire."
 
 #: includes/wizard/steps/class-installation-wizard-step-complete.php:101
 msgid "Installation Complete"
@@ -1359,7 +1359,7 @@ msgstr "La clé est invalide ou expirée. Merci de vérifier votre clé de licen
 
 #: includes/wizard/steps/class-installation-wizard-step-license-key.php:73
 msgid "Please accept the terms"
-msgstr "Accepter les termes"
+msgstr "Veuillez accepter les termes"
 
 #: includes/wizard/steps/class-installation-wizard-step-welcome.php:9
 msgid "Click the 'Get Started' button to complete your installation."
