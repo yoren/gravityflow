@@ -25,7 +25,7 @@ if ( class_exists( 'GFForms' ) ) {
 		public $_version = GRAVITY_FLOW_VERSION;
 
 		// The Framework will display an appropriate message on the plugins page if necessary
-		protected $_min_gravityforms_version = '1.9.6';
+		protected $_min_gravityforms_version = '1.9.10';
 
 		protected $_slug = 'gravityflow';
 
@@ -1148,7 +1148,7 @@ PRIMARY KEY  (id)
 				'default_value' => 'hours',
 				'choices' => array(
 					array(
-						'label' => esc_html__( 'Minutes(s)', 'gravityflow' ),
+						'label' => esc_html__( 'Minute(s)', 'gravityflow' ),
 						'value' => 'minutes',
 					),
 					array(
@@ -3728,6 +3728,9 @@ AND m.meta_value='queued'";
 			return $schedules;
 		}
 
+		public function get_setting( $setting_name, $default_value = '', $settings = false ){
+			return parent::get_setting( $setting_name, $default_value, $settings );
+		}
 
 	}
 }
