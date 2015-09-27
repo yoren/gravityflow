@@ -165,23 +165,6 @@ class Gravity_Flow_Support {
 		$entry_count    = GFFormsModel::get_lead_count_all_forms( 'active' );
 		$im             = is_multisite();
 
-		$forms = GFAPI::get_forms();
-		$workflow_forms = array();
-		foreach ( $forms as $form ) {
-			$form_id = absint( $form['id'] );
-			$feeds = gravity_flow()->get_feeds( $form_id );
-			if ( ! empty( $feeds ) ) {
-				$form['feeds'] = $feeds;
-				$workflow_forms[] = $form;
-			}
-		}
-
-		if ( version_compare( phpversion(), '5.4', '>=' ) ) {
-			$forms_json = json_encode( $workflow_forms, JSON_PRETTY_PRINT );
-		} else {
-			$forms_json = json_encode( $workflow_forms );
-		}
-
 		global $wpdb;
 
 		$info = array(
@@ -200,7 +183,6 @@ class Gravity_Flow_Support {
 			'form count: ' . $fc,
 			'entry count: ' . $entry_count,
 			'plugins: ' . $plugins,
-			'workflow_forms_json: ' . $forms_json,
 		);
 
 		return join( PHP_EOL, $info );
