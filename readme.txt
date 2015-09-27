@@ -12,13 +12,12 @@ Add workflow processes to your Gravity Forms.
 
 Gravity Flow is a business process workflow platform for WordPress.
 
-[youtube https://www.youtube.com/watch?v=eIEhF2KEGfI]
 
-=Who is it for?=
+= Who is it for? =
 
 Gravity Flow is for organisations and departments of any size that need to get a form-based workflow process up and running online quickly with no technical knowledge. These processes often already exist either offline or online but inefficiently implemented.
 
-=How does it work?=
+= How does it work? =
 
 An end-user submits a web form which generates an entry. The entry is then passed around between users and systems on an established path until the process is complete. Each user or system in the workflow will add something to the process before allowing the entry to proceed to the next step.
 
