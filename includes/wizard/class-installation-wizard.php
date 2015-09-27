@@ -31,7 +31,7 @@ class Gravity_Flow_Installation_Wizard {
 		return array(
 			'welcome',
 			'license_key',
-			'background_updates',
+			'updates',
 			'complete',
 		);
 	}
@@ -152,7 +152,7 @@ class Gravity_Flow_Installation_Wizard {
 					</div>
 					<?php
 					$next_button = '';
-					if ( $current_step->is( 'background_updates' ) ) {
+					if ( $current_step->is( 'updates' ) ) {
 						$next_button = sprintf( '<input class="button button-primary" type="submit" value="%s" name="_install"/>', esc_attr( $current_step->get_next_button_text() ) );
 					} elseif ( ! $current_step->is( 'complete' ) ) {
 						$next_button = sprintf( '<input class="button button-primary" type="submit" value="%s" name="_next"/>', esc_attr( $current_step->get_next_button_text() ) );
@@ -241,7 +241,7 @@ class Gravity_Flow_Installation_Wizard {
 			$step->install();
 			$step->flush_values();
 		}
-		delete_option( 'gravityflow_pending_installation' );
+		update_option( 'gravityflow_pending_installation', false );
 	}
 
 	public function get_posted_values() {
