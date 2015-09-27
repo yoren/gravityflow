@@ -1,9 +1,9 @@
 # Copyright 2015-2015 Steven Henty.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Flow Beta 1.0-beta-13\n"
+"Project-Id-Version: Gravity Flow 1.0.0\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2015-09-19 16:04:21+00:00\n"
+"POT-Creation-Date: 2015-09-27 07:39:30+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -121,7 +121,7 @@ msgid "Date"
 msgstr ""
 
 #: class-gravity-flow.php:1151
-msgid "Minutes(s)"
+msgid "Minute(s)"
 msgstr ""
 
 #: class-gravity-flow.php:1155
@@ -324,7 +324,7 @@ msgid "Invalid license"
 msgstr ""
 
 #: class-gravity-flow.php:2107
-#: includes/wizard/steps/class-installation-wizard-step-background-updates.php:82
+#: includes/wizard/steps/class-installation-wizard-step-updates.php:81
 msgid "Background Updates"
 msgstr ""
 
@@ -1138,7 +1138,7 @@ msgstr ""
 
 #: includes/steps/class-step-notification.php:57
 #: includes/steps/class-step-user-input.php:101
-#: includes/wizard/steps/class-installation-wizard-step-background-updates.php:96
+#: includes/wizard/steps/class-installation-wizard-step-updates.php:95
 msgid "Enabled"
 msgstr ""
 
@@ -1239,59 +1239,6 @@ msgstr ""
 msgid "Entry"
 msgstr ""
 
-#: includes/wizard/steps/class-installation-wizard-step-background-updates.php:16
-msgid ""
-"Gravity Flow will download important bug fixes, security enhancements and "
-"plugin updates automatically. Updates are extremely important to the "
-"security of your WordPress site."
-msgstr ""
-
-#: includes/wizard/steps/class-installation-wizard-step-background-updates.php:22
-msgid ""
-"This feature is activated by default unless you opt to disable it below. We "
-"only recommend disabling background updates if you intend on managing "
-"updates manually. A valid license is required for background updates."
-msgstr ""
-
-#: includes/wizard/steps/class-installation-wizard-step-background-updates.php:29
-msgid ""
-"Note for Beta users: you may want to deactivate background options and "
-"manage updates manually because some changes may require require "
-"reconfiguration of your steps and settings."
-msgstr ""
-
-#: includes/wizard/steps/class-installation-wizard-step-background-updates.php:36
-msgid "Keep background updates enabled"
-msgstr ""
-
-#: includes/wizard/steps/class-installation-wizard-step-background-updates.php:42
-msgid "Turn off background updates"
-msgstr ""
-
-#: includes/wizard/steps/class-installation-wizard-step-background-updates.php:48
-msgid "Are you sure?"
-msgstr ""
-
-#: includes/wizard/steps/class-installation-wizard-step-background-updates.php:51
-msgid ""
-"By disabling background updates your site may not get critical bug fixes "
-"and security enhancements. We only recommend doing this if you are "
-"experienced at managing a WordPress site and accept the risks involved in "
-"manually keeping your WordPress site updated."
-msgstr ""
-
-#: includes/wizard/steps/class-installation-wizard-step-background-updates.php:57
-msgid "I Understand and Accept the Risk"
-msgstr ""
-
-#: includes/wizard/steps/class-installation-wizard-step-background-updates.php:88
-msgid "Please accept the terms."
-msgstr ""
-
-#: includes/wizard/steps/class-installation-wizard-step-background-updates.php:96
-msgid "Disabled"
-msgstr ""
-
 #: includes/wizard/steps/class-installation-wizard-step-complete.php:42
 msgid "Congratulations! Now you can set up your first workflow."
 msgstr ""
@@ -1358,6 +1305,59 @@ msgstr ""
 msgid "Please accept the terms"
 msgstr ""
 
+#: includes/wizard/steps/class-installation-wizard-step-updates.php:16
+msgid ""
+"Gravity Flow will download important bug fixes, security enhancements and "
+"plugin updates automatically. Updates are extremely important to the "
+"security of your WordPress site."
+msgstr ""
+
+#: includes/wizard/steps/class-installation-wizard-step-updates.php:22
+msgid ""
+"This feature is activated by default unless you opt to disable it below. We "
+"only recommend disabling background updates if you intend on managing "
+"updates manually. A valid license is required for background updates."
+msgstr ""
+
+#: includes/wizard/steps/class-installation-wizard-step-updates.php:29
+msgid ""
+"Note for Beta users: you may want to deactivate background options and "
+"manage updates manually because some changes may require require "
+"reconfiguration of your steps and settings."
+msgstr ""
+
+#: includes/wizard/steps/class-installation-wizard-step-updates.php:36
+msgid "Keep background updates enabled"
+msgstr ""
+
+#: includes/wizard/steps/class-installation-wizard-step-updates.php:42
+msgid "Turn off background updates"
+msgstr ""
+
+#: includes/wizard/steps/class-installation-wizard-step-updates.php:48
+msgid "Are you sure?"
+msgstr ""
+
+#: includes/wizard/steps/class-installation-wizard-step-updates.php:51
+msgid ""
+"By disabling background updates your site may not get critical bug fixes "
+"and security enhancements. We only recommend doing this if you are "
+"experienced at managing a WordPress site and accept the risks involved in "
+"manually keeping your WordPress site updated."
+msgstr ""
+
+#: includes/wizard/steps/class-installation-wizard-step-updates.php:56
+msgid "I Understand and Accept the Risk"
+msgstr ""
+
+#: includes/wizard/steps/class-installation-wizard-step-updates.php:87
+msgid "Please accept the terms."
+msgstr ""
+
+#: includes/wizard/steps/class-installation-wizard-step-updates.php:95
+msgid "Disabled"
+msgstr ""
+
 #: includes/wizard/steps/class-installation-wizard-step-welcome.php:9
 msgid "Click the 'Get Started' button to complete your installation."
 msgstr ""
@@ -1379,11 +1379,11 @@ msgid "Back"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
-msgid "Gravity Flow Beta"
+msgid "Gravity Flow"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
-msgid "http://gravityflow.io"
+msgid "https://gravityflow.io"
 msgstr ""
 
 #. Description of the plugin/theme
@@ -1391,7 +1391,7 @@ msgid "Build Workflow Applications with Gravity Forms."
 msgstr ""
 
 #. Author of the plugin/theme
-msgid "Steve Henty"
+msgid "Steven Henty"
 msgstr ""
 
 #. Author URI of the plugin/theme
