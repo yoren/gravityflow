@@ -1,8 +1,8 @@
 <?php
 
-class Gravity_Flow_Installation_Wizard_Step_Background_Updates extends Gravity_Flow_Installation_Wizard_Step {
+class Gravity_Flow_Installation_Wizard_Step_Updates extends Gravity_Flow_Installation_Wizard_Step {
 
-	protected $_name = 'background_updates';
+	protected $_name = 'updates';
 
 	function display() {
 		if ( $this->background_updates == '' ) {
