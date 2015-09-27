@@ -899,6 +899,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		foreach ( $assignees as $assignee ) {
 			$assignee->remove();
 		}
+		do_action( 'gravityflow_step_complete', $this->get_id(), $this->get_entry_id(), $this->get_form_id(), $status );
 		$this->log_debug( __METHOD__ . '() - ending step ' . $this->get_id() );
 		$this->log_event( 'ended', $status, $duration );
 	}
