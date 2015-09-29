@@ -13,6 +13,7 @@
     width:190px;
 }
 
+.mt-_gaddon_setting_workflow_notification_message,
 .mt-_gaddon_setting_assignee_notification_message,
 .mt-_gaddon_setting_rejection_notification_message,
 .mt-_gaddon_setting_approval_notification_message,
@@ -23,6 +24,7 @@
     top: 90px;
 }
 
+#wp-_gaddon_setting_workflow_notification_message-wrap,
 #wp-_gaddon_setting_assignee_notification_message-wrap,
 #wp-_gaddon_setting_rejection_notification_message-wrap,
 #wp-_gaddon_setting_approval_notification_message-wrap,

@@ -449,6 +449,7 @@
     function addNoteMergeTag(mergeTags, elementId, hideAllFields, excludeFieldTypes, isPrepop, option) {
 
         var supportedElementIds = [
+            '_gaddon_setting_workflow_notification_message',
             '_gaddon_setting_assignee_notification_message',
             '_gaddon_setting_approval_notification_message',
             '_gaddon_setting_rejection_notification_message',
