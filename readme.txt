@@ -55,5 +55,9 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.0.1 =
+Fixed the merge tag UI for the Workflow Notification setting on the Notification step.
+Fixed an issue with the status permissions.
+
 = 1.0 =
 All New!
