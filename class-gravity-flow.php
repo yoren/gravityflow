@@ -2834,11 +2834,16 @@ PRIMARY KEY  (id)
 
 					if ( rgget( 'view' ) ) {
 						ob_start();
+						$check_permissions = true;
+
+						if ( $a['allow_anonymous'] || $a['display_all'] ) {
+							$check_permissions = false;
+						}
 
 						$args = array(
 							'show_header' => false,
 							'detail_base_url' => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
-							'check_permissions' => ! ( ( $a['allow_anonymous'] && $a['display_all'] ) || ( ! $a['allow_anonymous'] && ! $a['display_all'] ) ),
+							'check_permissions' => $check_permissions,
 						);
 
 						$this->inbox_page( $args );
