@@ -23,13 +23,6 @@ class Gravity_Flow_Installation_Wizard_Step_Updates extends Gravity_Flow_Install
 			?>
 
 		</p>
-		<p>
-			<strong>
-				<?php
-				esc_html_e( 'Note for Beta users: you may want to deactivate background options and manage updates manually because some changes may require require reconfiguration of your steps and settings.', 'gravityflow' );
-				?>
-			</strong>
-		</p>
 		<div>
 			<label>
 				<input type="radio" id="background_updates_enabled" value="enabled" <?php checked( 'enabled', $this->background_updates ); ?> name="background_updates"/>
