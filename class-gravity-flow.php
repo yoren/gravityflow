@@ -908,7 +908,7 @@ PRIMARY KEY  (id)
 						// New assignee - set & send
 						$step = $this->get_step( $current_step_id, $entry );
 						$assignee->update_status( 'pending' );
-						$step->maybe_send_assignee_notification( $assignee );
+						//$step->maybe_send_assignee_notification( $assignee );
 						$step->end_if_complete();
 						$results['added'][] = $assignee;
 						$updated = true;
