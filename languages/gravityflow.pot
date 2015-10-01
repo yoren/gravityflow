@@ -1,9 +1,9 @@
 # Copyright 2015-2015 Steven Henty.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Flow 1.0.0\n"
+"Project-Id-Version: Gravity Flow 1.0.1\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2015-09-27 07:39:30+00:00\n"
+"POT-Creation-Date: 2015-10-01 11:33:51+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -324,7 +324,7 @@ msgid "Invalid license"
 msgstr ""
 
 #: class-gravity-flow.php:2107
-#: includes/wizard/steps/class-installation-wizard-step-updates.php:81
+#: includes/wizard/steps/class-installation-wizard-step-updates.php:74
 msgid "Background Updates"
 msgstr ""
 
@@ -419,84 +419,84 @@ msgstr ""
 msgid "Sent to step: %s"
 msgstr ""
 
-#: class-gravity-flow.php:3111 includes/steps/class-step-feed-mailchimp.php:23
+#: class-gravity-flow.php:3116 includes/steps/class-step-feed-mailchimp.php:23
 msgid "MailChimp"
 msgstr ""
 
-#: class-gravity-flow.php:3112 includes/steps/class-step-feed-emma.php:23
+#: class-gravity-flow.php:3117 includes/steps/class-step-feed-emma.php:23
 msgid "Emma"
 msgstr ""
 
-#: class-gravity-flow.php:3113 includes/steps/class-step-feed-zapier.php:24
+#: class-gravity-flow.php:3118 includes/steps/class-step-feed-zapier.php:24
 msgid "Zapier"
 msgstr ""
 
-#: class-gravity-flow.php:3114
+#: class-gravity-flow.php:3119
 #: includes/steps/class-step-feed-user-registration.php:24
 msgid "User Registration"
 msgstr ""
 
-#: class-gravity-flow.php:3133
+#: class-gravity-flow.php:3138
 msgid "Assignees"
 msgstr ""
 
-#: class-gravity-flow.php:3138
+#: class-gravity-flow.php:3143
 msgid "Show Users"
 msgstr ""
 
-#: class-gravity-flow.php:3146
+#: class-gravity-flow.php:3151
 msgid "Show Roles"
 msgstr ""
 
-#: class-gravity-flow.php:3154
+#: class-gravity-flow.php:3159
 msgid "Show Fields"
 msgstr ""
 
-#: class-gravity-flow.php:3336
+#: class-gravity-flow.php:3341
 msgid "Gravity Flow Settings"
 msgstr ""
 
-#: class-gravity-flow.php:3340
+#: class-gravity-flow.php:3345
 msgid ""
 "%sThis operation deletes ALL Gravity Flow settings%s. If you continue, you "
 "will NOT be able to retrieve these settings."
 msgstr ""
 
-#: class-gravity-flow.php:3344
+#: class-gravity-flow.php:3349
 msgid ""
 "Warning! ALL Gravity Flow settings will be deleted. This cannot be undone. "
 "'OK' to delete, 'Cancel' to stop"
 msgstr ""
 
-#: class-gravity-flow.php:3660
+#: class-gravity-flow.php:3665
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] ""
 msgstr[1] ""
 
-#: class-gravity-flow.php:3664
+#: class-gravity-flow.php:3669
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] ""
 msgstr[1] ""
 
-#: class-gravity-flow.php:3668
+#: class-gravity-flow.php:3673
 msgid "%dd"
 msgstr ""
 
-#: class-gravity-flow.php:3672
+#: class-gravity-flow.php:3677
 msgid "%dh"
 msgstr ""
 
-#: class-gravity-flow.php:3676
+#: class-gravity-flow.php:3681
 msgid "%dm"
 msgstr ""
 
-#: class-gravity-flow.php:3680
+#: class-gravity-flow.php:3685
 msgid "%ds"
 msgstr ""
 
-#: class-gravity-flow.php:3725
+#: class-gravity-flow.php:3730
 msgid "Every Fifteen Minutes"
 msgstr ""
 
@@ -1138,7 +1138,7 @@ msgstr ""
 
 #: includes/steps/class-step-notification.php:57
 #: includes/steps/class-step-user-input.php:101
-#: includes/wizard/steps/class-installation-wizard-step-updates.php:95
+#: includes/wizard/steps/class-installation-wizard-step-updates.php:88
 msgid "Enabled"
 msgstr ""
 
@@ -1320,25 +1320,18 @@ msgid ""
 msgstr ""
 
 #: includes/wizard/steps/class-installation-wizard-step-updates.php:29
-msgid ""
-"Note for Beta users: you may want to deactivate background options and "
-"manage updates manually because some changes may require require "
-"reconfiguration of your steps and settings."
-msgstr ""
-
-#: includes/wizard/steps/class-installation-wizard-step-updates.php:36
 msgid "Keep background updates enabled"
 msgstr ""
 
-#: includes/wizard/steps/class-installation-wizard-step-updates.php:42
+#: includes/wizard/steps/class-installation-wizard-step-updates.php:35
 msgid "Turn off background updates"
 msgstr ""
 
-#: includes/wizard/steps/class-installation-wizard-step-updates.php:48
+#: includes/wizard/steps/class-installation-wizard-step-updates.php:41
 msgid "Are you sure?"
 msgstr ""
 
-#: includes/wizard/steps/class-installation-wizard-step-updates.php:51
+#: includes/wizard/steps/class-installation-wizard-step-updates.php:44
 msgid ""
 "By disabling background updates your site may not get critical bug fixes "
 "and security enhancements. We only recommend doing this if you are "
@@ -1346,15 +1339,15 @@ msgid ""
 "manually keeping your WordPress site updated."
 msgstr ""
 
-#: includes/wizard/steps/class-installation-wizard-step-updates.php:56
+#: includes/wizard/steps/class-installation-wizard-step-updates.php:49
 msgid "I Understand and Accept the Risk"
 msgstr ""
 
-#: includes/wizard/steps/class-installation-wizard-step-updates.php:87
+#: includes/wizard/steps/class-installation-wizard-step-updates.php:80
 msgid "Please accept the terms."
 msgstr ""
 
-#: includes/wizard/steps/class-installation-wizard-step-updates.php:95
+#: includes/wizard/steps/class-installation-wizard-step-updates.php:88
 msgid "Disabled"
 msgstr ""
 
