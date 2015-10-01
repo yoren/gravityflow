@@ -90,6 +90,9 @@ function ut_user_has_cap($all_caps, $cap, $args){
 	return $all_caps;
 }
 
+if ( ! class_exists( 'RGForms' ) ) {
+	require GRAVITYFORMS_BASE_PATH . 'gravityforms.php';
+}
 
 //require ABSPATH . 'wp-content/plugins/gravityflow/gravityflow.php';
 require dirname( __FILE__ ) . '/testcase.php';
