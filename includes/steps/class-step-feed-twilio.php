@@ -1,10 +1,10 @@
 <?php
 /**
- * Gravity Flow Step Feed Emma
+ * Gravity Flow Step Feed Twlio
  *
  *
  * @package     GravityFlow
- * @subpackage  Classes/Gravity_Flow_Step_Feed_Emma
+ * @subpackage  Classes/Gravity_Flow_Step_Feed_Twilio
  * @copyright   Copyright (c) 2015, Steven Henty
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
@@ -14,19 +14,14 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
-class Gravity_Flow_Step_Feed_Emma extends Gravity_Flow_Step_Feed_Add_On{
-	public $_step_type = 'emma';
+class Gravity_Flow_Step_Feed_Twilio extends Gravity_Flow_Step_Feed_Add_On{
+	public $_step_type = 'twilio';
 
-	protected $_class_name = 'GFEmma';
+	protected $_class_name = 'GFTwilio';
 
 	public function get_label() {
-		return esc_html__( 'Emma', 'gravityflow' );
-	}
-
-	function get_feed_label( $feed ){
-		$label = $feed['meta']['feed_name'];
-		return $label;
+		return esc_html__( 'Twilio', 'gravityflow' );
 	}
 
 }
-Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_Emma() );
+Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_Twilio() );
