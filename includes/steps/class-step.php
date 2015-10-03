@@ -119,11 +119,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
-	 * Returns an array with the configuration of the final status options for this step.
+	 * Returns an array of the configuration of the final status options for this step.
 	 * These options will appear in the step settings.
 	 * Override this method to add final status options.
 	 *
-	 * e.g.
+	 * For example, a final status configuration may look like this:
 	 * array(
 	 *    'status' => 'complete',
 	 *    'status_label' => __( 'Complete', 'gravityflow' ),
@@ -132,7 +132,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 *    )
 	 *
 	 *
-	 * @return array
+	 * @return array An array of arrays
 	 */
 	public function get_final_status_config(){
 		return array(
