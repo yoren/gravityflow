@@ -81,8 +81,8 @@ if ( class_exists( 'GFForms' ) ) {
 
 
 		public function pre_init(){
-			// Pending GF support for import hooks
-			//add_filter( 'gform_export_form', array( $this, 'filter_gform_export_form' ) );
+			add_filter( 'gform_export_form', array( $this, 'filter_gform_export_form' ) );
+			add_action( 'gform_forms_post_import', array( $this, 'action_gform_forms_post_import') );
 			parent::pre_init();
 			add_filter( 'cron_schedules', array( $this, 'filter_cron_schedule' ) );
 			if ( ! wp_next_scheduled( 'gravityflow_cron' ) ) {
@@ -3072,6 +3072,24 @@ PRIMARY KEY  (id)
 			return $form;
 		}
 
+		public function action_gform_forms_post_import( $forms ) {
+			$gravityflow_feeds_imported = false;
+			foreach ( $forms as $form ) {
+				if ( isset( $form['feeds']['gravityflow'] ) ) {
+					$this->import_gravityflow_feeds( $form['feeds']['gravityflow'], $form['id'] );
+					unset( $form['feeds']['gravityflow'] );
+					if ( empty( $form['feeds'] ) ) {
+						unset( $form['feeds'] );
+					}
+					$gravityflow_feeds_imported = true;
+				}
+			}
+
+			if ( $gravityflow_feeds_imported ) {
+				GFCommon::add_message( esc_html__( 'Gravity Flow Steps imported. IMPORTANT: Check the assignees for each step. If the form was imported from a different installation with different user IDs then then steps may need to be reassigned.', 'gravityflow' ) );
+			}
+		}
+
 		public function maybe_process_feed( $entry, $form ) {
 
 			$form_id = absint( $form['id'] );
@@ -3366,10 +3384,39 @@ AND m.meta_value='queued'";
 
 		public function action_gform_post_form_duplicated( $form_id, $new_id ) {
 
-			$feeds = $this->get_feeds( $form_id );
+			$original_feeds = $this->get_feeds( $form_id );
 
-			foreach ( $feeds as $feed ) {
-				GFAPI::add_feed( $new_id, $feed['meta'], 'gravityflow' );
+			$this->import_gravityflow_feeds( $original_feeds, $new_id);
+		}
+
+		public function import_gravityflow_feeds( $original_feeds, $new_form_id) {
+			$feed_id_mappings = array();
+
+			foreach ( $original_feeds as $feed ) {
+				$new_feed_id = GFAPI::add_feed( $new_form_id, $feed['meta'], 'gravityflow' );
+				if ( ! $feed['is_active'] ) {
+					$this->update_feed_active( $new_feed_id, false );
+				}
+				$feed_id_mappings[ $feed['id'] ] = $new_feed_id;
+			}
+
+			$new_steps = $this->get_steps( $new_form_id );
+
+			foreach ( $new_steps as $new_step ) {
+				$final_statuses = $new_step->get_final_status_config();
+				$new_step_meta = $new_step->get_feed_meta();
+				$step_ids_updated = false;
+				foreach ( $final_statuses as $final_status_config ) {
+					$destination_key = 'destination_' . $final_status_config['status'];
+					$old_destination_step_id = $new_step_meta[ $destination_key ];
+					if ( ! in_array( $old_destination_step_id, array( 'next', 'complete' ) ) && isset( $feed_id_mappings[ $old_destination_step_id ] ) ) {
+						$new_step_meta[ $destination_key ] = $feed_id_mappings[ $old_destination_step_id ];
+						$step_ids_updated = true;
+					}
+				}
+				if ( $step_ids_updated ) {
+					$this->update_feed_meta( $new_step->get_id(), $new_step_meta );
+				}
 			}
 		}
 
