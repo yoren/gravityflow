@@ -994,16 +994,16 @@ PRIMARY KEY  (id)
 			WHERE m.meta_key LIKE %s
 			AND m.meta_key NOT LIKE '%%_timestamp'
 			AND m.form_id=%d
-			AND l.status='active'", 'workflow_role_id_%', $form_id );
+			AND l.status='active'", 'workflow_role_%', $form_id );
 			$rows = $wpdb->get_results( $sql );
 
 			if ( ! is_wp_error( $rows ) && count( $rows ) > 0 ) {
 				foreach ( $rows as $row ) {
-					$user_id = str_replace( 'workflow_role_id_', '', $row->meta_key );
+					$user_id = str_replace( 'workflow_role_', '', $row->meta_key );
 					if ( ! isset( $assignee_status_by_entry[ $row->lead_id ] ) ) {
 						$assignee_status_by_entry[ $row->lead_id ] = array();
 					}
-					$assignee_status_by_entry[ $row->lead_id ][ 'user_id|' . $user_id ] = 'user_id|' . $user_id;
+					$assignee_status_by_entry[ $row->lead_id ][ 'role|' . $user_id ] = 'role|' . $user_id;
 				}
 			}
 
