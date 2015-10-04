@@ -56,6 +56,9 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 == ChangeLog ==
 
 = 1.0.3 =
+- Fixed an issue when updating step settings where where entries may not get reassigned correctly to new roles.
+
+= 1.0.2 =
 - Added support for SMS message steps via Twilio. Requires the Gravity Forms Twilio Add-On and a Twilio account.
 - Added support for form import and export. Requires Gravity Forms 1.9.13.29.
 - Fixed an issue when duplicating forms where the next step points to another step.
