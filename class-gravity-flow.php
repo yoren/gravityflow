@@ -97,14 +97,14 @@ if ( class_exists( 'GFForms' ) ) {
 		public function init() {
 			parent::init();
 
+			// Make sure Gravity Flow feeds are triggered before other feeds so we get a chance to intercept them.
 			remove_filter( 'gform_entry_post_save', array( $this, 'maybe_process_feed' ), 10 );
-
 			add_filter( 'gform_entry_post_save', array( $this, 'maybe_process_feed' ), 8, 2 );
 
 			add_action( 'gform_after_submission', array( $this, 'after_submission' ), 9, 2 );
 			add_action( 'gform_after_update_entry', array( $this, 'filter_after_update_entry' ), 10, 2 );
 
-			add_shortcode( 'gravityflow', array( $this, 'shortcode' ), 10, 3 );
+			add_shortcode( 'gravityflow', array( $this, 'shortcode' ) );
 
 			add_action( 'gform_register_init_scripts', array( $this, 'filter_gform_register_init_scripts' ), 10, 3 );
 
@@ -168,8 +168,6 @@ if ( class_exists( 'GFForms' ) ) {
 				$settings['background_updates'] = true;
 				$this->update_app_settings( $settings );
 
-			} elseif ( version_compare( $previous_version, '1.0-beta-3.5', '<' ) ) {
-				$this->upgrade_feed_settings();
 			}
 			$this->setup_db();
 		}
@@ -209,35 +207,6 @@ PRIMARY KEY  (id)
 
 			remove_filter( 'dbdelta_create_queries', array( 'RGForms', 'dbdelta_fix_case' ) );
 		}
-
-		public function upgrade_feed_settings(){
-
-			$feeds = $this->get_feeds_by_slug( 'gravityflow' );
-			foreach ( $feeds as $feed ) {
-				$step_type_key = $feed['meta']['step_type'] . '_';
-				foreach ( $feed['meta'] as $key => $meta ) {
-					$pos = strpos( $key, $step_type_key );
-					if ( $pos === 0 ) {
-						$new_key  = substr_replace( $key, '', $pos, strlen( $step_type_key ) );
-
-						if ( isset( $meta['choices'] ) && is_array( $meta['choices'] ) ){
-
-							foreach ( $meta['choices'] as &$choice ) {
-
-								$pos = strpos( $choice['name'], $step_type_key );
-								if ( $pos === 0 ) {
-									$choice['name']  = substr_replace( $choice['name'], '', $pos, strlen( $step_type_key ) );
-								}
-							}
-						}
-						unset( $feed['meta'][ $key ] );
-						$feed['meta'][ $new_key ] = $meta;
-					}
-				}
-				$this->update_feed_meta( $feed['id'], $feed['meta'] );
-			}
-		}
-
 
 		// Enqueue the JavaScript and output the root url and the nonce.
 		public function scripts() {
@@ -924,7 +893,6 @@ PRIMARY KEY  (id)
 
 				foreach ( $assignee_status as $old_assignee_key => $old_status ) {
 					foreach ( $current_assignees as $assignee ) {
-
 						$assignee_key = $assignee->get_key();
 						if ( $assignee_key == $old_assignee_key ) {
 							continue 2;
@@ -3832,7 +3800,6 @@ AND m.meta_value='queued'";
 
 		public function get_admin_icon_b64( $color = false) {
 
-			// replace the hex color (default was #999999) to %s; it will be replaced by the passed $color
 			$svg_xml = '<?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="100%" height="100%" viewBox="0 20 581 640" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
