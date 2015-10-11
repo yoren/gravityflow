@@ -440,13 +440,13 @@
             return mergeTags;
         }
 
-        addNoteMergeTag(mergeTags, elementId, hideAllFields, excludeFieldTypes, isPrepop, option);
+        addCommonMergeTags(mergeTags, elementId, hideAllFields, excludeFieldTypes, isPrepop, option);
         addAprovalMergeTags(mergeTags, elementId, hideAllFields, excludeFieldTypes, isPrepop, option);
 
         return mergeTags;
     };
 
-    function addNoteMergeTag(mergeTags, elementId, hideAllFields, excludeFieldTypes, isPrepop, option) {
+    function addCommonMergeTags(mergeTags, elementId, hideAllFields, excludeFieldTypes, isPrepop, option) {
 
         var supportedElementIds = [
             '_gaddon_setting_workflow_notification_message',
@@ -462,6 +462,8 @@
         var tags = [];
         tags.push({tag: '{workflow_entry_link}', label: 'Entry Link'});
         tags.push({tag: '{workflow_entry_url}', label: 'Entry URL'});
+        tags.push({tag: '{workflow_cancel_link}', label: 'Cancel Link'});
+        tags.push({tag: '{workflow_cancel_url}', label: 'Cancel URL'});
         tags.push({tag: '{workflow_note}', label: 'Note'});
 
         mergeTags['gravityflow'] = {
@@ -488,10 +490,14 @@
         tags.push({tag: '{workflow_approve_link}', label: 'Approve Link'});
         tags.push({tag: '{workflow_reject_link}', label: 'Reject Link'});
 
-        mergeTags['gravityflow'] = {
-            label: 'Workflow',
-            tags: tags
-        };
+        if ( typeof mergeTags['gravityflow'] != 'undefined' ) {
+            mergeTags['gravityflow']['tags'] = $.merge (mergeTags['gravityflow']['tags'], tags);
+        } else {
+            mergeTags['gravityflow'] = {
+                label: 'Workflow',
+                tags: tags
+            };
+        }
 
         return mergeTags;
     }

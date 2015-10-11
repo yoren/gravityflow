@@ -2400,6 +2400,20 @@ PRIMARY KEY  (id)
 					$token = $this->decode_access_token();
 
 					if ( isset( $token['scopes']['action'] ) ) {
+						if ( $token['scopes']['action'] === 'cancel_workflow'  ) {
+							$entry_id = rgars( $token, 'scopes/entry_id' );
+							if ( empty( $entry_id ) || $entry_id != $entry['id'] ) {
+								esc_html_e( 'Error: incorrect entry.', 'gravityflow' );
+								return;
+							}
+							$api = new Gravity_Flow_API( $form_id );
+							$result = $api->cancel_workflow( $entry );
+							if ( $result ) {
+								esc_html_e( 'Workflow Cancelled', 'gravityflow' );
+							}
+							return;
+						}
+
 						$feedback = $step->maybe_process_token_action( $token['scopes']['action'], $token, $form, $entry );
 						if ( empty( $feedback ) ) {
 							esc_html_e( 'Error: This URL is no longer valid.', 'gravityflow' );
