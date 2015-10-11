@@ -55,6 +55,13 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.0.5 =
+- Added one-click cancel links so workflows can be cancelled by clicking on a link in an email.
+- Added export to the admin UI status list.
+
+= 1.0.4 =
+- Updated the step type radio buttons to display as buttons with icons.
+
 = 1.0.3 =
 - Fixed an issue when updating step settings where where entries may not get reassigned correctly to new roles.
 
