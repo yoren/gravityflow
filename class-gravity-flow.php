@@ -685,8 +685,10 @@ PRIMARY KEY  (id)
 
 			foreach ( $step_classes as $key => $step_class ) {
 				$step_type_choice = array( 'label' => $step_class->get_label(), 'value' => $step_class->get_type() );
+				$step_type_choice['icon_url'] = $step_class->get_icon_url();
 				if ( $current_step_id > 0 ) {
 					$step_type_choice['disabled'] = 'disabled';
+					$step_type_choice['div_class'] = 'gravityflow-disabled';
 				}
 				$step_settings = $step_class->get_settings();
 				if ( empty( $step_settings ) ) {
@@ -701,7 +703,7 @@ PRIMARY KEY  (id)
 			$step_type_setting = array(
 				'name'       => 'step_type',
 				'label'      => esc_html__( 'Step Type', 'gravityflow' ),
-				'type'       => 'radio',
+				'type'       => 'radio_image',
 				'horizontal' => true,
 				'required'   => true,
 				'onchange' => 'jQuery(this).parents("form").submit();',
@@ -1099,6 +1101,76 @@ PRIMARY KEY  (id)
 			} else {
 				return $a - $b;
 			}
+		}
+
+		/***
+		 * Renders and initializes a radio field or a collection of radio fields based on the $field array.
+	     * Images/icons are used in place of the HTML radio buttons.
+		 *
+		 * @param array $field - Field array containing the configuration options of this field
+		 * @param bool  $echo  = true - true to echo the output to the screen, false to simply return the contents as a string
+		 *
+		 * @return string Returns the markup for the radio buttons
+		 *
+		 */
+		protected function settings_radio_image( $field, $echo = true ) {
+
+			$field['type'] = 'radio'; //making sure type is set to radio
+
+			$selected_value   = $this->get_setting( $field['name'], rgar( $field, 'default_value' ) );
+			$field_attributes = $this->get_field_attributes( $field );
+			$horizontal       = rgar( $field, 'horizontal' ) ? ' gaddon-setting-inline' : '';
+			$html             = '';
+			if ( is_array( $field['choices'] ) ) {
+				foreach ( $field['choices'] as $i => $choice ) {
+					$choice['id']      = $field['name'] . $i;
+					$choice_attributes = $this->get_choice_attributes( $choice, $field_attributes );
+
+					$tooltip = isset( $choice['tooltip'] ) ? gform_tooltip( $choice['tooltip'], rgar( $choice, 'tooltip_class' ), true ) : '';
+
+					$radio_value = isset( $choice['value'] ) ? $choice['value'] : $choice['label'];
+					$checked     = checked( $selected_value, $radio_value, false );
+
+					$div_class = rgar( $choice, 'div_class' );
+					if ( ! empty ( $div_class ) ) {
+						$div_class = ' ' . sanitize_html_class( $div_class );
+					}
+
+					$icon_url = rgar( $choice, 'icon_url' );
+
+					if ( strpos( $icon_url, 'http' ) === 0 ) {
+						$icon = '<img src="' . $icon_url . '"/>';
+					} else {
+						$icon = $icon_url;
+					}
+
+					$html .= '
+	                        <div id="gaddon-setting-radio-choice-' . $choice['id'] . '" class="gaddon-setting-radio' . $div_class . $horizontal . '">
+	                        <input
+	                                id = "' . esc_attr( $choice['id'] ) . '"
+	                                type = "radio" ' .
+					         'name="_gaddon_setting_' . esc_attr( $field['name'] ) . '" ' .
+					         'value="' . $radio_value . '" ' .
+					         implode( ' ', $choice_attributes ) . ' ' .
+					         $checked .
+					         ' />
+	                        <label for="' . esc_attr( $choice['id'] ) . '">
+	                            <span>' . $icon . '<br />' . esc_html( $choice['label'] ) . ' ' . $tooltip . '</span>
+							</label>
+	                        </div>
+	                    ';
+				}
+			}
+
+			if ( $this->field_failed_validation( $field ) ) {
+				$html .= $this->get_error_icon( $field );
+			}
+
+			if ( $echo ) {
+				echo $html;
+			}
+
+			return $html;
 		}
 
 		public function settings_schedule(){
