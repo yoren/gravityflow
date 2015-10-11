@@ -97,6 +97,31 @@ class Gravity_Flow_API {
 	}
 
 	/**
+	 * Cancels the workflow for the given Entry ID. Removes the assignees and logs the event.
+	 *
+	 * @param array $entry The entry
+	 * @return bool
+	 */
+	public function cancel_workflow( $entry ){
+		$entry_id = absint( $entry['id'] );
+		$form = GFAPI::get_form( $this->form_id );
+		$step = $this->get_current_step( $entry );
+		if ( ! $step ) {
+			return false;
+		}
+		$assignees = $step->get_assignees();
+		foreach ( $assignees as $assignee ) {
+			$assignee->remove();
+		}
+		gform_update_meta( $entry_id, 'workflow_final_status', 'cancelled' );
+		gform_delete_meta( $entry_id, 'workflow_step' );
+		$feedback = esc_html__( 'Workflow cancelled.',  'gravityflow' );
+		gravity_flow()->add_timeline_note( $entry_id, $feedback );
+		gravity_flow()->log_event( 'workflow', 'cancelled', $form['id'], $entry_id );
+		return true;
+	}
+
+	/**
 	 * Returns the workflow status for the current entry.
 	 *
 	 * @param $entry
