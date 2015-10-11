@@ -284,6 +284,34 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
+	 * Override this method to set a custom icon in the step settings.
+	 * 32px x 32px
+	 *
+	 * @return string
+	 */
+	public function get_icon_url(){
+		return $this->get_base_url() . '/images/gravityflow-icon-blue.svg';
+	}
+
+	/**
+	 * Returns the Gravity Flow base URL
+	 *
+	 * @return string
+	 */
+	public function get_base_url(){
+		return gravity_flow()->get_base_url();
+	}
+
+	/**
+	 * Returns the Gravity Flow base path
+	 *
+	 * @return string
+	 */
+	public function get_base_path(){
+		return gravity_flow()->get_base_path();
+	}
+
+	/**
 	 * Returns the ID of the next step.
 	 *
 	 * @return int|mixed|string
@@ -559,6 +587,60 @@ abstract class Gravity_Flow_Step extends stdClass {
 				);
 
 				$entry_url = $this->get_entry_url( $a['page_id'], $assignee );
+
+				$entry_link = sprintf( '<a href="%s">%s</a>', $entry_url, $a['text'] );
+				$text = str_replace( $full_tag, $entry_link, $text );
+			}
+		}
+
+		$expiration_days = apply_filters( 'gravityflow_cancel_token_expiration_days', 2 );
+
+		$expiration_str = '+' . (int) $expiration_days . ' days';
+
+		$expiration_timestamp = strtotime( $expiration_str );
+
+		$scopes = array(
+			'pages' => array( 'inbox' ),
+			'entry_id' => $this->get_entry_id(),
+			'action' => 'cancel_workflow',
+		);
+
+		$cancel_token = gravity_flow()->generate_access_token( $assignee, $scopes, $expiration_timestamp );
+
+		preg_match_all( '/{workflow_cancel_url(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
+		if ( is_array( $matches ) ) {
+			foreach ( $matches as $match ) {
+				$full_tag       = $match[0];
+				$options_string = isset( $match[2] ) ? $match[2] : '';
+				$options        = shortcode_parse_atts( $options_string );
+
+				$a = shortcode_atts(
+					array(
+						'page_id' => 'admin',
+					), $options
+				);
+
+				$entry_url = $this->get_entry_url( $a['page_id'], $assignee, $cancel_token );
+
+				$text = str_replace( $full_tag, $entry_url, $text );
+			}
+		}
+
+		preg_match_all( '/{workflow_cancel_link(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
+		if ( is_array( $matches ) ) {
+			foreach ( $matches as $match ) {
+				$full_tag       = $match[0];
+				$options_string = isset( $match[2] ) ? $match[2] : '';
+				$options        = shortcode_parse_atts( $options_string );
+
+				$a = shortcode_atts(
+					array(
+						'page_id' => 'admin',
+						'text' => esc_html__( 'Cancel Workflow', 'gravityflow' ),
+					), $options
+				);
+
+				$entry_url = $this->get_entry_url( $a['page_id'], $assignee, $cancel_token );
 
 				$entry_link = sprintf( '<a href="%s">%s</a>', $entry_url, $a['text'] );
 				$text = str_replace( $full_tag, $entry_link, $text );
@@ -1061,14 +1143,21 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return $this->_meta;
 	}
 
+	/**
+	 * Process token action if conditions are satisfied.
+	 *
+	 * @param $action
+	 * @param $token
+	 * @param $form
+	 * @param $entry
+	 *
+	 * @return bool|WP_Error
+	 */
 	public function maybe_process_token_action( $action, $token, $form, $entry ){
 		return false;
 	}
 
 	public function log_event( $step_event, $step_status = '', $duration = 0) {
-		// step_started, step_ended
-		// status: approved, rejected, complete
-
 
 		gravity_flow()->log_event( 'step', $step_event, $this->get_form_id(), $this->get_entry_id(), $step_status, $this->get_id(), $duration );
 

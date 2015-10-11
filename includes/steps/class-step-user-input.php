@@ -22,6 +22,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		return esc_html__( 'User Input', 'gravityflow' );
 	}
 
+	public function get_icon_url(){
+		return '<i class="fa fa-pencil" ></i>';
+	}
+
 	public function get_settings(){
 
 		$account_choices = gravity_flow()->get_users_as_choices();

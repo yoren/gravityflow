@@ -20,6 +20,11 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 	public function get_label() {
 		return esc_html__( 'Notification', 'gravityflow' );
 	}
+	public function get_icon_url(){
+		return '<i class="fa fa-envelope-o"></i>';
+	}
+
+
 
 	public function get_settings(){
 

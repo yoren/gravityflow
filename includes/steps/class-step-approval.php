@@ -39,6 +39,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return esc_html__( 'Approval', 'gravityflow' );
 	}
 
+	public function get_icon_url(){
+		return '<i class="fa fa-check" style="color:darkgreen;"></i>';
+	}
+
+
 	public function get_settings(){
 
 		$account_choices = gravity_flow()->get_users_as_choices();
@@ -864,6 +869,13 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 * @return bool|string|void|WP_Error
 	 */
 	public function maybe_process_token_action( $action, $token, $form, $entry ){
+
+		$feedback = parent::maybe_process_token_action( $action, $token, $form, $entry );
+
+		if ( $feedback ) {
+			return $feedback;
+		}
+
 		if ( ! in_array( $action, array( 'approve', 'reject' ) ) ) {
 			return false;
 		}

@@ -24,6 +24,10 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 		return esc_html__( 'User Registration', 'gravityflow' );
 	}
 
+	public function get_icon_url(){
+		return '<i class="fa fa-user" style="color:darkgreen"></i>';
+	}
+
 	function get_feeds() {
 
 		$form_id = $this->get_form_id();

@@ -21,6 +21,10 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		return esc_html__( 'Webhook', 'gravityflow' );
 	}
 
+	public function get_icon_url(){
+		return '<i class="fa fa-external-link"></i>';
+	}
+
 	public function get_settings(){
 
 		return array(

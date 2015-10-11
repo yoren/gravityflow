@@ -100,11 +100,74 @@ table.gform-routings tr.gform-routing-row td .repeater-buttons{
 
 #gaddon-setting-row-step_type td label{
 	display:inline-block;
-	width:150px;
-	padding-right:10px;
-	padding-bottom:10px;
+    margin-bottom: 5px;
+    color:black;
 }
 
 .gravityflow-schedule-type-container{
     margin:5px 0 5px 0;
+}
+
+tr#gaddon-setting-row-step_type input:checked + label > span{
+    -webkit-filter: none;
+    -moz-filter: none;
+    filter: none;
+}
+tr#gaddon-setting-row-step_type input:checked + label {
+    background-color:white;
+    border: 1px solid #CCCCCC;
+}
+tr#gaddon-setting-row-step_type label > span {
+    background-repeat:no-repeat;
+    display:inline-block;
+    -webkit-transition: all 100ms ease-in;
+    -moz-transition: all 100ms ease-in;
+    transition: all 100ms ease-in;
+    -webkit-filter: brightness(1.8) grayscale(1) opacity(.5);
+    -moz-filter: brightness(1.8) grayscale(1) opacity(.5);
+    filter: brightness(1.8) grayscale(1) opacity(.5);
+}
+
+.gravityflow-disabled label{
+    cursor:default!important;
+}
+
+tr#gaddon-setting-row-step_type input:not([disabled]):not([checked]) + label > span:hover{
+    -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+    -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+    filter: brightness(1.2) grayscale(.5) opacity(.9);
+}
+
+tr#gaddon-setting-row-step_type input{
+    display:none;
+}
+tr#gaddon-setting-row-step_type label > span{
+    padding-top:5px;
+    width:130px;
+    height:65px;
+}
+
+tr#gaddon-setting-row-step_type label > span > img{
+    width:32px;
+    height:32px;
+    margin:5px;
+    vertical-align:middle;
+}
+
+tr#gaddon-setting-row-step_type label{
+    border:1px solid #EEEEEE;
+    background-color:#F9F9F9;
+}
+
+.gaddon-setting-radio{
+    text-align:center;
+}
+
+tr#gaddon-setting-row-step_type label > span > i {
+    width:32px;
+    height:32px;
+    display:inline-block;
+    font-size:2.5em;
+    margin:5px;
+    color:#0074a2;
 }
