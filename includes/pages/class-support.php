@@ -117,7 +117,7 @@ class Gravity_Flow_Support {
 					<textarea id="gravityflow_description" name="gravityflow_description" class="widefat" cols="50" rows="10"></textarea>
 					<label>
 						<input type="checkbox" name="gravityflow_debug_info" value="1" checked="checked"/>
-						<?php esc_html_e( 'Send debugging information. (This includes some system information, active plugins, forms and workflow steps. No entry data will be sent.)', 'gravityflow' ); ?>
+						<?php esc_html_e( 'Send debugging information. (This includes some system information and a list of active plugins. No forms or entry data will be sent.)', 'gravityflow' ); ?>
 					</label>
 					</br /><br />
 					<input id="gravityflow_send" type="submit" class="button button-primary button-large" name="gravityflow_send_feedback" value="<?php esc_html_e( 'Send', 'gravityflow' ); ?>" />
