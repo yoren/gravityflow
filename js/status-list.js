@@ -1,5 +1,6 @@
 
 (function (GravityFlowStatusList, $) {
+    var page = 1, filters;
     $(document).ready(function () {
         $("#doaction").click(function(){
             var checkedValues = $('.gravityflow-cb-step-id:checked').map(function() {
@@ -8,7 +9,35 @@
             printPage( gravityflow_status_list_strings.ajaxurl + '?action=gravityflow_print_entries&lid=' + checkedValues.join(',') );
         	return false;
 		});
+
+        $('.gravityflow-export-status-button').click(function(){
+            var $this = $(this);
+            $this.addClass('button-disabled');
+            filters = $this.data('filter_args');
+            var s = $this.next('.spinner');
+            $this.next('.gravityflow-spinner').show();
+            processExport();
+        });
+
+        function processExport(){
+            var url;
+            url = ajaxurl + '?action=gravityflow_export_status&order=asc&paged=' + page;
+            url += filters;
+            $.getJSON(url, function(data){
+                if ( data.status =='complete' ) {
+                    window.location = data.url;
+                } else if( data.status =='incomplete' ) {
+                    processExport( page++ );
+                } else {
+                    alert(data.message);
+                }
+                $('.gravityflow-export-status-button.button-disabled').next('.gravityflow-spinner').hide();
+                $('.gravityflow-export-status-button.button-disabled').removeClass('button-disabled');
+            });
+        }
     });
+
+
 
 }(window.GravityFlowStatusList = window.GravityFlowStatusList || {}, jQuery));
 
