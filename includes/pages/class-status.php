@@ -6,18 +6,24 @@ if ( ! class_exists( 'GFForms' ) ) {
 
 class Gravity_Flow_Status {
 
-	public static function display( $args ){
+	public static function render( $args ) {
 
 		wp_enqueue_script( 'gform_field_filter' );
 		$defaults = array(
-			'action_url' => admin_url( 'admin.php?page=gravityflow-status' ),
+			'action_url'         => admin_url( 'admin.php?page=gravityflow-status' ),
 			'constraint_filters' => array(),
-			'field_ids' => apply_filters( 'gravityflow_status_fields', array() ),
+			'field_ids'          => apply_filters( 'gravityflow_status_fields', array() ),
+			'format'             => 'table', // csv
+			'file_name'          => 'export.csv',
 		);
-		$args = array_merge( $defaults, $args );
+		$args     = array_merge( $defaults, $args );
 
 		if ( empty( $args['constraint_filters'] ) ) {
-			$args['constraint_filters'] = apply_filters( 'gravityflow_status_filter', array( 'form_id' => 0, 'start_date' => '', 'end_date' => '' ) );
+			$args['constraint_filters'] = apply_filters( 'gravityflow_status_filter', array(
+				'form_id'    => 0,
+				'start_date' => '',
+				'end_date'   => ''
+			) );
 		}
 		if ( ! isset( $args['constraint_filters']['form_id'] ) ) {
 			$args['constraint_filters']['form_id'] = 0;
@@ -30,19 +36,80 @@ class Gravity_Flow_Status {
 		}
 
 		$table = new Gravity_Flow_Status_Table( $args );
-		$action_url = $args['action_url'];
-		?>
-		<form id="gravityflow-status-filter" method="GET" action="<?php echo esc_url( $action_url ) ?>">
-			<input type="hidden" name="page" value="gravityflow-status" />
-			<?php
-			$table->views();
-			$table->filters();
-			$table->prepare_items();
-			$table->display();
+
+		if ( $args['format'] == 'table' ) {
+
+			$action_url = $args['action_url'];
 			?>
-		</form>
-	<?php
+			<form id="gravityflow-status-filter" method="GET" action="<?php echo esc_url( $action_url ) ?>">
+				<input type="hidden" name="page" value="gravityflow-status"/>
+				<?php
+				$table->views();
+				$table->filters();
+				$table->prepare_items();
+				$table->display();
+				?>
+			</form>
+			<?php
+			if ( is_admin() ) {
+				$str = $_SERVER['QUERY_STRING'];
+				parse_str( $str, $query_args );
+
+				$remove_args = array( 'paged', '_wpnonce', '_wp_http_referer', 'action', 'action2' );
+				foreach ( $remove_args as $remove_arg_key ) {
+					unset( $query_args[ $remove_arg_key ] );
+				}
+				$query_args['gravityflow_export_nonce'] = wp_create_nonce( 'gravityflow_export_nonce' );
+				$filter_args_str                        = '&' . http_build_query( $query_args );
+				echo sprintf( '<br /><a class="gravityflow-export-status-button button" data-filter_args="%s">%s</a>', $filter_args_str, esc_html__( 'Export', 'gravityflow' ) );
+				echo sprintf( '<img class="gravityflow-spinner" src="%s" style="display:none;margin:5px"/>', GFCommon::get_base_url() . '/images/spinner.gif' );
+			}
+
+		} else {
+			$upload_dir = wp_upload_dir();
+			if ( ! is_writeable( $upload_dir['basedir'] ) ) {
+				return new WP_Error( 'export_destination_not_writeable', esc_html__( 'The destination file is not writeable', 'gravityflow' ) );
+			}
+
+			$file_path = trailingslashit( $upload_dir['basedir'] ) . $args['file_name'] . '.csv';
+			$export    = '';
+			$table->prepare_items();
+			$page = (int) $table->get_pagination_arg( 'page' );
+			if ( $page < 2 ) {
+				@unlink( $file_path );
+				$export .= $table->export_column_names();
+			}
+			$export .= $table->export();
+
+			@file_put_contents( $file_path, $export, FILE_APPEND );
+
+			$per_page = (int) $table->get_pagination_arg( 'per_page' );
+
+			$total_items = (int) $table->get_pagination_arg( 'total_items' );
+
+			$percent = $page * $per_page / $total_items * 100;
+
+			$total_pages = (int) $table->get_pagination_arg( 'total_pages' );
+
+			$status = $page == $total_pages ? 'complete' : 'incomplete';
+
+			$response = array( 'status' => $status, 'percent' => (int) $percent );
+
+			if ( $status == 'complete' ) {
+				$download_args   = array(
+					'nonce'     => wp_create_nonce( 'gravityflow_download_export' ),
+					'action'    => 'gravityflow_download_export',
+					'file_name' => $args['file_name'],
+				);
+				$download_url    = add_query_arg( $download_args, admin_url( 'admin-ajax.php' ) );
+				$response['url'] = $download_url;
+			}
+
+			return $response;
+		}
 	}
+
+
 }
 
 
@@ -100,41 +167,43 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 	public $bulk_actions;
 
-	/* @var Gravity_Flow_Step[] $steps $*/
+	public $per_page;
+
+	/* @var Gravity_Flow_Step[] $steps $ */
 	private $_steps;
 
 	private $_filter_args;
 
 	function __construct( $args = array() ) {
 		$default_args = array(
-			'singular' => __( 'entry', 'gravityflow' ),
-			'plural'   => __( 'entries', 'gravityflow' ),
-			'ajax'     => false,
-			'base_url' => admin_url( 'admin.php?page=gravityflow-status' ),
-			'detail_base_url' => admin_url( 'admin.php?page=gravityflow-inbox&view=entry' ),
+			'singular'           => __( 'entry', 'gravityflow' ),
+			'plural'             => __( 'entries', 'gravityflow' ),
+			'ajax'               => false,
+			'base_url'           => admin_url( 'admin.php?page=gravityflow-status' ),
+			'detail_base_url'    => admin_url( 'admin.php?page=gravityflow-inbox&view=entry' ),
 			'constraint_filters' => array(),
-			'field_ids' => array(),
-			'screen' => 'gravityflow-status',
-			'display_all' => GFAPI::current_user_can_any( 'gravityflow_status_view_all' ),
-			'bulk_actions' => array( 'print' => esc_html__( 'Print', 'gravityflow' ) ),
+			'field_ids'          => array(),
+			'screen'             => 'gravityflow-status',
+			'display_all'        => GFAPI::current_user_can_any( 'gravityflow_status_view_all' ),
+			'bulk_actions'       => array( 'print' => esc_html__( 'Print', 'gravityflow' ) ),
+			'per_page'           => 20,
 		);
 
 		$args = wp_parse_args( $args, $default_args );
 
 		parent::__construct( $args );
 
-		$this->base_url = $args['base_url'];
-		$this->detail_base_url = $args['detail_base_url'];
+		$this->base_url           = $args['base_url'];
+		$this->detail_base_url    = $args['detail_base_url'];
 		$this->constraint_filters = $args['constraint_filters'];
 		if ( ! is_array( $args['field_ids'] ) ) {
 			$args['field_ids'] = explode( ',', $args['field_ids'] );
 		}
-		$this->field_ids = $args['field_ids'];
-		$this->display_all = $args['display_all'];
+		$this->field_ids    = $args['field_ids'];
+		$this->display_all  = $args['display_all'];
 		$this->bulk_actions = $args['bulk_actions'];
 		$this->set_counts();
-
-		$paged = get_query_var( 'paged' );
+		$this->per_page = $args['per_page'];
 
 	}
 
@@ -143,57 +212,65 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	}
 
 	public function get_views() {
-		$current        = isset( $_GET['status'] ) ? $_GET['status'] : '';
-		$total_count    = '&nbsp;<span class="count">(' . $this->total_count    . ')</span>';
-		$complete_count = '&nbsp;<span class="count">(' . $this->complete_count . ')</span>';
-		$pending_count  = '&nbsp;<span class="count">(' . $this->pending_count  . ')</span>';
-		$cancelled_count  = '&nbsp;<span class="count">(' . $this->cancelled_count  . ')</span>';
+		$current         = isset( $_GET['status'] ) ? $_GET['status'] : '';
+		$total_count     = '&nbsp;<span class="count">(' . $this->total_count . ')</span>';
+		$complete_count  = '&nbsp;<span class="count">(' . $this->complete_count . ')</span>';
+		$pending_count   = '&nbsp;<span class="count">(' . $this->pending_count . ')</span>';
+		$cancelled_count = '&nbsp;<span class="count">(' . $this->cancelled_count . ')</span>';
 
 		$views = array(
-			'all'		=> sprintf( '<a href="%s"%s>%s</a>', remove_query_arg( array( 'status', 'paged' ) ), $current === 'all' || $current == '' ? ' class="current"' : '', esc_html__( 'All', 'gravityflow' ) . $total_count ),
-			'pending'	=> sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array( 'status' => 'pending', 'paged' => false ) ), $current === 'pending' ? ' class="current"' : '', esc_html__( 'Pending', 'gravityflow' ) . $pending_count ),
-			'complete'	=> sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array( 'status' => 'complete', 'paged' => false ) ), $current === 'complete' ? ' class="current"' : '', esc_html__( 'Complete', 'gravityflow' ) . $complete_count ),
-			'cancelled'	=> sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array( 'status' => 'cancelled', 'paged' => false ) ), $current === 'cancelled' ? ' class="current"' : '', esc_html__( 'Cancelled', 'gravityflow' ) . $cancelled_count ),
+			'all'       => sprintf( '<a href="%s"%s>%s</a>', remove_query_arg( array(
+				'status',
+				'paged'
+			) ), $current === 'all' || $current == '' ? ' class="current"' : '', esc_html__( 'All', 'gravityflow' ) . $total_count ),
+			'pending'   => sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array(
+				'status' => 'pending',
+				'paged'  => false
+			) ), $current === 'pending' ? ' class="current"' : '', esc_html__( 'Pending', 'gravityflow' ) . $pending_count ),
+			'complete'  => sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array(
+				'status' => 'complete',
+				'paged'  => false
+			) ), $current === 'complete' ? ' class="current"' : '', esc_html__( 'Complete', 'gravityflow' ) . $complete_count ),
+			'cancelled' => sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array(
+				'status' => 'cancelled',
+				'paged'  => false
+			) ), $current === 'cancelled' ? ' class="current"' : '', esc_html__( 'Cancelled', 'gravityflow' ) . $cancelled_count ),
 		);
+
 		return $views;
 	}
 
-	public function get_pagenum() {
-		return parent::get_pagenum(); // TODO: Change the autogenerated stub
-	}
+	function filters() {
 
-
-	function filters(){
-
-		$start_date = isset( $_GET['start-date'] )  ? sanitize_text_field( $_GET['start-date'] ) : null;
-		$end_date   = isset( $_GET['end-date'] )    ? sanitize_text_field( $_GET['end-date'] )   : null;
-		$status     = isset( $_GET['status'] )      ? $_GET['status'] : '';
-		$filter_form_id     = empty( $_GET['form-id'] ) ? '' : absint( $_GET['form-id'] );
-		$filter_entry_id     = empty( $_GET['entry-id'] ) ? '' :  absint( $_GET['entry-id'] );
+		$start_date      = isset( $_GET['start-date'] ) ? sanitize_text_field( $_GET['start-date'] ) : null;
+		$end_date        = isset( $_GET['end-date'] ) ? sanitize_text_field( $_GET['end-date'] ) : null;
+		$status          = isset( $_GET['status'] ) ? $_GET['status'] : '';
+		$filter_form_id  = empty( $_GET['form-id'] ) ? '' : absint( $_GET['form-id'] );
+		$filter_entry_id = empty( $_GET['entry-id'] ) ? '' : absint( $_GET['entry-id'] );
 
 		$field_filters = null;
 
 		$forms = GFAPI::get_forms();
-		foreach ( $forms as $form ){
+		foreach ( $forms as $form ) {
 			$form_filters = GFCommon::get_field_filter_settings( $form );
 
 			$empty_filter = array(
-				'key'             => '',
-				'text'            => esc_html__( 'Fields', 'gravityforms' ),
-				'operators'       => array(),
+				'key'       => '',
+				'text'      => esc_html__( 'Fields', 'gravityforms' ),
+				'operators' => array(),
 			);
 			array_unshift( $form_filters, $empty_filter );
 			$field_filters[ $form['id'] ] = $form_filters;
 		}
-		$search_field_ids = rgget( 'f' );
-		$search_field_id = ( $search_field_ids && is_array( $search_field_ids ) ) ? $search_field_ids[0] : '';
-		$init_field_id   = $search_field_id;
-		$search_operators = rgget( 'o' );
-		$search_operator = ( $search_operators && is_array( $search_operators ) ) ? $search_operators[0] : false;
+		$search_field_ids    = rgget( 'f' );
+		$search_field_id     = ( $search_field_ids && is_array( $search_field_ids ) ) ? $search_field_ids[0] : '';
+		$init_field_id       = $search_field_id;
+		$search_operators    = rgget( 'o' );
+		$search_operator     = ( $search_operators && is_array( $search_operators ) ) ? $search_operators[0] : false;
 		$init_field_operator = empty( $search_operator ) ? 'contains' : $search_operator;
-		$values = rgget( 'v' );
-		$value = ( $values && is_array( $values ) ) ? $values[0] : 0;
-		$init_filter_vars = array(
+		$values              = rgget( 'v' );
+		$value               = ( $values && is_array( $values ) ) ? $values[0] : 0;
+		$init_filter_vars    = array(
 			'mode'    => 'off',
 			'filters' => array(
 				array(
@@ -213,15 +290,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 				       value="<?php echo $filter_entry_id; ?>"/>
 				<?php if ( empty( $this->constraint_filters['start_date'] ) ) : ?>
 					<label for="start-date"><?php esc_html_e( 'Start:', 'gravityflow' ); ?></label>
-					<input type="text" id="start-date" name="start-date" class="datepicker medium-text ymd_dash" value="<?php echo $start_date; ?>" placeholder="yyyy/mm/dd"/>
+					<input type="text" id="start-date" name="start-date" class="datepicker medium-text ymd_dash"
+					       value="<?php echo $start_date; ?>" placeholder="yyyy/mm/dd"/>
 				<?php endif; ?>
 
 				<?php if ( empty( $this->constraint_filters['start_date'] ) ) : ?>
 					<label for="end-date"><?php esc_html_e( 'End:', 'gravityflow' ); ?></label>
-					<input type="text" id="end-date" name="end-date" class="datepicker medium-text ymd_dash" value="<?php echo $end_date; ?>" placeholder="yyyy/mm/dd"/>
+					<input type="text" id="end-date" name="end-date" class="datepicker medium-text ymd_dash"
+					       value="<?php echo $end_date; ?>" placeholder="yyyy/mm/dd"/>
 				<?php endif; ?>
 				<?php if ( ! empty( $this->constraint_filters['form_id'] ) ) { ?>
-					<input type="hidden" name="form-id" value="<?php echo esc_attr( $this->constraint_filters['form_id'] ); ?>">
+					<input type="hidden" name="form-id"
+					       value="<?php echo esc_attr( $this->constraint_filters['form_id'] ); ?>">
 				<?php } else { ?>
 					<select id="gravityflow-form-select" name="form-id">
 						<?php
@@ -243,34 +323,35 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 				<input type="submit" class="button-secondary" value="<?php esc_html_e( 'Apply', 'gravityflow' ); ?>"/>
 
-			<?php if ( ! empty( $status ) ) : ?>
-				<input type="hidden" name="status" value="<?php echo esc_attr( $status ); ?>"/>
-			<?php endif; ?>
-			<?php if ( ! empty( $start_date ) || ! empty( $end_date ) || ! empty( $filter_form_id ) | ! empty( $filter_entry_id ) ) : ?>
-				<a href="<?php echo esc_url( $this->base_url ); ?>" class="button-secondary"><?php esc_html_e( 'Clear Filter', 'gravityflow' ); ?></a>
-			<?php endif; ?>
+				<?php if ( ! empty( $status ) ) : ?>
+					<input type="hidden" name="status" value="<?php echo esc_attr( $status ); ?>"/>
+				<?php endif; ?>
+				<?php if ( ! empty( $start_date ) || ! empty( $end_date ) || ! empty( $filter_form_id ) | ! empty( $filter_entry_id ) ) : ?>
+					<a href="<?php echo esc_url( $this->base_url ); ?>"
+					   class="button-secondary"><?php esc_html_e( 'Clear Filter', 'gravityflow' ); ?></a>
+				<?php endif; ?>
 			</div>
 			<?php $this->search_box( esc_html__( 'Search', 'gravityflow' ), 'gravityflow-search' ); ?>
 		</div>
 
 		<script>
-			(function($) {
-				$( document ).ready( function(){
+			(function ($) {
+				$(document).ready(function () {
 					var gformFieldFilters = <?php echo json_encode( $field_filters ) ?>,
 						gformInitFilter = <?php echo json_encode( $init_filter_vars ) ?>;
 					var $form_select = $('#gravityflow-form-select');
 					var filterFormId = $form_select.val();
 					var $entry_filters = $('#entry_filters');
-					if( filterFormId ) {
+					if (filterFormId) {
 						$entry_filters.gfFilterUI(gformFieldFilters[filterFormId], gformInitFilter, false);
-						if ( $('.gform-filter-field').val() === '' ){
+						if ($('.gform-filter-field').val() === '') {
 							$('.gform-filter-operator').hide();
 							$('.gform-filter-value').hide();
 						}
 					}
-					$form_select.change(function(){
+					$form_select.change(function () {
 						filterFormId = $form_select.val();
-						if ( filterFormId ) {
+						if (filterFormId) {
 							$entry_filters.gfFilterUI(gformFieldFilters[filterFormId], gformInitFilter, false);
 							$('.gform-filter-field').val('');
 							$('.gform-filter-operator').hide();
@@ -280,8 +361,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 						}
 
 					})
-					$('#entry_filters').on( 'change', '.gform-filter-field', function(){
-						if ( $('.gform-filter-field').val() === '' ){
+					$('#entry_filters').on('change', '.gform-filter-field', function () {
+						if ($('.gform-filter-field').val() === '') {
 							$('.gform-filter-operator').hide();
 							$('.gform-filter-value').hide();
 						}
@@ -293,20 +374,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		</script>
 
-	<?php
+		<?php
 	}
 
 	function column_cb( $item ) {
 		$feed_id = rgar( $item, 'id' );
 
-		return sprintf(
-			'<input type="checkbox" class="gravityflow-cb-step-id" name="step_ids[]" value="%s" />', esc_attr( $feed_id )
-		);
+		return sprintf( '<input type="checkbox" class="gravityflow-cb-step-id" name="step_ids[]" value="%s" />', esc_attr( $feed_id ) );
 	}
 
 	function column_default( $item, $column_name ) {
 		$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
-		$label = esc_html( rgar( $item, $column_name ) );
+		$label     = esc_html( rgar( $item, $column_name ) );
 
 		$link = "<a href='{$url_entry}'>$label</a>";
 		echo $link;
@@ -314,7 +393,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 	function column_workflow_final_status( $item ) {
 		$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
-		$label = esc_html( rgar( $item, 'workflow_final_status' ) );
+		$label     = esc_html( rgar( $item, 'workflow_final_status' ) );
 
 		$link = "<a href='{$url_entry}'>$label</a>";
 
@@ -322,7 +401,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		$args = $this->get_filter_args();
 
-		if ( empty( $item['workflow_step'] ) ){
+		if ( empty( $item['workflow_step'] ) ) {
 			return;
 		}
 
@@ -330,6 +409,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$duration     = time() - strtotime( $item['date_created'] );
 			$duration_str = ' ' . $this->format_duration( $duration );
 			echo $duration_str;
+
 			return;
 		}
 
@@ -342,9 +422,9 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$steps = $this->get_steps( $item['form_id'] );
 		if ( $steps ) {
 			$pending = $rejected = $green = 0;
-			$id = 'gravityflow-status-assignees-' . absint( $item['id'] );
-			$m[] = '<ul id="' . $id .'" style="display:none;">';
-			$step = gravity_flow()->get_step( $item['workflow_step'], $item );
+			$id      = 'gravityflow-status-assignees-' . absint( $item['id'] );
+			$m[]     = '<ul id="' . $id . '" style="display:none;">';
+			$step    = gravity_flow()->get_step( $item['workflow_step'], $item );
 
 			if ( $step ) {
 				$step_type = $step->get_type();
@@ -352,18 +432,19 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 					$duration     = time() - strtotime( $item['date_created'] );
 					$duration_str = ' (' . $this->format_duration( $duration ) . ') ';
 					echo $duration_str;
+
 					return;
 				}
 
 				$assignees = $step->get_assignees();
 				foreach ( $assignees as $assignee ) {
 					$duration_str = '';
-					$meta_key = sprintf( 'workflow_%s_%s', $assignee->get_type(), $assignee->get_id() );
+					$meta_key     = sprintf( 'workflow_%s_%s', $assignee->get_type(), $assignee->get_id() );
 					if ( $item[ $meta_key ] ) {
 						if ( $item[ $meta_key ] == 'pending' ) {
 							$pending ++;
-							if ( $item[ $meta_key .'_timestamp' ] ) {
-								$duration = time() - $item[ $meta_key .'_timestamp' ];
+							if ( $item[ $meta_key . '_timestamp' ] ) {
+								$duration     = time() - $item[ $meta_key . '_timestamp' ];
 								$duration_str = ' (' . $this->format_duration( $duration ) . ') ';
 							} else {
 								$duration_str = '';
@@ -374,27 +455,27 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 							$green ++;
 						}
 					}
-					$m[]      = '<li>' . $assignee->get_display_name() . ': ' . $item[ $meta_key ] .  $duration_str . '</li>';
+					$m[] = '<li>' . $assignee->get_display_name() . ': ' . $item[ $meta_key ] . $duration_str . '</li>';
 
 				}
 			}
 			$m[] = '</ul>';
 
 			if ( $green == 0 && $rejected == 0 && $pending == 1 && $assignee ) {
-				if ( $item[ $meta_key .'_timestamp' ] ) {
-					$duration = time() - $item[ $meta_key .'_timestamp' ];
+				if ( $item[ $meta_key . '_timestamp' ] ) {
+					$duration     = time() - $item[ $meta_key . '_timestamp' ];
 					$duration_str = ' (' . $this->format_duration( $duration ) . ') ';
 					echo ': ' . $assignee->get_display_name() . $duration_str;
 				}
 			} else {
 				$assignee_icons = array();
-				for ( $i = 0; $i < $green; $i++ ) {
+				for ( $i = 0; $i < $green; $i ++ ) {
 					$assignee_icons[] = "<i class='fa fa-male' style='color:green;'></i>";
 				}
-				for ( $i = 0; $i < $rejected; $i++ ) {
+				for ( $i = 0; $i < $rejected; $i ++ ) {
 					$assignee_icons[] = "<i class='fa fa-male' style='color:red;'></i>";
 				}
-				for ( $i = 0; $i < $pending; $i++ ) {
+				for ( $i = 0; $i < $pending; $i ++ ) {
 					$assignee_icons[] = "<i class='fa fa-male' style='color:silver;'></i>";
 				}
 				echo sprintf( ":&nbsp;&nbsp;<span style='cursor:pointer;' onclick=\"jQuery('#$id').slideToggle()\">%s</span>", join( "\n", $assignee_icons ) );
@@ -409,13 +490,13 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		$user_id = $item['created_by'];
 		if ( $user_id ) {
-			$user = get_user_by( 'id', $user_id );
+			$user         = get_user_by( 'id', $user_id );
 			$display_name = $user->display_name;
 		} else {
 			$display_name = $item['ip'];
 		}
 		$label = esc_html( $display_name );
-		$link = "<a href='{$url_entry}'>$label</a>";
+		$link  = "<a href='{$url_entry}'>$label</a>";
 		echo $link;
 	}
 
@@ -426,18 +507,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$form    = GFAPI::get_form( $form_id );
 
 		$label = esc_html( $form['title'] );
-		$link = "<a href='{$url_entry}'>$label</a>";
+		$link  = "<a href='{$url_entry}'>$label</a>";
 		echo $link;
 	}
 
 	function column_workflow_step( $item ) {
 		$step_id = rgar( $item, 'workflow_step' );
 		if ( $step_id > 0 ) {
-			$step = gravity_flow()->get_step( $step_id );
+			$step      = gravity_flow()->get_step( $step_id );
 			$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
 
 			$label = $step ? esc_html( $step->get_name() ) : '';
-			$link = "<a href='{$url_entry}'>$label</a>";
+			$link  = "<a href='{$url_entry}'>$label</a>";
 			echo $link;
 		} else {
 			echo '<span class="gravityflow-empty">&nbsp;</span>';
@@ -448,21 +529,22 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
 
 		$label = GFCommon::format_date( $item['date_created'] );
-		$link = "<a href='{$url_entry}'>$label</a>";
+		$link  = "<a href='{$url_entry}'>$label</a>";
 		echo $link;
 	}
 
 	function get_bulk_actions() {
 		$bulk_actions = $this->bulk_actions;
+
 		return $bulk_actions;
 	}
 
 	function get_sortable_columns() {
 		$sortable_columns = array(
-			'id' => array('id', false),
-			'created_by' => array('created_by', false),
-			'workflow_final_status' => array('workflow_final_status', false),
-			'date_created'  => array('date_created', false)
+			'id'                    => array( 'id', false ),
+			'created_by'            => array( 'created_by', false ),
+			'workflow_final_status' => array( 'workflow_final_status', false ),
+			'date_created'          => array( 'date_created', false )
 		);
 
 		return $sortable_columns;
@@ -472,24 +554,24 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		$args = $this->get_filter_args();
 
-		$columns['cb']         = esc_html__( 'Checkbox', 'gravityflow' );
-		$columns['id']         = esc_html__( 'ID', 'gravityflow' );
-		$columns['date_created']    = esc_html__( 'Date', 'gravityflow' );
+		$columns['cb']           = esc_html__( 'Checkbox', 'gravityflow' );
+		$columns['id']           = esc_html__( 'ID', 'gravityflow' );
+		$columns['date_created'] = esc_html__( 'Date', 'gravityflow' );
 		if ( ! isset( $args['form-id'] ) ) {
-			$columns['form_id']         = esc_html__( 'Form', 'gravityflow' );
+			$columns['form_id'] = esc_html__( 'Form', 'gravityflow' );
 		}
-		$columns['created_by']      = esc_html__( 'Submitter', 'gravityflow' );
-		$columns['workflow_step']   = esc_html__( 'Step', 'gravityflow' );
+		$columns['created_by']            = esc_html__( 'Submitter', 'gravityflow' );
+		$columns['workflow_step']         = esc_html__( 'Step', 'gravityflow' );
 		$columns['workflow_final_status'] = esc_html__( 'Status', 'gravityflow' );
 
 		if ( ! empty( $args['form-id'] ) && ! empty( $this->field_ids ) ) {
 
 			$grid_columns = RGFormsModel::get_grid_columns( $args['form-id'], true );
-			$field_ids = array_keys( $grid_columns );
+			$field_ids    = array_keys( $grid_columns );
 			foreach ( $this->field_ids as $field_id ) {
 				$field_id = trim( $field_id );
 				if ( in_array( $field_id, $field_ids ) ) {
-					$field_info = $grid_columns[ $field_id ];
+					$field_info           = $grid_columns[ $field_id ];
 					$columns[ $field_id ] = $field_info['label'];
 				}
 			}
@@ -509,19 +591,20 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		return $columns;
 	}
 
-	public function get_filter_step_id(){
+	public function get_filter_step_id() {
 		$step_id = false;
-		$args = $this->get_filter_args();
+		$args    = $this->get_filter_args();
 		if ( isset( $args['form-id'] ) && isset( $args['field_filters'] ) ) {
 			unset( $args['field_filters']['mode'] );
 			$criteria     = array( 'key' => 'workflow_step' );
 			$step_filters = wp_list_filter( $args['field_filters'], $criteria );
 			$step_id      = count( $step_filters ) > 0 ? $step_filters[0]['value'] : false;
 		}
+
 		return $step_id;
 	}
 
-	public function get_filter_args(){
+	public function get_filter_args() {
 
 		if ( isset( $this->_filter_args ) ) {
 			return $this->_filter_args;
@@ -535,51 +618,52 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$args['form-id'] = absint( $_GET['form-id'] );
 		}
 
-		if ( ! empty( $args['form-id'] ) &&  rgget( 'f' ) !== '' ) {
-			$form = GFAPI::get_form( absint( $args['form-id'] ) );
-			$field_filters = $this->get_field_filters_from_request( $form );
+		if ( ! empty( $args['form-id'] ) && rgget( 'f' ) !== '' ) {
+			$form                  = GFAPI::get_form( absint( $args['form-id'] ) );
+			$field_filters         = $this->get_field_filters_from_request( $form );
 			$args['field_filters'] = $field_filters;
 		}
 
 		if ( ! empty( $this->constraint_filters['start_date'] ) ) {
-			$start_date = $this->constraint_filters['start_date'];
-			$start_date_gmt = $this->prepare_start_date_gmt( $start_date );
+			$start_date         = $this->constraint_filters['start_date'];
+			$start_date_gmt     = $this->prepare_start_date_gmt( $start_date );
 			$args['start-date'] = $start_date_gmt;
 		} elseif ( ! empty( $_GET['start-date'] ) ) {
-			$start_date = urldecode( $_GET['start-date'] );
-			$start_date = sanitize_text_field( $start_date );
-			$start_date_gmt = $this->prepare_start_date_gmt( $start_date );
+			$start_date         = urldecode( $_GET['start-date'] );
+			$start_date         = sanitize_text_field( $start_date );
+			$start_date_gmt     = $this->prepare_start_date_gmt( $start_date );
 			$args['start-date'] = $start_date_gmt;
 		}
 
 		if ( ! empty( $this->constraint_filters['end_date'] ) ) {
-			$end_date = $this->constraint_filters['end_date'];
-			$end_date_gmt = $this->prepare_end_date_gmt( $end_date );
+			$end_date         = $this->constraint_filters['end_date'];
+			$end_date_gmt     = $this->prepare_end_date_gmt( $end_date );
 			$args['end-date'] = $end_date_gmt;
 		} elseif ( ! empty( $_GET['end-date'] ) ) {
-			$end_date = urldecode( $_GET['end-date'] );
-			$end_date = sanitize_text_field( $end_date );
-			$end_date_gmt = $this->prepare_end_date_gmt( $end_date );
+			$end_date         = urldecode( $_GET['end-date'] );
+			$end_date         = sanitize_text_field( $end_date );
+			$end_date_gmt     = $this->prepare_end_date_gmt( $end_date );
 			$args['end-date'] = $end_date_gmt;
 		}
 
 		$this->_filter_args = $args;
+
 		return $args;
 	}
 
 	public function set_counts() {
 
-		$args = $this->get_filter_args();
-		$counts = $this->get_counts( $args );
-		$this->pending_count  = $counts->pending;
-		$this->complete_count = $counts->complete;
-		$this->cancelled_count  = $counts->cancelled;
+		$args                  = $this->get_filter_args();
+		$counts                = $this->get_counts( $args );
+		$this->pending_count   = $counts->pending;
+		$this->complete_count  = $counts->complete;
+		$this->cancelled_count = $counts->cancelled;
 		foreach ( $counts as $count ) {
 			$this->total_count += $count;
 		}
 	}
 
-	function get_counts( $args ){
+	function get_counts( $args ) {
 
 		if ( ! empty( $args['field_filters'] ) ) {
 			if ( isset( $args['form-id'] ) ) {
@@ -587,30 +671,31 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			} else {
 				$form_ids = $this->get_workflow_form_ids();
 			}
-			$results = new stdClass();
-			$results->pending = 0;
-			$results->complete = 0;
+			$results            = new stdClass();
+			$results->pending   = 0;
+			$results->complete  = 0;
 			$results->cancelled = 0;
 			if ( empty( $form_ids ) ) {
 				$this->items = array();
+
 				return $results;
 			}
-			$base_search_criteria = $this->get_search_criteria();
-			$pending_search_criteria = $base_search_criteria;
-			$pending_search_criteria['field_filters'][] = array(
-				'key' => 'workflow_final_status',
+			$base_search_criteria                        = $this->get_search_criteria();
+			$pending_search_criteria                     = $base_search_criteria;
+			$pending_search_criteria['field_filters'][]  = array(
+				'key'   => 'workflow_final_status',
 				'value' => 'pending',
 			);
-			$complete_search_criteria = $base_search_criteria;
+			$complete_search_criteria                    = $base_search_criteria;
 			$complete_search_criteria['field_filters'][] = array(
-				'key' => 'workflow_final_status',
+				'key'      => 'workflow_final_status',
 				'operator' => 'not in',
-				'value' => array( 'pending', 'cancelled' ),
+				'value'    => array( 'pending', 'cancelled' ),
 			);
 
-			$cancelled_search_criteria = $base_search_criteria;
+			$cancelled_search_criteria                    = $base_search_criteria;
 			$cancelled_search_criteria['field_filters'][] = array(
-				'key' => 'workflow_final_status',
+				'key'   => 'workflow_final_status',
 				'value' => 'cancelled',
 			);
 
@@ -630,10 +715,11 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$form_ids = $this->get_workflow_form_ids();
 
 			if ( empty ( $form_ids ) ) {
-				$results = new stdClass();
-				$results->pending = 0;
-				$results->complete = 0;
+				$results            = new stdClass();
+				$results->pending   = 0;
+				$results->complete  = 0;
 				$results->cancelled = 0;
+
 				return $results;
 			}
 			$form_clause = ' AND l.form_id IN(' . join( ',', $form_ids ) . ')';
@@ -653,14 +739,14 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		$user_id_clause = '';
 		if ( ! $this->display_all ) {
-			$user = wp_get_current_user();
-			$user_id_clause = $wpdb->prepare( ' AND created_by=%d' , $user->ID );
+			$user           = wp_get_current_user();
+			$user_id_clause = $wpdb->prepare( ' AND created_by=%d', $user->ID );
 		}
 
 		$lead_table = GFFormsModel::get_lead_table_name();
 		$meta_table = GFFormsModel::get_lead_meta_table_name();
 
-		$sql =  "SELECT
+		$sql     = "SELECT
 		(SELECT count(distinct(l.id)) FROM $lead_table l INNER JOIN  $meta_table m ON l.id = m.lead_id WHERE l.status='active' AND meta_key='workflow_final_status' AND meta_value='pending' $form_clause $start_clause $end_clause $user_id_clause) as pending,
 		(SELECT count(distinct(l.id)) FROM $lead_table l INNER JOIN  $meta_table m ON l.id = m.lead_id WHERE l.status='active' AND meta_key='workflow_final_status' AND meta_value NOT IN('pending', 'cancelled') $form_clause $start_clause $end_clause $user_id_clause) as complete,
 		(SELECT count(distinct(l.id)) FROM $lead_table l INNER JOIN  $meta_table m ON l.id = m.lead_id WHERE l.status='active' AND meta_key='workflow_final_status' AND meta_value='cancelled' $form_clause $start_clause $end_clause $user_id_clause) as cancelled
@@ -670,15 +756,16 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		return $results[0];
 	}
 
-	function prepare_start_date_gmt( $start_date ){
-		$start_date         = new DateTime( $start_date );
-		$start_date_str     = $start_date->format( 'Y-m-d H:i:s' );
+	function prepare_start_date_gmt( $start_date ) {
+		$start_date     = new DateTime( $start_date );
+		$start_date_str = $start_date->format( 'Y-m-d H:i:s' );
 		$start_date_gmt = get_gmt_from_date( $start_date_str );
+
 		return $start_date_gmt;
 	}
 
-	function prepare_end_date_gmt( $end_date ){
-		$end_date         = new DateTime( $end_date );
+	function prepare_end_date_gmt( $end_date ) {
+		$end_date = new DateTime( $end_date );
 
 		$end_datetime_str = $end_date->format( 'Y-m-d H:i:s' );
 		$end_date_str     = $end_date->format( 'Y-m-d' );
@@ -690,10 +777,11 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$end_date = $end_date->format( 'Y-m-d H:i:s' );
 		}
 		$end_date_gmt = get_gmt_from_date( $end_date );
+
 		return $end_date_gmt;
 	}
 
-	function get_workflow_form_ids(){
+	function get_workflow_form_ids() {
 		return gravity_flow()->get_workflow_form_ids();
 	}
 
@@ -704,7 +792,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$class = "class='$column_name column-$column_name'";
 
 			$style = '';
-			if ( in_array( $column_name, $hidden ) ){
+			if ( in_array( $column_name, $hidden ) ) {
 				$style = ' style="display:none;"';
 			}
 
@@ -716,13 +804,11 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 				echo '<th data-label="' . esc_html__( 'Select', 'gravityflow' ) . '" scope="row" class="check-column">';
 				echo $this->column_cb( $item );
 				echo '</th>';
-			}
-			elseif ( method_exists( $this, 'column_' . $column_name ) ) {
+			} elseif ( method_exists( $this, 'column_' . $column_name ) ) {
 				echo "<td $attributes>";
 				echo call_user_func( array( $this, 'column_' . $column_name ), $item );
 				echo '</td>';
-			}
-			else {
+			} else {
 				echo "<td $attributes>";
 				echo $this->column_default( $item, $column_name );
 				echo "</td>";
@@ -742,6 +828,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 			if ( empty( $form_ids ) ) {
 				$this->items = array();
+
 				return;
 			}
 		}
@@ -759,7 +846,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		$user = get_current_user_id();
 		if ( function_exists( 'get_current_screen' ) ) {
-			$screen           = get_current_screen();
+			$screen = get_current_screen();
 			if ( $screen ) {
 				$option = $screen->get_option( 'per_page', 'option' );
 			}
@@ -767,11 +854,11 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		}
 
 		$per_page_setting = ! empty( $option ) ? get_user_meta( $user, $option, true ) : false;
-		$per_page         = empty( $per_page_setting ) ? 20 : $per_page_setting;
+		$per_page         = empty( $per_page_setting ) ? $this->per_page : $per_page_setting;
 
 		$page_size    = $per_page;
 		$current_page = $this->get_pagenum();
-		$offset       = $page_size * ($current_page - 1);
+		$offset       = $page_size * ( $current_page - 1 );
 
 		$paging = array( 'page_size' => $page_size, 'offset' => $offset );
 
@@ -781,7 +868,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		gravity_flow()->log_debug( __METHOD__ . '(): search criteria: ' . print_r( $search_criteria, true ) );
 
-		$entries     = GFAPI::get_entries( $form_ids, $search_criteria, $sorting, $paging, $total_count );
+		$entries = GFAPI::get_entries( $form_ids, $search_criteria, $sorting, $paging, $total_count );
 
 		gravity_flow()->log_debug( __METHOD__ . '(): count entries: ' . count( $entries ) );
 		gravity_flow()->log_debug( __METHOD__ . '(): total count: ' . $total_count );
@@ -796,9 +883,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$this->items = $entries;
 	}
 
-	public function get_search_criteria(){
+	public function get_search_criteria() {
 		$filter_args = $this->get_filter_args();
-
 
 		global $current_user;
 		$search_criteria['status'] = 'active';
@@ -807,7 +893,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$search_criteria['start_date'] = $filter_args['start-date'];
 		}
 		if ( ! empty( $filter_args['end-date'] ) ) {
-			$search_criteria['end_date'] = $filter_args['end-date'] ;
+			$search_criteria['end_date'] = $filter_args['end-date'];
 		}
 
 		if ( ! empty( $_GET['entry-id'] ) ) {
@@ -820,9 +906,9 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		if ( ! empty( $_GET['status'] ) ) {
 			if ( $_GET['status'] == 'complete' ) {
 				$search_criteria['field_filters'][] = array(
-					'key'   => 'workflow_final_status',
+					'key'      => 'workflow_final_status',
 					'operator' => 'not in',
-					'value' => array( 'pending', 'cancelled' ),
+					'value'    => array( 'pending', 'cancelled' ),
 				);
 			} else {
 				$search_criteria['field_filters'][] = array(
@@ -840,10 +926,11 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		}
 
 		if ( ! empty( $filter_args['field_filters'] ) ) {
-			$filters = ! empty( $search_criteria['field_filters'] ) ? $search_criteria['field_filters'] : array();
-			$search_criteria['field_filters'] = array_merge( $filters, $filter_args['field_filters'] );
+			$filters                                  = ! empty( $search_criteria['field_filters'] ) ? $search_criteria['field_filters'] : array();
+			$search_criteria['field_filters']         = array_merge( $filters, $filter_args['field_filters'] );
 			$search_criteria['field_filters']['mode'] = 'all';
 		}
+
 		return $search_criteria;
 	}
 
@@ -867,7 +954,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 					$key       = $key_array[0];
 					$val       = $key_array[1] . ':' . $val;
 				}
-				$field_filter['key']      = $key;
+				$field_filter['key'] = $key;
 
 				$field = GFFormsModel::get_field( $form, $key );
 				if ( $field ) {
@@ -887,11 +974,12 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		return $field_filters;
 	}
 
-	public function get_steps($form_id){
+	public function get_steps( $form_id ) {
 		if ( ! isset( $this->_steps ) ) {
 			$this->_steps = gravity_flow()->get_steps( $form_id );
 
 		}
+
 		return $this->_steps;
 	}
 
@@ -907,8 +995,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		foreach ( $steps as $step ) {
 			$assignees = $step->get_assignees();
 			foreach ( $assignees as $assignee ) {
-				$meta_key = sprintf( 'workflow_%s_%s', $assignee->get_type(), $assignee->get_id() );
-				$entry_meta[ $meta_key ] = array(
+				$meta_key                               = sprintf( 'workflow_%s_%s', $assignee->get_type(), $assignee->get_id() );
+				$entry_meta[ $meta_key ]                = array(
 					'label'             => __( 'Status:', 'gravityflow' ) . ' ' . $assignee->get_id(),
 					'is_numeric'        => false,
 					'is_default_column' => false,
@@ -928,4 +1016,41 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		return gravity_flow()->format_duration( $seconds );
 	}
 
+	public function export_column_names( $echo = true ) {
+		$columns    = $this->get_columns();
+		$export_arr = array();
+
+		foreach ( $columns as $key => $column_title ) {
+			if ( $key == 'cb' ) {
+				continue;
+			}
+			$export_arr[] = '"' . $column_title . '"';
+		}
+
+		return join( ',', $export_arr ) . "\r\n";
+	}
+
+	public function export() {
+
+		// todo: manipulate values.
+
+		$export      = '';
+		$rows        = array();
+		$columns     = $this->get_columns();
+		$column_keys = array_keys( $columns );
+
+		foreach ( $this->items as $item ) {
+			$row_values = array();
+			foreach ( $column_keys as $column_key ) {
+				if ( isset( $item[ $column_key ] ) ) {
+					$row_values[] = '"' . addslashes( $item[ $column_key ] ) . '"';
+				}
+			}
+			$rows[] = join( ',', $row_values );
+		}
+
+		$export .= join( "\r\n", $rows );
+
+		return $export . "\r\n";
+	}
 } //class

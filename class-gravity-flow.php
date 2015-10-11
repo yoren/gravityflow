@@ -140,6 +140,11 @@ if ( class_exists( 'GFForms' ) ) {
 
 			add_action( 'wp_ajax_gravityflow_print_entries', array( $this, 'ajax_print_entries' ) );
 			add_action( 'wp_ajax_nopriv_gravityflow_print_entries', array( $this, 'ajax_print_entries' ) );
+
+			add_action( 'wp_ajax_gravityflow_export_status', array( $this, 'ajax_export_status' ) );
+			add_action( 'wp_ajax_nopriv_gravityflow_export_status', array( $this, 'ajax_export_status' ) );
+			add_action( 'wp_ajax_gravityflow_download_export', array( $this, 'ajax_download_export' ) );
+
 			add_action( 'wp_ajax_rg_delete_file', array( 'RGForms', 'delete_file' ) );
 		}
 
@@ -2417,7 +2422,7 @@ PRIMARY KEY  (id)
 				endif;
 
 				require_once( $this->get_base_path() . '/includes/pages/class-status.php' );
-				Gravity_Flow_Status::display( $args );
+				Gravity_Flow_Status::render( $args );
 				?>
 			</div>
 		<?php
@@ -3782,6 +3787,57 @@ AND m.meta_value='queued'";
 
 		public function get_setting( $setting_name, $default_value = '', $settings = false ){
 			return parent::get_setting( $setting_name, $default_value, $settings );
+		}
+
+		public function ajax_export_status(){
+			if ( ! wp_verify_nonce( rgget('gravityflow_export_nonce'), 'gravityflow_export_nonce' ) || ! GFAPI::current_user_can_any( 'gravityflow_status') ) {
+				$response['status'] = 'error';
+				$response['message'] = __('Not authorized', 'gravityflow');
+				$response_json = json_encode( $response );
+				echo $response_json;
+				die();
+			}
+
+			require_once( 'includes/pages/class-status.php');
+
+			$args['format'] = 'csv';
+			$args['per_page'] = 50;
+			$args['file_name'] = 'gravityflow-status-export';
+			$result = Gravity_Flow_Status::render( $args );
+			echo json_encode( $result );
+			die();
+		}
+
+		public function ajax_download_export(){
+
+			if ( ! wp_verify_nonce( rgget('nonce'), 'gravityflow_download_export' ) || ! GFAPI::current_user_can_any( 'gravityflow_status') ) {
+				$response['status'] = 'error';
+				$response['message'] = __('Not authorized', 'gravityflow');
+				$response_json = json_encode( $response );
+				echo $response_json;
+				die();
+			}
+
+			$file_name = $_REQUEST['file_name'];
+
+			$upload_dir = wp_upload_dir();
+
+			$file_path = trailingslashit( $upload_dir['basedir'] ) . $file_name . '.csv';
+
+			$file = '';
+
+			if ( @file_exists( $file_path ) ) {
+				$file = @file_get_contents( $file_path );
+				@unlink( $file_path );
+			}
+
+			nocache_headers();
+			header( 'Content-Type: text/csv; charset=utf-8' );
+			header( 'Content-Disposition: attachment; filename=' . $file_name . '-' . date( 'm-d-Y' ) . '.csv' );
+			header( "Expires: 0" );
+
+			echo $file;
+			die();
 		}
 
 	}
