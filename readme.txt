@@ -55,24 +55,16 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
-= 1.0.5 =
+= 1.1 =
 - Added one-click cancel links so workflows can be cancelled by clicking on a link in an email.
 - Added export to the admin UI status list.
-
-= 1.0.4 =
-- Updated the step type radio buttons to display as buttons with icons.
-
-= 1.0.3 =
-- Fixed an issue when updating step settings where where entries may not get reassigned correctly to new roles.
-
-= 1.0.2 =
 - Added support for SMS message steps via Twilio. Requires the Gravity Forms Twilio Add-On and a Twilio account.
 - Added support for form import and export. Requires Gravity Forms 1.9.13.29.
+- Updated the step type radio buttons to display as buttons with icons.
+- Fixed an issue when updating step settings where where entries may not get reassigned correctly to new roles.
 - Fixed an issue when duplicating forms where the next step points to another step.
-
-= 1.0.1 =
 - Fixed the merge tag UI for the Workflow Notification setting on the Notification step.
-Fixed an issue with the status permissions.
+- Fixed an issue with the status permissions.
 
 = 1.0 =
 - All New!
