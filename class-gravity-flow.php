@@ -703,8 +703,8 @@ PRIMARY KEY  (id)
 						'tooltip'        => "Build the conditional logic that should be applied to this step before it's allowed to be processed. If an entry does not meet the conditions of this step it will fall on to the next step in the list.",
 						'label'          => 'Condition',
 						'type'           => 'feed_condition',
-						'checkbox_label' => 'Enable Condition for this step',
-						'instructions'   => 'Perform this step if',
+						'checkbox_label' => esc_html__( 'Enable Condition for this step', 'gravityflow' ),
+						'instructions'   => esc_html__('Perform this step if', 'gravityflow' ),
 					),
 					array(
 						'name' => 'scheduled',
@@ -3887,10 +3887,40 @@ AND m.meta_value='queued'";
 			nocache_headers();
 			header( 'Content-Type: text/csv; charset=utf-8' );
 			header( 'Content-Disposition: attachment; filename=' . $file_name . '-' . date( 'm-d-Y' ) . '.csv' );
-			header( "Expires: 0" );
+			header( 'Expires: 0' );
 
 			echo $file;
 			die();
+		}
+
+		public function translate_status_label( $status ) {
+
+			switch ( $status ) {
+				case 'pending' :
+					return esc_html__( 'Pending', 'gravityflow' );
+					break;
+				case 'complete' :
+					return esc_html__( 'Complete', 'gravityflow' );
+					break;
+				case 'approved' :
+					return esc_html__( 'Approved', 'gravityflow' );
+					break;
+				case 'rejected' :
+					return esc_html__( 'Rejected', 'gravityflow' );
+					break;
+
+			}
+
+			$steps = Gravity_Flow_Steps::get_all();
+
+			foreach ( $steps as $step ) {
+				$final_status_config = $step->get_final_status_config();
+				foreach ( $final_status_config as $final_status ) {
+					if ( $status == $final_status['status'] ) {
+						return $final_status['status_label'];
+					}
+				}
+			}
 		}
 
 	}

@@ -28,7 +28,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	public function get_settings(){
 
 		return array(
-			'title'  => 'Webhook',
+			'title'  => esc_html__( 'Webhook', 'gravityflow' ),
 			'fields' => array(
 				array(
 					'name' => 'url',

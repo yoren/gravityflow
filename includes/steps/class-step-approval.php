@@ -54,7 +54,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		);
 
 		return array(
-			'title'  => 'Approval',
+			'title'  => esc_html__( 'Approval', 'gravityflow' ),
 			'fields' => array(
 				array(
 					'name'       => 'type',
@@ -70,7 +70,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					'tooltip'   => __( 'Users and roles fields will appear in this list. If the form contains any assignee fields they will also appear here. Click on an item to select it. The selected items will appear on the right. If you select a role then anybody from that role can approve.', 'gravityflow' ),
 					'size'     => '8',
 					'multiple' => 'multiple',
-					'label'    => 'Select Assignees',
+					'label'    => esc_html__( 'Select Assignees', 'gravityflow' ),
 					'type'     => 'select',
 					'choices'  => $account_choices,
 				),

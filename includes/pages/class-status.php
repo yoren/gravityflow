@@ -393,8 +393,9 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 	function column_workflow_final_status( $item ) {
 		$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
-		$label     = esc_html( rgar( $item, 'workflow_final_status' ) );
-
+		$final_status = rgar( $item, 'workflow_final_status' );
+		$label = empty( $final_status ) ? '' : gravity_flow()->translate_status_label( $final_status );
+		$label = esc_html( $label );
 		$link = "<a href='{$url_entry}'>$label</a>";
 
 		echo $link;

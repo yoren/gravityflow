@@ -65,6 +65,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Fixed an issue when duplicating forms where the next step points to another step.
 - Fixed the merge tag UI for the Workflow Notification setting on the Notification step.
 - Fixed an issue with the status permissions.
+- Fixed some untranslatable strings.
 
 = 1.0 =
 - All New!

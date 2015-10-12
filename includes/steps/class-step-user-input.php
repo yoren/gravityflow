@@ -36,7 +36,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		);
 
 		return array(
-			'title'  => 'User Input',
+			'title'  => esc_html__( 'User Input', 'gravityflow' ),
 			'fields' => array(
 				array(
 					'name'       => 'type',
