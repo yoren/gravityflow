@@ -1464,6 +1464,14 @@ PRIMARY KEY  (id)
 			);
 		}
 
+		public function get_column_value_step_type( $item ){
+			$step = $this->get_step( $item['id'] );
+			$icon_url = $step->get_icon_url();
+			$icon_html = ( strpos( $icon_url, 'http' ) === 0 ) ? sprintf( '<img src="%s" style="width:20px;height:20px;margin-right:5px;vertical-align:middle;"/>', $icon_url ) : sprintf( '<span style="width:20px;height:20px;margin-right:5px;vertical-align:middle;">%s</span>', $icon_url );
+			return $icon_html . $step->get_label();
+		}
+
+
 		public function get_column_value_entry_count( $item ){
 			$form_id = rgget( 'id' );
 			$form_id = absint( $form_id );
@@ -2827,6 +2835,7 @@ PRIMARY KEY  (id)
 				'display_all' => null,
 				'allow_anonymous' => false,
 				'title' => '',
+				'id_column' => true,
 			), $atts );
 
 			if ( $a['form_id'] > 0 ) {
@@ -2834,6 +2843,8 @@ PRIMARY KEY  (id)
 			}
 
 			$a['title'] = sanitize_text_field( $a['title'] );
+
+			$a['id_column'] = strtolower( $a['id_column'] ) == 'false' ? false : true;
 
 			if ( is_null( $a['display_all'] ) ) {
 				$a['display_all'] = GFAPI::current_user_can_any( 'gravityflow_status_view_all' );
@@ -2873,6 +2884,7 @@ PRIMARY KEY  (id)
 					wp_enqueue_script( 'gravityflow_status_list' );
 					$args = array(
 						'form_id' => $a['form'],
+						'id_column' => $a['id_column'],
 						'show_header' => false,
 						'field_ids' => explode( ',', $a['fields'] ),
 						'detail_base_url' => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
@@ -2924,6 +2936,7 @@ PRIMARY KEY  (id)
 							),
 							'field_ids' => explode( ',', $a['fields'] ),
 							'display_all' => $a['display_all'],
+							'id_column' => $a['id_column'],
 						);
 
 						if ( ! is_user_logged_in() && $a['allow_anonymous'] ) {
