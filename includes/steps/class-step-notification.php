@@ -55,7 +55,7 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 				array(
 					'name'    => 'workflow_notification_enabled',
 					'label'   => __( 'Workflow notification', 'gravityflow' ),
-					'tooltip'   => __( 'Enable this setting to send an email when the entry is rejected.', 'gravityflow' ),
+					'tooltip'   => __( 'Enable this setting to send an email.', 'gravityflow' ),
 					'type'    => 'checkbox',
 					'choices' => array(
 						array(
@@ -103,7 +103,9 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 
 		if ( class_exists( 'GFPDF_Core' ) ) {
 			global $gfpdf;
-			$gfpdf = new GFPDF_Core();
+			if ( empty( $gfpdf ) ) {
+				$gfpdf = new GFPDF_Core();
+			}
 		}
 
 		$entry = $this->get_entry();
