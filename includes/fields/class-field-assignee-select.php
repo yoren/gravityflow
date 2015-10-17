@@ -71,7 +71,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
 			if ( ! empty( $account_choices ) ) {
 				$users_opt_group = new GF_Field();
-				$users_opt_group->placeholder = true;
+				//$users_opt_group->placeholder = true;
 				$users_opt_group->choices = $account_choices;
 
 				$optgroups[] = array(
