@@ -421,7 +421,7 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 			'step_type' => 'user_input',
 			'feed_condition_logic_conditional_logic' => '0',
 			'feed_condition_conditional_logic_object' => array(),
-			'approval_policy' => 'any',
+			'assignee_policy' => 'any',
 			'type' => 'select',
 			'assignees' => array( 'user_id|1' ),
 			'routing' => array(),

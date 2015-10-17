@@ -704,7 +704,7 @@ PRIMARY KEY  (id)
 						'label'          => 'Condition',
 						'type'           => 'feed_condition',
 						'checkbox_label' => esc_html__( 'Enable Condition for this step', 'gravityflow' ),
-						'instructions'   => esc_html__('Perform this step if', 'gravityflow' ),
+						'instructions'   => esc_html__( 'Perform this step if', 'gravityflow' ),
 					),
 					array(
 						'name' => 'scheduled',
@@ -2865,7 +2865,7 @@ PRIMARY KEY  (id)
 			$entry_id = absint( rgget( 'lid' ) );
 
 			if ( ! empty( $a['form'] ) && ! empty( $entry_id ) ) {
-				// Support for multiple shortcodes on the same page
+				// Limited support for multiple shortcodes on the same page
 				$entry = GFAPI::get_entry( $entry_id );
 				if ( $entry['form_id'] !== $a['form'] ) {
 					return;

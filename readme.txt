@@ -55,6 +55,14 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.1.0.2 =
+- Added step icons to the step list.
+
+= 1.1.0.1 =
+- Added the id_column attribute to the shortcode so the ID column can be hidden.
+- Fixed an issue with the assignee field where the placeholder doesn't work correctly.
+- Fixed an issue with Gravity PDF integration in certain situations which prevents the PDF from attaching.
+
 = 1.1 =
 - Added one-click cancel links so workflows can be cancelled by clicking on a link in an email.
 - Added export to the admin UI status list.
