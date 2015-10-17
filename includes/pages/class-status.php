@@ -15,6 +15,7 @@ class Gravity_Flow_Status {
 			'field_ids'          => apply_filters( 'gravityflow_status_fields', array() ),
 			'format'             => 'table', // csv
 			'file_name'          => 'export.csv',
+			'id_column'            => true,
 		);
 		$args     = array_merge( $defaults, $args );
 
@@ -174,6 +175,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 	private $_filter_args;
 
+	public $id_column;
+
 	function __construct( $args = array() ) {
 		$default_args = array(
 			'singular'           => __( 'entry', 'gravityflow' ),
@@ -187,6 +190,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			'display_all'        => GFAPI::current_user_can_any( 'gravityflow_status_view_all' ),
 			'bulk_actions'       => array( 'print' => esc_html__( 'Print', 'gravityflow' ) ),
 			'per_page'           => 20,
+			'id_column'            => true,
 		);
 
 		$args = wp_parse_args( $args, $default_args );
@@ -204,7 +208,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$this->bulk_actions = $args['bulk_actions'];
 		$this->set_counts();
 		$this->per_page = $args['per_page'];
-
+		$this->id_column = $args['id_column'];
 	}
 
 	function no_items() {
@@ -441,7 +445,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 				foreach ( $assignees as $assignee ) {
 					$duration_str = '';
 					$meta_key     = sprintf( 'workflow_%s_%s', $assignee->get_type(), $assignee->get_id() );
-					if ( $item[ $meta_key ] ) {
+					if ( isset( $item[ $meta_key ] ) ) {
 						if ( $item[ $meta_key ] == 'pending' ) {
 							$pending ++;
 							if ( $item[ $meta_key . '_timestamp' ] ) {
@@ -455,9 +459,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 						} else {
 							$green ++;
 						}
+						$m[] = '<li>' . $assignee->get_display_name() . ': ' . $item[ $meta_key ] . $duration_str . '</li>';
 					}
-					$m[] = '<li>' . $assignee->get_display_name() . ': ' . $item[ $meta_key ] . $duration_str . '</li>';
-
 				}
 			}
 			$m[] = '</ul>';
@@ -556,7 +559,9 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$args = $this->get_filter_args();
 
 		$columns['cb']           = esc_html__( 'Checkbox', 'gravityflow' );
-		$columns['id']           = esc_html__( 'ID', 'gravityflow' );
+		if ( $this->id_column ) {
+			$columns['id']           = esc_html__( 'ID', 'gravityflow' );
+		}
 		$columns['date_created'] = esc_html__( 'Date', 'gravityflow' );
 		if ( ! isset( $args['form-id'] ) ) {
 			$columns['form_id'] = esc_html__( 'Form', 'gravityflow' );
@@ -918,6 +923,12 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 				);
 			}
 		}
+
+		$search_criteria['field_filters'][] = array(
+			'key'      => 'workflow_final_status',
+			'operator' => '<>',
+			'value'    => '',
+		);
 
 		if ( ! $this->display_all ) {
 			$search_criteria['field_filters'][] = array(
