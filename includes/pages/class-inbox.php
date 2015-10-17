@@ -15,6 +15,7 @@ class Gravity_Flow_Inbox {
 
 		$defaults = array(
 			'display_empty_fields' => true,
+			'id_column' => true,
 			'check_permissions'    => true,
 			'form_id'              => rgar( $filter, 'form_id' ),
 			'field_ids'              => $field_ids,
@@ -63,12 +64,13 @@ class Gravity_Flow_Inbox {
 		}
 
 		if ( sizeof( $entries ) > 0 ) {
+			$id_style = $args['id_column'] ? '' : 'style="display:none;"';
 			?>
 
 			<table id="gravityflow-inbox" class="widefat" cellspacing="0" style="border:0px;">
 				<thead>
 				<tr>
-					<th data-label="<?php esc_html_e( 'ID', 'gravityflow' ); ?>"><?php esc_html_e( 'ID', 'gravityflow' ); ?></th>
+					<th <?php echo $id_style ?> data-label="<?php esc_html_e( 'ID', 'gravityflow' ); ?>"><?php esc_html_e( 'ID', 'gravityflow' ); ?></th>
 					<th><?php esc_html_e( 'Form', 'gravityflow' ); ?></th>
 					<th><?php esc_html_e( 'Submitted by', 'gravityflow' ); ?></th>
 					<th><?php esc_html_e( 'Step', 'gravityflow' ); ?></th>
@@ -102,7 +104,7 @@ class Gravity_Flow_Inbox {
 					$link      = "<a href='%s'>%s</a>";
 					?>
 					<tr>
-						<td data-label="<?php esc_html_e( 'ID', 'gravityflow' ); ?>">
+						<td data-label="<?php esc_html_e( 'ID', 'gravityflow' ); ?>" <?php echo $id_style ?>>
 							<?php
 							printf( $link, $url_entry, $entry['id'] );
 							?>
