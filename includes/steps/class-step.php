@@ -182,6 +182,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return array|null
 	 */
 	public function get_entry(){
+		if ( empty ( $this->_entry ) ) {
+			$this->refresh_entry();
+		}
 		return $this->_entry;
 	}
 
@@ -192,7 +195,10 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 */
 	public function refresh_entry(){
 		$entry_id = $this->get_entry_id();
-		$this->_entry = GFAPI::get_entry( $entry_id );
+		if ( ! empty( $entry_id) ) {
+			$this->_entry = GFAPI::get_entry( $entry_id );
+		}
+
 		return $this->_entry;
 	}
 
@@ -214,11 +220,14 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
-	 * Returns the ID for the current entry object (if set).
+	 * Returns the ID for the current entry object. If not set the lid query arg is returned.
 	 *
 	 * @return int
 	 */
 	public function get_entry_id(){
+		if ( empty ( $this->_entry ) ) {
+			return rgget( 'lid' );
+		}
 		$id = absint( $this->_entry['id'] );
 		return $id;
 	}
