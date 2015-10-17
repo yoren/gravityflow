@@ -788,6 +788,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				);
 
 				$approve_url = $this->get_entry_url( $a['page_id'], $assignee, $approve_token );
+				$approve_url = esc_url_raw( $approve_url );
 
 				$text = str_replace( $full_tag, $approve_url, $text );
 			}
@@ -803,11 +804,13 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				$a = shortcode_atts(
 					array(
 						'page_id' => 'admin',
+						'text' => esc_html__( 'Approve', 'gravityflow' ),
 					), $options
 				);
 
 				$approve_url = $this->get_entry_url( $a['page_id'], $assignee, $approve_token );
-				$approve_link = sprintf( '<a href="%s">%s</a>', $approve_url, esc_html__( 'Approve', 'gravityflow' ) );
+				$approve_url = esc_url_raw( $approve_url );
+				$approve_link = sprintf( '<a href="%s">%s</a>', $approve_url, esc_html( $a['text'] ) );
 				$text = str_replace( $full_tag, $approve_link, $text );
 			}
 		}
@@ -832,6 +835,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				);
 
 				$reject_url = $this->get_entry_url( $a['page_id'], $assignee, $reject_token );
+				$reject_url = esc_url_raw( $reject_url );
 				$text = str_replace( $full_tag, $reject_url, $text );
 			}
 		}
@@ -846,11 +850,13 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				$a = shortcode_atts(
 					array(
 						'page_id' => 'admin',
+						'text' => esc_html__( 'Reject', 'gravityflow' ),
 					), $options
 				);
 
 				$reject_url = $this->get_entry_url( $a['page_id'], $assignee, $reject_token );
-				$reject_link = sprintf( '<a href="%s">%s</a>', $reject_url, esc_html__( 'Reject', 'gravityflow' ) );
+				$reject_url = esc_url_raw( $reject_url );
+				$reject_link = sprintf( '<a href="%s">%s</a>', $reject_url, esc_html( $a['text'] ) );
 				$text = str_replace( $full_tag, $reject_link, $text );
 			}
 		}
