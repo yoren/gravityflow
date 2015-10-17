@@ -159,7 +159,7 @@ tr#gaddon-setting-row-step_type label{
     background-color:#F9F9F9;
 }
 
-.gaddon-setting-radio{
+tr#gaddon-setting-row-step_type .gaddon-setting-radio{
     text-align:center;
 }
 
