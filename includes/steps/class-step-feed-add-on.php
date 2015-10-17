@@ -76,7 +76,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step{
 			$fields[] = array(
 				'name'     => 'feeds',
 				'required' => true,
-				'label'    => esc_html__( 'Feeds' ),
+				'label'    => esc_html__( 'Feeds', 'gravityflow' ),
 				'type'     => 'checkbox',
 				'choices'  => $feed_choices,
 			);
