@@ -112,6 +112,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 					'name'  => 'assignee_notification_message',
 					'label' => 'Message',
 					'type'  => 'visual_editor',
+					'default_value' => esc_html__( 'A new entry requires your input', 'gravityflow' )
 				),
 				array(
 					'name' => 'resend_assignee_email',
