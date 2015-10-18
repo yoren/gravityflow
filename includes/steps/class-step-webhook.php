@@ -18,7 +18,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	public $_step_type = 'webhook';
 
 	public function get_label() {
-		return esc_html__( 'Webhook', 'gravityflow' );
+		return esc_html__( 'Outgoing Webhook', 'gravityflow' );
 	}
 
 	public function get_icon_url(){
@@ -28,12 +28,12 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	public function get_settings(){
 
 		return array(
-			'title'  => esc_html__( 'Webhook', 'gravityflow' ),
+			'title'  => esc_html__( 'Outgoing Webhook', 'gravityflow' ),
 			'fields' => array(
 				array(
 					'name' => 'url',
 					'class' => 'large',
-					'label' => esc_html__( 'Webhook URL', 'gravityflow' ),
+					'label' => esc_html__( 'Outgoing Webhook URL', 'gravityflow' ),
 					'type' => 'text',
 				),
 				array(
