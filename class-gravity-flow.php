@@ -1994,7 +1994,7 @@ PRIMARY KEY  (id)
 				*/
 			);
 
-			$setting_tabs = apply_filters( 'gform_addon_app_settings_menu_' . $this->_slug, $setting_tabs );
+			$setting_tabs = apply_filters( 'gravityflow_settings_menu_tabs', $setting_tabs );
 
 			if ( $this->current_user_can_any( $this->_capabilities_uninstall ) ) {
 				$setting_tabs[] = array( 'name' => 'uninstall', 'label' => __( 'Uninstall', 'gravityflow' ), 'callback' => array( $this, 'app_settings_uninstall_tab' ) );

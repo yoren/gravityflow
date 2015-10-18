@@ -46,7 +46,7 @@ https://gravityflow.io/contact/
 
 1.  Download the zipped file.
 1.  Extract and upload the contents of the folder to /wp-contents/plugins/ folder
-1.  Go to the Plugin management page of WordPress admin section and enable the 'Gravity Forms Approval Add-On' plugin
+1.  Go to the Plugin management page of WordPress admin section and enable the 'Gravity Flow' plugin
 
 == Frequently Asked Questions ==
 
@@ -54,6 +54,9 @@ https://gravityflow.io/contact/
 Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.io/out/gravityforms).
 
 == ChangeLog ==
+
+= 1.1.0.3 =
+- API: Added the Gravity_Flow_Extension class.
 
 = 1.1.0.2 =
 - Added step icons to the step list.
