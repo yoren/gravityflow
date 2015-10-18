@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2015-10-12 08:37:10+00:00\n"
-"PO-Revision-Date: 2015-10-12 10:05+0000\n"
+"POT-Creation-Date: 2015-10-15 13:58:13+00:00\n"
+"PO-Revision-Date: 2015-10-18 09:39+0000\n"
 "Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/gravityflow/gravityflow/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
@@ -56,7 +56,7 @@ msgstr "Gebruiker (Gemaakt door)"
 
 #: class-gravity-flow.php:597
 #: includes/fields/class-field-assignee-select.php:128
-#: includes/pages/class-status.php:259
+#: includes/pages/class-status.php:263
 msgid "Fields"
 msgstr "Velden"
 
@@ -75,11 +75,11 @@ msgstr "Vul een unieke naam in om deze stap te identificeren."
 
 #: class-gravity-flow.php:706
 msgid "Enable Condition for this step"
-msgstr ""
+msgstr "Conditionele Logica voor deze stap"
 
 #: class-gravity-flow.php:707
 msgid "Perform this step if"
-msgstr ""
+msgstr "Voer deze stap uit als"
 
 #: class-gravity-flow.php:711 class-gravity-flow.php:1179
 #: class-gravity-flow.php:1186 class-gravity-flow.php:1192
@@ -123,7 +123,7 @@ msgid "Delay"
 msgstr "Vertragen"
 
 #: class-gravity-flow.php:1168 includes/pages/class-activity.php:33
-#: includes/pages/class-activity.php:58 includes/pages/class-status.php:560
+#: includes/pages/class-activity.php:58 includes/pages/class-status.php:565
 msgid "Date"
 msgstr "Datum"
 
@@ -181,13 +181,13 @@ msgstr "Inzendingen"
 msgid "You don't have any steps configured. Let's go %screate one%s!"
 msgstr "U heeft nog geen stap ingesteld. %sMaak een stap%s!"
 
-#: class-gravity-flow.php:1536 includes/pages/class-status.php:1001
-#: includes/pages/class-status.php:1006
+#: class-gravity-flow.php:1536 includes/pages/class-status.php:1012
+#: includes/pages/class-status.php:1017
 msgid "Status:"
 msgstr "Status:"
 
-#: class-gravity-flow.php:1555 class-gravity-flow.php:3900
-#: includes/pages/class-status.php:229 includes/steps/class-step.php:157
+#: class-gravity-flow.php:1555 class-gravity-flow.php:3905
+#: includes/pages/class-status.php:233 includes/steps/class-step.php:157
 msgid "Pending"
 msgstr "Wachtend"
 
@@ -199,8 +199,8 @@ msgstr "Workflow"
 msgid "Entry Id"
 msgstr "Inzending Id"
 
-#: class-gravity-flow.php:1672 includes/pages/class-inbox.php:75
-#: includes/pages/class-inbox.php:132
+#: class-gravity-flow.php:1672 includes/pages/class-inbox.php:77
+#: includes/pages/class-inbox.php:134
 msgid "Submitted"
 msgstr "Toegevoegd"
 
@@ -208,13 +208,13 @@ msgstr "Toegevoegd"
 msgid "Last updated"
 msgstr "Laatst bijgewerkt"
 
-#: class-gravity-flow.php:1684 includes/pages/class-inbox.php:73
-#: includes/pages/class-inbox.php:115
+#: class-gravity-flow.php:1684 includes/pages/class-inbox.php:75
+#: includes/pages/class-inbox.php:117
 msgid "Submitted by"
 msgstr "Toegevoegd door"
 
 #: class-gravity-flow.php:1694 class-gravity-flow.php:1927
-#: class-gravity-flow.php:2617 includes/pages/class-status.php:566
+#: class-gravity-flow.php:2617 includes/pages/class-status.php:571
 #: includes/steps/class-step-user-input.php:567
 msgid "Status"
 msgstr "Status"
@@ -227,7 +227,7 @@ msgstr "Admin"
 msgid "Select an action"
 msgstr "Selecteer een actie"
 
-#: class-gravity-flow.php:1729 includes/steps/class-step.php:639
+#: class-gravity-flow.php:1729 includes/steps/class-step.php:648
 msgid "Cancel Workflow"
 msgstr "Workflow Annuleren"
 
@@ -243,7 +243,7 @@ msgstr "Workflow Herstarten"
 msgid "Send to step:"
 msgstr "Verzend naar stap:"
 
-#: class-gravity-flow.php:1750 includes/pages/class-status.php:324
+#: class-gravity-flow.php:1750 includes/pages/class-status.php:328
 msgid "Apply"
 msgstr "Toepassen"
 
@@ -380,11 +380,11 @@ msgstr "Oeps! We konden uw inzending niet vinden. "
 
 #: class-gravity-flow.php:2374 includes/steps/class-step-approval.php:885
 msgid "Error: incorrect entry."
-msgstr ""
+msgstr "Fout: Inzending is niet correct."
 
 #: class-gravity-flow.php:2380
 msgid "Workflow Cancelled"
-msgstr ""
+msgstr "Workflow Geannuleerd"
 
 #: class-gravity-flow.php:2387
 msgid "Error: This URL is no longer valid."
@@ -434,99 +434,99 @@ msgstr "Workflow herstart. "
 msgid "Sent to step: %s"
 msgstr "Verzenden naar stap: : %s"
 
-#: class-gravity-flow.php:3148
+#: class-gravity-flow.php:3153
 msgid ""
 "Gravity Flow Steps imported. IMPORTANT: Check the assignees for each step. "
 "If the form was imported from a different installation with different user "
 "IDs then then steps may need to be reassigned."
 msgstr "Gravity Flow Stappen zijn geimporteerd. BELANGRIJK: Controleer de gemachtigden voor iedere stap. Als het formulier geimporteerd is vanuit een andere installatie met andere gebruikers ID's dan moeten stappen opnieuw verdeeld worden. "
 
-#: class-gravity-flow.php:3193 includes/steps/class-step-feed-mailchimp.php:23
+#: class-gravity-flow.php:3198 includes/steps/class-step-feed-mailchimp.php:23
 msgid "MailChimp"
 msgstr "MailChimp"
 
-#: class-gravity-flow.php:3194 includes/steps/class-step-feed-emma.php:23
+#: class-gravity-flow.php:3199 includes/steps/class-step-feed-emma.php:23
 msgid "Emma"
 msgstr "Emma"
 
-#: class-gravity-flow.php:3195 includes/steps/class-step-feed-zapier.php:24
+#: class-gravity-flow.php:3200 includes/steps/class-step-feed-zapier.php:24
 msgid "Zapier"
 msgstr "Zapier"
 
-#: class-gravity-flow.php:3196
+#: class-gravity-flow.php:3201
 #: includes/steps/class-step-feed-user-registration.php:24
 msgid "User Registration"
 msgstr "Gebruiker Registratie"
 
-#: class-gravity-flow.php:3215
+#: class-gravity-flow.php:3220
 msgid "Assignees"
 msgstr "Gemachtigden"
 
-#: class-gravity-flow.php:3220
+#: class-gravity-flow.php:3225
 msgid "Show Users"
 msgstr "Toon Gebruikers"
 
-#: class-gravity-flow.php:3228
+#: class-gravity-flow.php:3233
 msgid "Show Roles"
 msgstr "Toon Rollen"
 
-#: class-gravity-flow.php:3236
+#: class-gravity-flow.php:3241
 msgid "Show Fields"
 msgstr "Toon Velden"
 
-#: class-gravity-flow.php:3418
+#: class-gravity-flow.php:3423
 msgid "Gravity Flow Settings"
 msgstr "Gravity Flow Instellingen"
 
-#: class-gravity-flow.php:3422
+#: class-gravity-flow.php:3427
 msgid ""
 "%sThis operation deletes ALL Gravity Flow settings%s. If you continue, you "
 "will NOT be able to retrieve these settings."
 msgstr "%sDeze actie verwijderd ALLE Gravity Flow instellingen%s. Als u doorgaat, kunt u deze instellingen NIET meer herstellen. "
 
-#: class-gravity-flow.php:3426
+#: class-gravity-flow.php:3431
 msgid ""
 "Warning! ALL Gravity Flow settings will be deleted. This cannot be undone. "
 "'OK' to delete, 'Cancel' to stop"
 msgstr "Let op! ALLE Gravity Flow instellingen worden verwijderd. Dit kan niet ongedaan gemaakt worden. 'OK' om te verwijderen, 'Annuleren' om te stoppen. "
 
-#: class-gravity-flow.php:3771
+#: class-gravity-flow.php:3776
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "%d jaar"
 msgstr[1] "%d jaren"
 
-#: class-gravity-flow.php:3775
+#: class-gravity-flow.php:3780
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "%d maand"
 msgstr[1] "%d maanden"
 
-#: class-gravity-flow.php:3779
+#: class-gravity-flow.php:3784
 msgid "%dd"
 msgstr "%dd"
 
-#: class-gravity-flow.php:3783
+#: class-gravity-flow.php:3788
 msgid "%dh"
 msgstr "%du"
 
-#: class-gravity-flow.php:3787
+#: class-gravity-flow.php:3792
 msgid "%dm"
 msgstr "%dm"
 
-#: class-gravity-flow.php:3791
+#: class-gravity-flow.php:3796
 msgid "%ds"
 msgstr "%ds"
 
-#: class-gravity-flow.php:3835
+#: class-gravity-flow.php:3840
 msgid "Every Fifteen Minutes"
 msgstr "Elke Vijftien Minuten"
 
-#: class-gravity-flow.php:3848 class-gravity-flow.php:3868
+#: class-gravity-flow.php:3853 class-gravity-flow.php:3873
 msgid "Not authorized"
-msgstr ""
+msgstr "Niet geautoriseerd"
 
-#: class-gravity-flow.php:3903 includes/pages/class-status.php:233
+#: class-gravity-flow.php:3908 includes/pages/class-status.php:237
 #: includes/steps/class-step-user-input.php:96
 #: includes/steps/class-step-user-input.php:403
 #: includes/steps/class-step-user-input.php:522
@@ -534,28 +534,28 @@ msgstr ""
 msgid "Complete"
 msgstr "Compleet"
 
-#: class-gravity-flow.php:3906 includes/steps/class-step-approval.php:31
+#: class-gravity-flow.php:3911 includes/steps/class-step-approval.php:31
 #: includes/steps/class-step-approval.php:541
 msgid "Approved"
-msgstr ""
+msgstr "Goedgekeurd"
 
-#: class-gravity-flow.php:3909 includes/steps/class-step-approval.php:25
+#: class-gravity-flow.php:3914 includes/steps/class-step-approval.php:25
 #: includes/steps/class-step-approval.php:543
 msgid "Rejected"
-msgstr ""
+msgstr "Afgekeurd"
 
 #: includes/EDD_SL_Plugin_Updater.php:177
 msgid ""
 "There is a new version of %1$s available. <a target=\"_blank\" "
 "class=\"thickbox\" href=\"%2$s\">View version %3$s details</a>."
-msgstr ""
+msgstr "Er is een nieuwe versie van %1$s beschikbaar. <a target=\"_blank\" class=\"thickbox\" href=\"%2$s\">Bekijk de details van %3$s</a>."
 
 #: includes/EDD_SL_Plugin_Updater.php:184
 msgid ""
 "There is a new version of %1$s available. <a target=\"_blank\" "
 "class=\"thickbox\" href=\"%2$s\">View version %3$s details</a> or <a "
 "href=\"%4$s\">update now</a>."
-msgstr ""
+msgstr "Er is een nieuwe versie van %1$s beschikbaar. <a target=\"_blank\" class=\"thickbox\" href=\"%2$s\">Bekijk de details van versie %3$s</a> or <a href=\"%4$s\">update now</a>."
 
 #: includes/EDD_SL_Plugin_Updater.php:332
 msgid "You do not have permission to install plugin updates"
@@ -580,8 +580,8 @@ msgid "Event ID"
 msgstr "Gebeurtenis ID"
 
 #: includes/pages/class-activity.php:34 includes/pages/class-activity.php:63
-#: includes/pages/class-inbox.php:72 includes/pages/class-inbox.php:110
-#: includes/pages/class-reports.php:127 includes/pages/class-status.php:562
+#: includes/pages/class-inbox.php:74 includes/pages/class-inbox.php:112
+#: includes/pages/class-reports.php:127 includes/pages/class-status.php:567
 msgid "Form"
 msgstr "Formulier"
 
@@ -599,9 +599,9 @@ msgid "Event"
 msgstr "Gebeurtenis"
 
 #: includes/pages/class-activity.php:38 includes/pages/class-activity.php:96
-#: includes/pages/class-inbox.php:74 includes/pages/class-inbox.php:121
+#: includes/pages/class-inbox.php:76 includes/pages/class-inbox.php:123
 #: includes/pages/class-reports.php:231 includes/pages/class-reports.php:493
-#: includes/pages/class-status.php:565
+#: includes/pages/class-status.php:570
 msgid "Step"
 msgstr "Stap"
 
@@ -609,8 +609,8 @@ msgstr "Stap"
 msgid "Duration"
 msgstr "Duur"
 
-#: includes/pages/class-activity.php:53 includes/pages/class-inbox.php:71
-#: includes/pages/class-inbox.php:105 includes/pages/class-status.php:559
+#: includes/pages/class-activity.php:53 includes/pages/class-inbox.php:73
+#: includes/pages/class-inbox.php:107 includes/pages/class-status.php:563
 msgid "ID"
 msgstr "ID"
 
@@ -631,7 +631,7 @@ msgid "Workflow Entry #"
 msgstr "Workflow Inzending #"
 
 #: includes/pages/class-entry-detail.php:98
-#: includes/pages/class-status.php:309
+#: includes/pages/class-status.php:313
 msgid "Workflow Form"
 msgstr "Workflow Formulier"
 
@@ -641,7 +641,7 @@ msgid "You don't have permission to view this entry."
 msgstr "Je hebt geen toestemming om deze inzending te bekijken. "
 
 #: includes/pages/class-entry-detail.php:160
-#: includes/pages/class-status.php:188
+#: includes/pages/class-status.php:191
 msgid "Print"
 msgstr "Printen"
 
@@ -690,7 +690,7 @@ msgstr "Prijs"
 msgid "Total"
 msgstr "Totaal"
 
-#: includes/pages/class-inbox.php:176
+#: includes/pages/class-inbox.php:178
 msgid "No pending tasks"
 msgstr "Momenteel geen taken"
 
@@ -778,129 +778,129 @@ msgstr "Laatste 3 maanden"
 msgid "All Steps"
 msgstr "Alle stappen"
 
-#: includes/pages/class-status.php:64
+#: includes/pages/class-status.php:65
 msgid "Export"
-msgstr ""
+msgstr "Exporteren"
 
-#: includes/pages/class-status.php:71
+#: includes/pages/class-status.php:72
 msgid "The destination file is not writeable"
-msgstr ""
+msgstr "Het doelbestand is niet beschrijfbaar"
 
-#: includes/pages/class-status.php:179
+#: includes/pages/class-status.php:182
 msgid "entry"
 msgstr "inzending"
 
-#: includes/pages/class-status.php:180
+#: includes/pages/class-status.php:183
 msgid "entries"
 msgstr "inzendingen"
 
-#: includes/pages/class-status.php:211 includes/pages/class-submit.php:11
+#: includes/pages/class-status.php:215 includes/pages/class-submit.php:11
 msgid "You haven't submitted any workflow forms yet."
-msgstr ""
+msgstr "U heeft nog geen workflow formulieren toegevoegd. "
 
-#: includes/pages/class-status.php:225
+#: includes/pages/class-status.php:229
 msgid "All"
 msgstr "Alles"
 
-#: includes/pages/class-status.php:237
+#: includes/pages/class-status.php:241
 msgid "Cancelled"
 msgstr "Geannuleerd"
 
-#: includes/pages/class-status.php:292
+#: includes/pages/class-status.php:296
 msgid "Start:"
-msgstr ""
+msgstr "Start:"
 
-#: includes/pages/class-status.php:298
+#: includes/pages/class-status.php:302
 msgid "End:"
-msgstr ""
+msgstr "Einde:"
 
-#: includes/pages/class-status.php:331
+#: includes/pages/class-status.php:335
 msgid "Clear Filter"
-msgstr ""
+msgstr "Filter Wissen"
 
-#: includes/pages/class-status.php:334
+#: includes/pages/class-status.php:338
 msgid "Search"
-msgstr ""
+msgstr "Zoeken"
 
-#: includes/pages/class-status.php:558
+#: includes/pages/class-status.php:561
 msgid "Checkbox"
-msgstr ""
+msgstr "Checkbox"
 
-#: includes/pages/class-status.php:564
+#: includes/pages/class-status.php:569
 msgid "Submitter"
-msgstr ""
+msgstr "Inzender"
 
-#: includes/pages/class-status.php:805
+#: includes/pages/class-status.php:810
 msgid "Select"
-msgstr ""
+msgstr "Selecteren"
 
 #: includes/pages/class-support.php:71
 msgid "Please check the documentation before submitting a support request"
-msgstr ""
+msgstr "Bekijk eerst de documentatie voordat u een vraag instuurt"
 
 #: includes/pages/class-support.php:92
 #: includes/steps/class-step-approval.php:562
 #: includes/steps/class-step-user-input.php:442
 #: includes/steps/class-step-user-input.php:563
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: includes/pages/class-support.php:99
 msgid "General comment or suggestion"
-msgstr ""
+msgstr "Algemene opmerking of suggestie"
 
 #: includes/pages/class-support.php:104
 msgid "Feature request"
-msgstr ""
+msgstr "Verzoek om nieuwe feature"
 
 #: includes/pages/class-support.php:110
 msgid "Bug report"
-msgstr ""
+msgstr "Bug rapport"
 
 #: includes/pages/class-support.php:114
 msgid "Suggestion or steps to reproduce the issue."
-msgstr ""
+msgstr "Suggesties of stappen om dit probleem te reproduceren."
 
 #: includes/pages/class-support.php:120
 msgid ""
 "Send debugging information. (This includes some system information and a "
 "list of active plugins. No forms or entry data will be sent.)"
-msgstr ""
+msgstr "Verzend debugging informatie. (Dit bevat systeem informatie en een lijst van actieve plugins. Geen formulieren of data uit formulieren wordt verzonden). "
 
 #: includes/pages/class-support.php:123
 msgid "Send"
-msgstr ""
+msgstr "Verzenden"
 
 #: includes/steps/class-step-approval.php:26
 msgid "Next step if Rejected"
-msgstr ""
+msgstr "Voigende Stap is Afgekeurd"
 
 #: includes/steps/class-step-approval.php:32
 msgid "Next Step if Approved"
-msgstr ""
+msgstr "Volgende Stap is Goedgekeurd"
 
 #: includes/steps/class-step-approval.php:39
 #: includes/steps/class-step-approval.php:57
 msgid "Approval"
-msgstr ""
+msgstr "Goedkeuring"
 
 #: includes/steps/class-step-approval.php:52
 #: includes/steps/class-step-approval.php:216
 #: includes/steps/class-step-notification.php:75
 #: includes/steps/class-step-user-input.php:34
 msgid "Select Users"
-msgstr ""
+msgstr "Geselecteerde Gebruikers"
 
 #: includes/steps/class-step-approval.php:53
 #: includes/steps/class-step-notification.php:76
 #: includes/steps/class-step-user-input.php:35
 msgid "Configure Routing"
-msgstr ""
+msgstr "Stel Routering in"
 
 #: includes/steps/class-step-approval.php:61
 #: includes/steps/class-step-user-input.php:43
 msgid "Assign To:"
-msgstr ""
+msgstr "Wijs Toe Aan:"
 
 #: includes/steps/class-step-approval.php:70
 msgid ""
@@ -908,11 +908,11 @@ msgid ""
 "assignee fields they will also appear here. Click on an item to select it. "
 "The selected items will appear on the right. If you select a role then "
 "anybody from that role can approve."
-msgstr ""
+msgstr "Gebruikers en rollen velden zijn zichtbaar in deze lijst. Als het formulier toewijzingsvelden heeft verschijnen die ook hier. Klik op een item om het te selecteren. De geselecteerde items verschijnen rechts. Als je een rol selecteert, dan kan iedereen met die rol goedkeuren. "
 
 #: includes/steps/class-step-approval.php:73
 msgid "Select Assignees"
-msgstr ""
+msgstr "Selecteer Gemachtigden"
 
 #: includes/steps/class-step-approval.php:79
 msgid ""
@@ -920,18 +920,18 @@ msgid ""
 "will appear in the first drop-down field. If the form contains any assignee "
 "fields they will also appear here. Select the assignee and define the "
 "condition for that assignee. Add as many routing rules as you need."
-msgstr ""
+msgstr "Bouw route regels voor gemachtigden door het toevoegen van voorwaarden. Gebruikers en rollen velden verschijnen in het eerste drop-down veld. Als het formulier toewijzingsvelden heeft, verschijnen die hier. Selecteer een gemachtigde en voer de voorwaarde in voor die gemachtigde. Voeg zoveel route regels toe als nodig zijn. "
 
 #: includes/steps/class-step-approval.php:80
 #: includes/steps/class-step-approval.php:177
 #: includes/steps/class-step-approval.php:224
 #: includes/steps/class-step-notification.php:90
 msgid "Routing"
-msgstr ""
+msgstr "Route"
 
 #: includes/steps/class-step-approval.php:85
 msgid "Approval Policy"
-msgstr ""
+msgstr "Goedkeurings Beleid"
 
 #: includes/steps/class-step-approval.php:86
 msgid ""
@@ -939,270 +939,273 @@ msgid ""
 " the entry will require unanimous approval before the step can be completed."
 " If the step is assigned to a role only one user in that role needs to "
 "approve."
-msgstr ""
+msgstr "Stel vast hoe goedkeuring verwerkt moet worden. Als alle gemachtigden goed moeten keuren, dan moet de inzending unaniem goedgekeurd worden voordat de stap volledig is. Als de stap is toegekend aan een rol, dan hoeft maar een gebruiker met die rol goed te keuren. "
 
 #: includes/steps/class-step-approval.php:91
 msgid "At least one assignee must approve"
-msgstr ""
+msgstr "Minimaal een gemachtigde moet goedkeuren"
 
 #: includes/steps/class-step-approval.php:95
 msgid "All assignees must approve"
-msgstr ""
+msgstr "Alle gemachtigden moeten goedkeuren"
 
 #: includes/steps/class-step-approval.php:102
 msgid "Emails"
-msgstr ""
+msgstr "Emails"
 
 #: includes/steps/class-step-approval.php:103
 msgid "Configure the emails that should be sent for this step."
-msgstr ""
+msgstr "De emails instellen die verzonden moeten worden bij deze stap. "
 
 #: includes/steps/class-step-approval.php:107
 msgid "Assignee Email"
-msgstr ""
+msgstr "Gemachtigde Email"
 
 #: includes/steps/class-step-approval.php:112
 msgid "Send Email to the assignee(s)."
-msgstr ""
+msgstr "Verzend een Email naar de gemachtigde(n)"
 
 #: includes/steps/class-step-approval.php:113
 msgid ""
 "Enable this setting to send email to each of the assignees as soon as the "
 "entry has been assigned. If a role is configured to receive emails then all "
 "the users with that role will receive the email."
-msgstr ""
+msgstr "Stel dit in om een email te verzenden naar alle gemachtigden zodra deze inzending toegewezen is. Als de roi is ingesteld om emails te ontvangen, dan zullen alle gebruikers met die rol een email ontvangen. "
 
 #: includes/steps/class-step-approval.php:125
 msgid "Message to Assignee(s)"
-msgstr ""
+msgstr "Bericht aan Gemachtigde(n)"
 
 #: includes/steps/class-step-approval.php:127
 msgid ""
 "A new entry is pending your approval. Please check your Workflow Inbox."
-msgstr ""
+msgstr "Een nieuwe inzending wacht op goedkeuring. Controleer je Workflow Inbox. "
 
 #: includes/steps/class-step-approval.php:131
 #: includes/steps/class-step-user-input.php:118
 msgid "Send reminder"
-msgstr ""
+msgstr "Verstuur een herinnering. "
 
 #: includes/steps/class-step-approval.php:135
 #: includes/steps/class-step-user-input.php:122
 msgid "Resend the assignee email after"
-msgstr ""
+msgstr "Verstuur de gemachtigde email na"
 
 #: includes/steps/class-step-approval.php:136
 #: includes/steps/class-step-user-input.php:123
 msgid "day(s)"
-msgstr ""
+msgstr "dag/dagen"
 
 #: includes/steps/class-step-approval.php:142
 msgid "Rejection Email"
-msgstr ""
+msgstr "Afkeuring Email"
 
 #: includes/steps/class-step-approval.php:147
 msgid "Send email when the entry is rejected"
-msgstr ""
+msgstr "Verstuur email wanneer deze inzending is afgekeurd"
 
 #: includes/steps/class-step-approval.php:148
-#: includes/steps/class-step-notification.php:58
 msgid "Enable this setting to send an email when the entry is rejected."
-msgstr ""
+msgstr "Stel dit in om een email te versturen wanneer de inzending is afgekeurd."
 
 #: includes/steps/class-step-approval.php:160
 #: includes/steps/class-step-approval.php:207
 #: includes/steps/class-step-notification.php:70
 msgid "Send To"
-msgstr ""
+msgstr "Verstuur Naar"
 
 #: includes/steps/class-step-approval.php:169
 #: includes/steps/class-step-notification.php:82
 msgid "Select User"
-msgstr ""
+msgstr "Selecteer Gebruiker"
 
 #: includes/steps/class-step-approval.php:182
 #: includes/steps/class-step-notification.php:95
 msgid "Message"
-msgstr ""
+msgstr "Bericht"
 
 #: includes/steps/class-step-approval.php:184
 msgid "Entry {entry_id} has been rejected"
-msgstr ""
+msgstr "Inzending {entry_id} is afgekeurd"
 
 #: includes/steps/class-step-approval.php:189
 msgid "Approval Email"
-msgstr ""
+msgstr "Goedkeuring Email"
 
 #: includes/steps/class-step-approval.php:194
 msgid "Send email when the entry is approved"
-msgstr ""
+msgstr "Verstuur een email als deze inzending is goedgekeurd"
 
 #: includes/steps/class-step-approval.php:195
 msgid "Enable this setting to send an email when the entry is approved."
-msgstr ""
+msgstr "Stel dit in als een email verstuurd moet worden als de inzending is goedgekeurd. "
 
 #: includes/steps/class-step-approval.php:229
 msgid "Approval Message"
-msgstr ""
+msgstr "Goedkeuring Bericht"
 
 #: includes/steps/class-step-approval.php:231
 msgid "Entry {entry_id} has been approved"
-msgstr ""
+msgstr "Inzending {entry_id} is goedgekeurd"
 
 #: includes/steps/class-step-approval.php:480
 msgid ""
 "The status could not be changed because this step has already been "
 "processed."
-msgstr ""
+msgstr "De status kon niet worden aangepast omdat deze stap al uitgevoerd is. "
 
 #: includes/steps/class-step-approval.php:494
 msgid "Approved."
-msgstr ""
+msgstr "Goedgekeurd."
 
 #: includes/steps/class-step-approval.php:498
 msgid "Rejected."
-msgstr ""
+msgstr "Afgekeurd."
 
 #: includes/steps/class-step-approval.php:506
 #: includes/steps/class-step-approval.php:600
 #: includes/steps/class-step-user-input.php:347
 msgid "Note"
-msgstr ""
+msgstr "Notitie"
 
 #: includes/steps/class-step-approval.php:522
 msgid "Entry Approved"
-msgstr ""
+msgstr "Inzending Goedgekeurd"
 
 #: includes/steps/class-step-approval.php:525
 msgid "Entry Rejected"
-msgstr ""
+msgstr "Inzending Afgekeurd"
 
 #: includes/steps/class-step-approval.php:536
 msgid "Pending Approval"
-msgstr ""
+msgstr "In afwachting van Goedkeuring"
 
 #: includes/steps/class-step-approval.php:545
 #: includes/steps/class-step-user-input.php:405
-#: includes/steps/class-step.php:927
+#: includes/steps/class-step.php:936
 msgid "Queued"
-msgstr ""
+msgstr "Wachtrij"
 
 #: includes/steps/class-step-approval.php:568
 #: includes/steps/class-step-user-input.php:453
 msgid "Role"
-msgstr ""
+msgstr "Rol"
 
 #: includes/steps/class-step-approval.php:573
 #: includes/steps/class-step-user-input.php:435
 #: includes/steps/class-step-user-input.php:567
 msgid "User"
-msgstr ""
+msgstr "Gebruiker"
 
 #: includes/steps/class-step-approval.php:608
 #: includes/steps/class-step-approval.php:810
 msgid "Approve"
-msgstr ""
+msgstr "Goedkeuren"
 
 #: includes/steps/class-step-approval.php:612
 #: includes/steps/class-step-approval.php:853
 msgid "Reject"
-msgstr ""
+msgstr "Afkeuren"
 
 #: includes/steps/class-step-approval.php:890
 msgid "Error: step already processed."
-msgstr ""
+msgstr "Fout: deze stap is al uitgevoerd. "
 
 #: includes/steps/class-step-feed-add-on.php:79
 #: includes/steps/class-step-feed-add-on.php:89
 msgid "Feeds"
-msgstr ""
+msgstr "Feeds"
 
 #: includes/steps/class-step-feed-add-on.php:86
 #: includes/steps/class-step-multi-feed.php:50
 msgid "You don't have any feeds set up."
-msgstr ""
+msgstr "Je hebt nog geen feeds ingesteld. "
 
 #: includes/steps/class-step-feed-add-on.php:120
 #: includes/steps/class-step-multi-feed.php:84
 msgid "Feed processed: %s"
-msgstr ""
+msgstr "Feed uitgevoerd: %s"
 
 #: includes/steps/class-step-feed-campaign-monitor.php:23
 msgid "Campaign Monitor"
-msgstr ""
+msgstr "Campagne Monitor"
 
 #: includes/steps/class-step-feed-twilio.php:23
 msgid "Twilio"
-msgstr ""
+msgstr "Twilio"
 
 #: includes/steps/class-step-feed-user-registration.php:56
 #: includes/steps/class-step-multi-feed.php:187
 msgid "Create"
-msgstr ""
+msgstr "Maken"
 
 #: includes/steps/class-step-feed-user-registration.php:56
 #: includes/steps/class-step-user-input.php:527
 msgid "Update"
-msgstr ""
+msgstr "Updaten"
 
 #: includes/steps/class-step-multi-feed.php:12
 msgid "Multi-Feed"
-msgstr ""
+msgstr "Multi-Feed"
 
 #: includes/steps/class-step-multi-feed.php:48
 msgid "You don't have any supported feed add-ons installed."
-msgstr ""
+msgstr "Je hebt nog geen ondersteunde feed add-ons geinstalleerd. "
 
 #: includes/steps/class-step-multi-feed.php:54
 msgid "Add-On Feeds"
-msgstr ""
+msgstr "Add-On Feeds"
 
 #: includes/steps/class-step-multi-feed.php:174
 msgid "Feed ID %s"
-msgstr ""
+msgstr "Feed ID %s"
 
 #: includes/steps/class-step-multi-feed.php:187
 msgid "Registration"
-msgstr ""
+msgstr "Registratie"
 
 #: includes/steps/class-step-notification.php:21
 msgid "Notification"
-msgstr ""
+msgstr "Notificatie"
 
 #: includes/steps/class-step-notification.php:50
 msgid "Gravity Forms Notifications"
-msgstr ""
+msgstr "Gravity Forms Notificaties"
 
 #: includes/steps/class-step-notification.php:57
 msgid "Workflow notification"
+msgstr "Workflow Notificatie"
+
+#: includes/steps/class-step-notification.php:58
+msgid "Enable this setting to send an email."
 msgstr ""
 
 #: includes/steps/class-step-notification.php:62
 #: includes/steps/class-step-user-input.php:105
 #: includes/wizard/steps/class-installation-wizard-step-updates.php:88
 msgid "Enabled"
-msgstr ""
+msgstr "Ingeschakeld"
 
-#: includes/steps/class-step-notification.php:122
+#: includes/steps/class-step-notification.php:124
 msgid "Sent Notification: %s"
-msgstr ""
+msgstr "Verzend Notificatie: %s"
 
-#: includes/steps/class-step-notification.php:171
+#: includes/steps/class-step-notification.php:173
 msgid "Sent Notification: "
-msgstr ""
+msgstr "Verzend Notificatie:"
 
 #: includes/steps/class-step-user-input.php:22
 #: includes/steps/class-step-user-input.php:39
 msgid "User Input"
-msgstr ""
+msgstr "Gebruiker Input"
 
 #: includes/steps/class-step-user-input.php:60
 msgid "Editable fields"
-msgstr ""
+msgstr "Bewerkbare Velden"
 
 #: includes/steps/class-step-user-input.php:72
 msgid "Assignee Policy"
-msgstr ""
+msgstr "Toewijzing Beleid"
 
 #: includes/steps/class-step-user-input.php:73
 msgid ""
@@ -1210,170 +1213,170 @@ msgid ""
 "this step then the entry will require input from every assignee before the "
 "step can be completed. If the step is assigned to a role only one user in "
 "that role needs to complete the step."
-msgstr ""
+msgstr "Stel in hoe de stappen uitgevoerd moeten worden. ALs alle gemachtigden deze stap moeten voltooien, dan heeft de inzending input nodig van alle gemachtigden voordat de stap voltooid wordt. Als een rol is toegewezen, dan hoeft maar een enkele gebruiker de stap te voltooien. "
 
 #: includes/steps/class-step-user-input.php:78
 msgid "At least one assignee must complete this step"
-msgstr ""
+msgstr "Minimaal een gemachtigde moet deze stap afronden."
 
 #: includes/steps/class-step-user-input.php:82
 msgid "All assignees must complete this step"
-msgstr ""
+msgstr "Alle gemachtigden moeten deze stap afronden. "
 
 #: includes/steps/class-step-user-input.php:90
 msgid "Default update status"
-msgstr ""
+msgstr "Standaard update status"
 
 #: includes/steps/class-step-user-input.php:91
 msgid "The default value for the status on the workflow detail page"
-msgstr ""
+msgstr "De standaard waarde voor de status op de Workflow detail pagina"
 
 #: includes/steps/class-step-user-input.php:95
 #: includes/steps/class-step-user-input.php:521
 msgid "In progress"
-msgstr ""
+msgstr "In behandeling"
 
 #: includes/steps/class-step-user-input.php:341
 msgid "Entry updated and marked complete."
-msgstr ""
+msgstr "Inzending bijgewerkt en afgerond."
 
 #: includes/steps/class-step-user-input.php:341
 msgid "Entry updated - in progress."
-msgstr ""
+msgstr "Inzending bijgewerkt - In behandeling."
 
 #: includes/steps/class-step-user-input.php:399
 msgid "Pending Input"
-msgstr ""
+msgstr "In afwachting van Input"
 
 #: includes/steps/class-step-user-input.php:515
 msgid "Notes"
-msgstr ""
+msgstr "Notities"
 
 #: includes/steps/class-step-user-input.php:594
 msgid "You don't have adequate permission to edit entries."
-msgstr ""
+msgstr "U heeft niet de juiste toestemming om inzendingen te bewerken. "
 
 #: includes/steps/class-step-webhook.php:21
 #: includes/steps/class-step-webhook.php:31
 msgid "Webhook"
-msgstr ""
+msgstr "Webhook"
 
 #: includes/steps/class-step-webhook.php:36
 msgid "Webhook URL"
-msgstr ""
+msgstr "Webhook URL"
 
 #: includes/steps/class-step-webhook.php:41
 msgid "Request Method"
-msgstr ""
+msgstr "Verzoek Methode"
 
 #: includes/steps/class-step-webhook.php:65
 msgid "Format"
-msgstr ""
+msgstr "Formaat"
 
 #: includes/steps/class-step.php:142
 msgid "Next Step"
-msgstr ""
+msgstr "Volgende Stap"
 
-#: includes/steps/class-step.php:473
+#: includes/steps/class-step.php:482
 msgid "%s: not required"
-msgstr ""
+msgstr "%s: niet verplicht"
 
-#: includes/steps/class-step.php:585
+#: includes/steps/class-step.php:594
 msgid "Entry"
-msgstr ""
+msgstr "Inzending"
 
 #: includes/wizard/steps/class-installation-wizard-step-complete.php:42
 msgid "Congratulations! Now you can set up your first workflow."
-msgstr ""
+msgstr "Gefeliciteerd! Nu kunt u uw eerste Workflow starten."
 
 #: includes/wizard/steps/class-installation-wizard-step-complete.php:51
 msgid "Select a Form to use for your Workflow"
-msgstr ""
+msgstr "Selecteer een Formulier om Workflow in te gebruiken."
 
 #: includes/wizard/steps/class-installation-wizard-step-complete.php:67
 msgid "Add Workflow Steps in the Form Settings"
-msgstr ""
+msgstr "Voeg Workflow Stappen toe in de Formulier Instellingen"
 
 #: includes/wizard/steps/class-installation-wizard-step-complete.php:71
 msgid "Add Workflow Steps"
-msgstr ""
+msgstr "Voeg Workflow Stappen toe"
 
 #: includes/wizard/steps/class-installation-wizard-step-complete.php:78
 msgid ""
 "Don't have a form you want to use for the workflow? %sCreate a Form%s and "
 "add your steps in the Form Settings later."
-msgstr ""
+msgstr "Heeft u geen formulier die u wilt gebruiken voor workflow? Maak een nieuw formulier%s en voeg later stappen toe bij de Formulier Instellingen. "
 
 #: includes/wizard/steps/class-installation-wizard-step-complete.php:88
 msgid ""
 "%sCreate a Form%s and then add your Workflow steps in the Form Settings."
-msgstr ""
+msgstr "%sMaak een formulier%s en voeg vervolgens stappen toe bij de Formulier Instellingen."
 
 #: includes/wizard/steps/class-installation-wizard-step-complete.php:98
 msgid "Installation Complete"
-msgstr ""
+msgstr "Installatie Voltooid"
 
 #: includes/wizard/steps/class-installation-wizard-step-license-key.php:16
 msgid ""
 "Enter your Gravity Flow License Key below.  Your key unlocks access to "
 "automatic updates and support.  You can find your key in your purchase "
 "receipt or by logging into the %sGravity Flow%s site."
-msgstr ""
+msgstr "Voeg uw Gravity Flow Licentie Sleutel toe hieronder. Uw sleutel geeft toegang tot automatische updates en ondersteuning. U kunt de sleutel vinden in uw 'Purchase Receipt' of door in te loggen op de %sGravity Flow%s website. "
 
 #: includes/wizard/steps/class-installation-wizard-step-license-key.php:20
 msgid "Enter Your License Key"
-msgstr ""
+msgstr "Vul Uw Licentiesleutel In"
 
 #: includes/wizard/steps/class-installation-wizard-step-license-key.php:35
 msgid ""
 "If you don't enter a valid license key, you will not be able to update "
 "Gravity Flow when important bug fixes and security enhancements are "
 "released. This can be a serious security risk for your site."
-msgstr ""
+msgstr "Als u geen geldige sleutel invoert, dan is het niet mogelijk om Gravity Flow automatisch te updaten voor bug fixes en beveiligingsmaatregelen. Dit kan een serieus beveiligingsrisico vormen. "
 
 #: includes/wizard/steps/class-installation-wizard-step-license-key.php:40
 msgid "I understand the risks"
-msgstr ""
+msgstr "Ik begrijp de risico's"
 
 #: includes/wizard/steps/class-installation-wizard-step-license-key.php:59
 msgid "Please enter a valid license key."
-msgstr ""
+msgstr "Voer alstublieft een geldige licentie sleutel in."
 
 #: includes/wizard/steps/class-installation-wizard-step-license-key.php:65
 msgid ""
 "Invalid or Expired Key : Please make sure you have entered the correct value"
 " and that your key is not expired."
-msgstr ""
+msgstr "Ongeldige of Verlopen Sleutel: Controleer of u de juiste sleutel heeft ingevoerd of dat uw sleutel niet verlopen is. "
 
 #: includes/wizard/steps/class-installation-wizard-step-license-key.php:73
 msgid "Please accept the terms"
-msgstr ""
+msgstr "Accepteer alstublieft de voorwaarden"
 
 #: includes/wizard/steps/class-installation-wizard-step-updates.php:16
 msgid ""
 "Gravity Flow will download important bug fixes, security enhancements and "
 "plugin updates automatically. Updates are extremely important to the "
 "security of your WordPress site."
-msgstr ""
+msgstr "Gravity Flow zal belangrijke updates automatisch downloaden. Updates zijn zeer belangrijk voor de beveiliging van uw WordPress website. "
 
 #: includes/wizard/steps/class-installation-wizard-step-updates.php:22
 msgid ""
 "This feature is activated by default unless you opt to disable it below. We "
 "only recommend disabling background updates if you intend on managing "
 "updates manually. A valid license is required for background updates."
-msgstr ""
+msgstr "Deze functie is standaard actief, tenzij u het uitschakeld hier beneden. We raden het uitschakelen van automatische achtergrond updates alleen aan als u uw updates handmatig wilt regelen. Een geldige licentie is nodig voor achtergrond updates. "
 
 #: includes/wizard/steps/class-installation-wizard-step-updates.php:29
 msgid "Keep background updates enabled"
-msgstr ""
+msgstr "Houd achtergrond updates ingeschakeld"
 
 #: includes/wizard/steps/class-installation-wizard-step-updates.php:35
 msgid "Turn off background updates"
-msgstr ""
+msgstr "Schakel achtergrond updates uit"
 
 #: includes/wizard/steps/class-installation-wizard-step-updates.php:41
 msgid "Are you sure?"
-msgstr ""
+msgstr "Weet u het zeker?"
 
 #: includes/wizard/steps/class-installation-wizard-step-updates.php:44
 msgid ""
@@ -1381,56 +1384,56 @@ msgid ""
 " security enhancements. We only recommend doing this if you are experienced "
 "at managing a WordPress site and accept the risks involved in manually "
 "keeping your WordPress site updated."
-msgstr ""
+msgstr "Door het uitschakelen van achtergrond updates kan uw site beschadigd raken en loopt u een beveiligingsrisisco. We raden dit alleen aan als u een ervaren WordPress gebruiker bent en de risico's kent van het handmatig up-to-date houden van uw site. "
 
 #: includes/wizard/steps/class-installation-wizard-step-updates.php:49
 msgid "I Understand and Accept the Risk"
-msgstr ""
+msgstr "Ik Begrijp Dit en Accepteer de Risico's"
 
 #: includes/wizard/steps/class-installation-wizard-step-updates.php:80
 msgid "Please accept the terms."
-msgstr ""
+msgstr "Accepteer alstublieft de voorwaarden. "
 
 #: includes/wizard/steps/class-installation-wizard-step-updates.php:88
 msgid "Disabled"
-msgstr ""
+msgstr "Uitgeschakeld"
 
 #: includes/wizard/steps/class-installation-wizard-step-welcome.php:9
 msgid "Click the 'Get Started' button to complete your installation."
-msgstr ""
+msgstr "Klik op de 'Aan de slag' button om jouw installate te voltooien. "
 
 #: includes/wizard/steps/class-installation-wizard-step-welcome.php:16
 msgid "Get Started"
-msgstr ""
+msgstr "Aan de slag"
 
 #: includes/wizard/steps/class-installation-wizard-step-welcome.php:20
 msgid "Welcome"
-msgstr ""
+msgstr "Welkom"
 
 #: includes/wizard/steps/class-installation-wizard-step.php:98
 msgid "Next"
-msgstr ""
+msgstr "Volgende"
 
 #: includes/wizard/steps/class-installation-wizard-step.php:102
 msgid "Back"
-msgstr ""
+msgstr "Vorige"
 
 #. Plugin Name of the plugin/theme
 msgid "Gravity Flow"
-msgstr ""
+msgstr "Gravity Flow"
 
 #. Plugin URI of the plugin/theme
 msgid "https://gravityflow.io"
-msgstr ""
+msgstr "https://gravityflow.io"
 
 #. Description of the plugin/theme
 msgid "Build Workflow Applications with Gravity Forms."
-msgstr ""
+msgstr "Bouw Workflow Toepassingen met Gravity Forms. "
 
 #. Author of the plugin/theme
 msgid "Steven Henty"
-msgstr ""
+msgstr "Steven Henty"
 
 #. Author URI of the plugin/theme
 msgid "http://www.stevenhenty.com"
-msgstr ""
+msgstr "http://www.stevenhenty.com"
