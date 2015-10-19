@@ -2070,15 +2070,26 @@ PRIMARY KEY  (id)
 				return array();
 			}
 
-			$form_ids = array();
+			$selected_form_ids = array();
 
 			foreach ( $settings as $key => $setting ) {
 				if ( strstr( $key, 'publish_form_' ) && $setting == 1 ) {
 					$form_id = str_replace( 'publish_form_', '', $key );
-					$form_ids[] = absint( $form_id );
+					$selected_form_ids[] = absint( $form_id );
 				}
 			}
-			return $form_ids;
+
+			$workflow_forms = GFFormsModel::get_forms( true );
+
+			$published_form_ids = array();
+
+			foreach ( $workflow_forms as $workflow_form ) {
+				if ( in_array( $workflow_form->id, $selected_form_ids ) ) {
+					$published_form_ids[] = $workflow_form->id;
+				}
+			}
+
+			return $published_form_ids;
 		}
 
 		public function load_screen_options(){
@@ -2091,7 +2102,7 @@ PRIMARY KEY  (id)
 
 			if ( $this->is_status_page() ) {
 				$args = array(
-					'label'   => esc_html( 'Entries per page', 'gravityflow' ),
+					'label'   => esc_html__( 'Entries per page', 'gravityflow' ),
 					'default' => 20,
 					'option'  => 'entries_per_page',
 				);
@@ -2295,17 +2306,10 @@ PRIMARY KEY  (id)
 					$form_id = absint( $_GET['id'] );
 					Gravity_Flow_Submit::form( $form_id );
 				} else {
-					$settings = $this->get_app_settings();
-					$settings = $settings ? $settings : array();
-					$form_ids = array();
-					foreach ( $settings as $key => $setting ) {
-						if ( $setting == 1 ) {
-							$form_id = str_replace( 'publish_form_', '', $key );
-							$form_ids[] = absint( $form_id );
-						}
-					}
 
-					Gravity_Flow_Submit::list_page( $form_ids , $admin_ui );
+					$published_form_ids = gravity_flow()->get_published_form_ids();
+
+					Gravity_Flow_Submit::list_page( $published_form_ids , $admin_ui );
 				}
 
 				?>
@@ -3296,10 +3300,10 @@ PRIMARY KEY  (id)
 			if ( isset( $this->form_ids ) ) {
 				return $this->form_ids;
 			}
-			$forms = GFAPI::get_forms();
+			$forms = GFFormsModel::get_forms();
 			$form_ids = array();
 			foreach ( $forms as $form ) {
-				$form_id = absint( $form['id'] );
+				$form_id = absint( $form->id );
 				$feeds = gravity_flow()->get_feeds( $form_id );
 				if ( ! empty( $feeds ) ) {
 					$form_ids[] = $form_id;
