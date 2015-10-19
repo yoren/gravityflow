@@ -55,6 +55,9 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.1.0.4 =
+- Updated the submit page to display the forms in alphabetical order.
+
 = 1.1.0.3 =
 - API: Added the Gravity_Flow_Extension class.
 
