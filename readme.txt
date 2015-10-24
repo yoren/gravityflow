@@ -55,6 +55,15 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.1.0.6 =
+- Added support for custom navigation labels.
+- Fixed an issue with the merge tags in the assignee reminder email.
+
+= 1.1.0.5 =
+- Added support for custom status labels.
+- Added support for the Signature Add-on in the shortcode.
+- Fixed an issue with the assignee field where the number 1 appears at the top of the lists of users and fields.
+
 = 1.1.0.4 =
 - Updated the submit page to display the forms in alphabetical order.
 
