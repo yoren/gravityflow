@@ -3274,7 +3274,7 @@ PRIMARY KEY  (id)
 			}
 
 			if ( $gravityflow_feeds_imported ) {
-				GFCommon::add_message( esc_html__( 'Gravity Flow Steps imported. IMPORTANT: Check the assignees for each step. If the form was imported from a different installation with different user IDs then then steps may need to be reassigned.', 'gravityflow' ) );
+				GFCommon::add_message( esc_html__( 'Gravity Flow Steps imported. IMPORTANT: Check the assignees for each step. If the form was imported from a different installation with different user IDs then steps may need to be reassigned.', 'gravityflow' ) );
 			}
 		}
 
