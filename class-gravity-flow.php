@@ -113,6 +113,7 @@ if ( class_exists( 'GFForms' ) ) {
 			add_filter( 'gform_enqueue_scripts', array( $this, 'filter_gform_enqueue_scripts' ), 10, 2 );
 
 			add_action( 'wp_login', array( $this, 'filter_wp_login' ), 10, 2 );
+
 		}
 
 		public function init_admin() {
@@ -3521,12 +3522,12 @@ AND m.meta_value='queued'";
 							$assignee_status = $assignee->get_status();
 							if ( $assignee_status == 'pending' ) {
 								$assignee_timestamp = $assignee->get_status_timestamp();
-								$trigger_timestamp = $assignee_timestamp + ( (int) $step->resend_assignee_emailValue * DAY_IN_SECONDS );
+								$trigger_timestamp = $assignee_timestamp + ( (int) $current_step->resend_assignee_emailValue * DAY_IN_SECONDS );
 								$reminder_timestamp = $assignee->get_reminder_timestamp();
 								if ( time() > $trigger_timestamp && $reminder_timestamp == false ) {
 									$this->log_debug( __METHOD__ . '(): assignee_timestamp: ' . $assignee_timestamp . ' - ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $assignee_timestamp ), 'F j, Y H:i:s' ) );
 									$this->log_debug( __METHOD__ . '(): trigger_timestamp: ' . $trigger_timestamp  . ' - ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $trigger_timestamp ), 'F j, Y H:i:s' ) );
-									$step->send_assignee_notification( $assignee );
+									$current_step->send_assignee_notification( $assignee );
 									$assignee->set_reminder_timestamp();
 									$this->log_debug( __METHOD__ . '(): sent reminder about entry ' . $entry['id'] . ' to ' . $assignee->get_key() );
 								}
