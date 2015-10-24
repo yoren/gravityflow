@@ -151,6 +151,14 @@ if ( class_exists( 'GFForms' ) ) {
 		public function init_frontend(){
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_scripts' ), 10 );
 			add_action( 'template_redirect', array( $this, 'action_template_redirect' ), 5 );
+			if ( class_exists( 'GFSignature' ) ) {
+				add_filter( 'gform_admin_pre_render', array( $this, 'delete_signature_script' ) );
+				$this->maybe_save_signature();
+			}
+		}
+
+		public function get_short_title(){
+			return $this->translate_navigation_label( 'workflow' );
 		}
 
 		public function setup(){
