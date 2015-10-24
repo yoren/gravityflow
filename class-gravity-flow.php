@@ -521,6 +521,16 @@ PRIMARY KEY  (id)
 						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=0' ),
 					),
 				),
+				array(
+					'handle'  => 'gravityflow_settings',
+					'src'     => $this->get_base_url() . "/css/settings{$min}.css",
+					'version' => $this->_version,
+					'enqueue' => array(
+						array( 'query' => 'page=gravityflow_settings&view=_empty_' ),
+						array( 'query' => 'page=gravityflow_settings&view=settings' ),
+						array( 'query' => 'page=gravityflow_settings&view=labels' ),
+					),
+				),
 			);
 
 			return array_merge( parent::styles(), $styles );
@@ -1534,7 +1544,7 @@ PRIMARY KEY  (id)
 				foreach ( $step_final_status_options as $final_status_option ) {
 					$status_choices[] = array(
 						'value' => $final_status_option['status'],
-						'text' => $final_status_option['status_label'],
+						'text' => $this->translate_status_label( $final_status_option['status'] ),
 					);
 				}
 
@@ -1671,7 +1681,7 @@ PRIMARY KEY  (id)
 			?>
 			<div class="postbox">
 				<h3 class="hndle" style="cursor:default;">
-					<span><?php esc_html_e( 'Workflow', 'gravityflow' ); ?></span>
+					<span><?php echo esc_html( $this->translate_navigation_label( 'workflow' ) ); ?></span>
 				</h3>
 
 				<div id="submitcomment" class="submitbox">
@@ -1697,9 +1707,8 @@ PRIMARY KEY  (id)
 
 						$workflow_status = gform_get_meta( $entry['id'], 'workflow_final_status' );
 
-						//$workflow_status = $current_step ? $current_step->get_status_label( $workflow_status ) : esc_html__( 'Complete', 'gravityflow' );
-
-						printf( '%s: %s', esc_html__( 'Status', 'gravityflow' ), $workflow_status );
+						$workflow_status_label = $this->translate_status_label( $workflow_status );
+						printf( '%s: %s', esc_html__( 'Status', 'gravityflow' ), $workflow_status_label );
 
 
 
@@ -1776,7 +1785,7 @@ PRIMARY KEY  (id)
 
 			?>
 			<div class="postbox">
-				<h3><?php esc_html_e( 'Workflow', 'gravityflow' ) ?></h3>
+				<h3><?php echo esc_html( $this->translate_navigation_label( 'workflow' ) ); ?></h3>
 				<?php
 				if ( $current_step == false ) {
 					?>
@@ -1912,7 +1921,7 @@ PRIMARY KEY  (id)
 
 			$inbox_item = array(
 				'name' => 'gravityflow-inbox',
-				'label' => esc_html__( 'Inbox', 'gravityflow' ),
+				'label' => esc_html( $this->translate_navigation_label( 'inbox' ) ),
 				'permission' => 'gravityflow_inbox',
 				'callback' => array( $this, 'inbox' )
 			);
@@ -1923,7 +1932,7 @@ PRIMARY KEY  (id)
 			if ( ! empty( $form_ids ) ){
 				$menu_item = array(
 					'name' => 'gravityflow-submit',
-					'label' => esc_html__( 'Submit', 'gravityflow' ),
+					'label' => esc_html( $this->translate_navigation_label( 'submit' ) ),
 					'permission' => 'gravityflow_submit',
 					'callback' => array( $this, 'submit' )
 				);
@@ -1932,7 +1941,7 @@ PRIMARY KEY  (id)
 
 			$status_item = array(
 				'name' => 'gravityflow-status',
-				'label' => esc_html__( 'Status', 'gravityflow' ),
+				'label' => esc_html( $this->translate_navigation_label( 'status' ) ),
 				'permission' => 'gravityflow_status',
 				'callback' => array( $this, 'status' )
 			);
@@ -1940,7 +1949,7 @@ PRIMARY KEY  (id)
 
 			$help_item = array(
 				'name' => 'gravityflow-help',
-				'label' => esc_html__( 'Help', 'gravityflow' ),
+				'label' => esc_html( $this->translate_navigation_label( 'help' ) ),
 				'permission' => 'gform_full_access',
 				'callback' => array( $this, 'help' )
 			);
@@ -1948,7 +1957,7 @@ PRIMARY KEY  (id)
 
 			$support_item = array(
 				'name' => 'gravityflow-support',
-				'label' => esc_html__( 'Support', 'gravityflow' ),
+				'label' => esc_html( $this->translate_navigation_label( 'support' ) ),
 				'permission' => 'gform_full_access',
 				'callback' => array( $this, 'support' )
 			);
@@ -1956,7 +1965,7 @@ PRIMARY KEY  (id)
 
 			$reports_item = array(
 				'name' => 'gravityflow-reports',
-				'label' => esc_html__( 'Reports', 'gravityflow' ),
+				'label' => esc_html( $this->translate_navigation_label( 'reports' ) ),
 				'permission' => 'gravityflow_reports',
 				'callback' => array( $this, 'reports' )
 			);
@@ -1964,7 +1973,7 @@ PRIMARY KEY  (id)
 
 			$activity_item = array(
 				'name' => 'gravityflow-activity',
-				'label' => esc_html__( 'Activity', 'gravityflow' ),
+				'label' => esc_html( $this->translate_navigation_label( 'activity' ) ),
 				'permission' => 'gravityflow_activity',
 				'callback' => array( $this, 'activity' )
 			);
@@ -1977,13 +1986,19 @@ PRIMARY KEY  (id)
 
 		public function get_app_settings_tabs() {
 
-			//build left side options, always have app Settings first and Uninstall last, put add-ons in the middle
+			//build left side options, always have app Settings first and Uninstall last, put extensions in the middle
 
 			$setting_tabs = array(
 				array(
 					'name' => 'settings',
-					'label' => __( 'Settings', 'gravityflow' ),
+					'label' => esc_html__( 'General', 'gravityflow' ),
+					'title' => esc_html__( 'Gravity Flow Settings', 'gravityflow' ),
 					'callback' => array( $this, 'app_settings_tab' )
+				),
+				array(
+					'name' => 'labels',
+					'label' => __( 'Labels', 'gravityflow' ),
+					'callback' => array( $this, 'app_settings_label_tab' )
 				),
 				/*
 				array(
@@ -2008,6 +2023,95 @@ PRIMARY KEY  (id)
 		public function get_app_menu_icon(){
 			$admin_icon = $this->get_admin_icon_b64();
 			return $admin_icon;
+		}
+
+		public function app_settings_label_tab(){
+			require_once( GFCommon::get_base_path() . '/tooltips.php' );
+
+			if ( isset( $_POST['gravityflow-labels-update'] ) ) {
+				check_admin_referer( 'gravityflow_app_settings_labels' );
+				$status_labels = rgpost( 'status_labels' );
+				$labels['status'] = $status_labels;
+				$navigation_labels = rgpost( 'navigation_labels' );
+				$labels['navigation'] = $navigation_labels;
+				update_option( 'gravityflow_app_settings_labels', $labels );
+			}
+
+			$labels = get_option( 'gravityflow_app_settings_labels', array() );
+
+			?>
+
+			<h3><span><i class="fa fa-cogs"></i> <?php esc_html_e( 'Labels', 'gravityflow' ); ?></span></h3>
+
+			<form  id="gform-settings" method="POST" action="">
+				<?php wp_nonce_field( 'gravityflow_app_settings_labels' ); ?>
+				<div class="gaddon-section gaddon-first-section">
+					<h4 class="gaddon-section-title gf_settings_subgroup_title"> <?php echo esc_html__( 'Navigation', 'gravityflow' ); ?> </h4>
+					<?php
+
+
+					$custom_navigation_labels = isset( $labels['navigation'] )? $labels['navigation'] : array();
+
+
+					$default_navigation_labels = $this->get_default_navigation_labels();
+
+					$navigation_labels = array_merge( $default_navigation_labels, $custom_navigation_labels );
+
+					$fields = array();
+
+					foreach ( $navigation_labels as $navigation_label_key => $navigation_label ) {
+						if ( isset(  $default_navigation_labels[ $navigation_label_key ] ) ) {
+							$default_navigation_label = $default_navigation_labels[ $navigation_label_key ];
+							$fields[] = sprintf( '<tr><th><label for="navigation_label_%s">%s</label></th><td><input id="navigation_label_%s" type="text" name="navigation_labels[%s]" value="%s" /></td></tr>', $navigation_label_key, $default_navigation_label, $navigation_label_key, $navigation_label_key, rgar( $custom_navigation_labels, $navigation_label_key ) );
+						}
+					}
+
+					$fields_str = join( "\n", $fields );
+					printf( '<table id="gravityflow-settings-labels-navigation" class="gravityflow-settings-labels">%s</table>', $fields_str );
+
+					?>
+				</div>
+				<div class="gaddon-section">
+					<h4 class="gaddon-section-title gf_settings_subgroup_title"> <?php echo esc_html__( 'Status Labels', 'gravityflow' ); ?> </h4>
+					<?php
+
+					if ( isset( $_POST['gravityflow-labels-update'] ) ) {
+						check_admin_referer( 'gravityflow_app_settings_labels' );
+						$status_labels = rgpost( 'status_labels' );
+						$labels['status'] = $status_labels;
+						update_option( 'gravityflow_app_settings_labels', $labels );
+					}
+
+					$labels = get_option( 'gravityflow_app_settings_labels', array() );
+					$custom_status_labels = isset( $labels['status'] )? $labels['status'] : array();
+					$steps = Gravity_Flow_Steps::get_all();
+
+					$default_status_labels = array( 'pending' => esc_html__( 'Pending', 'gravityflow' ), 'cancelled' => esc_html__( 'Cancelled', 'gravityflow' ) );
+					foreach ( $steps as $step ) {
+						$final_status_config = $step->get_final_status_config();
+						foreach ( $final_status_config as $final_status ) {
+							$default_status_labels[ $final_status['status'] ] = $final_status['status_label'];
+						}
+					}
+
+					$status_labels = array_merge( $default_status_labels, $custom_status_labels );
+
+					$fields = array();
+
+					foreach ( $status_labels as $status_label_key => $status_label ) {
+						$default_status_label = $default_status_labels[ $status_label_key ];
+						$fields[] = sprintf( '<tr><th><label for="status_label_%s">%s</label></th><td><input id="status_label_%s" type="text" name="status_labels[%s]" value="%s" /></td></tr>', $status_label_key, $default_status_label, $status_label_key, $status_label_key, rgar( $custom_status_labels, $status_label_key ) );
+					}
+
+					$fields_str = join( "\n", $fields );
+					printf( '<table id="gravityflow-settings-labels-status" class="gravityflow-settings-labels">%s</table>', $fields_str );
+
+					?>
+				</div>
+				<?php echo get_submit_button( esc_html__( 'Update', 'gravityflow' ), 'primary large', 'gravityflow-labels-update', false ); ?>
+			</form>
+
+			<?php
 		}
 
 		public function app_tools_tab(){
@@ -2154,7 +2258,7 @@ PRIMARY KEY  (id)
 
 			if ( ! is_multisite() || ( is_multisite() && is_main_site() && ! defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ) ) {
 				$settings[] = array(
-					'title'  => 'Settings',
+					'title'  => esc_html( $this->translate_navigation_label( 'settings' ) ),
 					'fields' => array(
 						array(
 							'name'          => 'license_key',
@@ -2600,7 +2704,7 @@ PRIMARY KEY  (id)
 			$not_active_class = '';
 
 			$menu_items['inbox'] = array(
-				'label'        => __( 'Inbox', 'gravityflow' ),
+				'label'        => esc_html( $this->translate_navigation_label( 'inbox' ) ),
 				'icon'         => '<i class="fa fa-inbox fa-lg"></i>',
 				'title'        => __( 'Your inbox of pending tasks', 'gravityflow' ),
 				'url'          => '?page=gravityflow-inbox',
@@ -2614,7 +2718,7 @@ PRIMARY KEY  (id)
 
 			if ( ! empty( $form_ids ) ) {
 				$menu_items['submit'] = array(
-					'label'        => __( 'Submit', 'gravityflow' ),
+					'label'        => esc_html( $this->translate_navigation_label( 'submit' ) ),
 					'icon'         => '<i class="fa fa-pencil-square-o fa-lg"></i>',
 					'title'        => __( 'Submit a Workflow', 'gravityflow' ),
 					'url'          => '?page=gravityflow-submit',
@@ -2626,7 +2730,7 @@ PRIMARY KEY  (id)
 			}
 
 			$menu_items['status'] = array(
-				'label'          => __( 'Status', 'gravityflow' ),
+				'label'          => esc_html( $this->translate_navigation_label( 'status' ) ),
 				'icon'           => '<i class="fa fa-tachometer fa-lg"></i>',
 				'title'          => __( 'Your workflows', 'gravityflow' ),
 				'url'            => '?page=gravityflow-status',
@@ -2637,7 +2741,7 @@ PRIMARY KEY  (id)
 			);
 
 			$menu_items['reports'] = array(
-				'label'          => __( 'Reports', 'gravityflow' ),
+				'label'          => esc_html( $this->translate_navigation_label( 'reports' ) ),
 				'icon'           => '<i class="fa fa fa-bar-chart-o fa-lg"></i>',
 				'title'          => __( 'Reports', 'gravityflow' ),
 				'url'            => '?page=gravityflow-reports',
@@ -2648,7 +2752,7 @@ PRIMARY KEY  (id)
 			);
 
 			$menu_items['activity'] = array(
-				'label'          => __( 'Activity', 'gravityflow' ),
+				'label'          => esc_html( $this->translate_navigation_label( 'activity' ) ),
 				'icon'           => '<i class="fa fa fa-list fa-lg"></i>',
 				'title'          => __( 'Activity', 'gravityflow' ),
 				'url'            => '?page=gravityflow-activity',
@@ -3910,7 +4014,50 @@ AND m.meta_value='queued'";
 			die();
 		}
 
+		public function translate_navigation_label( $label_key ) {
+
+			$custom_labels = get_option( 'gravityflow_app_settings_labels', array() );
+
+			$custom_navigation_labels = rgar( $custom_labels, 'navigation' );
+
+
+			$custom_label = rgar( $custom_navigation_labels, $label_key );
+
+			if ( ! empty ( $custom_label) ) {
+				return $custom_label;
+			}
+
+			$default_labels = $this->get_default_navigation_labels();
+
+			$label = rgar( $default_labels, $label_key );
+
+			return empty ( $label ) ?  $label_key :  $label;
+		}
+
+		public function get_default_navigation_labels(){
+			return array(
+				'workflow' => esc_html__( 'Workflow', 'gravityflow' ),
+				'inbox' => esc_html__( 'Inbox', 'gravityflow' ),
+				'submit' => esc_html__( 'Submit', 'gravityflow' ),
+				'status' => esc_html__( 'Status', 'gravityflow' ),
+				'help' => esc_html__( 'Help', 'gravityflow' ),
+				'support' => esc_html__( 'Support', 'gravityflow' ),
+				'reports' => esc_html__( 'Reports', 'gravityflow' ),
+				'activity' => esc_html__( 'Activity', 'gravityflow' ),
+			);
+		}
+
 		public function translate_status_label( $status ) {
+
+			$custom_labels = get_option( 'gravityflow_app_settings_labels', array() );
+
+			$status_labels = rgar( $custom_labels, 'status' );
+
+			$custom_label = rgar( $status_labels, $status );
+
+			if ( ! empty ( $custom_label) ) {
+				return $custom_label;
+			}
 
 			switch ( $status ) {
 				case 'pending' :
@@ -3925,7 +4072,9 @@ AND m.meta_value='queued'";
 				case 'rejected' :
 					return esc_html__( 'Rejected', 'gravityflow' );
 					break;
-
+				case 'cancelled' :
+					return esc_html__( 'Cancelled', 'gravityflow' );
+					break;
 			}
 
 			$steps = Gravity_Flow_Steps::get_all();
@@ -3938,6 +4087,110 @@ AND m.meta_value='queued'";
 					}
 				}
 			}
+		}
+
+
+		/**
+		* Patch to fix signature add-on in the front-end until GF_Field is implemented. The input name is rendered with the form ID in the front-end but editing is expected to be done in admin.
+        */
+		public function maybe_save_signature() {
+
+			//see if this is an entry and it needs to be updated. abort if not
+
+			if ( ! ( RG_CURRENT_VIEW == 'entry' && rgpost( 'save' ) == 'Update' ) ) {
+				return;
+			}
+
+			$lead_id = rgget( 'lid' );
+			$form    = RGFormsModel::get_form_meta( rgget( 'id' ) );
+			if ( empty( $lead_id ) ) {
+				//lid is not always in the querystring when paging through entries, use same logic from entry detail page
+				$filter         = rgget( 'filter' );
+				$status         = in_array( $filter, array( 'trash', 'spam' ) ) ? $filter : 'active';
+				$search         = rgget( 's' );
+				$position       = rgget( 'pos' ) ? rgget( 'pos' ) : 0;
+				$sort_direction = rgget( 'dir' ) ? rgget( 'dir' ) : 'DESC';
+
+				$sort_field      = empty( $_GET['sort'] ) ? 0 : $_GET['sort'];
+				$sort_field_meta = RGFormsModel::get_field( $form, $sort_field );
+				$is_numeric      = $sort_field_meta['type'] == 'number';
+
+				$star = $filter == 'star' ? 1 : null;
+				$read = $filter == 'unread' ? 0 : null;
+
+				$leads = RGFormsModel::get_leads( rgget( 'id' ), $sort_field, $sort_direction, $search, $position, 1, $star, $read, $is_numeric, null, null, $status );
+
+				if ( ! $lead_id ) {
+					$lead = ! empty( $leads ) ? $leads[0] : false;
+				} else {
+					$lead = RGFormsModel::get_lead( $lead_id );
+				}
+
+				if ( ! $lead ) {
+					_e( "Oops! We couldn't find your lead. Please try again", 'gravityforms' );
+
+					return;
+				}
+				$lead_id = $lead['id'];
+			}
+
+			//loop through form fields, get the field name of the signature field
+			foreach ( $form['fields'] as $field ) {
+				if ( RGFormsModel::get_input_type( $field ) == 'signature' ) {
+					//get field name so the value can be pulled from the post data
+					$form_id = absint( $form['id'] );
+					$input_name = 'input_' . $form_id . '_' . str_replace( '.', '_', $field['id'] );
+
+					//when adding a new signature the data field will be populated
+					if ( ! rgempty( "{$input_name}_data" ) ) {
+						//new image added, save
+						$filename = gf_signature()->save_signature( $input_name . '_data' );
+					} else {
+						//existing image edited
+						$filename = rgpost( $input_name . '_signature_filename' );
+					}
+					$_POST[ "input_{$field['id']}" ] = $filename;
+
+				}
+			}
+
+		}
+
+		/**
+        *  Patch until the Signature Add-On uses GF_Field
+        *
+		* @param $form
+		*
+		* @return mixed
+	    */
+		public function delete_signature_script( $form ) {
+			$form_id = absint( $form['id'] );
+			?>
+
+			<script type="text/javascript">
+				function deleteSignature(leadId, fieldId) {
+
+					if (!confirm(<?php echo json_encode( __( "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete", 'gravityformssignature' ) ); ?>))
+						return;
+
+					jQuery.post(ajaxurl, {
+						lead_id: leadId,
+						field_id: fieldId,
+						action: 'gf_delete_signature',
+						gf_delete_signature: '<?php echo wp_create_nonce( 'gf_delete_signature' ) ?>'
+					}, function (response) {
+						if ( ! response ){
+							jQuery('#input_' + fieldId + '_signature_filename').val('');
+						}
+						jQuery('#input_<?php echo $form_id; ?>_' + fieldId + '_signature_image').hide();
+						jQuery('#input_<?php echo $form_id; ?>_' + fieldId + '_Container').show();
+						jQuery('#input_<?php echo $form_id; ?>_' + fieldId + '_resetbutton').show();
+					});
+				}
+			</script>
+
+			<?php
+		return $form;
 		}
 
 	}

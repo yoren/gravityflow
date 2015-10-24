@@ -222,23 +222,27 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$pending_count   = '&nbsp;<span class="count">(' . $this->pending_count . ')</span>';
 		$cancelled_count = '&nbsp;<span class="count">(' . $this->cancelled_count . ')</span>';
 
+		$pending_label = gravity_flow()->translate_status_label( 'pending' );
+		$complete_label = gravity_flow()->translate_status_label( 'complete' );
+		$cancelled_label = gravity_flow()->translate_status_label( 'cancelled' );
+
 		$views = array(
-			'all'       => sprintf( '<a href="%s"%s>%s</a>', remove_query_arg( array(
+			'all'       => sprintf( '<a href="%s"%s>%s</a>', esc_url( remove_query_arg( array(
 				'status',
 				'paged'
-			) ), $current === 'all' || $current == '' ? ' class="current"' : '', esc_html__( 'All', 'gravityflow' ) . $total_count ),
-			'pending'   => sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array(
+			) ) ), $current === 'all' || $current == '' ? ' class="current"' : '', esc_html__( 'All', 'gravityflow' ) . $total_count ),
+			'pending'   => sprintf( '<a href="%s"%s>%s</a>', esc_url( add_query_arg( array(
 				'status' => 'pending',
 				'paged'  => false
-			) ), $current === 'pending' ? ' class="current"' : '', esc_html__( 'Pending', 'gravityflow' ) . $pending_count ),
-			'complete'  => sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array(
+			) ) ), $current === 'pending' ? ' class="current"' : '', esc_html( $pending_label ) . $pending_count ),
+			'complete'  => sprintf( '<a href="%s"%s>%s</a>', esc_url( add_query_arg( array(
 				'status' => 'complete',
 				'paged'  => false
-			) ), $current === 'complete' ? ' class="current"' : '', esc_html__( 'Complete', 'gravityflow' ) . $complete_count ),
-			'cancelled' => sprintf( '<a href="%s"%s>%s</a>', add_query_arg( array(
+			) ) ), $current === 'complete' ? ' class="current"' : '',esc_html( $complete_label ) . $complete_count ),
+			'cancelled' => sprintf( '<a href="%s"%s>%s</a>', esc_url( add_query_arg( array(
 				'status' => 'cancelled',
 				'paged'  => false
-			) ), $current === 'cancelled' ? ' class="current"' : '', esc_html__( 'Cancelled', 'gravityflow' ) . $cancelled_count ),
+			) ) ), $current === 'cancelled' ? ' class="current"' : '', esc_html( $cancelled_label ) . $cancelled_count ),
 		);
 
 		return $views;
