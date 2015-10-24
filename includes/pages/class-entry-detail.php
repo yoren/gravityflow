@@ -14,6 +14,9 @@ class Gravity_Flow_Entry_Detail {
 	 */
 	public static function entry_detail( $form, $entry, $current_step = null, $args  = array() ){
 
+		$form_id = absint( $form['id'] );
+		$form    = gf_apply_filters( 'gform_admin_pre_render', $form_id, $form );
+
 		$defaults = array(
 			'display_empty_fields' => true,
 			'check_permissions' => true,
@@ -29,6 +32,10 @@ class Gravity_Flow_Entry_Detail {
 		?>
 
 		<script type="text/javascript">
+
+			if ( typeof ajaxurl == 'undefined' ) {
+				ajaxurl = <?php echo json_encode( admin_url( 'admin-ajax.php' ) ); ?>;
+			}
 
 			function DeleteFile(leadId, fieldId, deleteButton) {
 				if (confirm(<?php echo json_encode( __( "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete", 'gravityflow' ) ); ?>)) {
