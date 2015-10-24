@@ -168,7 +168,7 @@ class Gravity_Flow_Assignee {
 	}
 
 	/**
-	 * Returns the status timestamp.
+	 * Sets the timestamp for the reminder.
 	 *
 	 * @return bool|mixed
 	 */
