@@ -1578,7 +1578,7 @@ PRIMARY KEY  (id)
 
 				$workflow_final_status_options[] = array(
 					'value' => 'pending',
-					'text'  => __( 'Pending', 'gravityflow' )
+					'text'  => $this->translate_status_label( 'pending' )
 				);
 
 				$entry_meta['workflow_final_status'] = array(
