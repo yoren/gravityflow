@@ -1673,7 +1673,7 @@ PRIMARY KEY  (id)
 		function workflow_entry_detail_status_box( $form, $entry ) {
 
 			if ( ! isset( $entry['workflow_final_status'] ) ) {
-				return;
+				//return;
 			}
 
 			$current_step = $this->get_current_step( $form, $entry );
@@ -1698,10 +1698,12 @@ PRIMARY KEY  (id)
 						<?php esc_html_e( 'Entry Id', 'gravityflow' ); ?>: <?php echo $entry_id_link ?><br /><br />
 						<?php esc_html_e( 'Submitted', 'gravityflow' ); ?>: <?php echo esc_html( GFCommon::format_date( $lead['date_created'], true, 'Y/m/d' ) ) ?>
 						<?php
-						$last_updated = date( 'Y-m-d H:i:s', $lead['workflow_timestamp'] );
-						if ( $lead['date_created'] != $last_updated ) {
-							echo '<br /><br />';
-							esc_html_e( 'Last updated', 'gravityflow' ); ?>: <?php echo esc_html( GFCommon::format_date( $last_updated, true, 'Y/m/d' ) );
+						if ( isset( $lead['workflow_timestamp'] ) ) {
+							$last_updated = date( 'Y-m-d H:i:s', $lead['workflow_timestamp'] );
+							if ( $lead['date_created'] != $last_updated ) {
+								echo '<br /><br />';
+								esc_html_e( 'Last updated', 'gravityflow' ); ?>: <?php echo esc_html( GFCommon::format_date( $last_updated, true, 'Y/m/d' ) );
+							}
 						}
 						?>
 						<br /><br />
