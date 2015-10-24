@@ -94,7 +94,6 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
 			if ( ! empty( $role_choices ) ) {
 				$roles_opt_group = new GF_Field();
-				$roles_opt_group->placeholder = true;
 				$roles_opt_group->choices = $role_choices;
 
 				$optgroups[] = array(
@@ -121,7 +120,6 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
 				if ( ! empty( $fields_choices ) ) {
 					$fields_opt_group = new GF_Field();
-					$fields_opt_group->placeholder = true;
 					$fields_opt_group->choices = $fields_choices;
 
 					$optgroups[] = array(
