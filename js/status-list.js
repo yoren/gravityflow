@@ -3,11 +3,17 @@
     var page = 1, filters;
     $(document).ready(function () {
         $("#doaction").click(function(){
-            var checkedValues = $('.gravityflow-cb-step-id:checked').map(function() {
-                return this.value;
-            }).get();
-            printPage( gravityflow_status_list_strings.ajaxurl + '?action=gravityflow_print_entries&lid=' + checkedValues.join(',') );
-        	return false;
+
+            var action = $('#bulk-action-selector-top').val();
+
+            if ( action == 'print' ) {
+                var checkedValues = $('.gravityflow-cb-entry-id:checked').map(function() {
+                    return this.value;
+                }).get();
+                printPage( gravityflow_status_list_strings.ajaxurl + '?action=gravityflow_print_entries&lid=' + checkedValues.join(',') );
+                return false;
+            }
+
 		});
 
         $('.gravityflow-export-status-button').click(function(){
