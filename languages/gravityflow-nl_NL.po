@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
 "POT-Creation-Date: 2015-10-19 10:24:37+00:00\n"
-"PO-Revision-Date: 2015-10-20 08:14+0000\n"
-"Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
+"PO-Revision-Date: 2015-10-24 09:53+0000\n"
+"Last-Translator: Erik van Beek <erik@aiwos.nl>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/gravityflow/gravityflow/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -315,7 +315,7 @@ msgstr "Intrekken"
 
 #: class-gravity-flow.php:2105
 msgid "Entries per page"
-msgstr ""
+msgstr "Inzendingen per pagina"
 
 #: class-gravity-flow.php:2137
 msgid "Published"
@@ -563,7 +563,7 @@ msgstr "Er is een nieuwe versie van %1$s beschikbaar. <a target=\"_blank\" class
 
 #: includes/EDD_SL_Plugin_Updater.php:332
 msgid "You do not have permission to install plugin updates"
-msgstr "Je hebt geen toestemming om plugin updates te installeren"
+msgstr "U heeft geen toestemming om plugin updates te installeren"
 
 #: includes/EDD_SL_Plugin_Updater.php:332
 msgid "Error"
@@ -573,15 +573,15 @@ msgstr "Fout"
 msgid ""
 "%s has been successfully uninstalled. It can be re-activated from the "
 "%splugins page%s."
-msgstr ""
+msgstr "%s is succesvol verwijderd. U kunt het opnieuw activeren op deze %splugin pagina%s."
 
 #: includes/class-extension.php:89
 msgid "Uninstall %s Extension"
-msgstr ""
+msgstr "Verwijder %s Uitbreiding"
 
 #: includes/class-extension.php:95
 msgid "Uninstall Extension"
-msgstr ""
+msgstr "Verwijder Uitbreiding"
 
 #: includes/fields/class-field-assignee-select.php:40
 #: includes/pages/class-reports.php:293 includes/pages/class-reports.php:351
@@ -591,7 +591,7 @@ msgstr "Gemachtigde"
 
 #: includes/pages/class-activity.php:20 includes/pages/class-reports.php:44
 msgid "You don't have permission to view this page"
-msgstr "Je hebt geen toestemming deze pagina te bekijken"
+msgstr "U heeft geen toestemming deze pagina te bekijken"
 
 #: includes/pages/class-activity.php:32
 msgid "Event ID"
@@ -656,7 +656,7 @@ msgstr "Workflow Formulier"
 #: includes/pages/class-entry-detail.php:138
 #: includes/pages/class-print-entries.php:138
 msgid "You don't have permission to view this entry."
-msgstr "Je hebt geen toestemming om deze inzending te bekijken. "
+msgstr "U heeft geen toestemming om deze inzending te bekijken. "
 
 #: includes/pages/class-entry-detail.php:160
 #: includes/pages/class-status.php:191
@@ -891,11 +891,11 @@ msgstr "Verzenden"
 
 #: includes/steps/class-step-approval.php:26
 msgid "Next step if Rejected"
-msgstr "Voigende Stap is Afgekeurd"
+msgstr "Voigende Stap na Afkeuren"
 
 #: includes/steps/class-step-approval.php:32
 msgid "Next Step if Approved"
-msgstr "Volgende Stap is Goedgekeurd"
+msgstr "Volgende Stap na Goedkeuren"
 
 #: includes/steps/class-step-approval.php:39
 #: includes/steps/class-step-approval.php:57
@@ -926,7 +926,7 @@ msgid ""
 "assignee fields they will also appear here. Click on an item to select it. "
 "The selected items will appear on the right. If you select a role then "
 "anybody from that role can approve."
-msgstr "Gebruikers en rollen velden zijn zichtbaar in deze lijst. Als het formulier toewijzingsvelden heeft verschijnen die ook hier. Klik op een item om het te selecteren. De geselecteerde items verschijnen rechts. Als je een rol selecteert, dan kan iedereen met die rol goedkeuren. "
+msgstr "Gebruikers en rollen velden zijn zichtbaar in deze lijst. Als het formulier toewijzingsvelden heeft verschijnen die ook hier. Klik op een item om het te selecteren. De geselecteerde items verschijnen rechts. Als u een rol selecteert, dan kan iedereen met die rol goedkeuren. "
 
 #: includes/steps/class-step-approval.php:73
 msgid "Select Assignees"
@@ -997,7 +997,7 @@ msgstr "Bericht aan Gemachtigde(n)"
 #: includes/steps/class-step-approval.php:127
 msgid ""
 "A new entry is pending your approval. Please check your Workflow Inbox."
-msgstr "Een nieuwe inzending wacht op goedkeuring. Controleer je Workflow Inbox. "
+msgstr "Een nieuwe inzending wacht op goedkeuring. Controleer uw Workflow Inbox. "
 
 #: includes/steps/class-step-approval.php:131
 #: includes/steps/class-step-user-input.php:119
@@ -1137,7 +1137,7 @@ msgstr "Feeds"
 #: includes/steps/class-step-feed-add-on.php:86
 #: includes/steps/class-step-multi-feed.php:50
 msgid "You don't have any feeds set up."
-msgstr "Je hebt nog geen feeds ingesteld. "
+msgstr "U heeft nog geen feeds ingesteld. "
 
 #: includes/steps/class-step-feed-add-on.php:120
 #: includes/steps/class-step-multi-feed.php:84
@@ -1168,7 +1168,7 @@ msgstr "Multi-Feed"
 
 #: includes/steps/class-step-multi-feed.php:48
 msgid "You don't have any supported feed add-ons installed."
-msgstr "Je hebt nog geen ondersteunde feed add-ons geinstalleerd. "
+msgstr "U heeft nog geen ondersteunde feed add-ons geïnstalleerd. "
 
 #: includes/steps/class-step-multi-feed.php:54
 msgid "Add-On Feeds"
@@ -1196,7 +1196,7 @@ msgstr "Workflow Notificatie"
 
 #: includes/steps/class-step-notification.php:58
 msgid "Enable this setting to send an email."
-msgstr ""
+msgstr "Deze instelling toestaan om een e-mail te versturen. "
 
 #: includes/steps/class-step-notification.php:62
 #: includes/steps/class-step-user-input.php:105
@@ -1256,7 +1256,7 @@ msgstr "In behandeling"
 
 #: includes/steps/class-step-user-input.php:115
 msgid "A new entry requires your input"
-msgstr ""
+msgstr "Een nieuwe inzending vereist uw inbreng."
 
 #: includes/steps/class-step-user-input.php:342
 msgid "Entry updated and marked complete."
@@ -1281,11 +1281,11 @@ msgstr "U heeft niet de juiste toestemming om inzendingen te bewerken. "
 #: includes/steps/class-step-webhook.php:21
 #: includes/steps/class-step-webhook.php:31
 msgid "Outgoing Webhook"
-msgstr ""
+msgstr "Uitgaande Webhook"
 
 #: includes/steps/class-step-webhook.php:36
 msgid "Outgoing Webhook URL"
-msgstr ""
+msgstr "Uitgaande Webhook URL"
 
 #: includes/steps/class-step-webhook.php:41
 msgid "Request Method"
@@ -1410,7 +1410,7 @@ msgstr "Door het uitschakelen van achtergrond updates kan uw site beschadigd rak
 
 #: includes/wizard/steps/class-installation-wizard-step-updates.php:49
 msgid "I Understand and Accept the Risk"
-msgstr "Ik Begrijp Dit en Accepteer de Risico's"
+msgstr "Ik begrijp en accepteer de risico's"
 
 #: includes/wizard/steps/class-installation-wizard-step-updates.php:80
 msgid "Please accept the terms."
@@ -1422,7 +1422,7 @@ msgstr "Uitgeschakeld"
 
 #: includes/wizard/steps/class-installation-wizard-step-welcome.php:9
 msgid "Click the 'Get Started' button to complete your installation."
-msgstr "Klik op de 'Aan de slag' button om jouw installate te voltooien. "
+msgstr "Klik op de 'Aan de slag' button om uw installatie te voltooien. "
 
 #: includes/wizard/steps/class-installation-wizard-step-welcome.php:16
 msgid "Get Started"
