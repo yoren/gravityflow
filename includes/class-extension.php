@@ -44,14 +44,14 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 		}
 		?>
 
-		<h3><span><?php echo $icon ?><?php echo $this->app_settings_title() ?></span></h3>
+		<h3><span><?php echo $icon ?> <?php echo $this->app_settings_title() ?></span></h3>
 
 		<?php
 
 		if ( $this->maybe_uninstall() ) {
 			?>
 			<div class="push-alert-gold" style="border-left: 1px solid #E6DB55; border-right: 1px solid #E6DB55;">
-				<?php printf( esc_html__( '%s has been successfully uninstalled. It can be re-activated from the %splugins page%s.', 'gravityforms' ), esc_html( $this->_title ), "<a href='plugins.php'>", '</a>' ); ?>
+				<?php printf( esc_html_x( '%s has been successfully uninstalled. It can be re-activated from the %splugins page%s.', 'Displayed on the settings page after uninstalling a Gravity Flow extension.', 'gravityforms' ), esc_html( $this->_title ), "<a href='plugins.php'>", '</a>' ); ?>
 			</div>
 			<?php
 		} else {
@@ -86,13 +86,13 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 
 				<div class="hr-divider"></div>
 
-				<h3><span><i class="fa fa-times"></i> <?php printf( esc_html__( 'Uninstall %s Extension', 'gravityflow' ), $this->get_short_title() ) ?></span></h3>
+				<h3><span><i class="fa fa-times"></i> <?php printf( esc_html_x( 'Uninstall %s Extension', 'Title for the uninstall section on the settings page for a Gravity Flow extension.', 'gravityflow' ), $this->get_short_title() ) ?></span></h3>
 				<div class="delete-alert alert_red">
 					<h3><i class="fa fa-exclamation-triangle gf_invalid"></i> Warning</h3>
 					<div class="gf_delete_notice">
 						<?php echo $this->uninstall_warning_message() ?>
 					</div>
-					<input type="submit" name="uninstall" value="<?php esc_attr_e( 'Uninstall Extension', 'gravityflow' ) ?>" class="button" onclick="return confirm('<?php echo esc_js( $this->uninstall_confirm_message() ); ?>');">
+					<input type="submit" name="uninstall" value="<?php echo esc_attr_x( 'Uninstall Extension', 'Button text on the settings page for an extension.', 'gravityflow' ) ?>" class="button" onclick="return confirm('<?php echo esc_js( $this->uninstall_confirm_message() ); ?>');">
 				</div>
 
 				<?php
