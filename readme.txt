@@ -15,7 +15,7 @@ Gravity Flow is a business process workflow platform for WordPress.
 
 = Who is it for? =
 
-Gravity Flow is for organisations and departments of any size that need to get a form-based workflow process up and running online quickly with no technical knowledge. These processes often already exist either offline or online but inefficiently implemented.
+Gravity Flow is for organisations and departments of any size that need to get a form-based workflow process up and running online quickly with no programming. These processes usually already exist either offline or online but are often inefficiently implemented.
 
 = How does it work? =
 
@@ -54,6 +54,10 @@ https://gravityflow.io/contact/
 Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.io/out/gravityforms).
 
 == ChangeLog ==
+
+= 1.1.0.7 =
+- Added the Restart Workflow bulk action to the status page.
+- Added entries to the status page which were created before steps were added.
 
 = 1.1.0.6 =
 - Added support for custom navigation labels.
