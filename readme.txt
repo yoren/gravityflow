@@ -55,6 +55,9 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.1.0.8 =
+- Removed the redundant 'workflow: notification step' event in the Gravity Forms notification settings.
+
 = 1.1.0.7 =
 - Added the Restart Workflow bulk action to the status page.
 - Added entries to the status page which were created before steps were added.

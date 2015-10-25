@@ -3,7 +3,7 @@
 Plugin Name: Gravity Flow
 Plugin URI: https://gravityflow.io
 Description: Build Workflow Applications with Gravity Forms.
-Version: 1.1.0.7
+Version: 1.1.0.8
 Author: Steven Henty
 Author URI: http://www.stevenhenty.com
 License: GPL-3.0+
@@ -27,7 +27,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-define( 'GRAVITY_FLOW_VERSION', '1.1.0.7' );
+define( 'GRAVITY_FLOW_VERSION', '1.1.0.8' );
 
 define( 'GRAVITY_FLOW_EDD_STORE_URL', 'https://gravityflow.io' );
 

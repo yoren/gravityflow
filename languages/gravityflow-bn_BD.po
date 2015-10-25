@@ -5,9 +5,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2015-10-19 10:24:37+00:00\n"
-"PO-Revision-Date: 2015-10-23 09:54+0000\n"
-"Last-Translator: Luton Datta <lutondatta@gmail.com>\n"
+"POT-Creation-Date: 2015-10-24 22:34:51+00:00\n"
+"PO-Revision-Date: 2015-10-25 09:09+0000\n"
+"Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
 "Language-Team: Bengali (Bangladesh) (http://www.transifex.com/gravityflow/gravityflow/language/bn_BD/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,88 +23,88 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Textdomain-Support: yes\n"
 
-#: class-gravity-flow.php:396
+#: class-gravity-flow.php:405
 msgid "No results matched"
 msgstr "কোন রেজাল্ট পাওয়া যায় নি"
 
-#: class-gravity-flow.php:417
+#: class-gravity-flow.php:426
 msgid "Workflow Steps"
 msgstr "ওয়ার্কফ্লো প্রবাহগুলো"
 
-#: class-gravity-flow.php:417
+#: class-gravity-flow.php:426
 msgid "Add New"
 msgstr "নতুন জুরুন"
 
-#: class-gravity-flow.php:530
+#: class-gravity-flow.php:549
 msgid "Workflow Step Settings"
 msgstr "ওয়ার্কফ্লো স্টেপের গঠন"
 
-#: class-gravity-flow.php:560
+#: class-gravity-flow.php:579
 #: includes/fields/class-field-assignee-select.php:78
 msgid "Users"
 msgstr "ব্যাবহার করিগন"
 
-#: class-gravity-flow.php:564
-#: includes/fields/class-field-assignee-select.php:101
+#: class-gravity-flow.php:583
+#: includes/fields/class-field-assignee-select.php:100
 msgid "Roles"
 msgstr "ব্যবহার করিগনের প্রকার"
 
-#: class-gravity-flow.php:590
-#: includes/fields/class-field-assignee-select.php:115
+#: class-gravity-flow.php:609
+#: includes/fields/class-field-assignee-select.php:114
 msgid "User (Created by)"
 msgstr "ব্যবহারকারী (যিনি যোক করেছেন)"
 
-#: class-gravity-flow.php:597
-#: includes/fields/class-field-assignee-select.php:128
-#: includes/pages/class-status.php:263
+#: class-gravity-flow.php:616
+#: includes/fields/class-field-assignee-select.php:126
+#: includes/pages/class-status.php:278
 msgid "Fields"
 msgstr "ফিল্ড"
 
-#: class-gravity-flow.php:674 class-gravity-flow.php:1462
+#: class-gravity-flow.php:693 class-gravity-flow.php:1481
 msgid "Step Type"
 msgstr "ধাপের প্রকার"
 
-#: class-gravity-flow.php:688 class-gravity-flow.php:692
+#: class-gravity-flow.php:707 class-gravity-flow.php:711
 #: includes/pages/class-support.php:86
 msgid "Name"
 msgstr "নাম"
 
-#: class-gravity-flow.php:692
+#: class-gravity-flow.php:711
 msgid "Enter a name to uniquely identify this step."
 msgstr "এই ধাপটি একক ভাবে চিহ্নিত করতে নাম পবেশ করান"
 
-#: class-gravity-flow.php:706
+#: class-gravity-flow.php:725
 msgid "Enable Condition for this step"
 msgstr "এই ধাপের জন্য শর্ত সক্রিয় করুন"
 
-#: class-gravity-flow.php:707
+#: class-gravity-flow.php:726
 msgid "Perform this step if"
 msgstr "এই ধাপটি সম্পাদন করুন যদি"
 
-#: class-gravity-flow.php:711 class-gravity-flow.php:1179
-#: class-gravity-flow.php:1186 class-gravity-flow.php:1192
+#: class-gravity-flow.php:730 class-gravity-flow.php:1198
+#: class-gravity-flow.php:1205 class-gravity-flow.php:1211
 msgid "Schedule"
 msgstr "তফসিল"
 
-#: class-gravity-flow.php:713
+#: class-gravity-flow.php:732
 msgid ""
 "Scheduling a step will queue entries and prevent them from starting this "
 "step until the specified date or until the delay period has elapsed."
 msgstr ""
 
-#: class-gravity-flow.php:741
+#: class-gravity-flow.php:760
 msgid "Step settings updated. %sBack to the list%s or %sAdd another step%s."
 msgstr ""
 
-#: class-gravity-flow.php:751
+#: class-gravity-flow.php:770
 msgid "Update Step Settings"
 msgstr "ধাপের গঠন হালনগাদ করুন"
 
-#: class-gravity-flow.php:754
+#: class-gravity-flow.php:773
 msgid "There was an error while saving the step settings"
 msgstr ""
 
-#: class-gravity-flow.php:773
+#: class-gravity-flow.php:792
 msgid ""
 "There is %s entry currently on this step. This entry may be affected if the "
 "settings are changed."
@@ -114,438 +114,465 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: class-gravity-flow.php:1151
+#: class-gravity-flow.php:1170
 msgid "Schedule this step"
 msgstr ""
 
-#: class-gravity-flow.php:1164
+#: class-gravity-flow.php:1183
 msgid "Delay"
 msgstr "দেড়ি"
 
-#: class-gravity-flow.php:1168 includes/pages/class-activity.php:33
-#: includes/pages/class-activity.php:58 includes/pages/class-status.php:565
+#: class-gravity-flow.php:1187 includes/pages/class-activity.php:33
+#: includes/pages/class-activity.php:58 includes/pages/class-status.php:580
 msgid "Date"
 msgstr "তারিখ"
 
-#: class-gravity-flow.php:1196
+#: class-gravity-flow.php:1215
 msgid "Minute(s)"
 msgstr "মিনিট(গুলো)"
 
-#: class-gravity-flow.php:1200
+#: class-gravity-flow.php:1219
 msgid "Hour(s)"
 msgstr "ঘন্টা(গুলো)"
 
-#: class-gravity-flow.php:1204
+#: class-gravity-flow.php:1223
 msgid "Day(s)"
 msgstr "দিন(গুলো)"
 
-#: class-gravity-flow.php:1208
+#: class-gravity-flow.php:1227
 msgid "Week(s)"
 msgstr "সপ্তাহ(গুলো)"
 
-#: class-gravity-flow.php:1234
+#: class-gravity-flow.php:1253
 msgid "Start this step on"
 msgstr "এই ধাপ শুরু করুন"
 
-#: class-gravity-flow.php:1242
+#: class-gravity-flow.php:1261
 msgid "Start this step"
 msgstr "এই ধাপ শুরু করুন"
 
-#: class-gravity-flow.php:1247
+#: class-gravity-flow.php:1266
 msgid "after the workflow step is triggered."
 msgstr ""
 
-#: class-gravity-flow.php:1317 includes/steps/class-step-approval.php:117
+#: class-gravity-flow.php:1336 includes/steps/class-step-approval.php:117
 #: includes/steps/class-step-approval.php:152
 #: includes/steps/class-step-approval.php:199
 msgid "Enable"
 msgstr "সক্রিয়"
 
-#: class-gravity-flow.php:1415
+#: class-gravity-flow.php:1434
 msgid "Workflow Complete"
 msgstr "ওয়ার্কফ্লো শেষ"
 
-#: class-gravity-flow.php:1416
+#: class-gravity-flow.php:1435
 msgid "Next step in list"
 msgstr "লিষ্টের পরের ধাপ"
 
-#: class-gravity-flow.php:1461
+#: class-gravity-flow.php:1480
 msgid "Step name"
 msgstr "ধাপের নাম"
 
-#: class-gravity-flow.php:1463
+#: class-gravity-flow.php:1482
 msgid "Entries"
 msgstr ""
 
-#: class-gravity-flow.php:1488
+#: class-gravity-flow.php:1507
 msgid "You don't have any steps configured. Let's go %screate one%s!"
 msgstr ""
 
-#: class-gravity-flow.php:1544 includes/pages/class-status.php:1012
-#: includes/pages/class-status.php:1017
+#: class-gravity-flow.php:1563 includes/pages/class-status.php:1032
+#: includes/pages/class-status.php:1037
 msgid "Status:"
 msgstr ""
 
-#: class-gravity-flow.php:1563 class-gravity-flow.php:3917
-#: includes/pages/class-status.php:233 includes/steps/class-step.php:157
-msgid "Pending"
-msgstr "স্থগিত"
-
-#: class-gravity-flow.php:1674 class-gravity-flow.php:1779
-msgid "Workflow"
-msgstr ""
-
-#: class-gravity-flow.php:1679
+#: class-gravity-flow.php:1698
 msgid "Entry Id"
 msgstr ""
 
-#: class-gravity-flow.php:1680 includes/pages/class-inbox.php:77
+#: class-gravity-flow.php:1699 includes/pages/class-inbox.php:77
 #: includes/pages/class-inbox.php:134
 msgid "Submitted"
 msgstr "উপস্থাপিত"
 
-#: class-gravity-flow.php:1685
+#: class-gravity-flow.php:1705
 msgid "Last updated"
 msgstr "সর্বশেষ হালনাগাদ হয়েছিল"
 
-#: class-gravity-flow.php:1692 includes/pages/class-inbox.php:75
+#: class-gravity-flow.php:1713 includes/pages/class-inbox.php:75
 #: includes/pages/class-inbox.php:117
 msgid "Submitted by"
 msgstr "উপস্থাপন করেছেন"
 
-#: class-gravity-flow.php:1702 class-gravity-flow.php:1935
-#: class-gravity-flow.php:2629 includes/pages/class-status.php:571
+#: class-gravity-flow.php:1722 class-gravity-flow.php:4053
+#: includes/pages/class-status.php:586
 #: includes/steps/class-step-user-input.php:568
 msgid "Status"
 msgstr "অবস্থা"
 
-#: class-gravity-flow.php:1727
+#: class-gravity-flow.php:1747
 msgid "Admin"
 msgstr "প্রশাষক"
 
-#: class-gravity-flow.php:1735
+#: class-gravity-flow.php:1755
 msgid "Select an action"
 msgstr "একটি কাজ নির্বাচন করুন"
 
-#: class-gravity-flow.php:1737 includes/steps/class-step.php:648
+#: class-gravity-flow.php:1757 includes/steps/class-step.php:648
 msgid "Cancel Workflow"
 msgstr "ওয়ার্কফ্লো বাতিল করুন"
 
-#: class-gravity-flow.php:1739
+#: class-gravity-flow.php:1759
 msgid "Restart this step"
 msgstr "এই ধাপটি আবার শুরু করুন"
 
-#: class-gravity-flow.php:1741
+#: class-gravity-flow.php:1761 includes/pages/class-status.php:189
 msgid "Restart Workflow"
 msgstr ""
 
-#: class-gravity-flow.php:1746
+#: class-gravity-flow.php:1766
 msgid "Send to step:"
 msgstr ""
 
-#: class-gravity-flow.php:1758 includes/pages/class-status.php:328
+#: class-gravity-flow.php:1778 includes/pages/class-status.php:343
 msgid "Apply"
 msgstr ""
 
-#: class-gravity-flow.php:1783
+#: class-gravity-flow.php:1803
 msgid "Workflow complete"
 msgstr ""
 
-#: class-gravity-flow.php:1793
+#: class-gravity-flow.php:1813
 msgid "View"
 msgstr ""
 
-#: class-gravity-flow.php:1915 class-gravity-flow.php:2603
-msgid "Inbox"
+#: class-gravity-flow.php:2005
+msgid "General"
 msgstr ""
 
-#: class-gravity-flow.php:1926 class-gravity-flow.php:2617
-msgid "Submit"
+#: class-gravity-flow.php:2006 class-gravity-flow.php:3550
+msgid "Gravity Flow Settings"
 msgstr ""
 
-#: class-gravity-flow.php:1943 includes/pages/class-help.php:14
-msgid "Help"
+#: class-gravity-flow.php:2011 class-gravity-flow.php:2055
+msgid "Labels"
 msgstr ""
 
-#: class-gravity-flow.php:1951 includes/pages/class-support.php:67
-msgid "Support"
-msgstr "সহায়তা কেন্দ্র"
-
-#: class-gravity-flow.php:1959 class-gravity-flow.php:2640
-#: class-gravity-flow.php:2642
-msgid "Reports"
-msgstr "প্রতিবেদন গুলো"
-
-#: class-gravity-flow.php:1967 class-gravity-flow.php:2651
-#: class-gravity-flow.php:2653
-msgid "Activity"
-msgstr "কারযকলাপ"
-
-#: class-gravity-flow.php:1985
-msgid "Settings"
-msgstr "গঠন গুলো"
-
-#: class-gravity-flow.php:2000
+#: class-gravity-flow.php:2026
 msgid "Uninstall"
 msgstr ""
 
-#: class-gravity-flow.php:2022
+#: class-gravity-flow.php:2060
+msgid "Navigation"
+msgstr ""
+
+#: class-gravity-flow.php:2086
+msgid "Status Labels"
+msgstr ""
+
+#: class-gravity-flow.php:2100 class-gravity-flow.php:4075
+#: includes/steps/class-step.php:157
+msgid "Pending"
+msgstr "স্থগিত"
+
+#: class-gravity-flow.php:2100 class-gravity-flow.php:4087
+msgid "Cancelled"
+msgstr "বাতিল করা হয়েছে"
+
+#: class-gravity-flow.php:2122
+#: includes/steps/class-step-feed-user-registration.php:56
+#: includes/steps/class-step-user-input.php:528
+msgid "Update"
+msgstr "হালনাগান করুন"
+
+#: class-gravity-flow.php:2137
 msgid "Invalid token"
 msgstr "টোকেন ভুল"
 
-#: class-gravity-flow.php:2026
+#: class-gravity-flow.php:2141
 msgid "Token already expired"
 msgstr "টোকেনের মেয়াদ শেষ"
 
-#: class-gravity-flow.php:2034
+#: class-gravity-flow.php:2149
 msgid "Token revoked"
 msgstr "টোকেন প্রত্যাখান করা হয়েছে"
 
-#: class-gravity-flow.php:2038
+#: class-gravity-flow.php:2153
 msgid "Tools"
 msgstr "যন্ত্রপাতি"
 
-#: class-gravity-flow.php:2054
+#: class-gravity-flow.php:2169
 msgid "Revoke a token"
 msgstr ""
 
-#: class-gravity-flow.php:2060
+#: class-gravity-flow.php:2175
 msgid "Revoke"
 msgstr "প্রত্যাখান করুন"
 
-#: class-gravity-flow.php:2105
+#: class-gravity-flow.php:2220
 msgid "Entries per page"
 msgstr ""
 
-#: class-gravity-flow.php:2137
+#: class-gravity-flow.php:2252
 msgid "Published"
 msgstr "প্রকাশিত"
 
-#: class-gravity-flow.php:2148
+#: class-gravity-flow.php:2263
 msgid "No workflow steps have been added to any forms yet."
 msgstr ""
 
-#: class-gravity-flow.php:2161 includes/class-extension.php:112
+#: class-gravity-flow.php:2276 includes/class-extension.php:112
 #: includes/wizard/steps/class-installation-wizard-step-license-key.php:49
 msgid "License Key"
 msgstr ""
 
-#: class-gravity-flow.php:2165 includes/class-extension.php:116
+#: class-gravity-flow.php:2280 includes/class-extension.php:116
 msgid "Invalid license"
 msgstr ""
 
-#: class-gravity-flow.php:2171
+#: class-gravity-flow.php:2286
 #: includes/wizard/steps/class-installation-wizard-step-updates.php:74
 msgid "Background Updates"
 msgstr ""
 
-#: class-gravity-flow.php:2172
+#: class-gravity-flow.php:2287
 msgid ""
 "Set this to ON to allow Gravity Flow to download and install bug fixes and "
 "security updates automatically in the background. Requires a valid license "
 "key."
 msgstr ""
 
-#: class-gravity-flow.php:2177
+#: class-gravity-flow.php:2292
 msgid "On"
 msgstr "চলু"
 
-#: class-gravity-flow.php:2178
+#: class-gravity-flow.php:2293
 msgid "Off"
 msgstr "বন্ধ"
 
-#: class-gravity-flow.php:2186
+#: class-gravity-flow.php:2301
 msgid "Published Workflow Forms"
 msgstr ""
 
-#: class-gravity-flow.php:2187
+#: class-gravity-flow.php:2302
 msgid "Select the forms you wish to publish on the Submit page."
 msgstr ""
 
-#: class-gravity-flow.php:2197
+#: class-gravity-flow.php:2312
 msgid "Update Settings"
 msgstr ""
 
-#: class-gravity-flow.php:2199
+#: class-gravity-flow.php:2314
 msgid "Settings updated successfully"
 msgstr ""
 
-#: class-gravity-flow.php:2200
+#: class-gravity-flow.php:2315
 msgid "There was an error while saving the settings"
 msgstr ""
 
-#: class-gravity-flow.php:2298
+#: class-gravity-flow.php:2413
 msgid "Submit a Workflow Form"
 msgstr ""
 
-#: class-gravity-flow.php:2368
+#: class-gravity-flow.php:2483
 msgid "Oops! We could not locate your entry."
 msgstr ""
 
-#: class-gravity-flow.php:2386 includes/steps/class-step-approval.php:891
+#: class-gravity-flow.php:2501 includes/steps/class-step-approval.php:891
 msgid "Error: incorrect entry."
 msgstr ""
 
-#: class-gravity-flow.php:2392
+#: class-gravity-flow.php:2507
 msgid "Workflow Cancelled"
 msgstr ""
 
-#: class-gravity-flow.php:2399
+#: class-gravity-flow.php:2514
 msgid "Error: This URL is no longer valid."
 msgstr ""
 
-#: class-gravity-flow.php:2446
+#: class-gravity-flow.php:2561
 msgid "Workflow Inbox"
 msgstr ""
 
-#: class-gravity-flow.php:2483
+#: class-gravity-flow.php:2598
 msgid "Workflow Status"
 msgstr ""
 
-#: class-gravity-flow.php:2521
+#: class-gravity-flow.php:2636
 msgid "Workflow Activity"
 msgstr ""
 
-#: class-gravity-flow.php:2560
+#: class-gravity-flow.php:2675
 msgid "Workflow Reports"
 msgstr ""
 
-#: class-gravity-flow.php:2605
+#: class-gravity-flow.php:2720
 msgid "Your inbox of pending tasks"
 msgstr ""
 
-#: class-gravity-flow.php:2619
+#: class-gravity-flow.php:2734
 msgid "Submit a Workflow"
 msgstr ""
 
-#: class-gravity-flow.php:2631
+#: class-gravity-flow.php:2746
 msgid "Your workflows"
 msgstr ""
 
-#: class-gravity-flow.php:2680 includes/class-api.php:118
+#: class-gravity-flow.php:2757 class-gravity-flow.php:4056
+msgid "Reports"
+msgstr "প্রতিবেদন গুলো"
+
+#: class-gravity-flow.php:2768 class-gravity-flow.php:4057
+msgid "Activity"
+msgstr "কারযকলাপ"
+
+#: class-gravity-flow.php:2795 includes/class-api.php:118
 msgid "Workflow cancelled."
 msgstr ""
 
-#: class-gravity-flow.php:2688
+#: class-gravity-flow.php:2803
 msgid "Workflow Step restarted."
 msgstr ""
 
-#: class-gravity-flow.php:2699
+#: class-gravity-flow.php:2814 includes/pages/class-status.php:1107
 msgid "Workflow restarted."
 msgstr ""
 
-#: class-gravity-flow.php:2716
+#: class-gravity-flow.php:2831
 msgid "Sent to step: %s"
 msgstr ""
 
-#: class-gravity-flow.php:3165
+#: class-gravity-flow.php:3280
 msgid ""
 "Gravity Flow Steps imported. IMPORTANT: Check the assignees for each step. "
 "If the form was imported from a different installation with different user "
-"IDs then then steps may need to be reassigned."
+"IDs then steps may need to be reassigned."
 msgstr ""
 
-#: class-gravity-flow.php:3210 includes/steps/class-step-feed-mailchimp.php:23
+#: class-gravity-flow.php:3325 includes/steps/class-step-feed-mailchimp.php:23
 msgid "MailChimp"
 msgstr "মেইল চিম্প"
 
-#: class-gravity-flow.php:3211 includes/steps/class-step-feed-emma.php:23
+#: class-gravity-flow.php:3326 includes/steps/class-step-feed-emma.php:23
 msgid "Emma"
 msgstr ""
 
-#: class-gravity-flow.php:3212 includes/steps/class-step-feed-zapier.php:24
+#: class-gravity-flow.php:3327 includes/steps/class-step-feed-zapier.php:24
 msgid "Zapier"
 msgstr ""
 
-#: class-gravity-flow.php:3213
+#: class-gravity-flow.php:3328
 #: includes/steps/class-step-feed-user-registration.php:24
 msgid "User Registration"
 msgstr ""
 
-#: class-gravity-flow.php:3232
+#: class-gravity-flow.php:3347
 msgid "Assignees"
 msgstr ""
 
-#: class-gravity-flow.php:3237
+#: class-gravity-flow.php:3352
 msgid "Show Users"
 msgstr "ব্যবারকারীগুলোকে দেখুন"
 
-#: class-gravity-flow.php:3245
+#: class-gravity-flow.php:3360
 msgid "Show Roles"
 msgstr ""
 
-#: class-gravity-flow.php:3253
+#: class-gravity-flow.php:3368
 msgid "Show Fields"
 msgstr ""
 
-#: class-gravity-flow.php:3435
-msgid "Gravity Flow Settings"
-msgstr ""
-
-#: class-gravity-flow.php:3439
+#: class-gravity-flow.php:3554
 msgid ""
 "%sThis operation deletes ALL Gravity Flow settings%s. If you continue, you "
 "will NOT be able to retrieve these settings."
 msgstr ""
 
-#: class-gravity-flow.php:3443
+#: class-gravity-flow.php:3558
 msgid ""
 "Warning! ALL Gravity Flow settings will be deleted. This cannot be undone. "
 "'OK' to delete, 'Cancel' to stop"
 msgstr ""
 
-#: class-gravity-flow.php:3788
+#: class-gravity-flow.php:3903
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] ""
 msgstr[1] ""
 
-#: class-gravity-flow.php:3792
+#: class-gravity-flow.php:3907
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] ""
 msgstr[1] ""
 
-#: class-gravity-flow.php:3796
+#: class-gravity-flow.php:3911
 msgid "%dd"
 msgstr ""
 
-#: class-gravity-flow.php:3800
+#: class-gravity-flow.php:3915
 msgid "%dh"
 msgstr ""
 
-#: class-gravity-flow.php:3804
+#: class-gravity-flow.php:3919
 msgid "%dm"
 msgstr ""
 
-#: class-gravity-flow.php:3808
+#: class-gravity-flow.php:3923
 msgid "%ds"
 msgstr ""
 
-#: class-gravity-flow.php:3852
+#: class-gravity-flow.php:3967
 msgid "Every Fifteen Minutes"
 msgstr ""
 
-#: class-gravity-flow.php:3865 class-gravity-flow.php:3885
+#: class-gravity-flow.php:3980 class-gravity-flow.php:4000
 msgid "Not authorized"
 msgstr ""
 
-#: class-gravity-flow.php:3920 includes/pages/class-status.php:237
-#: includes/steps/class-step-user-input.php:96
+#: class-gravity-flow.php:4050
+msgid "Workflow"
+msgstr ""
+
+#: class-gravity-flow.php:4051
+msgid "Inbox"
+msgstr ""
+
+#: class-gravity-flow.php:4052
+msgid "Submit"
+msgstr ""
+
+#: class-gravity-flow.php:4054 includes/pages/class-help.php:14
+msgid "Help"
+msgstr ""
+
+#: class-gravity-flow.php:4055 includes/pages/class-support.php:67
+msgid "Support"
+msgstr "সহায়তা কেন্দ্র"
+
+#: class-gravity-flow.php:4078 includes/steps/class-step-user-input.php:96
 #: includes/steps/class-step-user-input.php:404
 #: includes/steps/class-step-user-input.php:523
 #: includes/steps/class-step.php:141
 msgid "Complete"
 msgstr ""
 
-#: class-gravity-flow.php:3923 includes/steps/class-step-approval.php:31
+#: class-gravity-flow.php:4081 includes/steps/class-step-approval.php:31
 #: includes/steps/class-step-approval.php:541
 msgid "Approved"
 msgstr ""
 
-#: class-gravity-flow.php:3926 includes/steps/class-step-approval.php:25
+#: class-gravity-flow.php:4084 includes/steps/class-step-approval.php:25
 #: includes/steps/class-step-approval.php:543
 msgid "Rejected"
+msgstr ""
+
+#: class-gravity-flow.php:4141
+msgid "Oops! We couldn't find your lead. Please try again"
+msgstr ""
+
+#: class-gravity-flow.php:4184 includes/pages/class-entry-detail.php:41
+msgid "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete"
 msgstr ""
 
 #: includes/EDD_SL_Plugin_Updater.php:177
@@ -569,20 +596,6 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: includes/class-extension.php:54
-msgid ""
-"%s has been successfully uninstalled. It can be re-activated from the "
-"%splugins page%s."
-msgstr ""
-
-#: includes/class-extension.php:89
-msgid "Uninstall %s Extension"
-msgstr ""
-
-#: includes/class-extension.php:95
-msgid "Uninstall Extension"
-msgstr ""
-
 #: includes/fields/class-field-assignee-select.php:40
 #: includes/pages/class-reports.php:293 includes/pages/class-reports.php:351
 #: includes/pages/class-reports.php:492
@@ -599,7 +612,7 @@ msgstr ""
 
 #: includes/pages/class-activity.php:34 includes/pages/class-activity.php:63
 #: includes/pages/class-inbox.php:74 includes/pages/class-inbox.php:112
-#: includes/pages/class-reports.php:127 includes/pages/class-status.php:567
+#: includes/pages/class-reports.php:127 includes/pages/class-status.php:582
 msgid "Form"
 msgstr ""
 
@@ -619,7 +632,7 @@ msgstr ""
 #: includes/pages/class-activity.php:38 includes/pages/class-activity.php:96
 #: includes/pages/class-inbox.php:76 includes/pages/class-inbox.php:123
 #: includes/pages/class-reports.php:231 includes/pages/class-reports.php:493
-#: includes/pages/class-status.php:570
+#: includes/pages/class-status.php:585
 msgid "Step"
 msgstr ""
 
@@ -628,7 +641,7 @@ msgid "Duration"
 msgstr ""
 
 #: includes/pages/class-activity.php:53 includes/pages/class-inbox.php:73
-#: includes/pages/class-inbox.php:107 includes/pages/class-status.php:563
+#: includes/pages/class-inbox.php:107 includes/pages/class-status.php:578
 msgid "ID"
 msgstr ""
 
@@ -636,75 +649,71 @@ msgstr ""
 msgid "Waiting for workflow activity"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:34
-msgid "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete"
-msgstr ""
-
-#: includes/pages/class-entry-detail.php:45
+#: includes/pages/class-entry-detail.php:52
 msgid "Ajax error while deleting file."
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:98
+#: includes/pages/class-entry-detail.php:105
 msgid "Workflow Entry #"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:98
-#: includes/pages/class-status.php:313
+#: includes/pages/class-entry-detail.php:105
+#: includes/pages/class-status.php:328
 msgid "Workflow Form"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:138
+#: includes/pages/class-entry-detail.php:145
 #: includes/pages/class-print-entries.php:138
 msgid "You don't have permission to view this entry."
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:160
-#: includes/pages/class-status.php:191
+#: includes/pages/class-entry-detail.php:167
+#: includes/pages/class-status.php:186
 msgid "Print"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:164
+#: includes/pages/class-entry-detail.php:171
 msgid "include timeline"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:202
+#: includes/pages/class-entry-detail.php:209
 msgid "Timeline"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:237
+#: includes/pages/class-entry-detail.php:244
 msgid "Workflow Submitted"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:283
+#: includes/pages/class-entry-detail.php:290
 #: includes/pages/class-print-entries.php:79
 msgid "Entry # "
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:292
+#: includes/pages/class-entry-detail.php:299
 msgid "show empty fields"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:393
+#: includes/pages/class-entry-detail.php:400
 msgid "Order"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:405
+#: includes/pages/class-entry-detail.php:412
 msgid "Product"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:406
+#: includes/pages/class-entry-detail.php:413
 msgid "Qty"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:407
+#: includes/pages/class-entry-detail.php:414
 msgid "Unit Price"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:408
+#: includes/pages/class-entry-detail.php:415
 msgid "Price"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:468
+#: includes/pages/class-entry-detail.php:475
 msgid "Total"
 msgstr ""
 
@@ -796,59 +805,55 @@ msgstr "শেষ ৩ মাস"
 msgid "All Steps"
 msgstr "সকল ধাপ গুলো"
 
-#: includes/pages/class-status.php:65
+#: includes/pages/class-status.php:69
 msgid "Export"
 msgstr "বাহিরে সংরক্ষন করুন"
 
-#: includes/pages/class-status.php:72
+#: includes/pages/class-status.php:76
 msgid "The destination file is not writeable"
 msgstr "গন্তব্য ফাইলটি লেখার জন্য অনুমুদিত নয়"
 
-#: includes/pages/class-status.php:182
+#: includes/pages/class-status.php:193
 msgid "entry"
 msgstr "গৃহীত তথ্য"
 
-#: includes/pages/class-status.php:183
+#: includes/pages/class-status.php:194
 msgid "entries"
 msgstr "গৃহীত গুলো"
 
-#: includes/pages/class-status.php:215 includes/pages/class-submit.php:11
+#: includes/pages/class-status.php:226 includes/pages/class-submit.php:11
 msgid "You haven't submitted any workflow forms yet."
 msgstr "আপনি কোন ওয়ার্কফ্লো ফর্ম জমা দেন নি"
 
-#: includes/pages/class-status.php:229
+#: includes/pages/class-status.php:244
 msgid "All"
 msgstr "সবগুলো"
 
-#: includes/pages/class-status.php:241
-msgid "Cancelled"
-msgstr "বাতিল করা হয়েছে"
-
-#: includes/pages/class-status.php:296
+#: includes/pages/class-status.php:311
 msgid "Start:"
 msgstr "শুরু:"
 
-#: includes/pages/class-status.php:302
+#: includes/pages/class-status.php:317
 msgid "End:"
 msgstr "শেষ:"
 
-#: includes/pages/class-status.php:335
+#: includes/pages/class-status.php:350
 msgid "Clear Filter"
 msgstr "ফিল্টর পরিষ্কার করুন"
 
-#: includes/pages/class-status.php:338
+#: includes/pages/class-status.php:353
 msgid "Search"
 msgstr "খুজুন"
 
-#: includes/pages/class-status.php:561
+#: includes/pages/class-status.php:576
 msgid "Checkbox"
 msgstr "নির্বাচন বক্স"
 
-#: includes/pages/class-status.php:569
+#: includes/pages/class-status.php:584
 msgid "Submitter"
 msgstr "উপস্থাপক"
 
-#: includes/pages/class-status.php:810
+#: includes/pages/class-status.php:826
 msgid "Select"
 msgstr "নির্বাচন করুন"
 
@@ -1157,11 +1162,6 @@ msgstr ""
 msgid "Create"
 msgstr "তৈরি করুন"
 
-#: includes/steps/class-step-feed-user-registration.php:56
-#: includes/steps/class-step-user-input.php:528
-msgid "Update"
-msgstr "হালনাগান করুন"
-
 #: includes/steps/class-step-multi-feed.php:12
 msgid "Multi-Feed"
 msgstr ""
@@ -1459,3 +1459,23 @@ msgstr "স্টিভেন হান্টি"
 #. Author URI of the plugin/theme
 msgid "http://www.stevenhenty.com"
 msgstr "http://www.stevenhenty.com"
+
+#: includes/class-extension.php:54
+msgctxt ""
+"Displayed on the settings page after uninstalling a Gravity Flow extension."
+msgid ""
+"%s has been successfully uninstalled. It can be re-activated from the "
+"%splugins page%s."
+msgstr ""
+
+#: includes/class-extension.php:89
+msgctxt ""
+"Title for the uninstall section on the settings page for a Gravity Flow "
+"extension."
+msgid "Uninstall %s Extension"
+msgstr ""
+
+#: includes/class-extension.php:95
+msgctxt "Button text on the settings page for an extension."
+msgid "Uninstall Extension"
+msgstr ""
