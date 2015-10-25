@@ -2842,7 +2842,6 @@ PRIMARY KEY  (id)
 		function add_notification_event( $events ) {
 			$events['workflow_approval'] = 'Workflow: approved or rejected';
 			$events['workflow_user_input'] = 'Workflow: user input';
-			$events['workflow_notification_step'] = 'Workflow: notification step';
 			$events['workflow_complete'] = 'Workflow: complete';
 
 			return $events;
