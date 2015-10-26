@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2015-10-24 22:34:51+00:00\n"
+"POT-Creation-Date: 2015-10-25 20:04:22+00:00\n"
 "PO-Revision-Date: 2015-10-25 09:09+0000\n"
 "Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/gravityflow/gravityflow/language/nl_NL/)\n"
@@ -204,7 +204,7 @@ msgstr "Laatst bijgewerkt"
 msgid "Submitted by"
 msgstr "Toegevoegd door"
 
-#: class-gravity-flow.php:1722 class-gravity-flow.php:4053
+#: class-gravity-flow.php:1722 class-gravity-flow.php:4052
 #: includes/pages/class-status.php:586
 #: includes/steps/class-step-user-input.php:568
 msgid "Status"
@@ -250,7 +250,7 @@ msgstr "Bekijken"
 msgid "General"
 msgstr ""
 
-#: class-gravity-flow.php:2006 class-gravity-flow.php:3550
+#: class-gravity-flow.php:2006 class-gravity-flow.php:3549
 msgid "Gravity Flow Settings"
 msgstr "Gravity Flow Instellingen"
 
@@ -270,12 +270,12 @@ msgstr ""
 msgid "Status Labels"
 msgstr ""
 
-#: class-gravity-flow.php:2100 class-gravity-flow.php:4075
+#: class-gravity-flow.php:2100 class-gravity-flow.php:4074
 #: includes/steps/class-step.php:157
 msgid "Pending"
 msgstr "Wachtend"
 
-#: class-gravity-flow.php:2100 class-gravity-flow.php:4087
+#: class-gravity-flow.php:2100 class-gravity-flow.php:4086
 msgid "Cancelled"
 msgstr "Geannuleerd"
 
@@ -418,11 +418,11 @@ msgstr "Voeg een Workflow toe"
 msgid "Your workflows"
 msgstr "Uw Workflows"
 
-#: class-gravity-flow.php:2757 class-gravity-flow.php:4056
+#: class-gravity-flow.php:2757 class-gravity-flow.php:4055
 msgid "Reports"
 msgstr "Rapporten"
 
-#: class-gravity-flow.php:2768 class-gravity-flow.php:4057
+#: class-gravity-flow.php:2768 class-gravity-flow.php:4056
 msgid "Activity"
 msgstr "Activiteit"
 
@@ -442,136 +442,136 @@ msgstr "Workflow herstart. "
 msgid "Sent to step: %s"
 msgstr "Verzenden naar stap: : %s"
 
-#: class-gravity-flow.php:3280
+#: class-gravity-flow.php:3279
 msgid ""
 "Gravity Flow Steps imported. IMPORTANT: Check the assignees for each step. "
 "If the form was imported from a different installation with different user "
 "IDs then steps may need to be reassigned."
 msgstr ""
 
-#: class-gravity-flow.php:3325 includes/steps/class-step-feed-mailchimp.php:23
+#: class-gravity-flow.php:3324 includes/steps/class-step-feed-mailchimp.php:23
 msgid "MailChimp"
 msgstr "MailChimp"
 
-#: class-gravity-flow.php:3326 includes/steps/class-step-feed-emma.php:23
+#: class-gravity-flow.php:3325 includes/steps/class-step-feed-emma.php:23
 msgid "Emma"
 msgstr "Emma"
 
-#: class-gravity-flow.php:3327 includes/steps/class-step-feed-zapier.php:24
+#: class-gravity-flow.php:3326 includes/steps/class-step-feed-zapier.php:24
 msgid "Zapier"
 msgstr "Zapier"
 
-#: class-gravity-flow.php:3328
+#: class-gravity-flow.php:3327
 #: includes/steps/class-step-feed-user-registration.php:24
 msgid "User Registration"
 msgstr "Gebruiker Registratie"
 
-#: class-gravity-flow.php:3347
+#: class-gravity-flow.php:3346
 msgid "Assignees"
 msgstr "Gemachtigden"
 
-#: class-gravity-flow.php:3352
+#: class-gravity-flow.php:3351
 msgid "Show Users"
 msgstr "Toon Gebruikers"
 
-#: class-gravity-flow.php:3360
+#: class-gravity-flow.php:3359
 msgid "Show Roles"
 msgstr "Toon Rollen"
 
-#: class-gravity-flow.php:3368
+#: class-gravity-flow.php:3367
 msgid "Show Fields"
 msgstr "Toon Velden"
 
-#: class-gravity-flow.php:3554
+#: class-gravity-flow.php:3553
 msgid ""
 "%sThis operation deletes ALL Gravity Flow settings%s. If you continue, you "
 "will NOT be able to retrieve these settings."
 msgstr "%sDeze actie verwijderd ALLE Gravity Flow instellingen%s. Als u doorgaat, kunt u deze instellingen NIET meer herstellen. "
 
-#: class-gravity-flow.php:3558
+#: class-gravity-flow.php:3557
 msgid ""
 "Warning! ALL Gravity Flow settings will be deleted. This cannot be undone. "
 "'OK' to delete, 'Cancel' to stop"
 msgstr "Let op! ALLE Gravity Flow instellingen worden verwijderd. Dit kan niet ongedaan gemaakt worden. 'OK' om te verwijderen, 'Annuleren' om te stoppen. "
 
-#: class-gravity-flow.php:3903
+#: class-gravity-flow.php:3902
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "%d jaar"
 msgstr[1] "%d jaren"
 
-#: class-gravity-flow.php:3907
+#: class-gravity-flow.php:3906
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "%d maand"
 msgstr[1] "%d maanden"
 
-#: class-gravity-flow.php:3911
+#: class-gravity-flow.php:3910
 msgid "%dd"
 msgstr "%dd"
 
-#: class-gravity-flow.php:3915
+#: class-gravity-flow.php:3914
 msgid "%dh"
 msgstr "%du"
 
-#: class-gravity-flow.php:3919
+#: class-gravity-flow.php:3918
 msgid "%dm"
 msgstr "%dm"
 
-#: class-gravity-flow.php:3923
+#: class-gravity-flow.php:3922
 msgid "%ds"
 msgstr "%ds"
 
-#: class-gravity-flow.php:3967
+#: class-gravity-flow.php:3966
 msgid "Every Fifteen Minutes"
 msgstr "Elke Vijftien Minuten"
 
-#: class-gravity-flow.php:3980 class-gravity-flow.php:4000
+#: class-gravity-flow.php:3979 class-gravity-flow.php:3999
 msgid "Not authorized"
 msgstr "Niet geautoriseerd"
 
-#: class-gravity-flow.php:4050
+#: class-gravity-flow.php:4049
 msgid "Workflow"
 msgstr "Workflow"
 
-#: class-gravity-flow.php:4051
+#: class-gravity-flow.php:4050
 msgid "Inbox"
 msgstr "Inbox"
 
-#: class-gravity-flow.php:4052
+#: class-gravity-flow.php:4051
 msgid "Submit"
 msgstr "Toevoegen"
 
-#: class-gravity-flow.php:4054 includes/pages/class-help.php:14
+#: class-gravity-flow.php:4053 includes/pages/class-help.php:14
 msgid "Help"
 msgstr "Help"
 
-#: class-gravity-flow.php:4055 includes/pages/class-support.php:67
+#: class-gravity-flow.php:4054 includes/pages/class-support.php:67
 msgid "Support"
 msgstr "Ondersteuning"
 
-#: class-gravity-flow.php:4078 includes/steps/class-step-user-input.php:96
+#: class-gravity-flow.php:4077 includes/steps/class-step-user-input.php:96
 #: includes/steps/class-step-user-input.php:404
 #: includes/steps/class-step-user-input.php:523
 #: includes/steps/class-step.php:141
 msgid "Complete"
 msgstr "Compleet"
 
-#: class-gravity-flow.php:4081 includes/steps/class-step-approval.php:31
+#: class-gravity-flow.php:4080 includes/steps/class-step-approval.php:31
 #: includes/steps/class-step-approval.php:541
 msgid "Approved"
 msgstr "Goedgekeurd"
 
-#: class-gravity-flow.php:4084 includes/steps/class-step-approval.php:25
+#: class-gravity-flow.php:4083 includes/steps/class-step-approval.php:25
 #: includes/steps/class-step-approval.php:543
 msgid "Rejected"
 msgstr "Afgekeurd"
 
-#: class-gravity-flow.php:4141
+#: class-gravity-flow.php:4140
 msgid "Oops! We couldn't find your lead. Please try again"
 msgstr ""
 
-#: class-gravity-flow.php:4184 includes/pages/class-entry-detail.php:41
+#: class-gravity-flow.php:4183 includes/pages/class-entry-detail.php:41
 msgid "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete"
 msgstr "Wilt u dit bestand verwijderen? 'Annuleren' om te stoppen. 'OK' om te verwijderen."
 
@@ -1204,11 +1204,11 @@ msgstr "Deze instelling toestaan om een e-mail te versturen. "
 msgid "Enabled"
 msgstr "Ingeschakeld"
 
-#: includes/steps/class-step-notification.php:124
+#: includes/steps/class-step-notification.php:126
 msgid "Sent Notification: %s"
 msgstr "Verzend Notificatie: %s"
 
-#: includes/steps/class-step-notification.php:173
+#: includes/steps/class-step-notification.php:175
 msgid "Sent Notification: "
 msgstr "Verzend Notificatie:"
 

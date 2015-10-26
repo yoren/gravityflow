@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2015-10-24 22:34:51+00:00\n"
+"POT-Creation-Date: 2015-10-25 20:04:22+00:00\n"
 "PO-Revision-Date: 2015-10-25 09:09+0000\n"
 "Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
 "Language-Team: French (France) (http://www.transifex.com/gravityflow/gravityflow/language/fr_FR/)\n"
@@ -205,7 +205,7 @@ msgstr "Dernière mise à jour"
 msgid "Submitted by"
 msgstr "Envoyée par"
 
-#: class-gravity-flow.php:1722 class-gravity-flow.php:4053
+#: class-gravity-flow.php:1722 class-gravity-flow.php:4052
 #: includes/pages/class-status.php:586
 #: includes/steps/class-step-user-input.php:568
 msgid "Status"
@@ -251,7 +251,7 @@ msgstr "Afficher"
 msgid "General"
 msgstr ""
 
-#: class-gravity-flow.php:2006 class-gravity-flow.php:3550
+#: class-gravity-flow.php:2006 class-gravity-flow.php:3549
 msgid "Gravity Flow Settings"
 msgstr "Réglages Gravity Flow"
 
@@ -271,12 +271,12 @@ msgstr ""
 msgid "Status Labels"
 msgstr ""
 
-#: class-gravity-flow.php:2100 class-gravity-flow.php:4075
+#: class-gravity-flow.php:2100 class-gravity-flow.php:4074
 #: includes/steps/class-step.php:157
 msgid "Pending"
 msgstr "En attente"
 
-#: class-gravity-flow.php:2100 class-gravity-flow.php:4087
+#: class-gravity-flow.php:2100 class-gravity-flow.php:4086
 msgid "Cancelled"
 msgstr "Annulé"
 
@@ -419,11 +419,11 @@ msgstr "Envoyer un workflow"
 msgid "Your workflows"
 msgstr "Mes workflows"
 
-#: class-gravity-flow.php:2757 class-gravity-flow.php:4056
+#: class-gravity-flow.php:2757 class-gravity-flow.php:4055
 msgid "Reports"
 msgstr "Rapports"
 
-#: class-gravity-flow.php:2768 class-gravity-flow.php:4057
+#: class-gravity-flow.php:2768 class-gravity-flow.php:4056
 msgid "Activity"
 msgstr "Activité"
 
@@ -443,136 +443,136 @@ msgstr "Workflow redémarré."
 msgid "Sent to step: %s"
 msgstr "Envoyez à l'étape : %s"
 
-#: class-gravity-flow.php:3280
+#: class-gravity-flow.php:3279
 msgid ""
 "Gravity Flow Steps imported. IMPORTANT: Check the assignees for each step. "
 "If the form was imported from a different installation with different user "
 "IDs then steps may need to be reassigned."
 msgstr ""
 
-#: class-gravity-flow.php:3325 includes/steps/class-step-feed-mailchimp.php:23
+#: class-gravity-flow.php:3324 includes/steps/class-step-feed-mailchimp.php:23
 msgid "MailChimp"
 msgstr "MailChimp"
 
-#: class-gravity-flow.php:3326 includes/steps/class-step-feed-emma.php:23
+#: class-gravity-flow.php:3325 includes/steps/class-step-feed-emma.php:23
 msgid "Emma"
 msgstr "Emma"
 
-#: class-gravity-flow.php:3327 includes/steps/class-step-feed-zapier.php:24
+#: class-gravity-flow.php:3326 includes/steps/class-step-feed-zapier.php:24
 msgid "Zapier"
 msgstr "Zapier"
 
-#: class-gravity-flow.php:3328
+#: class-gravity-flow.php:3327
 #: includes/steps/class-step-feed-user-registration.php:24
 msgid "User Registration"
 msgstr "Enregistrement d'utilisateur"
 
-#: class-gravity-flow.php:3347
+#: class-gravity-flow.php:3346
 msgid "Assignees"
 msgstr "Assignés"
 
-#: class-gravity-flow.php:3352
+#: class-gravity-flow.php:3351
 msgid "Show Users"
 msgstr "Afficher les utilisateurs"
 
-#: class-gravity-flow.php:3360
+#: class-gravity-flow.php:3359
 msgid "Show Roles"
 msgstr "Afficher les rôles"
 
-#: class-gravity-flow.php:3368
+#: class-gravity-flow.php:3367
 msgid "Show Fields"
 msgstr "Afficher les champs"
 
-#: class-gravity-flow.php:3554
+#: class-gravity-flow.php:3553
 msgid ""
 "%sThis operation deletes ALL Gravity Flow settings%s. If you continue, you "
 "will NOT be able to retrieve these settings."
 msgstr "%sCette opération supprime TOUS les réglages de Gravity Flow%s. Si vous continuez, vous ne serez PLUS en mesure de les récupérer."
 
-#: class-gravity-flow.php:3558
+#: class-gravity-flow.php:3557
 msgid ""
 "Warning! ALL Gravity Flow settings will be deleted. This cannot be undone. "
 "'OK' to delete, 'Cancel' to stop"
 msgstr "Attention&nbsp;! TOUS les réglages de Gravity Flow seront supprimés. Cela ne peut pas être annulé. « OK » pour supprimer, « Annuler » pour arrêter."
 
-#: class-gravity-flow.php:3903
+#: class-gravity-flow.php:3902
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "%d année"
 msgstr[1] "%d années"
 
-#: class-gravity-flow.php:3907
+#: class-gravity-flow.php:3906
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "%d mois"
 msgstr[1] "%d mois"
 
-#: class-gravity-flow.php:3911
+#: class-gravity-flow.php:3910
 msgid "%dd"
 msgstr "%dd"
 
-#: class-gravity-flow.php:3915
+#: class-gravity-flow.php:3914
 msgid "%dh"
 msgstr "%dh"
 
-#: class-gravity-flow.php:3919
+#: class-gravity-flow.php:3918
 msgid "%dm"
 msgstr "%dm"
 
-#: class-gravity-flow.php:3923
+#: class-gravity-flow.php:3922
 msgid "%ds"
 msgstr "%ds"
 
-#: class-gravity-flow.php:3967
+#: class-gravity-flow.php:3966
 msgid "Every Fifteen Minutes"
 msgstr "Toutes les 15 minutes"
 
-#: class-gravity-flow.php:3980 class-gravity-flow.php:4000
+#: class-gravity-flow.php:3979 class-gravity-flow.php:3999
 msgid "Not authorized"
 msgstr "Non autorisé"
 
-#: class-gravity-flow.php:4050
+#: class-gravity-flow.php:4049
 msgid "Workflow"
 msgstr "Workflow"
 
-#: class-gravity-flow.php:4051
+#: class-gravity-flow.php:4050
 msgid "Inbox"
 msgstr "Boîte de réception"
 
-#: class-gravity-flow.php:4052
+#: class-gravity-flow.php:4051
 msgid "Submit"
 msgstr "Envoyer"
 
-#: class-gravity-flow.php:4054 includes/pages/class-help.php:14
+#: class-gravity-flow.php:4053 includes/pages/class-help.php:14
 msgid "Help"
 msgstr "Aide"
 
-#: class-gravity-flow.php:4055 includes/pages/class-support.php:67
+#: class-gravity-flow.php:4054 includes/pages/class-support.php:67
 msgid "Support"
 msgstr "Support"
 
-#: class-gravity-flow.php:4078 includes/steps/class-step-user-input.php:96
+#: class-gravity-flow.php:4077 includes/steps/class-step-user-input.php:96
 #: includes/steps/class-step-user-input.php:404
 #: includes/steps/class-step-user-input.php:523
 #: includes/steps/class-step.php:141
 msgid "Complete"
 msgstr "Terminé"
 
-#: class-gravity-flow.php:4081 includes/steps/class-step-approval.php:31
+#: class-gravity-flow.php:4080 includes/steps/class-step-approval.php:31
 #: includes/steps/class-step-approval.php:541
 msgid "Approved"
 msgstr "Approuvé"
 
-#: class-gravity-flow.php:4084 includes/steps/class-step-approval.php:25
+#: class-gravity-flow.php:4083 includes/steps/class-step-approval.php:25
 #: includes/steps/class-step-approval.php:543
 msgid "Rejected"
 msgstr "Rejeté"
 
-#: class-gravity-flow.php:4141
+#: class-gravity-flow.php:4140
 msgid "Oops! We couldn't find your lead. Please try again"
 msgstr ""
 
-#: class-gravity-flow.php:4184 includes/pages/class-entry-detail.php:41
+#: class-gravity-flow.php:4183 includes/pages/class-entry-detail.php:41
 msgid "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete"
 msgstr "Voulez-vous supprimer ce fichier? 'Annuler' pour stopper. 'OK' pour supprimer"
 
@@ -1205,11 +1205,11 @@ msgstr "Activer ce paramètre pour envoyer un e-mail."
 msgid "Enabled"
 msgstr "Activer"
 
-#: includes/steps/class-step-notification.php:124
+#: includes/steps/class-step-notification.php:126
 msgid "Sent Notification: %s"
 msgstr "Envoi des notifications&nbsp;: %s"
 
-#: includes/steps/class-step-notification.php:173
+#: includes/steps/class-step-notification.php:175
 msgid "Sent Notification: "
 msgstr "Envoi de la notification&nbsp;:"
 

@@ -55,35 +55,22 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
-= 1.1.0.8 =
-- Removed the redundant 'workflow: notification step' event in the Gravity Forms notification settings.
-
-= 1.1.0.7 =
+= 1.1.1 =
+- Added the id_column attribute to the shortcode so the ID column can be hidden.
 - Added the Restart Workflow bulk action to the status page.
 - Added entries to the status page which were created before steps were added.
-
-= 1.1.0.6 =
-- Added support for custom navigation labels.
-- Fixed an issue with the merge tags in the assignee reminder email.
-
-= 1.1.0.5 =
 - Added support for custom status labels.
+- Added support for custom navigation labels.
 - Added support for the Signature Add-on in the shortcode.
-- Fixed an issue with the assignee field where the number 1 appears at the top of the lists of users and fields.
-
-= 1.1.0.4 =
-- Updated the submit page to display the forms in alphabetical order.
-
-= 1.1.0.3 =
-- API: Added the Gravity_Flow_Extension class.
-
-= 1.1.0.2 =
 - Added step icons to the step list.
-
-= 1.1.0.1 =
-- Added the id_column attribute to the shortcode so the ID column can be hidden.
+- Updated the submit page to display the forms in alphabetical order.
 - Fixed an issue with the assignee field where the placeholder doesn't work correctly.
 - Fixed an issue with Gravity PDF integration in certain situations which prevents the PDF from attaching.
+- Fixed an issue with the merge tags in the assignee reminder email.
+- Fixed an issue with the assignee field where the number 1 appears at the top of the lists of users and fields.
+- Removed the redundant 'workflow: notification step' event in the Gravity Forms notification settings.
+- API: Added the Gravity_Flow_Extension class.
+
 
 = 1.1 =
 - Added one-click cancel links so workflows can be cancelled by clicking on a link in an email.
