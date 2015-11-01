@@ -1,4 +1,6 @@
-(function (GravityFlowFeedSettings, $) {
+;(function (GravityFlowFeedSettings, $) {
+
+    "use strict";
 
     $(document).ready(function () {
 
