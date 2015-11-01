@@ -136,7 +136,7 @@ GROUP BY assignee_id, assignee_type", $form_id, $start_date );
 		$table   = self::get_activity_log_table_name();
 
 		$sql     = $wpdb->prepare( "
-SELECT assignee_id, assignee_type, count(id), ROUND( AVG(duration) )
+SELECT assignee_id, assignee_type, count(id) as c, ROUND( AVG(duration) ) as av
 FROM {$table}
 WHERE log_object = 'assignee' AND log_event = 'status' AND log_value NOT IN ('pending', 'removed')
   AND date_created >= %s
