@@ -428,8 +428,8 @@ class Gravity_Flow_Reports {
 			'bars' => 'horizontal',
 			'height' => 200 + count( $rows ) * 100,
 			'series' => array(
-				array( 'axis' => 'average_duration' ),
 				array( 'axis' => 'count' ),
+				array( 'axis' => 'average_duration' ),
 			),
 			'axes' => array(
 				'x' => array(
