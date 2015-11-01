@@ -49,8 +49,8 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$account_choices = gravity_flow()->get_users_as_choices();
 
 		$type_field_choices = array(
-			array( 'label' => __( 'Select Users', 'gravityflow' ), 'value' => 'select' ),
-			array( 'label' => __( 'Configure Routing', 'gravityflow' ), 'value' => 'routing' ),
+			array( 'label' => __( 'Select', 'gravityflow' ), 'value' => 'select' ),
+			array( 'label' => __( 'Conditional Routing', 'gravityflow' ), 'value' => 'routing' ),
 		);
 
 		return array(
@@ -213,7 +213,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 								array(
 									'id'       => 'approval_notification_users',
 									'name'    => 'approval_notification_users[]',
-									'label'   => __( 'Select Users', 'gravityflow' ),
+									'label'   => __( 'Select', 'gravityflow' ),
 									'size'     => '8',
 									'multiple' => 'multiple',
 									'type'     => 'select',

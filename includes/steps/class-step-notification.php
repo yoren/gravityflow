@@ -72,7 +72,7 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 					'default_value' => 'select',
 					'horizontal' => true,
 					'choices'    => array(
-						array( 'label' => __( 'Select Users', 'gravityflow' ), 'value' => 'select' ),
+						array( 'label' => __( 'Select', 'gravityflow' ), 'value' => 'select' ),
 						array( 'label' => __( 'Configure Routing', 'gravityflow' ), 'value' => 'routing' ),
 					),
 				),

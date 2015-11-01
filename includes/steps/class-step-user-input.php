@@ -31,7 +31,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		$account_choices = gravity_flow()->get_users_as_choices();
 
 		$type_field_choices = array(
-			array( 'label' => __( 'Select Users', 'gravityflow' ), 'value' => 'select' ),
+			array( 'label' => __( 'Select', 'gravityflow' ), 'value' => 'select' ),
 			array( 'label' => __( 'Configure Routing', 'gravityflow' ), 'value' => 'routing' ),
 		);
 
