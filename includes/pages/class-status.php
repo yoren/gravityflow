@@ -1116,10 +1116,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		return;
 	}
 
-
 	public function export() {
-
-		// todo: manipulate values.
 
 		$export      = '';
 		$rows        = array();
@@ -1129,8 +1126,31 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		foreach ( $this->items as $item ) {
 			$row_values = array();
 			foreach ( $column_keys as $column_key ) {
-				if ( isset( $item[ $column_key ] ) ) {
-					$row_values[] = '"' . addslashes( $item[ $column_key ] ) . '"';
+				if ( array_key_exists( $column_key, $item ) ) {
+					switch ( $column_key ) {
+						case 'created_by' :
+							$user_id = $item['created_by'];
+							if ( $user_id ) {
+								$user         = get_user_by( 'id', $user_id );
+								$col_val = $user->display_name;
+							} else {
+								$col_val = $item['ip'];
+							}
+						break;
+						case 'workflow_step' :
+							$step_id = rgar( $item, 'workflow_step' );
+							if ( $step_id > 0 ) {
+								$step      = gravity_flow()->get_step( $step_id );
+								$col_val = $step->get_name();
+							} else {
+								$col_val = $step_id;
+							}
+						break;
+						default :
+							$col_val = $item[ $column_key ];
+					}
+
+					$row_values[] = '"' . addslashes( $col_val ) . '"';
 				}
 			}
 			$rows[] = join( ',', $row_values );
