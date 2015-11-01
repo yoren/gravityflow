@@ -55,6 +55,16 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.1.1.3 =
+- Fixed an issue with the assignee by month report where the axis labels were switched.
+- Fixed an issue with the status export where the created_by column is missing for forms submitted by anonymous users.
+
+= 1.1.1.2 =
+- Fixed a compatibility issue with the Gravity Perks Limit Dates Perk.
+
+= 1.1.1.1 =
+- Updated the default number of users returned for settings and for the assignee field from 300 to 1000.
+
 = 1.1.1 =
 - Added the id_column attribute to the shortcode so the ID column can be hidden.
 - Added the Restart Workflow bulk action to the status page.
