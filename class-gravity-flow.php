@@ -253,9 +253,24 @@ PRIMARY KEY  (id)
 					),
 				),
 				array(
+					'handle'  => 'gf_routing_setting',
+					'src'     => $this->get_base_url() . "/js/routing-setting{$min}.js",
+					'deps'    => array( 'jquery' ),
+					'version' => $this->_version,
+					'enqueue' => array(
+						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=_notempty_' ),
+						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=0' ),
+					),
+					'strings' => array(
+						'accounts'     => $users,
+						'fields'       => $routing_fields,
+						'input_fields' => $input_fields,
+					)
+				),
+				array(
 					'handle'  => 'gravityflow_form_settings_js',
 					'src'     => $this->get_base_url() . "/js/form-settings{$min}.js",
-					'deps'    => array( 'jquery', 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'gform_datepicker_init' ),
+					'deps'    => array( 'jquery', 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'gform_datepicker_init', 'gf_routing_setting' ),
 					'version' => $this->_version,
 					'enqueue' => array(
 						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=_notempty_' ),
@@ -297,21 +312,6 @@ PRIMARY KEY  (id)
 						),
 					),
 					'strings' => array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) )
-				),
-				array(
-					'handle'  => 'gf_routing_setting',
-					'src'     => $this->get_base_url() . "/js/routing-setting{$min}.js",
-					'deps'    => array( 'jquery' ),
-					'version' => $this->_version,
-					'enqueue' => array(
-						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=_notempty_' ),
-						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=0' ),
-					),
-					'strings' => array(
-						'accounts'     => $users,
-						'fields'       => $routing_fields,
-						'input_fields' => $input_fields,
-					)
 				),
 				array(
 					'handle'  => 'google_charts',
@@ -567,7 +567,7 @@ PRIMARY KEY  (id)
 				$role_choices[] = array( 'value' => 'role|' . $role, 'label' => $name );
 			}
 
-			$args            = apply_filters( 'gravityflow_get_users_args', array( 'number' => 300, 'orderby' => 'display_name' ) );
+			$args            = apply_filters( 'gravityflow_get_users_args', array( 'number' => 1000, 'orderby' => 'display_name' ) );
 			$accounts        = get_users( $args );
 			$account_choices = array();
 			foreach ( $accounts as $account ) {
@@ -1859,7 +1859,6 @@ PRIMARY KEY  (id)
 		 * @return bool|Gravity_Flow_Step
 		 */
 		public function get_next_step( $step, $entry, $form ){
-			//$complete = true;
 			$keep_looking = true;
 			$form_id = absint( $form['id'] );
 			$steps = $this->get_steps( $form_id, $entry );
@@ -2269,7 +2268,7 @@ PRIMARY KEY  (id)
 
 			if ( ! is_multisite() || ( is_multisite() && is_main_site() && ! defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ) ) {
 				$settings[] = array(
-					'title'  => esc_html( $this->translate_navigation_label( 'settings' ) ),
+					'title'  => esc_html__( 'Settings', 'gravityflow' ),
 					'fields' => array(
 						array(
 							'name'          => 'license_key',
