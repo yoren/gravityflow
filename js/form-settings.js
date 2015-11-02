@@ -60,14 +60,12 @@
 
         $('#gaddon-setting-tab-field-rejection_notification_type input[type=radio]').click(function () {
             toggleRejectionNotificationType(this.value);
-
         });
 
 
         $('#gaddon-setting-tab-field-approval_notification_type input[type=radio]').click(function () {
             toggleApprovalNotificationType(this.value);
         });
-
 
 
         var approvalNotificationEnabled = $('#approval_notification_enabled').prop('checked');
