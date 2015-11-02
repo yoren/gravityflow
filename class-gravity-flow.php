@@ -1160,7 +1160,7 @@ PRIMARY KEY  (id)
 			return $html;
 		}
 
-		public function settings_schedule(){
+		public function settings_schedule( $field ){
 
 			$scheduled = array(
 				'name' => 'scheduled',
@@ -1232,14 +1232,8 @@ PRIMARY KEY  (id)
 
 			$this->settings_checkbox( $scheduled );
 
-			$feed_id = $this->get_current_feed_id();
-			$enabled = false;
-			$schedule_type_setting = 'delay'; // default
-			if ( ! empty( $feed_id ) ) {
-				$feed = $this->get_feed( $feed_id );
-				$enabled = rgar( $feed['meta'], 'scheduled' );
-				$schedule_type_setting = rgar( $feed['meta'], 'schedule_type' );
-			}
+			$enabled = $this->get_setting( 'scheduled', false );
+			$schedule_type_setting = $this->get_setting( 'schedule_type', 'delay' );
 			$schedule_style = $enabled ? '' : 'style="display:none;"';
 			$schedule_date_style = ( $schedule_type_setting == 'date' ) ? '' : 'style="display:none;"';
 			$schedule_delay_style = ( $schedule_type_setting !== 'date' ) ? '' : 'style="display:none;"';
