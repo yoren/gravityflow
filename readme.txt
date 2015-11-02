@@ -55,6 +55,9 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.1.1.4 =
+- Fixed an issue with the schedule step setting where the values are not retained after changing the step type.
+
 = 1.1.1.3 =
 - Fixed an issue with the assignee by month report where the axis labels were switched.
 - Fixed an issue with the status export where the created_by column is missing for forms submitted by anonymous users.
