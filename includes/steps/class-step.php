@@ -423,11 +423,20 @@ abstract class Gravity_Flow_Step extends stdClass {
 			return true;
 		}
 
+		$this->log_debug( __METHOD__ . '() step is scheduled' );
+
 		$schedule_timestamp = $this->get_schedule_timestamp();
 
-		$time_now = time();
+		$this->log_debug( __METHOD__ . '() schedule_timestamp: ' . $schedule_timestamp );
+		$this->log_debug( __METHOD__ . '() schedule_timestamp formatted: ' . date( 'Y-m-d H:i:s', $schedule_timestamp ) );
 
-		return time() >= $schedule_timestamp;
+		// Schedule delay is relative to UTC. Schedule date is relative to timezone of the site.
+		$current_time = $this->schedule_type == 'date' ? current_time( 'timestamp' ) : time();
+
+		$this->log_debug( __METHOD__ . '() current_time: ' . $current_time );
+		$this->log_debug( __METHOD__ . '() current_time formatted: ' . date( 'Y-m-d H:i:s', $current_time ) );
+
+		return $current_time >= $schedule_timestamp;
 	}
 
 	/**
@@ -438,8 +447,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 	function get_schedule_timestamp(){
 
 		if ( $this->schedule_type == 'date' ) {
-			$date_gmt = get_gmt_from_date( $this->schedule_date );
-			return strtotime( $date_gmt );
+
+			$this->log_debug( __METHOD__ . '() schedule_date: ' . $this->schedule_date );
+			$schedule_datetime = strtotime( $this->schedule_date );
+
+			return $schedule_datetime;
 		}
 
 		$entry = $this->get_entry();
