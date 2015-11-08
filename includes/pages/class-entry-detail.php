@@ -15,7 +15,8 @@ class Gravity_Flow_Entry_Detail {
 	public static function entry_detail( $form, $entry, $current_step = null, $args  = array() ){
 
 		$form_id = absint( $form['id'] );
-		$form    = gf_apply_filters( 'gform_admin_pre_render', $form_id, $form );
+		$form    = apply_filters( 'gform_admin_pre_render', $form );
+		$form    = apply_filters( 'gform_admin_pre_render_' . $form_id, $form );
 
 		$defaults = array(
 			'display_empty_fields' => true,
