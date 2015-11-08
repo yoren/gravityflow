@@ -4,15 +4,17 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+/**
+ * @deprecated since 1.1.1.6
+ *
+ * Class Gravity_Flow_Field_Assignee_Select
+ */
 class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
 	public $type = 'workflow_assignee_select';
 
 	public function get_form_editor_button() {
-		return array(
-			'group' => 'advanced_fields',
-			'text'  => $this->get_form_editor_field_title()
-		);
+		return array();
 	}
 
 	function get_form_editor_field_settings() {
@@ -55,6 +57,8 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
 		$form_id = $this->formId;
 
+		$account_choices = $role_choices = $fields_choices = array();
+
 		$optgroups = array();
 
 		if ( $include_users ) {
@@ -71,7 +75,6 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
 			if ( ! empty( $account_choices ) ) {
 				$users_opt_group = new GF_Field();
-				//$users_opt_group->placeholder = true;
 				$users_opt_group->choices = $account_choices;
 
 				$optgroups[] = array(
