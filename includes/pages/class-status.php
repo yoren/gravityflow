@@ -206,6 +206,11 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		$args = wp_parse_args( $args, $default_args );
 
+		require_once( ABSPATH .'wp-admin/includes/template.php');
+		if ( ! class_exists( 'WP_Screen' ) ) {
+			require_once( ABSPATH . 'wp-admin/includes/class-wp-screen.php' );
+		}
+
 		parent::__construct( $args );
 
 		$this->base_url           = $args['base_url'];
@@ -638,8 +643,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		} elseif ( ! empty( $_REQUEST['form-id'] ) ) {
 			$args['form-id'] = absint( $_REQUEST['form-id'] );
 		}
-
-		if ( ! empty( $args['form-id'] ) && $_REQUEST[ 'f' ] !== '' ) {
+		$f = isset( $_REQUEST['f'] ) ? $_REQUEST['f'] : '';
+		if ( ! empty( $args['form-id'] ) && $f !== '' ) {
 			$form                  = GFAPI::get_form( absint( $args['form-id'] ) );
 			$field_filters         = $this->get_field_filters_from_request( $form );
 			$args['field_filters'] = $field_filters;
@@ -968,7 +973,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 	public function get_field_filters_from_request( $form ) {
 		$field_filters = array();
-		$filter_fields = $_REQUEST['f'];
+		$filter_fields = isset( $_REQUEST['f'] ) ? $_REQUEST['f'] : '';
 		if ( is_array( $filter_fields ) && $filter_fields[0] !== '' ) {
 			$filter_operators = $_REQUEST['o'];
 			$filter_values    = $_REQUEST['v'];
