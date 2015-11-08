@@ -7,6 +7,20 @@ function SetDefaultValues_workflow_assignee_select(field) {
 	return field;
 }
 
+function SetDefaultValues_workflow_user(field) {
+
+	field.label = gravityflow_form_editor_js_strings.user.defaults.label;
+
+	return field;
+}
+
+function SetDefaultValues_workflow_role(field) {
+
+	field.label = gravityflow_form_editor_js_strings.role.defaults.label;
+
+	return field;
+}
+
 jQuery(document).bind("gform_load_field_settings", function(event, field, form) {
 
 	if (field.type == 'workflow_assignee_select') {
