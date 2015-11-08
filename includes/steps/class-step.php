@@ -105,7 +105,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 *
 	 * @return mixed
 	 */
-	public function __get( $name ){
+	public function &__get( $name ){
 		if ( ! isset( $this->_meta[ $name ] ) ) {
 			$this->_meta[ $name ] = '';
 		}
@@ -116,6 +116,14 @@ abstract class Gravity_Flow_Step extends stdClass {
 	public function __set( $key, $value ){
 		$this->_meta[ $key ] = $value;
 		$this->$key = $value;
+	}
+
+	public function __isset( $key ) {
+		return isset( $this->_meta[ $key ] );
+	}
+
+	public function __unset( $key ) {
+		unset( $this->$key );
 	}
 
 	/**
