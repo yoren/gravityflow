@@ -93,7 +93,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step{
 		}
 
 		return array(
-			'title'  => 'Feeds',
+			'title'  => $this->get_label(),
 			'fields' => $fields,
 		);
 	}
