@@ -32,7 +32,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 		$type_field_choices = array(
 			array( 'label' => __( 'Select', 'gravityflow' ), 'value' => 'select' ),
-			array( 'label' => __( 'Configure Routing', 'gravityflow' ), 'value' => 'routing' ),
+			array( 'label' => __( 'Conditional Routing', 'gravityflow' ), 'value' => 'routing' ),
 		);
 
 		return array(
@@ -107,6 +107,37 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 							'default_value' => 1,
 						),
 					)
+				),
+				array(
+					'name'  => 'assignee_notification_from_name',
+					'label' => __( 'From Name', 'gravityflow' ),
+					'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+					'type'  => 'text',
+				),
+				array(
+					'name'  => 'assignee_notification_from_email',
+					'label' => __( 'From Email', 'gravityflow' ),
+					'type'  => 'text',
+					'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+					'default_value' => '{admin_email}',
+				),
+				array(
+					'name'  => 'assignee_notification_reply_to',
+					'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+					'label' => __( 'Reply To', 'gravityflow' ),
+					'type'  => 'text',
+				),
+				array(
+					'name'  => 'assignee_notification_bcc',
+					'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+					'label' => __( 'BCC', 'gravityflow' ),
+					'type'  => 'text',
+				),
+				array(
+					'name'  => 'assignee_notification_subject',
+					'class' => 'fieldwidth-1 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+					'label' => __( 'Subject', 'gravityflow' ),
+					'type'  => 'text',
 				),
 				array(
 					'name'  => 'assignee_notification_message',

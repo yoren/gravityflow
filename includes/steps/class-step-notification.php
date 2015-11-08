@@ -91,6 +91,37 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 					'type'  => 'user_routing',
 				),
 				array(
+					'name'  => 'workflow_notification_from_name',
+					'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+					'label' => __( 'From Name', 'gravityflow' ),
+					'type'  => 'text',
+				),
+				array(
+					'name'  => 'workflow_notification_from_email',
+					'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+					'label' => __( 'From Email', 'gravityflow' ),
+					'type'  => 'text',
+					'default_value' => '{admin_email}'
+				),
+				array(
+					'name'  => 'workflow_notification_reply_to',
+					'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+					'label' => __( 'Reply To', 'gravityflow' ),
+					'type'  => 'text',
+				),
+				array(
+					'name'  => 'workflow_notification_bcc',
+					'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+					'label' => __( 'BCC', 'gravityflow' ),
+					'type'  => 'text',
+				),
+				array(
+					'name'  => 'workflow_notification_subject',
+					'class' => 'fieldwidth-1 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+					'label' => __( 'Subject', 'gravityflow' ),
+					'type'  => 'text',
+				),
+				array(
 					'name'  => 'workflow_notification_message',
 					'label' => __( 'Message', 'gravityflow' ),
 					'type'  => 'visual_editor',
@@ -168,9 +199,15 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 			return;
 		}
 
-		$body = $this->workflow_notification_message;
+		$notification['workflow_notification_type'] = 'workflow';
+		$notification['fromName'] = $this->workflow_notification_from_name;
+		$notification['from'] = $this->workflow_notification_from_email;
+		$notification['replyTo'] = $this->workflow_notification_reply_to;
+		$notification['bcc'] = $this->workflow_notification_bcc;
+		$notification['subject'] = $this->workflow_notification_subject;
+		$notification['message'] = $this->workflow_notification_message;
 
-		$this->send_notifications( $assignees, $body );
+		$this->send_notifications( $assignees, $notification );
 
 		$note = esc_html__( 'Sent Notification: ', 'gravityflow' ) . $this->get_name();
 		$this->add_note( $note );
