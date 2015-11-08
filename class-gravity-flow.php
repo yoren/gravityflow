@@ -242,6 +242,18 @@ PRIMARY KEY  (id)
 					'enqueue'  => array(
 						array( 'admin_page' => array( 'form_editor' ) ),
 					),
+					'strings' => array(
+						'user' => array(
+							'defaults' => array(
+								'label' => esc_html__( 'User', 'gravityflow' )
+							),
+						),
+						'role' => array(
+							'defaults' => array(
+								'label' => esc_html__( 'Role', 'gravityflow' )
+							),
+						),
+					),
 				),
 				array(
 					'handle'  => 'gravityflow_multi_select',
@@ -398,7 +410,7 @@ PRIMARY KEY  (id)
 			$chosen_fields = array();
 			foreach ( $form['fields'] as $field ) {
 				$input_type = GFFormsModel::get_input_type( $field );
-				if ( $field->enableEnhancedUI && in_array( $input_type, array( 'workflow_assignee_select' ) ) ) {
+				if ( $field->enableEnhancedUI && in_array( $input_type, array( 'workflow_assignee_select', 'workflow_user', 'workflow_role' ) ) ) {
 					$chosen_fields[] = "#input_{$form['id']}_{$field->id}";
 				}
 			}
@@ -413,7 +425,7 @@ PRIMARY KEY  (id)
 			}
 
 			foreach ( $form['fields'] as $field ) {
-				if ( in_array( RGFormsModel::get_input_type( $field ), array( 'workflow_assignee_select' ) ) && $field->enableEnhancedUI ) {
+				if ( in_array( RGFormsModel::get_input_type( $field ), array( 'workflow_assignee_select', 'workflow_user', 'workflow_role' ) ) && $field->enableEnhancedUI ) {
 					return true;
 				}
 			}
@@ -632,8 +644,13 @@ PRIMARY KEY  (id)
 			if ( isset( $form['fields'] ) && is_array( $form['fields'] ) ) {
 				foreach ( $form['fields'] as $field ) {
 					/* @var GF_Field $field */
-					if ( GFFormsModel::get_input_type( $field ) == 'workflow_assignee_select' ) {
+					$type = GFFormsModel::get_input_type( $field );
+					if ( $type == 'workflow_assignee_select' ) {
 						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_field|' . $field->id );
+					} elseif ( $type == 'workflow_user' ) {
+						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_user_field|' . $field->id );
+					} elseif ( $type == 'workflow_role' ) {
+						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_role_field|' . $field->id );
 					}
 				}
 			}
