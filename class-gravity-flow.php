@@ -4227,7 +4227,7 @@ AND m.meta_value='queued'";
 			</script>
 
 			<?php
-		return $form;
+			return $form;
 		}
 
 	}
