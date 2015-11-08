@@ -32,9 +32,9 @@ Thank you to all my colleagues at Rocketgenius, Zack Katz (GravityView), Naomi C
 
 Thank you to also all the translators for doing such a great job of keeping up with the updates:
 
-Samuel Aguilera @samuelaguilera (samuelaguilera.com) - Spanish
-FX Bénard @fxbenard (fxbenard.com) - French
-Erik van Beek @ErikvanBeek (erikvanbeek.nl) - Dutch
+* Samuel Aguilera @samuelaguilera (samuelaguilera.com) - Spanish
+* FX Bénard @fxbenard (fxbenard.com) - French
+* Erik van Beek @ErikvanBeek (erikvanbeek.nl) - Dutch
 
 
 
