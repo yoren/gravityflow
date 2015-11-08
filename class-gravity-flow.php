@@ -225,6 +225,7 @@ PRIMARY KEY  (id)
 			$input_fields   = array();
 			if ( is_array( $form['fields'] ) ) {
 				foreach ( $form['fields'] as $field ) {
+					/* @var GF_Field $field */
 					$input_fields[] = array( 'key' => absint( $field['id'] ), 'text' => esc_html__( $field['label'] ) );
 				}
 			}
