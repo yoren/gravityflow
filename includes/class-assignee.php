@@ -41,22 +41,37 @@ class Gravity_Flow_Assignee {
 			throw new Exception( 'Assignees must be instantiated with either a string or an array' );
 		}
 
-		if ( $type == 'assignee_field' ) {
-			$entry = $this->step->get_entry();
-			$assignee_key = rgar( $entry, $id );
-			list( $this->type, $this->id ) = rgexplode( '|', $assignee_key, 2 );
-		} elseif ( $type == 'email_field' ) {
-			$entry = $this->step->get_entry();
-			$this->id = sanitize_email( rgar( $entry, $id ) );
-			$this->type = 'email';
-		} elseif ( $type == 'entry' ) {
-			$entry = $this->step->get_entry();
-			$this->id = rgar( $entry, $id );
-			$this->type = 'user_id';
-		} else {
-			$this->type = $type;
-			$this->id = $id;
+		switch ( $type ) {
+			case  'assignee_field' :
+				$entry = $this->step->get_entry();
+				$assignee_key = rgar( $entry, $id );
+				list( $this->type, $this->id ) = rgexplode( '|', $assignee_key, 2 );
+				break;
+			case  'assignee_user_field' :
+				$entry = $this->step->get_entry();
+				$this->id = absint( rgar( $entry, $id ) );
+				$this->type = 'user_id';
+				break;
+			case  'assignee_role_field' :
+				$entry = $this->step->get_entry();
+				$this->id = sanitize_text_field( rgar( $entry, $id ) );
+				$this->type = 'role';
+				break;
+			case  'email_field' :
+				$entry = $this->step->get_entry();
+				$this->id = sanitize_email( rgar( $entry, $id ) );
+				$this->type = 'email';
+				break;
+			case 'entry' :
+				$entry = $this->step->get_entry();
+				$this->id = rgar( $entry, $id );
+				$this->type = 'user_id';
+				break;
+			default :
+				$this->type = $type;
+				$this->id = $id;
 		}
+
 		$this->key = $this->type . '|' . $this->id;
 	}
 
