@@ -7,7 +7,7 @@ This repository is a development version of Gravity Flow intended to facilitate 
 
 Bug reports and pull requests are welcome.
 
-If you'd like to receive the release version, automatic updates and support please sign up for the beta: https://gravityflow.io.
+If you'd like to receive the release version, automatic updates and support please purchase a license here: https://gravityflow.io.
 
 
 ## Installation Instructions
@@ -27,6 +27,14 @@ If you'd like to translate Gravity Flow into your language please create a free 
 
 https://www.transifex.com/projects/p/gravityflow/
 
+## Credits
+Thank you to all my colleagues at Rocketgenius, Zack Katz (GravityView), Naomi C Bush (Gravity Plus) and Jake Jackson (Gravity PDF) for all their collaboration, support and encouragement.
+
+Thank you to also all the translators for doing such a great job of keeping up with the updates:
+
+Samuel Aguilera @samuelaguilera (samuelaguilera.com) - Spanish
+FX Bénard @fxbenard (fxbenard.com) - French
+Erik van Beek @ErikvanBeek (erikvanbeek.nl) - Dutch
 
 
 

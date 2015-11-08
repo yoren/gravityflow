@@ -55,6 +55,26 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.1.1.9 =
+- Added options to the workflow email settings: From Name, From Email, Reply To, BCC, Subject.
+
+= 1.1.1.8 =
+- Added support for the User Registration Add-On version 3
+- Added support for Gravity PDF 4.
+
+= 1.1.1.7 =
+- Fixed an issue with the status shortcode on WordPress 4.4
+
+= 1.1.1.6 =
+- Added the Workflow Fields section in the form editor.
+- Added the User field.
+- Added the Role field.
+- Deprecated the Assignee Field and removed the button from the form editor.
+
+= 1.1.1.5 =
+- Added schedule date to the workflow entry detail for queued entries.
+- Fixed an issue with the schedule date setting for installations in timezones < UTC.
+
 = 1.1.1.4 =
 - Fixed an issue with the schedule step setting where the values are not retained after changing the step type.
 
