@@ -1213,8 +1213,8 @@ PRIMARY KEY  (id)
 			$schedule_date = array(
 				'id' => 'schedule_date',
 				'name' => 'schedule_date',
-				'placeholder' => 'mm/dd/yyyy',
-				'class' => 'datepicker datepicker_with_icon',
+				'placeholder' => 'yyyy-mm-dd',
+				'class' => 'datepicker datepicker_with_icon ymd_dash',
 				'label' => esc_html__( 'Schedule', 'gravityflow' ),
 				'type' => 'text',
 			);
@@ -1741,8 +1741,22 @@ PRIMARY KEY  (id)
 							?>
 							<hr style="margin-top:10px;"/>
 							<?php
+							if ( $current_step->is_queued() ) {
+								printf( '<h4>%s (%s)</h4>', $current_step->get_name(), esc_html__( 'Queued', 'gravityflow' ) );
 
-							$current_step->workflow_detail_status_box( $form );
+								$scheduled_timestamp = $current_step->get_schedule_timestamp();
+
+								if ( $current_step->schedule_type == 'delay' ) {
+									$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
+									$scheduled_date = get_date_from_gmt( $scheduled_date_str );
+								} else {
+									$scheduled_date = $current_step->schedule_date;
+								}
+
+								printf( '<h4>%s: %s</h4>', esc_html__( 'Scheduled', 'gravityflow' ), $scheduled_date );
+							} else {
+								$current_step->workflow_detail_status_box( $form );
+							}
 						}
 
 						?>
