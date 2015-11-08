@@ -34,13 +34,25 @@
             $assigneeNotificationMessage = $('#gaddon-setting-tab-field-assignee_notification_message');
         $assigneeNotificationEnabled.click(function () {
             $assigneeNotificationMessage.fadeToggle('normal');
+            $('#gaddon-setting-tab-field-assignee_notification_from_name').fadeToggle();
+            $('#gaddon-setting-tab-field-assignee_notification_from_email').fadeToggle();
+            $('#gaddon-setting-tab-field-assignee_notification_reply_to').fadeToggle();
+            $('#gaddon-setting-tab-field-assignee_notification_bcc').fadeToggle();
+            $('#gaddon-setting-tab-field-assignee_notification_subject').fadeToggle();
             $('#gaddon-setting-tab-field-resend_assignee_email').fadeToggle();
+            $('#gaddon-setting-tab-field-assignee_notification_gpdf').fadeToggle();
             $('#gaddon-setting-tab-tab_assignee_notification i.gravityflow-tab-checked').toggle();
             $('#gaddon-setting-tab-tab_assignee_notification i.gravityflow-tab-unchecked').toggle();
         });
         var assigneeNotificationChecked = $assigneeNotificationEnabled.prop('checked');
         $assigneeNotificationMessage.toggle(assigneeNotificationChecked);
+        $('#gaddon-setting-tab-field-assignee_notification_from_name').toggle( assigneeNotificationChecked );
+        $('#gaddon-setting-tab-field-assignee_notification_from_email').toggle( assigneeNotificationChecked );
+        $('#gaddon-setting-tab-field-assignee_notification_reply_to').toggle( assigneeNotificationChecked );
+        $('#gaddon-setting-tab-field-assignee_notification_bcc').toggle( assigneeNotificationChecked );
+        $('#gaddon-setting-tab-field-assignee_notification_subject').toggle( assigneeNotificationChecked );
         $('#gaddon-setting-tab-field-resend_assignee_email').toggle( assigneeNotificationChecked );
+        $('#gaddon-setting-tab-field-assignee_notification_gpdf').toggle( assigneeNotificationChecked );
         $('#gaddon-setting-tab-tab_assignee_notification i.gravityflow-tab-checked').toggle(assigneeNotificationChecked);
         $('#gaddon-setting-tab-tab_assignee_notification i.gravityflow-tab-unchecked').toggle(!assigneeNotificationChecked);
 
@@ -310,24 +322,24 @@
 
     function toggleRejectionNotificationType(showType) {
         var fields = {
-            select: ['rejection_notification_users', 'rejection_notification_message'],
-            routing: ['rejection_notification_routing', 'rejection_notification_message']
+            select: ['rejection_notification_users', 'rejection_notification_from_name', 'rejection_notification_from_email', 'rejection_notification_reply_to', 'rejection_notification_bcc', 'rejection_notification_subject', 'rejection_notification_message', 'rejection_notification_gpdf'],
+            routing: ['rejection_notification_routing', 'rejection_notification_from_name', 'rejection_notification_from_email', 'rejection_notification_reply_to', 'rejection_notification_bcc', 'rejection_notification_subject', 'rejection_notification_message', 'rejection_notification_gpdf']
         };
         toggleFields(fields, showType, true);
     }
 
     function toggleApprovalNotificationType(showType) {
         var fields = {
-            select: ['approval_notification_users', 'approval_notification_message'],
-            routing: ['approval_notification_routing', 'approval_notification_message']
+            select: ['approval_notification_users', 'approval_notification_from_name', 'approval_notification_from_email', 'approval_notification_reply_to', 'approval_notification_bcc', 'approval_notification_subject', 'approval_notification_message', 'approval_notification_gpdf'],
+            routing: ['approval_notification_routing', 'approval_notification_from_name', 'approval_notification_from_email', 'approval_notification_reply_to', 'approval_notification_bcc', 'approval_notification_subject', 'approval_notification_message', 'approval_notification_gpdf']
         };
         toggleFields(fields, showType, true);
     }
 
 	function toggleWorkflowNotificationType(showType) {
 		var fields = {
-			select: ['workflow_notification_users\\[\\]', 'workflow_notification_message'],
-			routing: ['workflow_notification_routing', 'workflow_notification_message']
+			select: ['workflow_notification_users\\[\\]', 'workflow_notification_from_name', 'workflow_notification_from_email', 'workflow_notification_reply_to', 'workflow_notification_bcc', 'workflow_notification_subject', 'workflow_notification_message'],
+			routing: ['workflow_notification_routing', 'workflow_notification_from_name', 'workflow_notification_from_email', 'workflow_notification_reply_to', 'workflow_notification_bcc', 'workflow_notification_subject', 'workflow_notification_message']
 		};
 		toggleFields(fields, showType, false);
 	}
@@ -404,6 +416,11 @@
             'routing',
             'assignees\\[\\]',
             'unanimous_approval',
+            'assignee_notification_from_name',
+            'assignee_notification_from_email',
+            'assignee_notification_reply_to',
+            'assignee_notification_bcc',
+            'assignee_notification_subject',
             'assignee_notification_message',
             'resend_assignee_email',
             'rejection_notification_type',
@@ -421,6 +438,11 @@
 			'workflow_notification_users\\[\\]',
 			'workflow_notification_user_field',
 			'workflow_notification_routing',
+            'workflow_notification_from_name',
+            'workflow_notification_from_email',
+            'workflow_notification_reply_to',
+            'workflow_notification_bcc',
+            'workflow_notification_subject',
 			'workflow_notification_message',
 
             'assignees\\[\\]',
