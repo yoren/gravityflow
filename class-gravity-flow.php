@@ -730,14 +730,14 @@ PRIMARY KEY  (id)
 					),
 					array(
 						'name'  => 'description',
-						'label' => 'Description',
+						'label' => esc_html__( 'Description', 'gravityflow' ),
 						'class' => 'fieldwidth-3 fieldheight-2',
 						'type'  => 'textarea',
 					),
 					$step_type_setting,
 					array(
 						'name'           => 'condition',
-						'tooltip'        => "Build the conditional logic that should be applied to this step before it's allowed to be processed. If an entry does not meet the conditions of this step it will fall on to the next step in the list.",
+						'tooltip'        => esc_html__( "Build the conditional logic that should be applied to this step before it's allowed to be processed. If an entry does not meet the conditions of this step it will fall on to the next step in the list.", 'gravityflow' ),
 						'label'          => 'Condition',
 						'type'           => 'feed_condition',
 						'checkbox_label' => esc_html__( 'Enable Condition for this step', 'gravityflow' ),
@@ -748,6 +748,8 @@ PRIMARY KEY  (id)
 						'label' => esc_html__( 'Schedule' ),
 						'type' => 'schedule',
 						'tooltip' => esc_html__( 'Scheduling a step will queue entries and prevent them from starting this step until the specified date or until the delay period has elapsed.', 'gravityflow' )
+									. ' ' . esc_html__( 'Note: the schedule setting requires the WordPress Cron which is included and enabled by default unless your host has deactivated it.', 'gravityflow' )
+
 					),
 				)
 			);
