@@ -20,6 +20,12 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 
 	protected $_class_name = 'GFUser';
 
+	public function get_feed_add_on_class_name(){
+		$class_name = class_exists( 'GF_User_Registration' ) ? 'GF_User_Registration' : 'GFUser';
+		$this->_class_name = $class_name;
+		return $class_name;
+	}
+
 	public function get_label() {
 		return esc_html__( 'User Registration', 'gravityflow' );
 	}
@@ -32,13 +38,21 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 
 		$form_id = $this->get_form_id();
 
-		$feeds = GFUserData::get_feeds( $form_id );
+		if ( class_exists( 'GF_User_Registration' ) ) {
+			$feeds = parent::get_feeds();
+		} else {
+			$feeds = GFUserData::get_feeds( $form_id );
+		}
+
 
 		return $feeds;
 	}
 
 	function process_feed( $feed ) {
-
+		if ( class_exists( 'GF_User_Registration' ) ) {
+			parent::process_feed( $feed );
+			return;
+		}
 		$form  = $this->get_form();
 		$entry = $this->get_entry();
 		remove_filter( 'gform_disable_registration', '__return_true' );
@@ -49,10 +63,19 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 	}
 
 	function intercept_submission() {
+		if ( class_exists( 'GF_User_Registration' ) ) {
+			parent::intercept_submission();
+			return;
+		}
+
 		add_filter( 'gform_disable_registration', '__return_true' );
 	}
 
 	function get_feed_label( $feed ) {
+		if ( class_exists( 'GF_User_Registration' ) ) {
+			return parent::get_feed_label( $feed );
+		}
+
 		$label = $feed['meta']['feed_type'] == 'create' ? __( 'Create', 'gravityflow' ) : __( 'Update', 'gravityflow' );
 		return $label;
 	}
