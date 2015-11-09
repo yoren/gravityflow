@@ -277,8 +277,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		// Support for Gravity PDF 4
 		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-beta2' , '>=' ) ){
 			$form_id = $this->get_form_id();
-			$form = GFAPI::get_form( $form_id );
-			$gpdf_feeds = rgar( $form, 'gfpdf_form_settings' );
+			$gpdf_feeds = GPDFAPI::get_form_pdfs( $form_id );
 			if ( is_array( $gpdf_feeds ) ) {
 				$gpdf_choices = array();
 				foreach( $gpdf_feeds as $gpdf_feed ) {
