@@ -65,7 +65,7 @@ class Gravity_Flow_Field_Role extends GF_Field_Select {
 		global $wp_roles;
 		$form_id = $this->formId;
 
-		$editable_roles = array_reverse( $wp_roles->roles );
+		$editable_roles = $wp_roles->roles;
 		$role_choices = array();
 		foreach ( $editable_roles as $role => $details ) {
 			$name           = translate_user_role( $details['name'] );
