@@ -64,14 +64,14 @@ class Gravity_Flow_Field_User extends GF_Field_Select {
 	public function get_users_as_choices( $value  ) {
 		$form_id = $this->formId;
 
-		$args            = apply_filters( 'gravityflow_get_users_args_assignee_field', array( 'number' => 1000, 'orderby' => 'display_name' ) );
+		$args            = apply_filters( 'gravityflow_get_users_args_user_field', array( 'number' => 1000, 'orderby' => 'display_name' ) );
 		$accounts        = get_users( $args );
 		$account_choices = array();
 		foreach ( $accounts as $account ) {
 			$account_choices[] = array( 'value' => $account->ID, 'text' => $account->display_name );
 		}
 
-		$account_choices = apply_filters( 'gravityflow_assignee_field_users', $account_choices, $form_id, $this );
+		$account_choices = apply_filters( 'gravityflow_user_field', $account_choices, $form_id, $this );
 
 		$this->choices = $account_choices;
 		$choices = GFCommon::get_select_choices( $this, $value );
