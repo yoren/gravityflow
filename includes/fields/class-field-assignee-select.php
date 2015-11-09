@@ -12,6 +12,10 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
 	public $type = 'workflow_assignee_select';
 
+	public function is_conditional_logic_supported() {
+		return false;
+	}
+
 	public function add_button( $field_groups ) {
 		$field_groups = $this->maybe_add_workflow_field_group( $field_groups );
 
