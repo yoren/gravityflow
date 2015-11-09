@@ -55,38 +55,21 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
-= 1.1.1.9 =
+= 1.1.2 =
 - Added options to the workflow email settings: From Name, From Email, Reply To, BCC, Subject.
-
-= 1.1.1.8 =
 - Added support for the User Registration Add-On version 3
 - Added support for Gravity PDF 4.
-
-= 1.1.1.7 =
-- Fixed an issue with the status shortcode on WordPress 4.4
-
-= 1.1.1.6 =
 - Added the Workflow Fields section in the form editor.
 - Added the User field.
 - Added the Role field.
-- Deprecated the Assignee Field and removed the button from the form editor.
-
-= 1.1.1.5 =
 - Added schedule date to the workflow entry detail for queued entries.
+- Updated the default number of users returned for settings and for the assignee field from 300 to 1000.
+- Fixed an issue with the status shortcode on WordPress 4.4
 - Fixed an issue with the schedule date setting for installations in timezones < UTC.
-
-= 1.1.1.4 =
 - Fixed an issue with the schedule step setting where the values are not retained after changing the step type.
-
-= 1.1.1.3 =
 - Fixed an issue with the assignee by month report where the axis labels were switched.
 - Fixed an issue with the status export where the created_by column is missing for forms submitted by anonymous users.
-
-= 1.1.1.2 =
 - Fixed a compatibility issue with the Gravity Perks Limit Dates Perk.
-
-= 1.1.1.1 =
-- Updated the default number of users returned for settings and for the assignee field from 300 to 1000.
 
 = 1.1.1 =
 - Added the id_column attribute to the shortcode so the ID column can be hidden.
@@ -103,7 +86,6 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Fixed an issue with the assignee field where the number 1 appears at the top of the lists of users and fields.
 - Removed the redundant 'workflow: notification step' event in the Gravity Forms notification settings.
 - API: Added the Gravity_Flow_Extension class.
-
 
 = 1.1 =
 - Added one-click cancel links so workflows can be cancelled by clicking on a link in an email.
