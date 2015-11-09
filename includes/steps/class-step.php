@@ -1002,6 +1002,10 @@ abstract class Gravity_Flow_Step extends stdClass {
 	public function gpdf_add_notification_attachment( $notification, $gpdf_id ) {
 		global $gfpdf;
 
+		if ( ! class_exists( 'GPDFAPI' ) ) {
+			return $notification;
+		}
+
 		$entry = $this->get_entry();
 
 		/* @var \GFPDF\Model\Model_PDF $gpdf_model */
