@@ -132,6 +132,8 @@ if ( class_exists( 'GFForms' ) ) {
 
 			add_action( 'gform_post_form_duplicated', array( $this, 'action_gform_post_form_duplicated' ), 10, 2 );
 
+			add_filter( 'gform_tooltips', array( $this, 'add_tooltips' ) );
+
 		}
 
 		public function init_ajax() {
@@ -4228,6 +4230,11 @@ AND m.meta_value='queued'";
 
 			<?php
 			return $form;
+		}
+
+		public function add_tooltips( $tooltips ) {
+			$tooltips['form_workflow_fields'] = '<h6>' . __( 'Workflow Fields', 'gravityflow' ) . '</h6>' . __( 'Workflow Fields add advanced workflow functionality to your forms.', 'gravityflow' );
+			return $tooltips;
 		}
 
 	}
