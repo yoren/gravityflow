@@ -507,14 +507,37 @@ class Gravity_Flow_Entry_Detail {
 
 		foreach ( $notes as $note ) {
 
-
 			?>
 
-			<div id="gravityflow-note-<?php echo $note->id; ?>" class="gravityflow-note">
+			<div id="gravityflow-note-<?php echo $note->id; ?>" class="gravityflow-note gravityflow-note-<?php echo $note->user_name; ?>">
 				<div class="gravityflow-note-avatar">
 					<div>
 						<?php
-						echo get_avatar( $note->user_id, 65 );
+
+						if ( empty( $note->user_id ) ) {
+
+							$img_url = '';
+
+							if ( $note->user_name !== 'gravityflow' ) {
+								$step = Gravity_Flow_Steps::get( $note->user_name );
+								if ( $step ) {
+									$img_url = $step->get_icon_url();
+								}
+							}
+
+							if ( empty ( $img_url) ) {
+								$img_url = gravity_flow()->get_base_url() . '/images/gravityflow-icon-blue.svg';
+							}
+
+							if ( strpos( $img_url, 'http' ) !== false ) {
+								printf( '<img class="avatar avatar-65 photo" src="%s" style="width:65px;height:65px;" />', $img_url );
+							} else {
+								printf( '<span class="avatar avatar-65 photo">%s</span>', $img_url );
+							}
+						} else {
+							echo get_avatar( $note->user_id, 65 );
+						}
+
 						?>
 					</div>
 					<div></div>
@@ -525,7 +548,22 @@ class Gravity_Flow_Entry_Detail {
 						<div class="gravityflow-note-header">
 
 							<div class="gravityflow-note-title">
-								<?php echo esc_html( $note->user_name ); ?>
+								<?php
+
+								if ( empty( $note->user_id ) ) {
+									if ( $note->user_name !== 'gravityflow' ) {
+										$step = Gravity_Flow_Steps::get( $note->user_name );
+										if ( $step ) {
+											echo $step->get_label();
+										}
+									} else {
+										echo esc_html( gravity_flow()->translate_navigation_label( 'Workflow' ) );
+									}
+								} else {
+									echo esc_html( $note->user_name );
+								}
+
+								?>
 							</div>
 							<div class="gravityflow-note-meta">
 								<?php echo esc_html( GFCommon::format_date( $note->date_created, false, 'd M Y g:i a', false ) ) ?>
