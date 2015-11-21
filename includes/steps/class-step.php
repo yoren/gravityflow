@@ -440,7 +440,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
-	 * Returns the schedule timestamp calculated from the schedule settings.
+	 * Returns the schedule timestamp (UTC) calculated from the schedule settings.
 	 *
 	 * @return int
 	 */
@@ -475,6 +475,76 @@ abstract class Gravity_Flow_Step extends stdClass {
 				break;
 		}
 		return $schedule_timestamp;
+	}
+
+	function is_expired() {
+		if ( ! $this->supports_expiration() ) {
+			return false;
+		}
+
+		if ( ! $this->expiration ) {
+			return false;
+		}
+
+		$this->log_debug( __METHOD__ . '() step is scheduled for expiration' );
+
+		$expiration_timestamp = $this->get_expiration_timestamp();
+
+		$this->log_debug( __METHOD__ . '() expiration_timestamp UTC: ' . $expiration_timestamp );
+		$this->log_debug( __METHOD__ . '() expiration_timestamp formatted UTC: ' . date( 'Y-m-d H:i:s', $expiration_timestamp ) );
+
+		// Schedule delay is relative to UTC. Schedule date is relative to timezone of the site.
+		$current_time = time();
+
+		$this->log_debug( __METHOD__ . '() current_time UTC: ' . $current_time );
+		$this->log_debug( __METHOD__ . '() current_time formatted UTC: ' . date( 'Y-m-d H:i:s', $current_time ) );
+
+		$is_expired = $current_time >= $expiration_timestamp;
+
+		$this->log_debug( __METHOD__ . '() is expired? ' . ( $is_expired ? 'yes' : 'no' ) );
+
+		return $is_expired;
+	}
+
+	/**
+	 * Returns the schedule timestamp calculated from the schedule settings.
+	 *
+	 * @param bool $utc
+	 *
+	 * @return bool|int|mixed
+	 */
+	function get_expiration_timestamp(){
+
+		if ( $this->expiration_type == 'date' ) {
+
+			$this->log_debug( __METHOD__ . '() expiration_date: ' . $this->expiration_date );
+			$expiration_datetime = strtotime( $this->expiration_date );
+			$expiration_date = date( 'Y-m-d H:i:s', $expiration_datetime );
+			$expiration_date_gmt = get_gmt_from_date( $expiration_date );
+			$expiration_datetime = strtotime( $expiration_date_gmt );
+
+			return $expiration_datetime;
+		}
+
+		$entry_timestamp = $this->get_step_timestamp();
+
+		$expiration_timestamp = $entry_timestamp;
+
+		switch ( $this->schedule_delay_unit ) {
+			case 'minutes' :
+				$expiration_timestamp += ( MINUTE_IN_SECONDS * $this->expiration_delay_offset );
+				break;
+			case 'hours' :
+				$expiration_timestamp += ( HOUR_IN_SECONDS * $this->expiration_delay_offset );
+				break;
+			case 'days' :
+				$expiration_timestamp += ( DAY_IN_SECONDS * $this->expiration_delay_offset );
+				break;
+			case 'weeks' :
+				$expiration_timestamp += ( WEEK_IN_SECONDS * $this->expiration_delay_offset );
+				break;
+		}
+		return $expiration_timestamp;
 	}
 
 	public function get_entry_timestamp(){
@@ -816,7 +886,18 @@ abstract class Gravity_Flow_Step extends stdClass {
 		if ( $this->is_queued() ) {
 			return 'queued';
 		}
+
+		if ( $this->is_expired() ) {
+			return $this->get_expiration_status_key();
+		}
+
 		return 'complete';
+	}
+
+	public function get_expiration_status_key(){
+		$status_expiration = $this->status_expiration ? $this->status_expiration : 'complete';
+
+		return $status_expiration;
 	}
 
 	/**
@@ -1231,5 +1312,26 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 	}
 
+	public function supports_expiration() {
+		return false;
+	}
+
+	/**
+	 * Returns the correct value for the step setting for the current context - either step settings or step processing.
+	 *
+	 * @param $setting
+	 *
+	 * @return array|mixed|string
+	 */
+	public function get_setting( $setting ) {
+		$meta = $this->get_feed_meta();
+
+		if ( empty ( $meta ) ) {
+			$value = gravity_flow()->get_setting( $setting );
+		} else {
+			$value = $this->{$setting};
+		}
+		return $value;
+	}
 }
 

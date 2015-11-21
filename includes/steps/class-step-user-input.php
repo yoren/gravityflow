@@ -22,6 +22,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		return esc_html__( 'User Input', 'gravityflow' );
 	}
 
+	public function supports_expiration() {
+		return true;
+	}
+
 	public function get_icon_url(){
 		return '<i class="fa fa-pencil" ></i>';
 	}
@@ -233,6 +237,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 		if ( $this->is_queued() ) {
 			return 'queued';
+		}
+
+		if ( $this->is_expired() ) {
+			return $this->get_expiration_status_key();
 		}
 
 		$assignee_details = $this->get_assignees();

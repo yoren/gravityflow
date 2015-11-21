@@ -762,8 +762,25 @@ PRIMARY KEY  (id)
 				$step_settings['id'] = 'gravityflow-step-settings-' . $type;
 				$step_settings['class'] = 'gravityflow-step-settings';
 				if ( isset( $step_settings['fields'] ) && is_array( $step_settings['fields'] ) ) {
-					//$step_settings['fields'] = $this->prefix_step_settings_fields( $step_settings['fields'], $type );
+
 					$final_status_options = $step_class->get_final_status_config();
+
+					if ( $step_class->supports_expiration() ) {
+						$final_status_choices = array();
+						if ( count( $final_status_options ) > 1 ) {
+							foreach ( $final_status_options as $final_status_option ) {
+								$final_status_choices[] = array( 'label' => $final_status_option['status_label'], 'value' => $final_status_option['status'] );
+							}
+						}
+						$step_settings['fields'][] = array(
+							'name' => 'expiration',
+							'label' => esc_html__( 'Expiration', 'gravityflow' ),
+							'type'       => 'expiration',
+							'status_choices' => $final_status_choices
+						);
+
+					}
+
 					foreach ( $final_status_options as $final_status_option ) {
 						$step_settings['fields'][] = array(
 							'name' => 'destination_' . $final_status_option['status'],
@@ -772,6 +789,8 @@ PRIMARY KEY  (id)
 							'default_value' => $final_status_option['default_destination'],
 						);
 					}
+
+
 				}
 				$step_settings['dependency'] = array( 'field' => 'step_type', 'values' => array( $type ) );
 				$settings[] = $step_settings;
@@ -1300,6 +1319,140 @@ PRIMARY KEY  (id)
 			</script>
 			<?php
 
+		}
+
+		public function settings_expiration( $field ){
+
+			$expiration = array(
+				'name' => 'expiration',
+				'type' => 'checkbox',
+				'choices' => array(
+					array(
+						'label' => esc_html__( 'Schedule expiration', 'gravityflow' ),
+						'name' => 'expiration',
+					),
+				),
+			);
+
+			$expiration_type = array(
+				'name' => 'expiration_type',
+				'type' => 'radio',
+				'horizontal' => true,
+				'default_value' => 'delay',
+				'choices' => array(
+					array(
+						'label' => esc_html__( 'Delay' ),
+						'value' => 'delay',
+					),
+					array(
+						'label' => esc_html__( 'Date' ),
+						'value' => 'date',
+					),
+				)
+			);
+
+			$expiration_date = array(
+				'id' => 'expiration_date',
+				'name' => 'expiration_date',
+				'placeholder' => 'yyyy-mm-dd',
+				'class' => 'datepicker datepicker_with_icon ymd_dash',
+				'label' => esc_html__( 'Expiration', 'gravityflow' ),
+				'type' => 'text',
+			);
+
+			$delay_offset_field = array(
+				'name' => 'expiration_delay_offset',
+				'class' => 'small-text',
+				'label' => esc_html__( 'Expiration', 'gravityflow' ),
+				'type' => 'text',
+			);
+
+			$unit_field = array(
+				'name' => 'expiration_delay_unit',
+				'label' => esc_html__( 'Expiration', 'gravityflow' ),
+				'default_value' => 'hours',
+				'choices' => array(
+					array(
+						'label' => esc_html__( 'Minute(s)', 'gravityflow' ),
+						'value' => 'minutes',
+					),
+					array(
+						'label' => esc_html__( 'Hour(s)', 'gravityflow' ),
+						'value' => 'hours',
+					),
+					array(
+						'label' => esc_html__( 'Day(s)', 'gravityflow' ),
+						'value' => 'days',
+					),
+					array(
+						'label' => esc_html__( 'Week(s)', 'gravityflow' ),
+						'value' => 'weeks',
+					),
+				)
+			);
+
+			$this->settings_checkbox( $expiration );
+
+			$enabled = $this->get_setting( 'expiration', false );
+			$expiration_type_setting = $this->get_setting( 'expiration_type', 'delay' );
+			$expiration_style = $enabled ? '' : 'style="display:none;"';
+			$expiration_date_style = ( $expiration_type_setting == 'date' ) ? '' : 'style="display:none;"';
+			$expiration_delay_style = ( $expiration_type_setting !== 'date' ) ? '' : 'style="display:none;"';
+			?>
+			<div class="gravityflow-expiration-settings" <?php echo $expiration_style ?> >
+				<div class="gravityflow-expiration-type-container">
+					<?php $this->settings_radio( $expiration_type ); ?>
+				</div>
+				<div class="gravityflow-expiration-date-container" <?php echo $expiration_date_style ?> >
+					<?php
+					esc_html_e( 'This step expires on', 'gravityflow' );
+					echo '&nbsp;';
+					$this->settings_text( $expiration_date );
+					?>
+					<input type="hidden" id="gforms_calendar_icon_expiration_date" class="gform_hidden" value="<?php echo GFCommon::get_base_url() . '/images/calendar.png'; ?>" />
+				</div>
+				<div class="gravityflow-expiration-delay-container" <?php echo $expiration_delay_style ?>>
+					<?php
+					esc_html_e( 'This step will expire', 'gravityflow' );
+					echo '&nbsp;';
+					$this->settings_text( $delay_offset_field );
+					$this->settings_select( $unit_field );
+					echo '&nbsp;';
+					esc_html_e( 'after the workflow step is started.' );
+					?>
+				</div>
+				<?php
+				$status_choices = rgar( $field, 'status_choices' );
+				if ( is_array( $status_choices ) && ! empty( $status_choices ) ) {
+					esc_html_e( 'Status after expiration', 'gravityflow' );
+					echo ': ';
+					$status_choices_field = array(
+						'name' => 'status_expiration',
+						'label' => esc_html__( 'Expiration Status', 'gravityflow' ),
+						'type' => 'select',
+						'choices' => $status_choices,
+					);
+					$this->settings_select( $status_choices_field );
+				}
+
+				?>
+			</div>
+			<script>
+				(function($) {
+					$( '#expiration' ).click(function(){
+						$('.gravityflow-expiration-settings').slideToggle();
+					});
+					$( '#expiration_type0' ).click(function(){
+						$('.gravityflow-expiration-date-container').hide();
+						$('.gravityflow-expiration-delay-container').show();
+					});
+					$( '#expiration_type1' ).click(function(){
+						$('.gravityflow-expiration-date-container').show();
+						$('.gravityflow-expiration-delay-container').hide();
+					});
+				})(jQuery);
+			</script>
+			<?php
 
 		}
 
@@ -1688,10 +1841,6 @@ PRIMARY KEY  (id)
 
 		function workflow_entry_detail_status_box( $form, $entry ) {
 
-			if ( ! isset( $entry['workflow_final_status'] ) ) {
-				//return;
-			}
-
 			$current_step = $this->get_current_step( $form, $entry );
 
 			$lead = $entry;
@@ -1737,9 +1886,17 @@ PRIMARY KEY  (id)
 						$workflow_status_label = $this->translate_status_label( $workflow_status );
 						printf( '%s: %s', esc_html__( 'Status', 'gravityflow' ), $workflow_status_label );
 
-
-
 						if ( $current_step !== false ) {
+
+							if ( $current_step->supports_expiration() && $current_step->expiration ){
+								$expiration_timestamp = $current_step->get_expiration_timestamp();
+								$expiration_date_str = date( 'Y-m-d H:i:s', $expiration_timestamp );
+								$expiration_date = get_date_from_gmt( $expiration_date_str );
+								echo '<br /><br />';
+								printf( '%s: %s', esc_html__( 'Expires', 'gravityflow' ), $expiration_date );
+
+							}
+
 							?>
 							<hr style="margin-top:10px;"/>
 							<?php
@@ -1756,6 +1913,9 @@ PRIMARY KEY  (id)
 								}
 
 								printf( '<h4>%s: %s</h4>', esc_html__( 'Scheduled', 'gravityflow' ), $scheduled_date );
+							} elseif ( $current_step->is_expired() ) {
+								$current_step = null;
+								printf( '<h4>%s</h4>', esc_html__( 'Expired: Pending processing', 'gravityflow' ) );
 							} else {
 								$current_step->workflow_detail_status_box( $form );
 							}
@@ -1770,7 +1930,13 @@ PRIMARY KEY  (id)
 
 			</div>
 
-			<?php if ( GFAPI::current_user_can_any( 'gravityflow_workflow_detail_admin_actions' ) ) : ?>
+			<?php
+
+			do_action( 'gravityflow_workflow_detail_sidebar', $form, $entry );
+
+			if ( GFAPI::current_user_can_any( 'gravityflow_workflow_detail_admin_actions' ) ) :
+
+			?>
 
 				<div class="postbox">
 					<h3 class="hndle" style="cursor:default;">
@@ -2463,7 +2629,7 @@ PRIMARY KEY  (id)
 
 		public function maybe_display_installation_wizard(){
 
-			if ( ! current_user_can( 'gform_full_access' ) ) {
+			if ( is_multisite() || ! current_user_can( 'gform_full_access' ) ) {
 				return false;
 			}
 
@@ -3460,7 +3626,7 @@ PRIMARY KEY  (id)
 			$this->log_debug( __METHOD__ . '() Starting cron.' );
 
 			$this->maybe_process_queued_entries();
-			$this->maybe_send_assignee_reminders();
+			$this->maybe_process_expiration_and_reminders();
 
 		}
 
@@ -3509,7 +3675,7 @@ AND m.meta_value='queued'";
 			}
 		}
 
-		public function maybe_send_assignee_reminders(){
+		public function maybe_process_expiration_and_reminders(){
 
 			$this->log_debug( __METHOD__ . '(): starting' );
 
@@ -3525,7 +3691,7 @@ AND m.meta_value='queued'";
 						continue;
 					}
 
-					if ( ! ( $step->assignee_notification_enabled && $step->resend_assignee_emailEnable && $step->resend_assignee_emailValue > 0 ) ) {
+					if ( ! $step->expiration && ! ( $step->assignee_notification_enabled && $step->resend_assignee_emailEnable && $step->resend_assignee_emailValue > 0 ) ) {
 						continue;
 					}
 
@@ -3540,14 +3706,43 @@ AND m.meta_value='queued'";
 							),
 						)
 					);
+
+					$paging = array(
+						'offset'    => 0,
+						'page_size' => 150,
+					);
 					// Criteria: step active
-					$entries = GFAPI::get_entries( $form_id, $criteria );
+					$entries = GFAPI::get_entries( $form_id, $criteria, null, $paging );
 
 					$this->log_debug( __METHOD__ . '(): count entries on step ' . $step->get_id() . ' = ' . count( $entries ) );
 
 					foreach ( $entries as $entry ) {
 						$current_step = $this->get_step( $entry['workflow_step'], $entry );
+
+						$this->log_debug( __METHOD__ . '(): processing entry: ' . $entry['id'] );
+
+						if ( $current_step->is_expired() ) {
+
+							$this->log_debug( __METHOD__ . '(): step has expired: ' . $current_step->get_id() . ' entry id: ' . $entry['id'] );
+
+							$expiration_status = $current_step->status_expiration ? $current_step->status_expiration : 'complete';
+
+							$this->log_debug( __METHOD__ . '(): expiration status: ' . $expiration_status );
+
+							$current_step->log_event( esc_html__( 'Step expired', 'gravityflow' ) );
+
+							$current_step->add_note( esc_html__( 'Step expired', 'gravityflow' ), 0, 'gravityflow' );
+
+							$form = GFAPI::get_form( $form_id );
+
+							gravity_flow()->process_workflow( $form, $entry['id'] );
+
+							// Next entry
+							continue;
+						}
+
 						$assignees = $current_step->get_assignees();
+
 						foreach ( $assignees as $assignee ) {
 							$assignee_status = $assignee->get_status();
 							if ( $assignee_status == 'pending' ) {
@@ -3632,6 +3827,11 @@ AND m.meta_value='queued'";
 						$new_step_meta[ $destination_key ] = $feed_id_mappings[ $old_destination_step_id ];
 						$step_ids_updated = true;
 					}
+				}
+				if ( $new_step->get_type() == 'approval' ) {
+                    if ( ! empty( $new_step->revert_buttonValue ) ) {
+                        $new_step_meta['revert_buttonValue'] = $feed_id_mappings[ $new_step->revert_buttonValue ];
+                    }
 				}
 				if ( $step_ids_updated ) {
 					$this->update_feed_meta( $new_step->get_id(), $new_step_meta );

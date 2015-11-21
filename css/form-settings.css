@@ -172,3 +172,12 @@ tr#gaddon-setting-row-step_type label > span > i {
     margin:5px;
     color:#0074a2;
 }
+
+.gravityflow-schedule-type-container,
+.gravityflow-schedule-delay-container,
+.gravityflow-schedule-date-container,
+.gravityflow-expiration-type-container,
+.gravityflow-expiration-delay-container,
+.gravityflow-expiration-date-container{
+    margin: 10px 0 10px 0;
+}

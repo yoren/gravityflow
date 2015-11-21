@@ -35,6 +35,10 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		);
 	}
 
+	public function supports_expiration() {
+		return true;
+	}
+
 	public function get_label() {
 		return esc_html__( 'Approval', 'gravityflow' );
 	}
