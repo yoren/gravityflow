@@ -383,14 +383,15 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			$steps = gravity_flow()->get_steps( $form_id );
 			foreach ( $steps as $step ) {
 				if ( $step->get_type() === 'user_input' ) {
-					$user_input_step_choices[] = array( 'label' => $step->get_label(), 'value' => $step->get_id() );
+					$user_input_step_choices[] = array( 'label' => $step->get_name(), 'value' => $step->get_id() );
 				}
 			}
 			if ( ! empty ( $user_input_step_choices  ) ) {
 				$revert_field = array(
 						'name' => 'revert',
-						'label' => esc_html__( 'Revert', 'gravityflow' ),
+						'label' => esc_html__( 'Revert to User Input step', 'gravityflow' ),
 						'type' => 'checkbox_and_select',
+                        'tooltip' => esc_html__( 'The Revert setting enables a third option in addition to Approve and Reject which allows the assignee to send the entry directly to a User Input step without changing the status. Enable this setting to show the Revert button next to the Approve and Reject buttons and specify the User Input step the entry will be sent to.', 'gravityflow' ),
 						'checkbox' => array(
 								'label' => esc_html__( 'Enable', 'gravityflow')
 						),

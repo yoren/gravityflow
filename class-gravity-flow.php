@@ -775,6 +775,7 @@ PRIMARY KEY  (id)
 						$step_settings['fields'][] = array(
 							'name' => 'expiration',
 							'label' => esc_html__( 'Expiration', 'gravityflow' ),
+							'tooltip' => esc_html__( 'Enable the expiration setting to allow this step to expire. Once expired, the entry will automatically proceed to the step configured in the Next Step setting(s) below.', 'gravityflow' ),
 							'type'       => 'expiration',
 							'status_choices' => $final_status_choices
 						);
@@ -1418,7 +1419,7 @@ PRIMARY KEY  (id)
 					$this->settings_text( $delay_offset_field );
 					$this->settings_select( $unit_field );
 					echo '&nbsp;';
-					esc_html_e( 'after the workflow step is started.' );
+					esc_html_e( 'after the workflow step has started.' );
 					?>
 				</div>
 				<?php
