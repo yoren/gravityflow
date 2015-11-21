@@ -376,6 +376,35 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			),
 		);
 
+		$current_feed_id = gravity_flow()->get_current_feed_id();
+		$revert_field = array();
+		if ( ! empty ( $current_feed_id ) ) {
+			$form_id = $this->get_form_id();
+			$steps = gravity_flow()->get_steps( $form_id );
+			foreach ( $steps as $step ) {
+				if ( $step->get_type() === 'user_input' ) {
+					$user_input_step_choices[] = array( 'label' => $step->get_label(), 'value' => $step->get_id() );
+				}
+			}
+			if ( ! empty ( $user_input_step_choices  ) ) {
+				$revert_field = array(
+						'name' => 'revert',
+						'label' => esc_html__( 'Revert', 'gravityflow' ),
+						'type' => 'checkbox_and_select',
+						'checkbox' => array(
+								'label' => esc_html__( 'Enable', 'gravityflow')
+						),
+						'select' => array(
+								'choices' => $user_input_step_choices
+						),
+				);
+			}
+
+		}
+		if ( ! empty ( $revert_field ) ) {
+			$settings['fields'][] = $revert_field;
+		}
+
 		return $settings;
 	}
 
@@ -443,6 +472,10 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 		if ( $this->is_queued() ) {
 			return 'queued';
+		}
+
+		if ( $this->is_expired() ) {
+			return $this->get_expiration_status_key();
 		}
 
 		$approvers = $this->get_assignees();
@@ -602,7 +635,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	public function process_status_update( $assignee, $new_status, $form ){
 		$feedback = false;
 
-		if ( ! in_array( $new_status, array( 'pending', 'approved', 'rejected' ) ) ) {
+		if ( ! in_array( $new_status, array( 'pending', 'approved', 'rejected', 'revert' ) ) ) {
 			return $feedback;
 		}
 
@@ -620,6 +653,25 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		if ( $current_user_status != 'pending' && $current_role_status != 'pending' ) {
 			return esc_html__( 'The status could not be changed because this step has already been processed.', 'gravityflow' );
 		}
+
+        if ( $new_status == 'revert' ) {
+            if ( $this->revertEnable ) {
+                $step = gravity_flow()->get_step( $this->revertValue, $this->get_entry() );
+                if ( $step ) {
+                    $this->end();
+                    $note = $this->get_name() . ': ' . esc_html__( 'Reverted to step', 'gravityflow' ) . ' - ' . $step->get_label();
+                    $user_note = rgpost( 'gravityflow_note' );
+                    if ( ! empty( $user_note ) ) {
+                        $note .= sprintf( "\n%s: %s", __( 'Note', 'gravityflow' ), $user_note );
+                    }
+                    $this->add_note( $note );
+                    $step->start();
+                    $feedback = esc_html__('Reverted to step:', 'gravityflow' ) . ' ' . $step->get_label();
+                }
+            }
+
+            return $feedback;
+        }
 
 		if ( $current_user_status == 'pending' ) {
 			$assignee->update_status( $new_status );
@@ -670,12 +722,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	}
 
 	public function workflow_detail_status_box( $form ){
-		$entry = $this->get_entry();
-
 		$status               = esc_html__( 'Pending Approval', 'gravityflow' );
 		$approve_icon         = '<i class="fa fa-check" style="color:green"></i>';
 		$reject_icon          = '<i class="fa fa-times" style="color:red"></i>';
-		$approval_step_status = $this->is_complete( $entry );
+        $revert_icon          = '<i class="fa fa-undo" style="color:blue"></i>';
+		$approval_step_status = $this->is_complete();
 		if ( $approval_step_status == 'approved' ) {
 			$status = $approve_icon . ' ' . __( 'Approved', 'gravityflow' );
 		} elseif ( $approval_step_status == 'rejected' ) {
@@ -750,9 +801,17 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 						        class="button">
 							<?php echo $reject_icon; ?> <?php esc_html_e( 'Reject', 'gravityflow' ); ?>
 						</button>
+                        <?php
+                        if ( $this->revertEnable ) :
+                        ?>
+                            <button name="gravityflow_approval_new_status_step_<?php echo $this->get_id() ?>" value="revert" type="submit"
+                                    class="button">
+                                <?php echo $revert_icon; ?> <?php esc_html_e( 'Revert', 'gravityflow' ); ?>
+                            </button>
+                            <?php
+                            endif;
+                            ?>
 					</div>
-
-
 				<?php
 				}
 				?>
@@ -768,6 +827,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		?>
 
 		<h4 style="padding:10px;"><?php echo $this->get_name() . ': ' . $status ?></h4>
+
 		<div style="padding:10px;">
 			<ul>
 				<?php
