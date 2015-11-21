@@ -55,10 +55,8 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
-= 1.1.2.2 =
+= 1.1.3 =
 - Added support for the revert button in the Approval Step so entries can be sent to a User Input step as a third alternative to "approve" or "reject".
-
-= 1.1.2.1 =
 - Added the expiration setting to the approval and user input steps.
 - Added the username/step type to the timeline notes classes to allow certain note types to be hidden using CSS.
 - Updated the timeline to display the step icon when a user avatar is not available.
