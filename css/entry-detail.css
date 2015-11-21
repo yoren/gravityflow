@@ -199,6 +199,13 @@
         margin-right: 0!important;
     }
 
+}
 
-
+.gravityflow-note-avatar span > i {
+	width:65px;
+	height:65px;
+	display:inline-block;
+	font-size:4em;
+	margin:5px;
+	color:#0074a2;
 }

@@ -580,3 +580,12 @@ table.wp-list-table.entries td[data-label="ID"] {
 #minor-publishing h4 {
     margin-bottom:10px;
 }
+
+.gravityflow-note-avatar span > i {
+	width:65px;
+	height:65px;
+	display:inline-block;
+	font-size:2.5em;
+	margin:5px;
+	color:#0074a2;
+}
