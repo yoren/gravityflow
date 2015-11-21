@@ -2,7 +2,7 @@
 Contributors: stevehenty
 Tags: workflow, approvals, gravity forms
 Requires at least: 4.0
-Tested up to: 4.3.1
+Tested up to: 4.4
 License: GPL-3.0+
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -54,6 +54,15 @@ https://gravityflow.io/contact/
 Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.io/out/gravityforms).
 
 == ChangeLog ==
+
+= 1.1.2.2 =
+- Added support for the revert button in the Approval Step so entries can be sent to a User Input step as a third alternative to "approve" or "reject".
+
+= 1.1.2.1 =
+- Added the expiration setting to the approval and user input steps.
+- Added the username/step type to the timeline notes classes to allow certain note types to be hidden using CSS.
+- Updated the timeline to display the step icon when a user avatar is not available.
+- Fixed an issue with the column header texts where the inbox and status pages use different terminology.
 
 = 1.1.2 =
 - Added options to the workflow email settings: From Name, From Email, Reply To, BCC, Subject.
