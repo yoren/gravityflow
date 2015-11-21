@@ -32,7 +32,7 @@ class Gravity_Flow_Inbox {
 
 		$entries = array();
 
-		$form_id = 0;
+		$form_id = $args['form_id'];
 
 		if ( ! empty( $filter_key ) ) {
 			$field_filters[] = array(
@@ -71,8 +71,10 @@ class Gravity_Flow_Inbox {
 				<thead>
 				<tr>
 					<th <?php echo $id_style ?> data-label="<?php esc_html_e( 'ID', 'gravityflow' ); ?>"><?php esc_html_e( 'ID', 'gravityflow' ); ?></th>
-					<th><?php esc_html_e( 'Form', 'gravityflow' ); ?></th>
-					<th><?php esc_html_e( 'Submitted by', 'gravityflow' ); ?></th>
+					<?php if ( $form_id === 0 ) : ?>
+						<th><?php esc_html_e( 'Form', 'gravityflow' ); ?></th>
+					<?php endif; ?>
+					<th><?php esc_html_e( 'Submitter', 'gravityflow' ); ?></th>
 					<th><?php esc_html_e( 'Step', 'gravityflow' ); ?></th>
 					<th><?php esc_html_e( 'Submitted', 'gravityflow' ); ?></th>
 					<?php
@@ -109,12 +111,14 @@ class Gravity_Flow_Inbox {
 							printf( $link, $url_entry, $entry['id'] );
 							?>
 						</td>
-						<td data-label="<?php esc_html_e( 'Form', 'gravityflow' ); ?>">
-							<?php
-							printf( $link, $url_entry, $form['title'] );
-							?>
-						</td>
-						<td data-label="<?php esc_html_e( 'Submitted by', 'gravityflow' ); ?>">
+						<?php if ( $form_id === 0 ) : ?>
+							<td data-label="<?php esc_html_e( 'Form', 'gravityflow' ); ?>">
+								<?php
+								printf( $link, $url_entry, $form['title'] );
+								?>
+							</td>
+						<?php endif; ?>
+						<td data-label="<?php esc_html_e( 'Submitter', 'gravityflow' ); ?>">
 							<?php
 							printf( $link, $url_entry, $name );
 
