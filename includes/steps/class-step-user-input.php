@@ -163,6 +163,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		);
 	}
 
+	public function process() {
+		return $this->assign();
+	}
+
 	/**
 	 *
 	 * @return Gravity_Flow_Assignee[]
@@ -226,14 +230,14 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	}
 
 	public function get_next_step_id(){
-		if ( isset( $this->next_step_id ) ) {
-			return $this->next_step_id;
+		if ( isset( $this->_next_step_id ) ) {
+			return $this->_next_step_id;
 		}
-		$this->next_step_id = $this->is_complete() ? $this->destination_complete : $this->get_id();
-		return $this->next_step_id;
+		$this->_next_step_id = $this->is_complete() ? $this->destination_complete : $this->get_id();
+		return $this->_next_step_id;
 	}
 
-	public function get_status() {
+	public function evaluate_status() {
 
 		if ( $this->is_queued() ) {
 			return 'queued';
@@ -389,7 +393,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 			$this->add_note( $note );
 
-			$status = $this->get_status();
+			$status = $this->evaluate_status();
 			$this->update_step_status( $status );
 			$entry = $this->refresh_entry();
 
@@ -438,7 +442,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 		$status_str            = __( 'Pending Input', 'gravityflow' );
 		$approve_icon      = '<i class="fa fa-check" style="color:green"></i>';
-		$input_step_status = $this->get_status();
+		$input_step_status = $this->evaluate_status();
 		if ( $input_step_status == 'complete' ) {
 			$status_str = $approve_icon . __( 'Complete', 'gravityflow' );
 		} elseif ( $input_step_status == 'queued' ) {
@@ -580,7 +584,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	}
 
 	public function entry_detail_status_box( $form ){
-		$status = $this->get_status();
+		$status = $this->evaluate_status();
 		?>
 		<h4 style="padding:10px;"><?php echo $this->get_name() . ': ' . $status ?></h4>
 

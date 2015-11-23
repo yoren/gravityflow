@@ -762,38 +762,38 @@ PRIMARY KEY  (id)
 				$step_settings = $step_class->get_settings();
 				$step_settings['id'] = 'gravityflow-step-settings-' . $type;
 				$step_settings['class'] = 'gravityflow-step-settings';
-				if ( isset( $step_settings['fields'] ) && is_array( $step_settings['fields'] ) ) {
 
-					$final_status_options = $step_class->get_final_status_config();
-
-					if ( $step_class->supports_expiration() ) {
-						$final_status_choices = array();
-						if ( count( $final_status_options ) > 1 ) {
-							foreach ( $final_status_options as $final_status_option ) {
-								$final_status_choices[] = array( 'label' => $final_status_option['status_label'], 'value' => $final_status_option['status'] );
-							}
-						}
-						$step_settings['fields'][] = array(
-							'name' => 'expiration',
-							'label' => esc_html__( 'Expiration', 'gravityflow' ),
-							'tooltip' => esc_html__( 'Enable the expiration setting to allow this step to expire. Once expired, the entry will automatically proceed to the step configured in the Next Step setting(s) below.', 'gravityflow' ),
-							'type'       => 'expiration',
-							'status_choices' => $final_status_choices
-						);
-
-					}
-
-					foreach ( $final_status_options as $final_status_option ) {
-						$step_settings['fields'][] = array(
-							'name' => 'destination_' . $final_status_option['status'],
-							'label' => $final_status_option['default_destination_label'],
-							'type'       => 'step_selector',
-							'default_value' => $final_status_option['default_destination'],
-						);
-					}
-
-
+				if ( ! isset( $step_settings['fields'] ) ) {
+				    $step_settings['fields'] = array();
 				}
+				$status_options = $step_class->get_status_config();
+
+                if ( $step_class->supports_expiration() ) {
+                    $final_status_choices = array();
+                    if ( count( $status_options ) > 1 ) {
+                        foreach ( $status_options as $status_option ) {
+                            $final_status_choices[] = array( 'label' => $status_option['status_label'], 'value' => $status_option['status'] );
+                        }
+                    }
+                    $step_settings['fields'][] = array(
+                        'name' => 'expiration',
+                        'label' => esc_html__( 'Expiration', 'gravityflow' ),
+                        'tooltip' => esc_html__( 'Enable the expiration setting to allow this step to expire. Once expired, the entry will automatically proceed to the step configured in the Next Step setting(s) below.', 'gravityflow' ),
+                        'type'       => 'expiration',
+                        'status_choices' => $final_status_choices
+                    );
+                }
+
+                foreach ( $status_options as $status_option ) {
+                    $setting_label = isset( $status_option['destination_setting_label'] ) ?  $status_option['destination_setting_label'] : esc_html__( 'Next step if', 'gravityflow' ) . ' ' . $status_option['status_label'];
+                    $default_destination = isset( $status_option['default_destination'] ) ? $status_option['default_destination'] : 'next';
+                    $step_settings['fields'][] = array(
+                        'name' => 'destination_' . $status_option['status'],
+                        'label' => $setting_label,
+                        'type'       => 'step_selector',
+                        'default_value' => $default_destination,
+                    );
+                }
 				$step_settings['dependency'] = array( 'field' => 'step_type', 'values' => array( $type ) );
 				$settings[] = $step_settings;
 			}
@@ -829,7 +829,14 @@ PRIMARY KEY  (id)
 			$entry_count = 0;
 			if ( $current_step_id ) {
 				$current_step = $this->get_step( $current_step_id );
-				$entry_count = $current_step->entry_count();
+				if ( empty( $current_step ) ) {
+				    $html = '<div class="delete-alert alert_red"><i class="fa fa-exclamation-triangle gf_invalid"></i> ' . esc_html__( 'This step type no longer exists.', 'gravityflow' ) . '</div>';
+				    echo $html;
+			die();
+				} else {
+				    $entry_count = $current_step->entry_count();
+				}
+
 			}
 			if ( $entry_count > 0 ) {
 				$html = '<div class="delete-alert alert_red"><i class="fa fa-exclamation-triangle gf_invalid"></i> ' . sprintf( _n( 'There is %s entry currently on this step. This entry may be affected if the settings are changed.', 'There are %s entries currently on this step. These entries may be affected if the settings are changed.', $entry_count, 'gravityflow' ), $entry_count ) . '</div>';
@@ -1111,7 +1118,11 @@ PRIMARY KEY  (id)
 			$steps = array();
 
 			foreach ( $feeds as $feed ) {
-				$steps[] = Gravity_Flow_Steps::create( $feed, $entry );
+			    $step = Gravity_Flow_Steps::create( $feed, $entry );
+				if ( $step ) {
+                    $steps[] = $step;
+				}
+
 			}
 
 			return $steps;
@@ -1656,6 +1667,9 @@ PRIMARY KEY  (id)
 
 		public function get_column_value_step_type( $item ){
 			$step = $this->get_step( $item['id'] );
+			if ( empty( $step ) ) {
+			    return '';
+			}
 			$icon_url = $step->get_icon_url();
 			$icon_html = ( strpos( $icon_url, 'http' ) === 0 ) ? sprintf( '<img src="%s" style="width:20px;height:20px;margin-right:5px;vertical-align:middle;"/>', $icon_url ) : sprintf( '<span style="width:20px;height:20px;margin-right:5px;vertical-align:middle;">%s</span>', $icon_url );
 			return $icon_html . $step->get_label();
@@ -1720,11 +1734,11 @@ PRIMARY KEY  (id)
 				$step_name = $step->get_name();
 				$step_choices[] = array( 'value' => $step_id, 'text' => $step_name );
 
-				$step_final_status_options = $step->get_final_status_config();
-				foreach ( $step_final_status_options as $final_status_option ) {
+				$step_status_options = $step->get_status_config();
+				foreach ( $step_status_options as $status_option ) {
 					$status_choices[] = array(
-						'value' => $final_status_option['status'],
-						'text' => $this->translate_status_label( $final_status_option['status'] ),
+						'value' => $status_option['status'],
+						'text' => $this->translate_status_label( $status_option['status'] ),
 					);
 				}
 
@@ -1747,6 +1761,8 @@ PRIMARY KEY  (id)
 
 				// Remove duplicates
 				$workflow_final_status_options = array_map( 'unserialize', array_unique( array_map( 'serialize', $workflow_final_status_options ) ) );
+
+				$workflow_final_status_options = array_values( $workflow_final_status_options );
 
 				$workflow_final_status_options[] = array(
 					'value' => 'pending',
@@ -1783,7 +1799,6 @@ PRIMARY KEY  (id)
 				);
 
 			}
-
 
 			return $entry_meta;
 		}
@@ -2296,9 +2311,9 @@ PRIMARY KEY  (id)
 
 					$default_status_labels = array( 'pending' => esc_html__( 'Pending', 'gravityflow' ), 'cancelled' => esc_html__( 'Cancelled', 'gravityflow' ) );
 					foreach ( $steps as $step ) {
-						$final_status_config = $step->get_final_status_config();
-						foreach ( $final_status_config as $final_status ) {
-							$default_status_labels[ $final_status['status'] ] = $final_status['status_label'];
+						$status_configs = $step->get_status_config();
+						foreach ( $status_configs as $status_config ) {
+							$default_status_labels[ $status_config['status'] ] = $status_config['status_label'];
 						}
 					}
 
@@ -3798,13 +3813,6 @@ AND m.meta_value='queued'";
 			return $action_links;
 		}
 
-		public function action_gform_post_form_duplicated( $form_id, $new_id ) {
-
-			$original_feeds = $this->get_feeds( $form_id );
-
-			$this->import_gravityflow_feeds( $original_feeds, $new_id);
-		}
-
 		public function import_gravityflow_feeds( $original_feeds, $new_form_id) {
 			$feed_id_mappings = array();
 
@@ -3819,11 +3827,11 @@ AND m.meta_value='queued'";
 			$new_steps = $this->get_steps( $new_form_id );
 
 			foreach ( $new_steps as $new_step ) {
-				$final_statuses = $new_step->get_final_status_config();
+				$statuses_configs = $new_step->get_status_config();
 				$new_step_meta = $new_step->get_feed_meta();
 				$step_ids_updated = false;
-				foreach ( $final_statuses as $final_status_config ) {
-					$destination_key = 'destination_' . $final_status_config['status'];
+				foreach ( $statuses_configs as $status_config ) {
+					$destination_key = 'destination_' . $status_config['status'];
 					$old_destination_step_id = $new_step_meta[ $destination_key ];
 					if ( ! in_array( $old_destination_step_id, array( 'next', 'complete' ) ) && isset( $feed_id_mappings[ $old_destination_step_id ] ) ) {
 						$new_step_meta[ $destination_key ] = $feed_id_mappings[ $old_destination_step_id ];
@@ -4289,6 +4297,9 @@ AND m.meta_value='queued'";
 		}
 
 		public function translate_status_label( $status ) {
+			$original_status = $status;
+
+			$status = strtolower( $status );
 
 			$custom_labels = get_option( 'gravityflow_app_settings_labels', array() );
 
@@ -4321,13 +4332,14 @@ AND m.meta_value='queued'";
 			$steps = Gravity_Flow_Steps::get_all();
 
 			foreach ( $steps as $step ) {
-				$final_status_config = $step->get_final_status_config();
-				foreach ( $final_status_config as $final_status ) {
-					if ( $status == $final_status['status'] ) {
-						return $final_status['status_label'];
+				$status_configs = $step->get_status_config();
+				foreach ( $status_configs as $status_config ) {
+					if ( $status == strtolower( $status_config['status'] )) {
+						return $step->get_status_label( $original_status );
 					}
 				}
 			}
+			return $original_status;
 		}
 
 

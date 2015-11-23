@@ -18,18 +18,18 @@ if ( ! class_exists( 'GFForms' ) ) {
 class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	public $_step_type = 'approval';
 
-	public function get_final_status_config(){
+	public function get_status_config(){
 		return array(
 			array(
 				'status' => 'rejected',
 				'status_label' => __( 'Rejected', 'gravityflow' ),
-				'default_destination_label' => esc_html__( 'Next step if Rejected', 'gravityflow' ),
+				'destination_setting_label' => esc_html__( 'Next step if Rejected', 'gravityflow' ),
 				'default_destination' => 'complete',
 			),
 			array(
 				'status' => 'approved',
 				'status_label' => __( 'Approved', 'gravityflow' ),
-				'default_destination_label' => __( 'Next Step if Approved', 'gravityflow' ),
+				'destination_setting_label' => __( 'Next Step if Approved', 'gravityflow' ),
 				'default_destination' => 'next',
 			),
 		);
@@ -409,15 +409,19 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return $settings;
 	}
 
+	public function process() {
+		return $this->assign();
+	}
+
 
 	public function get_next_step_id(){
-		if ( isset( $this->next_step_id ) ) {
-			return $this->next_step_id;
+		if ( isset( $this->_next_step_id ) ) {
+			return $this->_next_step_id;
 		}
 
-		$status = $this->get_status();
-		$this->next_step_id = $status == 'rejected' ? $this->destination_rejected : $this->destination_approved;
-		return $this->next_step_id;
+		$status = $this->evaluate_status();
+		$this->_next_step_id = $status == 'rejected' ? $this->destination_rejected : $this->destination_approved;
+		return $this->_next_step_id;
 	}
 
 	/**
@@ -464,12 +468,12 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	}
 
 	public function is_complete() {
-		$status = $this->get_status();
+		$status = $this->evaluate_status();
 
 		return ! in_array( $status, array( 'pending', 'queued' ) );
 	}
 
-	public function get_status(){
+	public function evaluate_status(){
 
 		if ( $this->is_queued() ) {
 			return 'queued';
@@ -704,7 +708,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		}
 
 		// keep????
-		$status = $this->get_status();
+		$status = $this->evaluate_status();
 		$this->update_step_status( $status );
 		$entry = $this->refresh_entry();
 
@@ -824,7 +828,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 	public function entry_detail_status_box( $form ){
 
-		$status = $this->get_status();
+		$status = $this->evaluate_status();
 		?>
 
 		<h4 style="padding:10px;"><?php echo $this->get_name() . ': ' . $status ?></h4>

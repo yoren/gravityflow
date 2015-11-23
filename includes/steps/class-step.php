@@ -127,47 +127,57 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
-	 * Returns an array of the configuration of the final status options for this step.
+	 * Returns an array of the configuration of the status options for this step.
 	 * These options will appear in the step settings.
-	 * Override this method to add final status options.
+	 * Override this method to add status options.
 	 *
-	 * For example, a final status configuration may look like this:
+	 * For example, a status configuration may look like this:
 	 * array(
 	 *    'status' => 'complete',
 	 *    'status_label' => __( 'Complete', 'gravityflow' ),
-	 *    'default_destination_label' => __( 'Next Step', 'gravityflow' ),
+	 *    'destination_setting_label' => __( 'Next Step', 'gravityflow' ),
 	 *    'default_destination' => 'next',
 	 *    )
 	 *
 	 *
 	 * @return array An array of arrays
 	 */
-	public function get_final_status_config(){
+	public function get_status_config() {
 		return array(
 			array(
 				'status' => 'complete',
 				'status_label' => __( 'Complete', 'gravityflow' ),
-				'default_destination_label' => __( 'Next Step', 'gravityflow' ),
+				'destination_setting_label' => __( 'Next Step', 'gravityflow' ),
 				'default_destination' => 'next',
 			),
 		);
 	}
 
-	/**
+    /**
+     * @deprecated
+     *
+     * @return array
+     */
+    public function get_final_status_config(){
+        return $this->get_status_config();
+    }
+
+
+    /**
 	 * Returns the translated label for a status key.
 	 *
 	 * @param $status
 	 *
 	 * @return string
 	 */
-	public function get_status_label($status) {
+	public function get_status_label( $status ) {
 		if ( $status == 'pending' ) {
 			return __( 'Pending', 'gravityflow' );
 		}
-		$final_statuses = $this->get_final_status_config();
-		foreach ( $final_statuses as $final_status ) {
-			if ( $status == rgar( $final_status, 'status' ) ) {
-				return isset( $final_status['status_label'] ) ? $final_status['status_label'] : $status;
+		$status_configs = $this->get_status_config();
+		foreach ( $status_configs as $status_config ) {
+			if ( strtolower( $status ) == rgar( $status_config, 'status' ) ) {
+				return isset( $status_config['status_label'] ) ? $status_config['status_label'] : $status;
 			}
 		}
 		return $status;
@@ -346,7 +356,14 @@ abstract class Gravity_Flow_Step extends stdClass {
 		if ( isset( $this->_next_step_id ) ) {
 			return $this->_next_step_id;
 		}
-		$next_step_id = $this->is_complete() ? $this->destination_complete : $this->get_id();
+        $status = $this->evaluate_status();
+        $destination_status_key = 'destination_' . $status;
+        if ( isset( $this->{$destination_status_key} ) ) {
+            $next_step_id = $this->{$destination_status_key};
+        } else {
+            $next_step_id = 'next';
+        }
+
 		$this->set_next_step_id( $next_step_id );
 		return $next_step_id;
 	}
@@ -378,7 +395,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$this->refresh_entry();
 		}
 
-		$status = $this->get_status();
+		$status = $this->evaluate_status();
 		$this->log_debug( __METHOD__ . '() - Step status before processing: ' . $status );
 
 
@@ -568,11 +585,15 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
-	 * Process the step. For example, assign to a user, send to a service or send a notification. Return (bool) $complete.
+	 * Process the step. For example, assign to a user, send to a service, send a notification or do nothing. Return (bool) $complete.
 	 *
 	 * @return bool Is the step complete?
 	 */
 	public function process(){
+		return true;
+	}
+
+	public function assign(){
 		$complete = $this->is_complete();
 
 		$assignees = $this->get_assignees();
@@ -886,12 +907,12 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
-	 * Returns the status for the step.
+	 * Evaluates the status for the step.
 	 * Override this method for interactive or long running steps.
 	 *
 	 * @return string 'queued' or 'complete'
 	 */
-	public function get_status() {
+	public function evaluate_status() {
 		if ( $this->is_queued() ) {
 			return 'queued';
 		}
@@ -1132,7 +1153,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	public function end(){
 		$next_step_id = $this->get_next_step_id();
 		$this->set_next_step_id( $next_step_id );
-		$status = $this->get_status();
+		$status = $this->evaluate_status();
 		$started = $this->get_step_timestamp();
 		$duration = time() - $started;
 		$this->update_step_status( $status );
@@ -1153,7 +1174,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return bool
 	 */
 	public function is_complete(){
-		$status = $this->get_status();
+		$status = $this->evaluate_status();
 		return $status == 'complete';
 	}
 
