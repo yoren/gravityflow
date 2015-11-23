@@ -268,6 +268,15 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return $this->_is_active;
 	}
 
+    /**
+     * Is this step supported on this server? Override to hide this step in the list of step types if the requirements are not met.
+     *
+     * @return bool
+     */
+    public function is_supported(){
+        return true;
+    }
+
 	/**
 	 * Returns the ID of the Form object for the step.
 	 *

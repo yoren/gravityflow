@@ -44,6 +44,22 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step{
 		return $this->_class_name;
 	}
 
+    /**
+     * Is this feed step supported on this server? Override to hide this step in the list of step types if the requirements are not met.
+     *
+     * @return bool
+     */
+    public function is_supported(){
+
+        $is_supported = true;
+        $feed_add_on_class = $this->get_feed_add_on_class_name();
+        if ( ! class_exists( $feed_add_on_class ) ) {
+            $is_supported = false;
+        }
+
+        return $is_supported;
+    }
+
 	/**
 	 * Returns the settings for this step.
 	 *

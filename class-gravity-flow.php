@@ -698,11 +698,10 @@ PRIMARY KEY  (id)
 					$step_type_choice['disabled'] = 'disabled';
 					$step_type_choice['div_class'] = 'gravityflow-disabled';
 				}
-				$step_settings = $step_class->get_settings();
-				if ( empty( $step_settings ) ) {
-					unset( $step_classes[ $key ] );
+				if ( $step_class->is_supported() ) {
+				    $step_type_choices[] = $step_type_choice;
 				} else {
-					$step_type_choices[] = $step_type_choice;
+					unset( $step_classes[ $key ] );
 				}
 			}
 
