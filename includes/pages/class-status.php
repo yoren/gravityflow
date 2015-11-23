@@ -545,7 +545,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$link  = "<a href='{$url_entry}'>$label</a>";
 			echo $link;
 		} else {
-			echo '<span class="gravityflow-empty">&nbsp;</span>';
+			echo '<span class="gravityflow-empty">&dash;</span>';
 		}
 	}
 
