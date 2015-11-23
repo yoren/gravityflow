@@ -55,6 +55,9 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.1.3.1 =
+- API: Refactor status config.
+
 = 1.1.3 =
 - Added support for the revert button in the Approval Step so entries can be sent to a User Input step as a third alternative to "approve" or "reject".
 - Added the expiration setting to the approval and user input steps.
