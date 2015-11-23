@@ -130,7 +130,9 @@ if ( class_exists( 'GFForms' ) ) {
 
 			add_filter( $this->_slug . '_feed_actions', array( $this, 'filter_feed_actions' ), 10, 3 );
 
-			add_action( 'gform_post_form_duplicated', array( $this, 'action_gform_post_form_duplicated' ), 10, 2 );
+			if ( ! has_action( 'gform_post_form_duplicated', array( $this, 'post_form_duplicated' ) ) ) {
+				add_action( 'gform_post_form_duplicated', array( $this, 'post_form_duplicated' ), 10, 2 );
+			}
 
 			add_filter( 'gform_tooltips', array( $this, 'add_tooltips' ) );
 
@@ -4435,6 +4437,18 @@ AND m.meta_value='queued'";
 		public function add_tooltips( $tooltips ) {
 			$tooltips['form_workflow_fields'] = '<h6>' . __( 'Workflow Fields', 'gravityflow' ) . '</h6>' . __( 'Workflow Fields add advanced workflow functionality to your forms.', 'gravityflow' );
 			return $tooltips;
+		}
+
+		public function can_duplicate_feed( $id ) {
+			return true;
+		}
+
+		public function post_form_duplicated( $form_id, $new_id ) {
+
+			$original_feeds = $this->get_feeds( $form_id );
+
+			$this->import_gravityflow_feeds( $original_feeds, $new_id);
+
 		}
 
 	}
