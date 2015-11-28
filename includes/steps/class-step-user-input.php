@@ -343,6 +343,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 			$this->refresh_entry();
 
+			GFCache::flush();
+
+			$this->maybe_adjust_assignment( $previous_assignees );
+
 			$user = wp_get_current_user();
 
 			$new_status = rgpost( 'gravityflow_status' );
@@ -351,55 +355,66 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				return false;
 			}
 
-			if ( $new_status == 'complete' ) {
-				$current_user_status = $this->get_user_status();
-
-				$current_role_status = false;
-				$role = false;
-				foreach ( gravity_flow()->get_user_roles() as $role ) {
-					$current_role_status = $this->get_role_status( $role );
-					if ( $current_role_status == 'pending' ) {
-						break;
-					}
-				}
-				if ( $current_user_status == 'pending' ) {
-					if ( $token = gravity_flow()->decode_access_token() ) {
-						$assignee_key = sanitize_text_field( $token['sub'] );
-
-					} else {
-						$assignee_key = 'user_id|' . $user->ID;
-					}
-					$assignee = new Gravity_Flow_Assignee( $assignee_key, $this );
-					$assignee->update_status( 'complete' );
-				}
-
-				if ( $current_role_status == 'pending' ) {
-					$this->update_role_status( $role, 'complete' );
-				}
-				$this->refresh_entry();
+			if ( $token = gravity_flow()->decode_access_token() ) {
+				$assignee_key = sanitize_text_field( $token['sub'] );
+			} else {
+				$assignee_key = 'user_id|' . $user->ID;
 			}
 
-			GFCache::flush();
-			$this->maybe_adjust_assignment( $previous_assignees );
+			$assignee = new Gravity_Flow_Assignee( $assignee_key, $this );
 
-			$feedback = $new_status == 'complete' ?  __( 'Entry updated and marked complete.', 'gravityflow' ) : __( 'Entry updated - in progress.', 'gravityflow' );
-
-			$note = sprintf( '%s: %s', $this->get_name(), $feedback );
-
-			$user_note = rgpost( 'gravityflow_note' );
-			if ( ! empty( $user_note ) ) {
-				$note .= sprintf( "\n%s: %s", esc_html__( 'Note', 'gravityflow' ), $user_note );
-			}
-
-			$this->add_note( $note );
-
-			$status = $this->evaluate_status();
-			$this->update_step_status( $status );
-			$entry = $this->refresh_entry();
-
-			GFAPI::send_notifications( $form, $entry, 'workflow_user_input' );
+			$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
 
 		}
+		return $feedback;
+	}
+
+	/**
+	 * @param Gravity_Flow_Assignee $assignee
+	 * @param string $new_status
+	 * @param array $form
+	 *
+	 * @return string|bool If processed return a message to be displayed to the user.
+	 */
+	public function process_assignee_status( $assignee, $new_status, $form ){
+		if ( $new_status == 'complete' ) {
+			$current_user_status = $assignee->get_status();
+
+			$current_role_status = false;
+			$role = false;
+			foreach ( gravity_flow()->get_user_roles() as $role ) {
+				$current_role_status = $this->get_role_status( $role );
+				if ( $current_role_status == 'pending' ) {
+					break;
+				}
+			}
+			if ( $current_user_status == 'pending' ) {
+				$assignee->update_status( 'complete' );
+			}
+
+			if ( $current_role_status == 'pending' ) {
+				$this->update_role_status( $role, 'complete' );
+			}
+			$this->refresh_entry();
+		}
+
+		$feedback = $new_status == 'complete' ?  __( 'Entry updated and marked complete.', 'gravityflow' ) : __( 'Entry updated - in progress.', 'gravityflow' );
+
+		$note = sprintf( '%s: %s', $this->get_name(), $feedback );
+
+		$user_note = rgpost( 'gravityflow_note' );
+		if ( ! empty( $user_note ) ) {
+			$note .= sprintf( "\n%s: %s", esc_html__( 'Note', 'gravityflow' ), $user_note );
+		}
+
+		$this->add_note( $note );
+
+		$status = $this->evaluate_status();
+		$this->update_step_status( $status );
+		$entry = $this->refresh_entry();
+
+		GFAPI::send_notifications( $form, $entry, 'workflow_user_input' );
+
 		return $feedback;
 	}
 
