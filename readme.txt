@@ -55,7 +55,19 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.1.3.3 =
+- Added support for starting workflows when an entry is added using the API.
+- Fixed an issue where the Revert setting doesn't appear for new Approval Steps even though there's a User Input step in the list.
+- Fixed an issue on the status page where a warning is displayed if a user account no longer exists.
+
+= 1.1.3.2 =
+- Added the GET forms/[ID]/steps Web API endpoint. Returns all the steps for a form.
+- Added the GET entries/[ID]/assignees Web API endpoint. Returns all the assignees for the current step of the specified entry.
+- Added the GET entries/[ID]/steps Web API endpoint. Returns all the steps for the specified entry.
+- Added the POST entries/[ID]/assignees/[KEY] Web API endpoint. Processes a status update for a specified assignee of the current step of the specified entry.
+
 = 1.1.3.1 =
+- Added support for step duplication.
 - API: Refactor status config.
 
 = 1.1.3 =
