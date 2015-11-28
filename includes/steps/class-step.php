@@ -541,6 +541,10 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 */
 	function get_expiration_timestamp(){
 
+		if ( ! $this->expiration ) {
+			return false;
+		}
+
 		if ( $this->expiration_type == 'date' ) {
 
 			$this->log_debug( __METHOD__ . '() expiration_date: ' . $this->expiration_date );
