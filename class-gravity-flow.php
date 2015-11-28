@@ -3130,6 +3130,9 @@ PRIMARY KEY  (id)
 					$this->log_debug( __METHOD__ . '() - ending workflow.' );
 					gform_delete_meta( $entry_id, 'workflow_step' );
 					$step_status = gform_get_meta( $entry_id, 'workflow_step_status_' . $step_id );
+					if ( empty ( $step_status ) ){
+						$step_status = 'complete';
+					}
 					gform_update_meta( $entry_id, 'workflow_final_status', $step_status );
 					gform_delete_meta( $entry_id, 'workflow_step_status' );
 					$entry_created_timestamp = strtotime( $entry['date_created'] );
