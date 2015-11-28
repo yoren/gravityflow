@@ -376,31 +376,27 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			),
 		);
 
-		$current_feed_id = gravity_flow()->get_current_feed_id();
 		$revert_field = array();
-		if ( ! empty ( $current_feed_id ) ) {
-			$form_id = $this->get_form_id();
-			$steps = gravity_flow()->get_steps( $form_id );
-			foreach ( $steps as $step ) {
-				if ( $step->get_type() === 'user_input' ) {
-					$user_input_step_choices[] = array( 'label' => $step->get_name(), 'value' => $step->get_id() );
-				}
+		$form_id = $this->get_form_id();
+		$steps = gravity_flow()->get_steps( $form_id );
+		foreach ( $steps as $step ) {
+			if ( $step->get_type() === 'user_input' ) {
+				$user_input_step_choices[] = array( 'label' => $step->get_name(), 'value' => $step->get_id() );
 			}
-			if ( ! empty ( $user_input_step_choices  ) ) {
-				$revert_field = array(
-						'name' => 'revert',
-						'label' => esc_html__( 'Revert to User Input step', 'gravityflow' ),
-						'type' => 'checkbox_and_select',
-                        'tooltip' => esc_html__( 'The Revert setting enables a third option in addition to Approve and Reject which allows the assignee to send the entry directly to a User Input step without changing the status. Enable this setting to show the Revert button next to the Approve and Reject buttons and specify the User Input step the entry will be sent to.', 'gravityflow' ),
-						'checkbox' => array(
-								'label' => esc_html__( 'Enable', 'gravityflow')
-						),
-						'select' => array(
-								'choices' => $user_input_step_choices
-						),
-				);
-			}
-
+		}
+		if ( ! empty ( $user_input_step_choices  ) ) {
+			$revert_field = array(
+				'name' => 'revert',
+				'label' => esc_html__( 'Revert to User Input step', 'gravityflow' ),
+				'type' => 'checkbox_and_select',
+				'tooltip' => esc_html__( 'The Revert setting enables a third option in addition to Approve and Reject which allows the assignee to send the entry directly to a User Input step without changing the status. Enable this setting to show the Revert button next to the Approve and Reject buttons and specify the User Input step the entry will be sent to.', 'gravityflow' ),
+				'checkbox' => array(
+					'label' => esc_html__( 'Enable', 'gravityflow')
+				),
+				'select' => array(
+					'choices' => $user_input_step_choices
+				),
+			);
 		}
 		if ( ! empty ( $revert_field ) ) {
 			$settings['fields'][] = $revert_field;
@@ -588,8 +584,9 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					$assignee = new Gravity_Flow_Assignee( 'user_id|' . $current_user->ID, $this );
 				}
 			} else {
-				// deprecated
-				$gworkflow_token = rgget( 'gworkflow_token' );
+
+				$gworkflow_token = rgget( 'gworkflow_token' ); // deprecated
+
 				$gflow_token = rgget( 'gflow_token' );
 				$new_status      = rgget( 'new_status' );
 
@@ -623,7 +620,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 			}
 
-			$feedback = $this->process_status_update( $assignee, $new_status, $form );
+			$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
 
 		}
 		return $feedback;
@@ -634,10 +631,9 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 * @param $new_status
 	 * @param $form
 	 *
-	 * @return bool|string|void
-	 *
+	 * @return bool|string If processed return a message to be displayed to the user.
 	 */
-	public function process_status_update( $assignee, $new_status, $form ){
+	public function process_assignee_status( $assignee, $new_status, $form ){
 		$feedback = false;
 
 		if ( ! in_array( $new_status, array( 'pending', 'approved', 'rejected', 'revert' ) ) ) {
@@ -691,7 +687,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		if ( $new_status == 'approved' ) {
 			$note = $this->get_name() . ': ' . __( 'Approved.', 'gravityflow' );
 			$this->send_approval_notification();
-
 		} elseif ( $new_status == 'rejected' ) {
 			$note = $this->get_name() . ': ' . __( 'Rejected.', 'gravityflow' );
 			$this->send_rejection_notification();
@@ -707,7 +702,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			$this->add_note( $note, $user_id, $assignee->get_display_name() );
 		}
 
-		// keep????
 		$status = $this->evaluate_status();
 		$this->update_step_status( $status );
 		$entry = $this->refresh_entry();
@@ -1137,7 +1131,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				$new_status = 'rejected';
 				break;
 		}
-		$feedback = $this->process_status_update( $assignee , $new_status, $form );
+		$feedback = $this->process_assignee_status( $assignee , $new_status, $form );
 
 		return $feedback;
 	}
