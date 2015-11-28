@@ -1367,5 +1367,21 @@ abstract class Gravity_Flow_Step extends stdClass {
 		}
 		return $value;
 	}
+
+	/**
+	 * Process a status change for an assignee.
+	 *
+	 * @param Gravity_Flow_Assignee $assignee
+	 * @param string $new_status
+	 * @param array $form
+	 *
+	 * @return string|bool If processed return a message to be displayed to the user.
+	 */
+	public function process_assignee_status( $assignee, $new_status, $form ){
+		$assignee->update_status( $new_status );
+		$note = $this->get_name() . ': ' . esc_html__( 'Processed', 'gravityflow' );
+		$this->add_note( $note );
+		return $note;
+	}
 }
 
