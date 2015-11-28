@@ -514,8 +514,13 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		$user_id = $item['created_by'];
 		if ( $user_id ) {
-			$user         = get_user_by( 'id', $user_id );
-			$display_name = $user->display_name;
+			$user = get_user_by( 'id', $user_id );
+			if ( empty ( $user ) || is_wp_error( $user ) ) {
+				$display_name = $user_id . ' ' . esc_html__( '(deleted)', 'gravityflow' );
+			} else {
+				$display_name = $user->display_name;
+			}
+
 		} else {
 			$display_name = $item['ip'];
 		}
