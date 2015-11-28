@@ -114,6 +114,8 @@ if ( class_exists( 'GFForms' ) ) {
 
 			add_action( 'wp_login', array( $this, 'filter_wp_login' ), 10, 2 );
 
+			add_action( 'gform_post_add_entry', array( $this, 'action_gform_post_add_entry' ), 10, 2 );
+
 		}
 
 		public function init_admin() {
@@ -4461,6 +4463,20 @@ AND m.meta_value='queued'";
 
 			$this->import_gravityflow_feeds( $original_feeds, $new_id);
 
+		}
+
+		public function action_gform_post_add_entry( $entry, $form ){
+
+			$this->log_debug( __METHOD__ . '(): starting' );
+
+			$api = new Gravity_Flow_API( $form['id'] );
+			$steps = $api->get_steps();
+
+			if ( $steps ) {
+				$this->log_debug( __METHOD__ . '(): triggering workflow for entry ID: ' . $entry['id'] );
+				gravity_flow()->maybe_process_feed( $entry, $form );
+				$api->process_workflow( $entry['id'] );
+			}
 		}
 
 	}
