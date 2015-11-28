@@ -3911,7 +3911,7 @@ AND m.meta_value='queued'";
 				$user_id = $token_array['user_id'];
 				$new_status = $token_array['new_status'];
 
-				$feedback = $step->process_status_update( $user_id, 'user_id', $new_status, $form );
+				$feedback = $step->process_assignee_status( $user_id, 'user_id', $new_status, $form );
 
 				if ( ! empty ( $feedback ) ) {
 					$this->process_workflow( $form, $entry_id );
