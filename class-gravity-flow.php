@@ -832,7 +832,7 @@ PRIMARY KEY  (id)
 			if ( $current_step_id ) {
 				$current_step = $this->get_step( $current_step_id );
 				if ( empty( $current_step ) ) {
-				    $html = '<div class="delete-alert alert_red"><i class="fa fa-exclamation-triangle gf_invalid"></i> ' . esc_html__( 'This step type no longer exists.', 'gravityflow' ) . '</div>';
+				    $html = '<div class="delete-alert alert_red"><i class="fa fa-exclamation-triangle gf_invalid"></i> ' . esc_html__( 'This step type is missing.', 'gravityflow' ) . '</div>';
 				    echo $html;
 			die();
 				} else {
@@ -1670,7 +1670,8 @@ PRIMARY KEY  (id)
 		public function get_column_value_step_type( $item ){
 			$step = $this->get_step( $item['id'] );
 			if ( empty( $step ) ) {
-			    return '';
+				$type_key = $item['meta']['step_type'];
+			    return '<span class="validation_error"><i class="fa fa-exclamation-triangle gf_invalid"></i> ' . $type_key . '  ' . esc_html__( '(missing)', 'gravityflow' ) . '</span>';
 			}
 			$icon_url = $step->get_icon_url();
 			$icon_html = ( strpos( $icon_url, 'http' ) === 0 ) ? sprintf( '<img src="%s" style="width:20px;height:20px;margin-right:5px;vertical-align:middle;"/>', $icon_url ) : sprintf( '<span style="width:20px;height:20px;margin-right:5px;vertical-align:middle;">%s</span>', $icon_url );
@@ -3353,7 +3354,6 @@ PRIMARY KEY  (id)
 		public function update_app_settings( $settings ){
 			parent::update_app_settings( $settings );
 		}
-
 
 		public function maybe_auto_update( $update, $item ) {
 			//$this->log_debug( __METHOD__ . '() - $item.' . print_r( $item, true ) );
