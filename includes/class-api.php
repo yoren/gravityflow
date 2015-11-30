@@ -122,6 +122,48 @@ class Gravity_Flow_API {
 	}
 
 	/**
+	 * Restarts the current step for the given entry, adds a note in the entry's timeline and logs the activity.
+	 *
+	 * @param array $entry The entry
+	 * @return bool True for success. False if the entry doesn't have a current step.
+	 */
+	public function restart_step( $entry ){
+		$step = $this->get_current_step( $entry );
+		if ( ! $step ) {
+			return false;
+		}
+		$entry_id = $entry['id'];
+		$this->log_activity( 'step', 'restarted', $this->form_id, $entry_id );
+		$step->start();
+		$feedback = esc_html__( 'Workflow Step restarted.',  'gravityflow' );
+		$this->add_timeline_note( $entry_id, $feedback );
+		return true;
+	}
+
+	/**
+	 * Restarts the workflow for an entry, adds a note in the entry's timeline and logs the activity.
+	 *
+	 * @param $entry
+	 */
+	public function restart_workflow( $entry ) {
+		$current_step = $this->get_current_step( $entry );
+		$entry_id = absint( $entry['id'] );
+		$form = GFAPI::get_form( $this->form_id );
+		if ( $current_step ) {
+			$assignees = $current_step->get_assignees();
+			foreach ( $assignees as $assignee ) {
+				$assignee->remove();
+			}
+		}
+		$feedback = esc_html__( 'Workflow restarted.',  'gravityflow' );
+		$this->add_timeline_note( $entry_id, $feedback );
+		gform_update_meta( $entry_id, 'workflow_final_status', 'pending' );
+		gform_update_meta( $entry_id, 'workflow_step', false );
+		$this->log_activity( 'workflow', 'restarted', $form['id'], $entry_id );
+		$this->process_workflow( $entry_id );
+	}
+
+	/**
 	 * Returns the workflow status for the current entry.
 	 *
 	 * @param $entry
