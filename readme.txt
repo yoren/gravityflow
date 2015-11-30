@@ -55,6 +55,10 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.1.3.4 =
+- Added restart_step() restart_workflow() send_to_step() add_timeline_note() and log_activity() to Gravity_Flow_API
+- Updated the admin actions to use the API.
+
 = 1.1.3.3 =
 - Added support for starting workflows when an entry is added using the API.
 - Fixed an issue where the Revert setting doesn't appear for new Approval Steps even though there's a User Input step in the list.
