@@ -661,7 +661,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		$calculation_fields = array();
 		$recalculate_total  = false;
 
-		GFCommon::log_debug( 'GFFormsModel::save_lead(): Saving entry fields.' );
+		GFCommon::log_debug( __METHOD__ . '(): Saving entry fields.' );
 
 		foreach ( $form['fields'] as $field ) {
 			/* @var $field GF_Field */
