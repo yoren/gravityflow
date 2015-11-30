@@ -140,5 +140,57 @@ class Gravity_Flow_API {
 		return $status;
 	}
 
+	/**
+	 * Sends and
+	 *
+	 * @param $entry
+	 * @param $step_id
+	 */
+	public function send_to_step( $entry, $step_id ){
+		$current_step = $this->get_current_step( $entry );
+		if ( $current_step ) {
+			$assignees = $current_step->get_assignees();
+			foreach ( $assignees as $assignee ) {
+				$assignee->remove();
+			}
+		}
+		$entry_id = $entry['id'];
+		$new_step = $this->get_step( $step_id, $entry );
+		$feedback = sprintf( esc_html__( 'Sent to step: %s',  'gravityflow' ), $new_step->get_name() );
+		$this->add_timeline_note( $entry_id, $feedback );
+		$this->log_activity( 'workflow', 'sent_to_step', $this->form_id, $entry_id, $step_id );
+		gform_update_meta( $entry_id, 'workflow_final_status', 'pending' );
+		$new_step->start();
+		$this->process_workflow( $entry_id );
+	}
+
+	/**
+	 * Add a note to the timeline of the specified entry.
+	 *
+	 * @param $entry_id
+	 * @param $note
+	 */
+	public function add_timeline_note( $entry_id, $note ) {
+		gravity_flow()->add_timeline_note( $entry_id, $note );
+	}
+
+	/**
+	 * Registers activity event in the activity log. The activity log is used to generate reports.
+	 *
+	 * @param string $log_type The object of the event. 'workflow', 'step', 'assignee'
+	 * @param string $event 'started', 'ended', 'status'
+	 * @param int $form_id The form ID.
+	 * @param int $entry_id The Entry ID.
+	 * @param string $log_value The value to log.
+	 * @param int $step_id The Step ID.
+	 * @param int $duration The duration in seconds - if applicable.
+	 * @param int $assignee_id The assignee ID - if applicable.
+	 * @param string $assignee_type - The Assignee type - if applicable
+	 * @param string $display_name - The display name of the User.
+	 */
+	public function log_activity( $log_type, $event, $form_id = 0, $entry_id = 0, $log_value = '', $step_id = 0, $duration = 0, $assignee_id = 0, $assignee_type = '', $display_name = '' ) {
+		gravity_flow()->log_event( $log_type, $event, $form_id, $entry_id, $log_value, $step_id, $duration, $assignee_id, $assignee_type, $display_name );
+	}
+
 }
 
