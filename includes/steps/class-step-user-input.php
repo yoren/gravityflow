@@ -645,14 +645,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 		gravity_flow()->log_debug( __METHOD__ . '(): Saving entry.' );
 
-		$is_form_editor = GFCommon::is_form_editor();
-		$is_entry_detail = GFCommon::is_entry_detail();
-		$is_admin = $is_form_editor || $is_entry_detail;
-
-		if ( $is_admin && ! GFCommon::current_user_can_any( 'gravityforms_edit_entries' ) ) {
-			die( __( "You don't have adequate permission to edit entries.", 'gravityflow' ) );
-		}
-
 		$lead_detail_table = GFFormsModel::get_lead_details_table_name();
 		$is_new_lead       = $lead == null;
 
