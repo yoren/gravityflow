@@ -2994,61 +2994,32 @@ PRIMARY KEY  (id)
 		function maybe_process_admin_action( $form, $entry ) {
 			$feedback = false;
 			if ( isset( $_POST['_gravityflow_admin_action'] ) && check_admin_referer( 'gravityflow_admin_action', '_gravityflow_admin_action_nonce' ) && GFAPI::current_user_can_any( 'gravityflow_workflow_detail_admin_actions' ) ) {
-				$entry_id = absint( rgar( $entry, 'id' ) );
-				$current_step = $this->get_current_step( $form, $entry );
 				$admin_action = rgpost( 'gravityflow_admin_action' );
 				switch ( $admin_action ) {
 					case 'cancel_workflow' :
-						if ( $current_step ) {
-							$assignees = $current_step->get_assignees();
-							foreach ( $assignees as $assignee ) {
-								$assignee->remove();
-							}
-						}
-						gform_update_meta( $entry_id, 'workflow_final_status', 'cancelled' );
-						gform_delete_meta( $entry_id, 'workflow_step' );
-						$feedback = esc_html__( 'Workflow cancelled.',  'gravityflow' );
-						$this->add_timeline_note( $entry_id, $feedback );
-						$this->log_event( 'workflow', 'cancelled', $form['id'], $entry_id );
+						$api = new Gravity_Flow_API( $form['id'] );
+						$success = $api->cancel_workflow( $entry );
+						$feedback = $success ? esc_html__( 'Workflow cancelled.',  'gravityflow' ) : esc_html__( 'The entry does not currently have an active step.',  'gravityflow' ) ;
 						break;
 					case 'restart_step':
-						if ( $current_step ) {
-							$this->log_event( 'step', 'restarted', $form['id'], $entry_id );
-							$current_step->start();
-							$feedback = esc_html__( 'Workflow Step restarted.',  'gravityflow' );
-							$this->add_timeline_note( $entry_id, $feedback );
-						}
+						$api = new Gravity_Flow_API( $form['id'] );
+						$success = $api->restart_step( $entry );
+						$feedback = $success ? esc_html__( 'Workflow Step restarted.',  'gravityflow' ) : esc_html__( 'The entry does not currently have an active step.',  'gravityflow' ) ;
+
 					break;
 					case 'restart_workflow':
-						if ( $current_step ) {
-							$assignees = $current_step->get_assignees();
-							foreach ( $assignees as $assignee ) {
-								$assignee->remove();
-							}
-						}
+						$api = new Gravity_Flow_API( $form['id'] );
+						$api->restart_workflow( $entry );
 						$feedback = esc_html__( 'Workflow restarted.',  'gravityflow' );
-						$this->add_timeline_note( $entry_id, $feedback );
-						gform_update_meta( $entry_id, 'workflow_final_status', 'pending' );
-						gform_update_meta( $entry_id, 'workflow_step', false );
-						$this->log_event( 'workflow', 'restarted', $form['id'], $entry_id );
-						$this->process_workflow( $form, $entry_id );
-
 						break;
 				}
 				list( $admin_action, $action_id ) = rgexplode( '|', $admin_action, 2 );
 				if ( $admin_action == 'send_to_step' ) {
 					$step_id = $action_id;
-					$assignees = $current_step->get_assignees();
-					foreach ( $assignees as $assignee ) {
-						$assignee->remove();
-					}
-					$new_step = $this->get_step( $step_id, $entry );
+					$api = new Gravity_Flow_API( $form['id'] );
+					$api->send_to_step( $entry, $step_id );
+					$new_step = $api->get_current_step( $entry );
 					$feedback = sprintf( esc_html__( 'Sent to step: %s',  'gravityflow' ), $new_step->get_name() );
-					$this->add_timeline_note( $entry_id, $feedback );
-					$this->log_event( 'workflow', 'sent_to_step', $form['id'], $entry_id, $step_id );
-					gform_update_meta( $entry_id, 'workflow_final_status', 'pending' );
-					$new_step->start();
-					$this->process_workflow( $form, $entry_id );
 				}
 			}
 			return $feedback;
