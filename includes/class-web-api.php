@@ -10,6 +10,10 @@ class Gravity_Flow_Web_API {
 	}
 
 	function get_entries_steps( $entry_id ) {
+
+		$capability = apply_filters( 'gravityflow_web_api_capability_get_entries_steps', 'gravityflow_create_steps' );
+		$this->authorize( $capability );
+
 		$entry = GFAPI::get_entry( $entry_id );
 		$form_id = absint( $entry['form_id'] );
 		$api = new Gravity_Flow_API( $form_id );
@@ -45,6 +49,10 @@ class Gravity_Flow_Web_API {
 	}
 
 	function get_forms_steps( $form_id ) {
+
+		$capability = apply_filters( 'gravityflow_web_api_capability_get_forms_steps', 'gravityflow_create_steps' );
+		$this->authorize( $capability );
+
 		$api = new Gravity_Flow_API( $form_id );
 		$steps = $api->get_steps();
 		$response = array();
@@ -65,6 +73,10 @@ class Gravity_Flow_Web_API {
 	}
 
 	function get_entries_assignees( $entry_id, $assignee_key = null ) {
+
+		$capability = apply_filters( 'gravityflow_web_api_capability_get_entries_assignees', 'gravityflow_create_steps' );
+		$this->authorize( $capability );
+
 		$entry = GFAPI::get_entry( $entry_id );
 		$form_id = absint( $entry['form_id'] );
 		$api = new Gravity_Flow_API( $form_id );
@@ -88,6 +100,9 @@ class Gravity_Flow_Web_API {
 	 */
 	function post_entries_assignees( $entry_id, $assignee_key = null ) {
 		global $HTTP_RAW_POST_DATA;
+
+		$capability = apply_filters( 'gravityflow_web_api_capability_post_entries_assignees', 'gravityflow_create_steps' );
+		$this->authorize( $capability );
 
 		if ( empty ( $assignee_key ) ) {
 			$this->end( 400, 'Bad request' );
@@ -156,6 +171,19 @@ class Gravity_Flow_Web_API {
 
 	function end( $status, $response) {
 		GFWebAPI::end( $status, $response );
+	}
+
+	public function authorize( $caps = array() ) {
+
+		if ( GFCommon::current_user_can_any( $caps ) ) {
+			return true;
+		}
+
+		$this->die_forbidden();
+	}
+
+	public function die_forbidden() {
+		$this->end( 403, __( 'Forbidden', 'gravityforms' ) );
 	}
 }
 
