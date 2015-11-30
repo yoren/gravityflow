@@ -88,6 +88,7 @@ class Gravity_Flow_API {
 
 	/**
 	 * Processes the workflow for the given Entry ID. Handles the step orchestration - moving the workflow through the steps and ending the workflow.
+	 * Not generally required unless there's been a change to the entry outside the usual workflow orchestration.
 	 *
 	 * @param $entry_id
 	 */
@@ -97,10 +98,10 @@ class Gravity_Flow_API {
 	}
 
 	/**
-	 * Cancels the workflow for the given Entry ID. Removes the assignees and logs the event.
+	 * Cancels the workflow for the given Entry ID. Removes the assignees, adds a note in the entry's timeline and logs the event.
 	 *
 	 * @param array $entry The entry
-	 * @return bool
+	 * @return bool True for success. False if not currently in a workflow.
 	 */
 	public function cancel_workflow( $entry ){
 		$entry_id = absint( $entry['id'] );
