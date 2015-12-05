@@ -704,10 +704,21 @@ abstract class Gravity_Flow_Step extends stdClass {
 				$a = shortcode_atts(
 					array(
 						'page_id' => 'admin',
+						'token' => false,
 					), $options
 				);
 
-				$entry_url = $this->get_entry_url( $a['page_id'], $assignee );
+				$force_token = strtolower( $a['token'] ) == 'true' ? true : false;
+
+				$entry_token = '';
+
+				if ( $force_token ) {
+					$token_lifetime_days = apply_filters( 'gravityflow_entry_token_expiration_days', 30, $assignee );
+					$token_expiration_timestamp = strtotime( '+' . (int) $token_lifetime_days . ' days' );
+					$entry_token = gravity_flow()->generate_access_token( $assignee, null, $token_expiration_timestamp );
+				}
+
+				$entry_url = $this->get_entry_url( $a['page_id'], $assignee, $entry_token );
 
 				$text = str_replace( $full_tag, $entry_url, $text );
 			}
@@ -724,10 +735,21 @@ abstract class Gravity_Flow_Step extends stdClass {
 					array(
 						'page_id' => 'admin',
 						'text' => esc_html__( 'Entry', 'gravityflow' ),
+						'token' => false,
 					), $options
 				);
 
-				$entry_url = $this->get_entry_url( $a['page_id'], $assignee );
+				$force_token = strtolower( $a['token'] ) == 'true' ? true : false;
+
+				$entry_token = '';
+
+				if ( $force_token ) {
+					$token_lifetime_days = apply_filters( 'gravityflow_entry_token_expiration_days', 30, $assignee );
+					$token_expiration_timestamp = strtotime( '+' . (int) $token_lifetime_days . ' days' );
+					$entry_token = gravity_flow()->generate_access_token( $assignee, null, $token_expiration_timestamp );
+				}
+
+				$entry_url = $this->get_entry_url( $a['page_id'], $assignee, $entry_token );
 
 				$entry_link = sprintf( '<a href="%s">%s</a>', $entry_url, $a['text'] );
 				$text = str_replace( $full_tag, $entry_link, $text );
@@ -801,9 +823,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 	public function get_entry_url( $page_id = null, $assignee, $access_token = '' ){
 
 		if ( $assignee->get_type() == 'email' ) {
-			$token_lifetime_days = apply_filters( 'gravityflow_email_token_expiration_days', 30, $assignee );
+			$token_lifetime_days = apply_filters( 'gravityflow_entry_token_expiration_days', 30, $assignee );
 			$token_expiration_timestamp = strtotime( '+' . (int) $token_lifetime_days . ' days' );
-			$access_token = $access_token ? $access_token : gravity_flow()->generate_access_token( $assignee, $token_expiration_timestamp );
+			$access_token = $access_token ? $access_token : gravity_flow()->generate_access_token( $assignee, null, $token_expiration_timestamp );
 		}
 
 		if ( empty ( $page_id ) || $page_id == 'admin' ) {
