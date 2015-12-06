@@ -55,6 +55,10 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.1.3.6 =
+- Added the gravityflow_webhook_args filter so the webhook request args can be modified.
+- Added the gravityflow_post_webhook action which fires after the webhook request.
+
 = 1.1.3.5 =
 - Added the token attribute to the workflow entry link merge tag which forces the token to be added to the link regardless of the assignee type. Useful for sending links that don't require login to WordPress users.
 
