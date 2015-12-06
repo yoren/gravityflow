@@ -747,20 +747,33 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					$status_label = $this->get_status_label( $user_approval_status );
 					if ( ! empty( $user_approval_status ) ) {
 						$assignee_type = $assignee->get_type();
-						if ( $assignee_type == 'email' ) {
-							echo sprintf( '<li>%s: %s (%s)</li>', esc_html__( 'Email', 'gravityflow' ), $assignee->get_id(),  $status_label );
-							continue;
+
+						switch ( $assignee_type ) {
+							case 'email' :
+								$type_label = esc_html__( 'Email', 'gravityflow' );
+								$display_name = $assignee->get_id();
+								break;
+							case 'role' :
+								$type_label = esc_html__( 'Role', 'gravityflow' );
+								$display_name = translate_user_role( $assignee->get_id() );
+								break;
+							case 'user_id' :
+								$user = get_user_by( 'id', $assignee->get_id() );
+								$display_name = $user ? $user->display_name : $assignee->get_id() . ' ' . esc_html__('(Missing)');
+								$type_label = esc_html__( 'User', 'gravityflow' );
+								break;
+							default :
+								$display_name = $assignee->get_id();
+								$type_label = $assignee->get_type();
 						}
+						$assignee_status_label = sprintf( '%s: %s (%s)', $type_label, $display_name,  $status_label );
 
-						if ( $assignee_type == 'role' ) {
-							$role_name = translate_user_role( $assignee->get_id() );
-							echo sprintf( '<li>%s: %s (%s)</li>', esc_html__( 'Role', 'gravityflow' ), $role_name,  $status_label );
+						$assignee_status_label = apply_filters( 'gravityflow_assignee_status_workflow_detail', $assignee_status_label, $assignee, $this );
 
-						} else {
-							$user = get_user_by( 'id', $assignee->get_id() );
+						$assignee_status_li = sprintf( '<li>%s</li>', $assignee_status_label );
 
-							echo sprintf( '<li>%s: %s (%s)</li>', esc_html__( 'User', 'gravityflow' ), $user->display_name,  $status_label );
-						}
+						echo $assignee_status_li;
+
 					}
 				}
 				?>
