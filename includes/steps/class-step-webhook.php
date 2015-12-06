@@ -142,7 +142,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			}
 		}
 
-		$response = wp_remote_request( $url, array(
+		$args = array(
 			'method'      => $method,
 			'timeout'     => 45,
 			'redirection' => 3,
@@ -150,7 +150,11 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			'headers'     => $headers,
 			'body'        => $body,
 			'cookies'     => array()
-		) );
+		);
+
+		$args = apply_filters( 'gravityflow_webhook_args', $args, $entry, $this );
+
+		$response = wp_remote_request( $url, $args );
 
 		$this->log_debug( __METHOD__ . '() - response: ' . print_r( $response, true ) );
 
@@ -162,6 +166,8 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 		$note = esc_html__( 'Webhook sent. Url: ' . $url );
 		$this->add_note( $note, 0, 'webhook' );
+
+		do_action( 'gravityflow_post_webhook', $response, $args, $entry, $this );
 
 		return $step_status;
 	}
