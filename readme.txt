@@ -55,6 +55,9 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.1.3.7 =
+- Added the gravityflow_assignee_status_workflow_detail filter to allow the assignee status label to be modified on the workflow detail page. Currently only supported by the Approval Step.
+
 = 1.1.3.6 =
 - Added the gravityflow_webhook_args filter so the webhook request args can be modified.
 - Added the gravityflow_post_webhook action which fires after the webhook request.
