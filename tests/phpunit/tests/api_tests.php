@@ -116,6 +116,194 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 		$this->assertEquals( 'approved', $final_status );
 	}
 
+	function test_cancel_workflow() {
+		$step_id = $this->_add_approval_step();
+
+		$steps = $this->api->get_steps();
+		$count_steps = count( $steps );
+		$this->assertEquals( 1, $count_steps );
+
+		$this->_create_entries();
+		$entries = GFAPI::get_entries( $this->form_id );
+
+		$entry = $entries[0];
+
+		$entry_id = $entry['id'];
+
+		// Refresh entry
+		$entry = GFAPI::get_entry( $entry_id );
+
+		// Check status
+		$status = $this->api->get_status( $entry );
+		$this->assertEquals( 'pending', $status );
+
+		$this->api->cancel_workflow( $entry );
+
+		// Refresh entry
+		$entry = GFAPI::get_entry( $entry_id );
+
+		// Check status
+		$status = $this->api->get_status( $entry );
+		$this->assertEquals( 'cancelled', $status );
+
+	}
+
+	function test_restart_workflow() {
+		$step_id = $this->_add_approval_step();
+
+		$steps = $this->api->get_steps();
+		$count_steps = count( $steps );
+		$this->assertEquals( 1, $count_steps );
+
+		$this->_create_entries();
+		$entries = GFAPI::get_entries( $this->form_id );
+
+		$entry = $entries[0];
+
+		$entry_id = $entry['id'];
+
+		// Refresh entry
+		$entry = GFAPI::get_entry( $entry_id );
+
+		// Check status
+		$status = $this->api->get_status( $entry );
+		$this->assertEquals( 'pending', $status );
+
+		// Approve
+		$step = $this->api->get_step( $step_id, $entry );
+		$assignees = $step->get_assignees();
+		$this->assertEquals( 1, count( $assignees ) );
+		$assignees[0]->update_status( 'approved' );
+
+		$this->api->process_workflow( $entry_id );
+
+		// Refresh entry
+		$entry = GFAPI::get_entry( $entry_id );
+
+		// Check status
+		$status = $this->api->get_status( $entry );
+		$this->assertEquals( 'approved', $status );
+
+		$this->api->restart_workflow( $entry );
+
+		// Refresh entry
+		$entry = GFAPI::get_entry( $entry_id );
+
+		// Check status
+		$status = $this->api->get_status( $entry );
+		$this->assertEquals( 'pending', $status );
+
+	}
+
+	function test_restart_step() {
+		$step_id = $this->_add_approval_step();
+		$step2_id = $this->_add_approval_step();
+
+		$steps = $this->api->get_steps();
+		$count_steps = count( $steps );
+		$this->assertEquals( 2, $count_steps );
+
+		$this->_create_entries();
+		$entries = GFAPI::get_entries( $this->form_id );
+
+		$entry = $entries[0];
+
+		$entry_id = $entry['id'];
+
+		// Refresh entry
+		$entry = GFAPI::get_entry( $entry_id );
+
+		// Check status
+		$status = $this->api->get_status( $entry );
+		$this->assertEquals( 'pending', $status );
+
+		// Approve
+		$step = $this->api->get_step( $step_id, $entry );
+		$assignees = $step->get_assignees();
+		$this->assertEquals( 1, count( $assignees ) );
+		$assignees[0]->update_status( 'approved' );
+
+		$this->api->process_workflow( $entry_id );
+
+		// Refresh entry
+		$entry = GFAPI::get_entry( $entry_id );
+
+		$current_step = $this->api->get_current_step( $entry );
+		$this->assertEquals( $step2_id, $current_step->get_id() );
+
+		// Check status
+		$status = $this->api->get_status( $entry );
+		$this->assertEquals( 'pending', $status );
+
+		$this->api->restart_step( $entry );
+
+		// Refresh entry
+		$entry = GFAPI::get_entry( $entry_id );
+
+		// Check status
+		$status = $this->api->get_status( $entry );
+		$this->assertEquals( 'pending', $status );
+
+		$current_step = $this->api->get_current_step( $entry );
+		$this->assertEquals( $step2_id, $current_step->get_id() );
+
+	}
+
+	function test_send_to_step() {
+		$step1_id = $this->_add_approval_step();
+		$step2_id = $this->_add_approval_step();
+
+		$steps = $this->api->get_steps();
+		$count_steps = count( $steps );
+		$this->assertEquals( 2, $count_steps );
+
+		$this->_create_entries();
+		$entries = GFAPI::get_entries( $this->form_id );
+
+		$entry = $entries[0];
+
+		$entry_id = $entry['id'];
+
+		// Refresh entry
+		$entry = GFAPI::get_entry( $entry_id );
+
+		// Check status
+		$status = $this->api->get_status( $entry );
+		$this->assertEquals( 'pending', $status );
+
+		// Approve
+		$step = $this->api->get_step( $step1_id, $entry );
+		$assignees = $step->get_assignees();
+		$this->assertEquals( 1, count( $assignees ) );
+		$assignees[0]->update_status( 'approved' );
+
+		$this->api->process_workflow( $entry_id );
+
+		// Refresh entry
+		$entry = GFAPI::get_entry( $entry_id );
+
+		$current_step = $this->api->get_current_step( $entry );
+		$this->assertEquals( $step2_id, $current_step->get_id() );
+
+		// Check status
+		$status = $this->api->get_status( $entry );
+		$this->assertEquals( 'pending', $status );
+
+		// Send back to first step
+		$this->api->send_to_step( $entry, $step1_id );
+
+		// Refresh entry
+		$entry = GFAPI::get_entry( $entry_id );
+
+		// Check status
+		$status = $this->api->get_status( $entry );
+		$this->assertEquals( 'pending', $status );
+
+		$current_step = $this->api->get_current_step( $entry );
+		$this->assertEquals( $step1_id, $current_step->get_id() );
+
+	}
+
 	function test_user_input_process(){
 
 		$step1_id = $this->_add_user_input_step();
@@ -396,13 +584,13 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 			'step_name' => 'Approval',
 			'description' => '',
 			'step_type' => 'approval',
-			'feed_condition_logic_conditional_logic' => '0',
+			'feed_condition_logic_conditional_logic' => false,
 			'feed_condition_conditional_logic_object' => array(),
 			'type' => 'select',
 			'assignees' => array( 'user_id|1' ),
 			'routing' => array(),
 			'unanimous_approval' => '',
-			'assignee_notification_enabled' => '0',
+			'assignee_notification_enabled' => false,
 			'assignee_notification_message' => 'A new entry is pending your approval',
 			'destination_complete' => 'next',
 			'destination_rejected' => 'complete',
