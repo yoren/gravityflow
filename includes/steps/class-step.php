@@ -1414,5 +1414,18 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$this->add_note( $note );
 		return $note;
 	}
+
+	public function is_assignee( $assignee_key ) {
+		$assignees = $this->get_assignees();
+		foreach( $assignees as $assignee ) {
+			$key = $assignee->get_key();
+			if ( $key == $assignee_key ) {
+				return true;
+			}
+			if ( $assignee->get_type() == 'role' && current_user_has_role( $assignee->get_id() ) ) {
+				return true;
+			}
+		}
+	}
 }
 
