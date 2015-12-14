@@ -1219,17 +1219,20 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 */
 	public function add_note( $note, $user_id = false, $user_name = false ){
 		global $current_user;
-		if ( $user_id === false ) {
-			$user_id = $current_user->ID;
-		}
 
-		if ( $user_name === false ) {
-			global $current_user;
-			$user_name = $current_user->display_name;
-		}
-
-		if ( empty ( $user_name ) && $token = gravity_flow()->decode_access_token() ) {
-			$user_name = gravity_flow()->parse_token_assignee( $token )->get_id();
+		if ( empty( $user_id ) ) {
+			$type = '';
+			if ( $token = gravity_flow()->decode_access_token() ) {
+				$assignee_key = sanitize_text_field( $token['sub'] );
+				list( $type, $user_id ) = rgexplode( '|', $assignee_key, 2 );
+			} elseif ( is_user_logged_in() ) {
+				$user_id = $current_user->ID;
+				$type = 'user_id';
+			}
+			if ( $type == 'user_id' ) {
+				$user = get_user_by( 'id', $user_id );
+				$user_name = $user ? $user->display_name : '';
+			}
 		}
 
 		if ( empty ( $user_name ) ) {
