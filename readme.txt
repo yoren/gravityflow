@@ -55,6 +55,13 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.1.3.9 =
+- Fixed an issue with editable fields on user input steps hidden by conditional logic on form submission.
+
+= 1.1.3.8 =
+- Fixed an issue with the timeline note not registering a WordPress user name correctly when using the token in the workflow entry link.
+- Fixed an issue after completing a step where assignees might see field values on the next step if they were hidden from the previous step.
+
 = 1.1.3.7 =
 - Added the gravityflow_assignee_status_workflow_detail filter to allow the assignee status label to be modified on the workflow detail page. Currently only supported by the Approval Step.
 

@@ -55,6 +55,7 @@ class Gravity_Flow_Status {
 				$table->display();
 				?>
 			</form>
+
 			<?php
 			if ( is_admin() ) {
 				$str = $_SERVER['QUERY_STRING'];
