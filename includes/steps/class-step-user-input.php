@@ -457,7 +457,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 		$status_str            = __( 'Pending Input', 'gravityflow' );
 		$approve_icon      = '<i class="fa fa-check" style="color:green"></i>';
-		$input_step_status = $this->evaluate_status();
+		$input_step_status = $this->get_status();
 		if ( $input_step_status == 'complete' ) {
 			$status_str = $approve_icon . __( 'Complete', 'gravityflow' );
 		} elseif ( $input_step_status == 'queued' ) {
@@ -663,7 +663,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 		GFCommon::log_debug( __METHOD__ . '(): Saving entry fields.' );
 
-		foreach ( $form['fields'] as $field ) {
+		foreach ( $form['fields'] as &$field ) {
 			/* @var $field GF_Field */
 
 			//Ignore fields that are marked as display only
@@ -695,6 +695,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			if ( ! in_array( $field->id, $editable_fields ) ) {
 				continue;
 			}
+
+			// Prevent conditional logic from removing editable fields.
+			$field->conditionalLogic = null;
 
 			gravity_flow()->log_debug( __METHOD__ . "(): Saving field {$field->label}(#{$field->id} - {$field->type})." );
 
