@@ -2756,7 +2756,7 @@ PRIMARY KEY  (id)
 
 				if ( $feedback ) {
 					GFCache::flush();
-					$args['check_permissions'] = false;
+
 					$entry = GFAPI::get_entry( $entry_id ); // refresh entry
 
 					?>
@@ -2765,7 +2765,12 @@ PRIMARY KEY  (id)
 					</div>
 					<?php
 
-					$step = $this->get_current_step( $form, $entry );
+					$next_step = $this->get_current_step( $form, $entry );
+					$current_user_assignee_key = $this->get_current_user_assignee_key();
+					if ( ( $next_step && $next_step->is_assignee( $current_user_assignee_key ) ) || $args['check_permissions'] == false ) {
+						$step = $next_step;
+					}
+					$args['check_permissions'] = false;
 				}
 
 				Gravity_Flow_Entry_Detail::entry_detail( $form, $entry, $step, $args );
