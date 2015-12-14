@@ -1859,9 +1859,11 @@ PRIMARY KEY  (id)
 		}
 
 
-		function workflow_entry_detail_status_box( $form, $entry ) {
+		function workflow_entry_detail_status_box( $form, $entry, $current_step = null ) {
 
-			$current_step = $this->get_current_step( $form, $entry );
+			if ( is_null( $current_step ) ) {
+				$current_step = $this->get_current_step( $form, $entry );
+			}
 
 			$lead = $entry;
 
