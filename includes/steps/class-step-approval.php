@@ -725,7 +725,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$approve_icon         = '<i class="fa fa-check" style="color:green"></i>';
 		$reject_icon          = '<i class="fa fa-times" style="color:red"></i>';
         $revert_icon          = '<i class="fa fa-undo" style="color:blue"></i>';
-		$approval_step_status = $this->is_complete();
+		$approval_step_status = $this->get_status();
 		if ( $approval_step_status == 'approved' ) {
 			$status = $approve_icon . ' ' . __( 'Approved', 'gravityflow' );
 		} elseif ( $approval_step_status == 'rejected' ) {
