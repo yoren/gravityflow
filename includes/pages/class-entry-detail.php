@@ -156,7 +156,7 @@ class Gravity_Flow_Entry_Detail {
 
 					<div id="side-info-column" class="inner-sidebar">
 						<?php
-						gravity_flow()->workflow_entry_detail_status_box( $form, $entry );
+						gravity_flow()->workflow_entry_detail_status_box( $form, $entry, $current_step );
 
 						if ( is_user_logged_in() || $check_view_entry_permissions ) :
 						?>
