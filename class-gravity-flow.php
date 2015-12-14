@@ -4462,6 +4462,17 @@ AND m.meta_value='queued'";
 			}
 		}
 
+		public function get_current_user_assignee_key() {
+			global $current_user;
+			$assignee_key = false;
+			if ( $token = gravity_flow()->decode_access_token() ) {
+				$assignee_key = sanitize_text_field( $token['sub'] );
+			} elseif ( is_user_logged_in() ) {
+				$assignee_key = 'user_id|' . $current_user->ID;
+			}
+			return $assignee_key;
+		}
+
 	}
 }
 
