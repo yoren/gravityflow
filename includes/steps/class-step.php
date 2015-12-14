@@ -932,6 +932,12 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return $key;
 	}
 
+	public function get_status() {
+		$status_key ='workflow_step_status_' . $this->get_id();
+		$status = gform_get_meta( $this->get_entry_id(), $status_key );
+		return $status;
+	}
+
 	/**
 	 * Evaluates the status for the step.
 	 * Override this method for interactive or long running steps.
