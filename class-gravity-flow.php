@@ -1956,7 +1956,9 @@ PRIMARY KEY  (id)
 
 			do_action( 'gravityflow_workflow_detail_sidebar', $form, $entry );
 
-			if ( GFAPI::current_user_can_any( 'gravityflow_workflow_detail_admin_actions' ) ) :
+			$steps = $this->get_steps( $form['id'] );
+
+			if ( GFAPI::current_user_can_any( 'gravityflow_workflow_detail_admin_actions' )  && ! empty ( $steps ) ) :
 
 			?>
 
