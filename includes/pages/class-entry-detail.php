@@ -309,7 +309,7 @@ class Gravity_Flow_Entry_Detail {
 			$count = 0;
 			$field_count = sizeof( $form['fields'] );
 			$has_product_fields = false;
-			foreach ( $form['fields'] as $field ) {
+			foreach ( $form['fields'] as &$field ) {
 				/* @var GF_Field $field */
 				switch ( RGFormsModel::get_input_type( $field ) ) {
 					case 'section' :
@@ -336,9 +336,15 @@ class Gravity_Flow_Entry_Detail {
 
 						$field_id = $field->id;
 
+						$field->conditionalLogic = null;
+
 						if ( in_array( $field_id, $editable_fields ) ) {
-							if ( $field->get_input_type() != 'date'  ) {
+							if ( $field->get_input_type() != 'date'  && $field->type != 'product') {
 								$field->_is_entry_detail = true;
+							}
+
+							if ( GFCommon::is_product_field( $field->type ) ) {
+								$has_product_fields = true;
 							}
 
 							$value   = RGFormsModel::get_lead_field_value( $entry, $field );
