@@ -720,9 +720,24 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 				gravity_flow()->log_debug( __METHOD__ . "(): Saving calculated field {$calculation_field->label}(#{$calculation_field->id} - {$calculation_field->type})." );
 
+				// Make sure that the value gets recalculated
+				$calculation_field->conditionalLogic = null;
+
 				$inputs = $calculation_field->get_entry_inputs();
 
 				if ( is_array( $inputs ) ) {
+
+					if ( ! in_array( $calculation_field->id, $editable_fields ) ) {
+						// Make sure calculated product names and quantities are saved as if they're submitted.
+						$value = array( $calculation_field->id . '.1' => $lead[ $calculation_field->id . '.1'] );
+						$_POST[ 'input_' . $calculation_field->id . '_1' ] = $calculation_field->get_field_label( false, $value);
+						$quantity = trim( $lead[ $calculation_field->id . '.3' ] );
+						if ( $calculation_field->disableQuantity && empty ( $quantity ) ) {
+							$_POST[ 'input_' . $calculation_field->id . '_3' ] = 1;
+						} else {
+							$_POST[ 'input_' . $calculation_field->id . '_3' ] = $quantity;
+						}
+					}
 					foreach ( $inputs as $input ) {
 						GFFormsModel::save_input( $form, $calculation_field, $lead, $current_fields, $input['id'] );
 						GFFormsModel::refresh_lead_field_value( $lead['id'], $input['id'] );
