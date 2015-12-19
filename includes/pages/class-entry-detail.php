@@ -364,14 +364,41 @@ class Gravity_Flow_Entry_Detail {
 								continue;
 							}
 
+
 							//ignore product fields as they will be grouped together at the end of the grid
 							if ( GFCommon::is_product_field( $field->type ) ) {
 								$has_product_fields = true;
-								continue;
 							}
 
 							$value         = RGFormsModel::get_lead_field_value( $entry, $field );
-							$display_value = GFCommon::get_lead_field_display( $field, $value, $entry['currency'] );
+
+							if ( $field->type == 'product' ) {
+
+								if ( $field->has_calculation() ) {
+									$product_name = trim( $value[ $field->id . '.1' ] );
+									$price        = trim( $value[ $field->id . '.2' ] );
+									$quantity     = trim( $value[ $field->id . '.3' ] );
+
+									if ( empty ( $product_name ) ) {
+										$value[ $field->id . '.1' ] = $field->get_field_label( false, $value );
+									}
+
+									if ( empty ( $price ) ) {
+										$value[ $field->id . '.2' ] = '0';
+									}
+
+									if ( empty ( $quantity ) ) {
+										$value[ $field->id . '.3' ] = '0';
+									}
+								}
+							}
+
+							$input_type = $field->get_input_type();
+							if ( $input_type == 'hiddenproduct' ) {
+								$display_value = $value[ $field->id . '.2' ];
+							} else {
+								$display_value = GFCommon::get_lead_field_display( $field, $value, $entry['currency'] );
+							}
 
 							$display_value = apply_filters( 'gform_entry_field_value', $display_value, $field, $entry, $form );
 
