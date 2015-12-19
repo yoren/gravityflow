@@ -683,8 +683,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				continue;
 			}
 
-			$read_value_from_post = $is_new_lead || ! isset( $lead[ 'date_created' ] );
-
 
 			// process calculation fields after all fields have been saved (moved after the is hidden check)
 			if ( $field->has_calculation() ) {
