@@ -9,11 +9,11 @@ class Gravity_Flow_Installation_Wizard {
 
 	function __construct(){
 		$path = gravity_flow()->get_base_path()  . '/includes/wizard/steps/';
-		require_once( $path . 'class-installation-wizard-step.php' );
+		require_once( $path . 'class-iw-step.php' );
 		$classes = array();
-		foreach ( glob( $path . 'class-installation-wizard-step-*.php' ) as $filename ) {
+		foreach ( glob( $path . 'class-iw-step-*.php' ) as $filename ) {
 			require_once( $filename );
-			$regex = '/class-installation-wizard-step-(.*?).php/';
+			$regex = '/class-iw-step-(.*?).php/';
 			preg_match( $regex, $filename, $matches );
 			$class_name = 'Gravity_Flow_Installation_Wizard_Step_' . str_replace( '-', '_', $matches[1] );
 			$step = new $class_name;
