@@ -55,6 +55,16 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.1.3.12 =
+- Fixed an issue with the recalculation of calculated fields when not editable.
+- Fixed an issue with the display of hidden product fields.
+
+= 1.1.3.11 =
+- Fixed an issue preventing upgrade on some Windows systems.
+
+= 1.1.3.10 =
+- Fixed an issue with the recalculation of calculated fields hidden by conditional logic.
+
 = 1.1.3.9 =
 - Fixed an issue with editable fields on user input steps hidden by conditional logic on form submission.
 
