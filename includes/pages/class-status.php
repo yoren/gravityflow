@@ -885,7 +885,6 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			if ( $screen ) {
 				$option = $screen->get_option( 'per_page', 'option' );
 			}
-
 		}
 
 		$per_page_setting = ! empty( $option ) ? get_user_meta( $user, $option, true ) : false;
@@ -952,14 +951,6 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 				);
 			}
 		}
-
-		/*
-		$search_criteria['field_filters'][] = array(
-			'key'      => 'workflow_final_status',
-			'operator' => '<>',
-			'value'    => '',
-		);
-		*/
 
 		if ( ! $this->display_all ) {
 			$search_criteria['field_filters'][] = array(
