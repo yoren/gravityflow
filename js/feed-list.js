@@ -11,7 +11,6 @@
 
         $('.wp-list-table tbody').addClass('gravityflow-reorder-mode')
             .sortable({
-
                 tolerance: "pointer",
                 placeholder: "step-drop-zone",
                 helper: fixHelperModified,
@@ -31,15 +30,16 @@
                     $.post( ajaxurl, data)
                         .done( function( response ) {
                             if ( response ) {
-
+                                // OK
                             } else {
-                                alert('fail');
+                                console.log( 'Error re-ordering feeds');
+                                console.log( response);
                             }
                         } )
                         .fail( function( response ) {
-                            alert('fail2');
+                            console.log( 'Error re-ordering feeds');
+                            console.log( response);
                         } );
-
                 }
             });
 
