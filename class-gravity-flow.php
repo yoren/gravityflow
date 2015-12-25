@@ -232,7 +232,7 @@ PRIMARY KEY  (id)
 			if ( is_array( $form['fields'] ) ) {
 				foreach ( $form['fields'] as $field ) {
 					/* @var GF_Field $field */
-					$input_fields[] = array( 'key' => absint( $field['id'] ), 'text' => esc_html__( $field['label'] ) );
+					$input_fields[] = array( 'key' => absint( $field->id ), 'text' => esc_html__( $field->get_field_label( false, null ) ) );
 				}
 			}
 
