@@ -255,10 +255,9 @@ div.gf_entry_wrap {
 table#gravityflow-inbox th[data-label="ID"],
 table#gravityflow-inbox td[data-label="ID"] {
     width:70px;
-    /*border-left:1px solid #ddd;*/
 }
 
-table#gravityflow-inbox th,{
+table#gravityflow-inbox th{
     border-top:1px solid #ddd !important;
 }
 
