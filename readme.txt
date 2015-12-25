@@ -58,6 +58,8 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 = 1.1.3.12 =
 - Fixed an issue with the recalculation of calculated fields when not editable.
 - Fixed an issue with the display of hidden product fields.
+- Fixed an issue with the confirmation page for users with the gravityflow_view_all capability when transitioning steps.
+- Fixed a deprecation warning on Gravity Forms 2.0
 
 = 1.1.3.11 =
 - Fixed an issue preventing upgrade on some Windows systems.
