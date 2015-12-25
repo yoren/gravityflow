@@ -55,6 +55,9 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.1.3.13 =
+- Added the content of html field to the workflow detail page.
+
 = 1.1.3.12 =
 - Fixed an issue with the recalculation of calculated fields when not editable.
 - Fixed an issue with the display of hidden product fields.
