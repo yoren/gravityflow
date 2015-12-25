@@ -325,13 +325,22 @@ class Gravity_Flow_Entry_Detail {
 						break;
 
 					case 'captcha':
-					case 'html':
 					case 'password':
 					case 'page':
 						//ignore captcha, html, password, page field
 						break;
 
+					case 'html':
+						$display_field = (bool) apply_filters( 'gravityflow_workflow_detail_display_field', true, $field, $form, $entry, $current_step );
+						if ( $display_field ) {
+							?>
+							<tr>
+								<td colspan="2" class="entry-view-field-value"><?php echo $field->content; ?></td>
+							</tr>
+							<?php
+						}
 
+						break;
 					default :
 
 						$field_id = $field->id;
@@ -350,7 +359,10 @@ class Gravity_Flow_Entry_Detail {
 							$value   = RGFormsModel::get_lead_field_value( $entry, $field );
 							$td_id   = 'field_' . $form_id . '_' . $field_id;
 							$td_id = esc_attr( $td_id );
-							$content = "<tr valign='top'><td colspan='2' class='detail-view' id='{$td_id}'><label class='detail-label'>" . esc_html( GFCommon::get_label( $field ) ) . '</label>' .
+							$content = '<tr>
+		                                    <td colspan="2" class="entry-view-field-name">' . esc_html( GFCommon::get_label( $field ) ) . "</td>
+		                                </tr>
+										<tr valign='top'><td colspan='2' class='detail-view' id='{$td_id}'>" .
 							           self::get_field_input( $field, $value, $entry['id'], $form_id, $form ) . '</td></tr>';
 
 							$content = apply_filters( 'gform_field_content', $content, $field, $value, $entry['id'], $form['id'] );
