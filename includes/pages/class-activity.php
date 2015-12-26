@@ -7,7 +7,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 
 class Gravity_Flow_Activity_List {
 
-	public static function display( $args ){
+	public static function display( $args ) {
 
 		$defaults = array(
 			'check_permissions' => true,
@@ -107,7 +107,7 @@ class Gravity_Flow_Activity_List {
 						</td>
 						<td data-label="<?php esc_html_e( 'Event', 'gravityflow' ); ?>">
 							<?php
-							if ( ! empty ( $event->duration ) ) {
+							if ( ! empty( $event->duration ) ) {
 
 								echo self::format_duration( $event->duration );
 							}
@@ -140,5 +140,4 @@ class Gravity_Flow_Activity_List {
 	public static function format_duration( $seconds ) {
 		return gravity_flow()->format_duration( $seconds );
 	}
-
 }

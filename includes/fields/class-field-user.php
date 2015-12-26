@@ -27,7 +27,7 @@ class Gravity_Flow_Field_User extends GF_Field_Select {
 	public function get_form_editor_button() {
 		return array(
 			'group' => 'workflow_fields',
-			'text'  => $this->get_form_editor_field_title()
+			'text'  => $this->get_form_editor_field_title(),
 		);
 	}
 
@@ -61,7 +61,7 @@ class Gravity_Flow_Field_User extends GF_Field_Select {
 		return $choices;
 	}
 
-	public function get_users_as_choices( $value  ) {
+	public function get_users_as_choices( $value ) {
 		$form_id = $this->formId;
 
 		$args            = apply_filters( 'gravityflow_get_users_args_user_field', array( 'orderby' => 'display_name' ) );
@@ -101,7 +101,7 @@ class Gravity_Flow_Field_User extends GF_Field_Select {
 		return $value;
 	}
 
-	public function get_display_name( $user_id ){
+	public function get_display_name( $user_id ) {
 		if ( empty( $user_id ) ) {
 			return '';
 		}
@@ -110,7 +110,6 @@ class Gravity_Flow_Field_User extends GF_Field_Select {
 
 		return $value;
 	}
-
 }
 
 GF_Fields::register( new Gravity_Flow_Field_User() );

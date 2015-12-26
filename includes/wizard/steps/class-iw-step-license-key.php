@@ -17,7 +17,7 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 
 		</p>
 		<div>
-			<input type="text" class="regular-text" id="license_key" value="<?php echo esc_attr( $this->license_key ); ?>" name="license_key" placeholder="<?php esc_attr_e('Enter Your License Key', 'gravityflow'); ?>" />
+			<input type="text" class="regular-text" id="license_key" value="<?php echo esc_attr( $this->license_key ); ?>" name="license_key" placeholder="<?php esc_attr_e( 'Enter Your License Key', 'gravityflow' ); ?>" />
 			<?php
 			$key_error = $this->validation_message( 'license_key', false );
 			if ( $key_error ) {
@@ -45,7 +45,7 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 		}
 	}
 
-	function get_title(){
+	function get_title() {
 		return esc_html__( 'License Key', 'gravityflow' );
 	}
 
@@ -61,7 +61,7 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 			$valid_key = false;
 		} else {
 			$license_info = gravity_flow()->activate_license( $license_key );
-			if ( empty( $license_info ) ||  $license_info->license !== 'valid' ){
+			if ( empty( $license_info ) ||  $license_info->license !== 'valid' ) {
 				$message = "&nbsp;<i class='fa fa-times gf_keystatus_invalid'></i> <span class='gf_keystatus_invalid_text'>" . __( 'Invalid or Expired Key : Please make sure you have entered the correct value and that your key is not expired.', 'gravityflow' ) . '</span>';
 				$this->set_field_validation_result( 'license_key', $message );
 				$valid_key = false;
@@ -78,7 +78,7 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 		return $valid;
 	}
 
-	function install(){
+	function install() {
 		if ( $this->license_key ) {
 			$gravityflow = gravity_flow();
 
@@ -88,8 +88,7 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 		}
 	}
 
-	function get_previous_button_text(){
+	function get_previous_button_text() {
 		return '';
 	}
-
 }

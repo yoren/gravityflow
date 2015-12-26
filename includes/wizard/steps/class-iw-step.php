@@ -9,14 +9,14 @@ abstract class Gravity_Flow_Installation_Wizard_Step extends stdClass {
 
 	private $_step_values;
 
-	function __construct( $values = array() ){
+	function __construct( $values = array() ) {
 		if ( empty( $this->_name ) ) {
 			throw new Exception( 'Name not set' );
 		}
 		$this->_step_values = $values;
 	}
 
-	function get_name(){
+	function get_name() {
 		return $this->_name;
 	}
 
@@ -24,7 +24,7 @@ abstract class Gravity_Flow_Installation_Wizard_Step extends stdClass {
 		return $key == $this->get_name();
 	}
 
-	function get_title(){
+	function get_title() {
 		return '';
 	}
 
@@ -40,33 +40,33 @@ abstract class Gravity_Flow_Installation_Wizard_Step extends stdClass {
 		unset( $this->_step_values[ $key ] );
 	}
 
-	function &__get( $key ){
+	function &__get( $key ) {
 		if ( ! isset( $this->_step_values[ $key ] ) ) {
 			$this->_step_values[ $key ] = '';
 		}
 		return $this->_step_values[ $key ];
 	}
 
-	function get_values(){
+	function get_values() {
 		return $this->_step_values;
 	}
 
-	function display(){
+	function display() {
 	}
 
-	function validate( $posted_values ){
+	function validate( $posted_values ) {
 		// Assign $this->_validation_result;
 		return true;
 	}
 
-	function get_field_validation_result( $key ){
+	function get_field_validation_result( $key ) {
 		if ( ! isset( $this->_field_validation_results[ $key ] ) ) {
 			$this->_field_validation_results[ $key ] = '';
 		}
 		return $this->_field_validation_results[ $key ];
 	}
 
-	function set_field_validation_result( $key, $text ){
+	function set_field_validation_result( $key, $text ) {
 		$this->_field_validation_results[ $key ] = $text;
 	}
 
@@ -74,11 +74,11 @@ abstract class Gravity_Flow_Installation_Wizard_Step extends stdClass {
 		$this->_validation_summary = $text;
 	}
 
-	function get_validation_summary(){
+	function get_validation_summary() {
 		return $this->_validation_summary;
 	}
 
-	function validation_message( $key, $echo = true ){
+	function validation_message( $key, $echo = true ) {
 		$message = '';
 		$validation_result = $this->get_field_validation_result( $key );
 		if ( ! empty( $validation_result ) ) {
@@ -91,31 +91,31 @@ abstract class Gravity_Flow_Installation_Wizard_Step extends stdClass {
 		return $message;
 	}
 
-	function is_complete(){
+	function is_complete() {
 	}
 
-	function get_next_button_text(){
+	function get_next_button_text() {
 		return __( 'Next', 'gravityflow' );
 	}
 
-	function get_previous_button_text(){
+	function get_previous_button_text() {
 		return __( 'Back', 'gravityflow' );
 	}
 
-	function update( $values ){
+	function update( $values ) {
 		update_option( 'gravityflow_installation_wizard_' . $this->get_name(), $values );
 		$this->_step_values = $values;
 	}
 
-	function summary( $echo = true ){
+	function summary( $echo = true ) {
 		return '';
 	}
 
-	function install(){
+	function install() {
 		// do something
 	}
 
-	function flush_values(){
+	function flush_values() {
 		delete_option( 'gravityflow_installation_wizard_' . $this->get_name() );
 	}
 }

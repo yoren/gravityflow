@@ -70,7 +70,6 @@ class Gravity_Flow_Status {
 				echo sprintf( '<br /><a class="gravityflow-export-status-button button" data-filter_args="%s">%s</a>', $filter_args_str, esc_html__( 'Export', 'gravityflow' ) );
 				echo sprintf( '<img class="gravityflow-spinner" src="%s" style="display:none;margin:5px"/>', GFCommon::get_base_url() . '/images/spinner.gif' );
 			}
-
 		} else {
 			$upload_dir = wp_upload_dir();
 			if ( ! is_writeable( $upload_dir['basedir'] ) ) {
@@ -114,8 +113,6 @@ class Gravity_Flow_Status {
 			return $response;
 		}
 	}
-
-
 }
 
 
@@ -207,7 +204,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		$args = wp_parse_args( $args, $default_args );
 
-		require_once( ABSPATH .'wp-admin/includes/template.php');
+		require_once( ABSPATH .'wp-admin/includes/template.php' );
 		if ( ! class_exists( 'WP_Screen' ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/class-wp-screen.php' );
 		}
@@ -246,19 +243,19 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$views = array(
 			'all'       => sprintf( '<a href="%s"%s>%s</a>', esc_url( remove_query_arg( array(
 				'status',
-				'paged'
+				'paged',
 			) ) ), $current === 'all' || $current == '' ? ' class="current"' : '', esc_html__( 'All', 'gravityflow' ) . $total_count ),
 			'pending'   => sprintf( '<a href="%s"%s>%s</a>', esc_url( add_query_arg( array(
 				'status' => 'pending',
-				'paged'  => false
+				'paged'  => false,
 			) ) ), $current === 'pending' ? ' class="current"' : '', esc_html( $pending_label ) . $pending_count ),
 			'complete'  => sprintf( '<a href="%s"%s>%s</a>', esc_url( add_query_arg( array(
 				'status' => 'complete',
-				'paged'  => false
+				'paged'  => false,
 			) ) ), $current === 'complete' ? ' class="current"' : '',esc_html( $complete_label ) . $complete_count ),
 			'cancelled' => sprintf( '<a href="%s"%s>%s</a>', esc_url( add_query_arg( array(
 				'status' => 'cancelled',
-				'paged'  => false
+				'paged'  => false,
 			) ) ), $current === 'cancelled' ? ' class="current"' : '', esc_html( $cancelled_label ) . $cancelled_count ),
 		);
 
@@ -303,7 +300,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 					'operator' => $init_field_operator,
 					'value'    => $value,
 				),
-			)
+			),
 		);
 
 		?>
@@ -516,12 +513,11 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$user_id = $item['created_by'];
 		if ( $user_id ) {
 			$user = get_user_by( 'id', $user_id );
-			if ( empty ( $user ) || is_wp_error( $user ) ) {
+			if ( empty( $user ) || is_wp_error( $user ) ) {
 				$display_name = $user_id . ' ' . esc_html__( '(deleted)', 'gravityflow' );
 			} else {
 				$display_name = $user->display_name;
 			}
-
 		} else {
 			$display_name = $item['ip'];
 		}
@@ -574,7 +570,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			'id'                    => array( 'id', false ),
 			'created_by'            => array( 'created_by', false ),
 			'workflow_final_status' => array( 'workflow_final_status', false ),
-			'date_created'          => array( 'date_created', false )
+			'date_created'          => array( 'date_created', false ),
 		);
 
 		return $sortable_columns;
@@ -746,7 +742,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		} else {
 			$form_ids = $this->get_workflow_form_ids();
 
-			if ( empty ( $form_ids ) ) {
+			if ( empty( $form_ids ) ) {
 				$results            = new stdClass();
 				$results->pending   = 0;
 				$results->complete  = 0;
@@ -844,7 +840,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			} else {
 				echo "<td $attributes>";
 				echo $this->column_default( $item, $column_name );
-				echo "</td>";
+				echo '</td>';
 			}
 		}
 	}
@@ -1077,7 +1073,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$nonce  = filter_input( INPUT_POST, '_wpnonce', FILTER_SANITIZE_STRING );
 			$nonce_action = 'bulk-' . $this->_args['plural'];
 
-			if ( ! wp_verify_nonce( $nonce, $nonce_action ) ){
+			if ( ! wp_verify_nonce( $nonce, $nonce_action ) ) {
 				wp_die();
 			}
 		}
@@ -1087,7 +1083,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		}
 
 		$entry_ids = rgpost( 'entry_ids' );
-		if ( empty ( $entry_ids ) || ! is_array( $entry_ids ) ) {
+		if ( empty( $entry_ids ) || ! is_array( $entry_ids ) ) {
 			return;
 		}
 

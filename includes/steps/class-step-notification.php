@@ -20,13 +20,13 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 	public function get_label() {
 		return esc_html__( 'Notification', 'gravityflow' );
 	}
-	public function get_icon_url(){
+	public function get_icon_url() {
 		return '<i class="fa fa-envelope-o"></i>';
 	}
 
 
 
-	public function get_settings(){
+	public function get_settings() {
 
 		$form = $this->get_form();
 		$notfications = $form['notifications'];
@@ -63,7 +63,7 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 							'name'          => 'workflow_notification_enabled',
 							'default_value' => false,
 						),
-					)
+					),
 				),
 				array(
 					'name'    => 'workflow_notification_type',
@@ -87,7 +87,7 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 				),
 				array(
 					'name'  => 'workflow_notification_routing',
-					'label' => __( 'Routing', 'gravityflow' ) ,
+					'label' => __( 'Routing', 'gravityflow' ),
 					'type'  => 'user_routing',
 				),
 				array(
@@ -101,7 +101,7 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 					'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
 					'label' => __( 'From Email', 'gravityflow' ),
 					'type'  => 'text',
-					'default_value' => '{admin_email}'
+					'default_value' => '{admin_email}',
 				),
 				array(
 					'name'  => 'workflow_notification_reply_to',
@@ -130,7 +130,7 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 		);
 	}
 
-	function process(){
+	function process() {
 
 		if ( class_exists( 'GFPDF_Core' ) ) {
 			global $gfpdf;
@@ -164,7 +164,7 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 		return true;
 	}
 
-	public function send_workflow_notification(){
+	public function send_workflow_notification() {
 
 		if ( ! $this->workflow_notification_enabled ) {
 			return;
@@ -213,6 +213,5 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 		$this->add_note( $note );
 
 	}
-
 }
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Notification() );

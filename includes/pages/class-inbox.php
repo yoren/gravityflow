@@ -179,7 +179,7 @@ class Gravity_Flow_Inbox {
 				<div id="gravityflow-no-pending-tasks-content">
 					<i class="fa fa-check-circle-o gravityflow-inbox-check"></i>
 					<br/><br/>
-					<?php esc_html_e( "No pending tasks", 'gravityflow' ); ?>
+					<?php esc_html_e( 'No pending tasks', 'gravityflow' ); ?>
 				</div>
 
 			</div>

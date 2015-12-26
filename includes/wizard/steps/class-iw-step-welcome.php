@@ -12,12 +12,11 @@ class Gravity_Flow_Installation_Wizard_Step_Welcome extends Gravity_Flow_Install
 	<?php
 	}
 
-	function get_next_button_text(){
+	function get_next_button_text() {
 		return esc_html__( 'Get Started', 'gravityflow' );
 	}
 
-	function get_title(){
+	function get_title() {
 		return esc_html__( 'Welcome', 'gravityflow' );
 	}
-
 }

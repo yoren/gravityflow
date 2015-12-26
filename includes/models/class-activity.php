@@ -7,7 +7,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 
 class Gravity_Flow_Activity {
 
-	public static function get_activity_log_table_name(){
+	public static function get_activity_log_table_name() {
 		global $wpdb;
 
 		return $wpdb->prefix . 'gravityflow_activity_log';
@@ -26,13 +26,13 @@ class Gravity_Flow_Activity {
 		return $results;
 	}
 
-	public static function get_report_data_for_all_forms( $start_date, $end_date = '' ){
+	public static function get_report_data_for_all_forms( $start_date, $end_date = '' ) {
 		global $wpdb;
 
 		$table   = self::get_activity_log_table_name();
 
 		$form_ids = self::get_form_ids();
-		if ( empty ( $form_ids ) ) {
+		if ( empty( $form_ids ) ) {
 			return false;
 		}
 		$in_str_arr    = array_fill( 0, count( $form_ids ), '%d' );
@@ -53,7 +53,7 @@ GROUP BY form_id", $start_date );
 
 	}
 
-	public static function get_report_data_for_form( $form_id, $start_date, $end_date = '' ){
+	public static function get_report_data_for_form( $form_id, $start_date, $end_date = '' ) {
 		global $wpdb;
 
 
@@ -73,7 +73,7 @@ GROUP BY YEAR(date_created), MONTH(date_created)", $form_id, $start_date );
 
 	}
 
-	public static function get_report_data_for_form_by_step( $form_id, $start_date, $end_date = '' ){
+	public static function get_report_data_for_form_by_step( $form_id, $start_date, $end_date = '' ) {
 		global $wpdb;
 
 		$table   = self::get_activity_log_table_name();
@@ -92,7 +92,7 @@ GROUP BY feed_id", $form_id, $start_date );
 
 	}
 
-	public static function get_report_data_for_step_by_assignee( $step_id, $start_date, $end_date = '' ){
+	public static function get_report_data_for_step_by_assignee( $step_id, $start_date, $end_date = '' ) {
 		global $wpdb;
 
 		$table   = self::get_activity_log_table_name();
@@ -111,7 +111,7 @@ GROUP BY assignee_id, assignee_type", $step_id, $start_date );
 
 	}
 
-	public static function get_report_data_for_form_by_assignee( $form_id, $start_date, $end_date = '' ){
+	public static function get_report_data_for_form_by_assignee( $form_id, $start_date, $end_date = '' ) {
 		global $wpdb;
 
 		$table   = self::get_activity_log_table_name();
@@ -130,7 +130,7 @@ GROUP BY assignee_id, assignee_type", $form_id, $start_date );
 
 	}
 
-	public static function get_report_data_for_all_forms_by_assignee( $start_date, $end_date = '' ){
+	public static function get_report_data_for_all_forms_by_assignee( $start_date, $end_date = '' ) {
 		global $wpdb;
 
 		$table   = self::get_activity_log_table_name();
@@ -148,13 +148,13 @@ GROUP BY assignee_id, assignee_type", $start_date );
 
 	}
 
-	public static function get_report_data_for_assignee_by_month( $assignee_type, $assignee_id, $start_date, $end_date = '' ){
+	public static function get_report_data_for_assignee_by_month( $assignee_type, $assignee_id, $start_date, $end_date = '' ) {
 		global $wpdb;
 
 		$table   = self::get_activity_log_table_name();
 
 		$form_ids = self::get_form_ids();
-		if ( empty ( $form_ids ) ) {
+		if ( empty( $form_ids ) ) {
 			return false;
 		}
 		$in_str_arr    = array_fill( 0, count( $form_ids ), '%d' );
@@ -176,9 +176,7 @@ GROUP BY YEAR(date_created), MONTH(date_created)", $assignee_type, $assignee_id,
 
 	}
 
-	public static function get_form_ids(){
+	public static function get_form_ids() {
 		return gravity_flow()->get_workflow_form_ids();
 	}
-
-
 }

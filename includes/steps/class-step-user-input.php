@@ -26,11 +26,11 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		return true;
 	}
 
-	public function get_icon_url(){
+	public function get_icon_url() {
 		return '<i class="fa fa-pencil" ></i>';
 	}
 
-	public function get_settings(){
+	public function get_settings() {
 
 		$account_choices = gravity_flow()->get_users_as_choices();
 
@@ -110,7 +110,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 							'name'          => 'assignee_notification_enabled',
 							'default_value' => 1,
 						),
-					)
+					),
 				),
 				array(
 					'name'  => 'assignee_notification_from_name',
@@ -147,7 +147,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 					'name'  => 'assignee_notification_message',
 					'label' => 'Message',
 					'type'  => 'visual_editor',
-					'default_value' => esc_html__( 'A new entry requires your input', 'gravityflow' )
+					'default_value' => esc_html__( 'A new entry requires your input', 'gravityflow' ),
 				),
 				array(
 					'name' => 'resend_assignee_email',
@@ -156,10 +156,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 					'text' => array(
 						'default_value' => 7,
 						'before_input' => __( 'Resend the assignee email after', 'gravityflow' ),
-						'after_input' => ' ' . __( 'day(s)', 'gravityflow' )
-					)
+						'after_input' => ' ' . __( 'day(s)', 'gravityflow' ),
+					),
 				),
-			)
+			),
 		);
 	}
 
@@ -184,10 +184,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				foreach ( $this->assignees as $assignee_key ) {
 					list( $assignee_type, $assignee_id ) = explode( '|', $assignee_key );
 					$assignee_details[] = new Gravity_Flow_Assignee( array(
-							'id'              => $assignee_id,
-							'type'            => $assignee_type,
-							'editable_fields' => $this->editable_fields,
-						), $this );
+						'id'              => $assignee_id,
+						'type'            => $assignee_type,
+						'editable_fields' => $this->editable_fields,
+					), $this );
 				}
 				break;
 			case 'routing' :
@@ -229,7 +229,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		return $assignee_details;
 	}
 
-	public function get_next_step_id(){
+	public function get_next_step_id() {
 		if ( isset( $this->_next_step_id ) ) {
 			return $this->_next_step_id;
 		}
@@ -280,7 +280,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		return true;
 	}
 
-	public function get_editable_fields(){
+	public function get_editable_fields() {
 		if ( $token = gravity_flow()->decode_access_token() ) {
 			$current_user_key = sanitize_text_field( $token['sub'] );
 		} else {
@@ -312,7 +312,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	}
 
 
-	public function maybe_process_status_update( $form, $entry ){
+	public function maybe_process_status_update( $form, $entry ) {
 
 		$feedback = false;
 
@@ -376,7 +376,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	 *
 	 * @return string|bool If processed return a message to be displayed to the user.
 	 */
-	public function process_assignee_status( $assignee, $new_status, $form ){
+	public function process_assignee_status( $assignee, $new_status, $form ) {
 		if ( $new_status == 'complete' ) {
 			$current_user_status = $assignee->get_status();
 
@@ -421,7 +421,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	/**
 	 * @param Gravity_Flow_Assignee[] $previous_assignees
 	 */
-	public function maybe_adjust_assignment( $previous_assignees ){
+	public function maybe_adjust_assignment( $previous_assignees ) {
 
 		gravity_flow()->log_debug( __METHOD__ . '(): Starting' );
 
@@ -450,7 +450,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	}
 
 
-	public function workflow_detail_status_box( $form ){
+	public function workflow_detail_status_box( $form ) {
 		global $current_user;
 
 		$form_id = absint( $form['id'] );
@@ -499,7 +499,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 							$email = $assignee_id;
 							$status_label = $this->get_status_label( $assignee_status );
 							echo sprintf( '<li>%s: %s (%s)</li>', esc_html__( 'Email', 'gravityflow' ), $email,  $status_label );
-							if ( $email == rgget('gflow_access_email' ) ) {
+							if ( $email == rgget( 'gflow_access_email' ) ) {
 								$editable_fields = $assignee['editable_fields'];
 							} elseif ( $token = gravity_flow()->decode_access_token() ) {
 								if ( $email == gravity_flow()->parse_token_assignee( $token )->get_id() ) {
@@ -598,7 +598,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	<?php
 	}
 
-	public function entry_detail_status_box( $form ){
+	public function entry_detail_status_box( $form ) {
 		$status = $this->evaluate_status();
 		?>
 		<h4 style="padding:10px;"><?php echo $this->get_name() . ': ' . $status ?></h4>
@@ -712,7 +712,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			} else {
 				GFFormsModel::save_input( $form, $field, $lead, $current_fields, $field->id );
 			}
-
 		}
 
 		if ( ! empty( $calculation_fields ) ) {
@@ -729,10 +728,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 					if ( ! in_array( $calculation_field->id, $editable_fields ) ) {
 						// Make sure calculated product names and quantities are saved as if they're submitted.
-						$value = array( $calculation_field->id . '.1' => $lead[ $calculation_field->id . '.1'] );
-						$_POST[ 'input_' . $calculation_field->id . '_1' ] = $calculation_field->get_field_label( false, $value);
+						$value = array( $calculation_field->id . '.1' => $lead[ $calculation_field->id . '.1' ] );
+						$_POST[ 'input_' . $calculation_field->id . '_1' ] = $calculation_field->get_field_label( false, $value );
 						$quantity = trim( $lead[ $calculation_field->id . '.3' ] );
-						if ( $calculation_field->disableQuantity && empty ( $quantity ) ) {
+						if ( $calculation_field->disableQuantity && empty( $quantity ) ) {
 							$_POST[ 'input_' . $calculation_field->id . '_3' ] = 1;
 						} else {
 							$_POST[ 'input_' . $calculation_field->id . '_3' ] = $quantity;
@@ -747,7 +746,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 					GFFormsModel::refresh_lead_field_value( $lead['id'], $calculation_field->id );
 				}
 			}
-
 		}
 
 		GFFormsModel::refresh_product_cache( $form, $lead = RGFormsModel::get_lead( $lead['id'] ) );
@@ -768,15 +766,13 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	 *
 	 * @return mixed
 	 */
-	public function replace_variables($text, $assignee){
+	public function replace_variables( $text, $assignee ) {
 		$text = parent::replace_variables( $text, $assignee );
 		$comment = rgpost( 'gravityflow_note' );
 		$text = str_replace( '{workflow_note}', $comment, $text );
 
 		return $text;
 	}
-
-
 }
 
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_User_Input() );

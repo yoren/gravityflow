@@ -70,7 +70,7 @@ class Gravity_Flow_Installation_Wizard_Step_Updates extends Gravity_Flow_Install
 	<?php
 	}
 
-	function get_title(){
+	function get_title() {
 		return esc_html__( 'Background Updates', 'gravityflow' );
 	}
 
@@ -84,7 +84,7 @@ class Gravity_Flow_Installation_Wizard_Step_Updates extends Gravity_Flow_Install
 		return $valid;
 	}
 
-	function summary( $echo = true ){
+	function summary( $echo = true ) {
 		$html = $this->background_updates !== 'disabled' ? esc_html__( 'Enabled', 'gravityflow' ) . '&nbsp;<i class="fa fa-check gf_valid"></i>' :   esc_html__( 'Disabled', 'gravityflow' ) . '&nbsp;<i class="fa fa-times gf_invalid"></i>' ;
 		if ( $echo ) {
 			echo $html;
@@ -92,7 +92,7 @@ class Gravity_Flow_Installation_Wizard_Step_Updates extends Gravity_Flow_Install
 		return $html;
 	}
 
-	function install(){
+	function install() {
 		$gravityflow = gravity_flow();
 
 		$settings = $gravityflow->get_app_settings();
@@ -100,5 +100,4 @@ class Gravity_Flow_Installation_Wizard_Step_Updates extends Gravity_Flow_Install
 		gravity_flow()->update_app_settings( $settings );
 
 	}
-
 }

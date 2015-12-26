@@ -82,16 +82,13 @@ class Gravity_Flow_Reports {
 		if ( $args['category'] == 'assignee' ) {
 			if ( empty( $args['assignee_key'] ) ) {
 				self::report_form_by_assignee( $form_id, $args );
-			} else {
-
 			}
-
 		} elseif ( $args['category'] == 'step' ) {
 			if ( empty( $args['step_id'] ) ) {
 				self::report_form_by_step( $form_id, $args );
 			} else {
 				$step_id = $args['step_id'];
-				if ( empty ( $args['assignee_id'] ) ) {
+				if ( empty( $args['assignee_id'] ) ) {
 					self::report_step_by_assignee( $step_id, $args );
 				} else {
 					$assignee_type = $args['assignee_type'];
@@ -105,7 +102,7 @@ class Gravity_Flow_Reports {
 
 	}
 
-	public static function report_all_forms( $args ){
+	public static function report_all_forms( $args ) {
 
 		$defaults = array(
 			'start_date' => date( 'Y-m-d', strtotime( '-1 year' ) ),
@@ -117,14 +114,14 @@ class Gravity_Flow_Reports {
 
 		$rows = Gravity_Flow_Activity::get_report_data_for_all_forms( $args['start_date'] );
 
-		if ( empty ( $rows ) ) {
+		if ( empty( $rows ) ) {
 			esc_html_e( 'No data to display', 'gravityflow' );
 			return;
 		}
 
 		$chart_data = array();
 
-		$chart_data[] = array( esc_html__( 'Form', 'gravityflow' ), esc_html__( 'Workflows Completed', 'gravityflow' ), esc_html__( 'Average Duration (hours)', 'gravityflow' )  );
+		$chart_data[] = array( esc_html__( 'Form', 'gravityflow' ), esc_html__( 'Workflows Completed', 'gravityflow' ), esc_html__( 'Average Duration (hours)', 'gravityflow' ) );
 
 		foreach ( $rows as $row ) {
 			$form = GFAPI::get_form( $row->form_id );
@@ -135,7 +132,7 @@ class Gravity_Flow_Reports {
 		$chart_options = array(
 			'chart' => array(
 				'title' => esc_html__( 'Forms', 'gravityflow' ),
-				'subtitle' => esc_html__( 'Workflows completed and average duration', 'gravityflow' )
+				'subtitle' => esc_html__( 'Workflows completed and average duration', 'gravityflow' ),
 			),
 			'bars' => 'horizontal',
 			'height' => 200 + count( $rows ) * 100,
@@ -147,7 +144,7 @@ class Gravity_Flow_Reports {
 				'x' => array(
 					'count' => array( 'side' => 'top', 'label' => esc_html__( 'Workflows Completed', 'gravityflow' ) ),
 					'average_duration' => array( 'label' => esc_html__( 'Average Duration (hours)', 'gravityflow' ) ),
-				)
+				),
 			),
 		);
 
@@ -157,7 +154,7 @@ class Gravity_Flow_Reports {
 		echo '<div id="gravityflow_chart_top_level" style="padding:20px;background-color:white;" class="gravityflow_chart" data-type="Bar" data-table="' . $data_table_json . '" data-options="' . $options_json . '""></div>';
 	}
 
-	public static function report_form_by_month( $form_id, $args ){
+	public static function report_form_by_month( $form_id, $args ) {
 
 		$defaults = array(
 			'start_date' => date( 'Y-m-d', strtotime( '-1 year' ) ),
@@ -169,14 +166,14 @@ class Gravity_Flow_Reports {
 
 		$rows = Gravity_Flow_Activity::get_report_data_for_form( $form_id, $args['start_date'] );
 
-		if ( empty ( $rows ) ) {
+		if ( empty( $rows ) ) {
 			esc_html_e( 'No data to display', 'gravityflow' );
 			return;
 		}
 
 		$chart_data = array();
 
-		$chart_data[] = array( esc_html__( 'Month', 'gravityflow' ), esc_html__( 'Workflows Completed', 'gravityflow' ), esc_html__( 'Average Duration (hours)', 'gravityflow' )  );
+		$chart_data[] = array( esc_html__( 'Month', 'gravityflow' ), esc_html__( 'Workflows Completed', 'gravityflow' ), esc_html__( 'Average Duration (hours)', 'gravityflow' ) );
 		global $wp_locale;
 		foreach ( $rows as $row ) {
 			$chart_data[] = array( $wp_locale->get_month( $row->month ), absint( $row->c ), absint( $row->av ) / HOUR_IN_SECONDS );
@@ -187,7 +184,7 @@ class Gravity_Flow_Reports {
 		$chart_options = array(
 			'chart' => array(
 				'title' => esc_html( $form['title'] ),
-				'subtitle' => esc_html__( 'Workflows completed and average duration', 'gravityflow' )
+				'subtitle' => esc_html__( 'Workflows completed and average duration', 'gravityflow' ),
 			),
 			'bars' => 'horizontal',
 			'height' => 200 + count( $rows ) * 100,
@@ -199,7 +196,7 @@ class Gravity_Flow_Reports {
 				'x' => array(
 					'count' => array( 'side' => 'top', 'label' => esc_html__( 'Workflows Completed', 'gravityflow' ) ),
 					'average_duration' => array( 'label' => esc_html__( 'Average Duration (hours)', 'gravityflow' ) ),
-				)
+				),
 			),
 		);
 
@@ -209,7 +206,7 @@ class Gravity_Flow_Reports {
 		echo '<div id="gravityflow_chart_top_level" style="padding:20px;background-color:white;" class="gravityflow_chart" data-type="Bar" data-table="' . $data_table_json . '" data-options="' . $options_json . '""></div>';
 	}
 
-	public static function report_form_by_step( $form_id, $args ){
+	public static function report_form_by_step( $form_id, $args ) {
 
 		$defaults = array(
 			'start_date' => date( 'Y-m-d', strtotime( '-1 year' ) ),
@@ -221,18 +218,18 @@ class Gravity_Flow_Reports {
 
 		$rows = Gravity_Flow_Activity::get_report_data_for_form_by_step( $form_id, $args['start_date'] );
 
-		if ( empty ( $rows ) ) {
+		if ( empty( $rows ) ) {
 			esc_html_e( 'No data to display', 'gravityflow' );
 			return;
 		}
 
 		$chart_data = array();
 
-		$chart_data[] = array( esc_html__( 'Step', 'gravityflow' ), esc_html__( 'Completed', 'gravityflow' ), esc_html__( 'Average Duration (hours)', 'gravityflow' )  );
+		$chart_data[] = array( esc_html__( 'Step', 'gravityflow' ), esc_html__( 'Completed', 'gravityflow' ), esc_html__( 'Average Duration (hours)', 'gravityflow' ) );
 
 		foreach ( $rows as $row ) {
 			$step = gravity_flow()->get_step( $row->feed_id );
-			if ( empty ( $step ) ) {
+			if ( empty( $step ) ) {
 				continue;
 			}
 			$name = esc_html( $step->get_name() );
@@ -244,7 +241,7 @@ class Gravity_Flow_Reports {
 		$chart_options = array(
 			'chart' => array(
 				'title' => esc_html( $form['title'] ),
-				'subtitle' => esc_html__( 'Step completed and average duration', 'gravityflow' )
+				'subtitle' => esc_html__( 'Step completed and average duration', 'gravityflow' ),
 			),
 			'bars' => 'horizontal',
 			'height' => 200 + count( $rows ) * 100,
@@ -256,7 +253,7 @@ class Gravity_Flow_Reports {
 				'x' => array(
 					'count' => array( 'side' => 'top', 'label' => esc_html__( 'Completed', 'gravityflow' ) ),
 					'average_duration' => array( 'label' => esc_html__( 'Average Duration (hours)', 'gravityflow' ) ),
-				)
+				),
 			),
 		);
 
@@ -266,7 +263,7 @@ class Gravity_Flow_Reports {
 		echo '<div id="gravityflow_chart_top_level" style="padding:20px;background-color:white;" class="gravityflow_chart" data-type="Bar" data-table="' . $data_table_json . '" data-options="' . $options_json . '""></div>';
 	}
 
-	public static function report_step_by_assignee( $step_id, $args ){
+	public static function report_step_by_assignee( $step_id, $args ) {
 
 		$defaults = array(
 			'start_date' => date( 'Y-m-d', strtotime( '-1 year' ) ),
@@ -277,20 +274,20 @@ class Gravity_Flow_Reports {
 		$args = array_merge( $defaults, $args );
 
 		$step = gravity_flow()->get_step( $step_id );
-		if ( empty ( $step ) ) {
+		if ( empty( $step ) ) {
 			return;
 		}
 
 		$rows = Gravity_Flow_Activity::get_report_data_for_step_by_assignee( $step_id, $args['start_date'] );
 
-		if ( empty ( $rows ) ) {
+		if ( empty( $rows ) ) {
 			esc_html_e( 'No data to display', 'gravityflow' );
 			return;
 		}
 
 		$chart_data = array();
 
-		$chart_data[] = array( esc_html__( 'Assignee', 'gravityflow' ), esc_html__( 'Completed', 'gravityflow' ), esc_html__( 'Average Duration (hours)', 'gravityflow' )  );
+		$chart_data[] = array( esc_html__( 'Assignee', 'gravityflow' ), esc_html__( 'Completed', 'gravityflow' ), esc_html__( 'Average Duration (hours)', 'gravityflow' ) );
 
 		foreach ( $rows as $row ) {
 			if ( $row->assignee_type == 'user_id' ) {
@@ -306,7 +303,7 @@ class Gravity_Flow_Reports {
 		$chart_options = array(
 			'chart' => array(
 				'title' => esc_html( $step->get_name() ),
-				'subtitle' => esc_html__( 'Step completed and average duration by assignee', 'gravityflow' )
+				'subtitle' => esc_html__( 'Step completed and average duration by assignee', 'gravityflow' ),
 			),
 			'bars' => 'horizontal',
 			'height' => 200 + count( $rows ) * 100,
@@ -318,7 +315,7 @@ class Gravity_Flow_Reports {
 				'x' => array(
 					'count' => array( 'side' => 'top', 'label' => esc_html__( 'Completed', 'gravityflow' ) ),
 					'average_duration' => array( 'label' => esc_html__( 'Average Duration (hours)', 'gravityflow' ) ),
-				)
+				),
 			),
 		);
 
@@ -328,7 +325,7 @@ class Gravity_Flow_Reports {
 		echo '<div id="gravityflow_chart_top_level" style="padding:20px;background-color:white;" class="gravityflow_chart" data-type="Bar" data-table="' . $data_table_json . '" data-options="' . $options_json . '""></div>';
 	}
 
-	public static function report_form_by_assignee( $form_id, $args ){
+	public static function report_form_by_assignee( $form_id, $args ) {
 
 		$defaults = array(
 			'start_date' => date( 'Y-m-d', strtotime( '-1 year' ) ),
@@ -341,14 +338,14 @@ class Gravity_Flow_Reports {
 
 		$rows = Gravity_Flow_Activity::get_report_data_for_form_by_assignee( $form_id,  $args['start_date'] );
 
-		if ( empty ( $rows ) ) {
+		if ( empty( $rows ) ) {
 			esc_html_e( 'No data to display', 'gravityflow' );
 			return;
 		}
 
 		$chart_data = array();
 
-		$chart_data[] = array( esc_html__( 'Assignee', 'gravityflow' ), esc_html__( 'Completed', 'gravityflow' ), esc_html__( 'Average Duration (hours)', 'gravityflow' )  );
+		$chart_data[] = array( esc_html__( 'Assignee', 'gravityflow' ), esc_html__( 'Completed', 'gravityflow' ), esc_html__( 'Average Duration (hours)', 'gravityflow' ) );
 
 		foreach ( $rows as $row ) {
 			if ( $row->assignee_type == 'user_id' ) {
@@ -366,7 +363,7 @@ class Gravity_Flow_Reports {
 		$chart_options = array(
 			'chart' => array(
 				'title' => esc_html( $form['title'] ),
-				'subtitle' => esc_html__( 'Step completed and average duration by assignee', 'gravityflow' )
+				'subtitle' => esc_html__( 'Step completed and average duration by assignee', 'gravityflow' ),
 			),
 			'bars' => 'horizontal',
 			'height' => 200 + count( $rows ) * 100,
@@ -378,7 +375,7 @@ class Gravity_Flow_Reports {
 				'x' => array(
 					'count' => array( 'side' => 'top', 'label' => esc_html__( 'Completed', 'gravityflow' ) ),
 					'average_duration' => array( 'label' => esc_html__( 'Average Duration (hours)', 'gravityflow' ) ),
-				)
+				),
 			),
 		);
 
@@ -388,7 +385,7 @@ class Gravity_Flow_Reports {
 		echo '<div id="gravityflow_chart_top_level" style="padding:20px;background-color:white;" class="gravityflow_chart" data-type="Bar" data-table="' . $data_table_json . '" data-options="' . $options_json . '""></div>';
 	}
 
-	public static function report_assignee_by_month( $assignee_type, $assignee_id, $args ){
+	public static function report_assignee_by_month( $assignee_type, $assignee_id, $args ) {
 
 		$defaults = array(
 			'start_date' => date( 'Y-m-d', strtotime( '-1 year' ) ),
@@ -400,14 +397,14 @@ class Gravity_Flow_Reports {
 
 		$rows = Gravity_Flow_Activity::get_report_data_for_assignee_by_month( $assignee_type, $assignee_id,  $args['start_date'] );
 
-		if ( empty ( $rows ) ) {
+		if ( empty( $rows ) ) {
 			esc_html_e( 'No data to display', 'gravityflow' );
 			return;
 		}
 
 		$chart_data = array();
 
-		$chart_data[] = array( esc_html__( 'Month', 'gravityflow' ), esc_html__( 'Workflows Completed', 'gravityflow' ), esc_html__( 'Average Duration (hours)', 'gravityflow' )  );
+		$chart_data[] = array( esc_html__( 'Month', 'gravityflow' ), esc_html__( 'Workflows Completed', 'gravityflow' ), esc_html__( 'Average Duration (hours)', 'gravityflow' ) );
 		global $wp_locale;
 		foreach ( $rows as $row ) {
 			$chart_data[] = array( $wp_locale->get_month( $row->month ) . ' ' . $row->year, absint( $row->c ), absint( $row->av ) / HOUR_IN_SECONDS );
@@ -423,7 +420,7 @@ class Gravity_Flow_Reports {
 		$chart_options = array(
 			'chart' => array(
 				'title' => esc_html( $display_name ),
-				'subtitle' => esc_html__( 'Workflows completed and average duration by month', 'gravityflow' )
+				'subtitle' => esc_html__( 'Workflows completed and average duration by month', 'gravityflow' ),
 			),
 			'bars' => 'horizontal',
 			'height' => 200 + count( $rows ) * 100,
@@ -435,7 +432,7 @@ class Gravity_Flow_Reports {
 				'x' => array(
 					'count' => array( 'side' => 'top', 'label' => esc_html__( 'Workflows Completed', 'gravityflow' ) ),
 					'average_duration' => array( 'label' => esc_html__( 'Average Duration (hours)', 'gravityflow' ) ),
-				)
+				),
 			),
 		);
 
@@ -449,7 +446,7 @@ class Gravity_Flow_Reports {
 		return gravity_flow()->format_duration( $seconds );
 	}
 
-	public static function form_drop_down( $selected_value, $echo = true){
+	public static function form_drop_down( $selected_value, $echo = true) {
 		$m = array();
 
 		$m[] = '<select id="gravityflow-form-drop-down" name="form-id">';
@@ -472,7 +469,7 @@ class Gravity_Flow_Reports {
 		$m   = array();
 		$m[] = '<select id="gravityflow-reports-range" name="range">';
 		$m[] = sprintf( '<option value="last-12-months" %s>%s</option>', selected( $selected_value, 'last-12-months', false ), esc_html__( 'Last 12 months', 'gravityflow' ) );
-		$m[] = sprintf( '<option value="last-6-months" %s>%s</option>', selected( $selected_value, 'last-6-months', false  ), esc_html__( 'Last 6 months', 'gravityflow' ) );
+		$m[] = sprintf( '<option value="last-6-months" %s>%s</option>', selected( $selected_value, 'last-6-months', false ), esc_html__( 'Last 6 months', 'gravityflow' ) );
 		$m[] = sprintf( '<option value="last-3-months" %s>%s</option>', selected( $selected_value, 'last-3-months', false ), esc_html__( 'Last 3 months', 'gravityflow' ) );
 		$m[] = '</select>';
 
@@ -495,13 +492,13 @@ class Gravity_Flow_Reports {
 
 		$html = join( '', $m );
 
-		if ( $echo ){
+		if ( $echo ) {
 			echo $html;
 		}
 		return $html;
 	}
 
-	public static function step_filter( $args ){
+	public static function step_filter( $args ) {
 		?>
 		<form method="GET" action="<?php echo esc_url( $args['base_url'] );?>">
 			<input type="hidden" value="step" name="view"/>
@@ -530,11 +527,11 @@ class Gravity_Flow_Reports {
 		return $html;
 	}
 
-	public static function get_form_ids(){
+	public static function get_form_ids() {
 		return gravity_flow()->get_workflow_form_ids();
 	}
 
-	public static function get_filter_config_vars(){
+	public static function get_filter_config_vars() {
 		$form_ids = self::get_form_ids();
 		$steps_vars = array();
 		foreach ( $form_ids as $form_id ) {

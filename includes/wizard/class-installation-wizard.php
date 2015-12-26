@@ -7,7 +7,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 class Gravity_Flow_Installation_Wizard {
 	private $_step_class_names = array();
 
-	function __construct(){
+	function __construct() {
 		$path = gravity_flow()->get_base_path()  . '/includes/wizard/steps/';
 		require_once( $path . 'class-iw-step.php' );
 		$classes = array();
@@ -21,13 +21,13 @@ class Gravity_Flow_Installation_Wizard {
 			$classes[ $step_name ] = $class_name;
 		}
 		$sorted = array();
-		foreach ( $this->get_sorted_step_names() as $sorted_step_name ){
+		foreach ( $this->get_sorted_step_names() as $sorted_step_name ) {
 			$sorted[ $sorted_step_name ] = $classes[ $sorted_step_name ];
 		}
 		$this->_step_class_names = $sorted;
 	}
 
-	public function get_sorted_step_names(){
+	public function get_sorted_step_names() {
 		return array(
 			'welcome',
 			'license_key',
@@ -36,7 +36,7 @@ class Gravity_Flow_Installation_Wizard {
 		);
 	}
 
-	public function display(){
+	public function display() {
 
 		$name = rgpost( '_step_name' );
 
@@ -181,7 +181,7 @@ class Gravity_Flow_Installation_Wizard {
 	 *
 	 * @return Gravity_Flow_Installation_Wizard_Step
 	 */
-	public function get_step( $name = false ){
+	public function get_step( $name = false ) {
 
 		if ( empty( $name ) ) {
 			$class_names = array_keys( $this->_step_class_names );
@@ -200,7 +200,7 @@ class Gravity_Flow_Installation_Wizard {
 	 *
 	 * @return bool|Gravity_Flow_Installation_Wizard_Step
 	 */
-	public function get_previous_step( $current_step ){
+	public function get_previous_step( $current_step ) {
 		$current_step_name = $current_step->get_name();
 
 		$step_names = array_keys( $this->_step_class_names );
@@ -220,7 +220,7 @@ class Gravity_Flow_Installation_Wizard {
 	 *
 	 * @return bool|Gravity_Flow_Installation_Wizard_Step
 	 */
-	public function get_next_step( $current_step ){
+	public function get_next_step( $current_step ) {
 		$current_step_name = $current_step->get_name();
 
 		$step_names = array_keys( $this->_step_class_names );
@@ -235,7 +235,7 @@ class Gravity_Flow_Installation_Wizard {
 		return $this->get_step( $next_step_name );
 	}
 
-	public function complete_installation(){
+	public function complete_installation() {
 		foreach ( array_keys( $this->_step_class_names ) as $step_name ) {
 			$step = $this->get_step( $step_name );
 			$step->install();
@@ -262,7 +262,7 @@ class Gravity_Flow_Installation_Wizard {
 	 *
 	 * @return string
 	 */
-	public function progress( $current_step, $echo = true ){
+	public function progress( $current_step, $echo = true ) {
 		$html = '<ul id="gform_installation_progress">';
 		$done = true;
 		$current_step_name = $current_step->get_name();
@@ -287,12 +287,12 @@ class Gravity_Flow_Installation_Wizard {
 		return $html;
 	}
 
-	public function get_step_index( $step ){
+	public function get_step_index( $step ) {
 		$i = array_search( $step->get_name(), array_keys( $this->_step_class_names ) );
 		return $i;
 	}
 
-	public function summary(){
+	public function summary() {
 		?>
 
 		<h3>Summary</h3>
@@ -327,5 +327,4 @@ class Gravity_Flow_Installation_Wizard {
 			$step->flush_values();
 		}
 	}
-
 }

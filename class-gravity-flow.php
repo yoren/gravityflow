@@ -80,9 +80,9 @@ if ( class_exists( 'GFForms' ) ) {
 		} /* do nothing */
 
 
-		public function pre_init(){
+		public function pre_init() {
 			add_filter( 'gform_export_form', array( $this, 'filter_gform_export_form' ) );
-			add_action( 'gform_forms_post_import', array( $this, 'action_gform_forms_post_import') );
+			add_action( 'gform_forms_post_import', array( $this, 'action_gform_forms_post_import' ) );
 			parent::pre_init();
 			add_filter( 'cron_schedules', array( $this, 'filter_cron_schedule' ) );
 			if ( ! wp_next_scheduled( 'gravityflow_cron' ) ) {
@@ -155,7 +155,7 @@ if ( class_exists( 'GFForms' ) ) {
 			add_action( 'wp_ajax_rg_delete_file', array( 'RGForms', 'delete_file' ) );
 		}
 
-		public function init_frontend(){
+		public function init_frontend() {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_scripts' ), 10 );
 			add_action( 'template_redirect', array( $this, 'action_template_redirect' ), 2 );
 			if ( class_exists( 'GFSignature' ) ) {
@@ -164,11 +164,11 @@ if ( class_exists( 'GFForms' ) ) {
 			}
 		}
 
-		public function get_short_title(){
+		public function get_short_title() {
 			return $this->translate_navigation_label( 'workflow' );
 		}
 
-		public function setup(){
+		public function setup() {
 			parent::setup();
 		}
 
@@ -187,7 +187,7 @@ if ( class_exists( 'GFForms' ) ) {
 			$this->setup_db();
 		}
 
-		private function setup_db(){
+		private function setup_db() {
 			global $wpdb;
 
 			require_once( ABSPATH . '/wp-admin/includes/upgrade.php' );
@@ -251,12 +251,12 @@ PRIMARY KEY  (id)
 					'strings' => array(
 						'user' => array(
 							'defaults' => array(
-								'label' => esc_html__( 'User', 'gravityflow' )
+								'label' => esc_html__( 'User', 'gravityflow' ),
 							),
 						),
 						'role' => array(
 							'defaults' => array(
-								'label' => esc_html__( 'Role', 'gravityflow' )
+								'label' => esc_html__( 'Role', 'gravityflow' ),
 							),
 						),
 					),
@@ -284,7 +284,7 @@ PRIMARY KEY  (id)
 						'accounts'     => $users,
 						'fields'       => $routing_fields,
 						'input_fields' => $input_fields,
-					)
+					),
 				),
 				array(
 					'handle'  => 'gravityflow_form_settings_js',
@@ -298,7 +298,7 @@ PRIMARY KEY  (id)
 					'strings' => array(
 						'feedId' => absint( rgget( 'fid' ) ),
 						'formId' => absint( rgget( 'id' ) ),
-					)
+					),
 				),
 				array(
 					'handle'  => 'gravityflow_feed_list',
@@ -330,15 +330,15 @@ PRIMARY KEY  (id)
 							'query' => 'page=gravityflow-status',
 						),
 					),
-					'strings' => array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) )
+					'strings' => array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ),
 				),
 				array(
 					'handle'  => 'google_charts',
 					'src'     => 'https://www.google.com/jsapi',
 					'version' => $this->_version,
 					'enqueue' => array(
-						array( 'query' => 'page=gravityflow-reports', ),
-					)
+						array( 'query' => 'page=gravityflow-reports' ),
+					),
 				),
 				array(
 					'handle'  => 'gravityflow_reports',
@@ -346,15 +346,15 @@ PRIMARY KEY  (id)
 					'version' => $this->_version,
 					'deps' => array( 'jquery', 'google_charts' ),
 					'enqueue' => array(
-						array( 'query' => 'page=gravityflow-reports', ),
-					)
+						array( 'query' => 'page=gravityflow-reports' ),
+					),
 				),
 			);
 
 			return array_merge( parent::scripts(), $scripts );
 		}
 
-		public function enqueue_frontend_scripts(){
+		public function enqueue_frontend_scripts() {
 			global $wp_query;
 			if ( isset( $wp_query->posts ) && is_array( $wp_query->posts ) ) {
 				$shortcode_found = $this->look_for_shortcode();
@@ -378,7 +378,7 @@ PRIMARY KEY  (id)
 			}
 		}
 
-		public function look_for_shortcode(){
+		public function look_for_shortcode() {
 			global $wp_query;
 
 			$shortcode_found = false;
@@ -391,7 +391,7 @@ PRIMARY KEY  (id)
 			return $shortcode_found;
 		}
 
-		public function filter_gform_enqueue_scripts( $form, $is_ajax ){
+		public function filter_gform_enqueue_scripts( $form, $is_ajax ) {
 
 			if ( $this->has_enhanced_dropdown( $form ) ) {
 				wp_enqueue_script( 'gform_gravityforms' );
@@ -403,7 +403,7 @@ PRIMARY KEY  (id)
 			}
 		}
 
-		public function filter_gform_register_init_scripts( $form, $field_values, $is_ajax ){
+		public function filter_gform_register_init_scripts( $form, $field_values, $is_ajax ) {
 
 			if ( $this->has_enhanced_dropdown( $form ) ) {
 				$chosen_script = $this->get_chosen_init_script( $form );
@@ -470,7 +470,7 @@ PRIMARY KEY  (id)
 						array(
 							'query'      => 'page=gravityflow-activity',
 						),
-					)
+					),
 				),
 				array(
 					'handle'  => 'gravityflow_inbox',
@@ -480,7 +480,7 @@ PRIMARY KEY  (id)
 						array(
 							'query'      => 'page=gravityflow-inbox',
 						),
-					)
+					),
 				),
 				array(
 					'handle'  => 'gravityflow_entry_detail',
@@ -491,7 +491,7 @@ PRIMARY KEY  (id)
 						array(
 							'query'      => 'page=gravityflow-inbox&view=entry',
 						),
-					)
+					),
 				),
 				array(
 					'handle'  => 'gravityflow_submit',
@@ -501,7 +501,7 @@ PRIMARY KEY  (id)
 						array(
 							'query'      => 'page=gravityflow-submit',
 						),
-					)
+					),
 				),
 				array(
 					'handle'  => 'gravityflow_status',
@@ -521,7 +521,7 @@ PRIMARY KEY  (id)
 						array(
 							'query'      => 'page=gravityflow-activity',
 						),
-					)
+					),
 				),
 				array(
 					'handle'  => 'gravityflow_feed_list',
@@ -568,7 +568,7 @@ PRIMARY KEY  (id)
 			return esc_html__( 'Workflow Step Settings', 'gravityflow' );
 		}
 
-		public function set_option($status, $option, $value){
+		public function set_option($status, $option, $value) {
 			if ( 'entries_per_page' == $option ) {
 				return $value;
 			}
@@ -640,8 +640,8 @@ PRIMARY KEY  (id)
 			return $choices;
 		}
 
-		public function get_assignee_fields_as_choices( $form = null){
-			if ( empty( $form ) ){
+		public function get_assignee_fields_as_choices( $form = null ) {
+			if ( empty( $form ) ) {
 				$form_id = absint( rgget( 'id' ) );
 				$form = GFAPI::get_form( $form_id );
 			}
@@ -663,8 +663,8 @@ PRIMARY KEY  (id)
 			return $assignee_fields;
 		}
 
-		public function get_email_fields_as_choices( $form = null){
-			if ( empty( $form ) ){
+		public function get_email_fields_as_choices( $form = null) {
+			if ( empty( $form ) ) {
 				$form_id = absint( rgget( 'id' ) );
 				$form = GFAPI::get_form( $form_id );
 			}
@@ -731,7 +731,7 @@ PRIMARY KEY  (id)
 						'type'     => 'text',
 						'class'    => 'medium',
 						'required' => true,
-						'tooltip'  => '<h6>' . __( 'Name', 'gravityflow' ) . '</h6>' . __( 'Enter a name to uniquely identify this step.', 'gravityflow' )
+						'tooltip'  => '<h6>' . __( 'Name', 'gravityflow' ) . '</h6>' . __( 'Enter a name to uniquely identify this step.', 'gravityflow' ),
 					),
 					array(
 						'name'  => 'description',
@@ -753,10 +753,10 @@ PRIMARY KEY  (id)
 						'label' => esc_html__( 'Schedule' ),
 						'type' => 'schedule',
 						'tooltip' => esc_html__( 'Scheduling a step will queue entries and prevent them from starting this step until the specified date or until the delay period has elapsed.', 'gravityflow' )
-									. ' ' . esc_html__( 'Note: the schedule setting requires the WordPress Cron which is included and enabled by default unless your host has deactivated it.', 'gravityflow' )
+									. ' ' . esc_html__( 'Note: the schedule setting requires the WordPress Cron which is included and enabled by default unless your host has deactivated it.', 'gravityflow' ),
 
 					),
-				)
+				),
 			);
 
 			foreach ( $step_classes as $step_class ) {
@@ -770,32 +770,32 @@ PRIMARY KEY  (id)
 				}
 				$status_options = $step_class->get_status_config();
 
-                if ( $step_class->supports_expiration() ) {
-                    $final_status_choices = array();
-                    if ( count( $status_options ) > 1 ) {
-                        foreach ( $status_options as $status_option ) {
-                            $final_status_choices[] = array( 'label' => $status_option['status_label'], 'value' => $status_option['status'] );
-                        }
-                    }
-                    $step_settings['fields'][] = array(
-                        'name' => 'expiration',
-                        'label' => esc_html__( 'Expiration', 'gravityflow' ),
-                        'tooltip' => esc_html__( 'Enable the expiration setting to allow this step to expire. Once expired, the entry will automatically proceed to the step configured in the Next Step setting(s) below.', 'gravityflow' ),
-                        'type'       => 'expiration',
-                        'status_choices' => $final_status_choices
-                    );
-                }
+				if ( $step_class->supports_expiration() ) {
+					$final_status_choices = array();
+					if ( count( $status_options ) > 1 ) {
+						foreach ( $status_options as $status_option ) {
+							$final_status_choices[] = array( 'label' => $status_option['status_label'], 'value' => $status_option['status'] );
+						}
+					}
+					$step_settings['fields'][] = array(
+						'name' => 'expiration',
+						'label' => esc_html__( 'Expiration', 'gravityflow' ),
+						'tooltip' => esc_html__( 'Enable the expiration setting to allow this step to expire. Once expired, the entry will automatically proceed to the step configured in the Next Step setting(s) below.', 'gravityflow' ),
+						'type'       => 'expiration',
+						'status_choices' => $final_status_choices,
+						);
+				}
 
-                foreach ( $status_options as $status_option ) {
-                    $setting_label = isset( $status_option['destination_setting_label'] ) ?  $status_option['destination_setting_label'] : esc_html__( 'Next step if', 'gravityflow' ) . ' ' . $status_option['status_label'];
-                    $default_destination = isset( $status_option['default_destination'] ) ? $status_option['default_destination'] : 'next';
-                    $step_settings['fields'][] = array(
-                        'name' => 'destination_' . $status_option['status'],
-                        'label' => $setting_label,
-                        'type'       => 'step_selector',
-                        'default_value' => $default_destination,
-                    );
-                }
+				foreach ( $status_options as $status_option ) {
+					$setting_label = isset( $status_option['destination_setting_label'] ) ?  $status_option['destination_setting_label'] : esc_html__( 'Next step if', 'gravityflow' ) . ' ' . $status_option['status_label'];
+					$default_destination = isset( $status_option['default_destination'] ) ? $status_option['default_destination'] : 'next';
+					$step_settings['fields'][] = array(
+					'name' => 'destination_' . $status_option['status'],
+					'label' => $setting_label,
+					'type'       => 'step_selector',
+					'default_value' => $default_destination,
+					);
+				}
 				$step_settings['dependency'] = array( 'field' => 'step_type', 'values' => array( $type ) );
 				$settings[] = $step_settings;
 			}
@@ -815,16 +815,16 @@ PRIMARY KEY  (id)
 						'value'    => __( 'Update Step Settings', 'gravityflow' ),
 						'messages' => array(
 							'success' => $success_feedback,
-							'error'   => __( 'There was an error while saving the step settings', 'gravityflow' )
-						)
+							'error'   => __( 'There was an error while saving the step settings', 'gravityflow' ),
+						),
 					),
-				)
+				),
 			);
 
 			return $settings;
 		}
 
-		public function ajax_feed_message(){
+		public function ajax_feed_message() {
 
 			$current_step_id = absint( rgget( 'fid' ) );
 
@@ -834,11 +834,10 @@ PRIMARY KEY  (id)
 				if ( empty( $current_step ) ) {
 				    $html = '<div class="delete-alert alert_red"><i class="fa fa-exclamation-triangle gf_invalid"></i> ' . esc_html__( 'This step type is missing.', 'gravityflow' ) . '</div>';
 				    echo $html;
-			die();
+					die();
 				} else {
 				    $entry_count = $current_step->entry_count();
 				}
-
 			}
 			if ( $entry_count > 0 ) {
 				$html = '<div class="delete-alert alert_red"><i class="fa fa-exclamation-triangle gf_invalid"></i> ' . sprintf( _n( 'There is %s entry currently on this step. This entry may be affected if the settings are changed.', 'There are %s entries currently on this step. These entries may be affected if the settings are changed.', $entry_count, 'gravityflow' ), $entry_count ) . '</div>';
@@ -851,7 +850,7 @@ PRIMARY KEY  (id)
 			die();
 		}
 
-		public function save_feed_validation_callback( $field, $field_setting ){
+		public function save_feed_validation_callback( $field, $field_setting ) {
 
 			$current_step_id = $this->get_current_feed_id();
 			$entry_count = 0;
@@ -886,10 +885,10 @@ PRIMARY KEY  (id)
 			}
 		}
 
-		public function maybe_refresh_assignees(){
+		public function maybe_refresh_assignees() {
 			$results = array(
 				'removed' => array(),
-				'added' => array()
+				'added' => array(),
 			);
 
 			if ( ! ( rgget( 'page' ) == 'gf_edit_forms' && rgget( 'view' ) == 'settings' && rgget( 'subview' ) == 'gravityflow' ) ) {
@@ -898,7 +897,7 @@ PRIMARY KEY  (id)
 
 			$current_step_id = $this->get_current_feed_id();
 			$current_step = $this->get_step( $current_step_id );
-			if ( empty ( $current_step ) ){
+			if ( empty ( $current_step ) ) {
 				return $results;
 			}
 			$assignee_settings['assignees'] = array();
@@ -917,10 +916,10 @@ PRIMARY KEY  (id)
 			return $results;
 		}
 
-		public function refresh_assignees(){
+		public function refresh_assignees() {
 			$results = array(
 				'removed' => array(),
-				'added' => array()
+				'added' => array(),
 			);
 			$current_step_id = $this->get_current_feed_id();
 			$form_id = absint( rgget( 'id' ) );
@@ -939,7 +938,7 @@ PRIMARY KEY  (id)
 			// Avoid paging through entries from GFAPI::get_entries() by using custom query.
 			$assignee_status_by_entry = $this->get_asssignee_status_by_entry( $form['id'] );
 
-			foreach ( $assignee_status_by_entry as $entry_id => $assignee_status ){
+			foreach ( $assignee_status_by_entry as $entry_id => $assignee_status ) {
 				$entry = GFAPI::get_entry( $entry_id );
 				$step_for_entry = $this->get_step( $current_step_id, $entry );
 				if ( $entry['workflow_step'] != $step_for_entry->get_id() ) {
@@ -985,7 +984,7 @@ PRIMARY KEY  (id)
 			return $results;
 		}
 
-		public function get_asssignee_status_by_entry( $form_id ){
+		public function get_asssignee_status_by_entry( $form_id ) {
 			global $wpdb;
 			$assignee_status_by_entry = array();
 			$table = GFFormsModel::get_lead_meta_table_name();
@@ -1056,7 +1055,7 @@ PRIMARY KEY  (id)
 			return $assignee_status_by_entry;
 		}
 
-		public function filter_gform_entries_field_value( $value, $form_id, $field_id, $entry ){
+		public function filter_gform_entries_field_value( $value, $form_id, $field_id, $entry ) {
 			if ( $field_id == 'workflow_step' ) {
 				if ( empty( $value ) ) {
 					$value = '';
@@ -1082,8 +1081,8 @@ PRIMARY KEY  (id)
 			die();
 		}
 
-		function ajax_print_entries(){
-			require_once($this->get_base_path() . '/includes/pages/class-print-entries.php');
+		function ajax_print_entries() {
+			require_once( $this->get_base_path() . '/includes/pages/class-print-entries.php' );
 			Gravity_Flow_Print_Entries::render();
 			exit();
 		}
@@ -1122,9 +1121,8 @@ PRIMARY KEY  (id)
 			foreach ( $feeds as $feed ) {
 			    $step = Gravity_Flow_Steps::create( $feed, $entry );
 				if ( $step ) {
-                    $steps[] = $step;
+					$steps[] = $step;
 				}
-
 			}
 
 			return $steps;
@@ -1175,7 +1173,7 @@ PRIMARY KEY  (id)
 					$checked     = checked( $selected_value, $radio_value, false );
 
 					$div_class = rgar( $choice, 'div_class' );
-					if ( ! empty ( $div_class ) ) {
+					if ( ! empty( $div_class ) ) {
 						$div_class = ' ' . sanitize_html_class( $div_class );
 					}
 
@@ -1216,7 +1214,7 @@ PRIMARY KEY  (id)
 			return $html;
 		}
 
-		public function settings_schedule( $field ){
+		public function settings_schedule( $field ) {
 
 			$scheduled = array(
 				'name' => 'scheduled',
@@ -1243,7 +1241,7 @@ PRIMARY KEY  (id)
 						'label' => esc_html__( 'Date' ),
 						'value' => 'date',
 					),
-				)
+				),
 			);
 
 			$schedule_date = array(
@@ -1283,7 +1281,7 @@ PRIMARY KEY  (id)
 						'label' => esc_html__( 'Week(s)', 'gravityflow' ),
 						'value' => 'weeks',
 					),
-				)
+				),
 			);
 
 			$this->settings_checkbox( $scheduled );
@@ -1336,7 +1334,7 @@ PRIMARY KEY  (id)
 
 		}
 
-		public function settings_expiration( $field ){
+		public function settings_expiration( $field ) {
 
 			$expiration = array(
 				'name' => 'expiration',
@@ -1363,7 +1361,7 @@ PRIMARY KEY  (id)
 						'label' => esc_html__( 'Date' ),
 						'value' => 'date',
 					),
-				)
+				),
 			);
 
 			$expiration_date = array(
@@ -1403,7 +1401,7 @@ PRIMARY KEY  (id)
 						'label' => esc_html__( 'Week(s)', 'gravityflow' ),
 						'value' => 'weeks',
 					),
-				)
+				),
 			);
 
 			$this->settings_checkbox( $expiration );
@@ -1509,7 +1507,7 @@ PRIMARY KEY  (id)
 			<?php
 		}
 
-		function settings_checkbox_and_text( $field, $echo = true ){
+		function settings_checkbox_and_text( $field, $echo = true ) {
 			// prepare checkbox
 
 			$checkbox_input = rgars( $field, 'checkbox' );
@@ -1549,15 +1547,15 @@ PRIMARY KEY  (id)
 						'name'          => $checkbox_field['name'],
 						'label'         => $checkbox_field['label'],
 						'onchange'      => sprintf( "( function( $, elem ) {
-						$( elem ).parents( 'td' ).css( 'position', 'relative' );
-						if( $( elem ).prop( 'checked' ) ) {
-							$( '%1\$s' ).fadeIn();
-						} else {
-							$( '%1\$s' ).fadeOut();
-						}
-					} )( jQuery, this );",
-							"#{$text_field['name']}Span" )
-					)
+								$( elem ).parents( 'td' ).css( 'position', 'relative' );
+								if( $( elem ).prop( 'checked' ) ) {
+									$( '%1\$s' ).fadeIn();
+								} else {
+									$( '%1\$s' ).fadeOut();
+								}
+							} )( jQuery, this );",
+						"#{$text_field['name']}Span" ),
+					),
 				);
 			}
 
@@ -1568,7 +1566,7 @@ PRIMARY KEY  (id)
 				$this->settings_checkbox( $checkbox_field, false ),
 				$text_field['name'] . 'Span',
 				$is_enabled ? '' : 'hidden',
-				esc_html( rgar($text_field, 'before_input') ),
+				esc_html( rgar( $text_field, 'before_input' ) ),
 				$this->settings_text( $text_field, false ),
 				$text_field['tooltip'] ? gform_tooltip( $text_field['tooltip'], rgar( $text_field, 'tooltip_class' ) . ' tooltip ' . $text_field['name'], true ) : ''
 			);
@@ -1667,7 +1665,7 @@ PRIMARY KEY  (id)
 			);
 		}
 
-		public function get_column_value_step_type( $item ){
+		public function get_column_value_step_type( $item ) {
 			$step = $this->get_step( $item['id'] );
 			if ( empty( $step ) ) {
 				$type_key = $item['meta']['step_type'];
@@ -1679,7 +1677,7 @@ PRIMARY KEY  (id)
 		}
 
 
-		public function get_column_value_entry_count( $item ){
+		public function get_column_value_entry_count( $item ) {
 			$form_id = rgget( 'id' );
 			$form_id = absint( $form_id );
 			$step = $this->get_step( $item['id'] );
@@ -1729,7 +1727,7 @@ PRIMARY KEY  (id)
 
 			foreach ( $steps as $step ) {
 
-				if (  empty ( $step ) || ! $step->is_active() ) {
+				if (  empty( $step ) || ! $step->is_active() ) {
 					continue;
 				}
 				$status_choices = array();
@@ -1754,7 +1752,7 @@ PRIMARY KEY  (id)
 					'filter'                     => array(
 						'operators' => array( 'is', 'isnot' ),
 						'choices'   => $status_choices,
-					)
+					),
 				);
 
 				$workflow_final_status_options = array_merge( $workflow_final_status_options, $status_choices );
@@ -1769,7 +1767,7 @@ PRIMARY KEY  (id)
 
 				$workflow_final_status_options[] = array(
 					'value' => 'pending',
-					'text'  => $this->translate_status_label( 'pending' )
+					'text'  => $this->translate_status_label( 'pending' ),
 				);
 
 				$entry_meta['workflow_final_status'] = array(
@@ -1780,7 +1778,7 @@ PRIMARY KEY  (id)
 					'filter'                     => array(
 						'operators' => array( 'is', 'isnot' ),
 						'choices'   => $workflow_final_status_options,
-					)
+					),
 				);
 
 				$entry_meta['workflow_step'] = array(
@@ -1791,7 +1789,7 @@ PRIMARY KEY  (id)
 					'filter'                     => array(
 						'operators' => array( 'is', 'isnot' ),
 						'choices'   => $step_choices,
-					)
+					),
 				);
 
 				$entry_meta['workflow_timestamp'] = array(
@@ -1910,7 +1908,7 @@ PRIMARY KEY  (id)
 
 						if ( $current_step !== false ) {
 
-							if ( $current_step->supports_expiration() && $current_step->expiration ){
+							if ( $current_step->supports_expiration() && $current_step->expiration ) {
 								$expiration_timestamp = $current_step->get_expiration_timestamp();
 								$expiration_date_str = date( 'Y-m-d H:i:s', $expiration_timestamp );
 								$expiration_date = get_date_from_gmt( $expiration_date_str );
@@ -1958,7 +1956,7 @@ PRIMARY KEY  (id)
 
 			$steps = $this->get_steps( $form['id'] );
 
-			if ( GFAPI::current_user_can_any( 'gravityflow_workflow_detail_admin_actions' )  && ! empty ( $steps ) ) :
+			if ( GFAPI::current_user_can_any( 'gravityflow_workflow_detail_admin_actions' )  && ! empty( $steps ) ) :
 
 			?>
 
@@ -2058,7 +2056,7 @@ PRIMARY KEY  (id)
 
 		public function get_current_step( $form, $entry ) {
 
-			if ( ! isset ( $entry['workflow_step'] ) ) {
+			if ( ! isset( $entry['workflow_step'] ) ) {
 				return false;
 			}
 
@@ -2078,7 +2076,7 @@ PRIMARY KEY  (id)
 		 *
 		 * @return bool|Gravity_Flow_Step
 		 */
-		public function get_next_step( $step, $entry, $form ){
+		public function get_next_step( $step, $entry, $form ) {
 			$keep_looking = true;
 			$form_id = absint( $form['id'] );
 			$steps = $this->get_steps( $form_id, $entry );
@@ -2105,7 +2103,7 @@ PRIMARY KEY  (id)
 			return $step;
 		}
 
-		public function get_step( $step_id, $entry = null ){
+		public function get_step( $step_id, $entry = null ) {
 
 			$feed = $this->get_feed( $step_id );
 			if ( ! $feed ) {
@@ -2124,7 +2122,7 @@ PRIMARY KEY  (id)
 		 *
 		 * @return bool|Gravity_Flow_Step
 		 */
-		public function get_next_step_in_list( $form, $current_step, $entry, $steps = array() ){
+		public function get_next_step_in_list( $form, $current_step, $entry, $steps = array() ) {
 			$form_id = absint( $form['id'] );
 
 			if ( empty( $steps ) ) {
@@ -2146,25 +2144,25 @@ PRIMARY KEY  (id)
 			return false;
 		}
 
-		public function get_app_menu_items(){
+		public function get_app_menu_items() {
 			$menu_items = array();
 
 			$inbox_item = array(
 				'name' => 'gravityflow-inbox',
 				'label' => esc_html( $this->translate_navigation_label( 'inbox' ) ),
 				'permission' => 'gravityflow_inbox',
-				'callback' => array( $this, 'inbox' )
+				'callback' => array( $this, 'inbox' ),
 			);
 			$menu_items[] = $inbox_item;
 
 			$form_ids = $this->get_published_form_ids();
 
-			if ( ! empty( $form_ids ) ){
+			if ( ! empty( $form_ids ) ) {
 				$menu_item = array(
 					'name' => 'gravityflow-submit',
 					'label' => esc_html( $this->translate_navigation_label( 'submit' ) ),
 					'permission' => 'gravityflow_submit',
-					'callback' => array( $this, 'submit' )
+					'callback' => array( $this, 'submit' ),
 				);
 				$menu_items[] = $menu_item;
 			}
@@ -2173,7 +2171,7 @@ PRIMARY KEY  (id)
 				'name' => 'gravityflow-status',
 				'label' => esc_html( $this->translate_navigation_label( 'status' ) ),
 				'permission' => 'gravityflow_status',
-				'callback' => array( $this, 'status' )
+				'callback' => array( $this, 'status' ),
 			);
 			$menu_items[] = $status_item;
 
@@ -2181,7 +2179,7 @@ PRIMARY KEY  (id)
 				'name' => 'gravityflow-help',
 				'label' => esc_html( $this->translate_navigation_label( 'help' ) ),
 				'permission' => 'gform_full_access',
-				'callback' => array( $this, 'help' )
+				'callback' => array( $this, 'help' ),
 			);
 			$menu_items[] = $help_item;
 
@@ -2189,7 +2187,7 @@ PRIMARY KEY  (id)
 				'name' => 'gravityflow-support',
 				'label' => esc_html( $this->translate_navigation_label( 'support' ) ),
 				'permission' => 'gform_full_access',
-				'callback' => array( $this, 'support' )
+				'callback' => array( $this, 'support' ),
 			);
 			$menu_items[] = $support_item;
 
@@ -2205,7 +2203,7 @@ PRIMARY KEY  (id)
 				'name' => 'gravityflow-activity',
 				'label' => esc_html( $this->translate_navigation_label( 'activity' ) ),
 				'permission' => 'gravityflow_activity',
-				'callback' => array( $this, 'activity' )
+				'callback' => array( $this, 'activity' ),
 			);
 			$menu_items[] = $activity_item;
 
@@ -2223,12 +2221,12 @@ PRIMARY KEY  (id)
 					'name' => 'settings',
 					'label' => esc_html__( 'General', 'gravityflow' ),
 					'title' => esc_html__( 'Gravity Flow Settings', 'gravityflow' ),
-					'callback' => array( $this, 'app_settings_tab' )
+					'callback' => array( $this, 'app_settings_tab' ),
 				),
 				array(
 					'name' => 'labels',
 					'label' => __( 'Labels', 'gravityflow' ),
-					'callback' => array( $this, 'app_settings_label_tab' )
+					'callback' => array( $this, 'app_settings_label_tab' ),
 				),
 				/*
 				array(
@@ -2250,12 +2248,12 @@ PRIMARY KEY  (id)
 			return $setting_tabs;
 		}
 
-		public function get_app_menu_icon(){
+		public function get_app_menu_icon() {
 			$admin_icon = $this->get_admin_icon_b64();
 			return $admin_icon;
 		}
 
-		public function app_settings_label_tab(){
+		public function app_settings_label_tab() {
 			require_once( GFCommon::get_base_path() . '/tooltips.php' );
 
 			if ( isset( $_POST['gravityflow-labels-update'] ) ) {
@@ -2290,7 +2288,7 @@ PRIMARY KEY  (id)
 					$fields = array();
 
 					foreach ( $navigation_labels as $navigation_label_key => $navigation_label ) {
-						if ( isset(  $default_navigation_labels[ $navigation_label_key ] ) ) {
+						if ( isset( $default_navigation_labels[ $navigation_label_key ] ) ) {
 							$default_navigation_label = $default_navigation_labels[ $navigation_label_key ];
 							$fields[] = sprintf( '<tr><th><label for="navigation_label_%s">%s</label></th><td><input id="navigation_label_%s" type="text" name="navigation_labels[%s]" value="%s" /></td></tr>', $navigation_label_key, $default_navigation_label, $navigation_label_key, $navigation_label_key, rgar( $custom_navigation_labels, $navigation_label_key ) );
 						}
@@ -2344,12 +2342,12 @@ PRIMARY KEY  (id)
 			<?php
 		}
 
-		public function app_tools_tab(){
+		public function app_tools_tab() {
 			require_once( GFCommon::get_base_path() . '/tooltips.php' );
 			$message = '';
 			$success = null;
 
-			if ( isset( $_POST['_revoke_token']) && check_admin_referer( 'gflow_revoke_token' ) ) {
+			if ( isset( $_POST['_revoke_token'] ) && check_admin_referer( 'gflow_revoke_token' ) ) {
 				$token_str = sanitize_text_field( $_POST['gflow_token'] );
 				$token = $this->decode_access_token( $token_str, false );
 				if ( empty( $token ) ) {
@@ -2397,7 +2395,7 @@ PRIMARY KEY  (id)
 			<?php
 		}
 
-		public function get_published_form_ids(){
+		public function get_published_form_ids() {
 			$settings = $this->get_app_settings();
 
 			if ( $settings === false ) {
@@ -2426,7 +2424,7 @@ PRIMARY KEY  (id)
 			return $published_form_ids;
 		}
 
-		public function load_screen_options(){
+		public function load_screen_options() {
 
 			$screen = get_current_screen();
 
@@ -2479,7 +2477,7 @@ PRIMARY KEY  (id)
 						'name'          => 'no_workflows',
 						'label'         => '',
 						'type'          => 'html',
-						'html'          => esc_html__( 'No workflow steps have been added to any forms yet.', 'gravityflow' )
+						'html'          => esc_html__( 'No workflow steps have been added to any forms yet.', 'gravityflow' ),
 					),
 				);
 			}
@@ -2510,7 +2508,7 @@ PRIMARY KEY  (id)
 							'choices' => array(
 								array( 'label' => __( 'On', 'gravityflow' ), 'value' => true ),
 								array( 'label' => __( 'Off', 'gravityflow' ), 'value' => false ),
-							)
+							),
 						),
 					),
 				);
@@ -2531,8 +2529,8 @@ PRIMARY KEY  (id)
 						'value'    => __( 'Update Settings', 'gravityflow' ),
 						'messages' => array(
 							'success' => __( 'Settings updated successfully', 'gravityflow' ),
-							'error'   => __( 'There was an error while saving the settings', 'gravityflow' )
-						)
+							'error'   => __( 'There was an error while saving the settings', 'gravityflow' ),
+						),
 					),
 				)
 			);
@@ -2560,7 +2558,7 @@ PRIMARY KEY  (id)
 
 		}
 
-		public function check_license( $value ){
+		public function check_license( $value ) {
 			$api_params = array(
 				'edd_action' => 'check_license',
 				'license'    => $value,
@@ -2568,12 +2566,12 @@ PRIMARY KEY  (id)
 				'url'       => home_url(),
 			);
 			// Send the remote request
-			$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params  ) );
+			$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params ) );
 			return json_decode( wp_remote_retrieve_body( $response ) );
 
 		}
 
-		public function license_validation( $field, $field_setting ){
+		public function license_validation( $field, $field_setting ) {
 			$old_license = $this->get_app_setting( 'license_key' );
 
 			if ( $old_license && $field_setting != $old_license  ) {
@@ -2582,10 +2580,10 @@ PRIMARY KEY  (id)
 					'edd_action' => 'deactivate_license',
 					'license'    => $old_license,
 					'item_name'  => urlencode( GRAVITY_FLOW_EDD_ITEM_NAME ),
-					'url'        => home_url()
+					'url'        => home_url(),
 				);
 				// Send the remote request
-				$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params  ) );
+				$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params ) );
 			}
 
 
@@ -2597,23 +2595,23 @@ PRIMARY KEY  (id)
 
 		}
 
-		public function activate_license( $license_key ){
+		public function activate_license( $license_key ) {
 			$api_params = array(
 				'edd_action' => 'activate_license',
 				'license'    => $license_key,
 				'item_name'  => urlencode( GRAVITY_FLOW_EDD_ITEM_NAME ),
-				'url'        => home_url()
+				'url'        => home_url(),
 			);
 
-			$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params  ) );
+			$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params ) );
 			return json_decode( wp_remote_retrieve_body( $response ) );
 		}
 
-		public function settings_html( $field ){
+		public function settings_html( $field ) {
 			echo $field['html'];
 		}
 
-		public function submit(){
+		public function submit() {
 
 			if ( $this->maybe_display_installation_wizard() ) {
 				return;
@@ -2622,7 +2620,7 @@ PRIMARY KEY  (id)
 			$this->submit_page( true );
 		}
 
-		public function submit_page( $admin_ui ){
+		public function submit_page( $admin_ui ) {
 			?>
 			<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_submit">
 				<?php if ( $admin_ui ) :	?>
@@ -2651,7 +2649,7 @@ PRIMARY KEY  (id)
 		<?php
 		}
 
-		public function maybe_display_installation_wizard(){
+		public function maybe_display_installation_wizard() {
 
 			if ( is_multisite() || ! current_user_can( 'gform_full_access' ) ) {
 				return false;
@@ -2799,7 +2797,7 @@ PRIMARY KEY  (id)
 
 
 
-		public function status(){
+		public function status() {
 
 			if ( $this->maybe_display_installation_wizard() ) {
 				return;
@@ -2913,7 +2911,7 @@ PRIMARY KEY  (id)
 
 
 
-		public function toolbar(){
+		public function toolbar() {
 			?>
 
 			<div id="gf_form_toolbar">
@@ -3008,12 +3006,12 @@ PRIMARY KEY  (id)
 					case 'cancel_workflow' :
 						$api = new Gravity_Flow_API( $form['id'] );
 						$success = $api->cancel_workflow( $entry );
-						$feedback = $success ? esc_html__( 'Workflow cancelled.',  'gravityflow' ) : esc_html__( 'The entry does not currently have an active step.',  'gravityflow' ) ;
+						$feedback = $success ? esc_html__( 'Workflow cancelled.',  'gravityflow' ) : esc_html__( 'The entry does not currently have an active step.', 'gravityflow' );
 						break;
 					case 'restart_step':
 						$api = new Gravity_Flow_API( $form['id'] );
 						$success = $api->restart_step( $entry );
-						$feedback = $success ? esc_html__( 'Workflow Step restarted.',  'gravityflow' ) : esc_html__( 'The entry does not currently have an active step.',  'gravityflow' ) ;
+						$feedback = $success ? esc_html__( 'Workflow Step restarted.',  'gravityflow' ) : esc_html__( 'The entry does not currently have an active step.', 'gravityflow' );
 
 					break;
 					case 'restart_workflow':
@@ -3110,7 +3108,7 @@ PRIMARY KEY  (id)
 					$this->log_debug( __METHOD__ . '() - ending workflow.' );
 					gform_delete_meta( $entry_id, 'workflow_step' );
 					$step_status = gform_get_meta( $entry_id, 'workflow_step_status_' . $step_id );
-					if ( empty ( $step_status ) ){
+					if ( empty( $step_status ) ){
 						$step_status = 'complete';
 					}
 					gform_update_meta( $entry_id, 'workflow_final_status', $step_status );
@@ -3128,7 +3126,7 @@ PRIMARY KEY  (id)
 			}
 		}
 
-		function get_first_step( $form_id, $entry ){
+		function get_first_step( $form_id, $entry ) {
 			$steps = $this->get_steps( $form_id, $entry );
 			foreach ( $steps as $step ) {
 				if ( $step->is_active() ) {
@@ -3239,14 +3237,14 @@ PRIMARY KEY  (id)
 						if ( ! class_exists( 'WP_Screen' ) ) {
 							require_once( ABSPATH . 'wp-admin/includes/screen.php' );
 						}
-						require_once( ABSPATH .'wp-admin/includes/template.php');
+						require_once( ABSPATH .'wp-admin/includes/template.php' );
 						ob_start();
 
 						$args = array(
 							'base_url' => remove_query_arg( array( 'entry-id', 'form-id', 'start-date', 'end-date', '_wpnonce', '_wp_http_referer', 'action', 'action2' ) ),
 							'detail_base_url' => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
 							'display_header' => false,
-							'action_url' => 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}?",
+							'action_url' => 'http' . ( isset( $_SERVER['HTTPS'] ) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}?",
 							'constraint_filters' => array(
 								'form_id' => $a['form'],
 							),
@@ -3309,19 +3307,19 @@ PRIMARY KEY  (id)
 			return (array) $user->roles;
 		}
 
-		public function support(){
+		public function support() {
 			require_once( $this->get_base_path() . '/includes/pages/class-support.php' );
 			Gravity_Flow_Support::display();
 		}
 
-		public function app_tab_page(){
+		public function app_tab_page() {
 			if ( $this->maybe_display_installation_wizard() ) {
 				return;
 			}
 			parent::app_tab_page();
 		}
 
-		public function help(){
+		public function help() {
 			if ( $this->maybe_display_installation_wizard() ) {
 				return;
 			}
@@ -3330,17 +3328,17 @@ PRIMARY KEY  (id)
 			Gravity_Flow_Help::display();
 		}
 
-		public function get_app_settings(){
+		public function get_app_settings() {
 			return parent::get_app_settings();
 		}
 
-		public function update_app_settings( $settings ){
+		public function update_app_settings( $settings ) {
 			parent::update_app_settings( $settings );
 		}
 
 		public function maybe_auto_update( $update, $item ) {
 			//$this->log_debug( __METHOD__ . '() - $item.' . print_r( $item, true ) );
-			if ( isset($item->slug) && $item->slug == 'gravityflow' ) {
+			if ( isset( $item->slug ) && $item->slug == 'gravityflow' ) {
 
 				$this->log_debug( __METHOD__ . '() - Starting auto-update for gravityflow.' );
 
@@ -3369,17 +3367,17 @@ PRIMARY KEY  (id)
 			return $update;
 		}
 
-		public function is_auto_update_disabled(){
+		public function is_auto_update_disabled() {
 
 			// Currently WordPress won't ask Gravity Flow to update if background updates are disabled.
 			// Let's double check anyway.
 
 			// WordPress background updates are disabled if you don't want file changes.
-			if ( defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS ){
+			if ( defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS ) {
 				return true;
 			}
 
-			if ( defined( 'WP_INSTALLING' ) ){
+			if ( defined( 'WP_INSTALLING' ) ) {
 				return true;
 			}
 
@@ -3408,7 +3406,7 @@ PRIMARY KEY  (id)
 			return $disabled;
 		}
 
-		public function uninstall(){
+		public function uninstall() {
 
 			require_once( $this->get_base_path() . '/includes/wizard/class-installation-wizard.php' );
 			$wizard = new Gravity_Flow_Installation_Wizard;
@@ -3421,7 +3419,7 @@ PRIMARY KEY  (id)
 			parent::uninstall();
 		}
 
-		private function uninstall_db(){
+		private function uninstall_db() {
 
 			global $wpdb;
 			$table = Gravity_Flow_Activity::get_activity_log_table_name();
@@ -3429,7 +3427,7 @@ PRIMARY KEY  (id)
 
 		}
 
-		public function add_timeline_note( $entry_id, $note, $user_id = false, $user_name = false ){
+		public function add_timeline_note( $entry_id, $note, $user_id = false, $user_name = false ) {
 			global $current_user;
 			if ( $user_id === false ) {
 				$user_id = $current_user->ID;
@@ -3440,7 +3438,7 @@ PRIMARY KEY  (id)
 				$user_name = $current_user->display_name;
 			}
 
-			if ( empty ( $user_name ) && $token = $this->decode_access_token() ) {
+			if ( empty( $user_name ) && $token = $this->decode_access_token() ) {
 				$user_name = $this->parse_token_assignee( $token )->get_id();
 			}
 
@@ -3501,7 +3499,7 @@ PRIMARY KEY  (id)
 			return parent::maybe_process_feed( $entry, $form );
 		}
 
-		public function get_feed_add_on_classes(){
+		public function get_feed_add_on_classes() {
 			$add_on_classes = GFAddOn::get_registered_addons();
 
 			$feed_add_on_classes = array();
@@ -3514,24 +3512,6 @@ PRIMARY KEY  (id)
 				}
 			}
 			return $feed_add_on_classes;
-		}
-
-		public function get_supported_feed_add_ons(){
-			$add_ons = array(
-				array(  'class' => 'GFMailChimp', 'name' => __( 'MailChimp', 'gravityflow' ), 'slug' => 'gravityformsmailchimp' ),
-				array(  'class' => 'GFEmma', 'name' => __( 'Emma', 'gravityflow' ), 'slug' => 'gravityformsemma' ),
-				array(  'class' => 'GFZapierData', 'name' => __( 'Zapier', 'gravityflow' ), 'slug' => 'gravityformszapier' ),
-				array(  'class' => 'GFUserData', 'name' => __( 'User Registration', 'gravityflow' ), 'slug' => 'gravityformsuserregistration' ),
-			);
-
-			$installed = array();
-			foreach ( $add_ons as $add_on ) {
-				if ( class_exists( $add_on['class'] ) ) {
-					$installed[] = $add_on;
-				}
-			}
-
-			return $installed;
 		}
 
 		public function field_settings( $position, $form_id ) {
@@ -3571,24 +3551,24 @@ PRIMARY KEY  (id)
 			<?php }
 		}
 
-		public function action_admin_enqueue_scripts(){
+		public function action_admin_enqueue_scripts() {
 			$this->maybe_enqueue_form_scripts();
 		}
 
 
-		public function maybe_enqueue_form_scripts(){
+		public function maybe_enqueue_form_scripts() {
 			if ( $this->is_workflow_detail_page() ) {
 				$this->enqueue_form_scripts();
 			}
 		}
 
-		public function enqueue_form_scripts(){
+		public function enqueue_form_scripts() {
 			$form = $this->get_current_form();
 
-			if ( empty ( $form ) ) {
+			if ( empty( $form ) ) {
 				return;
 			}
-			require_once( GFCommon::get_base_path() . '/form_display.php');
+			require_once( GFCommon::get_base_path() . '/form_display.php' );
 
 			if ( $this->has_enhanced_dropdown( $form ) ) {
 				if ( wp_script_is( 'chosen', 'registered' ) ) {
@@ -3601,13 +3581,13 @@ PRIMARY KEY  (id)
 			GFFormDisplay::enqueue_form_scripts( $form );
 		}
 
-		public function is_workflow_detail_page(){
+		public function is_workflow_detail_page() {
 			$id  = rgget( 'id' );
 			$lid = rgget( 'lid' );
 			return rgget( 'page' ) == 'gravityflow-inbox' && rgget( 'view' ) == 'entry' && ! empty( $id ) && ! empty( $lid );
 		}
 
-		function get_workflow_form_ids(){
+		function get_workflow_form_ids() {
 			if ( isset( $this->form_ids ) ) {
 				return $this->form_ids;
 			}
@@ -3624,7 +3604,7 @@ PRIMARY KEY  (id)
 			return $this->form_ids;
 		}
 
-		public function cron(){
+		public function cron() {
 			$this->log_debug( __METHOD__ . '() Starting cron.' );
 
 			$this->maybe_process_queued_entries();
@@ -3632,13 +3612,13 @@ PRIMARY KEY  (id)
 
 		}
 
-		public function maybe_process_queued_entries(){
+		public function maybe_process_queued_entries() {
 
 			$this->log_debug( __METHOD__ . '(): starting' );
 
 			$form_ids = $this->get_workflow_form_ids();
 
-			if ( empty( $form_ids  ) ) {
+			if ( empty( $form_ids ) ) {
 				return;
 			}
 
@@ -3658,7 +3638,7 @@ AND m.meta_value='queued'";
 
 			$results = $wpdb->get_results( $sql );
 
-			if ( empty ( $results ) || is_wp_error( $results ) ) {
+			if ( empty( $results ) || is_wp_error( $results ) ) {
 				return;
 			}
 
@@ -3677,7 +3657,7 @@ AND m.meta_value='queued'";
 			}
 		}
 
-		public function maybe_process_expiration_and_reminders(){
+		public function maybe_process_expiration_and_reminders() {
 
 			$this->log_debug( __METHOD__ . '(): starting' );
 
@@ -3689,7 +3669,7 @@ AND m.meta_value='queued'";
 				$steps = $this->get_steps( $form_id );
 				foreach ( $steps as $step ) {
 					if ( ! $step || ! $step instanceof Gravity_Flow_Step ) {
-						$this->log_debug( __METHOD__ . '(): step not a step!  ' . print_r( $step ) . ' - form ID: ' . $form_id);
+						$this->log_debug( __METHOD__ . '(): step not a step!  ' . print_r( $step ) . ' - form ID: ' . $form_id );
 						continue;
 					}
 
@@ -3706,7 +3686,7 @@ AND m.meta_value='queued'";
 								'key' => 'workflow_step',
 								'value' => $step->get_id(),
 							),
-						)
+						),
 					);
 
 					$paging = array(
@@ -3758,10 +3738,10 @@ AND m.meta_value='queued'";
 									$assignee->set_reminder_timestamp();
 									$this->log_debug( __METHOD__ . '(): sent reminder about entry ' . $entry['id'] . ' to ' . $assignee->get_key() );
 								}
-								if ( time() > $trigger_timestamp && $reminder_timestamp !== false ){
+								if ( time() > $trigger_timestamp && $reminder_timestamp !== false ) {
 									$this->log_debug( __METHOD__ . '(): not sending reminder to ' . $assignee->get_key() . ' for entry ' . $entry['id'] . ' because it was already sent: ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $reminder_timestamp ), 'F j, Y H:i:s' ) );
 								}
-								if ( time() < $trigger_timestamp && $reminder_timestamp == false ){
+								if ( time() < $trigger_timestamp && $reminder_timestamp == false ) {
 									$this->log_debug( __METHOD__ . '(): reminder to ' . $assignee->get_key() .' for entry ' . $entry['id'] . ' is scheduled for ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $trigger_timestamp ), 'F j, Y H:i:s' ) );
 								}
 							}
@@ -3785,7 +3765,7 @@ AND m.meta_value='queued'";
 
 		public function filter_feed_actions( $action_links, $item, $column ) {
 
-			if ( empty ( $action_links  ) ) {
+			if ( empty( $action_links  ) ) {
 				return $action_links;
 			}
 			$feed_id = $item['id'];
@@ -3798,7 +3778,7 @@ AND m.meta_value='queued'";
 			return $action_links;
 		}
 
-		public function import_gravityflow_feeds( $original_feeds, $new_form_id) {
+		public function import_gravityflow_feeds( $original_feeds, $new_form_id ) {
 			$feed_id_mappings = array();
 
 			foreach ( $original_feeds as $feed ) {
@@ -3824,9 +3804,9 @@ AND m.meta_value='queued'";
 					}
 				}
 				if ( $new_step->get_type() == 'approval' ) {
-                    if ( ! empty( $new_step->revert_buttonValue ) ) {
-                        $new_step_meta['revert_buttonValue'] = $feed_id_mappings[ $new_step->revert_buttonValue ];
-                    }
+					if ( ! empty( $new_step->revert_buttonValue ) ) {
+						$new_step_meta['revert_buttonValue'] = $feed_id_mappings[ $new_step->revert_buttonValue ];
+					}
 				}
 				if ( $step_ids_updated ) {
 					$this->update_feed_meta( $new_step->get_id(), $new_step_meta );
@@ -3834,13 +3814,13 @@ AND m.meta_value='queued'";
 			}
 		}
 
-		public function filter_wp(){
+		public function filter_wp() {
 
 			if ( isset( $_GET['gflow_access_token'] ) ) {
 
 				$token = $this->decode_access_token();
 
-				if ( ! empty ( $token ) && ! isset( $token['scopes']['action'] )&& ! is_user_logged_in() ){
+				if ( ! empty( $token ) && ! isset( $token['scopes']['action'] )&& ! is_user_logged_in() ) {
 					// Remove the token from the URL to avoid accidental sharing.
 					$secure = ( 'https' === parse_url( site_url(), PHP_URL_SCHEME ) );
 					$sanitized_cookie = sanitize_text_field( $_GET['gflow_access_token'] );
@@ -3893,7 +3873,7 @@ AND m.meta_value='queued'";
 
 				$feedback = $step->process_assignee_status( $user_id, 'user_id', $new_status, $form );
 
-				if ( ! empty ( $feedback ) ) {
+				if ( ! empty( $feedback ) ) {
 					$this->process_workflow( $form, $entry_id );
 					$this->_custom_page_content = $feedback;
 					add_filter( 'the_content', array( $this, 'custom_page_content' ) );
@@ -3901,7 +3881,7 @@ AND m.meta_value='queued'";
 			}
 		}
 
-		public function custom_page_content( $content ){
+		public function custom_page_content( $content ) {
 			$content .= $this->_custom_page_content;
 			return $content;
 		}
@@ -3916,7 +3896,7 @@ AND m.meta_value='queued'";
 		 *
 		 * @return string
 		 */
-		public function generate_access_token( $assignee, $scopes = array(), $expiration_timestamp = false) {
+		public function generate_access_token( $assignee, $scopes = array(), $expiration_timestamp = false ) {
 
 			if ( empty( $scopes ) ) {
 				$scopes = array(
@@ -3957,7 +3937,7 @@ AND m.meta_value='queued'";
 
 		public function validate_access_token( $token = false ) {
 
-			if ( empty ( $token ) ) {
+			if ( empty( $token ) ) {
 				$token = $this->get_access_token();
 			}
 
@@ -3992,7 +3972,7 @@ AND m.meta_value='queued'";
 			$body_json = base64_decode( $body_64_probably_url_decoded );
 			if ( empty( $body_json ) ) {
 				$body_json = base64_decode( urldecode( $body_64_probably_url_decoded ) );
-				if ( empty( $body_json) ) {
+				if ( empty( $body_json ) ) {
 					return false;
 				}
 			}
@@ -4019,7 +3999,7 @@ AND m.meta_value='queued'";
 			return true;
 		}
 
-		public function get_access_token(){
+		public function get_access_token() {
 			$token = false;
 			if ( empty( $token ) ) {
 				$token = rgget( 'gflow_access_token' );
@@ -4033,7 +4013,7 @@ AND m.meta_value='queued'";
 		}
 
 		public function decode_access_token( $token = false, $validate = true ) {
-			if ( empty ( $token ) ) {
+			if ( empty( $token ) ) {
 				$token = $this->get_access_token();
 			}
 
@@ -4067,7 +4047,7 @@ AND m.meta_value='queued'";
 		 * @return bool|Gravity_Flow_Assignee
 		 */
 		public function parse_token_assignee( $token ) {
-			if ( empty ( $token ) ) {
+			if ( empty( $token ) ) {
 				return false;
 			}
 
@@ -4117,7 +4097,7 @@ AND m.meta_value='queued'";
 		}
 
 		public function format_duration( $seconds ) {
-			if ( method_exists( 'DateTime', 'diff' ) ){
+			if ( method_exists( 'DateTime', 'diff' ) ) {
 				$dtF = new DateTime( '@0' );
 				$dtT = new DateTime( "@$seconds" );
 				$date_interval = $dtF->diff( $dtT );
@@ -4153,7 +4133,7 @@ AND m.meta_value='queued'";
 			}
 		}
 
-		public function get_admin_icon_b64( $color = false) {
+		public function get_admin_icon_b64( $color = false ) {
 
 			$svg_xml = '<?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
@@ -4193,20 +4173,20 @@ AND m.meta_value='queued'";
 			return $schedules;
 		}
 
-		public function get_setting( $setting_name, $default_value = '', $settings = false ){
+		public function get_setting( $setting_name, $default_value = '', $settings = false ) {
 			return parent::get_setting( $setting_name, $default_value, $settings );
 		}
 
-		public function ajax_export_status(){
-			if ( ! wp_verify_nonce( rgget('gravityflow_export_nonce'), 'gravityflow_export_nonce' ) || ! GFAPI::current_user_can_any( 'gravityflow_status') ) {
+		public function ajax_export_status() {
+			if ( ! wp_verify_nonce( rgget( 'gravityflow_export_nonce' ), 'gravityflow_export_nonce' ) || ! GFAPI::current_user_can_any( 'gravityflow_status' ) ) {
 				$response['status'] = 'error';
-				$response['message'] = __('Not authorized', 'gravityflow');
+				$response['message'] = __( 'Not authorized', 'gravityflow' );
 				$response_json = json_encode( $response );
 				echo $response_json;
 				die();
 			}
 
-			require_once( 'includes/pages/class-status.php');
+			require_once( 'includes/pages/class-status.php' );
 
 			$args['format'] = 'csv';
 			$args['per_page'] = 50;
@@ -4218,9 +4198,9 @@ AND m.meta_value='queued'";
 
 		public function ajax_download_export(){
 
-			if ( ! wp_verify_nonce( rgget('nonce'), 'gravityflow_download_export' ) || ! GFAPI::current_user_can_any( 'gravityflow_status') ) {
+			if ( ! wp_verify_nonce( rgget( 'nonce' ), 'gravityflow_download_export' ) || ! GFAPI::current_user_can_any( 'gravityflow_status' ) ) {
 				$response['status'] = 'error';
-				$response['message'] = __('Not authorized', 'gravityflow');
+				$response['message'] = __( 'Not authorized', 'gravityflow' );
 				$response_json = json_encode( $response );
 				echo $response_json;
 				die();
@@ -4257,7 +4237,7 @@ AND m.meta_value='queued'";
 
 			$custom_label = rgar( $custom_navigation_labels, $label_key );
 
-			if ( ! empty ( $custom_label) ) {
+			if ( ! empty( $custom_label) ) {
 				return $custom_label;
 			}
 
@@ -4265,10 +4245,10 @@ AND m.meta_value='queued'";
 
 			$label = rgar( $default_labels, $label_key );
 
-			return empty ( $label ) ?  $label_key :  $label;
+			return empty( $label ) ?  $label_key :  $label;
 		}
 
-		public function get_default_navigation_labels(){
+		public function get_default_navigation_labels() {
 			return array(
 				'workflow' => esc_html__( 'Workflow', 'gravityflow' ),
 				'inbox' => esc_html__( 'Inbox', 'gravityflow' ),
@@ -4292,7 +4272,7 @@ AND m.meta_value='queued'";
 
 			$custom_label = rgar( $status_labels, $status );
 
-			if ( ! empty ( $custom_label) ) {
+			if ( ! empty ( $custom_label ) ) {
 				return $custom_label;
 			}
 
@@ -4319,7 +4299,7 @@ AND m.meta_value='queued'";
 			foreach ( $steps as $step ) {
 				$status_configs = $step->get_status_config();
 				foreach ( $status_configs as $status_config ) {
-					if ( $status == strtolower( $status_config['status'] )) {
+					if ( $status == strtolower( $status_config['status'] ) ) {
 						return $step->get_status_label( $original_status );
 					}
 				}
@@ -4395,8 +4375,8 @@ AND m.meta_value='queued'";
 		}
 
 		/**
-        *  Patch until the Signature Add-On uses GF_Field
-        *
+		*  Patch until the Signature Add-On uses GF_Field
+		*
 		* @param $form
 		*
 		* @return mixed
@@ -4444,11 +4424,11 @@ AND m.meta_value='queued'";
 
 			$original_feeds = $this->get_feeds( $form_id );
 
-			$this->import_gravityflow_feeds( $original_feeds, $new_id);
+			$this->import_gravityflow_feeds( $original_feeds, $new_id );
 
 		}
 
-		public function action_gform_post_add_entry( $entry, $form ){
+		public function action_gform_post_add_entry( $entry, $form ) {
 
 			$this->log_debug( __METHOD__ . '(): starting' );
 
@@ -4472,7 +4452,6 @@ AND m.meta_value='queued'";
 			}
 			return $assignee_key;
 		}
-
 	}
 }
 

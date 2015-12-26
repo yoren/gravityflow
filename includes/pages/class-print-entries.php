@@ -134,7 +134,7 @@ class Gravity_Flow_Print_Entries {
 
 					$full_access = GFAPI::current_user_can_any( array( 'gform_full_access', 'gravityflow_status_view_all' ) );
 
-					if  ( ! ( $user_status || $full_access ) ) {
+					if ( ! ( $user_status || $full_access ) ) {
 						esc_attr_e( "You don't have permission to view this entry.", 'gravityflow' );
 						continue;
 					}

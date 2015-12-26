@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 
 	protected $_class_name = 'GFUser';
 
-	public function get_feed_add_on_class_name(){
+	public function get_feed_add_on_class_name() {
 		$class_name = class_exists( 'GF_User_Registration' ) ? 'GF_User_Registration' : 'GFUser';
 		$this->_class_name = $class_name;
 		return $class_name;
@@ -30,7 +30,7 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 		return esc_html__( 'User Registration', 'gravityflow' );
 	}
 
-	public function get_icon_url(){
+	public function get_icon_url() {
 		return '<i class="fa fa-user" style="color:darkgreen"></i>';
 	}
 
@@ -79,7 +79,6 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 		$label = $feed['meta']['feed_type'] == 'create' ? __( 'Create', 'gravityflow' ) : __( 'Update', 'gravityflow' );
 		return $label;
 	}
-
 }
 
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_User_Registration() );

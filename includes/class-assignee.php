@@ -24,7 +24,7 @@ class Gravity_Flow_Assignee {
 	/* @var Gravity_Flow_Step */
 	protected $step;
 
-	function __construct( $args = array(), $step = false) {
+	function __construct( $args = array(), $step = false ) {
 		$this->step = $step;
 		if ( is_string( $args ) ) {
 			$parts = explode( '|', $args );
@@ -34,7 +34,7 @@ class Gravity_Flow_Assignee {
 
 			$id = $args['id'];
 			$type = $args['type'];
-			if ( isset ( $args['editable_fields'] ) ) {
+			if ( isset( $args['editable_fields'] ) ) {
 				$this->editable_fields = $args['editable_fields'];
 			}
 		} else {
@@ -75,19 +75,19 @@ class Gravity_Flow_Assignee {
 		$this->key = $this->type . '|' . $this->id;
 	}
 
-	function get_id(){
+	function get_id() {
 		return $this->id;
 	}
 
-	function get_key(){
+	function get_key() {
 		return $this->key;
 	}
 
-	function get_type(){
+	function get_type() {
 		return $this->type;
 	}
 
-	function get_editable_fields(){
+	function get_editable_fields() {
 		return $this->editable_fields;
 	}
 
@@ -97,7 +97,7 @@ class Gravity_Flow_Assignee {
 	 *
 	 * @return bool|mixed
 	 */
-	public function get_status(){
+	public function get_status() {
 
 		$entry_id = $this->step->get_entry_id();
 		$key = $this->get_status_key();
@@ -112,7 +112,7 @@ class Gravity_Flow_Assignee {
 	 *
 	 * @return string
 	 */
-	public function get_status_key(){
+	public function get_status_key() {
 		if ( empty( $assignee_id ) ) {
 			$assignee_id = $this->get_id();
 		}
@@ -138,7 +138,7 @@ class Gravity_Flow_Assignee {
 		$this->log_event( $new_assignee_status, $duration );
 	}
 
-	public function get_display_name(){
+	public function get_display_name() {
 		if ( $this->get_type() == 'user_id' ) {
 			$user = get_user_by( 'id', $this->get_id() );
 			$name = $user->display_name;
@@ -149,7 +149,7 @@ class Gravity_Flow_Assignee {
 		return $name;
 	}
 
-	public function remove(){
+	public function remove() {
 		$key = $this->get_status_key();
 
 		gform_delete_meta( $this->step->get_entry_id(), $key );
@@ -161,7 +161,7 @@ class Gravity_Flow_Assignee {
 	 *
 	 * @return bool|mixed
 	 */
-	public function get_status_timestamp(){
+	public function get_status_timestamp() {
 
 		$status_key = $this->get_status_key();
 		$timestamp_key = $status_key . '_timestamp';
@@ -174,7 +174,7 @@ class Gravity_Flow_Assignee {
 	 *
 	 * @return bool|mixed
 	 */
-	public function get_reminder_timestamp(){
+	public function get_reminder_timestamp() {
 
 		$status_key = $this->get_status_key();
 		$timestamp_key = $status_key . '_reminder_timestamp';
@@ -187,7 +187,7 @@ class Gravity_Flow_Assignee {
 	 *
 	 * @return bool|mixed
 	 */
-	public function set_reminder_timestamp( $timestamp = false ){
+	public function set_reminder_timestamp( $timestamp = false ) {
 
 		if ( empty( $timestamp ) ) {
 			$timestamp = time();
@@ -199,8 +199,7 @@ class Gravity_Flow_Assignee {
 		gform_update_meta( $this->step->get_entry_id(), $timestamp_key, $timestamp );
 	}
 
-	public function log_event( $status, $duration = 0) {
+	public function log_event( $status, $duration = 0 ) {
 		gravity_flow()->log_event( 'assignee', 'status', $this->step->get_form_id(), $this->step->get_entry_id(), $status, $this->step->get_id(), $duration, $this->get_id(), $this->get_type(), $this->get_display_name() );
 	}
-
 }

@@ -21,11 +21,11 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		return esc_html__( 'Outgoing Webhook', 'gravityflow' );
 	}
 
-	public function get_icon_url(){
+	public function get_icon_url() {
 		return '<i class="fa fa-external-link"></i>';
 	}
 
-	public function get_settings(){
+	public function get_settings() {
 
 		return array(
 			'title'  => esc_html__( 'Outgoing Webhook', 'gravityflow' ),
@@ -107,7 +107,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		);
 	}
 
-	function process(){
+	function process() {
 
 		$this->send_webhook();
 
@@ -149,7 +149,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			'blocking'    => true,
 			'headers'     => $headers,
 			'body'        => $body,
-			'cookies'     => array()
+			'cookies'     => array(),
 		);
 
 		$args = apply_filters( 'gravityflow_webhook_args', $args, $entry, $this );
@@ -171,6 +171,5 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 		return $step_status;
 	}
-
 }
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Webhook() );

@@ -18,7 +18,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	public $_step_type = 'approval';
 
-	public function get_status_config(){
+	public function get_status_config() {
 		return array(
 			array(
 				'status' => 'rejected',
@@ -43,12 +43,12 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return esc_html__( 'Approval', 'gravityflow' );
 	}
 
-	public function get_icon_url(){
+	public function get_icon_url() {
 		return '<i class="fa fa-check" style="color:darkgreen;"></i>';
 	}
 
 
-	public function get_settings(){
+	public function get_settings() {
 
 		$account_choices = gravity_flow()->get_users_as_choices();
 
@@ -70,7 +70,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 						'name'          => 'assignee_notification_enabled',
 						'default_value' => false,
 					),
-				)
+				),
 			),
 			array(
 				'name'  => 'assignee_notification_from_name',
@@ -83,7 +83,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
 				'label' => __( 'From Email', 'gravityflow' ),
 				'type'  => 'text',
-				'default_value' => '{admin_email}'
+				'default_value' => '{admin_email}',
 			),
 			array(
 				'name'  => 'assignee_notification_reply_to',
@@ -107,20 +107,20 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				'name'  => 'assignee_notification_message',
 				'label' => __( 'Message to Assignee(s)', 'gravityflow' ),
 				'type'  => 'visual_editor',
-				'default_value' => __( 'A new entry is pending your approval. Please check your Workflow Inbox.', 'gravityflow' )
+				'default_value' => __( 'A new entry is pending your approval. Please check your Workflow Inbox.', 'gravityflow' ),
 			),
 			array(
 				'name' => 'resend_assignee_email',
 				'label' => '',
 				'type' => 'checkbox_and_text',
 				'checkbox' => array(
-					'label' => __( 'Send reminder', 'gravityflow' )
+					'label' => __( 'Send reminder', 'gravityflow' ),
 				),
 				'text' => array(
 					'default_value' => 7,
 					'before_input' => __( 'Resend the assignee email after', 'gravityflow' ),
-					'after_input' => ' ' . __( 'day(s)', 'gravityflow' )
-				)
+					'after_input' => ' ' . __( 'day(s)', 'gravityflow' ),
+				),
 			),
 		);
 
@@ -136,7 +136,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 						'name'          => 'rejection_notification_enabled',
 						'default_value' => false,
 					),
-				)
+				),
 			),
 			array(
 				'name'    => 'rejection_notification_type',
@@ -157,7 +157,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			),
 			array(
 				'name'  => 'rejection_notification_routing',
-				'label' => __( 'Routing', 'gravityflow' ) ,
+				'label' => __( 'Routing', 'gravityflow' ),
 				'type'  => 'user_routing',
 			),
 			array(
@@ -195,7 +195,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				'name'  => 'rejection_notification_message',
 				'label' => __( 'Message', 'gravityflow' ),
 				'type'  => 'visual_editor',
-				'default_value' => __( 'Entry {entry_id} has been rejected', 'gravityflow' )
+				'default_value' => __( 'Entry {entry_id} has been rejected', 'gravityflow' ),
 			),
 		);
 
@@ -212,7 +212,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 						'name'          => 'approval_notification_enabled',
 						'default_value' => false,
 					),
-				)
+				),
 			),
 			array(
 				'name'    => 'approval_notification_type',
@@ -233,7 +233,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			),
 			array(
 				'name'  => 'approval_notification_routing',
-				'label' => __( 'Routing', 'gravityflow' ) ,
+				'label' => __( 'Routing', 'gravityflow' ),
 				'class' => 'large',
 				'type'  => 'user_routing',
 			),
@@ -273,30 +273,30 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				'name'  => 'approval_notification_message',
 				'label' => __( 'Approval Message', 'gravityflow' ),
 				'type'  => 'visual_editor',
-				'default_value' => __( 'Entry {entry_id} has been approved', 'gravityflow' )
+				'default_value' => __( 'Entry {entry_id} has been approved', 'gravityflow' ),
 			),
 		);
 
 
 		// Support for Gravity PDF 4
-		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-beta2' , '>=' ) ){
+		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-beta2' , '>=' ) ) {
 			$form_id = $this->get_form_id();
 			$gpdf_feeds = GPDFAPI::get_form_pdfs( $form_id );
 			if ( is_array( $gpdf_feeds ) ) {
 				$gpdf_choices = array();
-				foreach( $gpdf_feeds as $gpdf_feed ) {
-					$gpdf_choices[] = array( 'label' => $gpdf_feed['name'], 'value' => $gpdf_feed['id']);
+				foreach ( $gpdf_feeds as $gpdf_feed ) {
+					$gpdf_choices[] = array( 'label' => $gpdf_feed['name'], 'value' => $gpdf_feed['id'] );
 				}
-				$pdf_setting =  array(
+				$pdf_setting = array(
 					'name' => 'assignee_notification_gpdf',
 					'label' => '',
 					'type' => 'checkbox_and_select',
 					'checkbox' => array(
-						'label' => esc_html__( 'Attach PDF', 'gravityflow' )
+						'label' => esc_html__( 'Attach PDF', 'gravityflow' ),
 					),
 					'select' => array(
 						'choices' => $gpdf_choices,
-					)
+					),
 				);
 				$assignee_notification_fields[] = $pdf_setting;
 				$pdf_setting['name'] = 'rejection_notification_gpdf';
@@ -369,9 +369,9 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 						array(
 							'label' => __( 'Approval Email', 'gravityflow' ),
 							'id' => 'tab_approval_notification',
-							'fields' => $approval_notification_fields
+							'fields' => $approval_notification_fields,
 						),
-					)
+					),
 				),
 			),
 		);
@@ -384,7 +384,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				$user_input_step_choices[] = array( 'label' => $step->get_name(), 'value' => $step->get_id() );
 			}
 		}
-		if ( ! empty ( $user_input_step_choices  ) ) {
+		if ( ! empty( $user_input_step_choices  ) ) {
 			$revert_field = array(
 				'name' => 'revert',
 				'label' => esc_html__( 'Revert to User Input step', 'gravityflow' ),
@@ -394,11 +394,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					'label' => esc_html__( 'Enable', 'gravityflow')
 				),
 				'select' => array(
-					'choices' => $user_input_step_choices
+					'choices' => $user_input_step_choices,
 				),
 			);
 		}
-		if ( ! empty ( $revert_field ) ) {
+		if ( ! empty( $revert_field ) ) {
 			$settings['fields'][] = $revert_field;
 		}
 
@@ -410,7 +410,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	}
 
 
-	public function get_next_step_id(){
+	public function get_next_step_id() {
 		if ( isset( $this->_next_step_id ) ) {
 			return $this->_next_step_id;
 		}
@@ -469,7 +469,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return ! in_array( $status, array( 'pending', 'queued' ) );
 	}
 
-	public function evaluate_status(){
+	public function evaluate_status() {
 
 		if ( $this->is_queued() ) {
 			return 'queued';
@@ -506,7 +506,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return $step_status;
 	}
 
-	public function is_valid_token( $token ){
+	public function is_valid_token( $token ) {
 
 		$token_json = base64_decode( $token );
 		$token_array = json_decode( $token_json, true );
@@ -549,7 +549,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 *
 	 * @return bool
 	 */
-	public function is_valid_token_deprecated ($token, $user_id, $new_status){
+	public function is_valid_token_deprecated ($token, $user_id, $new_status ) {
 		$expiration_days = apply_filters( 'gravityflow_approval_token_expiration_days', 1 );
 
 		$i = wp_nonce_tick();
@@ -570,7 +570,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return $is_valid;
 	}
 
-	public function maybe_process_status_update( $form, $entry ){
+	public function maybe_process_status_update( $form, $entry ) {
 		$feedback = false;
 		$step_status_key = 'gravityflow_approval_new_status_step_' . $this->get_id();
 		if ( isset( $_REQUEST[ $step_status_key ] ) || isset( $_GET['gworkflow_token'] ) || isset( $_GET['gflow_token'] )|| $token = gravity_flow()->decode_access_token() ) {
@@ -633,7 +633,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 *
 	 * @return bool|string If processed return a message to be displayed to the user.
 	 */
-	public function process_assignee_status( $assignee, $new_status, $form ){
+	public function process_assignee_status( $assignee, $new_status, $form ) {
 		$feedback = false;
 
 		if ( ! in_array( $new_status, array( 'pending', 'approved', 'rejected', 'revert' ) ) ) {
@@ -655,24 +655,24 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			return esc_html__( 'The status could not be changed because this step has already been processed.', 'gravityflow' );
 		}
 
-        if ( $new_status == 'revert' ) {
-            if ( $this->revertEnable ) {
-                $step = gravity_flow()->get_step( $this->revertValue, $this->get_entry() );
-                if ( $step ) {
-                    $this->end();
-                    $note = $this->get_name() . ': ' . esc_html__( 'Reverted to step', 'gravityflow' ) . ' - ' . $step->get_label();
-                    $user_note = rgpost( 'gravityflow_note' );
-                    if ( ! empty( $user_note ) ) {
-                        $note .= sprintf( "\n%s: %s", __( 'Note', 'gravityflow' ), $user_note );
-                    }
-                    $this->add_note( $note );
-                    $step->start();
-                    $feedback = esc_html__('Reverted to step:', 'gravityflow' ) . ' ' . $step->get_label();
-                }
-            }
+		if ( $new_status == 'revert' ) {
+			if ( $this->revertEnable ) {
+				$step = gravity_flow()->get_step( $this->revertValue, $this->get_entry() );
+				if ( $step ) {
+					$this->end();
+					$note      = $this->get_name() . ': ' . esc_html__( 'Reverted to step', 'gravityflow' ) . ' - ' . $step->get_label();
+					$user_note = rgpost( 'gravityflow_note' );
+					if ( ! empty( $user_note ) ) {
+						$note .= sprintf( "\n%s: %s", __( 'Note', 'gravityflow' ), $user_note );
+					}
+					$this->add_note( $note );
+					$step->start();
+					$feedback = esc_html__( 'Reverted to step:', 'gravityflow' ) . ' ' . $step->get_label();
+				}
+			}
 
-            return $feedback;
-        }
+			return $feedback;
+		}
 
 		if ( $current_user_status == 'pending' ) {
 			$assignee->update_status( $new_status );
@@ -720,11 +720,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return $feedback;
 	}
 
-	public function workflow_detail_status_box( $form ){
+	public function workflow_detail_status_box( $form ) {
 		$status               = esc_html__( 'Pending Approval', 'gravityflow' );
 		$approve_icon         = '<i class="fa fa-check" style="color:green"></i>';
 		$reject_icon          = '<i class="fa fa-times" style="color:red"></i>';
-        $revert_icon          = '<i class="fa fa-undo" style="color:blue"></i>';
+		$revert_icon          = '<i class="fa fa-undo" style="color:blue"></i>';
 		$approval_step_status = $this->get_status();
 		if ( $approval_step_status == 'approved' ) {
 			$status = $approve_icon . ' ' . __( 'Approved', 'gravityflow' );
@@ -759,7 +759,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 								break;
 							case 'user_id' :
 								$user = get_user_by( 'id', $assignee->get_id() );
-								$display_name = $user ? $user->display_name : $assignee->get_id() . ' ' . esc_html__('(Missing)');
+								$display_name = $user ? $user->display_name : $assignee->get_id() . ' ' . esc_html__( '(Missing)', 'gravityflow' );
 								$type_label = esc_html__( 'User', 'gravityflow' );
 								break;
 							default :
@@ -813,16 +813,14 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 						        class="button">
 							<?php echo $reject_icon; ?> <?php esc_html_e( 'Reject', 'gravityflow' ); ?>
 						</button>
-                        <?php
-                        if ( $this->revertEnable ) :
-                        ?>
+                        <?php if ( $this->revertEnable ) :  ?>
                             <button name="gravityflow_approval_new_status_step_<?php echo $this->get_id() ?>" value="revert" type="submit"
                                     class="button">
                                 <?php echo $revert_icon; ?> <?php esc_html_e( 'Revert', 'gravityflow' ); ?>
                             </button>
                             <?php
-                            endif;
-                            ?>
+						endif;
+						?>
 					</div>
 				<?php
 				}
@@ -833,7 +831,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 	}
 
-	public function entry_detail_status_box( $form ){
+	public function entry_detail_status_box( $form ) {
 
 		$status = $this->evaluate_status();
 		?>
@@ -872,7 +870,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 	}
 
-	public function send_approval_notification(){
+	public function send_approval_notification() {
 
 		if ( ! $this->approval_notification_enabled ) {
 			return;
@@ -916,7 +914,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$notification['subject'] = $this->approval_notification_subject;
 		$notification['message'] = $this->approval_notification_message;
 
-		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-beta2' , '>=' ) ){
+		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-beta2' , '>=' ) ) {
 			if ( $this->approval_notification_gpdfEnable ) {
 				$gpdf_id = $this->approval_notification_gpdfValue;
 				$notification = $this->gpdf_add_notification_attachment( $notification, $gpdf_id );
@@ -927,7 +925,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 	}
 
-	public function send_rejection_notification(){
+	public function send_rejection_notification() {
 
 		if ( ! $this->rejection_notification_enabled ) {
 			return;
@@ -970,7 +968,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$notification['subject'] = $this->rejection_notification_subject;
 		$notification['message'] = $this->rejection_notification_message;
 
-		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-beta2' , '>=' ) ){
+		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-beta2' , '>=' ) ) {
 			if ( $this->rejection_notification_gpdfEnable ) {
 				$gpdf_id = $this->rejection_notification_gpdfValue;
 				$notification = $this->gpdf_add_notification_attachment( $notification, $gpdf_id );
@@ -987,7 +985,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 *
 	 * @return mixed
 	 */
-	public function replace_variables( $text, $assignee ){
+	public function replace_variables( $text, $assignee ) {
 		$text = parent::replace_variables( $text, $assignee );
 		$comment = rgpost( 'gravityflow_note' );
 		$text = str_replace( '{workflow_note}', $comment, $text );
@@ -1111,7 +1109,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 *
 	 * @return bool|string|void|WP_Error
 	 */
-	public function maybe_process_token_action( $action, $token, $form, $entry ){
+	public function maybe_process_token_action( $action, $token, $form, $entry ) {
 
 		$feedback = parent::maybe_process_token_action( $action, $token, $form, $entry );
 
@@ -1148,6 +1146,5 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 		return $feedback;
 	}
-
 }
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Approval() );

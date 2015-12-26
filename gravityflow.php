@@ -3,7 +3,7 @@
 Plugin Name: Gravity Flow
 Plugin URI: https://gravityflow.io
 Description: Build Workflow Applications with Gravity Forms.
-Version: 1.1.3.13
+Version: 1.1.3.14
 Author: Steven Henty
 Author URI: http://www.stevenhenty.com
 License: GPL-3.0+
@@ -11,11 +11,12 @@ Text Domain: gravityflow
 Domain Path: /languages
 
 ------------------------------------------------------------------------
-Copyright 2015 Steven Henty
+Copyright 2010 Steven Henty
 
 This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License, version 3, as
-published by the Free Software Foundation.
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,11 +24,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+along with this program.  If not, see http://www.gnu.org/licenses.
 */
 
-define( 'GRAVITY_FLOW_VERSION', '1.1.3.13' );
+define( 'GRAVITY_FLOW_VERSION', '1.1.3.14' );
 
 define( 'GRAVITY_FLOW_EDD_STORE_URL', 'https://gravityflow.io' );
 
@@ -37,7 +37,7 @@ add_action( 'gform_loaded', array( 'Gravity_Flow_Bootstrap', 'load' ), 1 );
 
 class Gravity_Flow_Bootstrap {
 
-	public static function load(){
+	public static function load() {
 
 		if ( ! method_exists( 'GFForms', 'include_feed_addon_framework' ) ) {
 			return;
@@ -79,7 +79,6 @@ class Gravity_Flow_Bootstrap {
 		GFAddOn::register( 'Gravity_Flow' );
 		do_action( 'gravityflow_loaded' );
 	}
-
 }
 
 function gravity_flow() {

@@ -12,7 +12,7 @@ class Gravity_Flow_Entry_Detail {
 	 * @param null|Gravity_Flow_Step $current_step
 	 * @param array $args
 	 */
-	public static function entry_detail( $form, $entry, $current_step = null, $args  = array() ){
+	public static function entry_detail( $form, $entry, $current_step = null, $args = array() ) {
 
 		$form_id = absint( $form['id'] );
 		$form    = apply_filters( 'gform_admin_pre_render', $form );
@@ -140,10 +140,14 @@ class Gravity_Flow_Entry_Detail {
 						}
 					}
 
-					$full_access = GFAPI::current_user_can_any( array( 'gform_full_access', 'gravityflow_status_view_all' ) );
+					$full_access = GFAPI::current_user_can_any( array(
+						'gform_full_access',
+						'gravityflow_status_view_all',
+					) );
 
-					if  ( ! ( $user_status || $full_access ) ) {
+					if ( ! ( $user_status || $full_access ) ) {
 						esc_attr_e( "You don't have permission to view this entry.", 'gravityflow' );
+
 						return;
 					}
 				}
@@ -348,7 +352,7 @@ class Gravity_Flow_Entry_Detail {
 						$field->conditionalLogic = null;
 
 						if ( in_array( $field_id, $editable_fields ) ) {
-							if ( $field->get_input_type() != 'date'  && $field->type != 'product') {
+							if ( $field->get_input_type() != 'date'  && ! in_array( $field->type, array( 'product', 'name', 'address' ) ) ) {
 								$field->_is_entry_detail = true;
 							}
 
@@ -382,7 +386,7 @@ class Gravity_Flow_Entry_Detail {
 								$has_product_fields = true;
 							}
 
-							$value         = RGFormsModel::get_lead_field_value( $entry, $field );
+							$value = RGFormsModel::get_lead_field_value( $entry, $field );
 
 							if ( $field->type == 'product' ) {
 
@@ -391,15 +395,15 @@ class Gravity_Flow_Entry_Detail {
 									$price        = trim( $value[ $field->id . '.2' ] );
 									$quantity     = trim( $value[ $field->id . '.3' ] );
 
-									if ( empty ( $product_name ) ) {
+									if ( empty( $product_name ) ) {
 										$value[ $field->id . '.1' ] = $field->get_field_label( false, $value );
 									}
 
-									if ( empty ( $price ) ) {
+									if ( empty( $price ) ) {
 										$value[ $field->id . '.2' ] = '0';
 									}
 
-									if ( empty ( $quantity ) ) {
+									if ( empty( $quantity ) ) {
 										$value[ $field->id . '.3' ] = '0';
 									}
 								}
@@ -570,7 +574,7 @@ class Gravity_Flow_Entry_Detail {
 								}
 							}
 
-							if ( empty ( $img_url) ) {
+							if ( empty( $img_url) ) {
 								$img_url = gravity_flow()->get_base_url() . '/images/gravityflow-icon-blue.svg';
 							}
 
@@ -713,6 +717,4 @@ class Gravity_Flow_Entry_Detail {
 
 		}
 	}
-
-
 }

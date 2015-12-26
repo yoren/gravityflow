@@ -19,16 +19,16 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 
 	public $edd_item_name = '';
 
-	public function init_admin(){
+	public function init_admin() {
 		parent::init_admin();
 		add_filter( 'gravityflow_settings_menu_tabs', array( $this, 'app_settings_tabs' ) );
 	}
-	public function app_settings_tabs( $settings_tabs ){
+	public function app_settings_tabs( $settings_tabs ) {
 
 		$settings_tabs[] = array(
 			'name' => $this->_slug,
 			'label' => $this->get_short_title(),
-			'callback' => array( $this, 'app_settings_tab' )
+			'callback' => array( $this, 'app_settings_tab' ),
 		);
 
 		return $settings_tabs;
@@ -86,23 +86,27 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 
 				<div class="hr-divider"></div>
 
-				<h3><span><i class="fa fa-times"></i> <?php printf( esc_html_x( 'Uninstall %s Extension', 'Title for the uninstall section on the settings page for a Gravity Flow extension.', 'gravityflow' ), $this->get_short_title() ) ?></span></h3>
+				<h3><span><i
+							class="fa fa-times"></i> <?php printf( esc_html_x( 'Uninstall %s Extension', 'Title for the uninstall section on the settings page for a Gravity Flow extension.', 'gravityflow' ), $this->get_short_title() ) ?></span>
+				</h3>
 				<div class="delete-alert alert_red">
 					<h3><i class="fa fa-exclamation-triangle gf_invalid"></i> Warning</h3>
+
 					<div class="gf_delete_notice">
 						<?php echo $this->uninstall_warning_message() ?>
 					</div>
-					<input type="submit" name="uninstall" value="<?php echo esc_attr_x( 'Uninstall Extension', 'Button text on the settings page for an extension.', 'gravityflow' ) ?>" class="button" onclick="return confirm('<?php echo esc_js( $this->uninstall_confirm_message() ); ?>');">
+					<input type="submit" name="uninstall"
+					       value="<?php echo esc_attr_x( 'Uninstall Extension', 'Button text on the settings page for an extension.', 'gravityflow' ) ?>"
+					       class="button"
+					       onclick="return confirm('<?php echo esc_js( $this->uninstall_confirm_message() ); ?>');">
 				</div>
 
-				<?php
-			}
-			?>
+			<?php } ?>
 		</form>
 		<?php
 	}
 
-	public function app_settings_fields(){
+	public function app_settings_fields() {
 		return array(
 			array(
 				'title'       => $this->get_short_title(),
@@ -117,12 +121,12 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 						'class' => 'large',
 						'default_value' => '',
 					),
-				)
+				),
 			),
 		);
 	}
 
-	public function get_app_settings(){
+	public function get_app_settings() {
 		return parent::get_app_settings();
 	}
 
@@ -145,7 +149,7 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 
 	}
 
-	public function check_license( $value ){
+	public function check_license( $value ) {
 		$api_params = array(
 			'edd_action' => 'check_license',
 			'license'    => $value,
@@ -153,12 +157,12 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 			'url'       => home_url(),
 		);
 		// Send the remote request
-		$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params  ) );
+		$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params ) );
 		return json_decode( wp_remote_retrieve_body( $response ) );
 
 	}
 
-	public function license_validation( $field, $field_setting ){
+	public function license_validation( $field, $field_setting ) {
 		$old_license = $this->get_app_setting( 'license_key' );
 
 		if ( $old_license && $field_setting != $old_license  ) {
@@ -167,10 +171,10 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 				'edd_action' => 'deactivate_license',
 				'license'    => $old_license,
 				'item_name'  => urlencode( $this->edd_item_name ),
-				'url'        => home_url()
+				'url'        => home_url(),
 			);
 			// Send the remote request
-			$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params  ) );
+			$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params ) );
 		}
 
 
@@ -182,15 +186,15 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 
 	}
 
-	public function activate_license( $license_key ){
+	public function activate_license( $license_key ) {
 		$api_params = array(
 			'edd_action' => 'activate_license',
 			'license'    => $license_key,
 			'item_name'  => urlencode( $this->edd_item_name ),
-			'url'        => home_url()
+			'url'        => home_url(),
 		);
 
-		$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params  ) );
+		$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params ) );
 		return json_decode( wp_remote_retrieve_body( $response ) );
 	}
 }

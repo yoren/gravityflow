@@ -36,7 +36,7 @@ class Gravity_Flow_Submit {
 		echo $list;
 	}
 
-	public static function form( $form_id ){
+	public static function form( $form_id ) {
 		gravity_form_enqueue_scripts( $form_id );
 		gravity_form( $form_id );
 	}

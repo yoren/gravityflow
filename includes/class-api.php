@@ -62,7 +62,7 @@ class Gravity_Flow_API {
 	 *
 	 * @return Gravity_Flow_Step|bool Returns the Step. False if not found.
 	 */
-	public function get_step( $step_id, $entry = null  ) {
+	public function get_step( $step_id, $entry = null ) {
 		return gravity_flow()->get_step( $step_id, $entry );
 	}
 
@@ -92,7 +92,7 @@ class Gravity_Flow_API {
 	 *
 	 * @param $entry_id
 	 */
-	public function process_workflow( $entry_id ){
+	public function process_workflow( $entry_id ) {
 		$form = GFAPI::get_form( $this->form_id );
 		gravity_flow()->process_workflow( $form,  $entry_id );
 	}
@@ -103,7 +103,7 @@ class Gravity_Flow_API {
 	 * @param array $entry The entry
 	 * @return bool True for success. False if not currently in a workflow.
 	 */
-	public function cancel_workflow( $entry ){
+	public function cancel_workflow( $entry ) {
 		$entry_id = absint( $entry['id'] );
 		$form = GFAPI::get_form( $this->form_id );
 		$step = $this->get_current_step( $entry );
@@ -128,7 +128,7 @@ class Gravity_Flow_API {
 	 * @param array $entry The entry
 	 * @return bool True for success. False if the entry doesn't have a current step.
 	 */
-	public function restart_step( $entry ){
+	public function restart_step( $entry ) {
 		$step = $this->get_current_step( $entry );
 		if ( ! $step ) {
 			return false;
@@ -171,10 +171,10 @@ class Gravity_Flow_API {
 	 *
 	 * @return string|bool The status.
 	 */
-	public function get_status( $entry ){
+	public function get_status( $entry ) {
 		$current_step = $this->get_current_step( $entry );
 
-		if ( $current_step === false ){
+		if ( $current_step === false ) {
 			$status = gform_get_meta( $entry['id'], 'workflow_final_status' );
 		} else {
 			$status = $current_step->evaluate_status();
@@ -189,7 +189,7 @@ class Gravity_Flow_API {
 	 * @param $entry
 	 * @param $step_id
 	 */
-	public function send_to_step( $entry, $step_id ){
+	public function send_to_step( $entry, $step_id ) {
 		$current_step = $this->get_current_step( $entry );
 		if ( $current_step ) {
 			$assignees = $current_step->get_assignees();
@@ -234,6 +234,5 @@ class Gravity_Flow_API {
 	public function log_activity( $log_type, $event, $form_id = 0, $entry_id = 0, $log_value = '', $step_id = 0, $duration = 0, $assignee_id = 0, $assignee_type = '', $display_name = '' ) {
 		gravity_flow()->log_event( $log_type, $event, $form_id, $entry_id, $log_value, $step_id, $duration, $assignee_id, $assignee_type, $display_name );
 	}
-
 }
 

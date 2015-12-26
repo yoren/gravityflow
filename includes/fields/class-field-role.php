@@ -27,7 +27,7 @@ class Gravity_Flow_Field_Role extends GF_Field_Select {
 	public function get_form_editor_button() {
 		return array(
 			'group' => 'workflow_fields',
-			'text'  => $this->get_form_editor_field_title()
+			'text'  => $this->get_form_editor_field_title(),
 		);
 	}
 
@@ -61,7 +61,7 @@ class Gravity_Flow_Field_Role extends GF_Field_Select {
 		return $choices;
 	}
 
-	public function get_roles_as_choices( $value  ) {
+	public function get_roles_as_choices( $value ) {
 		global $wp_roles;
 		$form_id = $this->formId;
 
@@ -102,12 +102,11 @@ class Gravity_Flow_Field_Role extends GF_Field_Select {
 		return $value;
 	}
 
-	public function get_display_name( $value ){
+	public function get_display_name( $value ) {
 		$value = translate_user_role( $value );
 
 		return $value;
 	}
-
 }
 
 GF_Fields::register( new Gravity_Flow_Field_Role() );

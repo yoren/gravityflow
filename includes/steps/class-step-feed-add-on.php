@@ -40,32 +40,32 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step{
 	 *
 	 * @return string
 	 */
-	public function get_feed_add_on_class_name(){
+	public function get_feed_add_on_class_name() {
 		return $this->_class_name;
 	}
 
-    /**
-     * Is this feed step supported on this server? Override to hide this step in the list of step types if the requirements are not met.
-     *
-     * @return bool
-     */
-    public function is_supported(){
+	/**
+	 * Is this feed step supported on this server? Override to hide this step in the list of step types if the requirements are not met.
+	 *
+	 * @return bool
+	 */
+	public function is_supported() {
 
-        $is_supported = true;
-        $feed_add_on_class = $this->get_feed_add_on_class_name();
-        if ( ! class_exists( $feed_add_on_class ) ) {
-            $is_supported = false;
-        }
+		$is_supported      = true;
+		$feed_add_on_class = $this->get_feed_add_on_class_name();
+		if ( ! class_exists( $feed_add_on_class ) ) {
+			$is_supported = false;
+		}
 
-        return $is_supported;
-    }
+		return $is_supported;
+	}
 
 	/**
 	 * Returns the settings for this step.
 	 *
 	 * @return array
 	 */
-	public function get_settings(){
+	public function get_settings() {
 
 		$fields = array();
 
@@ -120,7 +120,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step{
 	 *
 	 * @return bool Is the step complete?
 	 */
-	public function process(){
+	public function process() {
 
 		$form = $this->get_form();
 		$entry = $this->get_entry();
@@ -149,7 +149,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step{
 	 *
 	 * @return array|mixed
 	 */
-	public function get_feeds(){
+	public function get_feeds() {
 
 		$form_id = $this->get_form_id();
 
@@ -182,7 +182,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step{
 	/**
 	 * Intercepts the form submission to prevent the default behaviour of the add-on.
 	 */
-	function intercept_submission(){
+	function intercept_submission() {
 		$add_on = call_user_func( array( $this->get_feed_add_on_class_name(), 'get_instance' ) );
 		remove_filter( 'gform_entry_post_save', array( $add_on, 'maybe_process_feed' ), 10 );
 	}
@@ -195,10 +195,8 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step{
 	 *
 	 * @return mixed
 	 */
-	function get_feed_label( $feed ){
+	function get_feed_label( $feed ) {
 		$label = $feed['meta']['feedName'];
 		return $label;
 	}
-
 }
-// Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_My_Step() );
