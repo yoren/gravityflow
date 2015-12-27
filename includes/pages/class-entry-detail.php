@@ -319,8 +319,20 @@ class Gravity_Flow_Entry_Detail {
 			$count = 0;
 			$field_count = sizeof( $form['fields'] );
 			$has_product_fields = false;
+			$display_fields_mode = $current_step ? $current_step->display_fields_mode : 'all_fields';
+			$display_fields_selected = $current_step && is_array( $current_step->display_fields_selected ) ? $current_step->display_fields_selected : array();
+
 			foreach ( $form['fields'] as &$field ) {
 				/* @var GF_Field $field */
+
+				$display_field = true;
+
+				if ( $display_fields_mode == 'selected_fields' && ! in_array( $field->id, $display_fields_selected ) ) {
+					$display_field = false;
+				}
+
+				$display_field = (bool) apply_filters( 'gravityflow_workflow_detail_display_field', $display_field, $field, $form, $entry, $current_step );
+
 				switch ( RGFormsModel::get_input_type( $field ) ) {
 					case 'section' :
 						if ( ! GFCommon::is_section_empty( $field, $form, $entry ) || $display_empty_fields ) {
@@ -341,7 +353,6 @@ class Gravity_Flow_Entry_Detail {
 						break;
 
 					case 'html':
-						$display_field = (bool) apply_filters( 'gravityflow_workflow_detail_display_field', true, $field, $form, $entry, $current_step );
 						if ( $display_field ) {
 							?>
 							<tr>
@@ -380,14 +391,10 @@ class Gravity_Flow_Entry_Detail {
 							echo $content;
 						} else {
 
-							$display_field = (bool) apply_filters( 'gravityflow_workflow_detail_display_field', true, $field, $form, $entry, $current_step );
-
 							if ( ! $display_field ) {
 								continue;
 							}
 
-
-							//ignore product fields as they will be grouped together at the end of the grid
 							if ( GFCommon::is_product_field( $field->type ) ) {
 								$has_product_fields = true;
 							}
