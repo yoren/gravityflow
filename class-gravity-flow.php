@@ -568,7 +568,7 @@ PRIMARY KEY  (id)
 			return esc_html__( 'Workflow Step Settings', 'gravityflow' );
 		}
 
-		public function set_option($status, $option, $value) {
+		public function set_option( $status, $option, $value ) {
 			if ( 'entries_per_page' == $option ) {
 				return $value;
 			}
