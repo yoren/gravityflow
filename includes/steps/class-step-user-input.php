@@ -761,7 +761,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			foreach ( $total_fields as $total_field ) {
 				gravity_flow()->log_debug( __METHOD__ . '(): Saving total field.' );
 				GFFormsModel::save_input( $form, $total_field, $lead, $current_fields, $total_field->id );
-				GFFormsModel::refresh_lead_field_value( $lead['id'], $total_field['id'] );
+				GFFormsModel::refresh_lead_field_value( $lead['id'], $total_field->id );
 			}
 		}
 	}
