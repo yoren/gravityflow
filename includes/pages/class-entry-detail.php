@@ -270,7 +270,13 @@ class Gravity_Flow_Entry_Detail {
 	}
 
 
-
+	/**
+	 * @param $form
+	 * @param $entry
+	 * @param bool|false $allow_display_empty_fields
+	 * @param array $editable_fields
+	 * @param Gravity_Flow_Step|null $current_step
+	 */
 	public static function entry_detail_grid( $form, $entry, $allow_display_empty_fields = false, $editable_fields = array(), $current_step = null ) {
 		$form_id = absint( $form['id'] );
 
