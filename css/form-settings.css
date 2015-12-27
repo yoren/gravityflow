@@ -181,3 +181,7 @@ tr#gaddon-setting-row-step_type label > span > i {
 .gravityflow-expiration-date-container{
     margin: 10px 0 10px 0;
 }
+
+.gravityflow_display_fields_selected_container{
+    margin-top:5px;
+}

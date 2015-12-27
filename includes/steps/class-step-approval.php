@@ -351,6 +351,12 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					),
 				),
 				array(
+					'name'     => 'display_fields',
+					'label'    => __( 'Display Fields', 'gravityflow' ),
+					'tooltip'   => __( 'Select the fields to hide or display.', 'gravityflow' ),
+					'type'     => 'display_fields',
+				),
+				array(
 					'name' => 'notification_tabs',
 					'label' => __( 'Emails', 'gravityflow' ),
 					'tooltip'   => __( 'Configure the emails that should be sent for this step.', 'gravityflow' ),

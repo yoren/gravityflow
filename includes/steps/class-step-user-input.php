@@ -89,6 +89,12 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 					),
 				),
 				array(
+					'name'     => 'display_fields',
+					'label'    => __( 'Display Fields', 'gravityflow' ),
+					'tooltip'   => __( 'Select the fields to hide or display.', 'gravityflow' ),
+					'type'     => 'display_fields',
+				),
+				array(
 					'name' => 'default_status',
 					'type' => 'radio',
 					'label' => __( 'Default update status', 'gravityflow' ),

@@ -6,7 +6,7 @@
 
         if(window['gformInitDatepicker']) {gformInitDatepicker();}
 
-        $('#assignees, #editable_fields, #rejection_notification_users, #approval_notification_users, #workflow_notification_users').multiSelect();
+        $('#assignees, #editable_fields, #rejection_notification_users, #approval_notification_users, #workflow_notification_users, .gravityflow-multiselect-ui').multiSelect();
 
         var gravityFlowIsDirty = false, gravityFlowSubmitted = false;
 

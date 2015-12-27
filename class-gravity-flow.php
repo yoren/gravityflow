@@ -4452,6 +4452,56 @@ AND m.meta_value='queued'";
 			}
 			return $assignee_key;
 		}
+
+		public function settings_display_fields() {
+			$mode_field = array(
+				'name'     => 'display_fields_mode',
+				'label'    => '',
+				'type'     => 'select',
+				'default_value' => 'all_fields',
+				'onchange' => 'jQuery(this).siblings(".gravityflow_display_fields_selected_container").toggle(this.value=="selected_fields");',
+				'choices' => array(
+					array(
+						'label' => __( 'All fields', 'gravityflow' ),
+						'value' => 'all_fields',
+					),
+					array(
+						'label' => __( 'Selected fields', 'gravityflow' ),
+						'value' => 'selected_fields',
+					),
+				),
+			);
+
+			$form = $this->get_current_form();
+
+			$fields = ( isset( $form['fields'] ) && is_array( $form['fields'] ) ) ? $form['fields'] : array();
+
+			$fields_as_choices = array();
+
+			foreach ( $fields as $field ) {
+				/* @var GF_Field $field */
+				if ( in_array( $field->type, array( 'page', 'section', 'captcha' ) ) ) {
+					continue;
+				}
+				$fields_as_choices[] = array( 'label' => $field->get_field_label( false, null ), 'value' => $field->id );
+			}
+
+			$mode_value = $this->get_setting( 'display_fields_mode', 'all_fields' );
+
+			$multiselect_field = array(
+					'name'     => 'display_fields_selected[]',
+					'label'    => __( 'Except', 'gravityflow' ),
+					'type'     => 'select',
+					'multiple' => 'multiple',
+					'class' => 'gravityflow-multiselect-ui',
+					'choices' => $fields_as_choices,
+				);
+			$this->settings_select( $mode_field );
+			$style = $mode_value == 'selected_fields' ? '' :  'style="display:none;"';
+			echo '<div class="gravityflow_display_fields_selected_container" ' . $style . '>';
+			$this->settings_select( $multiselect_field );
+			echo '</div>';
+		}
 	}
 }
 
