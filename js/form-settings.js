@@ -487,6 +487,9 @@
         tags.push({tag: '{workflow_cancel_link}', label: 'Cancel Link'});
         tags.push({tag: '{workflow_cancel_url}', label: 'Cancel URL'});
         tags.push({tag: '{workflow_note}', label: 'Note'});
+        tags.push({tag: '{workflow_timeline}', label: 'Timeline'});
+
+
 
         mergeTags['gravityflow'] = {
             label: 'Workflow',

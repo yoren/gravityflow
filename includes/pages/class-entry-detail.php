@@ -233,6 +233,23 @@ class Gravity_Flow_Entry_Detail {
 	}
 
 	public static function timeline( $entry, $form ) {
+		$notes = self::get_timeline_notes( $entry );
+
+		//getting email values
+		$email_fields = GFCommon::get_email_fields( $form );
+		$emails = array();
+
+		foreach ( $email_fields as $email_field ) {
+			if ( ! empty( $entry[ $email_field->id ] ) ) {
+				$emails[] = $entry[ $email_field->id ];
+			}
+		}
+		//displaying notes grid
+		$subject = '';
+		self::notes_grid( $notes, true, $emails, $subject );
+	}
+
+	public static function get_timeline_notes( $entry ) {
 		$notes = RGFormsModel::get_lead_notes( $entry['id'] );
 
 		foreach ( $notes as $key => $note ) {
@@ -254,19 +271,7 @@ class Gravity_Flow_Entry_Detail {
 		array_unshift( $notes, $initial_note );
 
 		$notes = array_reverse( $notes );
-
-		//getting email values
-		$email_fields = GFCommon::get_email_fields( $form );
-		$emails = array();
-
-		foreach ( $email_fields as $email_field ) {
-			if ( ! empty( $entry[ $email_field->id ] ) ) {
-				$emails[] = $entry[ $email_field->id ];
-			}
-		}
-		//displaying notes grid
-		$subject = '';
-		self::notes_grid( $notes, true, $emails, $subject );
+		return $notes;
 	}
 
 
@@ -587,7 +592,7 @@ class Gravity_Flow_Entry_Detail {
 								}
 							}
 
-							if ( empty( $img_url) ) {
+							if ( empty( $img_url ) ) {
 								$img_url = gravity_flow()->get_base_url() . '/images/gravityflow-icon-blue.svg';
 							}
 

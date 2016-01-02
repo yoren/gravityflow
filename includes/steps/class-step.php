@@ -810,6 +810,37 @@ abstract class Gravity_Flow_Step extends stdClass {
 			}
 		}
 
+		preg_match_all( '/{workflow_timeline(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
+		if ( is_array( $matches ) ) {
+			$full_tag = $matches[0][0];
+
+			$notes = Gravity_Flow_Entry_Detail::get_timeline_notes( $this->get_entry() );
+
+			$html = '';
+			foreach ( $notes as  $note ) {
+				$html .= '<br />';
+				$html .= GFCommon::format_date( $note->date_created, false, 'd M Y g:i a', false );
+				$html .= ': ';
+				if ( empty( $note->user_id ) ) {
+					if ( $note->user_name !== 'gravityflow' ) {
+						$step = Gravity_Flow_Steps::get( $note->user_name );
+						if ( $step ) {
+							$html .= $step->get_label();
+						}
+					} else {
+						$html .= esc_html( gravity_flow()->translate_navigation_label( 'Workflow' ) );
+					}
+				} else {
+					$html .= esc_html( $note->user_name );
+				}
+				$html .= '<br />';
+				$html .= nl2br( esc_html( $note->value ) );
+				$html .= '<br />';
+			}
+
+			$text = str_replace( $full_tag, $html, $text );
+		}
+
 		return $text;
 	}
 
@@ -820,7 +851,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 *
 	 * @return string
 	 */
-	public function get_entry_url( $page_id = null, $assignee, $access_token = '' ){
+	public function get_entry_url( $page_id = null, $assignee, $access_token = '' ) {
 
 		if ( $assignee->get_type() == 'email' ) {
 			$token_lifetime_days = apply_filters( 'gravityflow_entry_token_expiration_days', 30, $assignee );
@@ -888,7 +919,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 *
 	 * @return array
 	 */
-	public function get_entry_meta( $entry_meta, $form_id) {
+	public function get_entry_meta( $entry_meta, $form_id ) {
 		return array();
 	}
 
