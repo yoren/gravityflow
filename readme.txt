@@ -55,65 +55,32 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
-= 1.1.3.16 =
+= 1.2 =
 - Added the {workflow_timeline} merge tag to display a basic timeline with very simple formatting.
-
-= 1.1.3.15 =
 - Added the display fields setting to the Approval and User Input steps.
-
-= 1.1.3.14 =
-- Fixed code standards.
-
-= 1.1.3.13 =
 - Added the content of html field to the workflow detail page.
-
-= 1.1.3.12 =
-- Fixed an issue with the recalculation of calculated fields when not editable.
-- Fixed an issue with the display of hidden product fields.
-- Fixed an issue with the confirmation page for users with the gravityflow_view_all capability when transitioning steps.
-- Fixed a deprecation warning on Gravity Forms 2.0
-
-= 1.1.3.11 =
-- Fixed an issue preventing upgrade on some Windows systems.
-
-= 1.1.3.10 =
-- Fixed an issue with the recalculation of calculated fields hidden by conditional logic.
-
-= 1.1.3.9 =
-- Fixed an issue with editable fields on user input steps hidden by conditional logic on form submission.
-
-= 1.1.3.8 =
-- Fixed an issue with the timeline note not registering a WordPress user name correctly when using the token in the workflow entry link.
-- Fixed an issue after completing a step where assignees might see field values on the next step if they were hidden from the previous step.
-
-= 1.1.3.7 =
 - Added the gravityflow_assignee_status_workflow_detail filter to allow the assignee status label to be modified on the workflow detail page. Currently only supported by the Approval Step.
-
-= 1.1.3.6 =
 - Added the gravityflow_webhook_args filter so the webhook request args can be modified.
 - Added the gravityflow_post_webhook action which fires after the webhook request.
-
-= 1.1.3.5 =
 - Added the token attribute to the workflow entry link merge tag which forces the token to be added to the link regardless of the assignee type. Useful for sending links that don't require login to WordPress users.
-
-= 1.1.3.4 =
 - Added restart_step() restart_workflow() send_to_step() add_timeline_note() and log_activity() to Gravity_Flow_API
-- Updated the admin actions to use the API.
-
-= 1.1.3.3 =
 - Added support for starting workflows when an entry is added using the API.
-- Fixed an issue where the Revert setting doesn't appear for new Approval Steps even though there's a User Input step in the list.
-- Fixed an issue on the status page where a warning is displayed if a user account no longer exists.
-
-= 1.1.3.2 =
 - Added the GET forms/[ID]/steps Web API endpoint. Returns all the steps for a form.
 - Added the GET entries/[ID]/assignees Web API endpoint. Returns all the assignees for the current step of the specified entry.
 - Added the GET entries/[ID]/steps Web API endpoint. Returns all the steps for the specified entry.
 - Added the POST entries/[ID]/assignees/[KEY] Web API endpoint. Processes a status update for a specified assignee of the current step of the specified entry.
-
-= 1.1.3.1 =
 - Added support for step duplication.
-- API: Refactor status config.
+- Fixed an issue with the recalculation of calculated fields when not editable.
+- Fixed an issue with the display of hidden product fields.
+- Fixed an issue with the confirmation page for users with the gravityflow_view_all capability when transitioning steps.
+- Fixed a deprecation warning on Gravity Forms 2.0
+- Fixed an issue preventing upgrade on some Windows systems.
+- Fixed an issue with the recalculation of calculated fields hidden by conditional logic.
+- Fixed an issue with editable fields on user input steps hidden by conditional logic on form submission.
+- Fixed an issue with the timeline note not registering a WordPress user name correctly when using the token in the workflow entry link.
+- Fixed an issue after completing a step where assignees might see field values on the next step if they were hidden from the previous step.
+- Fixed an issue where the Revert setting doesn't appear for new Approval Steps even though there's a User Input step in the list.
+- Fixed an issue on the status page where a warning is displayed if a user account no longer exists.
 
 = 1.1.3 =
 - Added support for the revert button in the Approval Step so entries can be sent to a User Input step as a third alternative to "approve" or "reject".
