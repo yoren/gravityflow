@@ -55,6 +55,9 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.1.3.16 =
+- Added the {workflow_timeline} merge tag to display a basic timeline with very simple formatting.
+
 = 1.1.3.15 =
 - Added the display fields setting to the Approval and User Input steps.
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2015-12-14 11:33:13+00:00\n"
+"POT-Creation-Date: 2015-12-19 21:48:02+00:00\n"
 "PO-Revision-Date: 2015-12-15 08:32+0000\n"
 "Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
 "Language-Team: French (France) (http://www.transifex.com/gravityflow/gravityflow/language/fr_FR/)\n"
@@ -420,7 +420,7 @@ msgid "Settings"
 msgstr "Réglages"
 
 #: class-gravity-flow.php:2495 includes/class-extension.php:112
-#: includes/wizard/steps/class-installation-wizard-step-license-key.php:49
+#: includes/wizard/steps/class-iw-step-license-key.php:49
 msgid "License Key"
 msgstr "Clé de licence"
 
@@ -429,7 +429,7 @@ msgid "Invalid license"
 msgstr "Licence invalide"
 
 #: class-gravity-flow.php:2505
-#: includes/wizard/steps/class-installation-wizard-step-updates.php:74
+#: includes/wizard/steps/class-iw-step-updates.php:74
 msgid "Background Updates"
 msgstr "Mises à jour en arrière plan"
 
@@ -815,27 +815,27 @@ msgstr "Demande #"
 msgid "show empty fields"
 msgstr "afficher les champs vides"
 
-#: includes/pages/class-entry-detail.php:405
+#: includes/pages/class-entry-detail.php:438
 msgid "Order"
 msgstr "Commande"
 
-#: includes/pages/class-entry-detail.php:417
+#: includes/pages/class-entry-detail.php:450
 msgid "Product"
 msgstr "Produit"
 
-#: includes/pages/class-entry-detail.php:418
+#: includes/pages/class-entry-detail.php:451
 msgid "Qty"
 msgstr "Qté"
 
-#: includes/pages/class-entry-detail.php:419
+#: includes/pages/class-entry-detail.php:452
 msgid "Unit Price"
 msgstr "Prix unitaire"
 
-#: includes/pages/class-entry-detail.php:420
+#: includes/pages/class-entry-detail.php:453
 msgid "Price"
 msgstr "Prix"
 
-#: includes/pages/class-entry-detail.php:480
+#: includes/pages/class-entry-detail.php:513
 msgid "Total"
 msgstr "Total"
 
@@ -1380,7 +1380,7 @@ msgstr "Activer ce paramètre pour envoyer un e-mail."
 
 #: includes/steps/class-step-notification.php:62
 #: includes/steps/class-step-user-input.php:109
-#: includes/wizard/steps/class-installation-wizard-step-updates.php:88
+#: includes/wizard/steps/class-iw-step-updates.php:88
 msgid "Enabled"
 msgstr "Activer"
 
@@ -1491,100 +1491,100 @@ msgstr "Entrée"
 msgid "Processed"
 msgstr ""
 
-#: includes/wizard/steps/class-installation-wizard-step-complete.php:42
+#: includes/wizard/steps/class-iw-step-complete.php:42
 msgid "Congratulations! Now you can set up your first workflow."
 msgstr "Félicitations, vous pouvez configurer votre premier workflow"
 
-#: includes/wizard/steps/class-installation-wizard-step-complete.php:51
+#: includes/wizard/steps/class-iw-step-complete.php:51
 msgid "Select a Form to use for your Workflow"
 msgstr "Sélectionnez un formulaire à utiliser pour le workflow"
 
-#: includes/wizard/steps/class-installation-wizard-step-complete.php:67
+#: includes/wizard/steps/class-iw-step-complete.php:67
 msgid "Add Workflow Steps in the Form Settings"
 msgstr "Ajouter une étape du workflow dans les paramètres du formulaire"
 
-#: includes/wizard/steps/class-installation-wizard-step-complete.php:71
+#: includes/wizard/steps/class-iw-step-complete.php:71
 msgid "Add Workflow Steps"
 msgstr "Ajouter une étape au Workflow"
 
-#: includes/wizard/steps/class-installation-wizard-step-complete.php:78
+#: includes/wizard/steps/class-iw-step-complete.php:78
 msgid ""
 "Don't have a form you want to use for the workflow? %sCreate a Form%s and "
 "add your steps in the Form Settings later."
 msgstr "Vous n'avez pas de formulaire créé pour le workflow? %sCréez un formulaire%s et ajoutez les étapes du workflow ultérieurement."
 
-#: includes/wizard/steps/class-installation-wizard-step-complete.php:88
+#: includes/wizard/steps/class-iw-step-complete.php:88
 msgid ""
 "%sCreate a Form%s and then add your Workflow steps in the Form Settings."
 msgstr "%sCréez un formulaire%s puis ajoutez les étapes du workflow dans les paramètres du formulaire."
 
-#: includes/wizard/steps/class-installation-wizard-step-complete.php:98
+#: includes/wizard/steps/class-iw-step-complete.php:98
 msgid "Installation Complete"
 msgstr "Installation terminée"
 
-#: includes/wizard/steps/class-installation-wizard-step-license-key.php:16
+#: includes/wizard/steps/class-iw-step-license-key.php:16
 msgid ""
 "Enter your Gravity Flow License Key below.  Your key unlocks access to "
 "automatic updates and support.  You can find your key in your purchase "
 "receipt or by logging into the %sGravity Flow%s site."
 msgstr "Ajoutez votre licence Gravity Flow ci-dessous. La licence active les mises à jour automatique et le support. Vous pouvez retrouver votre licence dans la confirmation du commande sur le site %sGravity Flow%s."
 
-#: includes/wizard/steps/class-installation-wizard-step-license-key.php:20
+#: includes/wizard/steps/class-iw-step-license-key.php:20
 msgid "Enter Your License Key"
 msgstr "Entrez votre clé de licence"
 
-#: includes/wizard/steps/class-installation-wizard-step-license-key.php:35
+#: includes/wizard/steps/class-iw-step-license-key.php:35
 msgid ""
 "If you don't enter a valid license key, you will not be able to update "
 "Gravity Flow when important bug fixes and security enhancements are "
 "released. This can be a serious security risk for your site."
 msgstr "Si vous ne possédez pas de clé de licence valide, vous ne recevrez pas les mises à jour automatiques. Ceci comporte des risques pour votre site."
 
-#: includes/wizard/steps/class-installation-wizard-step-license-key.php:40
+#: includes/wizard/steps/class-iw-step-license-key.php:40
 msgid "I understand the risks"
 msgstr "Je comprend les risques"
 
-#: includes/wizard/steps/class-installation-wizard-step-license-key.php:59
+#: includes/wizard/steps/class-iw-step-license-key.php:59
 msgid "Please enter a valid license key."
 msgstr "Merci de saisir une clé de licence valide."
 
-#: includes/wizard/steps/class-installation-wizard-step-license-key.php:65
+#: includes/wizard/steps/class-iw-step-license-key.php:65
 msgid ""
 "Invalid or Expired Key : Please make sure you have entered the correct value"
 " and that your key is not expired."
 msgstr "La clé est invalide ou expirée. Merci de vérifier votre clé de licence."
 
-#: includes/wizard/steps/class-installation-wizard-step-license-key.php:73
+#: includes/wizard/steps/class-iw-step-license-key.php:73
 msgid "Please accept the terms"
 msgstr "Veuillez accepter les termes"
 
-#: includes/wizard/steps/class-installation-wizard-step-updates.php:16
+#: includes/wizard/steps/class-iw-step-updates.php:16
 msgid ""
 "Gravity Flow will download important bug fixes, security enhancements and "
 "plugin updates automatically. Updates are extremely important to the "
 "security of your WordPress site."
 msgstr "Gravity Flow met à jour des correctifs de sécurité, des bugs automatiquement. Les mises à jour sont importantes pour la sécurité de votre site WordPress."
 
-#: includes/wizard/steps/class-installation-wizard-step-updates.php:22
+#: includes/wizard/steps/class-iw-step-updates.php:22
 msgid ""
 "This feature is activated by default unless you opt to disable it below. We "
 "only recommend disabling background updates if you intend on managing "
 "updates manually. A valid license is required for background updates."
 msgstr "Cette option est activée automatiquement. Nous conseillons de désactiver les mises à jour en arrière plan uniquement si vous les effectuer manuellement. Une licence valide est demandée pour les mises à jour en arrière plan."
 
-#: includes/wizard/steps/class-installation-wizard-step-updates.php:29
+#: includes/wizard/steps/class-iw-step-updates.php:29
 msgid "Keep background updates enabled"
 msgstr "Garder les mises à jour en aarrière plan activées"
 
-#: includes/wizard/steps/class-installation-wizard-step-updates.php:35
+#: includes/wizard/steps/class-iw-step-updates.php:35
 msgid "Turn off background updates"
 msgstr "Désactiver les mises à jour en arrière plan"
 
-#: includes/wizard/steps/class-installation-wizard-step-updates.php:41
+#: includes/wizard/steps/class-iw-step-updates.php:41
 msgid "Are you sure?"
 msgstr "Êtes-vous sûr&nbsp;?"
 
-#: includes/wizard/steps/class-installation-wizard-step-updates.php:44
+#: includes/wizard/steps/class-iw-step-updates.php:44
 msgid ""
 "By disabling background updates your site may not get critical bug fixes and"
 " security enhancements. We only recommend doing this if you are experienced "
@@ -1592,35 +1592,35 @@ msgid ""
 "keeping your WordPress site updated."
 msgstr "En désactivant les mises à jour en arrière plan votre site ne peut pas obtenir les corrections de bugs critiques et les améliorations de sécurité. Nous vous recommandons de le faire uniquement si vous êtes expérimenté dans la gestion d'un site WordPress et que vous accepter les risques liés au mises à jour manuelles de votre site WordPress."
 
-#: includes/wizard/steps/class-installation-wizard-step-updates.php:49
+#: includes/wizard/steps/class-iw-step-updates.php:49
 msgid "I Understand and Accept the Risk"
 msgstr "Je comprend et approuve les risques"
 
-#: includes/wizard/steps/class-installation-wizard-step-updates.php:80
+#: includes/wizard/steps/class-iw-step-updates.php:80
 msgid "Please accept the terms."
 msgstr "Merci d'accepter les conditions"
 
-#: includes/wizard/steps/class-installation-wizard-step-updates.php:88
+#: includes/wizard/steps/class-iw-step-updates.php:88
 msgid "Disabled"
 msgstr "Désactiver"
 
-#: includes/wizard/steps/class-installation-wizard-step-welcome.php:9
+#: includes/wizard/steps/class-iw-step-welcome.php:9
 msgid "Click the 'Get Started' button to complete your installation."
 msgstr "Cliquez sur le bouton Commencer pour débuter l'installation."
 
-#: includes/wizard/steps/class-installation-wizard-step-welcome.php:16
+#: includes/wizard/steps/class-iw-step-welcome.php:16
 msgid "Get Started"
 msgstr "Commencer"
 
-#: includes/wizard/steps/class-installation-wizard-step-welcome.php:20
+#: includes/wizard/steps/class-iw-step-welcome.php:20
 msgid "Welcome"
 msgstr "Bienvenue"
 
-#: includes/wizard/steps/class-installation-wizard-step.php:98
+#: includes/wizard/steps/class-iw-step.php:98
 msgid "Next"
 msgstr "Suivant"
 
-#: includes/wizard/steps/class-installation-wizard-step.php:102
+#: includes/wizard/steps/class-iw-step.php:102
 msgid "Back"
 msgstr "Précédent"
 
