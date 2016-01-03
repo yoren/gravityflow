@@ -514,6 +514,7 @@
         tags.push({tag: '{workflow_entry_url}', label: 'Entry URL'});
         tags.push({tag: '{workflow_approve_link}', label: 'Approve Link'});
         tags.push({tag: '{workflow_reject_link}', label: 'Reject Link'});
+        tags.push({tag: '{workflow_timeline}', label: 'Timeline'});
 
         if ( typeof mergeTags['gravityflow'] != 'undefined' ) {
             mergeTags['gravityflow']['tags'] = $.merge (mergeTags['gravityflow']['tags'], tags);
