@@ -811,9 +811,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 		}
 
 		preg_match_all( '/{workflow_timeline(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
-		if ( is_array( $matches ) ) {
+		if ( is_array( $matches ) && isset( $matches[0] ) ) {
 			$full_tag = $matches[0][0];
-
+			require_once( gravity_flow()->get_base_path() . '/includes/pages/class-entry-detail.php' );
 			$notes = Gravity_Flow_Entry_Detail::get_timeline_notes( $this->get_entry() );
 
 			$html = '';
