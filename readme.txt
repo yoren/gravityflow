@@ -55,6 +55,9 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.2.0.1 =
+- Fixed an issue where the confirmation page is not displayed in certain conditions.
+
 = 1.2 =
 - Added the {workflow_timeline} merge tag to display a basic timeline with very simple formatting.
 - Added the display fields setting to the Approval and User Input steps.
