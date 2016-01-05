@@ -332,8 +332,14 @@ class Gravity_Flow_Entry_Detail {
 
 				$display_field = true;
 
-				if ( $display_fields_mode == 'selected_fields' && ! in_array( $field->id, $display_fields_selected ) ) {
-					$display_field = false;
+				if ( $display_fields_mode == 'selected_fields' ) {
+					if ( ! in_array( $field->id, $display_fields_selected ) ) {
+						$display_field = false;
+					}
+				} else {
+					if ( GFFormsModel::is_field_hidden( $form, $field, array(), $entry ) ) {
+						$display_field = false;
+					}
 				}
 
 				$display_field = (bool) apply_filters( 'gravityflow_workflow_detail_display_field', $display_field, $field, $form, $entry, $current_step );
@@ -354,7 +360,7 @@ class Gravity_Flow_Entry_Detail {
 					case 'captcha':
 					case 'password':
 					case 'page':
-						//ignore captcha, html, password, page field
+						//ignore captcha, password, page field
 						break;
 
 					case 'html':
