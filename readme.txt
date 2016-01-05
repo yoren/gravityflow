@@ -55,6 +55,9 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.2.0.2 =
+- Updated the workflow detail page to respect the conditional logic rules.
+
 = 1.2.0.1 =
 - Fixed an issue where the confirmation page is not displayed in certain conditions.
 
