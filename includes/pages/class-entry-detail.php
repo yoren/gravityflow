@@ -388,7 +388,7 @@ class Gravity_Flow_Entry_Detail {
 						$field->conditionalLogic = null;
 
 						if ( in_array( $field_id, $editable_fields ) ) {
-							if ( $field->get_input_type() != 'date'  && ! in_array( $field->type, array( 'product', 'name', 'address' ) ) ) {
+							if ( $field->get_input_type() == 'fileupload' ) {
 								$field->_is_entry_detail = true;
 							}
 
@@ -396,14 +396,20 @@ class Gravity_Flow_Entry_Detail {
 								$has_product_fields = true;
 							}
 
-							$value   = RGFormsModel::get_lead_field_value( $entry, $field );
-							$td_id   = 'field_' . $form_id . '_' . $field_id;
-							$td_id = esc_attr( $td_id );
-							$content = '<tr>
-		                                    <td colspan="2" class="entry-view-field-name">' . esc_html( GFCommon::get_label( $field ) ) . "</td>
-		                                </tr>
-										<tr valign='top'><td colspan='2' class='detail-view' id='{$td_id}'>" .
-							           self::get_field_input( $field, $value, $entry['id'], $form_id, $form ) . '</td></tr>';
+							$posted_step_id = rgpost( 'step_id' );
+							if ( $posted_step_id == $current_step->get_id() ) {
+								$value = GFFormsModel::get_field_value( $field );
+								if ( $field->isRequired && $field->is_value_submission_empty( $form_id ) ) {
+									$field->failed_validation  = true;
+									$field->validation_message = empty( $field->errorMessage ) ? __( 'This field is required.', 'gravityforms' ) : $field->errorMessage;
+								}
+							} else {
+								$value = GFFormsModel::get_lead_field_value( $entry, $field );
+							}
+
+
+
+							$content = self::get_field_content( $field, $value, true, $form );
 
 							$content = apply_filters( 'gform_field_content', $content, $field, $value, $entry['id'], $form['id'] );
 
@@ -421,7 +427,6 @@ class Gravity_Flow_Entry_Detail {
 							$value = RGFormsModel::get_lead_field_value( $entry, $field );
 
 							if ( $field->type == 'product' ) {
-
 								if ( $field->has_calculation() ) {
 									$product_name = trim( $value[ $field->id . '.1' ] );
 									$price        = trim( $value[ $field->id . '.2' ] );
@@ -574,6 +579,8 @@ class Gravity_Flow_Entry_Detail {
 		</table>
 		<div class="gform_footer">
 			<input type="hidden" name="gform_unique_id" value="" />
+			<input type="hidden" name="is_submit_<?php echo $form_id ?>" value="1" />
+			<input type="hidden" name="step_id" value="<?php echo $current_step ? $current_step->get_id() : '' ?>" />
 			<input type="hidden" name="gform_uploaded_files" id='gform_uploaded_files_<?php echo absint( $form_id ); ?>' value="" />
 		</div>
 
@@ -748,5 +755,41 @@ class Gravity_Flow_Entry_Detail {
 				break;
 
 		}
+
+	}
+
+	public static function get_field_content( GF_Field $field, $value, $form, $entry ) {
+
+		$validation_message = ( $field->failed_validation && ! empty( $field->validation_message ) ) ? sprintf( "<div class='gfield_description validation_message'>%s</div>", $field->validation_message ) : '';
+
+		$required_div = $field->isRequired ? sprintf( "<span class='gfield_required'>%s</span>", $field->isRequired ? '*' : '' ) : '';
+
+		$target_input_id = $field->get_first_input_id( $form );
+
+		$for_attribute = empty( $target_input_id ) ? '' : "for='{$target_input_id}'";
+
+		$form_id = absint( $form['id'] );
+
+		$td_id = 'field_' . $form_id . '_' . $field->id;
+		$td_id = esc_attr( $td_id );
+
+		$description = $field->get_description( $field->description, 'gfield_description' );
+
+		$field_input = self::get_field_input( $field, $value, $entry['id'], $form_id, $form );
+
+		if ( $field->is_description_above( $form ) ) {
+			$clear       = "<div class='gf_clear'></div>";
+			$field_input = $description . $field_input . $validation_message . $clear;
+		} else {
+			$field_input = $field_input . $description . $validation_message;
+		}
+
+		$field_content = "<tr>
+		                     <td colspan='2' class='entry-view-field-name'><label class='gfield_label' $for_attribute >" . esc_html( GFCommon::get_label( $field ) ) . $required_div . "</label></td>
+		                 </tr>
+		                 <tr valign='top'><td colspan='2' class='detail-view' id='{$td_id}'>$field_input</td></tr>";
+
+
+		return $field_content;
 	}
 }

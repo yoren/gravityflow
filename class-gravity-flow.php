@@ -2794,19 +2794,30 @@ PRIMARY KEY  (id)
 
 					$feedback = $step->maybe_process_status_update( $form, $entry );
 
-					if ( $feedback ) {
+					if ( $feedback && ! is_wp_error( $feedback ) ) {
 						$this->process_workflow( $form, $entry_id );
 					}
 				}
 
-				if ( $feedback ) {
+				if ( is_wp_error( $feedback ) ) {
+					$error_data = $feedback->get_error_data();
+					if ( ! empty( $error_data['form'] ) ) {
+						$form = $error_data['form'];
+					}
+					?>
+					<div class="notice error is-dismissible" style="padding:6px;">
+						<?php esc_html_e( $feedback->get_error_message() ); ?>
+					</div>
+					<?php
+
+				} elseif ( $feedback ) {
 					GFCache::flush();
 
 					$entry = GFAPI::get_entry( $entry_id ); // refresh entry
 
 					?>
 					<div class="updated notice notice-success is-dismissible" style="padding:6px;">
-						<?php echo esc_html( $feedback ); ?>
+						<?php esc_html_e( $feedback ); ?>
 					</div>
 					<?php
 
