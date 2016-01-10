@@ -22,7 +22,7 @@ class Gravity_Flow_Support {
 					'input_4' => rgpost( 'gravityflow_subject' ),
 					'input_3' => rgpost( 'gravityflow_description' ),
 					'input_5' => $system_info,
-				)
+				),
 			);
 			$body_json = json_encode( $body );
 
@@ -34,7 +34,7 @@ class Gravity_Flow_Support {
 				'sslverify' => false,
 				'headers' => array(),
 				'body' => $body_json,
-				'cookies' => array()
+				'cookies' => array(),
 			);
 
 			$raw_response = wp_remote_post( 'https://gravityflow.io/gravityformsapi/forms/3/submissions/', $options );
@@ -144,11 +144,10 @@ class Gravity_Flow_Support {
 			$is_active = in_array( $key, $active_plugins );
 			if ( $is_active ) {
 				$name      = substr( $key, 0, strpos( $key, '/' ) );
-				$plugins_details = array( 'name: ' . $name, 'version: ' . $plugin['Version'] );
-				$plugins[] = join( PHP_EOL, $plugins_details );
+				$plugins[] = array( $name . 'v' . $plugin['Version'] );
 			}
 		}
-		$plugins = join( PHP_EOL, $plugins );
+		$plugins = join( ', ', $plugins );
 
 		//get theme info
 		$theme            = wp_get_theme();
@@ -163,7 +162,7 @@ class Gravity_Flow_Support {
 		$inactive_count = $form_counts['inactive'];
 		$fc             = abs( $active_count ) + abs( $inactive_count );
 		$entry_count    = GFFormsModel::get_lead_count_all_forms( 'active' );
-		$im             = is_multisite();
+		$im             = is_multisite()  ? 'yes' : 'no';
 
 		global $wpdb;
 
