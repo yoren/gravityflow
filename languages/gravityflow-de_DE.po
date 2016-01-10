@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2016-01-02 20:36:50+00:00\n"
+"POT-Creation-Date: 2016-01-05 16:07:59+00:00\n"
 "PO-Revision-Date: 2016-01-03 09:12+0000\n"
 "Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
 "Language-Team: German (Germany) (http://www.transifex.com/gravityflow/gravityflow/language/de_DE/)\n"
@@ -809,27 +809,27 @@ msgstr "Eintrag #"
 msgid "show empty fields"
 msgstr "Zeige leere Felder"
 
-#: includes/pages/class-entry-detail.php:472
+#: includes/pages/class-entry-detail.php:478
 msgid "Order"
 msgstr "Auftrag"
 
-#: includes/pages/class-entry-detail.php:484
+#: includes/pages/class-entry-detail.php:490
 msgid "Product"
 msgstr "Produkt"
 
-#: includes/pages/class-entry-detail.php:485
+#: includes/pages/class-entry-detail.php:491
 msgid "Qty"
 msgstr "Anz"
 
-#: includes/pages/class-entry-detail.php:486
+#: includes/pages/class-entry-detail.php:492
 msgid "Unit Price"
 msgstr "Einheitspreis"
 
-#: includes/pages/class-entry-detail.php:487
+#: includes/pages/class-entry-detail.php:493
 msgid "Price"
 msgstr "Preis"
 
-#: includes/pages/class-entry-detail.php:547
+#: includes/pages/class-entry-detail.php:553
 msgid "Total"
 msgstr "Total"
 

@@ -55,6 +55,16 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.2.0.4 =
+- Added the timeline attribute to the shortcode so the timeline can be hidden.
+- Added the date field option to the schedule setting to allow steps to be scheduled for a date in the entry.
+- Added the workflow note setting to the apporval and user input steps so the note box can be hidden, required or required depending on the status.
+- Added the gravityflow_validation_approval and gravityflow_validation_user_input filters to allow custom validation.
+- Added support for required fields in the User Input step.
+
+= 1.2.0.3 =
+- Fixed an issue with the expiration delay calculation for units other than hours.
+
 = 1.2.0.2 =
 - Updated the workflow detail page to respect the conditional logic rules.
 
