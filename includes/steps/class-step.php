@@ -482,6 +482,19 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 		$entry = $this->get_entry();
 
+		if ( $this->schedule_type == 'date_field' ) {
+
+			$this->log_debug( __METHOD__ . '() schedule_date_field: ' . $this->schedule_date_field );
+			$schedule_date = $entry[ (string) $this->schedule_date_field ];
+			$this->log_debug( __METHOD__ . '() schedule_date: ' . $schedule_date );
+
+			$schedule_datetime = strtotime( $schedule_date );
+
+			return $schedule_datetime;
+		}
+
+
+
 		$entry_timestamp = $this->get_step_timestamp();
 
 		$schedule_timestamp = $entry_timestamp;
@@ -535,8 +548,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Returns the schedule timestamp calculated from the schedule settings.
 	 *
-	 * @param bool $utc
-	 *
 	 * @return bool|int|mixed
 	 */
 	function get_expiration_timestamp() {
@@ -560,7 +571,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 		$expiration_timestamp = $entry_timestamp;
 
-		switch ( $this->schedule_delay_unit ) {
+		switch ( $this->expiration_delay_unit ) {
 			case 'minutes' :
 				$expiration_timestamp += ( MINUTE_IN_SECONDS * $this->expiration_delay_offset );
 				break;
@@ -1122,7 +1133,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @param $form
 	 * @param $entry
 	 *
-	 * @return string|bool Return a feedback message to display to the user.
+	 * @return string|bool|WP_Error Return a success feedback message or a WP_Error instance with an error.
 	 */
 	public function maybe_process_status_update( $form, $entry ) {
 		return false;

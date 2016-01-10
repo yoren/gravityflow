@@ -1216,6 +1216,8 @@ PRIMARY KEY  (id)
 
 		public function settings_schedule( $field ) {
 
+			$form = $this->get_current_form();
+
 			$scheduled = array(
 				'name' => 'scheduled',
 				'type' => 'checkbox',
@@ -1242,6 +1244,28 @@ PRIMARY KEY  (id)
 						'value' => 'date',
 					),
 				),
+			);
+
+			$date_fields = GFFormsModel::get_fields_by_type( $form, 'date' );
+
+			$date_field_choices = array();
+
+			if ( ! empty( $date_fields ) ) {
+				$schedule_type['choices'][] = array(
+						'label' => esc_html__( 'Date Field' ),
+						'value' => 'date_field',
+					);
+
+
+				foreach ( $date_fields  as $date_field ) {
+					$date_field_choices[] = array( 'value' => $date_field->id, 'label' => GFFormsModel::get_label( $date_field ) );
+				}
+			}
+
+			$schedule_date_fields = array(
+				'name' => 'schedule_date_field',
+				'label' => esc_html__( 'Schedule Date Field', 'gravityflow' ),
+				'choices' => $date_field_choices,
 			);
 
 			$schedule_date = array(
@@ -1290,7 +1314,8 @@ PRIMARY KEY  (id)
 			$schedule_type_setting = $this->get_setting( 'schedule_type', 'delay' );
 			$schedule_style = $enabled ? '' : 'style="display:none;"';
 			$schedule_date_style = ( $schedule_type_setting == 'date' ) ? '' : 'style="display:none;"';
-			$schedule_delay_style = ( $schedule_type_setting !== 'date' ) ? '' : 'style="display:none;"';
+			$schedule_delay_style = ( $schedule_type_setting == 'delay' ) ? '' : 'style="display:none;"';
+			$schedule_date_fields_style = ( $schedule_type_setting == 'date_field' ) ? '' : 'style="display:none;"';
 			?>
 			<div class="gravityflow-schedule-settings" <?php echo $schedule_style ?> >
 				<div class="gravityflow-schedule-type-container">
@@ -1314,6 +1339,13 @@ PRIMARY KEY  (id)
 					esc_html_e( 'after the workflow step is triggered.' );
 					?>
 				</div>
+				<div class="gravityflow-schedule-date-field-container" <?php echo $schedule_date_fields_style ?>>
+					<?php
+					esc_html_e( 'Start this step on the date specified in the selected field.', 'gravityflow' );
+					echo '<br />';
+					$this->settings_select( $schedule_date_fields );
+					?>
+				</div>
 			</div>
 			<script>
 				(function($) {
@@ -1321,12 +1353,19 @@ PRIMARY KEY  (id)
 						$('.gravityflow-schedule-settings').slideToggle();
 					});
 					$( '#schedule_type0' ).click(function(){
-						$('.gravityflow-schedule-date-container').hide();
 						$('.gravityflow-schedule-delay-container').show();
+						$('.gravityflow-schedule-date-container').hide();
+						$('.gravityflow-schedule-date-field-container').hide();
 					});
 					$( '#schedule_type1' ).click(function(){
-						$('.gravityflow-schedule-date-container').show();
 						$('.gravityflow-schedule-delay-container').hide();
+						$('.gravityflow-schedule-date-container').show();
+						$('.gravityflow-schedule-date-field-container').hide();
+					});
+					$( '#schedule_type2' ).click(function(){
+					$('.gravityflow-schedule-delay-container').hide();
+						$('.gravityflow-schedule-date-container').hide();
+						$('.gravityflow-schedule-date-field-container').show();
 					});
 				})(jQuery);
 			</script>
@@ -1925,17 +1964,24 @@ PRIMARY KEY  (id)
 
 								$scheduled_timestamp = $current_step->get_schedule_timestamp();
 
-								if ( $current_step->schedule_type == 'delay' ) {
-									$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
-									$scheduled_date = get_date_from_gmt( $scheduled_date_str );
-								} else {
-									$scheduled_date = $current_step->schedule_date;
+								switch ( $current_step->schedule_type ) {
+									case 'delay' :
+										$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
+										$scheduled_date = get_date_from_gmt( $scheduled_date_str );
+										break;
+									case 'date' :
+										$scheduled_date = $current_step->schedule_date;
+										break;
+									case 'date_field' :
+										$scheduled_date = $entry[ (string) $current_step->schedule_date_field ];
 								}
+
 
 								printf( '<h4>%s: %s</h4>', esc_html__( 'Scheduled', 'gravityflow' ), $scheduled_date );
 							} elseif ( $current_step->is_expired() ) {
+								$this->process_workflow( $form, $entry_id );
 								$current_step = null;
-								printf( '<h4>%s</h4>', esc_html__( 'Expired: Pending processing', 'gravityflow' ) );
+								printf( '<h4>%s</h4>', esc_html__( 'Expired: refresh the page', 'gravityflow' ) );
 							} else {
 								$current_step->workflow_detail_status_box( $form );
 							}
