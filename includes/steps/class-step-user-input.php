@@ -107,6 +107,20 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 					),
 				),
 				array(
+					'name' => 'note_mode',
+					'label' => esc_html__( 'Workflow Note', 'gravityflow' ),
+					'type' => 'select',
+					'tooltip' => esc_html__( 'The text entered in the Note box will be added to the timeline. Use this setting to select the options for the Note box.', 'gravityflow' ),
+					'default_value' => 'not_required',
+					'choices' => array(
+						array( 'value' => 'hidden', 'label' => esc_html__( 'Hidden', 'gravityflow' ) ),
+						array( 'value' => 'not_required', 'label' => esc_html__( 'Not required', 'gravityflow' ) ),
+						array( 'value' => 'required','label' => esc_html__( 'Always Required', 'gravityflow' ) ),
+						array( 'value' => 'required_if_in_progress','label' => esc_html__( 'Required if in progress', 'gravityflow' ) ),
+						array( 'value' => 'required_if_complete','label' => esc_html__( 'Required if complete', 'gravityflow' ) ),
+					),
+				),
+				array(
 					'name'    => 'assignee_notification_enabled',
 					'label'   => 'Email',
 					'type'    => 'checkbox',
@@ -167,6 +181,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				),
 			),
 		);
+
 	}
 
 	public function process() {
@@ -325,7 +340,19 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		$form_id = $form['id'];
 
 		if ( isset( $_POST['gforms_save_entry'] ) && check_admin_referer( 'gforms_save_entry', 'gforms_save_entry' ) ) {
-			//Loading files that have been uploaded to temp folder
+
+			$new_status = rgpost( 'gravityflow_status' );
+
+			if ( ! in_array( $new_status, array( 'in_progress', 'complete' ) ) ) {
+				return false;
+			}
+
+			$validation = $this->validate_status_update( $new_status, $form );
+			if ( is_wp_error( $validation )  ) {
+				return $validation;
+			}
+
+			// Loading files that have been uploaded to temp folder
 			$files = GFCommon::json_decode( stripslashes( RGForms::post( 'gform_uploaded_files' ) ) );
 			if ( ! is_array( $files ) ) {
 				$files = array();
@@ -353,17 +380,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 			$this->maybe_adjust_assignment( $previous_assignees );
 
-			$user = wp_get_current_user();
-
-			$new_status = rgpost( 'gravityflow_status' );
-
-			if ( ! in_array( $new_status, array( 'in_progress', 'complete' ) ) ) {
-				return false;
-			}
-
 			if ( $token = gravity_flow()->decode_access_token() ) {
 				$assignee_key = sanitize_text_field( $token['sub'] );
 			} else {
+				$user = wp_get_current_user();
 				$assignee_key = 'user_id|' . $user->ID;
 			}
 
@@ -422,6 +442,40 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		GFAPI::send_notifications( $form, $entry, 'workflow_user_input' );
 
 		return $feedback;
+	}
+
+	public function validate_status_update( $new_status, $form ) {
+		$valid = true;
+		$note = rgpost( 'gravityflow_note' );
+		switch ( $this->note_mode ) {
+			case 'required' :
+				$valid = ! empty( $note );
+				break;
+			case 'required_if_in_progress' :
+				if ( $new_status == 'in_progress' && empty( $note ) ) {
+					$valid = false;
+				};
+				break;
+			case 'required_if_complete' :
+				if ( $new_status == 'complete' && empty( $note ) ) {
+					$valid = false;
+				};
+		}
+
+		$validation_result = array(
+			'is_valid' => $valid,
+			'form' => $form,
+		);
+
+		$validation_result = apply_filters( 'gravityflow_validation_user_input', $validation_result, $this );
+
+		if ( ! is_wp_error( $validation_result ) ) {
+			if ( ! $validation_result['is_valid'] ) {
+				$valid = new WP_Error( 'validation_result', esc_html__( 'There was a problem while updating your form.', 'gravityflow' ), $validation_result );
+			}
+		}
+
+		return $valid;
 	}
 
 	/**
@@ -575,12 +629,14 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 			if ( $can_update ) {
 				$default_status = $this->default_status ? $this->default_status : 'complete';
-				?>
-				<div>
-					<label id="gravityflow-notes-label" for="gravityflow-note"><?php esc_html_e( 'Notes', 'gravityflow' ); ?></label>
-				</div>
 
-				<textarea id="gravityflow-note" style="width:100%;" rows="4" class="wide" name="gravityflow_note"></textarea>
+				if ( $this->note_mode !== 'hidden' ) : ?>
+					<div>
+						<label id="gravityflow-notes-label" for="gravityflow-note"><?php esc_html_e( 'Note', 'gravityflow' ); ?></label>
+					</div>
+
+					<textarea id="gravityflow-note" style="width:100%;" rows="4" class="wide" name="gravityflow_note"></textarea>
+				<?php endif; ?>
 				<br /><br />
 				<div>
 					<label for="gravityflow_in_progress"><input type="radio" id="gravityflow_in_progress" name="gravityflow_status" <?php checked( $default_status, 'in_progress' ); ?> value="in_progress" /><?php esc_html_e( 'In progress', 'gravityflow' ); ?></label>&nbsp;&nbsp;

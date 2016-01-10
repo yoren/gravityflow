@@ -390,23 +390,43 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				$user_input_step_choices[] = array( 'label' => $step->get_name(), 'value' => $step->get_id() );
 			}
 		}
-		if ( ! empty( $user_input_step_choices  ) ) {
+
+		if ( ! empty( $user_input_step_choices ) ) {
 			$revert_field = array(
 				'name' => 'revert',
 				'label' => esc_html__( 'Revert to User Input step', 'gravityflow' ),
 				'type' => 'checkbox_and_select',
 				'tooltip' => esc_html__( 'The Revert setting enables a third option in addition to Approve and Reject which allows the assignee to send the entry directly to a User Input step without changing the status. Enable this setting to show the Revert button next to the Approve and Reject buttons and specify the User Input step the entry will be sent to.', 'gravityflow' ),
 				'checkbox' => array(
-					'label' => esc_html__( 'Enable', 'gravityflow')
+					'label' => esc_html__( 'Enable', 'gravityflow' ),
 				),
 				'select' => array(
 					'choices' => $user_input_step_choices,
 				),
 			);
 		}
+
+		$note_mode_setting = array(
+			'name' => 'note_mode',
+			'label' => esc_html__( 'Workflow Note', 'gravityflow' ),
+			'type' => 'select',
+			'tooltip' => esc_html__( 'The text entered in the Note box will be added to the timeline. Use this setting to select the options for the Note box.', 'gravityflow' ),
+			'default_value' => 'not_required',
+			'choices' => array(
+				array( 'value' => 'hidden', 'label' => esc_html__( 'Hidden', 'gravityflow' ) ),
+				array( 'value' => 'not_required', 'label' => esc_html__( 'Not required', 'gravityflow' ) ),
+				array( 'value' => 'required','label' => esc_html__( 'Always required', 'gravityflow' ) ),
+				array( 'value' => 'required_if_approved', 'label' => esc_html__( 'Required if approved', 'gravityflow' ) ),
+				array( 'value' => 'required_if_rejected', 'label' => esc_html__( 'Required if rejected', 'gravityflow' ) ),
+			),
+		);
+
 		if ( ! empty( $revert_field ) ) {
+			$note_mode_setting['choices'][] = array( 'value' => 'required_if_reverted', 'label' => esc_html__( 'Required if reverted', 'gravityflow' ) );
 			$settings['fields'][] = $revert_field;
 		}
+
+		$settings['fields'][] = $note_mode_setting;
 
 		return $settings;
 	}
@@ -546,43 +566,18 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return $is_valid;
 	}
 
-	/**
-	 * @deprecated  deprecated since version 1.0-beta-7
-	 *
-	 * @param $token
-	 * @param $user_id
-	 * @param $new_status
-	 *
-	 * @return bool
-	 */
-	public function is_valid_token_deprecated ($token, $user_id, $new_status ) {
-		$expiration_days = apply_filters( 'gravityflow_approval_token_expiration_days', 1 );
-
-		$i = wp_nonce_tick();
-
-		$is_valid = false;
-
-		$step_status_key = 'gravityflow_approval_new_status_step_' . $this->get_id();
-
-		for ( $n = 1; $n <= $expiration_days; $n++ ) {
-			$token_key = sprintf( '%s|%s|%s|%s', $i, $step_status_key, $user_id, $new_status );
-			$verification_token     = substr( wp_hash( $token_key ),  -12, 10 );
-			if ( hash_equals( $verification_token, $token ) ) {
-				$is_valid = true;
-				break;
-			}
-			$i--;
-		}
-		return $is_valid;
-	}
-
 	public function maybe_process_status_update( $form, $entry ) {
+
 		$feedback = false;
 		$step_status_key = 'gravityflow_approval_new_status_step_' . $this->get_id();
-		if ( isset( $_REQUEST[ $step_status_key ] ) || isset( $_GET['gworkflow_token'] ) || isset( $_GET['gflow_token'] )|| $token = gravity_flow()->decode_access_token() ) {
+		if ( isset( $_REQUEST[ $step_status_key ] ) || isset( $_GET['gflow_token'] ) || $token = gravity_flow()->decode_access_token() ) {
 			global $current_user;
 			if ( isset( $_POST['_wpnonce'] ) && check_admin_referer( 'gravityflow_approvals_' . $this->get_id() ) ) {
 				$new_status = rgpost( $step_status_key );
+				$validation = $this->validate_status_update( $new_status, $form );
+				if ( is_wp_error( $validation )  ) {
+					return $validation;
+				}
 
 				if ( $token = gravity_flow()->decode_access_token() ) {
 					$assignee = new Gravity_Flow_Assignee( sanitize_text_field( $token['sub'] ), $this );
@@ -591,12 +586,10 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				}
 			} else {
 
-				$gworkflow_token = rgget( 'gworkflow_token' ); // deprecated
-
 				$gflow_token = rgget( 'gflow_token' );
 				$new_status      = rgget( 'new_status' );
 
-				if ( ! $gflow_token && ! $gworkflow_token ) {
+				if ( ! $gflow_token ) {
 					return false;
 				}
 
@@ -616,14 +609,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 				$valid_token = $this->is_valid_token( $gflow_token );
 
-				$valid_token_deprecated = $this->is_valid_token_deprecated( $gworkflow_token, $current_user->ID, $new_status );
-
-				if ( ! ( $valid_token || $valid_token_deprecated ) ) {
+				if ( ! ( $valid_token ) ) {
 					return false;
 				}
 
 				$assignee = new Gravity_Flow_Assignee( 'user_id|' . $current_user->ID, $this );
-
 			}
 
 			$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
@@ -726,6 +716,46 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return $feedback;
 	}
 
+
+	public function validate_status_update( $new_status, $form ) {
+		$valid = true;
+		$note = rgpost( 'gravityflow_note' );
+		switch ( $this->note_mode ) {
+			case 'required' :
+				$valid = ! empty( $note );
+				break;
+			case 'required_if_approved' :
+				if ( $new_status == 'approved' && empty( $note ) ) {
+					$valid = false;
+				}
+				break;
+			case 'required_if_rejected' :
+				if ( $new_status == 'rejected' && empty( $note ) ) {
+					$valid = false;
+				}
+				break;
+			case 'required_if_reverted' :
+				if ( $new_status == 'revert' && empty( $note ) ) {
+					$valid = false;
+				}
+		}
+
+		$validation_result = array(
+			'is_valid' => $valid,
+			'form' => $form,
+		);
+
+		$validation_result = apply_filters( 'gravityflow_validation_approval', $validation_result, $this );
+
+		if ( ! is_wp_error( $validation_result ) ) {
+			if ( ! $validation_result['is_valid'] ) {
+				$valid = new WP_Error( 'validation_result', esc_html__( 'The note field is required.', 'gravityflow' ), $validation_result );
+			}
+		}
+
+		return $valid;
+	}
+
 	public function workflow_detail_status_box( $form ) {
 		$status               = esc_html__( 'Pending Approval', 'gravityflow' );
 		$approve_icon         = '<i class="fa fa-check" style="color:green"></i>';
@@ -798,17 +828,15 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				}
 
 				if ( $user_approval_status == 'pending' || $role_approval_status == 'pending' ) {
-					?>
-
-					<?php
 					wp_nonce_field( 'gravityflow_approvals_' . $this->get_id() );
-					?>
-					<br />
-					<div>
-						<label for="gravityflow-note"><?php esc_html_e( 'Note', 'gravityflow' ); ?></label>
-					</div>
 
-					<textarea id="gravityflow-note" style="width:100%;" rows="4" class="wide" name="gravityflow_note" ></textarea>
+					if ( $this->note_mode !== 'hidden' ) { ?>
+						<br />
+						<div>
+							<label for="gravityflow-note"><?php esc_html_e( 'Note', 'gravityflow' ); ?></label>
+						</div>
+						<textarea id="gravityflow-note" style="width:100%;" rows="4" class="wide" name="gravityflow_note" ></textarea>
+					<?php } ?>
 					<br /><br />
 					<div style="text-align:right;">
 						<button name="gravityflow_approval_new_status_step_<?php echo $this->get_id() ?>" value="approved" type="submit"
