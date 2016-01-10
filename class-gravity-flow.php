@@ -2732,6 +2732,7 @@ PRIMARY KEY  (id)
 				'display_empty_fields' => true,
 				'check_permissions' => true,
 				'show_header' => true,
+				'timeline' => true,
 			);
 
 			$args = array_merge( $defaults, $args );
@@ -3196,6 +3197,7 @@ PRIMARY KEY  (id)
 				'allow_anonymous' => false,
 				'title' => '',
 				'id_column' => true,
+				'timeline' => true,
 			), $atts );
 
 			if ( $a['form_id'] > 0 ) {
@@ -3205,6 +3207,7 @@ PRIMARY KEY  (id)
 			$a['title'] = sanitize_text_field( $a['title'] );
 
 			$a['id_column'] = strtolower( $a['id_column'] ) == 'false' ? false : true;
+			$a['timeline'] = strtolower( $a['timeline'] ) == 'false' ? false : true;
 
 			if ( is_null( $a['display_all'] ) ) {
 				$a['display_all'] = GFAPI::current_user_can_any( 'gravityflow_status_view_all' );
@@ -3248,6 +3251,7 @@ PRIMARY KEY  (id)
 						'show_header' => false,
 						'field_ids' => explode( ',', $a['fields'] ),
 						'detail_base_url' => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
+						'timeline' => $a['timeline'],
 					);
 
 					ob_start();
@@ -3275,6 +3279,7 @@ PRIMARY KEY  (id)
 							'show_header' => false,
 							'detail_base_url' => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
 							'check_permissions' => $check_permissions,
+							'timeline' => $a['timeline'],
 						);
 
 						$this->inbox_page( $args );

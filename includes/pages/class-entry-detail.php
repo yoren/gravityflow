@@ -22,6 +22,7 @@ class Gravity_Flow_Entry_Detail {
 			'display_empty_fields' => true,
 			'check_permissions' => true,
 			'show_header' => true,
+			'timeline' => true,
 		);
 
 		$args = array_merge( $defaults, $args );
@@ -29,6 +30,7 @@ class Gravity_Flow_Entry_Detail {
 		$display_empty_fields = (bool) $args['display_empty_fields'];
 		$check_view_entry_permissions = (bool) $args['check_permissions'];
 		$show_header = (bool) $args['show_header'];
+		$show_timeline = (bool) $args['timeline'];
 
 		?>
 
@@ -171,9 +173,12 @@ class Gravity_Flow_Entry_Detail {
 							   onclick="var notes_qs = jQuery('#gform_print_notes').is(':checked') ? '&notes=1' : ''; var url='<?php echo admin_url( 'admin-ajax.php' )?>?action=gravityflow_print_entries&lid=<?php echo absint( $entry['id'] ); ?>' + notes_qs; printPage(url);"
 							   class="button"><?php esc_html_e( 'Print', 'gravityflow' ) ?></a>
 
+								<?php if ( $show_timeline ) { ?>
+
 								<input type="checkbox" name="print_notes" value="print_notes" checked="checked"
 								       id="gform_print_notes"/>
 								<label for="print_notes"><?php esc_html_e( 'include timeline', 'gravityflow' ) ?></label>
+								<?php } ?>
 
 						</div>
 						<!-- end print button -->
@@ -208,20 +213,22 @@ class Gravity_Flow_Entry_Detail {
 							self::entry_detail_grid( $form, $entry, $display_empty_fields, $editable_fields, $current_step );
 
 							do_action( 'gravityflow_entry_detail', $form, $entry );
+
+							if ( $show_timeline ) {
 								?>
 								<div class="postbox">
 									<h3>
 										<label for="name"><?php esc_html_e( 'Timeline', 'gravityflow' ); ?></label>
 									</h3>
 
-
-										<div class="inside">
-											<?php
-											self::timeline( $entry, $form );
-											?>
-										</div>
+									<div class="inside">
+										<?php self::timeline( $entry, $form ); ?>
+									</div>
 
 								</div>
+
+							<?php } ?>
+
 						</div>
 					</div>
 
@@ -326,6 +333,7 @@ class Gravity_Flow_Entry_Detail {
 			$has_product_fields = false;
 			$display_fields_mode = $current_step ? $current_step->display_fields_mode : 'all_fields';
 			$display_fields_selected = $current_step && is_array( $current_step->display_fields_selected ) ? $current_step->display_fields_selected : array();
+
 
 			foreach ( $form['fields'] as &$field ) {
 				/* @var GF_Field $field */
