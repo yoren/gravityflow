@@ -23,7 +23,7 @@ class Gravity_Flow_Status {
 			$args['constraint_filters'] = apply_filters( 'gravityflow_status_filter', array(
 				'form_id'    => 0,
 				'start_date' => '',
-				'end_date'   => ''
+				'end_date'   => '',
 			) );
 		}
 		if ( ! isset( $args['constraint_filters']['form_id'] ) ) {
