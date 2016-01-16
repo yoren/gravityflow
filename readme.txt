@@ -55,6 +55,10 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.2.0.5 =
+- Updated the auto-update and license check component.
+- Update the field labels in the entry detail page to display the full label instead of the admin label.
+
 = 1.2.0.4 =
 - Added the timeline attribute to the shortcode so the timeline can be hidden.
 - Added the date field option to the schedule setting to allow steps to be scheduled for a date in the entry.
