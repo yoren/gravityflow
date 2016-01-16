@@ -359,7 +359,7 @@ class Gravity_Flow_Entry_Detail {
 							$is_last = $count >= $field_count ? true : false;
 							?>
 							<tr>
-								<td colspan="2" class="entry-view-section-break<?php echo $is_last ? ' lastrow' : '' ?>"><?php echo esc_html( GFCommon::get_label( $field ) ) ?></td>
+								<td colspan="2" class="entry-view-section-break<?php echo $is_last ? ' lastrow' : '' ?>"><?php echo esc_html( rgar( $field, 'label' ) ) ?></td>
 							</tr>
 						<?php
 						}
@@ -411,7 +411,7 @@ class Gravity_Flow_Entry_Detail {
 
 							$content = self::get_field_content( $field, $value, true, $form );
 
-							$content = apply_filters( 'gform_field_content', $content, $field, $value, $entry['id'], $form['id'] );
+							$content = apply_filters( 'gravityflow_field_content', $content, $field, $value, $entry['id'], $form['id'] );
 
 							echo $content;
 						} else {
@@ -464,13 +464,13 @@ class Gravity_Flow_Entry_Detail {
 
 								$content = '
                                 <tr>
-                                    <td colspan="2" class="entry-view-field-name">' . esc_html( GFCommon::get_label( $field ) ) . '</td>
+                                    <td colspan="2" class="entry-view-field-name">' . esc_html( rgar( $field, 'label' ) ) . '</td>
                                 </tr>
                                 <tr>
                                     <td colspan="2" class="entry-view-field-value' . $last_row . '">' . $display_value . '</td>
                                 </tr>';
 
-								$content = apply_filters( 'gform_field_content', $content, $field, $value, $entry['id'], $form['id'] );
+								$content = apply_filters( 'gravityflow_field_content', $content, $field, $value, $entry['id'], $form['id'] );
 
 								echo $content;
 
@@ -785,7 +785,7 @@ class Gravity_Flow_Entry_Detail {
 		}
 
 		$field_content = "<tr>
-		                     <td colspan='2' class='entry-view-field-name'><label class='gfield_label' $for_attribute >" . esc_html( GFCommon::get_label( $field ) ) . $required_div . "</label></td>
+		                     <td colspan='2' class='entry-view-field-name'><label class='gfield_label' $for_attribute >" . esc_html( rgar( $field, 'label' ) ) . $required_div . "</label></td>
 		                 </tr>
 		                 <tr valign='top'><td colspan='2' class='detail-view' id='{$td_id}'>$field_input</td></tr>";
 
