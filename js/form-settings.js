@@ -128,34 +128,7 @@
         var routing_items = json ? $.parseJSON(json) : null;
 
 		var options;
-		if ( selectedStepType == 'approval' ) {
-			if (!routing_items) {
-				routing_items = [{
-					assignee: gf_routing_setting_strings['accounts'][0]['choices'][0]['value'],
-					fieldId: '0',
-					operator: 'is',
-					value: '',
-					type: '',
-				}];
-				$('#routing').val($.toJSON(routing_items));
-			}
-
-			options = {
-				fieldName: $routingSetting.data('field_name'),
-				fieldId: $routingSetting.data('field_id'),
-				settings: gf_routing_setting_strings['fields'],
-				accounts: gf_routing_setting_strings['accounts'],
-				imagesURL: gf_vars.baseUrl + "/images",
-				items: routing_items,
-				callbacks: {
-					addNewTarget: function (obj, target) {
-						var str = GravityFlowFeedSettings.getUsersMarkup('assignee');
-						return str;
-					}
-				}
-			};
-
-		} else if ( selectedStepType == 'user_input' ) {
+		if ( selectedStepType == 'user_input' ) {
 			if (!routing_items) {
 				routing_items = [{
 					assignee: gf_routing_setting_strings['accounts'][0]['choices'][0]['value'],
@@ -163,7 +136,7 @@
 					fieldId: '0',
 					operator: 'is',
 					value: '',
-					type: '',
+					type: ''
 				}];
 				$('#user_input_routing').val($.toJSON(routing_items));
 			}
@@ -195,7 +168,33 @@
 					}
 				}
 			};
-		}
+		} else {
+            if (!routing_items) {
+                routing_items = [{
+                    assignee: gf_routing_setting_strings['accounts'][0]['choices'][0]['value'],
+                    fieldId: '0',
+                    operator: 'is',
+                    value: '',
+                    type: ''
+                }];
+                $('#routing').val($.toJSON(routing_items));
+            }
+
+            options = {
+                fieldName: $routingSetting.data('field_name'),
+                fieldId: $routingSetting.data('field_id'),
+                settings: gf_routing_setting_strings['fields'],
+                accounts: gf_routing_setting_strings['accounts'],
+                imagesURL: gf_vars.baseUrl + "/images",
+                items: routing_items,
+                callbacks: {
+                    addNewTarget: function (obj, target) {
+                        var str = GravityFlowFeedSettings.getUsersMarkup('assignee');
+                        return str;
+                    }
+                }
+            };
+        }
 
         $routingSetting.gfRoutingSetting(options);
 
