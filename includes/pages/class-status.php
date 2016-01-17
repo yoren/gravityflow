@@ -15,7 +15,8 @@ class Gravity_Flow_Status {
 			'field_ids'          => apply_filters( 'gravityflow_status_fields', array() ),
 			'format'             => 'table', // csv
 			'file_name'          => 'export.csv',
-			'id_column'            => true,
+			'id_column'          => true,
+			'last_updated'       => false,
 		);
 		$args     = array_merge( $defaults, $args );
 
@@ -179,6 +180,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 	public $id_column;
 
+	public $last_updated;
+
 	function __construct( $args = array() ) {
 
 		$default_bulk_actions = array( 'print' => esc_html__( 'Print', 'gravityflow' ) );
@@ -200,6 +203,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			'bulk_actions'       => $default_bulk_actions,
 			'per_page'           => 20,
 			'id_column'            => true,
+			'last_updated' => false,
 		);
 
 		$args = wp_parse_args( $args, $default_args );
@@ -223,6 +227,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$this->set_counts();
 		$this->per_page = $args['per_page'];
 		$this->id_column = $args['id_column'];
+		$this->last_updated = $args['last_updated'];
 	}
 
 	function no_items() {
@@ -559,6 +564,21 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		echo $link;
 	}
 
+	function column_workflow_timestamp( $item ) {
+		$label = '-';
+
+		if ( isset( $item['workflow_timestamp'] ) ) {
+			$last_updated = date( 'Y-m-d H:i:s', $item['workflow_timestamp'] );
+			if ( $item['date_created'] != $last_updated ) {
+				$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
+				$last_updated = esc_html( GFCommon::format_date( $last_updated, true, 'Y/m/d' ) );
+				$label  = "<a href='{$url_entry}'>$last_updated</a>";
+			}
+		}
+
+		echo $label;
+	}
+
 	function get_bulk_actions() {
 		$bulk_actions = $this->bulk_actions;
 
@@ -572,6 +592,10 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			'workflow_final_status' => array( 'workflow_final_status', false ),
 			'date_created'          => array( 'date_created', false ),
 		);
+
+		if ( $this->last_updated ) {
+			$sortable_columns['workflow_timestamp'] = array( 'workflow_timestamp', false );
+		}
 
 		return $sortable_columns;
 	}
@@ -615,6 +639,9 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			}
 		}
 
+		if ( $this->last_updated ) {
+			$columns['workflow_timestamp'] = esc_html__( 'Last Updated', 'gravityflow' );
+		}
 
 		return $columns;
 	}

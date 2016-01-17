@@ -3209,6 +3209,7 @@ PRIMARY KEY  (id)
 				'title' => '',
 				'id_column' => true,
 				'timeline' => true,
+				'last_updated' => false,
 			), $atts );
 
 			if ( $a['form_id'] > 0 ) {
@@ -3229,6 +3230,7 @@ PRIMARY KEY  (id)
 			}
 
 			$a['allow_anonymous'] = strtolower( $a['allow_anonymous'] ) == 'true' ? true : false;
+			$a['last_updated'] = strtolower( $a['last_updated'] ) == 'true' ? true : false;
 
 			if ( ! $a['allow_anonymous'] && ! is_user_logged_in() ) {
 				if ( ! $this->validate_access_token() ) {
@@ -3263,6 +3265,7 @@ PRIMARY KEY  (id)
 						'field_ids' => explode( ',', $a['fields'] ),
 						'detail_base_url' => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
 						'timeline' => $a['timeline'],
+						'last_updated' => $a['last_updated'],
 					);
 
 					ob_start();
@@ -3313,6 +3316,7 @@ PRIMARY KEY  (id)
 							'field_ids' => explode( ',', $a['fields'] ),
 							'display_all' => $a['display_all'],
 							'id_column' => $a['id_column'],
+							'last_updated' => $a['last_updated'],
 						);
 
 						if ( ! is_user_logged_in() && $a['allow_anonymous'] ) {

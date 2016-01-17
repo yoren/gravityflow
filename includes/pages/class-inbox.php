@@ -17,9 +17,10 @@ class Gravity_Flow_Inbox {
 			'display_empty_fields' => true,
 			'id_column' => true,
 			'check_permissions'    => true,
-			'form_id'              => rgar( $filter, 'form_id' ),
+			'form_id'              => absint( rgar( $filter, 'form_id' ) ),
 			'field_ids'              => $field_ids,
 			'detail_base_url'      => admin_url( 'admin.php?page=gravityflow-inbox&view=entry' ),
+			'last_updated' => false,
 		);
 
 		$args = array_merge( $defaults, $args );
@@ -33,6 +34,8 @@ class Gravity_Flow_Inbox {
 		$entries = array();
 
 		$form_id = $args['form_id'];
+
+		$total_count = 0;
 
 		if ( ! empty( $filter_key ) ) {
 			$field_filters[] = array(
@@ -58,7 +61,6 @@ class Gravity_Flow_Inbox {
 				$paging = array(
 					'page_size' => 150,
 				);
-				$total_count = 0;
 				$entries = GFAPI::get_entries( $form_ids, $search_criteria, null, $paging, $total_count );
 			}
 		}
@@ -71,7 +73,7 @@ class Gravity_Flow_Inbox {
 				<thead>
 				<tr>
 					<th <?php echo $id_style ?> data-label="<?php esc_html_e( 'ID', 'gravityflow' ); ?>"><?php esc_html_e( 'ID', 'gravityflow' ); ?></th>
-					<?php if ( $form_id === 0 ) : ?>
+					<?php if ( empty( $form_id ) ) : ?>
 						<th><?php esc_html_e( 'Form', 'gravityflow' ); ?></th>
 					<?php endif; ?>
 					<th><?php esc_html_e( 'Submitter', 'gravityflow' ); ?></th>
@@ -88,6 +90,9 @@ class Gravity_Flow_Inbox {
 								echo '<th>' .  esc_html( $field_info['label'] ) . '</th>';
 							}
 						}
+					}
+					if ( $args['last_updated'] ) {
+						echo '<th>' .  esc_html__( 'Last Updated', 'gravityflow' ) . '</th>';
 					}
 
 					?>
@@ -111,7 +116,7 @@ class Gravity_Flow_Inbox {
 							printf( $link, $url_entry, $entry['id'] );
 							?>
 						</td>
-						<?php if ( $form_id === 0 ) : ?>
+						<?php if ( empty( $form_id ) ) : ?>
 							<td data-label="<?php esc_html_e( 'Form', 'gravityflow' ); ?>">
 								<?php
 								printf( $link, $url_entry, $form['title'] );
@@ -164,6 +169,21 @@ class Gravity_Flow_Inbox {
 							}
 						}
 
+						if ( $args['last_updated'] ) {
+							?>
+							<td data-label="<?php esc_html_e( 'Last_Updated', 'gravityflow' ); ?>">
+								<?php
+								$last_updated = date( 'Y-m-d H:i:s', $entry['workflow_timestamp'] );
+								if ( $entry['date_created'] != $last_updated ) {
+									echo esc_html( GFCommon::format_date( $last_updated, true, 'Y/m/d' ) );
+								} else {
+									echo '-';
+								}
+								?>
+							</td>
+							<?php
+						}
+
 						?>
 					</tr>
 				<?php
@@ -172,7 +192,13 @@ class Gravity_Flow_Inbox {
 				</tbody>
 			</table>
 
-		<?php
+			<?php
+			if ( $total_count > 150 ) {
+				echo '<br />';
+				echo '<div class="excess_entries_indicator">';
+				printf( '(Showing 150 of %d)', absint( $total_count ) );
+				echo '</div>';
+			}
 		} else {
 			?>
 			<div id="gravityflow-no-pending-tasks-container">
