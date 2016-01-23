@@ -871,7 +871,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		}
 
 		if ( empty( $page_id ) || $page_id == 'admin' ) {
-			$base_url = admin_url();
+			$base_url = admin_url( 'admin.php' );
 		} else {
 			$base_url = get_permalink( $page_id );
 		}
