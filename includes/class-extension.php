@@ -195,6 +195,12 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 		);
 
 		$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params ) );
+
+		// Force plugins page to refresh the update info.
+		set_site_transient( 'update_plugins', null );
+		$cache_key = md5( 'edd_plugin_' . sanitize_key( $this->_path ) . '_version_info' );
+		delete_transient( $cache_key );
+
 		return json_decode( wp_remote_retrieve_body( $response ) );
 	}
 }
