@@ -55,12 +55,24 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.2.0.8 =
+- Updated styles of the front end validation message.
+
+= 1.2.0.7 =
+- Added support for field validation in the User Input step.
+
+= 1.2.0.6 =
+- Added the gravityflow_permission_denied_message_entry_detail filter to allow the error message to be customized.
+- Fixed an issue with the URL in the entry link merge tag.
+- Fixed an issue with the timeline notes for email assignees
+
+
 = 1.2.0.5 =
 - Added the last_updated attribute to the inbox shortcode to activate the last updated column to appear in the inbox list.
 - Added total count indicator below the inbox when entry count > 150.
 - Updated the auto-update and license check component.
-- Update the field labels in the entry detail page to display the full label instead of the admin label.
-- Fixed an issue in the inbox where the form name doesn't appear.
+- Updated the field labels in the entry detail page to display the full label instead of the admin label.
+- Fixed an issue in the inbox where the form n  ame doesn't appear.
 
 = 1.2.0.4 =
 - Added the timeline attribute to the shortcode so the timeline can be hidden.
