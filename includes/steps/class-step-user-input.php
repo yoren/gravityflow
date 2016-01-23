@@ -445,8 +445,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	}
 
 	public function validate_status_update( $new_status, $form ) {
-		$valid = true;
+
 		$note = rgpost( 'gravityflow_note' );
+		$valid = true;
 		switch ( $this->note_mode ) {
 			case 'required' :
 				$valid = ! empty( $note );
@@ -460,6 +461,29 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				if ( $new_status == 'complete' && empty( $note ) ) {
 					$valid = false;
 				};
+		}
+
+		if ( ! $valid ) {
+			$form['workflow_note'] = array( 'failed_validation' => true, 'validation_message' => esc_html__( 'A note is required' ) );
+		}
+
+		$editable_fields = $this->get_editable_fields();
+
+		foreach ( $form['fields'] as $field ) {
+			/* @var GF_Field $field */
+			if ( in_array( $field->id, $editable_fields ) ) {
+				$value = GFFormsModel::get_field_value( $field );
+				if ( $field->isRequired && $field->is_value_submission_empty( $form['id'] ) ) {
+					$field->failed_validation  = true;
+					$field->validation_message = empty( $field->errorMessage ) ? __( 'This field is required.', 'gravityforms' ) : $field->errorMessage;
+					$valid = false;
+				} else {
+					$field->validate( $value, $form );
+					if ( $field->failed_validation ) {
+						$valid = false;
+					}
+				}
+			}
 		}
 
 		$validation_result = array(
@@ -630,13 +654,35 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			if ( $can_update ) {
 				$default_status = $this->default_status ? $this->default_status : 'complete';
 
-				if ( $this->note_mode !== 'hidden' ) : ?>
+				if ( $this->note_mode !== 'hidden' ) {
+					$invalid_note = ( isset( $form['workflow_note'] ) && is_array( $form['workflow_note'] ) && $form['workflow_note']['failed_validation'] );
+					?>
+
 					<div>
-						<label id="gravityflow-notes-label" for="gravityflow-note"><?php esc_html_e( 'Note', 'gravityflow' ); ?></label>
+						<label id="gravityflow-notes-label"
+						       for="gravityflow-note">
+							<?php
+							esc_html_e( 'Note', 'gravityflow' );
+							$required_indicator = ( $this->note_mode == 'required' ) ? '*' : '';
+							printf( "<span class='gfield_required'>%s</span>", $required_indicator );
+							?>
+						</label>
 					</div>
 
-					<textarea id="gravityflow-note" style="width:100%;" rows="4" class="wide" name="gravityflow_note"></textarea>
-				<?php endif; ?>
+					<textarea id="gravityflow-note" style="width:100%;" rows="4" class="wide"
+					          name="gravityflow_note"><?php
+						$posted_note = rgpost( 'gravityflow_note' );
+						if ( $posted_note ) {
+							echo esc_html( $posted_note );
+						}
+						?></textarea>
+					<?php
+
+					if ( $invalid_note ) {
+						printf( "<div class='gfield_description validation_message'>%s</div>", $form['workflow_note']['validation_message'] );
+					}
+				}
+				?>
 				<br /><br />
 				<div>
 					<label for="gravityflow_in_progress"><input type="radio" id="gravityflow_in_progress" name="gravityflow_status" <?php checked( $default_status, 'in_progress' ); ?> value="in_progress" /><?php esc_html_e( 'In progress', 'gravityflow' ); ?></label>&nbsp;&nbsp;

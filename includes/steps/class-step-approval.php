@@ -740,6 +740,10 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				}
 		}
 
+		if ( ! $valid ) {
+			$form['workflow_note'] = array( 'failed_validation' => true, 'validation_message' => esc_html__( 'A note is required' ) );
+		}
+
 		$validation_result = array(
 			'is_valid' => $valid,
 			'form' => $form,
@@ -833,10 +837,27 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					if ( $this->note_mode !== 'hidden' ) { ?>
 						<br />
 						<div>
-							<label for="gravityflow-note"><?php esc_html_e( 'Note', 'gravityflow' ); ?></label>
+							<label for="gravityflow-note">
+								<?php
+								esc_html_e( 'Note', 'gravityflow' );
+								$required_indicator = ( $this->note_mode == 'required' ) ? '*' : '';
+								printf( "<span class='gfield_required'>%s</span>", $required_indicator );
+								?>
+							</label>
 						</div>
-						<textarea id="gravityflow-note" style="width:100%;" rows="4" class="wide" name="gravityflow_note" ></textarea>
-					<?php } ?>
+						<textarea id="gravityflow-note" style="width:100%;" rows="4" class="wide" name="gravityflow_note" ><?php
+							$posted_note = rgpost( 'gravityflow_note' );
+							if ( $posted_note ) {
+								echo esc_html( $posted_note );
+							}
+							?></textarea>
+						<?php
+						$invalid_note = ( isset( $form['workflow_note'] ) && is_array( $form['workflow_note'] ) && $form['workflow_note']['failed_validation'] );
+						if ( $invalid_note ) {
+							printf( "<div class='gfield_description validation_message'>%s</div>", $form['workflow_note']['validation_message'] );
+						}
+					}
+					?>
 					<br /><br />
 					<div style="text-align:right;">
 						<button name="gravityflow_approval_new_status_step_<?php echo $this->get_id() ?>" value="approved" type="submit"
