@@ -588,3 +588,15 @@ table.wp-list-table.entries td[data-label="ID"] {
 	margin:5px;
 	color:#0074a2;
 }
+
+div.gravityflow_validation_error {
+    border-bottom: 2px solid #790000;
+    border-top: 2px solid #790000;
+    clear: both;
+    color: #790000;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 1.6em;
+    padding: 1em 0;
+    width: 97.5%;
+}

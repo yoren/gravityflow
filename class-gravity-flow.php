@@ -2810,7 +2810,7 @@ PRIMARY KEY  (id)
 						$form = $error_data['form'];
 					}
 					?>
-					<div class="notice error is-dismissible" style="padding:6px;">
+					<div class="notice error is-dismissible gravityflow_validation_error" style="padding:6px;">
 						<?php esc_html_e( $feedback->get_error_message() ); ?>
 					</div>
 					<?php
