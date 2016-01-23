@@ -69,7 +69,7 @@ class Gravity_Flow_Inbox {
 			$id_style = $args['id_column'] ? '' : 'style="display:none;"';
 			?>
 
-			<table id="gravityflow-inbox" class="widefat" cellspacing="0" style="border:0px;">
+			<table id="gravityflow-inbox" class="widefat gravityflow-inbox" cellspacing="0" style="border:0px;">
 				<thead>
 				<tr>
 					<th <?php echo $id_style ?> data-label="<?php esc_html_e( 'ID', 'gravityflow' ); ?>"><?php esc_html_e( 'ID', 'gravityflow' ); ?></th>
