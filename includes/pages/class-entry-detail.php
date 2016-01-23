@@ -148,8 +148,9 @@ class Gravity_Flow_Entry_Detail {
 					) );
 
 					if ( ! ( $user_status || $full_access ) ) {
-						esc_attr_e( "You don't have permission to view this entry.", 'gravityflow' );
-
+						$permission_denied_message = esc_attr__( "You don't have permission to view this entry.", 'gravityflow' );
+						$permission_denied_message = apply_filters( 'gravityflow_permission_denied_message_entry_detail', $permission_denied_message, $current_step );
+						echo $permission_denied_message;
 						return;
 					}
 				}
@@ -399,15 +400,9 @@ class Gravity_Flow_Entry_Detail {
 							$posted_step_id = rgpost( 'step_id' );
 							if ( $posted_step_id == $current_step->get_id() ) {
 								$value = GFFormsModel::get_field_value( $field );
-								if ( $field->isRequired && $field->is_value_submission_empty( $form_id ) ) {
-									$field->failed_validation  = true;
-									$field->validation_message = empty( $field->errorMessage ) ? __( 'This field is required.', 'gravityforms' ) : $field->errorMessage;
-								}
 							} else {
 								$value = GFFormsModel::get_lead_field_value( $entry, $field );
 							}
-
-
 
 							$content = self::get_field_content( $field, $value, true, $form );
 
@@ -639,13 +634,15 @@ class Gravity_Flow_Entry_Detail {
 								<?php
 
 								if ( empty( $note->user_id ) ) {
-									if ( $note->user_name !== 'gravityflow' ) {
+									if ( $note->user_name == 'gravityflow' ) {
+										echo esc_html( gravity_flow()->translate_navigation_label( 'Workflow' ) );
+									} else {
 										$step = Gravity_Flow_Steps::get( $note->user_name );
 										if ( $step ) {
 											echo $step->get_label();
+										} else {
+											echo esc_html( $note->user_name );
 										}
-									} else {
-										echo esc_html( gravity_flow()->translate_navigation_label( 'Workflow' ) );
 									}
 								} else {
 									echo esc_html( $note->user_name );
