@@ -131,6 +131,7 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 	}
 
 	function process() {
+		$this->log_debug( __METHOD__ . '(): starting' );
 
 		if ( class_exists( 'GFPDF_Core' ) ) {
 			global $gfpdf;
