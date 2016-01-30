@@ -1223,10 +1223,10 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
-	 * Override to return an array of editable fields for the given user.
+	 * Override to return an array of editable fields for the current user.
 	 * @return array
 	 */
-	public function get_editable_fields(){
+	public function get_editable_fields() {
 		return array();
 	}
 
