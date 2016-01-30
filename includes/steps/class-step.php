@@ -461,7 +461,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$this->log_debug( __METHOD__ . '() schedule_timestamp formatted: ' . date( 'Y-m-d H:i:s', $schedule_timestamp ) );
 
 		// Schedule delay is relative to UTC. Schedule date is relative to timezone of the site.
-		$current_time = $this->schedule_type == 'date' ? current_time( 'timestamp' ) : time();
+		$current_time = in_array( $this->schedule_type, array( 'date', 'date_field' ) ) ? current_time( 'timestamp' ) : time();
 
 		$this->log_debug( __METHOD__ . '() current_time: ' . $current_time );
 		$this->log_debug( __METHOD__ . '() current_time formatted: ' . date( 'Y-m-d H:i:s', $current_time ) );
@@ -496,8 +496,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 			return $schedule_datetime;
 		}
-
-
 
 		$entry_timestamp = $this->get_step_timestamp();
 
