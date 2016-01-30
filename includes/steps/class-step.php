@@ -383,14 +383,18 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return bool Is the step complete?
 	 */
 	public function start() {
-		$this->log_debug( __METHOD__ . '() - triggered step: ' . $this->get_name() );
+
+		$entry_id = $this->get_entry_id();
+
+		$this->log_debug( __METHOD__ . '() - triggered step: ' . $this->get_name() . ' for entry id ' .$entry_id );
 
 		$step_id = $this->get_id();
-		$entry_id = $this->get_entry_id();
+
 		gform_update_meta( $entry_id , 'workflow_step', $step_id );
 
 		$step_timestamp = $this->get_step_timestamp();
 		if ( empty( $step_timestamp ) ) {
+			$this->log_debug( __METHOD__ . '() - No timestamp, adding one' );
 			gform_update_meta( $entry_id, 'workflow_step_' . $this->get_id() . '_timestamp', time() );
 			$this->refresh_entry();
 		}
