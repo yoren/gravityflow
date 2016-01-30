@@ -386,9 +386,12 @@ class Gravity_Flow_Entry_Detail {
 
 						$field_id = $field->id;
 
-						$field->conditionalLogic = null;
-
 						if ( in_array( $field_id, $editable_fields ) ) {
+
+							if ( ! $current_step->conditional_logic_editable_fields_enabled ) {
+								$field->conditionalLogic = null;
+							}
+
 							if ( $field->get_input_type() == 'fileupload' ) {
 								$field->_is_entry_detail = true;
 							}
@@ -404,12 +407,14 @@ class Gravity_Flow_Entry_Detail {
 								$value = GFFormsModel::get_lead_field_value( $entry, $field );
 							}
 
-							$content = self::get_field_content( $field, $value, true, $form );
+							$content = self::get_field_content( $field, $value, $form, $entry );
 
 							$content = apply_filters( 'gravityflow_field_content', $content, $field, $value, $entry['id'], $form['id'] );
 
 							echo $content;
 						} else {
+
+							$field->conditionalLogic = null;
 
 							if ( ! $display_field ) {
 								continue;

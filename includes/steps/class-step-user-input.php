@@ -39,7 +39,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			array( 'label' => __( 'Conditional Routing', 'gravityflow' ), 'value' => 'routing' ),
 		);
 
-		return array(
+		$form = $this->get_form();
+
+		$settings = array(
 			'title'  => esc_html__( 'User Input', 'gravityflow' ),
 			'fields' => array(
 				array(
@@ -70,118 +72,160 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 					'label' => 'Assignee Routing',
 					'type'  => 'routing',
 				),
-				array(
-					'id' => 'assignee_policy',
-					'name'     => 'assignee_policy',
-					'label'    => __( 'Assignee Policy', 'gravityflow' ),
-					'tooltip'   => __( 'Define how this step should be processed. If all assignees must complete this step then the entry will require input from every assignee before the step can be completed. If the step is assigned to a role only one user in that role needs to complete the step.', 'gravityflow' ),
-					'type'     => 'radio',
-					'default_value' => 'all',
-					'choices' => array(
-						array(
-							'label' => __( 'At least one assignee must complete this step', 'gravityflow' ),
-							'value' => 'any',
-						),
-						array(
-							'label' => __( 'All assignees must complete this step', 'gravityflow' ),
-							'value' => 'all',
-						),
-					),
-				),
-				array(
-					'name'     => 'display_fields',
-					'label'    => __( 'Display Fields', 'gravityflow' ),
-					'tooltip'   => __( 'Select the fields to hide or display.', 'gravityflow' ),
-					'type'     => 'display_fields',
-				),
-				array(
-					'name' => 'default_status',
-					'type' => 'radio',
-					'label' => __( 'Default update status', 'gravityflow' ),
-					'tooltip' => __( 'The default value for the status on the workflow detail page', 'gravityflow' ),
-					'default_value' => 'complete',
-					'horizontal' => true,
-					'choices' => array(
-						array( 'label' => __( 'In progress', 'gravityflow' ), 'value' => 'in_progress' ),
-						array( 'label' => __( 'Complete', 'gravityflow' ), 'value' => 'complete' ),
-					),
-				),
-				array(
-					'name' => 'note_mode',
-					'label' => esc_html__( 'Workflow Note', 'gravityflow' ),
-					'type' => 'select',
-					'tooltip' => esc_html__( 'The text entered in the Note box will be added to the timeline. Use this setting to select the options for the Note box.', 'gravityflow' ),
-					'default_value' => 'not_required',
-					'choices' => array(
-						array( 'value' => 'hidden', 'label' => esc_html__( 'Hidden', 'gravityflow' ) ),
-						array( 'value' => 'not_required', 'label' => esc_html__( 'Not required', 'gravityflow' ) ),
-						array( 'value' => 'required','label' => esc_html__( 'Always Required', 'gravityflow' ) ),
-						array( 'value' => 'required_if_in_progress','label' => esc_html__( 'Required if in progress', 'gravityflow' ) ),
-						array( 'value' => 'required_if_complete','label' => esc_html__( 'Required if complete', 'gravityflow' ) ),
-					),
-				),
-				array(
-					'name'    => 'assignee_notification_enabled',
-					'label'   => 'Email',
-					'type'    => 'checkbox',
-					'choices' => array(
-						array(
-							'label'         => __( 'Enabled' ),
-							'name'          => 'assignee_notification_enabled',
-							'default_value' => 1,
-						),
-					),
-				),
-				array(
-					'name'  => 'assignee_notification_from_name',
-					'label' => __( 'From Name', 'gravityflow' ),
-					'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-					'type'  => 'text',
-				),
-				array(
-					'name'  => 'assignee_notification_from_email',
-					'label' => __( 'From Email', 'gravityflow' ),
-					'type'  => 'text',
-					'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-					'default_value' => '{admin_email}',
-				),
-				array(
-					'name'  => 'assignee_notification_reply_to',
-					'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-					'label' => __( 'Reply To', 'gravityflow' ),
-					'type'  => 'text',
-				),
-				array(
-					'name'  => 'assignee_notification_bcc',
-					'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-					'label' => __( 'BCC', 'gravityflow' ),
-					'type'  => 'text',
-				),
-				array(
-					'name'  => 'assignee_notification_subject',
-					'class' => 'fieldwidth-1 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-					'label' => __( 'Subject', 'gravityflow' ),
-					'type'  => 'text',
-				),
-				array(
-					'name'  => 'assignee_notification_message',
-					'label' => 'Message',
-					'type'  => 'visual_editor',
-					'default_value' => esc_html__( 'A new entry requires your input', 'gravityflow' ),
-				),
-				array(
-					'name' => 'resend_assignee_email',
-					'label' => __( 'Send reminder', 'gravityflow' ),
-					'type' => 'checkbox_and_text',
-					'text' => array(
-						'default_value' => 7,
-						'before_input' => __( 'Resend the assignee email after', 'gravityflow' ),
-						'after_input' => ' ' . __( 'day(s)', 'gravityflow' ),
-					),
-				),
 			),
 		);
 
+		if ( $this->fields_have_conditional_logic( $form ) ) {
+			$settings['fields'][] = array(
+				'name'    => 'conditional_logic_editable_fields_enabled',
+				'label'   => 'Conditional Logic',
+				'type'    => 'checkbox',
+				'choices' => array(
+					array(
+						'label'         => __( 'Evaluate field conditional logic' ),
+						'name'          => 'conditional_logic_editable_fields_enabled',
+						'default_value' => 0,
+					),
+				),
+			);
+		}
+
+		$settings2 = array(
+			array(
+				'id'            => 'assignee_policy',
+				'name'          => 'assignee_policy',
+				'label'         => __( 'Assignee Policy', 'gravityflow' ),
+				'tooltip'       => __( 'Define how this step should be processed. If all assignees must complete this step then the entry will require input from every assignee before the step can be completed. If the step is assigned to a role only one user in that role needs to complete the step.', 'gravityflow' ),
+				'type'          => 'radio',
+				'default_value' => 'all',
+				'choices'       => array(
+					array(
+						'label' => __( 'At least one assignee must complete this step', 'gravityflow' ),
+						'value' => 'any',
+					),
+					array(
+						'label' => __( 'All assignees must complete this step', 'gravityflow' ),
+						'value' => 'all',
+					),
+				),
+			),
+			array(
+				'name'    => 'display_fields',
+				'label'   => __( 'Display Fields', 'gravityflow' ),
+				'tooltip' => __( 'Select the fields to hide or display.', 'gravityflow' ),
+				'type'    => 'display_fields',
+			),
+			array(
+				'name'          => 'default_status',
+				'type'          => 'radio',
+				'label'         => __( 'Default Status Option', 'gravityflow' ),
+				'tooltip'       => __( 'Select the default value for the status on the workflow detail page. Select Hidden to hide the status options.', 'gravityflow' ),
+				'default_value' => 'hidden',
+				'horizontal'    => true,
+				'choices'       => array(
+					array( 'label' => __( 'Hidden', 'gravityflow' ), 'value' => 'hidden' ),
+					array( 'label' => __( 'In progress', 'gravityflow' ), 'value' => 'in_progress' ),
+					array( 'label' => __( 'Complete', 'gravityflow' ), 'value' => 'complete' ),
+				),
+			),
+			array(
+				'name'          => 'note_mode',
+				'label'         => esc_html__( 'Workflow Note', 'gravityflow' ),
+				'type'          => 'select',
+				'tooltip'       => esc_html__( 'The text entered in the Note box will be added to the timeline. Use this setting to select the options for the Note box.', 'gravityflow' ),
+				'default_value' => 'not_required',
+				'choices'       => array(
+					array( 'value' => 'hidden', 'label' => esc_html__( 'Hidden', 'gravityflow' ) ),
+					array( 'value' => 'not_required', 'label' => esc_html__( 'Not required', 'gravityflow' ) ),
+					array( 'value' => 'required', 'label' => esc_html__( 'Always Required', 'gravityflow' ) ),
+					array(
+						'value' => 'required_if_in_progress',
+						'label' => esc_html__( 'Required if in progress', 'gravityflow' ),
+					),
+					array(
+						'value' => 'required_if_complete',
+						'label' => esc_html__( 'Required if complete', 'gravityflow' ),
+					),
+				),
+			),
+			array(
+				'name'    => 'assignee_notification_enabled',
+				'label'   => 'Email',
+				'type'    => 'checkbox',
+				'choices' => array(
+					array(
+						'label'         => __( 'Enabled' ),
+						'name'          => 'assignee_notification_enabled',
+						'default_value' => 1,
+					),
+				),
+			),
+			array(
+				'name'  => 'assignee_notification_from_name',
+				'label' => __( 'From Name', 'gravityflow' ),
+				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+				'type'  => 'text',
+			),
+			array(
+				'name'          => 'assignee_notification_from_email',
+				'label'         => __( 'From Email', 'gravityflow' ),
+				'type'          => 'text',
+				'class'         => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+				'default_value' => '{admin_email}',
+			),
+			array(
+				'name'  => 'assignee_notification_reply_to',
+				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+				'label' => __( 'Reply To', 'gravityflow' ),
+				'type'  => 'text',
+			),
+			array(
+				'name'  => 'assignee_notification_bcc',
+				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+				'label' => __( 'BCC', 'gravityflow' ),
+				'type'  => 'text',
+			),
+			array(
+				'name'  => 'assignee_notification_subject',
+				'class' => 'fieldwidth-1 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+				'label' => __( 'Subject', 'gravityflow' ),
+				'type'  => 'text',
+			),
+			array(
+				'name'          => 'assignee_notification_message',
+				'label'         => 'Message',
+				'type'          => 'visual_editor',
+				'default_value' => esc_html__( 'A new entry requires your input', 'gravityflow' ),
+			),
+			array(
+				'name'  => 'resend_assignee_email',
+				'label' => __( 'Send reminder', 'gravityflow' ),
+				'type'  => 'checkbox_and_text',
+				'text'  => array(
+					'default_value' => 7,
+					'before_input'  => __( 'Resend the assignee email after', 'gravityflow' ),
+					'after_input'   => ' ' . __( 'day(s)', 'gravityflow' ),
+				),
+			),
+
+		);
+
+		$settings['fields'] = array_merge( $settings['fields'], $settings2 );
+
+		return $settings;
+	}
+
+	public function fields_have_conditional_logic( $form ) {
+		$has_conditional_logic = false;
+		if ( isset( $form['fields'] ) && is_array( $form['fields'] ) ) {
+			foreach ( $form['fields'] as $field ) {
+				if ( is_array( $field->conditionalLogic ) ) {
+					$has_conditional_logic = true;
+					break;
+				}
+			}
+		}
+		return $has_conditional_logic;
 	}
 
 	public function process() {
@@ -326,9 +370,25 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			if ( $match && is_array( $assignee->get_editable_fields() ) ) {
 				$assignee_editable_fields = $assignee->get_editable_fields();
 				$editable_fields          = array_merge( $editable_fields, $assignee_editable_fields );
-
 			}
 		}
+
+		if ( $this->conditional_logic_editable_fields_enabled ) {
+			$form = $this->get_form();
+
+			$entry = $this->get_entry();
+			$visible_editable_fields = array();
+			foreach ( $editable_fields as $editable_field ) {
+				$field = GFFormsModel::get_field( $form, $editable_field );
+				if ( ! GFFormsModel::is_field_hidden( $form, $field, array(), $entry ) ) {
+					$visible_editable_fields[] = $editable_field;
+				}
+			}
+			$editable_fields = $visible_editable_fields;
+		}
+
+		$editable_fields = apply_filters( 'gravityflow_editable_fields_user_input', $editable_fields, $this );
+
 		return $editable_fields;
 	}
 
@@ -682,12 +742,20 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 						printf( "<div class='gfield_description validation_message'>%s</div>", $form['workflow_note']['validation_message'] );
 					}
 				}
+				if ( $default_status == 'hidden' ) {
+					?>
+					<input type="hidden" id="gravityflow_status_hidden" name="gravityflow_status" value="complete" />
+					<?php
+				} else {
+					?>
+					<br /><br />
+					<div>
+						<label for="gravityflow_in_progress"><input type="radio" id="gravityflow_in_progress" name="gravityflow_status" <?php checked( $default_status, 'in_progress' ); ?> value="in_progress" /><?php esc_html_e( 'In progress', 'gravityflow' ); ?></label>&nbsp;&nbsp;
+						<label for="gravityflow_complete"><input type="radio" id="gravityflow_complete" name="gravityflow_status" value="complete" <?php checked( $default_status, 'complete' ); ?>/><?php esc_html_e( 'Complete', 'gravityflow' ); ?></label>
+					</div>
+					<?php
+				}
 				?>
-				<br /><br />
-				<div>
-					<label for="gravityflow_in_progress"><input type="radio" id="gravityflow_in_progress" name="gravityflow_status" <?php checked( $default_status, 'in_progress' ); ?> value="in_progress" /><?php esc_html_e( 'In progress', 'gravityflow' ); ?></label>&nbsp;&nbsp;
-					<label for="gravityflow_complete"><input type="radio" id="gravityflow_complete" name="gravityflow_status" value="complete" <?php checked( $default_status, 'complete' ); ?>/><?php esc_html_e( 'Complete', 'gravityflow' ); ?></label>
-				</div>
 				<br />
 				<div style="text-align:right;">
 				<?php
@@ -748,7 +816,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	<?php
 	}
 
-	public static function save_entry( $form, &$lead, $editable_fields ) {
+	public function save_entry( $form, &$lead, $editable_fields ) {
 		global $wpdb;
 
 		gravity_flow()->log_debug( __METHOD__ . '(): Saving entry.' );
@@ -756,9 +824,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		$lead_detail_table = GFFormsModel::get_lead_details_table_name();
 		$is_new_lead       = $lead == null;
 
-		//Bailing  if null
+		// Bailing if null
 		if ( $is_new_lead ) {
-
 			return;
 		}
 
@@ -791,7 +858,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				continue;
 			}
 
-
 			// process calculation fields after all fields have been saved (moved after the is hidden check)
 			if ( $field->has_calculation() ) {
 				$calculation_fields[] = $field;
@@ -802,8 +868,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				continue;
 			}
 
-			// Prevent conditional logic from removing editable fields.
-			$field->conditionalLogic = null;
+			if ( ! $this->conditional_logic_editable_fields_enabled ) {
+				$field->conditionalLogic = null;
+			}
 
 			gravity_flow()->log_debug( __METHOD__ . "(): Saving field {$field->label}(#{$field->id} - {$field->type})." );
 
