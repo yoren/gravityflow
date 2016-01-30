@@ -3070,17 +3070,32 @@ PRIMARY KEY  (id)
 					case 'cancel_workflow' :
 						$api = new Gravity_Flow_API( $form['id'] );
 						$success = $api->cancel_workflow( $entry );
-						$feedback = $success ? esc_html__( 'Workflow cancelled.',  'gravityflow' ) : esc_html__( 'The entry does not currently have an active step.', 'gravityflow' );
+						if ( $success ) {
+							$this->log_debug( __METHOD__ . '() - workflow cancelled. entry id ' . $entry['id'] );
+							$feedback = esc_html__( 'Workflow cancelled.',  'gravityflow' );
+
+						} else {
+							$this->log_debug( __METHOD__ . '() - workflow cancel failed. entry id ' . $entry['id'] );
+							$feedback = esc_html__( 'The entry does not currently have an active step.', 'gravityflow' );
+						}
+
 						break;
 					case 'restart_step':
 						$api = new Gravity_Flow_API( $form['id'] );
 						$success = $api->restart_step( $entry );
-						$feedback = $success ? esc_html__( 'Workflow Step restarted.',  'gravityflow' ) : esc_html__( 'The entry does not currently have an active step.', 'gravityflow' );
+						if ( $success ) {
+							$this->log_debug( __METHOD__ . '() - step restarted. entry id ' . $entry['id'] );
+							$feedback = esc_html__( 'Workflow Step restarted.',  'gravityflow' );
+						} else {
+							$this->log_debug( __METHOD__ . '() - step restart failed. entry id ' . $entry['id'] );
+							$feedback = esc_html__( 'The entry does not currently have an active step.', 'gravityflow' );
+						}
 
 					break;
 					case 'restart_workflow':
 						$api = new Gravity_Flow_API( $form['id'] );
 						$api->restart_workflow( $entry );
+						$this->log_debug( __METHOD__ . '() - workflow restarted. entry id ' . $entry['id'] );
 						$feedback = esc_html__( 'Workflow restarted.',  'gravityflow' );
 						break;
 				}
@@ -3172,7 +3187,7 @@ PRIMARY KEY  (id)
 					$this->log_debug( __METHOD__ . '() - ending workflow.' );
 					gform_delete_meta( $entry_id, 'workflow_step' );
 					$step_status = gform_get_meta( $entry_id, 'workflow_step_status_' . $step_id );
-					if ( empty( $step_status ) ){
+					if ( empty( $step_status ) ) {
 						$step_status = 'complete';
 					}
 					gform_update_meta( $entry_id, 'workflow_final_status', $step_status );
@@ -3724,7 +3739,11 @@ AND m.meta_value='queued'";
 					$complete = $step->start();
 					if ( $complete ) {
 						$this->process_workflow( $form, $entry['id'] );
+					} else {
+						$this->log_debug( __METHOD__ . '() queued entry started step but step is not complete: ' . $entry['id'] );
 					}
+				} else {
+					$this->log_debug( __METHOD__ . '() queued entry not on a step: ' . $entry['id'] );
 				}
 			}
 		}
