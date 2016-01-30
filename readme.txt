@@ -55,6 +55,9 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.2.0.14 =
+- Added a setting in the user input step to allow field conditional logic to be displayed to the editable fields.
+
 = 1.2.0.13 =
 - Fixed an issue with the multi-file upload field where files can't be deleted by email assignees or users authenticating by token.
 
