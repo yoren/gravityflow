@@ -55,6 +55,34 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.2.0.13 =
+- Fixed an issue with the multi-file upload field where files can't be deleted by email assignees or users authenticating by token.
+
+= 1.2.0.12 =
+- Fixed an issue with the multi-file upload field.
+
+= 1.2.0.11 =
+- Added the gravityflow_editable_fields_user_input filter to allow the editable fields array to be modified for the user input step.
+    Example:
+        add_filter( 'gravityflow_editable_fields_user_input', 'sh_gravityflow_editable_fields_user_input', 10, 2);
+        function sh_gravityflow_editable_fields_user_input( $editable_fields, $step ){
+            // Use these variable to program your editable fields logic
+            // $entry = $step->get_entry();
+            // $entry_id = $step->get_entry_id();
+            // $form = $step->get_form();
+            // $form_id = $step->get_form_id();
+
+            // Return an array of IDs
+            // e.g. array( 1, 2, 3 );
+            return $editable_fields;
+        }
+= 1.2.0.10 =
+- Fixed an issue with styles for the inbox shortcode where the field value columns don't adapt well to narrow screens.
+
+= 1.2.0.9 =
+- Added the hidden option to the default status setting of the User Input step.
+- Added support for the {created_by:[property]} and {assignees} merge tags
+
 = 1.2.0.8 =
 - Updated styles of the front end validation message.
 
@@ -72,7 +100,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Added total count indicator below the inbox when entry count > 150.
 - Updated the auto-update and license check component.
 - Updated the field labels in the entry detail page to display the full label instead of the admin label.
-- Fixed an issue in the inbox where the form n  ame doesn't appear.
+- Fixed an issue in the inbox where the form name doesn't appear.
 
 = 1.2.0.4 =
 - Added the timeline attribute to the shortcode so the timeline can be hidden.
