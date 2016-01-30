@@ -213,7 +213,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 */
 	public function refresh_entry() {
 		$entry_id = $this->get_entry_id();
-		if ( ! empty( $entry_id) ) {
+		if ( ! empty( $entry_id ) ) {
 			$this->_entry = GFAPI::get_entry( $entry_id );
 		}
 
