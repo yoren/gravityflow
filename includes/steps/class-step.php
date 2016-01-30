@@ -707,11 +707,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 */
 	public function replace_variables( $text, $assignee ) {
 
-		preg_match_all( '/{workflow_entry_url(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
-		if ( is_array( $matches ) ) {
-			foreach ( $matches as $match ) {
-				$full_tag       = $match[0];
-				$options_string = isset( $match[2] ) ? $match[2] : '';
+		preg_match_all( '/{workflow_entry_url(:(.*?))?}/', $text, $entry_url_matches, PREG_SET_ORDER );
+		if ( is_array( $entry_url_matches ) ) {
+			foreach ( $entry_url_matches as $entry_url_match ) {
+				$full_tag       = $entry_url_match[0];
+				$options_string = isset( $entry_url_match[2] ) ? $entry_url_match[2] : '';
 				$options        = shortcode_parse_atts( $options_string );
 
 				$a = shortcode_atts(
@@ -737,11 +737,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 			}
 		}
 
-		preg_match_all( '/{workflow_entry_link(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
-		if ( is_array( $matches ) ) {
-			foreach ( $matches as $match ) {
-				$full_tag       = $match[0];
-				$options_string = isset( $match[2] ) ? $match[2] : '';
+		preg_match_all( '/{workflow_entry_link(:(.*?))?}/', $text, $entry_link_matches, PREG_SET_ORDER );
+		if ( is_array( $entry_link_matches ) ) {
+			foreach ( $entry_link_matches as $entry_link_match ) {
+				$full_tag       = $entry_link_match[0];
+				$options_string = isset( $entry_link_match[2] ) ? $entry_link_match[2] : '';
 				$options        = shortcode_parse_atts( $options_string );
 
 				$a = shortcode_atts(
@@ -783,11 +783,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 		$cancel_token = gravity_flow()->generate_access_token( $assignee, $scopes, $expiration_timestamp );
 
-		preg_match_all( '/{workflow_cancel_url(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
-		if ( is_array( $matches ) ) {
-			foreach ( $matches as $match ) {
-				$full_tag       = $match[0];
-				$options_string = isset( $match[2] ) ? $match[2] : '';
+		preg_match_all( '/{workflow_cancel_url(:(.*?))?}/', $text, $cancel_url_matches, PREG_SET_ORDER );
+		if ( is_array( $cancel_url_matches ) ) {
+			foreach ( $cancel_url_matches as $cancel_url_match ) {
+				$full_tag       = $cancel_url_match[0];
+				$options_string = isset( $cancel_url_match[2] ) ? $cancel_url_match[2] : '';
 				$options        = shortcode_parse_atts( $options_string );
 
 				$a = shortcode_atts(
@@ -802,11 +802,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 			}
 		}
 
-		preg_match_all( '/{workflow_cancel_link(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
-		if ( is_array( $matches ) ) {
-			foreach ( $matches as $match ) {
-				$full_tag       = $match[0];
-				$options_string = isset( $match[2] ) ? $match[2] : '';
+		preg_match_all( '/{workflow_cancel_link(:(.*?))?}/', $text, $cancel_link_matches, PREG_SET_ORDER );
+		if ( is_array( $cancel_link_matches ) ) {
+			foreach ( $cancel_link_matches as $cancel_link_match ) {
+				$full_tag       = $cancel_link_match[0];
+				$options_string = isset( $cancel_link_match[2] ) ? $cancel_link_match[2] : '';
 				$options        = shortcode_parse_atts( $options_string );
 
 				$a = shortcode_atts(
@@ -823,9 +823,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 			}
 		}
 
-		preg_match_all( '/{workflow_timeline(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
-		if ( is_array( $matches ) && isset( $matches[0] ) ) {
-			$full_tag = $matches[0][0];
+		preg_match_all( '/{workflow_timeline(:(.*?))?}/', $text, $timeline_matches, PREG_SET_ORDER );
+		if ( is_array( $timeline_matches ) && isset( $timeline_matches[0] ) ) {
+			$full_tag = $timeline_matches[0][0];
 			require_once( gravity_flow()->get_base_path() . '/includes/pages/class-entry-detail.php' );
 			$notes = Gravity_Flow_Entry_Detail::get_timeline_notes( $this->get_entry() );
 
@@ -852,6 +852,69 @@ abstract class Gravity_Flow_Step extends stdClass {
 			}
 
 			$text = str_replace( $full_tag, $html, $text );
+		}
+
+		preg_match_all( '/{created_by(:(.*?))?}/', $text, $created_by_matches, PREG_SET_ORDER );
+		if ( is_array( $created_by_matches ) ) {
+			$entry = $this->get_entry();
+
+			if ( ! empty( $entry['created_by'] ) ) {
+				$entry_creator = new WP_User( $entry['created_by'] );
+
+				foreach ( $created_by_matches as $created_by_match ) {
+
+					if ( ! isset( $created_by_match[2] ) ) {
+						continue;
+					}
+
+					$full_tag = $created_by_match[0];
+
+					$property = $created_by_match[2];
+
+					if ( $property == 'roles' ) {
+						$value = implode( ', ', $entry_creator->roles );
+					} else {
+						$value = $entry_creator->get( $property );
+					}
+					$value = esc_html( $value );
+
+					$text = str_replace( $full_tag, $value, $text );
+				}
+			}
+		}
+
+		preg_match_all( '/{assignees(:(.*?))?}/', $text, $assignees_matches, PREG_SET_ORDER );
+		if ( is_array( $assignees_matches ) ) {
+			foreach ( $assignees_matches as $assignees_match ) {
+				$full_tag       = $assignees_match[0];
+				$options_string = isset( $assignees_match[2] ) ? $assignees_match[2] : '';
+				$options        = shortcode_parse_atts( $options_string );
+
+				$a = shortcode_atts(
+					array(
+						'status' => true,
+						'user_email' => true,
+					), $options
+				);
+				$a['status'] = strtolower( $a['status'] ) == 'false' ? false : true;
+				$a['user_email'] = strtolower( $a['user_email'] ) == 'false' ? false : true;
+
+				$assignees_text_arr = array();
+				$assignees = $this->get_assignees();
+				foreach ( $assignees as $step_assignee ) {
+					$assignee_line = $step_assignee->get_display_name();
+					if ( $a['user_email'] && $step_assignee->get_type() == 'user_id' ) {
+						$assignee_user = new WP_User( $step_assignee->get_id() );
+						$assignee_line .= sprintf( ' (%s)', $assignee_user->user_email );
+					}
+					if ( $a['status'] ) {
+						$assignee_line .= ': ' . $step_assignee->get_status();
+					}
+					$assignees_text_arr[] = $assignee_line;
+				}
+				$assignees_text = join( "\n", $assignees_text_arr );
+				$text = str_replace( $full_tag, $assignees_text, $text );
+			}
 		}
 
 		return $text;
