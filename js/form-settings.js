@@ -345,8 +345,8 @@
 
     function toggleType(showType) {
         var fields = {
-            select: ['assignees\\[\\]', 'editable_fields\\[\\]', 'unanimous_approval', 'assignee_policy'],
-            routing: ['routing']
+            select: ['assignees\\[\\]', 'editable_fields\\[\\]', 'conditional_logic_editable_fields_enabled', 'unanimous_approval', 'assignee_policy'],
+            routing: ['routing', 'conditional_logic_editable_fields_enabled']
         };
 
         toggleFields(fields, showType);
@@ -446,6 +446,7 @@
 
             'assignees\\[\\]',
             'editable_fields\\[\\]',
+            'conditional_logic_editable_fields_enabled',
             'routing',
             'assignee_policy',
             'assignee_notification_message',
