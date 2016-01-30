@@ -162,7 +162,7 @@ class Gravity_Flow_Inbox {
 									$field = GFFormsModel::get_field( $form, $field_id );
 									?>
 									<td data-label="<?php echo esc_attr( $field_info['label'] ); ?>">
-										<?php echo $field->get_value_entry_list( $value, $entry, $field_id, $columns, $form ); ?>
+										<?php printf( $link, $url_entry, $field->get_value_entry_list( $value, $entry, $field_id, $columns, $form ) );  ?>
 									</td>
 								<?php
 								}
