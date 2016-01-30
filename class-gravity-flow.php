@@ -153,6 +153,7 @@ if ( class_exists( 'GFForms' ) ) {
 			add_action( 'wp_ajax_gravityflow_download_export', array( $this, 'ajax_download_export' ) );
 
 			add_action( 'wp_ajax_rg_delete_file', array( 'RGForms', 'delete_file' ) );
+			add_action( 'wp_ajax_nopriv_rg_delete_file', array( 'RGForms', 'delete_file' ) );
 		}
 
 		public function init_frontend() {
