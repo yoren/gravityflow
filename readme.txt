@@ -55,6 +55,11 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.2.0.15 =
+- Added support for the display_name attribute in the assignees merge tag. e.g. {assignees: display_name=true}
+- Added the instructions setting to the user input and approval steps.
+- Added support for an area for instructions at the top of the workflow detail page.
+
 = 1.2.0.14 =
 - Added a setting in the user input step to allow field conditional logic to be displayed to the editable fields.
 

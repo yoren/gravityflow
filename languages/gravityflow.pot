@@ -1,9 +1,9 @@
 # Copyright 2015-2016 Steven Henty.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Flow 1.2.0.14\n"
+"Project-Id-Version: Gravity Flow 1.2.0.15\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2016-01-30 16:52:18+00:00\n"
+"POT-Creation-Date: 2016-01-31 11:04:42+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -25,15 +25,15 @@ msgstr ""
 "X-Textdomain-Support: yes\n"
 
 #: class-gravity-flow.php:255 includes/fields/class-field-user.php:55
-#: includes/steps/class-step-approval.php:803
-#: includes/steps/class-step-user-input.php:638
-#: includes/steps/class-step-user-input.php:802
+#: includes/steps/class-step-approval.php:816
+#: includes/steps/class-step-user-input.php:650
+#: includes/steps/class-step-user-input.php:814
 msgid "User"
 msgstr ""
 
 #: class-gravity-flow.php:260 includes/fields/class-field-role.php:55
-#: includes/steps/class-step-approval.php:797
-#: includes/steps/class-step-user-input.php:656
+#: includes/steps/class-step-approval.php:810
+#: includes/steps/class-step-user-input.php:668
 msgid "Role"
 msgstr ""
 
@@ -74,7 +74,7 @@ msgstr ""
 msgid "Fields"
 msgstr ""
 
-#: class-gravity-flow.php:717 class-gravity-flow.php:1703
+#: class-gravity-flow.php:717 class-gravity-flow.php:1774
 msgid "Step Type"
 msgstr ""
 
@@ -243,460 +243,461 @@ msgstr ""
 msgid "Expiration Status"
 msgstr ""
 
-#: class-gravity-flow.php:1558 includes/steps/class-step-approval.php:401
+#: class-gravity-flow.php:1558 class-gravity-flow.php:1629
+#: includes/steps/class-step-approval.php:414
 msgid "Enable"
 msgstr ""
 
-#: class-gravity-flow.php:1656
+#: class-gravity-flow.php:1727
 msgid "Workflow Complete"
 msgstr ""
 
-#: class-gravity-flow.php:1657
+#: class-gravity-flow.php:1728
 msgid "Next step in list"
 msgstr ""
 
-#: class-gravity-flow.php:1702
+#: class-gravity-flow.php:1773
 msgid "Step name"
 msgstr ""
 
-#: class-gravity-flow.php:1704
+#: class-gravity-flow.php:1775
 msgid "Entries"
 msgstr ""
 
-#: class-gravity-flow.php:1712
+#: class-gravity-flow.php:1783
 msgid "(missing)"
 msgstr ""
 
-#: class-gravity-flow.php:1733
+#: class-gravity-flow.php:1804
 msgid "You don't have any steps configured. Let's go %screate one%s!"
 msgstr ""
 
-#: class-gravity-flow.php:1789 includes/pages/class-status.php:1057
+#: class-gravity-flow.php:1860 includes/pages/class-status.php:1057
 #: includes/pages/class-status.php:1062
 msgid "Status:"
 msgstr ""
 
-#: class-gravity-flow.php:1923
+#: class-gravity-flow.php:1994
 msgid "Entry Id"
 msgstr ""
 
-#: class-gravity-flow.php:1924 includes/pages/class-inbox.php:81
+#: class-gravity-flow.php:1995 includes/pages/class-inbox.php:81
 #: includes/pages/class-inbox.php:143
 msgid "Submitted"
 msgstr ""
 
-#: class-gravity-flow.php:1930
+#: class-gravity-flow.php:2001
 msgid "Last updated"
 msgstr ""
 
-#: class-gravity-flow.php:1938
+#: class-gravity-flow.php:2009
 msgid "Submitted by"
 msgstr ""
 
-#: class-gravity-flow.php:1947 class-gravity-flow.php:4347
+#: class-gravity-flow.php:2018 class-gravity-flow.php:4418
 #: includes/pages/class-status.php:617
-#: includes/steps/class-step-user-input.php:802
+#: includes/steps/class-step-user-input.php:814
 msgid "Status"
 msgstr ""
 
-#: class-gravity-flow.php:1956
+#: class-gravity-flow.php:2027
 msgid "Expires"
 msgstr ""
 
-#: class-gravity-flow.php:1964 includes/steps/class-step-approval.php:774
-#: includes/steps/class-step-user-input.php:608
+#: class-gravity-flow.php:2035 includes/steps/class-step-approval.php:787
+#: includes/steps/class-step-user-input.php:620
 msgid "Queued"
 msgstr ""
 
-#: class-gravity-flow.php:1981
+#: class-gravity-flow.php:2052
 msgid "Scheduled"
 msgstr ""
 
-#: class-gravity-flow.php:1985
+#: class-gravity-flow.php:2056
 msgid "Expired: refresh the page"
 msgstr ""
 
-#: class-gravity-flow.php:2012
+#: class-gravity-flow.php:2083
 msgid "Admin"
 msgstr ""
 
-#: class-gravity-flow.php:2020
+#: class-gravity-flow.php:2091
 msgid "Select an action"
 msgstr ""
 
-#: class-gravity-flow.php:2022 includes/steps/class-step.php:815
+#: class-gravity-flow.php:2093 includes/steps/class-step.php:815
 msgid "Cancel Workflow"
 msgstr ""
 
-#: class-gravity-flow.php:2024
+#: class-gravity-flow.php:2095
 msgid "Restart this step"
 msgstr ""
 
-#: class-gravity-flow.php:2026 includes/pages/class-status.php:190
+#: class-gravity-flow.php:2097 includes/pages/class-status.php:190
 msgid "Restart Workflow"
 msgstr ""
 
-#: class-gravity-flow.php:2031
+#: class-gravity-flow.php:2102
 msgid "Send to step:"
 msgstr ""
 
-#: class-gravity-flow.php:2043 includes/pages/class-status.php:351
+#: class-gravity-flow.php:2114 includes/pages/class-status.php:351
 msgid "Apply"
 msgstr ""
 
-#: class-gravity-flow.php:2068
+#: class-gravity-flow.php:2139
 msgid "Workflow complete"
 msgstr ""
 
-#: class-gravity-flow.php:2078
+#: class-gravity-flow.php:2149
 msgid "View"
 msgstr ""
 
-#: class-gravity-flow.php:2269
+#: class-gravity-flow.php:2340
 msgid "General"
 msgstr ""
 
-#: class-gravity-flow.php:2270 class-gravity-flow.php:3846
+#: class-gravity-flow.php:2341 class-gravity-flow.php:3917
 msgid "Gravity Flow Settings"
 msgstr ""
 
-#: class-gravity-flow.php:2275 class-gravity-flow.php:2319
+#: class-gravity-flow.php:2346 class-gravity-flow.php:2390
 msgid "Labels"
 msgstr ""
 
-#: class-gravity-flow.php:2290
+#: class-gravity-flow.php:2361
 msgid "Uninstall"
 msgstr ""
 
-#: class-gravity-flow.php:2324
+#: class-gravity-flow.php:2395
 msgid "Navigation"
 msgstr ""
 
-#: class-gravity-flow.php:2350
+#: class-gravity-flow.php:2421
 msgid "Status Labels"
 msgstr ""
 
-#: class-gravity-flow.php:2364 class-gravity-flow.php:4372
+#: class-gravity-flow.php:2435 class-gravity-flow.php:4443
 #: includes/steps/class-step.php:175
 msgid "Pending"
 msgstr ""
 
-#: class-gravity-flow.php:2364 class-gravity-flow.php:4384
+#: class-gravity-flow.php:2435 class-gravity-flow.php:4455
 msgid "Cancelled"
 msgstr ""
 
-#: class-gravity-flow.php:2386
+#: class-gravity-flow.php:2457
 #: includes/steps/class-step-feed-user-registration.php:79
-#: includes/steps/class-step-user-input.php:762
+#: includes/steps/class-step-user-input.php:774
 msgid "Update"
 msgstr ""
 
-#: class-gravity-flow.php:2401
+#: class-gravity-flow.php:2472
 msgid "Invalid token"
 msgstr ""
 
-#: class-gravity-flow.php:2405
+#: class-gravity-flow.php:2476
 msgid "Token already expired"
 msgstr ""
 
-#: class-gravity-flow.php:2413
+#: class-gravity-flow.php:2484
 msgid "Token revoked"
 msgstr ""
 
-#: class-gravity-flow.php:2417
+#: class-gravity-flow.php:2488
 msgid "Tools"
 msgstr ""
 
-#: class-gravity-flow.php:2433
+#: class-gravity-flow.php:2504
 msgid "Revoke a token"
 msgstr ""
 
-#: class-gravity-flow.php:2439
+#: class-gravity-flow.php:2510
 msgid "Revoke"
 msgstr ""
 
-#: class-gravity-flow.php:2484
+#: class-gravity-flow.php:2555
 msgid "Entries per page"
 msgstr ""
 
-#: class-gravity-flow.php:2516
+#: class-gravity-flow.php:2587
 msgid "Published"
 msgstr ""
 
-#: class-gravity-flow.php:2527
+#: class-gravity-flow.php:2598
 msgid "No workflow steps have been added to any forms yet."
 msgstr ""
 
-#: class-gravity-flow.php:2536
+#: class-gravity-flow.php:2607
 msgid "Settings"
 msgstr ""
 
-#: class-gravity-flow.php:2540 includes/class-extension.php:116
+#: class-gravity-flow.php:2611 includes/class-extension.php:116
 #: includes/wizard/steps/class-iw-step-license-key.php:49
 msgid "License Key"
 msgstr ""
 
-#: class-gravity-flow.php:2544 includes/class-extension.php:120
+#: class-gravity-flow.php:2615 includes/class-extension.php:120
 msgid "Invalid license"
 msgstr ""
 
-#: class-gravity-flow.php:2550
+#: class-gravity-flow.php:2621
 #: includes/wizard/steps/class-iw-step-updates.php:74
 msgid "Background Updates"
 msgstr ""
 
-#: class-gravity-flow.php:2551
+#: class-gravity-flow.php:2622
 msgid ""
 "Set this to ON to allow Gravity Flow to download and install bug fixes and "
 "security updates automatically in the background. Requires a valid license "
 "key."
 msgstr ""
 
-#: class-gravity-flow.php:2556
+#: class-gravity-flow.php:2627
 msgid "On"
 msgstr ""
 
-#: class-gravity-flow.php:2557
+#: class-gravity-flow.php:2628
 msgid "Off"
 msgstr ""
 
-#: class-gravity-flow.php:2565
+#: class-gravity-flow.php:2636
 msgid "Published Workflow Forms"
 msgstr ""
 
-#: class-gravity-flow.php:2566
+#: class-gravity-flow.php:2637
 msgid "Select the forms you wish to publish on the Submit page."
 msgstr ""
 
-#: class-gravity-flow.php:2576
+#: class-gravity-flow.php:2647
 msgid "Update Settings"
 msgstr ""
 
-#: class-gravity-flow.php:2578
+#: class-gravity-flow.php:2649
 msgid "Settings updated successfully"
 msgstr ""
 
-#: class-gravity-flow.php:2579
+#: class-gravity-flow.php:2650
 msgid "There was an error while saving the settings"
 msgstr ""
 
-#: class-gravity-flow.php:2682
+#: class-gravity-flow.php:2753
 msgid "Submit a Workflow Form"
 msgstr ""
 
-#: class-gravity-flow.php:2753
+#: class-gravity-flow.php:2824
 msgid "Oops! We could not locate your entry."
 msgstr ""
 
-#: class-gravity-flow.php:2771 includes/steps/class-step-approval.php:1181
+#: class-gravity-flow.php:2842 includes/steps/class-step-approval.php:1200
 msgid "Error: incorrect entry."
 msgstr ""
 
-#: class-gravity-flow.php:2777
+#: class-gravity-flow.php:2848
 msgid "Workflow Cancelled"
 msgstr ""
 
-#: class-gravity-flow.php:2784
+#: class-gravity-flow.php:2855
 msgid "Error: This URL is no longer valid."
 msgstr ""
 
-#: class-gravity-flow.php:2847
+#: class-gravity-flow.php:2918
 msgid "Workflow Inbox"
 msgstr ""
 
-#: class-gravity-flow.php:2884
+#: class-gravity-flow.php:2955
 msgid "Workflow Status"
 msgstr ""
 
-#: class-gravity-flow.php:2922
+#: class-gravity-flow.php:2993
 msgid "Workflow Activity"
 msgstr ""
 
-#: class-gravity-flow.php:2961
+#: class-gravity-flow.php:3032
 msgid "Workflow Reports"
 msgstr ""
 
-#: class-gravity-flow.php:3006
+#: class-gravity-flow.php:3077
 msgid "Your inbox of pending tasks"
 msgstr ""
 
-#: class-gravity-flow.php:3020
+#: class-gravity-flow.php:3091
 msgid "Submit a Workflow"
 msgstr ""
 
-#: class-gravity-flow.php:3032
+#: class-gravity-flow.php:3103
 msgid "Your workflows"
 msgstr ""
 
-#: class-gravity-flow.php:3043 class-gravity-flow.php:4350
+#: class-gravity-flow.php:3114 class-gravity-flow.php:4421
 msgid "Reports"
 msgstr ""
 
-#: class-gravity-flow.php:3054 class-gravity-flow.php:4351
+#: class-gravity-flow.php:3125 class-gravity-flow.php:4422
 msgid "Activity"
 msgstr ""
 
-#: class-gravity-flow.php:3075 includes/class-api.php:119
+#: class-gravity-flow.php:3146 includes/class-api.php:119
 msgid "Workflow cancelled."
 msgstr ""
 
-#: class-gravity-flow.php:3079 class-gravity-flow.php:3091
+#: class-gravity-flow.php:3150 class-gravity-flow.php:3162
 msgid "The entry does not currently have an active step."
 msgstr ""
 
-#: class-gravity-flow.php:3088 includes/class-api.php:139
+#: class-gravity-flow.php:3159 includes/class-api.php:139
 msgid "Workflow Step restarted."
 msgstr ""
 
-#: class-gravity-flow.php:3099 includes/class-api.php:159
+#: class-gravity-flow.php:3170 includes/class-api.php:159
 #: includes/pages/class-status.php:1132
 msgid "Workflow restarted."
 msgstr ""
 
-#: class-gravity-flow.php:3108 includes/class-api.php:202
+#: class-gravity-flow.php:3179 includes/class-api.php:202
 msgid "Sent to step: %s"
 msgstr ""
 
-#: class-gravity-flow.php:3561
+#: class-gravity-flow.php:3632
 msgid ""
 "Gravity Flow Steps imported. IMPORTANT: Check the assignees for each step. "
 "If the form was imported from a different installation with different user "
 "IDs then steps may need to be reassigned."
 msgstr ""
 
-#: class-gravity-flow.php:3610
+#: class-gravity-flow.php:3681
 msgid "Assignees"
 msgstr ""
 
-#: class-gravity-flow.php:3615
+#: class-gravity-flow.php:3686
 msgid "Show Users"
 msgstr ""
 
-#: class-gravity-flow.php:3623
+#: class-gravity-flow.php:3694
 msgid "Show Roles"
 msgstr ""
 
-#: class-gravity-flow.php:3631
+#: class-gravity-flow.php:3702
 msgid "Show Fields"
 msgstr ""
 
-#: class-gravity-flow.php:3805 class-gravity-flow.php:3807
+#: class-gravity-flow.php:3876 class-gravity-flow.php:3878
 msgid "Step expired"
 msgstr ""
 
-#: class-gravity-flow.php:3850
+#: class-gravity-flow.php:3921
 msgid ""
 "%sThis operation deletes ALL Gravity Flow settings%s. If you continue, you "
 "will NOT be able to retrieve these settings."
 msgstr ""
 
-#: class-gravity-flow.php:3854
+#: class-gravity-flow.php:3925
 msgid ""
 "Warning! ALL Gravity Flow settings will be deleted. This cannot be undone. "
 "'OK' to delete, 'Cancel' to stop"
 msgstr ""
 
-#: class-gravity-flow.php:4197
+#: class-gravity-flow.php:4268
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] ""
 msgstr[1] ""
 
-#: class-gravity-flow.php:4201
+#: class-gravity-flow.php:4272
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] ""
 msgstr[1] ""
 
-#: class-gravity-flow.php:4205
+#: class-gravity-flow.php:4276
 msgid "%dd"
 msgstr ""
 
-#: class-gravity-flow.php:4209
+#: class-gravity-flow.php:4280
 msgid "%dh"
 msgstr ""
 
-#: class-gravity-flow.php:4213
+#: class-gravity-flow.php:4284
 msgid "%dm"
 msgstr ""
 
-#: class-gravity-flow.php:4217
+#: class-gravity-flow.php:4288
 msgid "%ds"
 msgstr ""
 
-#: class-gravity-flow.php:4261
+#: class-gravity-flow.php:4332
 msgid "Every Fifteen Minutes"
 msgstr ""
 
-#: class-gravity-flow.php:4274 class-gravity-flow.php:4294
+#: class-gravity-flow.php:4345 class-gravity-flow.php:4365
 msgid "Not authorized"
 msgstr ""
 
-#: class-gravity-flow.php:4344
+#: class-gravity-flow.php:4415
 msgid "Workflow"
 msgstr ""
 
-#: class-gravity-flow.php:4345
+#: class-gravity-flow.php:4416
 msgid "Inbox"
 msgstr ""
 
-#: class-gravity-flow.php:4346
+#: class-gravity-flow.php:4417
 msgid "Submit"
 msgstr ""
 
-#: class-gravity-flow.php:4348 includes/pages/class-help.php:14
+#: class-gravity-flow.php:4419 includes/pages/class-help.php:14
 msgid "Help"
 msgstr ""
 
-#: class-gravity-flow.php:4349 includes/pages/class-support.php:67
+#: class-gravity-flow.php:4420 includes/pages/class-support.php:67
 msgid "Support"
 msgstr ""
 
-#: class-gravity-flow.php:4375 includes/steps/class-step-user-input.php:128
-#: includes/steps/class-step-user-input.php:606
-#: includes/steps/class-step-user-input.php:754
+#: class-gravity-flow.php:4446 includes/steps/class-step-user-input.php:140
+#: includes/steps/class-step-user-input.php:618
+#: includes/steps/class-step-user-input.php:766
 #: includes/steps/class-step.php:149
 msgid "Complete"
 msgstr ""
 
-#: class-gravity-flow.php:4378 includes/steps/class-step-approval.php:31
-#: includes/steps/class-step-approval.php:770
+#: class-gravity-flow.php:4449 includes/steps/class-step-approval.php:31
+#: includes/steps/class-step-approval.php:783
 msgid "Approved"
 msgstr ""
 
-#: class-gravity-flow.php:4381 includes/steps/class-step-approval.php:25
-#: includes/steps/class-step-approval.php:772
+#: class-gravity-flow.php:4452 includes/steps/class-step-approval.php:25
+#: includes/steps/class-step-approval.php:785
 msgid "Rejected"
 msgstr ""
 
-#: class-gravity-flow.php:4439
+#: class-gravity-flow.php:4510
 msgid "Oops! We couldn't find your lead. Please try again"
 msgstr ""
 
-#: class-gravity-flow.php:4482 includes/pages/class-entry-detail.php:44
+#: class-gravity-flow.php:4553 includes/pages/class-entry-detail.php:44
 msgid "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete"
 msgstr ""
 
-#: class-gravity-flow.php:4506
+#: class-gravity-flow.php:4577
 #: includes/fields/class-field-assignee-select.php:31
 #: includes/fields/class-field-role.php:23
 #: includes/fields/class-field-user.php:23
 msgid "Workflow Fields"
 msgstr ""
 
-#: class-gravity-flow.php:4506
+#: class-gravity-flow.php:4577
 msgid "Workflow Fields add advanced workflow functionality to your forms."
 msgstr ""
 
-#: class-gravity-flow.php:4556
+#: class-gravity-flow.php:4627
 msgid "All fields"
 msgstr ""
 
-#: class-gravity-flow.php:4560
+#: class-gravity-flow.php:4631
 msgid "Selected fields"
 msgstr ""
 
-#: class-gravity-flow.php:4584
+#: class-gravity-flow.php:4655
 msgid "Except"
 msgstr ""
 
@@ -813,36 +814,36 @@ msgstr ""
 msgid "Workflow Submitted"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:314
+#: includes/pages/class-entry-detail.php:330
 #: includes/pages/class-print-entries.php:79
 msgid "Entry # "
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:323
+#: includes/pages/class-entry-detail.php:339
 msgid "show empty fields"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:491
+#: includes/pages/class-entry-detail.php:507
 msgid "Order"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:503
+#: includes/pages/class-entry-detail.php:519
 msgid "Product"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:504
+#: includes/pages/class-entry-detail.php:520
 msgid "Qty"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:505
+#: includes/pages/class-entry-detail.php:521
 msgid "Unit Price"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:506
+#: includes/pages/class-entry-detail.php:522
 msgid "Price"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:566
+#: includes/pages/class-entry-detail.php:582
 msgid "Total"
 msgstr ""
 
@@ -1008,9 +1009,9 @@ msgid "Please check the documentation before submitting a support request"
 msgstr ""
 
 #: includes/pages/class-support.php:92
-#: includes/steps/class-step-approval.php:793
-#: includes/steps/class-step-user-input.php:645
-#: includes/steps/class-step-user-input.php:798
+#: includes/steps/class-step-approval.php:806
+#: includes/steps/class-step-user-input.php:657
+#: includes/steps/class-step-user-input.php:810
 msgid "Email"
 msgstr ""
 
@@ -1073,7 +1074,7 @@ msgstr ""
 #: includes/steps/class-step-approval.php:166
 #: includes/steps/class-step-approval.php:242
 #: includes/steps/class-step-notification.php:96
-#: includes/steps/class-step-user-input.php:165
+#: includes/steps/class-step-user-input.php:177
 msgid "From Name"
 msgstr ""
 
@@ -1081,7 +1082,7 @@ msgstr ""
 #: includes/steps/class-step-approval.php:171
 #: includes/steps/class-step-approval.php:248
 #: includes/steps/class-step-notification.php:102
-#: includes/steps/class-step-user-input.php:171
+#: includes/steps/class-step-user-input.php:183
 msgid "From Email"
 msgstr ""
 
@@ -1089,7 +1090,7 @@ msgstr ""
 #: includes/steps/class-step-approval.php:179
 #: includes/steps/class-step-approval.php:256
 #: includes/steps/class-step-notification.php:109
-#: includes/steps/class-step-user-input.php:179
+#: includes/steps/class-step-user-input.php:191
 msgid "Reply To"
 msgstr ""
 
@@ -1097,7 +1098,7 @@ msgstr ""
 #: includes/steps/class-step-approval.php:185
 #: includes/steps/class-step-approval.php:262
 #: includes/steps/class-step-notification.php:115
-#: includes/steps/class-step-user-input.php:185
+#: includes/steps/class-step-user-input.php:197
 msgid "BCC"
 msgstr ""
 
@@ -1105,7 +1106,7 @@ msgstr ""
 #: includes/steps/class-step-approval.php:191
 #: includes/steps/class-step-approval.php:268
 #: includes/steps/class-step-notification.php:121
-#: includes/steps/class-step-user-input.php:191
+#: includes/steps/class-step-user-input.php:203
 msgid "Subject"
 msgstr ""
 
@@ -1118,17 +1119,17 @@ msgid "A new entry is pending your approval. Please check your Workflow Inbox."
 msgstr ""
 
 #: includes/steps/class-step-approval.php:117
-#: includes/steps/class-step-user-input.php:202
+#: includes/steps/class-step-user-input.php:214
 msgid "Send reminder"
 msgstr ""
 
 #: includes/steps/class-step-approval.php:121
-#: includes/steps/class-step-user-input.php:206
+#: includes/steps/class-step-user-input.php:218
 msgid "Resend the assignee email after"
 msgstr ""
 
 #: includes/steps/class-step-approval.php:122
-#: includes/steps/class-step-user-input.php:207
+#: includes/steps/class-step-user-input.php:219
 msgid "day(s)"
 msgstr ""
 
@@ -1234,39 +1235,62 @@ msgstr ""
 
 #: includes/steps/class-step-approval.php:355
 #: includes/steps/class-step-user-input.php:114
+msgid "Instructions"
+msgstr ""
+
+#: includes/steps/class-step-approval.php:357
+#: includes/steps/class-step-user-input.php:116
+msgid ""
+"Activate this setting to display instructions to the user for the current "
+"step."
+msgstr ""
+
+#: includes/steps/class-step-approval.php:359
+#: includes/steps/class-step-user-input.php:118
+msgid "Display instructions"
+msgstr ""
+
+#: includes/steps/class-step-approval.php:363
+msgid ""
+"Instructions: please review the values in the fields below and click on the "
+"Approve or Reject button"
+msgstr ""
+
+#: includes/steps/class-step-approval.php:368
+#: includes/steps/class-step-user-input.php:126
 msgid "Display Fields"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:356
-#: includes/steps/class-step-user-input.php:115
+#: includes/steps/class-step-approval.php:369
+#: includes/steps/class-step-user-input.php:127
 msgid "Select the fields to hide or display."
 msgstr ""
 
-#: includes/steps/class-step-approval.php:361
+#: includes/steps/class-step-approval.php:374
 msgid "Emails"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:362
+#: includes/steps/class-step-approval.php:375
 msgid "Configure the emails that should be sent for this step."
 msgstr ""
 
-#: includes/steps/class-step-approval.php:366
+#: includes/steps/class-step-approval.php:379
 msgid "Assignee Email"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:371
+#: includes/steps/class-step-approval.php:384
 msgid "Rejection Email"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:376
+#: includes/steps/class-step-approval.php:389
 msgid "Approval Email"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:397
+#: includes/steps/class-step-approval.php:410
 msgid "Revert to User Input step"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:399
+#: includes/steps/class-step-approval.php:412
 msgid ""
 "The Revert setting enables a third option in addition to Approve and Reject "
 "which allows the assignee to send the entry directly to a User Input step "
@@ -1275,115 +1299,115 @@ msgid ""
 "entry will be sent to."
 msgstr ""
 
-#: includes/steps/class-step-approval.php:411
-#: includes/steps/class-step-user-input.php:133
+#: includes/steps/class-step-approval.php:424
+#: includes/steps/class-step-user-input.php:145
 msgid "Workflow Note"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:413
-#: includes/steps/class-step-user-input.php:135
+#: includes/steps/class-step-approval.php:426
+#: includes/steps/class-step-user-input.php:147
 msgid ""
 "The text entered in the Note box will be added to the timeline. Use this "
 "setting to select the options for the Note box."
 msgstr ""
 
-#: includes/steps/class-step-approval.php:416
-#: includes/steps/class-step-user-input.php:126
+#: includes/steps/class-step-approval.php:429
 #: includes/steps/class-step-user-input.php:138
+#: includes/steps/class-step-user-input.php:150
 msgid "Hidden"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:417
-#: includes/steps/class-step-user-input.php:139
+#: includes/steps/class-step-approval.php:430
+#: includes/steps/class-step-user-input.php:151
 msgid "Not required"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:418
+#: includes/steps/class-step-approval.php:431
 msgid "Always required"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:419
+#: includes/steps/class-step-approval.php:432
 msgid "Required if approved"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:420
+#: includes/steps/class-step-approval.php:433
 msgid "Required if rejected"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:425
+#: includes/steps/class-step-approval.php:438
 msgid "Required if reverted"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:651
+#: includes/steps/class-step-approval.php:664
 msgid ""
 "The status could not be changed because this step has already been "
 "processed."
 msgstr ""
 
-#: includes/steps/class-step-approval.php:659
+#: includes/steps/class-step-approval.php:672
 msgid "Reverted to step"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:662
-#: includes/steps/class-step-approval.php:695
-#: includes/steps/class-step-approval.php:842
-#: includes/steps/class-step-user-input.php:493
-#: includes/steps/class-step-user-input.php:725
+#: includes/steps/class-step-approval.php:675
+#: includes/steps/class-step-approval.php:708
+#: includes/steps/class-step-approval.php:855
+#: includes/steps/class-step-user-input.php:505
+#: includes/steps/class-step-user-input.php:737
 msgid "Note"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:666
+#: includes/steps/class-step-approval.php:679
 msgid "Reverted to step:"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:684
+#: includes/steps/class-step-approval.php:697
 msgid "Approved."
 msgstr ""
 
-#: includes/steps/class-step-approval.php:687
+#: includes/steps/class-step-approval.php:700
 msgid "Rejected."
 msgstr ""
 
-#: includes/steps/class-step-approval.php:710
+#: includes/steps/class-step-approval.php:723
 msgid "Entry Approved"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:713
+#: includes/steps/class-step-approval.php:726
 msgid "Entry Rejected"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:744
-#: includes/steps/class-step-user-input.php:527
+#: includes/steps/class-step-approval.php:757
+#: includes/steps/class-step-user-input.php:539
 msgid "A note is required"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:756
+#: includes/steps/class-step-approval.php:769
 msgid "The note field is required."
 msgstr ""
 
-#: includes/steps/class-step-approval.php:764
+#: includes/steps/class-step-approval.php:777
 msgid "Pending Approval"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:802
+#: includes/steps/class-step-approval.php:815
 msgid "(Missing)"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:865
-#: includes/steps/class-step-approval.php:1097
+#: includes/steps/class-step-approval.php:878
+#: includes/steps/class-step-approval.php:1113
 msgid "Approve"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:869
-#: includes/steps/class-step-approval.php:1143
+#: includes/steps/class-step-approval.php:882
+#: includes/steps/class-step-approval.php:1162
 msgid "Reject"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:874
+#: includes/steps/class-step-approval.php:887
 msgid "Revert"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:1186
+#: includes/steps/class-step-approval.php:1205
 msgid "Error: step already processed."
 msgstr ""
 
@@ -1468,7 +1492,7 @@ msgid "Enable this setting to send an email."
 msgstr ""
 
 #: includes/steps/class-step-notification.php:62
-#: includes/steps/class-step-user-input.php:157
+#: includes/steps/class-step-user-input.php:169
 #: includes/wizard/steps/class-iw-step-updates.php:88
 msgid "Enabled"
 msgstr ""
@@ -1518,54 +1542,54 @@ msgstr ""
 msgid "All assignees must complete this step"
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:121
+#: includes/steps/class-step-user-input.php:133
 msgid "Default Status Option"
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:122
+#: includes/steps/class-step-user-input.php:134
 msgid ""
 "Select the default value for the status on the workflow detail page. Select "
 "Hidden to hide the status options."
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:127
-#: includes/steps/class-step-user-input.php:753
+#: includes/steps/class-step-user-input.php:139
+#: includes/steps/class-step-user-input.php:765
 msgid "In progress"
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:140
+#: includes/steps/class-step-user-input.php:152
 msgid "Always Required"
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:143
+#: includes/steps/class-step-user-input.php:155
 msgid "Required if in progress"
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:147
+#: includes/steps/class-step-user-input.php:159
 msgid "Required if complete"
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:198
+#: includes/steps/class-step-user-input.php:210
 msgid "A new entry requires your input"
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:487
+#: includes/steps/class-step-user-input.php:499
 msgid "Entry updated and marked complete."
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:487
+#: includes/steps/class-step-user-input.php:499
 msgid "Entry updated - in progress."
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:538
+#: includes/steps/class-step-user-input.php:550
 msgid "This field is required."
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:558
+#: includes/steps/class-step-user-input.php:570
 msgid "There was a problem while updating your form."
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:602
+#: includes/steps/class-step-user-input.php:614
 msgid "Pending Input"
 msgstr ""
 
@@ -1598,7 +1622,7 @@ msgstr ""
 msgid "Entry"
 msgstr ""
 
-#: includes/steps/class-step.php:1520
+#: includes/steps/class-step.php:1529
 msgid "Processed"
 msgstr ""
 
