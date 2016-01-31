@@ -351,6 +351,19 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					),
 				),
 				array(
+					'name'  => 'instructions',
+					'label' => __( 'Instructions', 'gravityflow' ),
+					'type'  => 'checkbox_and_textarea',
+					'tooltip' => esc_html__( 'Activate this setting to display instructions to the user for the current step.', 'gravityflow' ),
+					'checkbox' => array(
+						'label' => esc_html__( 'Display instructions', 'gravityflow' ),
+					),
+					'textarea'  => array(
+						'use_editor' => true,
+						'default_value' => esc_html__( 'Instructions: please review the values in the fields below and click on the Approve or Reject button', 'gravityflow' ),
+					),
+				),
+				array(
 					'name'     => 'display_fields',
 					'label'    => __( 'Display Fields', 'gravityflow' ),
 					'tooltip'   => __( 'Select the fields to hide or display.', 'gravityflow' ),
@@ -1059,10 +1072,13 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			'action' => 'approve',
 		);
 
-		$approve_token = gravity_flow()->generate_access_token( $assignee, $scopes, $expiration_timestamp );
+		$approve_token = '';
 
-		$text = str_replace( '{workflow_approve_token}', $approve_token, $text );
+		if ( $assignee ) {
+			$approve_token = gravity_flow()->generate_access_token( $assignee, $scopes, $expiration_timestamp );
 
+			$text = str_replace( '{workflow_approve_token}', $approve_token, $text );
+		}
 
 		preg_match_all( '/{workflow_approve_url(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
 		if ( is_array( $matches ) ) {
@@ -1107,9 +1123,12 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 		$scopes['action'] = 'reject';
 
-		$reject_token = gravity_flow()->generate_access_token( $assignee, $scopes, $expiration_timestamp );
+		$reject_token = '';
 
-		$text = str_replace( '{workflow_reject_token}', $reject_token, $text );
+		if ( $assignee ) {
+			$reject_token = gravity_flow()->generate_access_token( $assignee, $scopes, $expiration_timestamp );
+			$text = str_replace( '{workflow_reject_token}', $reject_token, $text );
+		}
 
 		preg_match_all( '/{workflow_reject_url(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
 		if ( is_array( $matches ) ) {

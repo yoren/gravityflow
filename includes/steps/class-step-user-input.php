@@ -110,6 +110,18 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				),
 			),
 			array(
+				'name'  => 'instructions',
+				'label' => __( 'Instructions', 'gravityflow' ),
+				'type'  => 'checkbox_and_textarea',
+				'tooltip' => esc_html__( 'Activate this setting to display instructions to the user for the current step.', 'gravityflow' ),
+				'checkbox' => array(
+					'label' => esc_html__( 'Display instructions', 'gravityflow' ),
+				),
+				'textarea'  => array(
+					'use_editor' => true,
+				),
+			),
+			array(
 				'name'    => 'display_fields',
 				'label'   => __( 'Display Fields', 'gravityflow' ),
 				'tooltip' => __( 'Select the fields to hide or display.', 'gravityflow' ),

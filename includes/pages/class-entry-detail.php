@@ -300,6 +300,22 @@ class Gravity_Flow_Entry_Detail {
 
 		$display_empty_fields = (bool) apply_filters( 'gravityflow_entry_detail_grid_display_empty_fields', $display_empty_fields, $form, $entry );
 
+		if ( $current_step && $current_step->instructionsEnable ) {
+			$instructions = $current_step->instructionsValue;
+			$instructions = GFCommon::replace_variables( $instructions, $form, $entry, false, true, true );
+			$instructions = $current_step->replace_variables( $instructions, null );
+			$instructions = wp_kses_post( $instructions );
+			?>
+			<div class="postbox">
+				<div class="inside">
+					<?php echo $instructions; ?>
+				</div>
+
+			</div>
+
+			<?php
+
+		}
 		?>
 
 		<input type="hidden" name="action" id="action" value="" />
