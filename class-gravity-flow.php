@@ -1618,6 +1618,77 @@ PRIMARY KEY  (id)
 			return $html;
 		}
 
+		function settings_checkbox_and_textarea( $field, $echo = true ) {
+			// prepare checkbox
+
+			$checkbox_input = rgars( $field, 'checkbox' );
+
+			$checkbox_field = array(
+				'type'       => 'checkbox',
+				'name'       => $field['name'] . 'Enable',
+				'label'      => esc_html__( 'Enable', 'gravityforms' ),
+				'horizontal' => true,
+				'value'      => '1',
+				'choices'    => false,
+				'tooltip'    => false,
+			);
+
+			$checkbox_field = wp_parse_args( $checkbox_input, $checkbox_field );
+
+			// prepare textarea
+
+			$textarea_input = rgars( $field, 'textarea' );
+			$is_enabled   = $this->get_setting( $checkbox_field['name'] );
+
+			$text_field = array(
+				'name'    => $field['name'] . 'Value',
+				'type'    => 'select',
+				'class'   => '',
+				'tooltip' => false,
+			);
+
+			$text_field['class'] .= ' ' . $text_field['name'];
+
+			$text_field = wp_parse_args( $textarea_input, $text_field );
+
+			// a little more with the checkbox
+			if ( empty( $checkbox_field['choices'] ) ) {
+				$checkbox_field['choices'] = array(
+					array(
+						'name'          => $checkbox_field['name'],
+						'label'         => $checkbox_field['label'],
+						'onchange'      => sprintf( "( function( $, elem ) {
+								$( elem ).parents( 'td' ).css( 'position', 'relative' );
+								if( $( elem ).prop( 'checked' ) ) {
+									$( '%1\$s' ).fadeIn();
+								} else {
+									$( '%1\$s' ).fadeOut();
+								}
+							} )( jQuery, this );",
+							"#{$text_field['name']}Span" ),
+					),
+				);
+			}
+
+			// get markup
+
+			$html = sprintf(
+				'%s <br /><span id="%s" class="%s">%s %s %s</span>',
+				$this->settings_checkbox( $checkbox_field, false ),
+				$text_field['name'] . 'Span',
+				$is_enabled ? '' : 'hidden',
+				esc_html( rgar( $text_field, 'before_input' ) ),
+				$this->settings_textarea( $text_field, false ),
+				$text_field['tooltip'] ? gform_tooltip( $text_field['tooltip'], rgar( $text_field, 'tooltip_class' ) . ' tooltip ' . $text_field['name'], true ) : ''
+			);
+
+			if ( $echo ) {
+				echo $html;
+			}
+
+			return $html;
+		}
+
 		function settings_visual_editor( $field ) {
 
 			$default_value = rgar( $field, 'value' ) ? rgar( $field, 'value' ) : rgar( $field, 'default_value' );
