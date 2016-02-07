@@ -156,86 +156,105 @@ class Gravity_Flow_Entry_Detail {
 				}
 			}
 			$url = remove_query_arg( array( 'gworkflow_token', 'new_status' ) );
+
 			?>
-			<form method="post" id="entry_form" enctype='multipart/form-data' action="<?php echo esc_url( $url ); ?>">
-				<?php wp_nonce_field( 'gforms_save_entry', 'gforms_save_entry' ) ?>
-				<div id="poststuff" class="metabox-holder has-right-sidebar">
+			<div class="gform_wrapper">
+				<form method="post" id="entry_form" enctype='multipart/form-data' action="<?php echo esc_url( $url ); ?>">
+					<?php wp_nonce_field( 'gforms_save_entry', 'gforms_save_entry' ) ?>
+					<div id="poststuff" class="metabox-holder has-right-sidebar">
 
-					<div id="side-info-column" class="inner-sidebar">
-						<?php
-						gravity_flow()->workflow_entry_detail_status_box( $form, $entry, $current_step );
-
-						if ( is_user_logged_in() || $check_view_entry_permissions ) :
-						?>
-
-						<!-- begin print button -->
-						<div class="detail-view-print">
-							<a href="javascript:;"
-							   onclick="var notes_qs = jQuery('#gform_print_notes').is(':checked') ? '&notes=1' : ''; var url='<?php echo admin_url( 'admin-ajax.php' )?>?action=gravityflow_print_entries&lid=<?php echo absint( $entry['id'] ); ?>' + notes_qs; printPage(url);"
-							   class="button"><?php esc_html_e( 'Print', 'gravityflow' ) ?></a>
-
-								<?php if ( $show_timeline ) { ?>
-
-								<input type="checkbox" name="print_notes" value="print_notes" checked="checked"
-								       id="gform_print_notes"/>
-								<label for="print_notes"><?php esc_html_e( 'include timeline', 'gravityflow' ) ?></label>
-								<?php } ?>
-
-						</div>
-						<!-- end print button -->
-
-						<?php endif; ?>
-					</div>
-
-					<div id="post-body" class="has-sidebar">
-						<div id="post-body-content" class="has-sidebar-content">
+						<div id="side-info-column" class="inner-sidebar">
 							<?php
+							gravity_flow()->workflow_entry_detail_status_box( $form, $entry, $current_step );
 
-							do_action( 'gravityflow_entry_detail_content_before', $form, $entry );
+							if ( is_user_logged_in() || $check_view_entry_permissions ) :
+							?>
 
-							$editable_fields = array();
+							<!-- begin print button -->
+							<div class="detail-view-print">
+								<a href="javascript:;"
+								   onclick="var notes_qs = jQuery('#gform_print_notes').is(':checked') ? '&notes=1' : ''; var url='<?php echo admin_url( 'admin-ajax.php' )?>?action=gravityflow_print_entries&lid=<?php echo absint( $entry['id'] ); ?>' + notes_qs; printPage(url);"
+								   class="button"><?php esc_html_e( 'Print', 'gravityflow' ) ?></a>
 
-							if ( $current_step ) {
-								$current_user_status = $current_step->get_user_status();
-								$current_role_status = false;
+									<?php if ( $show_timeline ) { ?>
+
+									<input type="checkbox" name="print_notes" value="print_notes" checked="checked"
+									       id="gform_print_notes"/>
+									<label for="print_notes"><?php esc_html_e( 'include timeline', 'gravityflow' ) ?></label>
+									<?php } ?>
+
+							</div>
+							<!-- end print button -->
+
+							<?php endif; ?>
+						</div>
+
+						<div id="post-body" class="has-sidebar">
+							<div id="post-body-content" class="has-sidebar-content">
+								<?php
+
+								do_action( 'gravityflow_entry_detail_content_before', $form, $entry );
+
+								$editable_fields = array();
+
 								if ( $current_step ) {
-									foreach ( gravity_flow()->get_user_roles() as $role ) {
-										$current_role_status = $current_step->get_role_status( $role );
-										if ( $current_role_status == 'pending' ) {
-											break;
+									$current_user_status = $current_step->get_user_status();
+									$current_role_status = false;
+									if ( $current_step ) {
+										foreach ( gravity_flow()->get_user_roles() as $role ) {
+											$current_role_status = $current_step->get_role_status( $role );
+											if ( $current_role_status == 'pending' ) {
+												break;
+											}
 										}
+									}
+
+									$can_update = $current_step && ( $current_user_status == 'pending' || $current_role_status == 'pending' );
+									$editable_fields = $can_update ? $current_step->get_editable_fields() : array();
+
+									if ( $can_update && $display_instructions && $current_step->instructionsEnable ) {
+										$instructions = $current_step->instructionsValue;
+										$instructions = GFCommon::replace_variables( $instructions, $form, $entry, false, true, true );
+										$instructions = $current_step->replace_variables( $instructions, null );
+										$instructions = wp_kses_post( $instructions );
+										?>
+										<div class="postbox">
+											<div class="inside">
+												<?php echo $instructions; ?>
+											</div>
+
+										</div>
+
+										<?php
 									}
 								}
 
-								$can_update = $current_step && ( $current_user_status == 'pending' || $current_role_status == 'pending' );
-								$editable_fields = $can_update ? $current_step->get_editable_fields() : array();
-							}
+								self::entry_detail_grid( $form, $entry, $display_empty_fields, $editable_fields, $current_step );
 
-							self::entry_detail_grid( $form, $entry, $display_empty_fields, $editable_fields, $current_step );
+								do_action( 'gravityflow_entry_detail', $form, $entry );
 
-							do_action( 'gravityflow_entry_detail', $form, $entry );
+								if ( $show_timeline ) {
+									?>
+									<div class="postbox">
+										<h3>
+											<label for="name"><?php esc_html_e( 'Timeline', 'gravityflow' ); ?></label>
+										</h3>
 
-							if ( $show_timeline ) {
-								?>
-								<div class="postbox">
-									<h3>
-										<label for="name"><?php esc_html_e( 'Timeline', 'gravityflow' ); ?></label>
-									</h3>
+										<div class="inside">
+											<?php self::timeline( $entry, $form ); ?>
+										</div>
 
-									<div class="inside">
-										<?php self::timeline( $entry, $form ); ?>
 									</div>
 
-								</div>
+								<?php } ?>
 
-							<?php } ?>
-
+							</div>
 						</div>
+
 					</div>
 
-				</div>
-
-			</form>
+				</form>
+			</div>
 		</div>
 		<?php
 	}
@@ -300,22 +319,21 @@ class Gravity_Flow_Entry_Detail {
 
 		$display_empty_fields = (bool) apply_filters( 'gravityflow_entry_detail_grid_display_empty_fields', $display_empty_fields, $form, $entry );
 
-		if ( $current_step && $current_step->instructionsEnable ) {
-			$instructions = $current_step->instructionsValue;
-			$instructions = GFCommon::replace_variables( $instructions, $form, $entry, false, true, true );
-			$instructions = $current_step->replace_variables( $instructions, null );
-			$instructions = wp_kses_post( $instructions );
-			?>
-			<div class="postbox">
-				<div class="inside">
-					<?php echo $instructions; ?>
-				</div>
+		$condtional_logic_enabled = $current_step && $current_step->conditional_logic_editable_fields_enabled;
+		self::register_form_init_scripts( $form, array(), $condtional_logic_enabled );
 
-			</div>
-
-			<?php
-
+		if ( apply_filters( 'gform_init_scripts_footer', false ) ) {
+			add_action( 'wp_footer', create_function( '', 'GFFormDisplay::footer_init_scripts(' . $form['id'] . ');' ), 20 );
+			add_action( 'gform_preview_footer', create_function( '', 'GFFormDisplay::footer_init_scripts(' . $form['id'] . ');' ) );
+		} else {
+			echo GFFormDisplay::get_form_init_scripts( $form );
+			$current_page = 1;
+			$scripts = "<script type='text/javascript'>" . apply_filters( 'gform_cdata_open', '' ) . " jQuery(document).ready(function(){jQuery(document).trigger('gform_post_render', [{$form_id}, {$current_page}]) } ); " . apply_filters( 'gform_cdata_close', '' ) . '</script>';
+			echo $scripts;
 		}
+
+
+
 		?>
 
 		<input type="hidden" name="action" id="action" value="" />
@@ -343,14 +361,13 @@ class Gravity_Flow_Entry_Detail {
 				</th>
 			</tr>
 			</thead>
-			<tbody>
+			<tbody class="<?php echo GFCommon::get_ul_classes( $form ) ?>">
 			<?php
 			$count = 0;
 			$field_count = sizeof( $form['fields'] );
 			$has_product_fields = false;
 			$display_fields_mode = $current_step ? $current_step->display_fields_mode : 'all_fields';
 			$display_fields_selected = $current_step && is_array( $current_step->display_fields_selected ) ? $current_step->display_fields_selected : array();
-
 
 			foreach ( $form['fields'] as &$field ) {
 				/* @var GF_Field $field */
@@ -399,17 +416,12 @@ class Gravity_Flow_Entry_Detail {
 
 						break;
 					default :
-
 						$field_id = $field->id;
 
 						if ( in_array( $field_id, $editable_fields ) ) {
 
-							if ( ! $current_step->conditional_logic_editable_fields_enabled ) {
-								$field->conditionalLogic = null;
-							}
-
-							if ( $field->get_input_type() == 'fileupload' ) {
-								$field->_is_entry_detail = true;
+							if ( $current_step->conditional_logic_editable_fields_enabled ) {
+								$field->conditionalLogicFields = GFFormDisplay::get_conditional_logic_fields( $form, $field->id );
 							}
 
 							if ( GFCommon::is_product_field( $field->type ) ) {
@@ -421,16 +433,24 @@ class Gravity_Flow_Entry_Detail {
 								$value = GFFormsModel::get_field_value( $field );
 							} else {
 								$value = GFFormsModel::get_lead_field_value( $entry, $field );
+								if ( $field->get_input_type() == 'email' && $field->emailConfirmEnabled ) {
+									$_POST[ 'input_' . $field->id . '_2' ] = $value;
+								}
+							}
+
+							if ( $field->get_input_type() == 'fileupload' ) {
+								$field->_is_entry_detail = true;
 							}
 
 							$content = self::get_field_content( $field, $value, $form, $entry );
 
+							$content = apply_filters( 'gform_field_content', $content, $field, $value, $entry['id'], $form['id'] );
 							$content = apply_filters( 'gravityflow_field_content', $content, $field, $value, $entry['id'], $form['id'] );
 
 							echo $content;
 						} else {
 
-							$field->conditionalLogic = null;
+							//$field->conditionalLogic = null;
 
 							if ( ! $display_field ) {
 								continue;
@@ -441,6 +461,13 @@ class Gravity_Flow_Entry_Detail {
 							}
 
 							$value = RGFormsModel::get_lead_field_value( $entry, $field );
+
+							$conditional_logic_fields = GFFormDisplay::get_conditional_logic_fields( $form, $field->id );
+							if ( ! empty( $conditional_logic_fields ) ) {
+								$field->conditionalLogicFields = $conditional_logic_fields;
+								$field_input = self::get_field_input( $field, $value, $entry['id'], $form_id, $form );
+								echo '<div style="display:none;"">' . $field_input . '</div>';
+							}
 
 							if ( $field->type == 'product' ) {
 								if ( $field->has_calculation() ) {
@@ -485,7 +512,7 @@ class Gravity_Flow_Entry_Detail {
                                 <tr>
                                     <td colspan="2" class="entry-view-field-value' . $last_row . '">' . $display_value . '</td>
                                 </tr>';
-
+								$content = apply_filters( 'gform_field_content', $content, $field, $value, $entry['id'], $form['id'] );
 								$content = apply_filters( 'gravityflow_field_content', $content, $field, $value, $entry['id'], $form['id'] );
 
 								echo $content;
@@ -497,6 +524,7 @@ class Gravity_Flow_Entry_Detail {
 						break;
 				}
 			}
+
 
 			$products = array();
 			if ( $has_product_fields ) {
@@ -597,7 +625,18 @@ class Gravity_Flow_Entry_Detail {
 			<input type="hidden" name="gform_unique_id" value="" />
 			<input type="hidden" name="is_submit_<?php echo $form_id ?>" value="1" />
 			<input type="hidden" name="step_id" value="<?php echo $current_step ? $current_step->get_id() : '' ?>" />
-			<input type="hidden" name="gform_uploaded_files" id='gform_uploaded_files_<?php echo absint( $form_id ); ?>' value="" />
+			<?php
+			if ( GFCommon::has_multifile_fileupload_field( $form ) || ! empty( GFFormsModel::$uploaded_files[ $form_id ] ) ) {
+				$files       = ! empty( GFFormsModel::$uploaded_files[ $form_id ] ) ? GFCommon::json_encode( GFFormsModel::$uploaded_files[ $form_id ] ) : '';
+				$files_input = "<input type='hidden' name='gform_uploaded_files' id='gform_uploaded_files_{$form_id}' value='" . str_replace( "'", '&#039;', $files ) . "' />";
+				echo $files_input;
+			}
+			//GFFormDisplay::print_form_scripts( $form, false );
+
+
+
+
+			?>
 		</div>
 
 	<?php
@@ -704,21 +743,16 @@ class Gravity_Flow_Entry_Detail {
 			$field = GF_Fields::create( $field );
 		}
 
-		$is_form_editor = GFCommon::is_form_editor();
-		$is_entry_detail = GFCommon::is_entry_detail();
-		$is_admin = $is_form_editor || $is_entry_detail;
+		$field->adminOnly = false;
 
 		$id       = intval( $field->id );
-		$field_id = $is_admin || $form_id == 0 ? "input_$id" : 'input_' . $form_id . "_$id";
-		$form_id  = $is_admin && empty( $form_id ) ? rgget( 'id' ) : $form_id;
+		$field_id = 'input_' . $form_id . "_$id";
 
-		if ( RG_CURRENT_VIEW == 'entry' ) {
-			$lead      = RGFormsModel::get_lead( $lead_id );
-			$post_id   = $lead['post_id'];
-			$post_link = '';
-			if ( is_numeric( $post_id ) && GFCommon::is_post_field( $field ) ) {
-				$post_link = "<div>You can <a href='post.php?action=edit&post=$post_id'>edit this post</a> from the post page.</div>";
-			}
+		$entry      = RGFormsModel::get_lead( $lead_id );
+		$post_id   = $entry['post_id'];
+		$post_link = '';
+		if ( is_numeric( $post_id ) && GFCommon::is_post_field( $field ) ) {
+			$post_link = "<div>You can <a href='post.php?action=edit&post=$post_id'>edit this post</a> from the post page.</div>";
 		}
 
 		$field_input = apply_filters( 'gform_field_input', '', $field, $value, $lead_id, $form_id );
@@ -764,11 +798,12 @@ class Gravity_Flow_Entry_Detail {
 					return $post_link;
 				}
 
-				if ( ! isset( $lead ) ) {
-					$lead = null;
+				if ( ! isset( $entry ) ) {
+					$entry = null;
 				}
 
-				return $field->get_field_input( $form, $value, $lead );
+
+				return $field->get_field_input( $form, $value, $entry );
 
 				break;
 
@@ -793,6 +828,8 @@ class Gravity_Flow_Entry_Detail {
 
 		$description = $field->get_description( $field->description, 'gfield_description' );
 
+		$field->conditionalLogicFields = GFFormDisplay::get_conditional_logic_fields( $form, $field->id );
+
 		$field_input = self::get_field_input( $field, $value, $entry['id'], $form_id, $form );
 
 		if ( $field->is_description_above( $form ) ) {
@@ -802,12 +839,415 @@ class Gravity_Flow_Entry_Detail {
 			$field_input = $field_input . $description . $validation_message;
 		}
 
-		$field_content = "<tr>
-		                     <td colspan='2' class='entry-view-field-name'><label class='gfield_label' $for_attribute >" . esc_html( rgar( $field, 'label' ) ) . $required_div . "</label></td>
-		                 </tr>
-		                 <tr valign='top'><td colspan='2' class='detail-view' id='{$td_id}'>$field_input</td></tr>";
-
+		$field_content = "<tr valign='top'><td colspan='2' class='detail-view' id='{$td_id}'><ul><li><label class='gfield_label' $for_attribute >" . esc_html( rgar( $field, 'label' ) ) . $required_div . "</label>$field_input</li></ul>  </td></tr>";
 
 		return $field_content;
+	}
+
+	/**
+	 * Enqueue and retrieve all inline scripts that should be executed when the form is rendered.
+	 * Use add_init_script() function to enqueue scripts.
+	 *
+	 * @param array $form
+	 * @param array $field_values
+	 * @param bool  $is_ajax
+	 */
+	public static function register_form_init_scripts( $form, $field_values = array(), $conditional_logic_enabled = true ) {
+		$is_ajax = false;
+		// adding conditional logic script if conditional logic is configured for this form.
+		// get_conditional_logic also adds the chosen script for the enhanced dropdown option.
+		// if this form does not have conditional logic, add chosen script separately
+		if ( $conditional_logic_enabled && GFFormDisplay::has_conditional_logic( $form ) ) {
+			GFFormDisplay::add_init_script( $form['id'], 'number_formats', GFFormDisplay::ON_PAGE_RENDER, GFFormDisplay::get_number_formats_script( $form ) );
+			GFFormDisplay::add_init_script( $form['id'], 'conditional_logic', GFFormDisplay::ON_PAGE_RENDER, self::get_conditional_logic( $form, $field_values ) );
+		}
+
+		//adding currency config if there are any product fields in the form
+		if ( self::has_price_field( $form ) ) {
+			GFFormDisplay::add_init_script( $form['id'], 'pricing', GFFormDisplay::ON_PAGE_RENDER, GFFormDisplay::get_pricing_init_script( $form ) );
+		}
+
+		if ( self::has_password_strength( $form ) ) {
+			$password_script = GFFormDisplay::get_password_strength_init_script( $form );
+			GFFormDisplay::add_init_script( $form['id'], 'password', GFFormDisplay::ON_PAGE_RENDER, $password_script );
+		}
+
+		if ( self::has_enhanced_dropdown( $form ) ) {
+			$chosen_script = GFFormDisplay::get_chosen_init_script( $form );
+			GFFormDisplay::add_init_script( $form['id'], 'chosen', GFFormDisplay::ON_PAGE_RENDER, $chosen_script );
+			GFFormDisplay::add_init_script( $form['id'], 'chosen', GFFormDisplay::ON_CONDITIONAL_LOGIC, $chosen_script );
+		}
+
+		if ( self::has_character_counter( $form ) ) {
+			GFFormDisplay::add_init_script( $form['id'], 'character_counter', GFFormDisplay::ON_PAGE_RENDER, GFFormDisplay::get_counter_init_script( $form ) );
+		}
+
+		if ( GFFormDisplay::has_input_mask( $form ) ) {
+			GFFormDisplay::add_init_script( $form['id'], 'input_mask', GFFormDisplay::ON_PAGE_RENDER, GFFormDisplay::get_input_mask_init_script( $form ) );
+		}
+
+		if ( GFFormDisplay::has_calculation_field( $form ) ) {
+			GFFormDisplay::add_init_script( $form['id'], 'number_formats', GFFormDisplay::ON_PAGE_RENDER, GFFormDisplay::get_number_formats_script( $form ) );
+			GFFormDisplay::add_init_script( $form['id'], 'calculation', GFFormDisplay::ON_PAGE_RENDER, GFFormDisplay::get_calculations_init_script( $form ) );
+		}
+
+		if ( self::has_currency_format_number_field( $form ) ) {
+			GFFormDisplay::add_init_script( $form['id'], 'currency_format', GFFormDisplay::ON_PAGE_RENDER, GFFormDisplay::get_currency_format_init_script( $form ) );
+		}
+
+		if ( self::has_currency_copy_values_option( $form ) ) {
+			GFFormDisplay::add_init_script( $form['id'], 'copy_values', GFFormDisplay::ON_PAGE_RENDER, GFFormDisplay::get_copy_values_init_script( $form ) );
+		}
+
+		if ( self::has_placeholder( $form ) ) {
+			GFFormDisplay::add_init_script( $form['id'], 'placeholders', GFFormDisplay::ON_PAGE_RENDER, GFFormDisplay::get_placeholders_init_script( $form ) );
+		}
+
+		if ( isset( $form['fields'] ) && is_array( $form['fields'] ) ) {
+			foreach ( $form['fields'] as $field ) {
+				/* @var GF_Field $field */
+				if ( is_subclass_of( $field, 'GF_Field' ) ) {
+					$field->register_form_init_scripts( $form );
+				}
+			}
+		}
+
+		gf_do_action( array( 'gform_register_init_scripts', $form['id'] ), $form, $field_values, $is_ajax );
+
+	}
+
+	private static function get_conditional_logic( $form, $field_values = array() ) {
+		$logics            = '';
+		$dependents        = '';
+		$fields_with_logic = array();
+		$default_values    = array();
+
+		foreach ( $form['fields'] as $field ) {
+
+			/* @var GF_Field $field */
+
+			$field_deps = GFFormDisplay::get_conditional_logic_fields( $form, $field->id );
+			$field_dependents[ $field->id ] = ! empty( $field_deps ) ? $field_deps : array();
+
+			//use section's logic if one exists
+			$section       = RGFormsModel::get_section( $form, $field->id );
+			$section_logic = ! empty( $section ) ? rgar( $section, 'conditionalLogic' ) : null;
+
+			$field_logic = $field->type != 'page' ? $field->conditionalLogic : null; //page break conditional logic will be handled during the next button click
+
+			$next_button_logic = ! empty( $field->nextButton ) && ! empty( $field->nextButton['conditionalLogic'] ) ? $field->nextButton['conditionalLogic'] : null;
+
+			if ( ! empty( $field_logic ) || ! empty( $next_button_logic ) ) {
+
+				$field_section_logic = array( 'field' => $field_logic, 'nextButton' => $next_button_logic, 'section' => $section_logic );
+
+				$logics .= $field->id . ': ' . GFCommon::json_encode( $field_section_logic ) . ',';
+
+				$fields_with_logic[] = $field->id;
+
+				$peers    = $field->type == 'section' ? GFCommon::get_section_fields( $form, $field->id ) : array( $field );
+				$peer_ids = array();
+
+				foreach ( $peers as $peer ) {
+					$peer_ids[] = $peer->id;
+				}
+
+				$dependents .= $field->id . ': ' . GFCommon::json_encode( $peer_ids ) . ',';
+			}
+
+			//-- Saving default values so that they can be restored when toggling conditional logic ---
+			$field_val  = '';
+			$input_type = $field->get_input_type();
+			$inputs     = $field->get_entry_inputs();
+
+			//get parameter value if pre-populate is enabled
+			if ( $field->allowsPrepopulate ) {
+				if ( $input_type == 'checkbox' ) {
+					$field_val = RGFormsModel::get_parameter_value( $field->inputName, $field_values, $field );
+					if ( ! is_array( $field_val ) ) {
+						$field_val = explode( ',', $field_val );
+					}
+				} elseif ( is_array( $inputs ) ) {
+					$field_val = array();
+					foreach ( $inputs as $input ) {
+						$field_val["input_{$input['id']}"] = RGFormsModel::get_parameter_value( rgar( $input, 'name' ), $field_values, $field );
+					}
+				} elseif ( $input_type == 'time' ) { // maintained for backwards compatibility. The Time field now has an inputs array.
+					$parameter_val = RGFormsModel::get_parameter_value( $field->inputName, $field_values, $field );
+					if ( ! empty( $parameter_val ) && preg_match( '/^(\d*):(\d*) ?(.*)$/', $parameter_val, $matches ) ) {
+						$field_val   = array();
+						$field_val[] = esc_attr( $matches[1] ); //hour
+						$field_val[] = esc_attr( $matches[2] ); //minute
+						$field_val[] = rgar( $matches, 3 );     //am or pm
+					}
+				} elseif ( $input_type == 'list' ) {
+					$parameter_val = RGFormsModel::get_parameter_value( $field->inputName, $field_values, $field );
+					$field_val     = is_array( $parameter_val ) ? $parameter_val : explode( ',', str_replace( '|', ',', $parameter_val ) );
+
+					if ( is_array( rgar( $field_val, 0 ) ) ) {
+						$list_values = array();
+						foreach ( $field_val as $row ) {
+							$list_values = array_merge( $list_values, array_values( $row ) );
+						}
+						$field_val = $list_values;
+					}
+				} else {
+					$field_val = RGFormsModel::get_parameter_value( $field->inputName, $field_values, $field );
+				}
+			}
+
+			//use default value if pre-populated value is empty
+			$field_val = $field->get_value_default_if_empty( $field_val );
+
+			if ( is_array( $field->choices ) && $input_type != 'list' ) {
+
+				//radio buttons start at 0 and checkboxes start at 1
+				$choice_index     = $input_type == 'radio' ? 0 : 1;
+				$is_pricing_field = GFCommon::is_pricing_field( $field->type );
+
+				foreach ( $field->choices as $choice ) {
+
+					if ( $input_type == 'checkbox' && ( $choice_index % 10 ) == 0 ){
+						$choice_index++;
+					}
+
+					$is_prepopulated    = is_array( $field_val ) ? in_array( $choice['value'], $field_val ) : $choice['value'] == $field_val;
+					$is_choice_selected = rgar( $choice, 'isSelected' ) || $is_prepopulated;
+
+					if ( $is_choice_selected && $input_type == 'select' ) {
+						$price = GFCommon::to_number( rgar( $choice, 'price' ) ) == false ? 0 : GFCommon::to_number( rgar( $choice, 'price' ) );
+						$val   = $is_pricing_field && $field->type != 'quantity' ? $choice['value'] . '|' . $price : $choice['value'];
+						$default_values[ $field->id ] = $val;
+					} elseif ( $is_choice_selected ) {
+						if ( ! isset( $default_values[ $field->id ] ) ) {
+							$default_values[ $field->id ] = array();
+						}
+
+						$default_values[ $field->id ][] = "choice_{$form['id']}_{$field->id}_{$choice_index}";
+					}
+					$choice_index ++;
+				}
+			} elseif ( ! empty( $field_val ) ) {
+
+				switch ( $input_type ) {
+					case 'date':
+						// for date fields; that are multi-input; and where the field value is a string
+						// (happens with prepop, default value will always be an array for multi-input date fields)
+						if ( is_array( $field->inputs ) && ( ! is_array( $field_val ) || ! isset( $field_val['m'] ) ) ) {
+
+							$format    = empty( $field->dateFormat ) ? 'mdy' : esc_attr( $field->dateFormat );
+							$date_info = GFcommon::parse_date( $field_val, $format );
+
+							// converts date to array( 'm' => 1, 'd' => '13', 'y' => '1987' )
+							$field_val = $field->get_date_array_by_format( array( $date_info['month'], $date_info['day'], $date_info['year'] ) );
+
+						}
+						break;
+					case 'time':
+						if ( is_array( $field_val ) ) {
+							$ampm_key               = key( array_slice( $field_val, - 1, 1, true ) );
+							$field_val[ $ampm_key ] = strtolower( $field_val[ $ampm_key ] );
+						}
+						break;
+					case 'address':
+
+						$state_input_id = sprintf( '%s.4', $field->id );
+						if ( isset( $field_val[ $state_input_id ] ) && ! $field_val[ $state_input_id ] ) {
+							$field_val[ $state_input_id ] = $field->defaultState;
+						}
+
+						$country_input_id = sprintf( '%s.6', $field->id );
+						if ( isset( $field_val[ $country_input_id ] ) && ! $field_val[ $country_input_id ] ) {
+							$field_val[ $country_input_id ] = $field->defaultCountry;
+						}
+
+						break;
+				}
+
+				$default_values[ $field->id ] = $field_val;
+
+			}
+
+		}
+
+		$button_conditional_script = '';
+
+		//adding form button conditional logic if enabled
+		if ( isset( $form['button']['conditionalLogic'] ) ) {
+			$logics .= '0: ' . GFCommon::json_encode( array( 'field' => $form['button']['conditionalLogic'], 'section' => null ) ) . ',';
+			$dependents .= '0: ' . GFCommon::json_encode( array( 0 ) ) . ',';
+			$fields_with_logic[] = 0;
+
+			$button_conditional_script = "jQuery('#gform_{$form['id']}').submit(" .
+			                             'function(event, isButtonPress){' .
+			                             '    var visibleButton = jQuery(".gform_next_button:visible, .gform_button:visible, .gform_image_button:visible");' .
+			                             '    return visibleButton.length > 0 || isButtonPress == true;' .
+			                             '}' .
+			                             ');';
+		}
+
+		if ( ! empty( $logics ) ) {
+			$logics = substr( $logics, 0, strlen( $logics ) - 1 );
+		} //removing last comma;
+
+		if ( ! empty( $dependents ) ) {
+			$dependents = substr( $dependents, 0, strlen( $dependents ) - 1 );
+		} //removing last comma;
+
+		$animation = rgar( $form, 'enableAnimation' ) ? '1' : '0';
+		global $wp_locale;
+		$number_format = $wp_locale->number_format['decimal_point'] == ',' ? 'decimal_comma' : 'decimal_dot';
+
+		$str = "if(window['jQuery']){" .
+
+		       "if(!window['gf_form_conditional_logic'])" .
+		       "window['gf_form_conditional_logic'] = new Array();" .
+		       "window['gf_form_conditional_logic'][{$form['id']}] = { logic: { {$logics} }, dependents: { {$dependents} }, animation: {$animation}, defaults: " . json_encode( $default_values ) . ", fields: " . json_encode( $field_dependents ) . " }; " .
+
+		       "if(!window['gf_number_format'])" .
+		       "window['gf_number_format'] = '" . $number_format . "';" .
+
+		       'jQuery(document).ready(function(){' .
+		       "gf_apply_rules({$form['id']}, " . json_encode( $fields_with_logic ) . ', true);' .
+		       "jQuery('#gform_wrapper_{$form['id']}').show();" .
+		       "jQuery(document).trigger('gform_post_conditional_logic', [{$form['id']}, null, true]);" .
+		       $button_conditional_script .
+
+		       '} );' .
+
+		       '} ';
+
+		return $str;
+	}
+
+	private static function has_price_field( $form ) {
+		$has_price_field = false;
+		foreach ( $form['fields'] as $field ) {
+			$input_type      = GFFormsModel::get_input_type( $field );
+			$has_price_field = GFCommon::is_product_field( $input_type ) ? true : $has_price_field;
+		}
+
+		return $has_price_field;
+	}
+
+	private static function has_character_counter( $form ) {
+
+		if ( ! is_array( $form['fields'] ) ) {
+			return false;
+		}
+
+		foreach ( $form['fields'] as $field ) {
+			if ( $field->maxLength && ! $field->inputMask ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private static function has_placeholder( $form ) {
+
+		if ( ! is_array( $form['fields'] ) ) {
+			return false;
+		}
+
+		foreach ( $form['fields'] as $field ) {
+			if ( $field->placeholder != '' ) {
+				return true;
+			}
+			if ( is_array( $field->inputs ) ) {
+				foreach ( $field->inputs as $input ) {
+					if ( rgar( $input, 'placeholder' ) != '' ) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+
+	private static function has_enhanced_dropdown( $form ) {
+
+		if ( ! is_array( $form['fields'] ) ) {
+			return false;
+		}
+
+		foreach ( $form['fields'] as $field ) {
+			if ( in_array( RGFormsModel::get_input_type( $field ), array( 'select', 'multiselect' ) ) && $field->enableEnhancedUI ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private static function has_password_strength( $form ) {
+
+		if ( ! is_array( $form['fields'] ) ) {
+			return false;
+		}
+
+		foreach ( $form['fields'] as $field ) {
+			if ( $field->type == 'password' && $field->passwordStrengthEnabled ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private static function has_other_choice( $form ) {
+
+		if ( ! is_array( $form['fields'] ) ) {
+			return false;
+		}
+
+		foreach ( $form['fields'] as $field ) {
+			if ( $field->type == 'radio' && $field->enableOtherChoice ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private static function has_currency_copy_values_option( $form ) {
+		if ( is_array( $form['fields'] ) ) {
+			foreach ( $form['fields'] as $field ) {
+				if ( $field->enableCopyValuesOption == true ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	private static function has_fileupload_field( $form ) {
+		if ( is_array( $form['fields'] ) ) {
+			foreach ( $form['fields'] as $field ) {
+				$input_type = RGFormsModel::get_input_type( $field );
+				if ( in_array( $input_type, array( 'fileupload', 'post_image' ) ) ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	private static function has_currency_format_number_field( $form ) {
+		if ( is_array( $form['fields'] ) ) {
+			foreach ( $form['fields'] as $field ) {
+				$input_type = RGFormsModel::get_input_type( $field );
+				if ( $input_type == 'number' && $field->numberFormat == 'currency' ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 }

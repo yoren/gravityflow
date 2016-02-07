@@ -316,7 +316,7 @@ PRIMARY KEY  (id)
 					'handle'  => 'gravityflow_entry_detail',
 					'src'     => $this->get_base_url() . "/js/entry-detail{$min}.js",
 					'version' => $this->_version,
-					'deps'    => array( 'jquery', 'sack' ),
+					'deps'    => array( 'jquery', 'sack', 'gform_conditional_logic' ),
 					'enqueue' => array(
 						array(
 							'query' => 'page=gravityflow-inbox',
