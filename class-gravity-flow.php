@@ -116,6 +116,8 @@ if ( class_exists( 'GFForms' ) ) {
 
 			add_action( 'gform_post_add_entry', array( $this, 'action_gform_post_add_entry' ), 10, 2 );
 
+			add_filter( 'gform_pre_replace_merge_tags', array( $this, 'replace_variables' ), 10, 7 );
+
 		}
 
 		public function init_admin() {
@@ -4663,6 +4665,84 @@ AND m.meta_value='queued'";
 			echo '<div class="gravityflow_display_fields_selected_container" ' . $style . '>';
 			$this->settings_select( $multiselect_field );
 			echo '</div>';
+		}
+
+
+		/**
+		 * Target for the gform_pre_replace_merge_tags filter. Replaces the workflow_timeline and created_by merge tags.
+		 *
+		 *
+		 * @param string $text
+		 * @param array $form
+		 * @param array $entry
+		 * @param bool $url_encode
+		 * @param bool $esc_html
+		 * @param bool $nl2br
+		 * @param string $format
+		 *
+		 * @return string
+		 */
+		function replace_variables( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
+			preg_match_all( '/{workflow_timeline(:(.*?))?}/', $text, $timeline_matches, PREG_SET_ORDER );
+			if ( is_array( $timeline_matches ) && isset( $timeline_matches[0] ) ) {
+				$full_tag = $timeline_matches[0][0];
+				require_once( gravity_flow()->get_base_path() . '/includes/pages/class-entry-detail.php' );
+				$notes = Gravity_Flow_Entry_Detail::get_timeline_notes( $entry );
+
+				$html = '';
+				foreach ( $notes as  $note ) {
+					$html .= '<br />';
+					$html .= GFCommon::format_date( $note->date_created, false, 'd M Y g:i a', false );
+					$html .= ': ';
+					if ( empty( $note->user_id ) ) {
+						if ( $note->user_name !== 'gravityflow' ) {
+							$step = Gravity_Flow_Steps::get( $note->user_name );
+							if ( $step ) {
+								$html .= $step->get_label();
+							}
+						} else {
+							$html .= esc_html( gravity_flow()->translate_navigation_label( 'Workflow' ) );
+						}
+					} else {
+						$html .= esc_html( $note->user_name );
+					}
+					$html .= '<br />';
+					$html .= nl2br( esc_html( $note->value ) );
+					$html .= '<br />';
+				}
+
+				$text = str_replace( $full_tag, $html, $text );
+			}
+
+			preg_match_all( '/{created_by(:(.*?))?}/', $text, $created_by_matches, PREG_SET_ORDER );
+			if ( is_array( $created_by_matches ) ) {
+
+				if ( ! empty( $entry['created_by'] ) ) {
+					$entry_creator = new WP_User( $entry['created_by'] );
+
+					foreach ( $created_by_matches as $created_by_match ) {
+
+						if ( ! isset( $created_by_match[2] ) ) {
+							continue;
+						}
+
+						$full_tag = $created_by_match[0];
+
+						$property = $created_by_match[2];
+
+						if ( $property == 'roles' ) {
+							$value = implode( ', ', $entry_creator->roles );
+						} else {
+							$value = $entry_creator->get( $property );
+						}
+						$value = esc_html( $value );
+
+						$text = str_replace( $full_tag, $value, $text );
+					}
+				}
+			}
+
+			return $text;
 		}
 	}
 }
