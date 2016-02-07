@@ -3132,6 +3132,8 @@ PRIMARY KEY  (id)
 				'priority'       => 600,
 			);
 
+			$menu_items = apply_filters( 'gravityflow_toolbar_menu_items', $menu_items );
+
 			return $menu_items;
 		}
 
