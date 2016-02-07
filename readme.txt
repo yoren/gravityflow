@@ -55,6 +55,61 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.2.0.28 =
+- Added support for dynamic conditional logic.
+- Added the feed extension class.
+
+= 1.2.0.27 =
+- Fixed an issue with the status page introduced in 1.2.0.21.
+
+= 1.2.0.26 =
+- Fixed an issue with the notification workflow notification where the workflow note merge tag doesn't get replaced.
+
+= 1.2.0.25 =
+- Fixed an issue where the gform_field_content was not getting triggered in the workflow detail page.
+
+= 1.2.0.24 =
+- Fixed an issue where the workflow complete notifications where the entry contains the wrong status.
+- Added support for the created_by, and workflow_timeline merge tags within Gravity Forms notifications.
+
+= 1.2.0.23 =
+- Added the gravityflow_post_process_workflow action.
+    Example: add_action( 'gravityflow_post_process_workflow'. 'sh_gravityflow_post_process_workflow', 10, 4);
+    function sh_gravityflow_post_process_workflow( $form, $entry_id, $step_id, $step_id_before_processing ) {
+        // Do something every time the workflow is processed.
+    }
+
+
+= 1.2.0.22 =
+- Fixed validation of the file upload field.
+- Fixed an issue with the email field with confirmation enabled where the confirmation is not automatically set to the value.
+
+= 1.2.0.21 =
+- Removed support for sorting in the status page for the workflow fields.
+
+= 1.2.0.20 =
+- Added the gravityflow_update_button_text_user_input filter to allow the button text to be changed on the user input step.
+    Example:
+        add_filter( 'gravityflow_update_button_text_user_input', 'sh_gravityflow_update_button_text_user_input', 10, 2 );
+        function sh_gravityflow_update_button_text_user_input( $text, $form_id, $step ) {
+            return 'Submit';
+        }
+
+
+= 1.2.0.19 =
+- Added support for sorting on the field columns in the status page.
+- Fixed an issue with the field column values in the status list.
+
+= 1.2.0.18 =
+- Fixed an issue with the email subject not replacing merge tags.
+
+= 1.2.0.17 =
+- Added the form ID and field as parameters to the gravityflow_get_users_args_assignee_field and gravityflow_get_users_args_user_field filters.
+- Added the step_column, submitter_column and status_column attributes to the shortcode.
+
+= 1.2.0.16 =
+- Fixed an issue with instructions being displayed when the current user is no longer an assignee after update.
+
 = 1.2.0.15 =
 - Added support for the display_name attribute in the assignees merge tag. e.g. {assignees: display_name=true}
 - Added the instructions setting to the user input and approval steps.

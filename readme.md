@@ -38,4 +38,4 @@ Thank you to also all the translators for doing such a great job of keeping up w
 
 
 
-Copyright 2015 Steven Henty
+Copyright 2015-2016 Steven Henty
