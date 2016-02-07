@@ -214,5 +214,21 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 		$this->add_note( $note );
 
 	}
+
+	/**
+	 * Replace the workflow_note merge tag and the tags in the base step class.
+	 *
+	 * @param string $text The text with merge tags.
+	 * @param Gravity_Flow_Assignee $assignee
+	 *
+	 * @return mixed
+	 */
+	public function replace_variables( $text, $assignee ) {
+		$text = parent::replace_variables( $text, $assignee );
+		$comment = rgpost( 'gravityflow_note' );
+		$text = str_replace( '{workflow_note}', $comment, $text );
+
+		return $text;
+	}
 }
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Notification() );
