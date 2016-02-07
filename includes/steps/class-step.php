@@ -1486,5 +1486,39 @@ abstract class Gravity_Flow_Step extends stdClass {
 			}
 		}
 	}
+
+	/**
+	 * Removes assignees from and/or adds assignees to a step. Call after updating entry values.
+	 * Make sure you call get_assignees() before you update the entry or the previous assignees may not get removed.
+	 *
+	 * @param Gravity_Flow_Assignee[] $previous_assignees The previous assign
+	 */
+	public function maybe_adjust_assignment( $previous_assignees ) {
+
+		gravity_flow()->log_debug( __METHOD__ . '(): Starting' );
+
+		$new_assignees = $this->get_assignees();
+		$new_assignees_keys = array();
+		foreach ( $new_assignees  as $new_assignee ) {
+			$new_assignees_keys[] = $new_assignee->get_key();
+		}
+		$previous_assignees_keys = array();
+		foreach ( $previous_assignees  as $previous_assignee ) {
+			$previous_assignees_keys[] = $previous_assignee->get_key();
+		}
+
+		$assignee_keys_to_add = array_diff( $new_assignees_keys, $previous_assignees_keys );
+		$assignee_keys_to_remove = array_diff( $previous_assignees_keys, $new_assignees_keys );
+
+		foreach ( $assignee_keys_to_add as $assignee_key_to_add ) {
+			$assignee_to_add = new Gravity_Flow_Assignee( $assignee_key_to_add, $this );
+			$assignee_to_add->update_status( 'pending' );
+		}
+
+		foreach ( $assignee_keys_to_remove as $assignee_key_to_remove ) {
+			$assignee_to_remove = new Gravity_Flow_Assignee( $assignee_key_to_remove, $this );
+			$assignee_to_remove->remove();
+		}
+	}
 }
 
