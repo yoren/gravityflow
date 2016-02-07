@@ -15,14 +15,15 @@ class Gravity_Flow_Entry_Detail {
 	public static function entry_detail( $form, $entry, $current_step = null, $args = array() ) {
 
 		$form_id = absint( $form['id'] );
-		$form    = apply_filters( 'gform_admin_pre_render', $form );
-		$form    = apply_filters( 'gform_admin_pre_render_' . $form_id, $form );
+		$form    = apply_filters( 'gform_pre_render', $form );
+		$form    = apply_filters( 'gform_pre_render_' . $form_id, $form );
 
 		$defaults = array(
 			'display_empty_fields' => true,
 			'check_permissions' => true,
 			'show_header' => true,
 			'timeline' => true,
+			'display_instructions' => true,
 		);
 
 		$args = array_merge( $defaults, $args );
@@ -31,6 +32,7 @@ class Gravity_Flow_Entry_Detail {
 		$check_view_entry_permissions = (bool) $args['check_permissions'];
 		$show_header = (bool) $args['show_header'];
 		$show_timeline = (bool) $args['timeline'];
+		$display_instructions = (bool) $args['display_instructions'];
 
 		?>
 
