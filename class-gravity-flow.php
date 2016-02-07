@@ -14,7 +14,7 @@ if ( class_exists( 'GFForms' ) ) {
 	 *
 	 * @package     GravityFlow
 	 * @subpackage  Classes/Gravity_Flow
-	 * @copyright   Copyright (c) 2015, Steven Henty
+	 * @copyright   Copyright (c) 2015-2016, Steven Henty
 	 * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
 	 * @since       1.0
 	 */
