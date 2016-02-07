@@ -3302,6 +3302,9 @@ PRIMARY KEY  (id)
 				'allow_anonymous' => false,
 				'title' => '',
 				'id_column' => true,
+				'submitter_column' => true,
+				'step_column' => true,
+				'status_column' => true,
 				'timeline' => true,
 				'last_updated' => false,
 			), $atts );
@@ -3313,6 +3316,9 @@ PRIMARY KEY  (id)
 			$a['title'] = sanitize_text_field( $a['title'] );
 
 			$a['id_column'] = strtolower( $a['id_column'] ) == 'false' ? false : true;
+			$a['submitter_column'] = strtolower( $a['submitter_column'] ) == 'false' ? false : true;
+			$a['step_column'] = strtolower( $a['step_column'] ) == 'false' ? false : true;
+			$a['status_column'] = strtolower( $a['status_column'] ) == 'false' ? false : true;
 			$a['timeline'] = strtolower( $a['timeline'] ) == 'false' ? false : true;
 
 			if ( is_null( $a['display_all'] ) ) {
@@ -3355,6 +3361,8 @@ PRIMARY KEY  (id)
 					$args = array(
 						'form_id' => $a['form'],
 						'id_column' => $a['id_column'],
+						'submitter_column' => $a['submitter_column'],
+						'step_column' => $a['step_column'],
 						'show_header' => false,
 						'field_ids' => explode( ',', $a['fields'] ),
 						'detail_base_url' => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
@@ -3410,6 +3418,9 @@ PRIMARY KEY  (id)
 							'field_ids' => explode( ',', $a['fields'] ),
 							'display_all' => $a['display_all'],
 							'id_column' => $a['id_column'],
+							'submitter_column' => $a['submitter_column'],
+							'step_column' => $a['step_column'],
+							'status_column' => $a['status_column'],
 							'last_updated' => $a['last_updated'],
 						);
 
