@@ -2904,6 +2904,8 @@ PRIMARY KEY  (id)
 					$current_user_assignee_key = $this->get_current_user_assignee_key();
 					if ( ( $next_step && $next_step->is_assignee( $current_user_assignee_key ) ) || $args['check_permissions'] == false || $this->current_user_can_any( 'gravityflow_view_all' ) ) {
 						$step = $next_step;
+					} else {
+						$args['display_instructions'] = false;
 					}
 					$args['check_permissions'] = false;
 				}
