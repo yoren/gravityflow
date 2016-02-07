@@ -77,14 +77,14 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 		if ( $this->fields_have_conditional_logic( $form ) ) {
 			$settings['fields'][] = array(
-				'name'    => 'conditional_logic_editable_fields_enabled',
-				'label'   => 'Conditional Logic',
-				'type'    => 'checkbox',
-				'choices' => array(
+				'name'          => 'conditional_logic_editable_fields_enabled',
+				'label'         => 'Conditional Logic',
+				'type'          => 'checkbox',
+				'choices'       => array(
 					array(
-						'label'         => __( 'Evaluate field conditional logic' ),
-						'name'          => 'conditional_logic_editable_fields_enabled',
-						'default_value' => 0,
+						'label' => __( 'Enable field conditional logic' ),
+						'name' => 'conditional_logic_editable_fields_enabled',
+						'defeault_value' => '0',
 					),
 				),
 			);
@@ -385,20 +385,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			}
 		}
 
-		if ( $this->conditional_logic_editable_fields_enabled ) {
-			$form = $this->get_form();
-
-			$entry = $this->get_entry();
-			$visible_editable_fields = array();
-			foreach ( $editable_fields as $editable_field ) {
-				$field = GFFormsModel::get_field( $form, $editable_field );
-				if ( ! GFFormsModel::is_field_hidden( $form, $field, array(), $entry ) ) {
-					$visible_editable_fields[] = $editable_field;
-				}
-			}
-			$editable_fields = $visible_editable_fields;
-		}
-
 		$editable_fields = apply_filters( 'gravityflow_editable_fields_user_input', $editable_fields, $this );
 
 		return $editable_fields;
@@ -419,11 +405,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				return false;
 			}
 
-			$validation = $this->validate_status_update( $new_status, $form );
-			if ( is_wp_error( $validation )  ) {
-				return $validation;
-			}
-
 			// Loading files that have been uploaded to temp folder
 			$files = GFCommon::json_decode( stripslashes( RGForms::post( 'gform_uploaded_files' ) ) );
 			if ( ! is_array( $files ) ) {
@@ -431,6 +412,11 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			}
 
 			GFFormsModel::$uploaded_files[ $form_id ] = $files;
+
+			$validation = $this->validate_status_update( $new_status, $form );
+			if ( is_wp_error( $validation )  ) {
+				return $validation;
+			}
 
 			$editable_fields = $this->get_editable_fields();
 
@@ -545,6 +531,59 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			/* @var GF_Field $field */
 			if ( in_array( $field->id, $editable_fields ) ) {
 				$value = GFFormsModel::get_field_value( $field );
+				if ( $field->get_input_type() == 'fileupload' ) {
+
+					$entry = $this->get_entry();
+
+					$input_name = 'input_'.$field->id;
+					$form_id = $form['id'];
+
+					$value = null;
+
+					if ( isset( $entry[ $field->id ] ) ) {
+						$value = $entry[ $field->id ];
+					}
+
+					if ( ! empty( $_FILES[ $input_name ] ) && ! empty( $_FILES[  $input_name ]['name'] ) ) {
+						$file_path = GFFormsModel::get_file_upload_path( $form['id'], $_FILES[ $input_name ]['name'] );
+						$value = $file_path['url'];
+
+					} else {
+						$_FILES[ $input_name ] = array( 'name' => '', 'size' => '' );
+					}
+
+					if ( $field->multipleFiles ) {
+						if ( isset( GFFormsModel::$uploaded_files[ $form_id ][  $input_name ] ) ) {
+							$value = empty( $value ) ? '[]' : $value;
+							$value = stripslashes_deep( $value );
+							$value = GFFormsModel::prepare_value( $form, $field, $value, $input_name, $entry['id'], array() );
+						}
+					} else {
+						GFFormsModel::$uploaded_files[ $form_id ][ $input_name ] = $value;
+					}
+
+					$original_value = GFFormsModel::get_lead_field_value( $entry, $field );
+					if ( empty( $value ) && ! empty( $original_value ) ) {
+						continue;
+					}
+
+					$_POST[ $input_name ] = $value;
+
+					if ( $field->isRequired && empty( $value ) ) {
+						$field->failed_validation  = true;
+						$field->validation_message = empty( $field->errorMessage ) ? __( 'This field is required.', 'gravityforms' ) : $field->errorMessage;
+						$valid = false;
+					}
+
+
+					$field->validate( $value, $form );
+					if ( $field->failed_validation ) {
+						$valid = false;
+					}
+
+					continue;
+				}
+
 				if ( $field->isRequired && $field->is_value_submission_empty( $form['id'] ) ) {
 					$field->failed_validation  = true;
 					$field->validation_message = empty( $field->errorMessage ) ? __( 'This field is required.', 'gravityforms' ) : $field->errorMessage;
@@ -572,37 +611,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		}
 
 		return $valid;
-	}
-
-	/**
-	 * @param Gravity_Flow_Assignee[] $previous_assignees
-	 */
-	public function maybe_adjust_assignment( $previous_assignees ) {
-
-		gravity_flow()->log_debug( __METHOD__ . '(): Starting' );
-
-		$new_assignees = $this->get_assignees();
-		$new_assignees_keys = array();
-		foreach ( $new_assignees  as $new_assignee ) {
-			$new_assignees_keys[] = $new_assignee->get_key();
-		}
-		$previous_assignees_keys = array();
-		foreach ( $previous_assignees  as $previous_assignee ) {
-			$previous_assignees_keys[] = $previous_assignee->get_key();
-		}
-
-		$assignee_keys_to_add = array_diff( $new_assignees_keys, $previous_assignees_keys );
-		$assignee_keys_to_remove = array_diff( $previous_assignees_keys, $new_assignees_keys );
-
-		foreach ( $assignee_keys_to_add as $assignee_key_to_add ) {
-			$assignee_to_add = new Gravity_Flow_Assignee( $assignee_key_to_add, $this );
-			$assignee_to_add->update_status( 'pending' );
-		}
-
-		foreach ( $assignee_keys_to_remove as $assignee_key_to_remove ) {
-			$assignee_to_remove = new Gravity_Flow_Assignee( $assignee_key_to_remove, $this );
-			$assignee_to_remove->remove();
-		}
 	}
 
 
@@ -683,7 +691,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 					$assignee_key = sanitize_text_field( $token['sub'] );
 				} else {
 					$assignee_key = 'user_id|' . $current_user->ID;
-
 				}
 				$assignee = new Gravity_Flow_Assignee( $assignee_key, $this );
 				$assignee_status = $assignee->get_status();
@@ -711,7 +718,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 						(function (GFFlowInput, $) {
 							$(document).ready(function () {
 								$('#gravityflow_update_button').prop('disabled', false);
-								$(<?php  echo json_encode( $field_ids_str ) ?>).addClass('gravityflow-input-required');
+								//$(<?php  echo json_encode( $field_ids_str ) ?>).closest('td').addClass('gravityflow-input-required');
 							});
 						}(window.GFFlowInput = window.GFFlowInput || {}, jQuery));
 					</script>
@@ -771,11 +778,12 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				<br />
 				<div style="text-align:right;">
 				<?php
-				$button_text      = __( 'Update', 'gravityflow' );
+				$button_text      = esc_html__( 'Update', 'gravityflow' );
+				$button_text      = apply_filters( 'gravityflow_update_button_text_user_input', $button_text, $form, $this );
 				$update_button_id = 'gravityflow_update_button';
 				$button_click     = "jQuery('#action').val('update'); jQuery('#entry_form').submit(); return false;";
 				$update_button    = '<input id="' . $update_button_id . '" disabled="disabled" class="button button-large button-primary" type="submit" tabindex="4" value="' . $button_text . '" name="save" onclick="' . $button_click . '"/>';
-				echo apply_filters( 'gravityflow_entrydetail_update_button', $update_button );
+				echo apply_filters( 'gravityflow_update_button_user_input', $update_button );
 				?>
 				</div>
 				<?php
@@ -948,7 +956,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	}
 
 	/**
-	 * @param $text
+	 * Replace the workflow_note merge tag and the tags in the base step class.
+	 *
+	 * @param string $text The text with merge tags.
 	 * @param Gravity_Flow_Assignee $assignee
 	 *
 	 * @return mixed
