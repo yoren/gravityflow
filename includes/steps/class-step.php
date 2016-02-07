@@ -824,66 +824,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 			}
 		}
 
-		preg_match_all( '/{workflow_timeline(:(.*?))?}/', $text, $timeline_matches, PREG_SET_ORDER );
-		if ( is_array( $timeline_matches ) && isset( $timeline_matches[0] ) ) {
-			$full_tag = $timeline_matches[0][0];
-			require_once( gravity_flow()->get_base_path() . '/includes/pages/class-entry-detail.php' );
-			$notes = Gravity_Flow_Entry_Detail::get_timeline_notes( $this->get_entry() );
-
-			$html = '';
-			foreach ( $notes as  $note ) {
-				$html .= '<br />';
-				$html .= GFCommon::format_date( $note->date_created, false, 'd M Y g:i a', false );
-				$html .= ': ';
-				if ( empty( $note->user_id ) ) {
-					if ( $note->user_name !== 'gravityflow' ) {
-						$step = Gravity_Flow_Steps::get( $note->user_name );
-						if ( $step ) {
-							$html .= $step->get_label();
-						}
-					} else {
-						$html .= esc_html( gravity_flow()->translate_navigation_label( 'Workflow' ) );
-					}
-				} else {
-					$html .= esc_html( $note->user_name );
-				}
-				$html .= '<br />';
-				$html .= nl2br( esc_html( $note->value ) );
-				$html .= '<br />';
-			}
-
-			$text = str_replace( $full_tag, $html, $text );
-		}
-
-		preg_match_all( '/{created_by(:(.*?))?}/', $text, $created_by_matches, PREG_SET_ORDER );
-		if ( is_array( $created_by_matches ) ) {
-			$entry = $this->get_entry();
-
-			if ( ! empty( $entry['created_by'] ) ) {
-				$entry_creator = new WP_User( $entry['created_by'] );
-
-				foreach ( $created_by_matches as $created_by_match ) {
-
-					if ( ! isset( $created_by_match[2] ) ) {
-						continue;
-					}
-
-					$full_tag = $created_by_match[0];
-
-					$property = $created_by_match[2];
-
-					if ( $property == 'roles' ) {
-						$value = implode( ', ', $entry_creator->roles );
-					} else {
-						$value = $entry_creator->get( $property );
-					}
-					$value = esc_html( $value );
-
-					$text = str_replace( $full_tag, $value, $text );
-				}
-			}
-		}
-
 		preg_match_all( '/{assignees(:(.*?))?}/', $text, $assignees_matches, PREG_SET_ORDER );
 		if ( is_array( $assignees_matches ) ) {
 			foreach ( $assignees_matches as $assignees_match ) {
@@ -1403,6 +1343,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$form = $this->get_form();
 		if ( empty( $notification['subject'] ) ) {
 			$notification['subject'] = $form['title'] . ': ' . $this->get_name();
+		} else {
+			$notification['subject'] = $this->replace_variables( $notification['subject'], null );
 		}
 
 		foreach ( $assignees as $assignee ) {
