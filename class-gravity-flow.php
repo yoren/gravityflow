@@ -3215,6 +3215,8 @@ PRIMARY KEY  (id)
 
 				$step_id = $entry['workflow_step'];
 
+				$starting_step_id = $step_id;
+
 				if ( empty( $step_id ) && ( empty( $entry['workflow_final_status'] ) || $entry['workflow_final_status'] == 'pending') ) {
 					$this->log_debug( __METHOD__ . '() - not yet started workflow. starting.' );
 					// Starting workflow
@@ -3269,12 +3271,16 @@ PRIMARY KEY  (id)
 					$duration = time() - $entry_created_timestamp;
 					$this->log_event( 'workflow', 'ended', $form['id'], $entry_id, $step_status, 0, $duration );
 					do_action( 'gravityflow_workflow_complete', $entry_id, $form, $step_status );
+					// Refresh entry after action.
+					$entry = GFAPI::get_entry( $entry_id );
 					GFAPI::send_notifications( $form, $entry, 'workflow_complete' );
 				} else {
 					$this->log_debug( __METHOD__ . '() - not ending workflow.' );
 					$step_id = $step->get_id();
 					gform_update_meta( $entry_id, 'workflow_step', $step_id );
 				}
+
+				do_action( 'gravityflow_post_process_workflow', $form, $entry_id, $step_id, $starting_step_id );
 			}
 		}
 
