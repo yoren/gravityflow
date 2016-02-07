@@ -16,6 +16,8 @@ class Gravity_Flow_Inbox {
 		$defaults = array(
 			'display_empty_fields' => true,
 			'id_column' => true,
+			'submitter_column' => true,
+			'step_column' => true,
 			'check_permissions'    => true,
 			'form_id'              => absint( rgar( $filter, 'form_id' ) ),
 			'field_ids'              => $field_ids,
@@ -67,6 +69,8 @@ class Gravity_Flow_Inbox {
 
 		if ( sizeof( $entries ) > 0 ) {
 			$id_style = $args['id_column'] ? '' : 'style="display:none;"';
+			$submitter_style = $args['submitter_column'] ? '' : 'style="display:none;"';
+			$step_style = $args['step_column'] ? '' : 'style="display:none;"';
 			?>
 
 			<table id="gravityflow-inbox" class="widefat gravityflow-inbox" cellspacing="0" style="border:0px;">
@@ -76,8 +80,8 @@ class Gravity_Flow_Inbox {
 					<?php if ( empty( $form_id ) ) : ?>
 						<th><?php esc_html_e( 'Form', 'gravityflow' ); ?></th>
 					<?php endif; ?>
-					<th><?php esc_html_e( 'Submitter', 'gravityflow' ); ?></th>
-					<th><?php esc_html_e( 'Step', 'gravityflow' ); ?></th>
+					<th <?php echo $submitter_style ?>><?php esc_html_e( 'Submitter', 'gravityflow' ); ?></th>
+					<th <?php echo $step_style ?>><?php esc_html_e( 'Step', 'gravityflow' ); ?></th>
 					<th><?php esc_html_e( 'Submitted', 'gravityflow' ); ?></th>
 					<?php
 					if ( $args['form_id'] && is_array( $args['field_ids'] ) ) {
@@ -123,13 +127,13 @@ class Gravity_Flow_Inbox {
 								?>
 							</td>
 						<?php endif; ?>
-						<td data-label="<?php esc_html_e( 'Submitter', 'gravityflow' ); ?>">
+						<td data-label="<?php esc_html_e( 'Submitter', 'gravityflow' ); ?>" <?php echo $submitter_style ?>>
 							<?php
 							printf( $link, $url_entry, $name );
 
 							?>
 						</td>
-						<td data-label="<?php esc_html_e( 'Step', 'gravityflow' ); ?>">
+						<td data-label="<?php esc_html_e( 'Step', 'gravityflow' ); ?>" <?php echo $step_style ?>>
 							<?php
 							if ( isset( $entry['workflow_step'] ) ) {
 								$step = gravity_flow()->get_step( $entry['workflow_step'] );
