@@ -1,7 +1,7 @@
 
-thead tr {background: #FFF}
-tr:nth-child(even) {background: #f9f9f9}
-tr:nth-child(odd) {background: #FFF}
+table#gravityflow-inbox thead tr {background: #FFF}
+table#gravityflow-inbox tr:nth-child(even) {background: #f9f9f9}
+table#gravityflow-inbox tr:nth-child(odd) {background: #FFF}
 
 table#gravityflow-inbox {border-collapse:collapse;}
 table#workflow-inbox tr:hover {background-color:#808080;}
@@ -34,3 +34,4 @@ table#gravityflow-inbox th[data-label="ID"],
 table#gravityflow-inbox td[data-label="ID"] {
     width:70px!important;
 }
+
