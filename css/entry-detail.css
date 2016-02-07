@@ -209,3 +209,9 @@
 	color:#0074a2;
 }
 
+table.entry-detail-view td.detail-view{
+    border-right: 1px;
+    border-left: 1px;
+    border-top: 0;
+    border-bottom: 0;
+}
