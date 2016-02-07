@@ -14,15 +14,23 @@
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
-
+GFForms::include_addon_framework();
 abstract class Gravity_Flow_Extension extends GFAddOn {
 
 	public $edd_item_name = '';
 
+	public function init() {
+		parent::init();
+		add_filter( 'gravityflow_menu_items', array( $this, 'menu_items' ) );
+		add_filter( 'gravityflow_toolbar_menu_items', array( $this, 'toolbar_menu_items' ) );
+	}
+
 	public function init_admin() {
 		parent::init_admin();
 		add_filter( 'gravityflow_settings_menu_tabs', array( $this, 'app_settings_tabs' ) );
+
 	}
+
 	public function app_settings_tabs( $settings_tabs ) {
 
 		$settings_tabs[] = array(
@@ -202,5 +210,13 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 		delete_transient( $cache_key );
 
 		return json_decode( wp_remote_retrieve_body( $response ) );
+	}
+
+	public function menu_items( $menu_items ) {
+		return $menu_items;
+	}
+
+	public function toolbar_menu_items( $menu_items ) {
+		return $menu_items;
 	}
 }
