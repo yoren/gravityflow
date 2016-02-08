@@ -76,18 +76,46 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		);
 
 		if ( $this->fields_have_conditional_logic( $form ) ) {
-			$settings['fields'][] = array(
-				'name'          => 'conditional_logic_editable_fields_enabled',
-				'label'         => 'Conditional Logic',
-				'type'          => 'checkbox',
-				'choices'       => array(
-					array(
-						'label' => __( 'Enable field conditional logic' ),
-						'name' => 'conditional_logic_editable_fields_enabled',
+
+			if ( GFCommon::has_pages( $form ) && $this->pages_have_conditional_logic( $form ) ) {
+				$settings['fields'][] = array(
+					'name'     => 'conditional_logic_editable_fields_enabled',
+					'label'    => 'Conditional Logic',
+					'type'     => 'checkbox_and_select',
+					'checkbox' => array(
+						'label'          => esc_html__( 'Enable field conditional logic' ),
+						'name'           => 'conditional_logic_editable_fields_enabled',
 						'defeault_value' => '0',
 					),
-				),
-			);
+					'select'   => array(
+						'name' => 'conditional_logic_editable_fields_mode',
+						'choices' => array(
+							array(
+								'value' => 'dynamic',
+								'label' => esc_html__( 'Dynamic', 'gravityflow' ),
+							),
+							array(
+								'value' => 'page_load',
+								'label' => esc_html__( 'Only when the page loads', 'gravityflow' ),
+							),
+						),
+						'tooltip' => esc_html__( 'Fields and Sections support dynamic conditional logic. Pages do not support dynamic conditional logic so they will only be shown or hidden when the page loads.' , 'gravityflow' ),
+					),
+				);
+			} else {
+				$settings['fields'][] = array(
+					'name'    => 'conditional_logic_editable_fields_enabled',
+					'label'   => 'Conditional Logic',
+					'type'    => 'checkbox',
+					'choices' => array(
+						array(
+							'label'          => esc_html__( 'Enable field conditional logic' ),
+							'name'           => 'conditional_logic_editable_fields_enabled',
+							'defeault_value' => '0',
+						),
+					),
+				);
+			}
 		}
 
 		$settings2 = array(
@@ -228,16 +256,11 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	}
 
 	public function fields_have_conditional_logic( $form ) {
-		$has_conditional_logic = false;
-		if ( isset( $form['fields'] ) && is_array( $form['fields'] ) ) {
-			foreach ( $form['fields'] as $field ) {
-				if ( is_array( $field->conditionalLogic ) ) {
-					$has_conditional_logic = true;
-					break;
-				}
-			}
-		}
-		return $has_conditional_logic;
+		return gravity_flow()->fields_have_conditional_logic( $form );
+	}
+
+	public function pages_have_conditional_logic( $form ) {
+		return gravity_flow()->pages_have_conditional_logic( $form );
 	}
 
 	public function process() {

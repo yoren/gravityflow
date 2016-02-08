@@ -4765,6 +4765,32 @@ AND m.meta_value='queued'";
 
 			return $text;
 		}
+
+		public function fields_have_conditional_logic( $form ) {
+			$has_conditional_logic = false;
+			if ( isset( $form['fields'] ) && is_array( $form['fields'] ) ) {
+				foreach ( $form['fields'] as $field ) {
+					if ( is_array( $field->conditionalLogic ) ) {
+						$has_conditional_logic = true;
+						break;
+					}
+				}
+			}
+			return $has_conditional_logic;
+		}
+
+		public function pages_have_conditional_logic( $form ) {
+			$has_conditional_logic = false;
+			if ( isset( $form['fields'] ) && is_array( $form['fields'] ) ) {
+				foreach ( $form['fields'] as $field ) {
+					if ( $field->type == 'page' && is_array( $field->conditionalLogic ) ) {
+						$has_conditional_logic = true;
+						break;
+					}
+				}
+			}
+			return $has_conditional_logic;
+		}
 	}
 }
 
