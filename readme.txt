@@ -55,6 +55,12 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.2.0.30 =
+- Updated the user input conditional logic setting to display an option to deactivate dynamic conditional logic when page conditional logic is present on the form.
+
+= 1.2.0.29 =
+- Updated the entry detail page to hide fields when the page is hidden by conditional logic.
+
 = 1.2.0.28 =
 - Added support for dynamic conditional logic.
 - Added the feed extension class.
