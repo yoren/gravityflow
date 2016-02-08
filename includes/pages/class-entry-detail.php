@@ -34,6 +34,7 @@ class Gravity_Flow_Entry_Detail {
 		$show_timeline = (bool) $args['timeline'];
 		$display_instructions = (bool) $args['display_instructions'];
 
+		gravity_flow()->log_debug( __METHOD__ . '() args: ' . print_r( $args, true ) );
 		?>
 
 		<script type="text/javascript">
@@ -130,16 +131,22 @@ class Gravity_Flow_Entry_Detail {
 				// Check view permissions
 				global $current_user;
 
+				gravity_flow()->log_debug( __METHOD__ . '() checking permissions.  $current_user->ID: ' . $current_user->ID . ' created_by: ' . $entry['created_by'] );
+
 				if ( $entry['created_by'] != $current_user->ID ) {
+
 					$user_status = false;
 					if ( $current_step ) {
 						$user_status = $current_step->get_user_status();
+
+						gravity_flow()->log_debug( __METHOD__ . '() $user_status: ' . $user_status );
 
 						if ( ! $user_status ) {
 							$user_roles = gravity_flow()->get_user_roles();
 
 							foreach ( $user_roles as $user_role ) {
 								$user_status = $current_step->get_role_status( $user_role );
+								gravity_flow()->log_debug( __METHOD__ . '() $role: ' . $user_role . ' status: ' . $user_status );
 							}
 						}
 					}
@@ -148,6 +155,8 @@ class Gravity_Flow_Entry_Detail {
 						'gform_full_access',
 						'gravityflow_status_view_all',
 					) );
+
+					gravity_flow()->log_debug( __METHOD__ . '() $full_access: ' . ( $full_access ? 'yes' : 'no' ) );
 
 					if ( ! ( $user_status || $full_access ) ) {
 						$permission_denied_message = esc_attr__( "You don't have permission to view this entry.", 'gravityflow' );
@@ -321,8 +330,8 @@ class Gravity_Flow_Entry_Detail {
 
 		$display_empty_fields = (bool) apply_filters( 'gravityflow_entry_detail_grid_display_empty_fields', $display_empty_fields, $form, $entry );
 
-		$condtional_logic_enabled = $current_step && $current_step->conditional_logic_editable_fields_enabled;
-		self::register_form_init_scripts( $form, array(), $condtional_logic_enabled );
+		$dynamic_conditional_logic_enabled = $current_step && gravity_flow()->fields_have_conditional_logic( $form ) && $current_step->conditional_logic_editable_fields_enabled && $current_step->conditional_logic_editable_fields_enabledValue != 'page_load';
+		self::register_form_init_scripts( $form, array(), $dynamic_conditional_logic_enabled );
 
 		if ( apply_filters( 'gform_init_scripts_footer', false ) ) {
 			add_action( 'wp_footer', create_function( '', 'GFFormDisplay::footer_init_scripts(' . $form['id'] . ');' ), 20 );
@@ -333,8 +342,6 @@ class Gravity_Flow_Entry_Detail {
 			$scripts = "<script type='text/javascript'>" . apply_filters( 'gform_cdata_open', '' ) . " jQuery(document).ready(function(){jQuery(document).trigger('gform_post_render', [{$form_id}, {$current_page}]) } ); " . apply_filters( 'gform_cdata_close', '' ) . '</script>';
 			echo $scripts;
 		}
-
-
 
 		?>
 
@@ -422,12 +429,16 @@ class Gravity_Flow_Entry_Detail {
 
 						if ( in_array( $field_id, $editable_fields ) ) {
 
-							if ( $current_step->conditional_logic_editable_fields_enabled ) {
+							if ( $dynamic_conditional_logic_enabled ) {
 								$field->conditionalLogicFields = GFFormDisplay::get_conditional_logic_fields( $form, $field->id );
 							}
 
 							if ( GFCommon::is_product_field( $field->type ) ) {
 								$has_product_fields = true;
+							}
+
+							if ( $current_step->conditional_logic_editable_fields_enabled && $current_step->conditional_logic_editable_fields_mode == 'page_load' && GFFormsModel::is_page_hidden( $form, $field->pageNumber, array(), $entry ) ) {
+								continue;
 							}
 
 							$posted_step_id = rgpost( 'step_id' );
@@ -452,8 +463,6 @@ class Gravity_Flow_Entry_Detail {
 							echo $content;
 						} else {
 
-							//$field->conditionalLogic = null;
-
 							if ( ! $display_field ) {
 								continue;
 							}
@@ -464,11 +473,13 @@ class Gravity_Flow_Entry_Detail {
 
 							$value = RGFormsModel::get_lead_field_value( $entry, $field );
 
-							$conditional_logic_fields = GFFormDisplay::get_conditional_logic_fields( $form, $field->id );
-							if ( ! empty( $conditional_logic_fields ) ) {
-								$field->conditionalLogicFields = $conditional_logic_fields;
-								$field_input = self::get_field_input( $field, $value, $entry['id'], $form_id, $form );
-								echo '<div style="display:none;"">' . $field_input . '</div>';
+							if ( $dynamic_conditional_logic_enabled ) {
+								$conditional_logic_fields = GFFormDisplay::get_conditional_logic_fields( $form, $field->id );
+								if ( ! empty( $conditional_logic_fields ) ) {
+									$field->conditionalLogicFields = $conditional_logic_fields;
+									$field_input = self::get_field_input( $field, $value, $entry['id'], $form_id, $form );
+									echo '<div style="display:none;"">' . $field_input . '</div>';
+								}
 							}
 
 							if ( $field->type == 'product' ) {
@@ -830,8 +841,6 @@ class Gravity_Flow_Entry_Detail {
 
 		$description = $field->get_description( $field->description, 'gfield_description' );
 
-		$field->conditionalLogicFields = GFFormDisplay::get_conditional_logic_fields( $form, $field->id );
-
 		$field_input = self::get_field_input( $field, $value, $entry['id'], $form_id, $form );
 
 		if ( $field->is_description_above( $form ) ) {
@@ -852,7 +861,7 @@ class Gravity_Flow_Entry_Detail {
 	 *
 	 * @param array $form
 	 * @param array $field_values
-	 * @param bool  $is_ajax
+	 * @param bool  $conditional_logic_enabled
 	 */
 	public static function register_form_init_scripts( $form, $field_values = array(), $conditional_logic_enabled = true ) {
 		$is_ajax = false;
@@ -918,6 +927,14 @@ class Gravity_Flow_Entry_Detail {
 
 	}
 
+	/**
+	 * From GFFormDisplay
+	 *
+	 * @param $form
+	 * @param array $field_values
+	 *
+	 * @return string
+	 */
 	private static function get_conditional_logic( $form, $field_values = array() ) {
 		$logics            = '';
 		$dependents        = '';
