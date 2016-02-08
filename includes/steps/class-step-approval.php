@@ -279,30 +279,42 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 
 		// Support for Gravity PDF 4
-		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-beta2' , '>=' ) ) {
-			$form_id = $this->get_form_id();
+		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-RC2', '>=' ) ) {
+
+			$form_id    = $this->get_form_id();
 			$gpdf_feeds = GPDFAPI::get_form_pdfs( $form_id );
-			if ( is_array( $gpdf_feeds ) ) {
+
+			if ( ! is_wp_error( $gpdf_feeds ) ) {
+
+				/* Format the PDFs in the appropriate format for use in a select field */
 				$gpdf_choices = array();
 				foreach ( $gpdf_feeds as $gpdf_feed ) {
 					$gpdf_choices[] = array( 'label' => $gpdf_feed['name'], 'value' => $gpdf_feed['id'] );
 				}
+
+				/* Create a select box for the Gravity PDFs */
 				$pdf_setting = array(
-					'name' => 'assignee_notification_gpdf',
-					'label' => '',
-					'type' => 'checkbox_and_select',
+					'name'     => 'assignee_notification_gpdf',
+					'label'    => '',
+					'type'     => 'checkbox_and_select',
 					'checkbox' => array(
 						'label' => esc_html__( 'Attach PDF', 'gravityflow' ),
 					),
-					'select' => array(
+					'select'   => array(
 						'choices' => $gpdf_choices,
 					),
 				);
-				$assignee_notification_fields[] = $pdf_setting;
-				$pdf_setting['name'] = 'rejection_notification_gpdf';
+
+				/* Include PDF select box in assignee notification settings */
+				$assignee_notification_fields[]  = $pdf_setting;
+
+				/* Include PDF select box in rejection notification settings */
+				$pdf_setting['name']             = 'rejection_notification_gpdf';
 				$rejection_notification_fields[] = $pdf_setting;
-				$pdf_setting['name'] = 'approval_notification_gpdf';
-				$approval_notification_fields[] = $pdf_setting;
+
+				/* Include PDF select box in aproval notification settings */
+				$pdf_setting['name']             = 'approval_notification_gpdf';
+				$approval_notification_fields[]  = $pdf_setting;
 			}
 		}
 
@@ -982,7 +994,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$notification['subject'] = $this->approval_notification_subject;
 		$notification['message'] = $this->approval_notification_message;
 
-		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-beta2' , '>=' ) ) {
+		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-RC2' , '>=' ) ) {
 			if ( $this->approval_notification_gpdfEnable ) {
 				$gpdf_id = $this->approval_notification_gpdfValue;
 				$notification = $this->gpdf_add_notification_attachment( $notification, $gpdf_id );
@@ -1036,7 +1048,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$notification['subject'] = $this->rejection_notification_subject;
 		$notification['message'] = $this->rejection_notification_message;
 
-		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-beta2' , '>=' ) ) {
+		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-RC2', '>=' ) ) {
 			if ( $this->rejection_notification_gpdfEnable ) {
 				$gpdf_id = $this->rejection_notification_gpdfValue;
 				$notification = $this->gpdf_add_notification_attachment( $notification, $gpdf_id );

@@ -133,7 +133,8 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 	function process() {
 		$this->log_debug( __METHOD__ . '(): starting' );
 
-		if ( class_exists( 'GFPDF_Core' ) ) {
+		/* Ensure compatibility with Gravity PDF 3.x */
+		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-beta1', '<' ) && class_exists( 'GFPDF_Core' ) ) {
 			global $gfpdf;
 			if ( empty( $gfpdf ) ) {
 				$gfpdf = new GFPDF_Core();

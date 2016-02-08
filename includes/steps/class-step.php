@@ -657,7 +657,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$notification['subject'] = empty( $this->assignee_notification_subject ) ? $form['title'] . ': ' . $this->get_name() : $this->assignee_notification_subject;
 		$notification['message'] = $this->assignee_notification_message;
 
-		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-beta2' , '>=' ) ) {
+		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-RC2' , '>=' ) ) {
 			if ( $this->assignee_notification_gpdfEnable ) {
 				$gpdf_id = $this->assignee_notification_gpdfValue;
 				$notification = $this->gpdf_add_notification_attachment( $notification, $gpdf_id );
@@ -1198,39 +1198,30 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 	}
 
+	/**
+	 * If Gravity PDF is enabled we'll generate the appropriate PDF and attach it to the current notification
+	 *
+	 * @param array $notification The notification array currently being sent
+	 * @param sting $gpdf_id      The Gravity PDF ID
+	 *
+	 * @return array
+	 */
 	public function gpdf_add_notification_attachment( $notification, $gpdf_id ) {
-		global $gfpdf;
 
 		if ( ! class_exists( 'GPDFAPI' ) ) {
 			return $notification;
 		}
 
-		$entry = $this->get_entry();
+		/* Generate and save the PDF */
+		$entry_id = $this->get_entry_id();
+		$pdf_path = GPDFAPI::create_pdf( $entry_id, $gpdf_id );
 
-		/* @var \GFPDF\Model\Model_PDF $gpdf_model */
-		$gpdf_model = GPDFAPI::get_pdf_class( 'model' );
-
-		$settings = GPDFAPI::get_pdf( $entry['form_id'], $gpdf_id );
-
-		if ( ! is_wp_error( $settings ) ) {
-
-			/* @var \GFPDF\Helper\Helper_Data $data */
-			$data = GPDFAPI::get_data_class();
-
-			$pdf_generator = new \GFPDF\Helper\Helper_PDF( $entry, $settings, $gfpdf->form, $data );
-			$pdf_generator->set_filename( $gpdf_model->get_pdf_name( $settings, $entry ) );
-
-			if ( $gpdf_model->process_and_save_pdf( $pdf_generator ) ) {
-				$pdf_path = $pdf_generator->get_path() . $pdf_generator->get_filename();
-
-				if ( is_file( $pdf_path ) ) {
-					if ( ! isset( $notification['attachments'] ) ) {
-						$notification['attachments'] = array();
-					}
-					$notification['attachments'][] = $pdf_path;
-				}
-			}
+		if( ! is_wp_error( $pdf_path ) ) {
+			/* Ensure our notification has an array setup for the attachments key */
+			$notification['attachments']  = ( isset( $notification['attachments'] ) ) ? $notification['attachments'] : array();
+			$notification['attachments'][] = $pdf_path;
 		}
+
 		return $notification;
 	}
 
