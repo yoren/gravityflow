@@ -13,7 +13,16 @@
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
-
+/**
+ * Gravity Flow Web Hook
+ *
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow_Step_Webhook
+ * @copyright   Copyright (c) 2015-2016, Steven Henty
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
 class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	public $_step_type = 'webhook';
 

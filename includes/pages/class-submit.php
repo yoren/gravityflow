@@ -4,6 +4,16 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+/**
+ * Gravity Flow Submit
+ *
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow_Submit
+ * @copyright   Copyright (c) 2015-2016, Steven Henty
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
 class Gravity_Flow_Submit {
 	public static function list_page( $form_ids, $is_admin ) {
 

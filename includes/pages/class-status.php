@@ -3,7 +3,16 @@
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
-
+/**
+ * Gravity Flow Status
+ *
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow_Status
+ * @copyright   Copyright (c) 2015-2016, Steven Henty
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
 class Gravity_Flow_Status {
 
 	public static function render( $args ) {

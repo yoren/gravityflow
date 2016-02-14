@@ -4,9 +4,18 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
-
+/**
+ * Gravity Flow Print Entries
+ *
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow_Print_Entries
+ * @copyright   Copyright (c) 2015-2016, Steven Henty
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
 class Gravity_Flow_Print_Entries {
-	public static function render(){
+	public static function render() {
 
 		$form_id = 0;
 		$entries = rgget( 'lid' );

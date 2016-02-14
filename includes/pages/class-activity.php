@@ -4,7 +4,16 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
-
+/**
+ * Gravity Flow Activity List
+ *
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow
+ * @copyright   Copyright (c) 2015-2016, Steven Henty
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
 class Gravity_Flow_Activity_List {
 
 	public static function display( $args ) {

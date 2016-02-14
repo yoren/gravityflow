@@ -4,10 +4,19 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
-
+/**
+ * Gravity Flow Reports
+ *
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow_Reports
+ * @copyright   Copyright (c) 2015-2016, Steven Henty
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
 class Gravity_Flow_Reports {
 
-	public static function display( $args ){
+	public static function display( $args ) {
 
 		$assignee_key = sanitize_text_field( rgget( 'assignee' ) );
 		list( $assignee_type, $assignee_id ) = rgexplode( '|', $assignee_key, 2 );
