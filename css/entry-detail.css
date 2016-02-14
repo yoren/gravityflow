@@ -1,11 +1,11 @@
 /* The little triangle indicator */
-.gravityflow-input-required {
-    width: 10em;
+.gravityflow-editable-field.green-triangle label.gfield_label {
+    width:100%;
     position: relative;
 }
 
-.gravityflow-input-required::before,
-.gravityflow-input-required::after {
+.gravityflow-editable-field.green-triangle label.gfield_label::before,
+.gravityflow-editable-field.green-triangle label.gfield_label::after {
     content: '';
     position: absolute;
     top: 0;
@@ -14,18 +14,26 @@
     border-style: solid;
 }
 
-.gravityflow-input-required::before {
-    border-width: 0.5em;
+.gravityflow-editable-field.green-triangle label.gfield_label::before {
+    border-width: 0.4em;
     border-left-color: #ccc;
     border-top-color: #ccc;
 }
 
-.gravityflow-input-required::after {
+.gravityflow-editable-field.green-triangle label.gfield_label::after {
     border-radius: 0.1em;
-    border-width: 0.6em;
+    border-width: 0.4em;
     border-left-color: #0c0;
     border-top-color: #0c0;
 }
+
+.gravityflow-editable-field.green-background {
+    list-style-position:inside;
+    border: 1px solid green;
+    background: #eeffee;
+    padding:10px;
+}
+
 
 /* Notes */
 
@@ -126,13 +134,6 @@
     display: table;
 }
 
-/*
-.gravityflow-note-body-wrap{
-    margin: 0 20px 0 74px;
-    padding: 20px;
-    display:block;
-}
-*/
 .gravityflow-note-body{
     line-height: 1.3em;
     overflow: auto;
@@ -214,4 +215,49 @@ table.entry-detail-view td.detail-view{
     border-left: 1px;
     border-top: 0;
     border-bottom: 0;
+}
+
+.gravityflow-field-value {
+    padding: 7px 7px 7px 40px;
+    line-height: 1.8;
+}
+
+.gravityflow-field-value p {
+    text-align: left;
+}
+
+.gravityflow-field-value ul.bulleted {
+    margin-left: 12px;
+}
+
+.gravityflow-field-value ul.bulleted li {
+    list-style-type: disc;
+}
+
+.gfield label.gfield_label{
+    background-color: #EAF2FA;
+    border-top: 1px solid #DFDFDF;
+    border-bottom: 1px solid #FFF;
+    line-height: 1.5;
+    padding: 7px;
+    width:100%;
+    margin:0;
+}
+
+.gravityflow-editable-field.gfield.green-background label.gfield_label{
+    background-color: #eeffee;
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+.gravityflow-editable-field.gfield.green-background{
+    background-color: #eeffee;
+    padding: 7px;
+}
+
+td.gravityflow-order-summary{
+    border-top:1px solid #DDDDDD;
+    background-color: #EFEFEF;
+    font-weight: bold;
+    font-size: 16px;
 }
