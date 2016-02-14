@@ -88,8 +88,19 @@ class Gravity_Flow_Field_User extends GF_Field_Select {
 
 
 	public function get_value_merge_tag( $value, $input_id, $entry, $form, $modifier, $raw_value, $url_encode, $esc_html, $format, $nl2br ) {
-		$value = $this->get_display_name( $value );
-
+		switch ( $modifier ) {
+			case 'id' :
+				break;
+			case 'email' :
+			case 'user_email' :
+				$user  = get_user_by( 'id', $value );
+				$value = $user->user_email;
+				break;
+			case '' :
+			case 'display_name' :
+			default :
+				$value = $this->get_display_name( $value );
+		}
 		return $value;
 	}
 
