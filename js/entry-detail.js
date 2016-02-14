@@ -1,16 +1,8 @@
 
 (function (GravityFlowEntryDetail, $) {
-    $(document).ready(function () {
-        $(".gform_fileupload_multifile").each(function(){
-            gfMultiFileUploader.setup(this);
-        });
-        if(window['gformInitDatepicker']) {gformInitDatepicker();}
-    });
-
     GravityFlowEntryDetail.printPage = function (sURL) {
         printPage (sURL);
     };
-
 
 }(window.GravityFlowEntryDetail = window.GravityFlowEntryDetail || {}, jQuery));
 
