@@ -447,6 +447,7 @@
             'assignees\\[\\]',
             'editable_fields\\[\\]',
             'conditional_logic_editable_fields_enabled',
+			'highlight_editable_fields',
             'routing',
             'assignee_policy',
             'assignee_notification_message',
