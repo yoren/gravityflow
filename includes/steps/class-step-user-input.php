@@ -76,14 +76,14 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		);
 
 		if ( $this->fields_have_conditional_logic( $form ) ) {
-
-			if ( GFCommon::has_pages( $form ) && $this->pages_have_conditional_logic( $form ) ) {
+			$display_page_load_logic_setting = apply_filters( 'gravityflow_page_load_logic_setting',  false );
+			if ( $display_page_load_logic_setting && GFCommon::has_pages( $form ) && $this->pages_have_conditional_logic( $form ) ) {
 				$settings['fields'][] = array(
 					'name'     => 'conditional_logic_editable_fields_enabled',
 					'label'    => 'Conditional Logic',
 					'type'     => 'checkbox_and_select',
 					'checkbox' => array(
-						'label'          => esc_html__( 'Enable field conditional logic' ),
+						'label'          => esc_html__( 'Enable field conditional logic', 'gravityflow' ),
 						'name'           => 'conditional_logic_editable_fields_enabled',
 						'defeault_value' => '0',
 					),
@@ -119,6 +119,30 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		}
 
 		$settings2 = array(
+			array(
+				'name'     => 'highlight_editable_fields',
+				'label'    => 'Highlight Editable Fields',
+				'type'     => 'checkbox_and_select',
+				'checkbox' => array(
+					'label'          => esc_html__( 'Enable' ),
+					'name'           => 'highlight_editable_fields_enabled',
+					'defeault_value' => '0',
+				),
+				'select'   => array(
+					'name' => 'highlight_editable_fields_class',
+					'choices' => array(
+						array(
+							'value' => 'green-triangle',
+							'label' => esc_html__( 'Green triangle', 'gravityflow' ),
+						),
+						array(
+							'value' => 'green-background',
+							'label' => esc_html__( 'Green Background', 'gravityflow' ),
+						),
+					),
+					'tooltip' => esc_html__( 'Fields and Sections support dynamic conditional logic. Pages do not support dynamic conditional logic so they will only be shown or hidden when the page loads.' , 'gravityflow' ),
+				),
+			),
 			array(
 				'id'            => 'assignee_policy',
 				'name'          => 'assignee_policy',
@@ -550,21 +574,33 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 		$editable_fields = $this->get_editable_fields();
 
+		$conditional_logic_enabled = gravity_flow()->fields_have_conditional_logic( $form ) && $this->conditional_logic_editable_fields_enabled;
+		$page_load_conditional_logic_enabled = gravity_flow()->fields_have_conditional_logic( $form ) && $this->conditional_logic_editable_fields_enabled && $this->conditional_logic_editable_fields_mode == 'page_load';
+		$dynamic_conditional_logic_enabled = gravity_flow()->fields_have_conditional_logic( $form ) && $this->conditional_logic_editable_fields_enabled && $this->conditional_logic_editable_fields_mode != 'page_load';
+
+		$saved_entry = $this->get_entry();
+
+		if ( ! $conditional_logic_enabled || $page_load_conditional_logic_enabled ) {
+			$entry = $saved_entry;
+		} else {
+			$entry = GFFormsModel::create_lead( $form );
+		}
 		foreach ( $form['fields'] as $field ) {
 			/* @var GF_Field $field */
 			if ( in_array( $field->id, $editable_fields ) ) {
+				if ( ( $dynamic_conditional_logic_enabled && GFFormsModel::is_field_hidden( $form, $field, array() ) ) ) {
+					continue;
+				}
 				$value = GFFormsModel::get_field_value( $field );
+
 				if ( $field->get_input_type() == 'fileupload' ) {
-
-					$entry = $this->get_entry();
-
-					$input_name = 'input_'.$field->id;
+					$input_name = 'input_' . $field->id;
 					$form_id = $form['id'];
 
 					$value = null;
 
-					if ( isset( $entry[ $field->id ] ) ) {
-						$value = $entry[ $field->id ];
+					if ( isset( $saved_entry[ $field->id ] ) ) {
+						$value = $saved_entry[ $field->id ];
 					}
 
 					if ( ! empty( $_FILES[ $input_name ] ) && ! empty( $_FILES[  $input_name ]['name'] ) ) {
@@ -579,13 +615,13 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 						if ( isset( GFFormsModel::$uploaded_files[ $form_id ][  $input_name ] ) ) {
 							$value = empty( $value ) ? '[]' : $value;
 							$value = stripslashes_deep( $value );
-							$value = GFFormsModel::prepare_value( $form, $field, $value, $input_name, $entry['id'], array() );
+							$value = GFFormsModel::prepare_value( $form, $field, $value, $input_name, $saved_entry['id'], array() );
 						}
 					} else {
 						GFFormsModel::$uploaded_files[ $form_id ][ $input_name ] = $value;
 					}
 
-					$original_value = GFFormsModel::get_lead_field_value( $entry, $field );
+					$original_value = GFFormsModel::get_lead_field_value( $saved_entry, $field );
 					if ( empty( $value ) && ! empty( $original_value ) ) {
 						continue;
 					}
@@ -594,7 +630,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 					if ( $field->isRequired && empty( $value ) ) {
 						$field->failed_validation  = true;
-						$field->validation_message = empty( $field->errorMessage ) ? __( 'This field is required.', 'gravityforms' ) : $field->errorMessage;
+						$field->validation_message = empty( $field->errorMessage ) ? esc_html__( 'This field is required.', 'gravityflow' ) : $field->errorMessage;
 						$valid = false;
 					}
 
@@ -607,11 +643,21 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 					continue;
 				}
 
-				if ( $field->isRequired && $field->is_value_submission_empty( $form['id'] ) ) {
-					$field->failed_validation  = true;
-					$field->validation_message = empty( $field->errorMessage ) ? __( 'This field is required.', 'gravityforms' ) : $field->errorMessage;
-					$valid = false;
+				$submission_is_empty = $field->is_value_submission_empty( $form['id'] );
+
+				if ( $page_load_conditional_logic_enabled ) {
+					$field_is_hidden = GFFormsModel::is_field_hidden( $form, $field, array(), $entry );
+				} elseif ( $dynamic_conditional_logic_enabled ) {
+					$field_is_hidden = GFFormsModel::is_field_hidden( $form, $field, array() );
 				} else {
+					$field_is_hidden = false;
+				}
+
+				if ( ! $field_is_hidden && $submission_is_empty && $field->isRequired ) {
+					$field->failed_validation  = true;
+					$field->validation_message = empty( $field->errorMessage ) ? esc_html__( 'This field is required.', 'gravityflow' ) : $field->errorMessage;
+					$valid                     = false;
+				} elseif ( ! $field_is_hidden && ! $submission_is_empty ) {
 					$field->validate( $value, $form );
 					if ( $field->failed_validation ) {
 						$valid = false;
@@ -804,7 +850,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				$button_text      = esc_html__( 'Update', 'gravityflow' );
 				$button_text      = apply_filters( 'gravityflow_update_button_text_user_input', $button_text, $form, $this );
 				$update_button_id = 'gravityflow_update_button';
-				$button_click     = "jQuery('#action').val('update'); jQuery('#entry_form').submit(); return false;";
+				$button_click     = "jQuery('#action').val('update'); jQuery('#gform_{$form_id}').submit(); return false;";
 				$update_button    = '<input id="' . $update_button_id . '" disabled="disabled" class="button button-large button-primary" type="submit" tabindex="4" value="' . $button_text . '" name="save" onclick="' . $button_click . '"/>';
 				echo apply_filters( 'gravityflow_update_button_user_input', $update_button );
 				?>
