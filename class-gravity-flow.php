@@ -1771,11 +1771,17 @@ PRIMARY KEY  (id)
 		 * @return array
 		 */
 		function feed_list_columns() {
-			return array(
+
+			$columns = array(
 				'step_name' => __( 'Step name', 'gravityflow' ),
 				'step_type' => esc_html__( 'Step Type', 'gravityflow' ),
-				'entry_count' => esc_html__( 'Entries', 'gravityflow' ),
 			);
+
+			$count_entries = apply_filters( 'gravityflow_entry_count_step_list', true );
+			if ( $count_entries ) {
+				$columns[] = esc_html__( 'Entries', 'gravityflow' );
+			}
+			return $columns;
 		}
 
 		public function get_column_value_step_type( $item ) {
@@ -1791,6 +1797,10 @@ PRIMARY KEY  (id)
 
 
 		public function get_column_value_entry_count( $item ) {
+			$count_entries = apply_filters( 'gravityflow_entry_count_step_list', true );
+			if ( ! $count_entries ) {
+				return '';
+			}
 			$form_id = rgget( 'id' );
 			$form_id = absint( $form_id );
 			$step = $this->get_step( $item['id'] );
@@ -1927,6 +1937,11 @@ PRIMARY KEY  (id)
 		 * @return string|void
 		 */
 		function callback_update_entry_meta_workflow_step( $key, $entry, $form ) {
+
+			if ( ! isset( $entry['id'] ) ) {
+				return;
+			}
+
 			if ( isset( $entry['workflow_final_status'] ) && $entry['workflow_final_status'] != 'pending' && isset( $entry['workflow_step'] ) ) {
 				return $entry['workflow_step'];
 			}
@@ -1949,6 +1964,10 @@ PRIMARY KEY  (id)
 		 */
 		function callback_update_entry_meta_workflow_final_status( $key, $entry, $form ) {
 
+			if ( ! isset( $entry['id'] ) ) {
+				return;
+			}
+
 			if ( isset( $entry['workflow_final_status'] ) && $entry['workflow_final_status'] != 'pending' && $entry[ $key ] !== false ) {
 				return $entry['workflow_final_status'];
 			} else {
@@ -1966,6 +1985,9 @@ PRIMARY KEY  (id)
 		 * @return string|void
 		 */
 		function callback_update_entry_meta_timestamp( $key, $entry, $form ) {
+			if ( ! isset( $entry['id'] ) ) {
+				return;
+			}
 			return ! isset( $entry['workflow_timestamp'] ) ? strtotime( $entry['date_created'] ) : time();
 		}
 
@@ -3197,6 +3219,9 @@ PRIMARY KEY  (id)
 		}
 
 		function after_submission( $entry, $form ) {
+			if ( ! isset( $entry['id'] ) ) {
+				return;
+			}
 			if ( isset( $entry['workflow_step'] ) ) {
 				$entry_id = absint( $entry['id'] );
 				$this->process_workflow( $form, $entry_id );
@@ -3658,7 +3683,16 @@ PRIMARY KEY  (id)
 
 		public function maybe_process_feed( $entry, $form ) {
 
+			if ( ! isset( $entry['id'] ) ) {
+				return;
+			}
+
 			$form_id = absint( $form['id'] );
+
+			if ( empty( $form_id ) ) {
+				return;
+			}
+
 			$steps = $this->get_steps( $form_id );
 
 			foreach ( $steps as $step ) {
@@ -3950,12 +3984,16 @@ AND m.meta_value='queued'";
 
 		public function filter_feed_actions( $action_links, $item, $column ) {
 
-			if ( empty( $action_links  ) ) {
+			if ( empty( $action_links ) ) {
 				return $action_links;
 			}
 			$feed_id = $item['id'];
+
 			$current_step = $this->get_step( $feed_id );
-			$entry_count = $current_step ? $current_step->entry_count() : false;
+
+			$count_entries = apply_filters( 'gravityflow_entry_count_step_list', true );
+
+			$entry_count = $current_step && $count_entries ? $current_step->entry_count() : false;
 
 			if ( $entry_count && $entry_count > 0 ) {
 				unset( $action_links['delete'] );
@@ -4663,12 +4701,15 @@ AND m.meta_value='queued'";
 
 			$fields_as_choices = array();
 
+			$has_product_field = false;
+
 			foreach ( $fields as $field ) {
 				/* @var GF_Field $field */
 				if ( in_array( $field->type, array( 'page', 'section', 'captcha' ) ) ) {
 					continue;
 				}
 				$fields_as_choices[] = array( 'label' => $field->get_field_label( false, null ), 'value' => $field->id );
+				$has_product_field = GFCommon::is_product_field( $field->type );
 			}
 
 			$mode_value = $this->get_setting( 'display_fields_mode', 'all_fields' );
@@ -4686,6 +4727,24 @@ AND m.meta_value='queued'";
 			echo '<div class="gravityflow_display_fields_selected_container" ' . $style . '>';
 			$this->settings_select( $multiselect_field );
 			echo '</div>';
+
+			if ( $has_product_field ) {
+
+				$display_summary_field = array(
+					'name' => 'display_order_summary',
+					'type' => 'checkbox',
+					'choices' => array(
+						array(
+							'label' => esc_html__( 'Order Summary', 'gravityflow' ),
+							'name' => 'display_order_summary',
+							'default_value' => '1',
+						),
+					),
+				);
+				echo '<div style="margin-top:5px;">';
+				$this->settings_checkbox( $display_summary_field );
+				echo '</div>';
+			}
 		}
 
 
