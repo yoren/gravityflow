@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2016-02-07 10:01:04+00:00\n"
-"PO-Revision-Date: 2016-02-07 10:26+0000\n"
+"POT-Creation-Date: 2016-02-08 12:24:53+00:00\n"
+"PO-Revision-Date: 2016-02-09 10:29+0000\n"
 "Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
 "Language-Team: Spanish (Spain) (http://www.transifex.com/gravityflow/gravityflow/language/es_ES/)\n"
 "MIME-Version: 1.0\n"
@@ -24,14 +24,14 @@ msgstr ""
 
 #: class-gravity-flow.php:257 includes/fields/class-field-user.php:55
 #: includes/steps/class-step-approval.php:816
-#: includes/steps/class-step-user-input.php:658
-#: includes/steps/class-step-user-input.php:822
+#: includes/steps/class-step-user-input.php:681
+#: includes/steps/class-step-user-input.php:845
 msgid "User"
 msgstr "Usuario"
 
 #: class-gravity-flow.php:262 includes/fields/class-field-role.php:55
 #: includes/steps/class-step-approval.php:810
-#: includes/steps/class-step-user-input.php:676
+#: includes/steps/class-step-user-input.php:699
 msgid "Role"
 msgstr "Rol"
 
@@ -294,7 +294,7 @@ msgstr "Enviado por"
 
 #: class-gravity-flow.php:2020 class-gravity-flow.php:4441
 #: includes/pages/class-status.php:673
-#: includes/steps/class-step-user-input.php:822
+#: includes/steps/class-step-user-input.php:845
 msgid "Status"
 msgstr "Estado"
 
@@ -303,7 +303,7 @@ msgid "Expires"
 msgstr ""
 
 #: class-gravity-flow.php:2037 includes/steps/class-step-approval.php:787
-#: includes/steps/class-step-user-input.php:628
+#: includes/steps/class-step-user-input.php:651
 msgid "Queued"
 msgstr "En cola"
 
@@ -386,7 +386,7 @@ msgstr "Cancelado"
 
 #: class-gravity-flow.php:2459
 #: includes/steps/class-step-feed-user-registration.php:79
-#: includes/steps/class-step-user-input.php:781
+#: includes/steps/class-step-user-input.php:804
 msgid "Update"
 msgstr "Actualizar"
 
@@ -653,9 +653,9 @@ msgstr "Ayuda"
 msgid "Support"
 msgstr "Soporte"
 
-#: class-gravity-flow.php:4469 includes/steps/class-step-user-input.php:140
-#: includes/steps/class-step-user-input.php:626
-#: includes/steps/class-step-user-input.php:773
+#: class-gravity-flow.php:4469 includes/steps/class-step-user-input.php:168
+#: includes/steps/class-step-user-input.php:649
+#: includes/steps/class-step-user-input.php:796
 #: includes/steps/class-step.php:149
 msgid "Complete"
 msgstr "Completado"
@@ -674,7 +674,7 @@ msgstr "Rechazada"
 msgid "Oops! We couldn't find your lead. Please try again"
 msgstr ""
 
-#: class-gravity-flow.php:4576 includes/pages/class-entry-detail.php:46
+#: class-gravity-flow.php:4576 includes/pages/class-entry-detail.php:47
 msgid "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete"
 msgstr "¿Quieres eliminar este archivo? 'Cancelar' para parar. 'Aceptar' para borrar."
 
@@ -779,71 +779,71 @@ msgstr "ID"
 msgid "Waiting for workflow activity"
 msgstr "Esperando actividad del flujo de trabajo"
 
-#: includes/pages/class-entry-detail.php:57
+#: includes/pages/class-entry-detail.php:58
 msgid "Ajax error while deleting file."
 msgstr "Error ajax al borrar el archivo."
 
-#: includes/pages/class-entry-detail.php:110
+#: includes/pages/class-entry-detail.php:111
 msgid "Workflow Entry #"
 msgstr "Entrada de flujo de trabajo #"
 
-#: includes/pages/class-entry-detail.php:110
+#: includes/pages/class-entry-detail.php:111
 #: includes/pages/class-status.php:351
 msgid "Workflow Form"
 msgstr "Formulario de flujo de trabajo"
 
-#: includes/pages/class-entry-detail.php:153
+#: includes/pages/class-entry-detail.php:162
 #: includes/pages/class-print-entries.php:138
 msgid "You don't have permission to view this entry."
 msgstr "No tienes permiso para ver esta entrada."
 
-#: includes/pages/class-entry-detail.php:179
+#: includes/pages/class-entry-detail.php:188
 #: includes/pages/class-status.php:196
 msgid "Print"
 msgstr "Imprimir"
 
-#: includes/pages/class-entry-detail.php:185
+#: includes/pages/class-entry-detail.php:194
 msgid "include timeline"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:242
+#: includes/pages/class-entry-detail.php:251
 msgid "Timeline"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:295
+#: includes/pages/class-entry-detail.php:304
 msgid "Workflow Submitted"
 msgstr "Flujo de trabajo enviado"
 
-#: includes/pages/class-entry-detail.php:350
+#: includes/pages/class-entry-detail.php:357
 #: includes/pages/class-print-entries.php:79
 msgid "Entry # "
 msgstr "Entrada # "
 
-#: includes/pages/class-entry-detail.php:359
+#: includes/pages/class-entry-detail.php:366
 msgid "show empty fields"
 msgstr "Mostrar campos vacíos"
 
-#: includes/pages/class-entry-detail.php:537
+#: includes/pages/class-entry-detail.php:548
 msgid "Order"
 msgstr "Pedido"
 
-#: includes/pages/class-entry-detail.php:549
+#: includes/pages/class-entry-detail.php:560
 msgid "Product"
 msgstr "Producto"
 
-#: includes/pages/class-entry-detail.php:550
+#: includes/pages/class-entry-detail.php:561
 msgid "Qty"
 msgstr "Cant."
 
-#: includes/pages/class-entry-detail.php:551
+#: includes/pages/class-entry-detail.php:562
 msgid "Unit Price"
 msgstr "Precio unitario"
 
-#: includes/pages/class-entry-detail.php:552
+#: includes/pages/class-entry-detail.php:563
 msgid "Price"
 msgstr "Precio"
 
-#: includes/pages/class-entry-detail.php:612
+#: includes/pages/class-entry-detail.php:623
 msgid "Total"
 msgstr "Total"
 
@@ -1010,8 +1010,8 @@ msgstr "Por favor consulta la documentación antes de enviar una petición de so
 
 #: includes/pages/class-support.php:92
 #: includes/steps/class-step-approval.php:806
-#: includes/steps/class-step-user-input.php:665
-#: includes/steps/class-step-user-input.php:818
+#: includes/steps/class-step-user-input.php:688
+#: includes/steps/class-step-user-input.php:841
 msgid "Email"
 msgstr "Email"
 
@@ -1074,7 +1074,7 @@ msgstr "Activa este ajuste para enviar un email a cada uno de los encargados tan
 #: includes/steps/class-step-approval.php:166
 #: includes/steps/class-step-approval.php:242
 #: includes/steps/class-step-notification.php:96
-#: includes/steps/class-step-user-input.php:177
+#: includes/steps/class-step-user-input.php:205
 msgid "From Name"
 msgstr ""
 
@@ -1082,7 +1082,7 @@ msgstr ""
 #: includes/steps/class-step-approval.php:171
 #: includes/steps/class-step-approval.php:248
 #: includes/steps/class-step-notification.php:102
-#: includes/steps/class-step-user-input.php:183
+#: includes/steps/class-step-user-input.php:211
 msgid "From Email"
 msgstr ""
 
@@ -1090,7 +1090,7 @@ msgstr ""
 #: includes/steps/class-step-approval.php:179
 #: includes/steps/class-step-approval.php:256
 #: includes/steps/class-step-notification.php:109
-#: includes/steps/class-step-user-input.php:191
+#: includes/steps/class-step-user-input.php:219
 msgid "Reply To"
 msgstr ""
 
@@ -1098,7 +1098,7 @@ msgstr ""
 #: includes/steps/class-step-approval.php:185
 #: includes/steps/class-step-approval.php:262
 #: includes/steps/class-step-notification.php:115
-#: includes/steps/class-step-user-input.php:197
+#: includes/steps/class-step-user-input.php:225
 msgid "BCC"
 msgstr ""
 
@@ -1106,7 +1106,7 @@ msgstr ""
 #: includes/steps/class-step-approval.php:191
 #: includes/steps/class-step-approval.php:268
 #: includes/steps/class-step-notification.php:121
-#: includes/steps/class-step-user-input.php:203
+#: includes/steps/class-step-user-input.php:231
 msgid "Subject"
 msgstr ""
 
@@ -1120,17 +1120,17 @@ msgid ""
 msgstr "Hay una nueva entrada esperando tu aprobación. Por favor comprueba tu buzón del flujo de trabajo."
 
 #: includes/steps/class-step-approval.php:117
-#: includes/steps/class-step-user-input.php:214
+#: includes/steps/class-step-user-input.php:242
 msgid "Send reminder"
 msgstr "Enviar recordatorio"
 
 #: includes/steps/class-step-approval.php:121
-#: includes/steps/class-step-user-input.php:218
+#: includes/steps/class-step-user-input.php:246
 msgid "Resend the assignee email after"
 msgstr "Reenviar el email al encargado después de"
 
 #: includes/steps/class-step-approval.php:122
-#: includes/steps/class-step-user-input.php:219
+#: includes/steps/class-step-user-input.php:247
 msgid "day(s)"
 msgstr "día(s)"
 
@@ -1235,19 +1235,19 @@ msgid "All assignees must approve"
 msgstr "Todos los encargados deben aprobarlo"
 
 #: includes/steps/class-step-approval.php:355
-#: includes/steps/class-step-user-input.php:114
+#: includes/steps/class-step-user-input.php:142
 msgid "Instructions"
 msgstr ""
 
 #: includes/steps/class-step-approval.php:357
-#: includes/steps/class-step-user-input.php:116
+#: includes/steps/class-step-user-input.php:144
 msgid ""
 "Activate this setting to display instructions to the user for the current "
 "step."
 msgstr ""
 
 #: includes/steps/class-step-approval.php:359
-#: includes/steps/class-step-user-input.php:118
+#: includes/steps/class-step-user-input.php:146
 msgid "Display instructions"
 msgstr ""
 
@@ -1258,12 +1258,12 @@ msgid ""
 msgstr ""
 
 #: includes/steps/class-step-approval.php:368
-#: includes/steps/class-step-user-input.php:126
+#: includes/steps/class-step-user-input.php:154
 msgid "Display Fields"
 msgstr ""
 
 #: includes/steps/class-step-approval.php:369
-#: includes/steps/class-step-user-input.php:127
+#: includes/steps/class-step-user-input.php:155
 msgid "Select the fields to hide or display."
 msgstr ""
 
@@ -1301,25 +1301,25 @@ msgid ""
 msgstr ""
 
 #: includes/steps/class-step-approval.php:424
-#: includes/steps/class-step-user-input.php:145
+#: includes/steps/class-step-user-input.php:173
 msgid "Workflow Note"
 msgstr ""
 
 #: includes/steps/class-step-approval.php:426
-#: includes/steps/class-step-user-input.php:147
+#: includes/steps/class-step-user-input.php:175
 msgid ""
 "The text entered in the Note box will be added to the timeline. Use this "
 "setting to select the options for the Note box."
 msgstr ""
 
 #: includes/steps/class-step-approval.php:429
-#: includes/steps/class-step-user-input.php:138
-#: includes/steps/class-step-user-input.php:150
+#: includes/steps/class-step-user-input.php:166
+#: includes/steps/class-step-user-input.php:178
 msgid "Hidden"
 msgstr ""
 
 #: includes/steps/class-step-approval.php:430
-#: includes/steps/class-step-user-input.php:151
+#: includes/steps/class-step-user-input.php:179
 msgid "Not required"
 msgstr ""
 
@@ -1352,8 +1352,8 @@ msgstr ""
 #: includes/steps/class-step-approval.php:675
 #: includes/steps/class-step-approval.php:708
 #: includes/steps/class-step-approval.php:855
-#: includes/steps/class-step-user-input.php:491
-#: includes/steps/class-step-user-input.php:744
+#: includes/steps/class-step-user-input.php:514
+#: includes/steps/class-step-user-input.php:767
 msgid "Note"
 msgstr "Nota"
 
@@ -1378,7 +1378,7 @@ msgid "Entry Rejected"
 msgstr "Entrada rechazada"
 
 #: includes/steps/class-step-approval.php:757
-#: includes/steps/class-step-user-input.php:525
+#: includes/steps/class-step-user-input.php:548
 msgid "A note is required"
 msgstr ""
 
@@ -1493,7 +1493,7 @@ msgid "Enable this setting to send an email."
 msgstr "Activa este ajuste para enviar un email."
 
 #: includes/steps/class-step-notification.php:62
-#: includes/steps/class-step-user-input.php:169
+#: includes/steps/class-step-user-input.php:197
 #: includes/wizard/steps/class-iw-step-updates.php:88
 msgid "Enabled"
 msgstr "Activado"
@@ -1519,15 +1519,31 @@ msgstr ""
 msgid "Editable fields"
 msgstr "Campos editables"
 
-#: includes/steps/class-step-user-input.php:85
+#: includes/steps/class-step-user-input.php:86
+#: includes/steps/class-step-user-input.php:112
 msgid "Enable field conditional logic"
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:97
+#: includes/steps/class-step-user-input.php:95
+msgid "Dynamic"
+msgstr ""
+
+#: includes/steps/class-step-user-input.php:99
+msgid "Only when the page loads"
+msgstr ""
+
+#: includes/steps/class-step-user-input.php:102
+msgid ""
+"Fields and Sections support dynamic conditional logic. Pages do not support "
+"dynamic conditional logic so they will only be shown or hidden when the page"
+" loads."
+msgstr ""
+
+#: includes/steps/class-step-user-input.php:125
 msgid "Assignee Policy"
 msgstr "Política de encargados"
 
-#: includes/steps/class-step-user-input.php:98
+#: includes/steps/class-step-user-input.php:126
 msgid ""
 "Define how this step should be processed. If all assignees must complete "
 "this step then the entry will require input from every assignee before the "
@@ -1535,63 +1551,63 @@ msgid ""
 "that role needs to complete the step."
 msgstr "Define como debe procesarse este paso. Si todos los encargados deben completar este paso entonces la entrada necesitará respuesta de cada uno de los encargados para completar el paso. Si este paso está asignado a un rol sólo uno de los usuarios con ese rol necesitará completar el paso."
 
-#: includes/steps/class-step-user-input.php:103
+#: includes/steps/class-step-user-input.php:131
 msgid "At least one assignee must complete this step"
 msgstr "Al menos un encargado debe completar este paso"
 
-#: includes/steps/class-step-user-input.php:107
+#: includes/steps/class-step-user-input.php:135
 msgid "All assignees must complete this step"
 msgstr "Todos los encargados deben completar este paso"
 
-#: includes/steps/class-step-user-input.php:133
+#: includes/steps/class-step-user-input.php:161
 msgid "Default Status Option"
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:134
+#: includes/steps/class-step-user-input.php:162
 msgid ""
 "Select the default value for the status on the workflow detail page. Select "
 "Hidden to hide the status options."
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:139
-#: includes/steps/class-step-user-input.php:772
+#: includes/steps/class-step-user-input.php:167
+#: includes/steps/class-step-user-input.php:795
 msgid "In progress"
 msgstr "En progreso"
 
-#: includes/steps/class-step-user-input.php:152
+#: includes/steps/class-step-user-input.php:180
 msgid "Always Required"
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:155
+#: includes/steps/class-step-user-input.php:183
 msgid "Required if in progress"
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:159
+#: includes/steps/class-step-user-input.php:187
 msgid "Required if complete"
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:210
+#: includes/steps/class-step-user-input.php:238
 msgid "A new entry requires your input"
 msgstr "Una nueva entrada necesita tu atención"
 
-#: includes/steps/class-step-user-input.php:485
+#: includes/steps/class-step-user-input.php:508
 msgid "Entry updated and marked complete."
 msgstr "Entrada actualizada y marcada como completada."
 
-#: includes/steps/class-step-user-input.php:485
+#: includes/steps/class-step-user-input.php:508
 msgid "Entry updated - in progress."
 msgstr "Entrada actualizada - en progreso."
 
-#: includes/steps/class-step-user-input.php:574
-#: includes/steps/class-step-user-input.php:589
+#: includes/steps/class-step-user-input.php:597
+#: includes/steps/class-step-user-input.php:612
 msgid "This field is required."
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:609
+#: includes/steps/class-step-user-input.php:632
 msgid "There was a problem while updating your form."
 msgstr ""
 
-#: includes/steps/class-step-user-input.php:622
+#: includes/steps/class-step-user-input.php:645
 msgid "Pending Input"
 msgstr ""
 

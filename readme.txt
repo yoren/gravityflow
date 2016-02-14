@@ -55,6 +55,35 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.2.0.38 =
+- Fixed an issue with the gravityflow_entry_count_step_list filter.
+
+= 1.2.0.37 =
+- Added the Order Summary step setting for user input and approval steps with pricing fields.
+
+= 1.2.0.36 =
+- Refactored the edit page.
+
+= 1.2.0.35 =
+- Added support for the id, user_email and display_name modifiers for the User field merge tag.
+
+= 1.2.0.34 =
+- Reverted the approval step to display the values in a table. User input steps use the form styles.
+
+= 1.2.0.33 =
+- Added the gravityflow_entry_count_step_list so the entry counts on the step list page can be turned off.
+    Example: add_filter( 'gravityflow_entry_count_step_list', '__return_false' );
+- Added the highlight editable fields setting to the user input step.
+- Fixed an issue with the validation of the user input step where required fields that are hidden by conditional logic can fail validation.
+- Fixed a PHP notice on the entry detail page when accessing the entry when not on a step.
+
+
+= 1.2.0.32 =
+- Fixed an issue affecting access to the entry detail page.
+
+= 1.2.0.31 =
+- Updated Gravity PDF integration so it's fully compatible with Gravity PDF 4.0 RC2.
+
 = 1.2.0.30 =
 - Updated the user input conditional logic setting to display an option to deactivate dynamic conditional logic when page conditional logic is present on the form.
 
