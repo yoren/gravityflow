@@ -85,7 +85,7 @@ class Gravity_Flow_Print_Entries {
 			<title>
 				<?php
 				$entry_count = count( $entry_ids );
-				$title       = $entry_count > 1 ? esc_html__( 'Bulk Print', 'gravityflow' ) : esc_html__( 'Entry # ', 'gravityflow' ) . $entry_ids[0];
+				$title       = $entry_count > 1 ? esc_html__( 'Bulk Print', 'gravityflow' ) : esc_html__( 'Entry # ', 'gravityflow' ) . absint( $entry_ids[0] );
 				$title       = apply_filters( 'gravityflow_page_title_print_entry', $title, $entry_count );
 				echo esc_html( $title );
 				?>
