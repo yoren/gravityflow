@@ -156,6 +156,10 @@ class Gravity_Flow_API {
 				$assignee->remove();
 			}
 		}
+		$steps = $this->get_steps();
+		foreach ( $steps as $step ) {
+			$step->update_step_status( 'pending' );
+		}
 		$feedback = esc_html__( 'Workflow restarted.',  'gravityflow' );
 		$this->add_timeline_note( $entry_id, $feedback );
 		gform_update_meta( $entry_id, 'workflow_final_status', 'pending' );
