@@ -707,14 +707,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 		if ( $new_status == 'approved' ) {
 			$note = $this->get_name() . ': ' . __( 'Approved.', 'gravityflow' );
-			$this->send_approval_notification();
 		} elseif ( $new_status == 'rejected' ) {
 			$note = $this->get_name() . ': ' . __( 'Rejected.', 'gravityflow' );
-			$this->send_rejection_notification();
 		}
 
 		if ( ! empty( $note ) ) {
-
 			$user_note = rgpost( 'gravityflow_note' );
 			if ( ! empty( $user_note ) ) {
 				$note .= sprintf( "\n%s: %s", __( 'Note', 'gravityflow' ), $user_note );
@@ -726,9 +723,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$status = $this->evaluate_status();
 		$this->update_step_status( $status );
 		$entry = $this->refresh_entry();
-
-
-		GFAPI::send_notifications( $form, $entry, 'workflow_approval' );
 
 		switch ( $new_status ) {
 			case 'approved':
@@ -1231,6 +1225,19 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$feedback = $this->process_assignee_status( $assignee , $new_status, $form );
 
 		return $feedback;
+	}
+
+	public function end() {
+		$status = $this->evaluate_status();
+		if ( $status == 'approved' ) {
+			$this->send_approval_notification();
+		} elseif ( $status == 'rejected' ) {
+			$this->send_rejection_notification();
+		}
+		if ( $status == 'approved' || $status == 'rejected'  ) {
+			GFAPI::send_notifications( $this->get_form(), $this->get_entry(), 'workflow_approval' );
+		}
+		parent::end();
 	}
 }
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Approval() );
