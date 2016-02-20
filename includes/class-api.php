@@ -158,7 +158,9 @@ class Gravity_Flow_API {
 		}
 		$steps = $this->get_steps();
 		foreach ( $steps as $step ) {
-			$step->update_step_status( 'pending' );
+			// Create a step based on the entry and use it to reset the status.
+			$step_for_entry = $this->get_step( $step->get_id(), $entry );
+			$step_for_entry->update_step_status( 'pending' );
 		}
 		$feedback = esc_html__( 'Workflow restarted.',  'gravityflow' );
 		$this->add_timeline_note( $entry_id, $feedback );
