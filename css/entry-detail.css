@@ -1,11 +1,11 @@
 /* The little triangle indicator */
-.gravityflow-editable-field.green-triangle label.gfield_label {
+.gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label {
     width:100%;
     position: relative;
 }
 
-.gravityflow-editable-field.green-triangle label.gfield_label::before,
-.gravityflow-editable-field.green-triangle label.gfield_label::after {
+.gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label::before,
+.gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label::after {
     content: '';
     position: absolute;
     top: 0;
@@ -14,20 +14,20 @@
     border-style: solid;
 }
 
-.gravityflow-editable-field.green-triangle label.gfield_label::before {
+.gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label::before {
     border-width: 0.4em;
     border-left-color: #ccc;
     border-top-color: #ccc;
 }
 
-.gravityflow-editable-field.green-triangle label.gfield_label::after {
+.gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label::after {
     border-radius: 0.1em;
     border-width: 0.4em;
     border-left-color: #0c0;
     border-top-color: #0c0;
 }
 
-.gravityflow-editable-field.green-background {
+.gravityflow-editable-field.green-background:not(.gfield_error) {
     list-style-position:inside;
     border: 1px solid green;
     background: #eeffee;
@@ -234,7 +234,8 @@ table.entry-detail-view td.detail-view{
     list-style-type: disc;
 }
 
-.gfield label.gfield_label{
+.gfield.gravityflow-display-field label.gfield_label,
+.gfield.gravityflow-editable-field:not(.green-background):not(.gfield_error) label.gfield_label{
     background-color: #EAF2FA;
     border-top: 1px solid #DFDFDF;
     border-bottom: 1px solid #FFF;
@@ -245,7 +246,6 @@ table.entry-detail-view td.detail-view{
 }
 
 .gravityflow-editable-field.gfield.green-background label.gfield_label{
-    background-color: #eeffee;
     border: 0;
     margin: 0;
     padding: 0;
