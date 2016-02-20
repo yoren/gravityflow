@@ -188,6 +188,7 @@ class Gravity_Flow_Entry_Detail {
 
 				<form id="gform_<?php echo $form_id; ?>" method="post" enctype='multipart/form-data' action="<?php echo esc_url( $url ); ?>">
 					<?php wp_nonce_field( 'gforms_save_entry', 'gforms_save_entry' ) ?>
+					<input type="hidden" name="step_id" value="<?php echo $current_step ? $current_step->get_id() : ''; ?>" />
 					<div id="poststuff" class="metabox-holder has-right-sidebar">
 
 						<div id="side-info-column" class="inner-sidebar">

@@ -115,6 +115,7 @@ class Gravity_Flow_Entry_Editor {
 					$field->description = null;
 				}
 				$field->adminOnly = false;
+				$field->adminLabel = '';
 				$fields[] = $field;
 			}
 		}
@@ -170,7 +171,8 @@ class Gravity_Flow_Entry_Editor {
 		}
 
 		$posted_form_id = rgpost( 'gravityflow_submit' );
-		if ( $posted_form_id == $this->form['id'] ) {
+		if ( $posted_form_id == $this->form['id'] && rgpost( 'step_id' ) == $this->step->get_id() ) {
+			// updated or failed validation
 			$value = GFFormsModel::get_field_value( $field );
 		} else {
 			$value = GFFormsModel::get_lead_field_value( $this->entry, $field );
@@ -459,10 +461,12 @@ class Gravity_Flow_Entry_Editor {
 	 */
 	public function filter_gform_field_css_class( $classes, $field, $form ) {
 		$is_editable = $this->is_editable_field( $field );
-		$editable_class = $is_editable ? 'gravityflow-editable-field' : '';
-		$editable_class .= $is_editable && $this->step->highlight_editable_fields_enabled ? ' ' . $this->step->highlight_editable_fields_class : 'gravityflow-display-field';
+		$class = $is_editable ? 'gravityflow-editable-field' : 'gravityflow-display-field';
+		if ( $is_editable && $this->step->highlight_editable_fields_enabled ) {
+			$class .= ' ' . $this->step->highlight_editable_fields_class;
+		}
 
-		$classes .= ' ' . $editable_class;
+		$classes .= ' ' . $class;
 		return $classes;
 	}
 }
