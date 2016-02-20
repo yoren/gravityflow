@@ -7,7 +7,7 @@ This repository is a development version of Gravity Flow intended to facilitate 
 
 Bug reports and pull requests are welcome.
 
-If you'd like to receive the release version, automatic updates and support please purchase a license here: https://gravityflow.io.
+IMPORTANT: Please read the installation instructions below. If you'd like to receive the release version, automatic updates and support please purchase a license here: https://gravityflow.io. Support requests without a valid license will be ignored.
 
 
 ## Installation Instructions
