@@ -1779,7 +1779,7 @@ PRIMARY KEY  (id)
 
 			$count_entries = apply_filters( 'gravityflow_entry_count_step_list', true );
 			if ( $count_entries ) {
-				$columns[] = esc_html__( 'Entries', 'gravityflow' );
+				$columns['entry_count'] = esc_html__( 'Entries', 'gravityflow' );
 			}
 			return $columns;
 		}
@@ -3993,7 +3993,7 @@ AND m.meta_value='queued'";
 
 			$count_entries = apply_filters( 'gravityflow_entry_count_step_list', true );
 
-			$entry_count = $current_step && $count_entries ? $current_step->entry_count() : false;
+			$entry_count = $current_step && $count_entries ? absint( $current_step->entry_count() ) : false;
 
 			if ( $entry_count && $entry_count > 0 ) {
 				unset( $action_links['delete'] );
@@ -4709,7 +4709,7 @@ AND m.meta_value='queued'";
 					continue;
 				}
 				$fields_as_choices[] = array( 'label' => $field->get_field_label( false, null ), 'value' => $field->id );
-				$has_product_field = GFCommon::is_product_field( $field->type );
+				$has_product_field = GFCommon::is_product_field( $field->type ) ? true : $has_product_field;
 			}
 
 			$mode_value = $this->get_setting( 'display_fields_mode', 'all_fields' );
