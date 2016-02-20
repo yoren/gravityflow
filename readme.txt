@@ -55,111 +55,30 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
-= 1.2.0.38 =
-- Fixed an issue with the gravityflow_entry_count_step_list filter.
-
-= 1.2.0.37 =
-- Added the Order Summary step setting for user input and approval steps with pricing fields.
-
-= 1.2.0.36 =
-- Refactored the edit page.
-
-= 1.2.0.35 =
 - Added support for the id, user_email and display_name modifiers for the User field merge tag.
-
-= 1.2.0.34 =
-- Reverted the approval step to display the values in a table. User input steps use the form styles.
-
-= 1.2.0.33 =
 - Added the gravityflow_entry_count_step_list so the entry counts on the step list page can be turned off.
     Example: add_filter( 'gravityflow_entry_count_step_list', '__return_false' );
 - Added the highlight editable fields setting to the user input step.
-- Fixed an issue with the validation of the user input step where required fields that are hidden by conditional logic can fail validation.
-- Fixed a PHP notice on the entry detail page when accessing the entry when not on a step.
-
-
-= 1.2.0.32 =
-- Fixed an issue affecting access to the entry detail page.
-
-= 1.2.0.31 =
-- Updated Gravity PDF integration so it's fully compatible with Gravity PDF 4.0 RC2.
-
-= 1.2.0.30 =
-- Updated the user input conditional logic setting to display an option to deactivate dynamic conditional logic when page conditional logic is present on the form.
-
-= 1.2.0.29 =
-- Updated the entry detail page to hide fields when the page is hidden by conditional logic.
-
-= 1.2.0.28 =
+- Added the Order Summary step setting for user input and approval steps with pricing fields.
 - Added support for dynamic conditional logic.
 - Added the feed extension class.
-
-= 1.2.0.27 =
-- Fixed an issue with the status page introduced in 1.2.0.21.
-
-= 1.2.0.26 =
-- Fixed an issue with the notification workflow notification where the workflow note merge tag doesn't get replaced.
-
-= 1.2.0.25 =
-- Fixed an issue where the gform_field_content was not getting triggered in the workflow detail page.
-
-= 1.2.0.24 =
-- Fixed an issue where the workflow complete notifications where the entry contains the wrong status.
 - Added support for the created_by, and workflow_timeline merge tags within Gravity Forms notifications.
-
-= 1.2.0.23 =
 - Added the gravityflow_post_process_workflow action.
     Example: add_action( 'gravityflow_post_process_workflow'. 'sh_gravityflow_post_process_workflow', 10, 4);
     function sh_gravityflow_post_process_workflow( $form, $entry_id, $step_id, $step_id_before_processing ) {
         // Do something every time the workflow is processed.
     }
-
-
-= 1.2.0.22 =
-- Fixed validation of the file upload field.
-- Fixed an issue with the email field with confirmation enabled where the confirmation is not automatically set to the value.
-
-= 1.2.0.21 =
-- Removed support for sorting in the status page for the workflow fields.
-
-= 1.2.0.20 =
 - Added the gravityflow_update_button_text_user_input filter to allow the button text to be changed on the user input step.
     Example:
         add_filter( 'gravityflow_update_button_text_user_input', 'sh_gravityflow_update_button_text_user_input', 10, 2 );
         function sh_gravityflow_update_button_text_user_input( $text, $form_id, $step ) {
             return 'Submit';
         }
-
-
-= 1.2.0.19 =
-- Added support for sorting on the field columns in the status page.
-- Fixed an issue with the field column values in the status list.
-
-= 1.2.0.18 =
-- Fixed an issue with the email subject not replacing merge tags.
-
-= 1.2.0.17 =
 - Added the form ID and field as parameters to the gravityflow_get_users_args_assignee_field and gravityflow_get_users_args_user_field filters.
 - Added the step_column, submitter_column and status_column attributes to the shortcode.
-
-= 1.2.0.16 =
-- Fixed an issue with instructions being displayed when the current user is no longer an assignee after update.
-
-= 1.2.0.15 =
 - Added support for the display_name attribute in the assignees merge tag. e.g. {assignees: display_name=true}
 - Added the instructions setting to the user input and approval steps.
 - Added support for an area for instructions at the top of the workflow detail page.
-
-= 1.2.0.14 =
-- Added a setting in the user input step to allow field conditional logic to be displayed to the editable fields.
-
-= 1.2.0.13 =
-- Fixed an issue with the multi-file upload field where files can't be deleted by email assignees or users authenticating by token.
-
-= 1.2.0.12 =
-- Fixed an issue with the multi-file upload field.
-
-= 1.2.0.11 =
 - Added the gravityflow_editable_fields_user_input filter to allow the editable fields array to be modified for the user input step.
     Example:
         add_filter( 'gravityflow_editable_fields_user_input', 'sh_gravityflow_editable_fields_user_input', 10, 2);
@@ -174,47 +93,54 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
             // e.g. array( 1, 2, 3 );
             return $editable_fields;
         }
-= 1.2.0.10 =
-- Fixed an issue with styles for the inbox shortcode where the field value columns don't adapt well to narrow screens.
-
-= 1.2.0.9 =
+- Added a setting in the user input step to allow field conditional logic to be displayed to the editable fields.
+- Added support for sorting on the field columns in the status page.
+- Added the gravityflow_permission_denied_message_entry_detail filter to allow the error message to be customized.
 - Added the hidden option to the default status setting of the User Input step.
 - Added support for the {created_by:[property]} and {assignees} merge tags
-
-= 1.2.0.8 =
-- Updated styles of the front end validation message.
-
-= 1.2.0.7 =
 - Added support for field validation in the User Input step.
-
-= 1.2.0.6 =
-- Added the gravityflow_permission_denied_message_entry_detail filter to allow the error message to be customized.
-- Fixed an issue with the URL in the entry link merge tag.
-- Fixed an issue with the timeline notes for email assignees
-
-
-= 1.2.0.5 =
 - Added the last_updated attribute to the inbox shortcode to activate the last updated column to appear in the inbox list.
 - Added total count indicator below the inbox when entry count > 150.
-- Updated the auto-update and license check component.
-- Updated the field labels in the entry detail page to display the full label instead of the admin label.
-- Fixed an issue in the inbox where the form name doesn't appear.
-
-= 1.2.0.4 =
 - Added the timeline attribute to the shortcode so the timeline can be hidden.
 - Added the date field option to the schedule setting to allow steps to be scheduled for a date in the entry.
 - Added the workflow note setting to the approval and user input steps so the note box can be hidden, required or required depending on the status.
 - Added the gravityflow_validation_approval and gravityflow_validation_user_input filters to allow custom validation.
 - Added support for required fields in the User Input step.
 
-= 1.2.0.3 =
-- Fixed an issue with the expiration delay calculation for units other than hours.
-
-= 1.2.0.2 =
+- Updated Gravity PDF integration so it's fully compatible with Gravity PDF 4.0 RC2.
+- Updated the user input conditional logic setting to display an option to deactivate dynamic conditional logic when page conditional logic is present on the form.
+- Updated the entry detail page to hide fields when the page is hidden by conditional logic.
+- Updated the user input step to display the front end field labels instead of the admin labels.
+- Updated styles of the front end validation message.
+- Updated the field labels in the entry detail page to display the full label instead of the admin label.
 - Updated the workflow detail page to respect the conditional logic rules.
+- Updated the auto-update and license check component.
 
-= 1.2.0.1 =
+
+- Fixed an issue with the user input step where values are not displayed in editable fields after saving a previous step in which those field are not editable.
+- Fixed an issue with the entry count column in the step list.
+- Fixed an issue with the approval step expiration where the emails don't get send.
+- Fixed an issue with the status of all the steps afte restarting the workflow.
+- Fixed an issue with the order summary setting.
+- Fixed an issue with the gravityflow_entry_count_step_list filter.
+- Fixed an issue with the validation of the user input step where required fields that are hidden by conditional logic can fail validation.
+- Fixed a PHP notice on the entry detail page when accessing the entry when not on a step.
+- Fixed an issue affecting access to the entry detail page.
+- Fixed an issue with the notification workflow notification where the workflow note merge tag doesn't get replaced.
+- Fixed an issue where the gform_field_content was not getting triggered in the workflow detail page.
+- Fixed an issue where the workflow complete notifications where the entry contains the wrong status.
+- Fixed validation of the file upload field.
+- Fixed an issue with the email field with confirmation enabled where the confirmation is not automatically set to the value.
+- Fixed an issue with the field column values in the status list.
+- Fixed an issue with the email subject not replacing merge tags.
+- Fixed an issue with the multi-file upload field where files can't be deleted by email assignees or users authenticating by token.
+- Fixed an issue with styles for the inbox shortcode where the field value columns don't adapt well to narrow screens.
+- Fixed an issue with the URL in the entry link merge tag.
+- Fixed an issue with the timeline notes for email assignees
+- Fixed an issue in the inbox where the form name doesn't appear.
+- Fixed an issue with the expiration delay calculation for units other than hours.
 - Fixed an issue where the confirmation page is not displayed in certain conditions.
+
 
 = 1.2 =
 - Added the {workflow_timeline} merge tag to display a basic timeline with very simple formatting.
