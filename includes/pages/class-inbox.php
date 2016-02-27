@@ -36,6 +36,8 @@ class Gravity_Flow_Inbox {
 
 		$args = array_merge( $defaults, $args );
 
+		$args = apply_filters( 'gravityflow_inbox_args', $args );
+
 		if ( $current_user->ID > 0 ) {
 			$filter_key = 'user_id_' . $current_user->ID;
 		} elseif ( $token = gravity_flow()->decode_access_token() ) {
