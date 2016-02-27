@@ -165,8 +165,8 @@ class Gravity_Flow_Entry_Editor {
 
 		$dynamic_conditional_logic_enabled = $this->is_dynamic_conditional_logic_enabled();
 
-		if ( $dynamic_conditional_logic_enabled ) {
-			$field->conditionalLogicFields = GFFormDisplay::get_conditional_logic_fields( $this->form, $field->id );
+		if ( ! $dynamic_conditional_logic_enabled ) {
+			$field->conditionalLogicFields = null;
 		}
 
 		if ( GFCommon::is_product_field( $field->type ) ) {
