@@ -49,6 +49,8 @@ class Gravity_Flow_Status {
 			$args['constraint_filters']['end_date'] = '';
 		}
 
+		$args = apply_filters( 'gravityflow_status_args', $args );
+
 		$table = new Gravity_Flow_Status_Table( $args );
 
 		if ( $args['format'] == 'table' ) {
