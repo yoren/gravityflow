@@ -1871,7 +1871,7 @@ PRIMARY KEY  (id)
 				$entry_meta[ 'workflow_step_status_' . $step_id ] = array(
 					'label'                      => __( 'Status:', 'gravityflow' ) . ' ' . $step_name,
 					'is_numeric'                 => false,
-					'is_default_column'          => true, // this column will be displayed by default on the entry list
+					'is_default_column'          => false, // this column will not be displayed by default on the entry list
 					'filter'                     => array(
 						'operators' => array( 'is', 'isnot' ),
 						'choices'   => $status_choices,
