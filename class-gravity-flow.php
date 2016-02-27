@@ -3825,6 +3825,7 @@ PRIMARY KEY  (id)
 			$this->maybe_process_queued_entries();
 			$this->maybe_process_expiration_and_reminders();
 
+			$this->log_debug( __METHOD__ . '() Finished cron.' );
 		}
 
 		public function maybe_process_queued_entries() {
