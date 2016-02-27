@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2016-02-14 17:23:41+00:00\n"
+"POT-Creation-Date: 2016-02-20 15:51:17+00:00\n"
 "PO-Revision-Date: 2016-02-15 10:28+0000\n"
 "Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/gravityflow/gravityflow/language/nl_NL/)\n"
@@ -25,14 +25,14 @@ msgstr ""
 "X-Textdomain-Support: yes\n"
 
 #: class-gravity-flow.php:257 includes/fields/class-field-user.php:55
-#: includes/steps/class-step-approval.php:828
+#: includes/steps/class-step-approval.php:822
 #: includes/steps/class-step-user-input.php:727
 #: includes/steps/class-step-user-input.php:891
 msgid "User"
 msgstr "Gebruiker"
 
 #: class-gravity-flow.php:262 includes/fields/class-field-role.php:55
-#: includes/steps/class-step-approval.php:822
+#: includes/steps/class-step-approval.php:816
 #: includes/steps/class-step-user-input.php:745
 msgid "Role"
 msgstr "Rol"
@@ -70,7 +70,7 @@ msgstr "Gebruiker (Gemaakt door)"
 
 #: class-gravity-flow.php:638
 #: includes/fields/class-field-assignee-select.php:151
-#: includes/pages/class-status.php:301
+#: includes/pages/class-status.php:310
 msgid "Fields"
 msgstr "Velden"
 
@@ -79,7 +79,7 @@ msgid "Step Type"
 msgstr "Stap Type"
 
 #: class-gravity-flow.php:733 class-gravity-flow.php:737
-#: includes/pages/class-support.php:86
+#: includes/pages/class-support.php:96
 msgid "Name"
 msgstr "Naam"
 
@@ -174,8 +174,8 @@ msgid "Delay"
 msgstr "Vertragen"
 
 #: class-gravity-flow.php:1246 class-gravity-flow.php:1403
-#: includes/pages/class-activity.php:33 includes/pages/class-activity.php:58
-#: includes/pages/class-status.php:660
+#: includes/pages/class-activity.php:42 includes/pages/class-activity.php:67
+#: includes/pages/class-status.php:669
 msgid "Date"
 msgstr "Datum"
 
@@ -273,8 +273,8 @@ msgstr ""
 msgid "You don't have any steps configured. Let's go %screate one%s!"
 msgstr "U heeft nog geen stap ingesteld. %sMaak een stap%s!"
 
-#: class-gravity-flow.php:1872 includes/pages/class-status.php:1119
-#: includes/pages/class-status.php:1124
+#: class-gravity-flow.php:1872 includes/pages/class-status.php:1128
+#: includes/pages/class-status.php:1133
 msgid "Status:"
 msgstr "Status:"
 
@@ -282,8 +282,8 @@ msgstr "Status:"
 msgid "Entry Id"
 msgstr "Inzending Id"
 
-#: class-gravity-flow.php:2019 includes/pages/class-inbox.php:85
-#: includes/pages/class-inbox.php:147
+#: class-gravity-flow.php:2019 includes/pages/class-inbox.php:94
+#: includes/pages/class-inbox.php:156
 msgid "Submitted"
 msgstr "Toegevoegd"
 
@@ -296,7 +296,7 @@ msgid "Submitted by"
 msgstr "Toegevoegd door"
 
 #: class-gravity-flow.php:2042 class-gravity-flow.php:4479
-#: includes/pages/class-status.php:673
+#: includes/pages/class-status.php:682
 #: includes/steps/class-step-user-input.php:891
 msgid "Status"
 msgstr "Status"
@@ -305,7 +305,7 @@ msgstr "Status"
 msgid "Expires"
 msgstr ""
 
-#: class-gravity-flow.php:2059 includes/steps/class-step-approval.php:799
+#: class-gravity-flow.php:2059 includes/steps/class-step-approval.php:793
 #: includes/steps/class-step-user-input.php:697
 msgid "Queued"
 msgstr "Wachtrij"
@@ -334,7 +334,7 @@ msgstr "Workflow Annuleren"
 msgid "Restart this step"
 msgstr "Herstart deze stap"
 
-#: class-gravity-flow.php:2121 includes/pages/class-status.php:199
+#: class-gravity-flow.php:2121 includes/pages/class-status.php:208
 msgid "Restart Workflow"
 msgstr "Workflow Herstarten"
 
@@ -342,7 +342,7 @@ msgstr "Workflow Herstarten"
 msgid "Send to step:"
 msgstr "Verzend naar stap:"
 
-#: class-gravity-flow.php:2138 includes/pages/class-status.php:366
+#: class-gravity-flow.php:2138 includes/pages/class-status.php:375
 msgid "Apply"
 msgstr "Toepassen"
 
@@ -492,7 +492,7 @@ msgstr "Voeg een Workflow Formulier toe"
 msgid "Oops! We could not locate your entry."
 msgstr "Oeps! We konden uw inzending niet vinden. "
 
-#: class-gravity-flow.php:2866 includes/steps/class-step-approval.php:1212
+#: class-gravity-flow.php:2866 includes/steps/class-step-approval.php:1206
 msgid "Error: incorrect entry."
 msgstr "Fout: Inzending is niet correct."
 
@@ -552,12 +552,12 @@ msgstr ""
 msgid "Workflow Step restarted."
 msgstr "Workflow Stap herstart."
 
-#: class-gravity-flow.php:3198 includes/class-api.php:159
-#: includes/pages/class-status.php:1194
+#: class-gravity-flow.php:3198 includes/class-api.php:165
+#: includes/pages/class-status.php:1203
 msgid "Workflow restarted."
 msgstr "Workflow herstart. "
 
-#: class-gravity-flow.php:3207 includes/class-api.php:202
+#: class-gravity-flow.php:3207 includes/class-api.php:208
 msgid "Sent to step: %s"
 msgstr "Verzenden naar stap: : %s"
 
@@ -648,11 +648,11 @@ msgstr "Inbox"
 msgid "Submit"
 msgstr "Toevoegen"
 
-#: class-gravity-flow.php:4480 includes/pages/class-help.php:14
+#: class-gravity-flow.php:4480 includes/pages/class-help.php:23
 msgid "Help"
 msgstr "Help"
 
-#: class-gravity-flow.php:4481 includes/pages/class-support.php:67
+#: class-gravity-flow.php:4481 includes/pages/class-support.php:77
 msgid "Support"
 msgstr "Ondersteuning"
 
@@ -664,12 +664,12 @@ msgid "Complete"
 msgstr "Compleet"
 
 #: class-gravity-flow.php:4510 includes/steps/class-step-approval.php:31
-#: includes/steps/class-step-approval.php:795
+#: includes/steps/class-step-approval.php:789
 msgid "Approved"
 msgstr "Goedgekeurd"
 
 #: class-gravity-flow.php:4513 includes/steps/class-step-approval.php:25
-#: includes/steps/class-step-approval.php:797
+#: includes/steps/class-step-approval.php:791
 msgid "Rejected"
 msgstr "Afgekeurd"
 
@@ -677,7 +677,7 @@ msgstr "Afgekeurd"
 msgid "Oops! We couldn't find your lead. Please try again"
 msgstr ""
 
-#: class-gravity-flow.php:4614 includes/pages/class-entry-detail.php:47
+#: class-gravity-flow.php:4614 includes/pages/class-entry-detail.php:56
 msgid "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete"
 msgstr "Wilt u dit bestand verwijderen? 'Annuleren' om te stoppen. 'OK' om te verwijderen."
 
@@ -734,277 +734,277 @@ msgid "Forbidden"
 msgstr ""
 
 #: includes/fields/class-field-assignee-select.php:64
-#: includes/pages/class-reports.php:290 includes/pages/class-reports.php:348
-#: includes/pages/class-reports.php:489
+#: includes/pages/class-reports.php:299 includes/pages/class-reports.php:357
+#: includes/pages/class-reports.php:498
 msgid "Assignee"
 msgstr "Gemachtigde"
 
-#: includes/pages/class-activity.php:20 includes/pages/class-reports.php:44
+#: includes/pages/class-activity.php:29 includes/pages/class-reports.php:53
 msgid "You don't have permission to view this page"
 msgstr "U heeft geen toestemming deze pagina te bekijken"
 
-#: includes/pages/class-activity.php:32
+#: includes/pages/class-activity.php:41
 msgid "Event ID"
 msgstr "Gebeurtenis ID"
 
-#: includes/pages/class-activity.php:34 includes/pages/class-activity.php:63
-#: includes/pages/class-inbox.php:81 includes/pages/class-inbox.php:124
-#: includes/pages/class-reports.php:124 includes/pages/class-status.php:662
+#: includes/pages/class-activity.php:43 includes/pages/class-activity.php:72
+#: includes/pages/class-inbox.php:90 includes/pages/class-inbox.php:133
+#: includes/pages/class-reports.php:133 includes/pages/class-status.php:671
 msgid "Form"
 msgstr "Formulier"
 
-#: includes/pages/class-activity.php:35 includes/pages/class-activity.php:68
+#: includes/pages/class-activity.php:44 includes/pages/class-activity.php:77
 msgid "Entry ID"
 msgstr "Inzending ID"
 
-#: includes/pages/class-activity.php:36 includes/pages/class-activity.php:73
+#: includes/pages/class-activity.php:45 includes/pages/class-activity.php:82
 msgid "Type"
 msgstr "Type"
 
-#: includes/pages/class-activity.php:37 includes/pages/class-activity.php:78
-#: includes/pages/class-activity.php:108
+#: includes/pages/class-activity.php:46 includes/pages/class-activity.php:87
+#: includes/pages/class-activity.php:117
 msgid "Event"
 msgstr "Gebeurtenis"
 
-#: includes/pages/class-activity.php:38 includes/pages/class-activity.php:96
-#: includes/pages/class-inbox.php:84 includes/pages/class-inbox.php:136
-#: includes/pages/class-reports.php:228 includes/pages/class-reports.php:490
-#: includes/pages/class-status.php:669
+#: includes/pages/class-activity.php:47 includes/pages/class-activity.php:105
+#: includes/pages/class-inbox.php:93 includes/pages/class-inbox.php:145
+#: includes/pages/class-reports.php:237 includes/pages/class-reports.php:499
+#: includes/pages/class-status.php:678
 msgid "Step"
 msgstr "Stap"
 
-#: includes/pages/class-activity.php:39
+#: includes/pages/class-activity.php:48
 msgid "Duration"
 msgstr "Duur"
 
-#: includes/pages/class-activity.php:53 includes/pages/class-inbox.php:79
-#: includes/pages/class-inbox.php:118 includes/pages/class-status.php:658
+#: includes/pages/class-activity.php:62 includes/pages/class-inbox.php:88
+#: includes/pages/class-inbox.php:127 includes/pages/class-status.php:667
 msgid "ID"
 msgstr "ID"
 
-#: includes/pages/class-activity.php:132
+#: includes/pages/class-activity.php:141
 msgid "Waiting for workflow activity"
 msgstr "Wachten op workflow activiteit"
 
-#: includes/pages/class-entry-detail.php:58
+#: includes/pages/class-entry-detail.php:67
 msgid "Ajax error while deleting file."
 msgstr "Ajax fout tijdens het verwijderen van het bestand. "
 
-#: includes/pages/class-entry-detail.php:111
+#: includes/pages/class-entry-detail.php:120
 msgid "Workflow Entry #"
 msgstr "Workflow Inzending #"
 
-#: includes/pages/class-entry-detail.php:111
-#: includes/pages/class-status.php:351
+#: includes/pages/class-entry-detail.php:120
+#: includes/pages/class-status.php:360
 msgid "Workflow Form"
 msgstr "Workflow Formulier"
 
-#: includes/pages/class-entry-detail.php:169
-#: includes/pages/class-print-entries.php:138
+#: includes/pages/class-entry-detail.php:178
+#: includes/pages/class-print-entries.php:147
 msgid "You don't have permission to view this entry."
 msgstr "U heeft geen toestemming om deze inzending te bekijken. "
 
-#: includes/pages/class-entry-detail.php:195
-#: includes/pages/class-status.php:196
+#: includes/pages/class-entry-detail.php:205
+#: includes/pages/class-status.php:205
 msgid "Print"
 msgstr "Printen"
 
-#: includes/pages/class-entry-detail.php:201
+#: includes/pages/class-entry-detail.php:211
 msgid "include timeline"
 msgstr "Insluiten tijdlijn"
 
-#: includes/pages/class-entry-detail.php:258
+#: includes/pages/class-entry-detail.php:268
 msgid "Timeline"
 msgstr "Tijdlijn"
 
-#: includes/pages/class-entry-detail.php:311
+#: includes/pages/class-entry-detail.php:321
 msgid "Workflow Submitted"
 msgstr "Workflow Toegevoegd"
 
-#: includes/pages/class-entry-detail.php:360
-#: includes/pages/class-print-entries.php:79
+#: includes/pages/class-entry-detail.php:370
+#: includes/pages/class-print-entries.php:88
 msgid "Entry # "
 msgstr "Inzending #"
 
-#: includes/pages/class-entry-detail.php:369
+#: includes/pages/class-entry-detail.php:379
 msgid "show empty fields"
 msgstr "toon lege velden"
 
-#: includes/pages/class-entry-detail.php:412
-#: includes/pages/class-entry-detail.php:584
+#: includes/pages/class-entry-detail.php:423
+#: includes/pages/class-entry-detail.php:596
 msgid "Order"
 msgstr "Volgorde"
 
-#: includes/pages/class-entry-detail.php:614
+#: includes/pages/class-entry-detail.php:626
 msgid "Product"
 msgstr "Product"
 
-#: includes/pages/class-entry-detail.php:615
+#: includes/pages/class-entry-detail.php:627
 msgid "Qty"
 msgstr "Aantal"
 
-#: includes/pages/class-entry-detail.php:616
+#: includes/pages/class-entry-detail.php:628
 msgid "Unit Price"
 msgstr "Prijs per stuk"
 
-#: includes/pages/class-entry-detail.php:617
+#: includes/pages/class-entry-detail.php:629
 msgid "Price"
 msgstr "Prijs"
 
-#: includes/pages/class-entry-detail.php:677
+#: includes/pages/class-entry-detail.php:689
 msgid "Total"
 msgstr "Totaal"
 
-#: includes/pages/class-inbox.php:83 includes/pages/class-inbox.php:130
-#: includes/pages/class-status.php:665
+#: includes/pages/class-inbox.php:92 includes/pages/class-inbox.php:139
+#: includes/pages/class-status.php:674
 msgid "Submitter"
 msgstr "Inzender"
 
-#: includes/pages/class-inbox.php:99 includes/pages/class-status.php:705
+#: includes/pages/class-inbox.php:108 includes/pages/class-status.php:714
 msgid "Last Updated"
 msgstr ""
 
-#: includes/pages/class-inbox.php:178
+#: includes/pages/class-inbox.php:187
 msgid "Last_Updated"
 msgstr ""
 
-#: includes/pages/class-inbox.php:212
+#: includes/pages/class-inbox.php:221
 msgid "No pending tasks"
 msgstr "Momenteel geen taken"
 
-#: includes/pages/class-print-entries.php:58
+#: includes/pages/class-print-entries.php:67
 msgid "Form Id and Lead Id are required parameters."
 msgstr "Formulier Id en Lead Id zijn verplichte velden. "
 
-#: includes/pages/class-print-entries.php:79
+#: includes/pages/class-print-entries.php:88
 msgid "Bulk Print"
 msgstr "Bulk Printen"
 
-#: includes/pages/class-reports.php:67 includes/pages/class-reports.php:507
+#: includes/pages/class-reports.php:76 includes/pages/class-reports.php:516
 msgid "Filter"
 msgstr "Filter"
 
-#: includes/pages/class-reports.php:118 includes/pages/class-reports.php:170
-#: includes/pages/class-reports.php:222 includes/pages/class-reports.php:284
-#: includes/pages/class-reports.php:342 includes/pages/class-reports.php:401
+#: includes/pages/class-reports.php:127 includes/pages/class-reports.php:179
+#: includes/pages/class-reports.php:231 includes/pages/class-reports.php:293
+#: includes/pages/class-reports.php:351 includes/pages/class-reports.php:410
 msgid "No data to display"
 msgstr "Geen gegevens om te tonen"
 
-#: includes/pages/class-reports.php:124 includes/pages/class-reports.php:145
-#: includes/pages/class-reports.php:176 includes/pages/class-reports.php:197
-#: includes/pages/class-reports.php:407 includes/pages/class-reports.php:433
+#: includes/pages/class-reports.php:133 includes/pages/class-reports.php:154
+#: includes/pages/class-reports.php:185 includes/pages/class-reports.php:206
+#: includes/pages/class-reports.php:416 includes/pages/class-reports.php:442
 msgid "Workflows Completed"
 msgstr "Workflows Compleet"
 
-#: includes/pages/class-reports.php:124 includes/pages/class-reports.php:146
-#: includes/pages/class-reports.php:176 includes/pages/class-reports.php:198
-#: includes/pages/class-reports.php:228 includes/pages/class-reports.php:255
-#: includes/pages/class-reports.php:290 includes/pages/class-reports.php:317
-#: includes/pages/class-reports.php:348 includes/pages/class-reports.php:377
-#: includes/pages/class-reports.php:407 includes/pages/class-reports.php:434
+#: includes/pages/class-reports.php:133 includes/pages/class-reports.php:155
+#: includes/pages/class-reports.php:185 includes/pages/class-reports.php:207
+#: includes/pages/class-reports.php:237 includes/pages/class-reports.php:264
+#: includes/pages/class-reports.php:299 includes/pages/class-reports.php:326
+#: includes/pages/class-reports.php:357 includes/pages/class-reports.php:386
+#: includes/pages/class-reports.php:416 includes/pages/class-reports.php:443
 msgid "Average Duration (hours)"
 msgstr "Gemiddelde Duur (uren)"
 
-#: includes/pages/class-reports.php:134
+#: includes/pages/class-reports.php:143
 msgid "Forms"
 msgstr "Formulieren"
 
-#: includes/pages/class-reports.php:135 includes/pages/class-reports.php:187
+#: includes/pages/class-reports.php:144 includes/pages/class-reports.php:196
 msgid "Workflows completed and average duration"
 msgstr "Workflows compleet en gemiddelde duur"
 
-#: includes/pages/class-reports.php:176 includes/pages/class-reports.php:407
-#: includes/pages/class-reports.php:488
+#: includes/pages/class-reports.php:185 includes/pages/class-reports.php:416
+#: includes/pages/class-reports.php:497
 msgid "Month"
 msgstr "Maand"
 
-#: includes/pages/class-reports.php:228 includes/pages/class-reports.php:254
-#: includes/pages/class-reports.php:290 includes/pages/class-reports.php:316
-#: includes/pages/class-reports.php:348 includes/pages/class-reports.php:376
+#: includes/pages/class-reports.php:237 includes/pages/class-reports.php:263
+#: includes/pages/class-reports.php:299 includes/pages/class-reports.php:325
+#: includes/pages/class-reports.php:357 includes/pages/class-reports.php:385
 msgid "Completed"
 msgstr "Compleet"
 
-#: includes/pages/class-reports.php:244
+#: includes/pages/class-reports.php:253
 msgid "Step completed and average duration"
 msgstr "Stap compleet en gemiddelde duur"
 
-#: includes/pages/class-reports.php:306 includes/pages/class-reports.php:366
+#: includes/pages/class-reports.php:315 includes/pages/class-reports.php:375
 msgid "Step completed and average duration by assignee"
 msgstr "Stap compleet en gemiddelde duur per gemachtigde"
 
-#: includes/pages/class-reports.php:423
+#: includes/pages/class-reports.php:432
 msgid "Workflows completed and average duration by month"
 msgstr "Workflows compleet en gemiddelde duur per maand"
 
-#: includes/pages/class-reports.php:453
+#: includes/pages/class-reports.php:462
 msgid "Select A Workflow Form"
 msgstr "Selecteer een Workflow Formulier"
 
-#: includes/pages/class-reports.php:471
+#: includes/pages/class-reports.php:480
 msgid "Last 12 months"
 msgstr "Laatste 12 maanden"
 
-#: includes/pages/class-reports.php:472
+#: includes/pages/class-reports.php:481
 msgid "Last 6 months"
 msgstr "Laatste 6 maanden"
 
-#: includes/pages/class-reports.php:473
+#: includes/pages/class-reports.php:482
 msgid "Last 3 months"
 msgstr "Laatste 3 maanden"
 
-#: includes/pages/class-reports.php:516
+#: includes/pages/class-reports.php:525
 msgid "All Steps"
 msgstr "Alle stappen"
 
-#: includes/pages/class-status.php:74
+#: includes/pages/class-status.php:83
 msgid "Export"
 msgstr "Exporteren"
 
-#: includes/pages/class-status.php:80
+#: includes/pages/class-status.php:89
 msgid "The destination file is not writeable"
 msgstr "Het doelbestand is niet beschrijfbaar"
 
-#: includes/pages/class-status.php:203
+#: includes/pages/class-status.php:212
 msgid "entry"
 msgstr "inzending"
 
-#: includes/pages/class-status.php:204
+#: includes/pages/class-status.php:213
 msgid "entries"
 msgstr "inzendingen"
 
-#: includes/pages/class-status.php:249 includes/pages/class-submit.php:11
+#: includes/pages/class-status.php:258 includes/pages/class-submit.php:21
 msgid "You haven't submitted any workflow forms yet."
 msgstr "U heeft nog geen workflow formulieren toegevoegd. "
 
-#: includes/pages/class-status.php:267
+#: includes/pages/class-status.php:276
 msgid "All"
 msgstr "Alles"
 
-#: includes/pages/class-status.php:334
+#: includes/pages/class-status.php:343
 msgid "Start:"
 msgstr "Start:"
 
-#: includes/pages/class-status.php:340
+#: includes/pages/class-status.php:349
 msgid "End:"
 msgstr "Einde:"
 
-#: includes/pages/class-status.php:373
+#: includes/pages/class-status.php:382
 msgid "Clear Filter"
 msgstr "Filter Wissen"
 
-#: includes/pages/class-status.php:376
+#: includes/pages/class-status.php:385
 msgid "Search"
 msgstr "Zoeken"
 
-#: includes/pages/class-status.php:558
+#: includes/pages/class-status.php:567
 msgid "(deleted)"
 msgstr ""
 
-#: includes/pages/class-status.php:656
+#: includes/pages/class-status.php:665
 msgid "Checkbox"
 msgstr "Checkbox"
 
-#: includes/pages/class-status.php:922
+#: includes/pages/class-status.php:931
 #: includes/steps/class-step-approval.php:56
 #: includes/steps/class-step-approval.php:228
 #: includes/steps/class-step-notification.php:75
@@ -1012,40 +1012,40 @@ msgstr "Checkbox"
 msgid "Select"
 msgstr "Selecteren"
 
-#: includes/pages/class-support.php:71
+#: includes/pages/class-support.php:81
 msgid "Please check the documentation before submitting a support request"
 msgstr "Bekijk eerst de documentatie voordat u een vraag instuurt"
 
-#: includes/pages/class-support.php:92
-#: includes/steps/class-step-approval.php:818
+#: includes/pages/class-support.php:102
+#: includes/steps/class-step-approval.php:812
 #: includes/steps/class-step-user-input.php:734
 #: includes/steps/class-step-user-input.php:887
 msgid "Email"
 msgstr "Email"
 
-#: includes/pages/class-support.php:99
+#: includes/pages/class-support.php:109
 msgid "General comment or suggestion"
 msgstr "Algemene opmerking of suggestie"
 
-#: includes/pages/class-support.php:104
+#: includes/pages/class-support.php:114
 msgid "Feature request"
 msgstr "Verzoek om nieuwe feature"
 
-#: includes/pages/class-support.php:110
+#: includes/pages/class-support.php:120
 msgid "Bug report"
 msgstr "Bug rapport"
 
-#: includes/pages/class-support.php:114
+#: includes/pages/class-support.php:124
 msgid "Suggestion or steps to reproduce the issue."
 msgstr "Suggesties of stappen om dit probleem te reproduceren."
 
-#: includes/pages/class-support.php:120
+#: includes/pages/class-support.php:130
 msgid ""
 "Send debugging information. (This includes some system information and a "
 "list of active plugins. No forms or entry data will be sent.)"
 msgstr "Verzend debugging informatie. (Dit bevat systeem informatie en een lijst van actieve plugins. Geen formulieren of data uit formulieren wordt verzonden). "
 
-#: includes/pages/class-support.php:123
+#: includes/pages/class-support.php:133
 msgid "Send"
 msgstr "Verzenden"
 
@@ -1358,8 +1358,8 @@ msgid "Reverted to step"
 msgstr ""
 
 #: includes/steps/class-step-approval.php:687
-#: includes/steps/class-step-approval.php:720
-#: includes/steps/class-step-approval.php:867
+#: includes/steps/class-step-approval.php:717
+#: includes/steps/class-step-approval.php:861
 #: includes/steps/class-step-user-input.php:538
 #: includes/steps/class-step-user-input.php:813
 msgid "Note"
@@ -1373,50 +1373,50 @@ msgstr ""
 msgid "Approved."
 msgstr "Goedgekeurd."
 
-#: includes/steps/class-step-approval.php:712
+#: includes/steps/class-step-approval.php:711
 msgid "Rejected."
 msgstr "Afgekeurd."
 
-#: includes/steps/class-step-approval.php:735
+#: includes/steps/class-step-approval.php:729
 msgid "Entry Approved"
 msgstr "Inzending Goedgekeurd"
 
-#: includes/steps/class-step-approval.php:738
+#: includes/steps/class-step-approval.php:732
 msgid "Entry Rejected"
 msgstr "Inzending Afgekeurd"
 
-#: includes/steps/class-step-approval.php:769
+#: includes/steps/class-step-approval.php:763
 #: includes/steps/class-step-user-input.php:572
 msgid "A note is required"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:781
+#: includes/steps/class-step-approval.php:775
 msgid "The note field is required."
 msgstr ""
 
-#: includes/steps/class-step-approval.php:789
+#: includes/steps/class-step-approval.php:783
 msgid "Pending Approval"
 msgstr "In afwachting van Goedkeuring"
 
-#: includes/steps/class-step-approval.php:827
+#: includes/steps/class-step-approval.php:821
 msgid "(Missing)"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:890
-#: includes/steps/class-step-approval.php:1125
+#: includes/steps/class-step-approval.php:884
+#: includes/steps/class-step-approval.php:1119
 msgid "Approve"
 msgstr "Goedkeuren"
 
-#: includes/steps/class-step-approval.php:894
-#: includes/steps/class-step-approval.php:1174
+#: includes/steps/class-step-approval.php:888
+#: includes/steps/class-step-approval.php:1168
 msgid "Reject"
 msgstr "Afkeuren"
 
-#: includes/steps/class-step-approval.php:899
+#: includes/steps/class-step-approval.php:893
 msgid "Revert"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:1217
+#: includes/steps/class-step-approval.php:1211
 msgid "Error: step already processed."
 msgstr "Fout: deze stap is al uitgevoerd. "
 
@@ -1628,20 +1628,20 @@ msgstr ""
 msgid "Pending Input"
 msgstr "In afwachting van Input"
 
-#: includes/steps/class-step-webhook.php:21
-#: includes/steps/class-step-webhook.php:31
+#: includes/steps/class-step-webhook.php:30
+#: includes/steps/class-step-webhook.php:40
 msgid "Outgoing Webhook"
 msgstr "Uitgaande Webhook"
 
-#: includes/steps/class-step-webhook.php:36
+#: includes/steps/class-step-webhook.php:45
 msgid "Outgoing Webhook URL"
 msgstr "Uitgaande Webhook URL"
 
-#: includes/steps/class-step-webhook.php:41
+#: includes/steps/class-step-webhook.php:50
 msgid "Request Method"
 msgstr "Verzoek Methode"
 
-#: includes/steps/class-step-webhook.php:65
+#: includes/steps/class-step-webhook.php:74
 msgid "Format"
 msgstr "Formaat"
 

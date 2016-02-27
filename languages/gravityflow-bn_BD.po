@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2016-02-14 17:23:41+00:00\n"
+"POT-Creation-Date: 2016-02-20 15:51:17+00:00\n"
 "PO-Revision-Date: 2016-02-15 10:28+0000\n"
 "Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
 "Language-Team: Bengali (Bangladesh) (http://www.transifex.com/gravityflow/gravityflow/language/bn_BD/)\n"
@@ -24,14 +24,14 @@ msgstr ""
 "X-Textdomain-Support: yes\n"
 
 #: class-gravity-flow.php:257 includes/fields/class-field-user.php:55
-#: includes/steps/class-step-approval.php:828
+#: includes/steps/class-step-approval.php:822
 #: includes/steps/class-step-user-input.php:727
 #: includes/steps/class-step-user-input.php:891
 msgid "User"
 msgstr "ব্যবহারকরী"
 
 #: class-gravity-flow.php:262 includes/fields/class-field-role.php:55
-#: includes/steps/class-step-approval.php:822
+#: includes/steps/class-step-approval.php:816
 #: includes/steps/class-step-user-input.php:745
 msgid "Role"
 msgstr ""
@@ -69,7 +69,7 @@ msgstr "ব্যবহারকারী (যিনি যোক করেছ�
 
 #: class-gravity-flow.php:638
 #: includes/fields/class-field-assignee-select.php:151
-#: includes/pages/class-status.php:301
+#: includes/pages/class-status.php:310
 msgid "Fields"
 msgstr "ফিল্ড"
 
@@ -78,7 +78,7 @@ msgid "Step Type"
 msgstr "ধাপের প্রকার"
 
 #: class-gravity-flow.php:733 class-gravity-flow.php:737
-#: includes/pages/class-support.php:86
+#: includes/pages/class-support.php:96
 msgid "Name"
 msgstr "নাম"
 
@@ -173,8 +173,8 @@ msgid "Delay"
 msgstr "দেড়ি"
 
 #: class-gravity-flow.php:1246 class-gravity-flow.php:1403
-#: includes/pages/class-activity.php:33 includes/pages/class-activity.php:58
-#: includes/pages/class-status.php:660
+#: includes/pages/class-activity.php:42 includes/pages/class-activity.php:67
+#: includes/pages/class-status.php:669
 msgid "Date"
 msgstr "তারিখ"
 
@@ -272,8 +272,8 @@ msgstr ""
 msgid "You don't have any steps configured. Let's go %screate one%s!"
 msgstr ""
 
-#: class-gravity-flow.php:1872 includes/pages/class-status.php:1119
-#: includes/pages/class-status.php:1124
+#: class-gravity-flow.php:1872 includes/pages/class-status.php:1128
+#: includes/pages/class-status.php:1133
 msgid "Status:"
 msgstr ""
 
@@ -281,8 +281,8 @@ msgstr ""
 msgid "Entry Id"
 msgstr ""
 
-#: class-gravity-flow.php:2019 includes/pages/class-inbox.php:85
-#: includes/pages/class-inbox.php:147
+#: class-gravity-flow.php:2019 includes/pages/class-inbox.php:94
+#: includes/pages/class-inbox.php:156
 msgid "Submitted"
 msgstr "উপস্থাপিত"
 
@@ -295,7 +295,7 @@ msgid "Submitted by"
 msgstr "উপস্থাপন করেছেন"
 
 #: class-gravity-flow.php:2042 class-gravity-flow.php:4479
-#: includes/pages/class-status.php:673
+#: includes/pages/class-status.php:682
 #: includes/steps/class-step-user-input.php:891
 msgid "Status"
 msgstr "অবস্থা"
@@ -304,7 +304,7 @@ msgstr "অবস্থা"
 msgid "Expires"
 msgstr ""
 
-#: class-gravity-flow.php:2059 includes/steps/class-step-approval.php:799
+#: class-gravity-flow.php:2059 includes/steps/class-step-approval.php:793
 #: includes/steps/class-step-user-input.php:697
 msgid "Queued"
 msgstr ""
@@ -333,7 +333,7 @@ msgstr "ওয়ার্কফ্লো বাতিল করুন"
 msgid "Restart this step"
 msgstr "এই ধাপটি আবার শুরু করুন"
 
-#: class-gravity-flow.php:2121 includes/pages/class-status.php:199
+#: class-gravity-flow.php:2121 includes/pages/class-status.php:208
 msgid "Restart Workflow"
 msgstr ""
 
@@ -341,7 +341,7 @@ msgstr ""
 msgid "Send to step:"
 msgstr ""
 
-#: class-gravity-flow.php:2138 includes/pages/class-status.php:366
+#: class-gravity-flow.php:2138 includes/pages/class-status.php:375
 msgid "Apply"
 msgstr ""
 
@@ -491,7 +491,7 @@ msgstr ""
 msgid "Oops! We could not locate your entry."
 msgstr ""
 
-#: class-gravity-flow.php:2866 includes/steps/class-step-approval.php:1212
+#: class-gravity-flow.php:2866 includes/steps/class-step-approval.php:1206
 msgid "Error: incorrect entry."
 msgstr ""
 
@@ -551,12 +551,12 @@ msgstr ""
 msgid "Workflow Step restarted."
 msgstr ""
 
-#: class-gravity-flow.php:3198 includes/class-api.php:159
-#: includes/pages/class-status.php:1194
+#: class-gravity-flow.php:3198 includes/class-api.php:165
+#: includes/pages/class-status.php:1203
 msgid "Workflow restarted."
 msgstr ""
 
-#: class-gravity-flow.php:3207 includes/class-api.php:202
+#: class-gravity-flow.php:3207 includes/class-api.php:208
 msgid "Sent to step: %s"
 msgstr ""
 
@@ -647,11 +647,11 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: class-gravity-flow.php:4480 includes/pages/class-help.php:14
+#: class-gravity-flow.php:4480 includes/pages/class-help.php:23
 msgid "Help"
 msgstr ""
 
-#: class-gravity-flow.php:4481 includes/pages/class-support.php:67
+#: class-gravity-flow.php:4481 includes/pages/class-support.php:77
 msgid "Support"
 msgstr "সহায়তা কেন্দ্র"
 
@@ -663,12 +663,12 @@ msgid "Complete"
 msgstr ""
 
 #: class-gravity-flow.php:4510 includes/steps/class-step-approval.php:31
-#: includes/steps/class-step-approval.php:795
+#: includes/steps/class-step-approval.php:789
 msgid "Approved"
 msgstr ""
 
 #: class-gravity-flow.php:4513 includes/steps/class-step-approval.php:25
-#: includes/steps/class-step-approval.php:797
+#: includes/steps/class-step-approval.php:791
 msgid "Rejected"
 msgstr ""
 
@@ -676,7 +676,7 @@ msgstr ""
 msgid "Oops! We couldn't find your lead. Please try again"
 msgstr ""
 
-#: class-gravity-flow.php:4614 includes/pages/class-entry-detail.php:47
+#: class-gravity-flow.php:4614 includes/pages/class-entry-detail.php:56
 msgid "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete"
 msgstr ""
 
@@ -733,277 +733,277 @@ msgid "Forbidden"
 msgstr ""
 
 #: includes/fields/class-field-assignee-select.php:64
-#: includes/pages/class-reports.php:290 includes/pages/class-reports.php:348
-#: includes/pages/class-reports.php:489
+#: includes/pages/class-reports.php:299 includes/pages/class-reports.php:357
+#: includes/pages/class-reports.php:498
 msgid "Assignee"
 msgstr ""
 
-#: includes/pages/class-activity.php:20 includes/pages/class-reports.php:44
+#: includes/pages/class-activity.php:29 includes/pages/class-reports.php:53
 msgid "You don't have permission to view this page"
 msgstr ""
 
-#: includes/pages/class-activity.php:32
+#: includes/pages/class-activity.php:41
 msgid "Event ID"
 msgstr ""
 
-#: includes/pages/class-activity.php:34 includes/pages/class-activity.php:63
-#: includes/pages/class-inbox.php:81 includes/pages/class-inbox.php:124
-#: includes/pages/class-reports.php:124 includes/pages/class-status.php:662
+#: includes/pages/class-activity.php:43 includes/pages/class-activity.php:72
+#: includes/pages/class-inbox.php:90 includes/pages/class-inbox.php:133
+#: includes/pages/class-reports.php:133 includes/pages/class-status.php:671
 msgid "Form"
 msgstr ""
 
-#: includes/pages/class-activity.php:35 includes/pages/class-activity.php:68
+#: includes/pages/class-activity.php:44 includes/pages/class-activity.php:77
 msgid "Entry ID"
 msgstr ""
 
-#: includes/pages/class-activity.php:36 includes/pages/class-activity.php:73
+#: includes/pages/class-activity.php:45 includes/pages/class-activity.php:82
 msgid "Type"
 msgstr ""
 
-#: includes/pages/class-activity.php:37 includes/pages/class-activity.php:78
-#: includes/pages/class-activity.php:108
+#: includes/pages/class-activity.php:46 includes/pages/class-activity.php:87
+#: includes/pages/class-activity.php:117
 msgid "Event"
 msgstr ""
 
-#: includes/pages/class-activity.php:38 includes/pages/class-activity.php:96
-#: includes/pages/class-inbox.php:84 includes/pages/class-inbox.php:136
-#: includes/pages/class-reports.php:228 includes/pages/class-reports.php:490
-#: includes/pages/class-status.php:669
+#: includes/pages/class-activity.php:47 includes/pages/class-activity.php:105
+#: includes/pages/class-inbox.php:93 includes/pages/class-inbox.php:145
+#: includes/pages/class-reports.php:237 includes/pages/class-reports.php:499
+#: includes/pages/class-status.php:678
 msgid "Step"
 msgstr ""
 
-#: includes/pages/class-activity.php:39
+#: includes/pages/class-activity.php:48
 msgid "Duration"
 msgstr ""
 
-#: includes/pages/class-activity.php:53 includes/pages/class-inbox.php:79
-#: includes/pages/class-inbox.php:118 includes/pages/class-status.php:658
+#: includes/pages/class-activity.php:62 includes/pages/class-inbox.php:88
+#: includes/pages/class-inbox.php:127 includes/pages/class-status.php:667
 msgid "ID"
 msgstr ""
 
-#: includes/pages/class-activity.php:132
+#: includes/pages/class-activity.php:141
 msgid "Waiting for workflow activity"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:58
+#: includes/pages/class-entry-detail.php:67
 msgid "Ajax error while deleting file."
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:111
+#: includes/pages/class-entry-detail.php:120
 msgid "Workflow Entry #"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:111
-#: includes/pages/class-status.php:351
+#: includes/pages/class-entry-detail.php:120
+#: includes/pages/class-status.php:360
 msgid "Workflow Form"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:169
-#: includes/pages/class-print-entries.php:138
+#: includes/pages/class-entry-detail.php:178
+#: includes/pages/class-print-entries.php:147
 msgid "You don't have permission to view this entry."
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:195
-#: includes/pages/class-status.php:196
+#: includes/pages/class-entry-detail.php:205
+#: includes/pages/class-status.php:205
 msgid "Print"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:201
+#: includes/pages/class-entry-detail.php:211
 msgid "include timeline"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:258
+#: includes/pages/class-entry-detail.php:268
 msgid "Timeline"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:311
+#: includes/pages/class-entry-detail.php:321
 msgid "Workflow Submitted"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:360
-#: includes/pages/class-print-entries.php:79
+#: includes/pages/class-entry-detail.php:370
+#: includes/pages/class-print-entries.php:88
 msgid "Entry # "
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:369
+#: includes/pages/class-entry-detail.php:379
 msgid "show empty fields"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:412
-#: includes/pages/class-entry-detail.php:584
+#: includes/pages/class-entry-detail.php:423
+#: includes/pages/class-entry-detail.php:596
 msgid "Order"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:614
+#: includes/pages/class-entry-detail.php:626
 msgid "Product"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:615
+#: includes/pages/class-entry-detail.php:627
 msgid "Qty"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:616
+#: includes/pages/class-entry-detail.php:628
 msgid "Unit Price"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:617
+#: includes/pages/class-entry-detail.php:629
 msgid "Price"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:677
+#: includes/pages/class-entry-detail.php:689
 msgid "Total"
 msgstr ""
 
-#: includes/pages/class-inbox.php:83 includes/pages/class-inbox.php:130
-#: includes/pages/class-status.php:665
+#: includes/pages/class-inbox.php:92 includes/pages/class-inbox.php:139
+#: includes/pages/class-status.php:674
 msgid "Submitter"
 msgstr "উপস্থাপক"
 
-#: includes/pages/class-inbox.php:99 includes/pages/class-status.php:705
+#: includes/pages/class-inbox.php:108 includes/pages/class-status.php:714
 msgid "Last Updated"
 msgstr ""
 
-#: includes/pages/class-inbox.php:178
+#: includes/pages/class-inbox.php:187
 msgid "Last_Updated"
 msgstr ""
 
-#: includes/pages/class-inbox.php:212
+#: includes/pages/class-inbox.php:221
 msgid "No pending tasks"
 msgstr ""
 
-#: includes/pages/class-print-entries.php:58
+#: includes/pages/class-print-entries.php:67
 msgid "Form Id and Lead Id are required parameters."
 msgstr ""
 
-#: includes/pages/class-print-entries.php:79
+#: includes/pages/class-print-entries.php:88
 msgid "Bulk Print"
 msgstr ""
 
-#: includes/pages/class-reports.php:67 includes/pages/class-reports.php:507
+#: includes/pages/class-reports.php:76 includes/pages/class-reports.php:516
 msgid "Filter"
 msgstr ""
 
-#: includes/pages/class-reports.php:118 includes/pages/class-reports.php:170
-#: includes/pages/class-reports.php:222 includes/pages/class-reports.php:284
-#: includes/pages/class-reports.php:342 includes/pages/class-reports.php:401
+#: includes/pages/class-reports.php:127 includes/pages/class-reports.php:179
+#: includes/pages/class-reports.php:231 includes/pages/class-reports.php:293
+#: includes/pages/class-reports.php:351 includes/pages/class-reports.php:410
 msgid "No data to display"
 msgstr "দেখানোর মত কোন তথ্য নেই"
 
-#: includes/pages/class-reports.php:124 includes/pages/class-reports.php:145
-#: includes/pages/class-reports.php:176 includes/pages/class-reports.php:197
-#: includes/pages/class-reports.php:407 includes/pages/class-reports.php:433
+#: includes/pages/class-reports.php:133 includes/pages/class-reports.php:154
+#: includes/pages/class-reports.php:185 includes/pages/class-reports.php:206
+#: includes/pages/class-reports.php:416 includes/pages/class-reports.php:442
 msgid "Workflows Completed"
 msgstr "ওয়ার্কফ্লো সমাপ্ত"
 
-#: includes/pages/class-reports.php:124 includes/pages/class-reports.php:146
-#: includes/pages/class-reports.php:176 includes/pages/class-reports.php:198
-#: includes/pages/class-reports.php:228 includes/pages/class-reports.php:255
-#: includes/pages/class-reports.php:290 includes/pages/class-reports.php:317
-#: includes/pages/class-reports.php:348 includes/pages/class-reports.php:377
-#: includes/pages/class-reports.php:407 includes/pages/class-reports.php:434
+#: includes/pages/class-reports.php:133 includes/pages/class-reports.php:155
+#: includes/pages/class-reports.php:185 includes/pages/class-reports.php:207
+#: includes/pages/class-reports.php:237 includes/pages/class-reports.php:264
+#: includes/pages/class-reports.php:299 includes/pages/class-reports.php:326
+#: includes/pages/class-reports.php:357 includes/pages/class-reports.php:386
+#: includes/pages/class-reports.php:416 includes/pages/class-reports.php:443
 msgid "Average Duration (hours)"
 msgstr "গড় স্থায়িত্ব (ঘন্টা)"
 
-#: includes/pages/class-reports.php:134
+#: includes/pages/class-reports.php:143
 msgid "Forms"
 msgstr "ফর্ম গুলো"
 
-#: includes/pages/class-reports.php:135 includes/pages/class-reports.php:187
+#: includes/pages/class-reports.php:144 includes/pages/class-reports.php:196
 msgid "Workflows completed and average duration"
 msgstr "ওয়ার্কফ্লো শেষ এবং গড় স্থায়িত্ব"
 
-#: includes/pages/class-reports.php:176 includes/pages/class-reports.php:407
-#: includes/pages/class-reports.php:488
+#: includes/pages/class-reports.php:185 includes/pages/class-reports.php:416
+#: includes/pages/class-reports.php:497
 msgid "Month"
 msgstr "মাস"
 
-#: includes/pages/class-reports.php:228 includes/pages/class-reports.php:254
-#: includes/pages/class-reports.php:290 includes/pages/class-reports.php:316
-#: includes/pages/class-reports.php:348 includes/pages/class-reports.php:376
+#: includes/pages/class-reports.php:237 includes/pages/class-reports.php:263
+#: includes/pages/class-reports.php:299 includes/pages/class-reports.php:325
+#: includes/pages/class-reports.php:357 includes/pages/class-reports.php:385
 msgid "Completed"
 msgstr "সমাপ্ত"
 
-#: includes/pages/class-reports.php:244
+#: includes/pages/class-reports.php:253
 msgid "Step completed and average duration"
 msgstr "ধাপ  শেষ এবং গড় স্থায়িত্ব"
 
-#: includes/pages/class-reports.php:306 includes/pages/class-reports.php:366
+#: includes/pages/class-reports.php:315 includes/pages/class-reports.php:375
 msgid "Step completed and average duration by assignee"
 msgstr "প্রতিনিধি কর্তৃক স্টেপ  শেষ এবং গড় স্থায়িত্ব"
 
-#: includes/pages/class-reports.php:423
+#: includes/pages/class-reports.php:432
 msgid "Workflows completed and average duration by month"
 msgstr "প্রতি মাসে ওয়ার্কফ্লো শেষ এবং গড় স্থায়িত্ব"
 
-#: includes/pages/class-reports.php:453
+#: includes/pages/class-reports.php:462
 msgid "Select A Workflow Form"
 msgstr "এখাম থেকে একটা ওয়ার্কফ্লো নির্বাচন করুন"
 
-#: includes/pages/class-reports.php:471
+#: includes/pages/class-reports.php:480
 msgid "Last 12 months"
 msgstr "শেষ ১২ মাস"
 
-#: includes/pages/class-reports.php:472
+#: includes/pages/class-reports.php:481
 msgid "Last 6 months"
 msgstr "শেষ ৬ মাস"
 
-#: includes/pages/class-reports.php:473
+#: includes/pages/class-reports.php:482
 msgid "Last 3 months"
 msgstr "শেষ ৩ মাস"
 
-#: includes/pages/class-reports.php:516
+#: includes/pages/class-reports.php:525
 msgid "All Steps"
 msgstr "সকল ধাপ গুলো"
 
-#: includes/pages/class-status.php:74
+#: includes/pages/class-status.php:83
 msgid "Export"
 msgstr "বাহিরে সংরক্ষন করুন"
 
-#: includes/pages/class-status.php:80
+#: includes/pages/class-status.php:89
 msgid "The destination file is not writeable"
 msgstr "গন্তব্য ফাইলটি লেখার জন্য অনুমুদিত নয়"
 
-#: includes/pages/class-status.php:203
+#: includes/pages/class-status.php:212
 msgid "entry"
 msgstr "গৃহীত তথ্য"
 
-#: includes/pages/class-status.php:204
+#: includes/pages/class-status.php:213
 msgid "entries"
 msgstr "গৃহীত গুলো"
 
-#: includes/pages/class-status.php:249 includes/pages/class-submit.php:11
+#: includes/pages/class-status.php:258 includes/pages/class-submit.php:21
 msgid "You haven't submitted any workflow forms yet."
 msgstr "আপনি কোন ওয়ার্কফ্লো ফর্ম জমা দেন নি"
 
-#: includes/pages/class-status.php:267
+#: includes/pages/class-status.php:276
 msgid "All"
 msgstr "সবগুলো"
 
-#: includes/pages/class-status.php:334
+#: includes/pages/class-status.php:343
 msgid "Start:"
 msgstr "শুরু:"
 
-#: includes/pages/class-status.php:340
+#: includes/pages/class-status.php:349
 msgid "End:"
 msgstr "শেষ:"
 
-#: includes/pages/class-status.php:373
+#: includes/pages/class-status.php:382
 msgid "Clear Filter"
 msgstr "ফিল্টর পরিষ্কার করুন"
 
-#: includes/pages/class-status.php:376
+#: includes/pages/class-status.php:385
 msgid "Search"
 msgstr "খুজুন"
 
-#: includes/pages/class-status.php:558
+#: includes/pages/class-status.php:567
 msgid "(deleted)"
 msgstr ""
 
-#: includes/pages/class-status.php:656
+#: includes/pages/class-status.php:665
 msgid "Checkbox"
 msgstr "নির্বাচন বক্স"
 
-#: includes/pages/class-status.php:922
+#: includes/pages/class-status.php:931
 #: includes/steps/class-step-approval.php:56
 #: includes/steps/class-step-approval.php:228
 #: includes/steps/class-step-notification.php:75
@@ -1011,40 +1011,40 @@ msgstr "নির্বাচন বক্স"
 msgid "Select"
 msgstr "নির্বাচন করুন"
 
-#: includes/pages/class-support.php:71
+#: includes/pages/class-support.php:81
 msgid "Please check the documentation before submitting a support request"
 msgstr "সহায়তার জন্য সহায্য চাওয়ার আগে আগের তথ্যগুলো দেখুন"
 
-#: includes/pages/class-support.php:92
-#: includes/steps/class-step-approval.php:818
+#: includes/pages/class-support.php:102
+#: includes/steps/class-step-approval.php:812
 #: includes/steps/class-step-user-input.php:734
 #: includes/steps/class-step-user-input.php:887
 msgid "Email"
 msgstr "ইমেইল"
 
-#: includes/pages/class-support.php:99
+#: includes/pages/class-support.php:109
 msgid "General comment or suggestion"
 msgstr "সাধারন মতামত"
 
-#: includes/pages/class-support.php:104
+#: includes/pages/class-support.php:114
 msgid "Feature request"
 msgstr "বিশেষ অনুরোধ"
 
-#: includes/pages/class-support.php:110
+#: includes/pages/class-support.php:120
 msgid "Bug report"
 msgstr "সমস্যা জানান"
 
-#: includes/pages/class-support.php:114
+#: includes/pages/class-support.php:124
 msgid "Suggestion or steps to reproduce the issue."
 msgstr "সমস্যা সমাধানের পরামর্শ অথবা ধাপ"
 
-#: includes/pages/class-support.php:120
+#: includes/pages/class-support.php:130
 msgid ""
 "Send debugging information. (This includes some system information and a "
 "list of active plugins. No forms or entry data will be sent.)"
 msgstr ""
 
-#: includes/pages/class-support.php:123
+#: includes/pages/class-support.php:133
 msgid "Send"
 msgstr "পাঠান"
 
@@ -1357,8 +1357,8 @@ msgid "Reverted to step"
 msgstr ""
 
 #: includes/steps/class-step-approval.php:687
-#: includes/steps/class-step-approval.php:720
-#: includes/steps/class-step-approval.php:867
+#: includes/steps/class-step-approval.php:717
+#: includes/steps/class-step-approval.php:861
 #: includes/steps/class-step-user-input.php:538
 #: includes/steps/class-step-user-input.php:813
 msgid "Note"
@@ -1372,50 +1372,50 @@ msgstr ""
 msgid "Approved."
 msgstr ""
 
-#: includes/steps/class-step-approval.php:712
+#: includes/steps/class-step-approval.php:711
 msgid "Rejected."
 msgstr ""
 
-#: includes/steps/class-step-approval.php:735
+#: includes/steps/class-step-approval.php:729
 msgid "Entry Approved"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:738
+#: includes/steps/class-step-approval.php:732
 msgid "Entry Rejected"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:769
+#: includes/steps/class-step-approval.php:763
 #: includes/steps/class-step-user-input.php:572
 msgid "A note is required"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:781
+#: includes/steps/class-step-approval.php:775
 msgid "The note field is required."
 msgstr ""
 
-#: includes/steps/class-step-approval.php:789
+#: includes/steps/class-step-approval.php:783
 msgid "Pending Approval"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:827
+#: includes/steps/class-step-approval.php:821
 msgid "(Missing)"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:890
-#: includes/steps/class-step-approval.php:1125
+#: includes/steps/class-step-approval.php:884
+#: includes/steps/class-step-approval.php:1119
 msgid "Approve"
 msgstr "অনুমোদন করুন"
 
-#: includes/steps/class-step-approval.php:894
-#: includes/steps/class-step-approval.php:1174
+#: includes/steps/class-step-approval.php:888
+#: includes/steps/class-step-approval.php:1168
 msgid "Reject"
 msgstr "বতিল করুন"
 
-#: includes/steps/class-step-approval.php:899
+#: includes/steps/class-step-approval.php:893
 msgid "Revert"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:1217
+#: includes/steps/class-step-approval.php:1211
 msgid "Error: step already processed."
 msgstr ""
 
@@ -1627,20 +1627,20 @@ msgstr ""
 msgid "Pending Input"
 msgstr ""
 
-#: includes/steps/class-step-webhook.php:21
-#: includes/steps/class-step-webhook.php:31
+#: includes/steps/class-step-webhook.php:30
+#: includes/steps/class-step-webhook.php:40
 msgid "Outgoing Webhook"
 msgstr ""
 
-#: includes/steps/class-step-webhook.php:36
+#: includes/steps/class-step-webhook.php:45
 msgid "Outgoing Webhook URL"
 msgstr ""
 
-#: includes/steps/class-step-webhook.php:41
+#: includes/steps/class-step-webhook.php:50
 msgid "Request Method"
 msgstr ""
 
-#: includes/steps/class-step-webhook.php:65
+#: includes/steps/class-step-webhook.php:74
 msgid "Format"
 msgstr ""
 

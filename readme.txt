@@ -55,6 +55,36 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+
+= 1.3.0.7 =
+- Added the gravityflow_inbox_args filter so the inbox criteria can be modified.
+- Added the 'Required Reverted or Rejected' to the options in the Wordkflow note setting.
+- Updated the entry meta so that the status columns don't appear automatically in the Gravity Forms entry list.
+
+= 1.3.0.6 =
+- Added the gravityflow-instructions and gravityflow-timeline CSS classes.
+- Fixed an issue with the styles of the timeline.
+
+= 1.3.0.5 =
+- Added the gravityflow_status_args filter to allow the status table to be modified.
+
+= 1.3.0.4 =
+- Fixed an issue with Gravity_Flow_API::get_current_step() for entries that have not started the workflow.
+
+= 1.3.0.3 =
+- Added the gravityflow_webhook_args_[Form ID] filter immediately after the gravityflow_webhook_args filter.
+- Fixed an issue with the support form.
+- Fixed an issue with the user input step where conditional logic is not disabled correctly in some cases.
+
+= 1.3.0.2 =
+- Fixed an issue with the user input step where the save and continue button might appear.
+
+= 1.3.0.1 =
+- Updated the styles of the workflow detail page for narrow screens to display the entry first and then the info box below.
+- Fixed an issue with the update button on the user input step under certain conditions.
+- Fixed an issue with the field label showing the admin label on approval steps.
+
+= 1.3 =
 - Added support for the id, user_email and display_name modifiers for the User field merge tag.
 - Added the gravityflow_entry_count_step_list so the entry counts on the step list page can be turned off.
     Example: add_filter( 'gravityflow_entry_count_step_list', '__return_false' );
@@ -70,7 +100,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
     }
 - Added the gravityflow_update_button_text_user_input filter to allow the button text to be changed on the user input step.
     Example:
-        add_filter( 'gravityflow_update_button_text_user_input', 'sh_gravityflow_update_button_text_user_input', 10, 2 );
+        add_filter( 'gravityflow_update_button_text_user_input', 'sh_gravityflow_update_button_text_user_input', 10, 3 );
         function sh_gravityflow_update_button_text_user_input( $text, $form_id, $step ) {
             return 'Submit';
         }
