@@ -1,13 +1,4 @@
-.has-right-sidebar .inner-sidebar {
-    display: block;
-}
-.inner-sidebar {
-    clear: right;
-    display: none;
-    float: right;
-    position: relative;
-
-}
+/* ENTRY DETAIL */
 table.entry-detail-view {
     width:100%;
     border:0;
@@ -18,24 +9,49 @@ table.entry-detail-view td{
     border-right:0;
 }
 .postbox {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #e5e5e5;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
     min-width: 200px;
     position: relative;
-    width:100%;
+    line-height: 1;
+    margin-bottom: 20px;
+    padding: 0;
+    font-size:11px;
 }
-.has-right-sidebar #post-body-content {
-    float: none;
-    margin-right: 280px;
-    width: auto;
+
+.wrap {
+    margin: 10px 20px 0 2px;
 }
+
+#post-body-content {
+    float: left;
+    min-width: 420px;
+    width: 100%;
+}
+#poststuff #post-body.columns-2 {
+    margin-right: 220px;
+}
+
+#poststuff .postbox-container {
+    width: 100%;
+}
+
 #post-body-content, .edit-form-section {
     margin-bottom: 20px;
 }
+#post-body.columns-2 #postbox-container-1 {
+    float: right;
+    margin-right: -300px;
+    width: 280px;
+}
 
-.has-right-sidebar #post-body {
-    clear: left;
+#post-body.columns-2 #postbox-container-2 {
     float: left;
-    width: 100%;
-    margin-right: -2000px;
+}
+
+#postbox-container-2 .postbox {
+    border: 0;
 }
 
 .gravityflow_workflow_wrap{
@@ -63,25 +79,11 @@ table.entry-detail-view td{
     width: auto;
 }
 
-.inner-sidebar .postbox {
-    background: #fff none repeat scroll 0 0;
-    border: 1px solid #e5e5e5;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
-    min-width: 225px;
-    position: relative;
-    width:200px;
-    font-size:11px;
-}
-.postbox, .stuffbox {
-    line-height: 1;
-    margin-bottom: 20px;
-    padding: 0;
-}
-.inner-sidebar hr {
+.gravityflow_workflow_wrap hr {
     margin:10px;
 }
 
-.inner-sidebar .button{
+.gravityflow_workflow_wrap .button{
     background: #f7f7f7 none repeat scroll 0 0;
     border-color: #cccccc;
     box-shadow: 0 1px 0 #fff inset, 0 1px 0 rgba(0, 0, 0, 0.08);
@@ -103,14 +105,34 @@ table.entry-detail-view td{
     white-space: nowrap;
 }
 
-.inner-sidebar input[type=radio]{
+.postbox-container input[type=radio]{
     margin-right:5px;
     white-space: nowrap;
 }
 #gravityflow-note{
     margin-top:5px;
+    clear:both;
 }
 
+@media screen and (max-width: 880px) {
+    #post-body-content{
+        min-width:0;
+    }
+    #post-body.columns-2 #postbox-container-1 {
+        margin-right: 0;
+        width: 100%;
+    }
+    #poststuff #post-body.columns-2 {
+        margin-right: 0;
+    }
+}
+
+.detail-view-print{
+    margin-bottom: 20px;
+}
+
+
+/* INBOX */
 
 table#gravityflow-inbox thead tr {background: #FFF}
 table#gravityflow-inbox tr:nth-child(even) {background: #f9f9f9}
@@ -181,23 +203,7 @@ table.entry-products col.entry-products-col4{
     width:140px;
 }
 
-.has-right-sidebar .inner-sidebar{
-    width:250px;
-}
-
-.inner-sidebar .postbox{
-    width:100%;
-}
-
 @media screen and (max-width: 700px) {
-    .has-right-sidebar #post-body {
-        clear: left;
-        float: right;
-        width: 100%;
-    }
-    .has-right-sidebar .inner-sidebar{
-        width:100%;
-    }
 
     table#gravityflow-inbox {
         border: 0;
@@ -235,7 +241,7 @@ table.entry-products col.entry-products-col4{
         padding:5px;
     }
 
-    .has-right-sidebar #post-body {
+    #post-body {
         margin-right: 0;
         padding-right: 0;
     }
@@ -490,15 +496,11 @@ table.wp-list-table.entries td[data-label="ID"] {
 
 
 @media screen and (max-width: 700px) {
-	.has-right-sidebar #post-body {
+	#post-body {
 		clear: left;
 		float: right;
 		width: 100%;
 	}
-	.has-right-sidebar .inner-sidebar{
-		width:100%;
-	}
-
 	table.wp-list-table.entries {
 		border: 0;
 		width:100%;
