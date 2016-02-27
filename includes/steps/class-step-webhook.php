@@ -162,6 +162,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		);
 
 		$args = apply_filters( 'gravityflow_webhook_args', $args, $entry, $this );
+		$args = apply_filters( 'gravityflow_webhook_args_' . $this->get_form_id(), $args, $entry, $this );
 
 		$response = wp_remote_request( $url, $args );
 
