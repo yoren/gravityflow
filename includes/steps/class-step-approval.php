@@ -448,6 +448,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 		if ( ! empty( $revert_field ) ) {
 			$note_mode_setting['choices'][] = array( 'value' => 'required_if_reverted', 'label' => esc_html__( 'Required if reverted', 'gravityflow' ) );
+			$note_mode_setting['choices'][] = array( 'value' => 'required_if_reverted_or_rejected', 'label' => esc_html__( 'Required if reverted or rejected', 'gravityflow' ) );
 			$settings['fields'][] = $revert_field;
 		}
 
@@ -755,6 +756,10 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				break;
 			case 'required_if_reverted' :
 				if ( $new_status == 'revert' && empty( $note ) ) {
+					$valid = false;
+				}
+			case 'required_if_reverted_or_rejected' :
+				if ( ( $new_status == 'revert' || $new_status == 'rejected' ) && empty( $note ) ) {
 					$valid = false;
 				}
 		}
