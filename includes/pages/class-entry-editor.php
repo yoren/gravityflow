@@ -122,6 +122,9 @@ class Gravity_Flow_Entry_Editor {
 
 		$form['fields'] = $fields;
 
+		// disable save and continue
+		unset( $form['save'] );
+
 		return $form;
 	}
 
