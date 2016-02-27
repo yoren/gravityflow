@@ -83,7 +83,8 @@ class Gravity_Flow_API {
 	 * @return Gravity_Flow_Step|bool
 	 */
 	public function get_current_step( $entry ) {
-		return gravity_flow()->get_current_step( $this->form_id, $entry );
+		$form = GFAPI::get_form( $this->form_id );
+		return gravity_flow()->get_current_step( $form, $entry );
 	}
 
 	/**
@@ -190,10 +191,10 @@ class Gravity_Flow_API {
 	}
 
 	/**
-	 * Sends and
+	 * Sends an entry to the specified step.
 	 *
-	 * @param $entry
-	 * @param $step_id
+	 * @param array $entry
+	 * @param int $step_id
 	 */
 	public function send_to_step( $entry, $step_id ) {
 		$current_step = $this->get_current_step( $entry );
