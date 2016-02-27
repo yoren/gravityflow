@@ -112,7 +112,7 @@
 .gravityflow-note{
 
     margin:20px 0 30px;
-
+    clear:both;
     width:100%;
 }
 #gravityflow-note-content{
