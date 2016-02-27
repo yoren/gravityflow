@@ -23,9 +23,11 @@ class Gravity_Flow_Entry_Detail {
 	 */
 	public static function entry_detail( $form, $entry, $current_step = null, $args = array() ) {
 
-		$form_id = absint( $form['id'] );
-		$form    = apply_filters( 'gform_pre_render', $form );
-		$form    = apply_filters( 'gform_pre_render_' . $form_id, $form );
+		$form_id      = absint( $form['id'] );
+		$ajax         = false;
+		$field_values = null;
+		$form         = apply_filters( 'gform_pre_render', $form, $ajax, $field_values );
+		$form         = apply_filters( 'gform_pre_render_' . $form_id, $form, $ajax, $field_values );
 
 		$defaults = array(
 			'display_empty_fields' => true,
