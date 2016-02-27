@@ -154,7 +154,7 @@ class Gravity_Flow_Support {
 			$is_active = in_array( $key, $active_plugins );
 			if ( $is_active ) {
 				$name      = substr( $key, 0, strpos( $key, '/' ) );
-				$plugins[] = array( $name . 'v' . $plugin['Version'] );
+				$plugins[] = $name . 'v' . $plugin['Version'];
 			}
 		}
 		$plugins = join( ', ', $plugins );
