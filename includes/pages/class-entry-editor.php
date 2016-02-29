@@ -188,13 +188,15 @@ class Gravity_Flow_Entry_Editor {
 			$field->_is_entry_detail = true;
 		}
 
+		$value = apply_filters( 'gravityflow_field_value_entry_editor', $value, $field, $this->form, $this->entry, $this->step );
+
 		$html = $field->get_field_input( $this->form, $value, $this->entry );
 
 		return $html;
 	}
 
 	/**
-	 * Checks wether dynamic conditional logic is enabled.
+	 * Checks whether dynamic conditional logic is enabled.
 	 *
 	 * @return bool
 	 */
