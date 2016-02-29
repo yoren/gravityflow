@@ -60,6 +60,13 @@ abstract class Gravity_Flow_Step extends stdClass {
 	private $_entry;
 
 	/**
+	 * The assignee emails for which notifications have been processed.
+	 *
+	 * @var array
+	 */
+	private $_assignees_emailed = array();
+
+	/**
 	 * A unique key for this step type. This property must be overridden by extending classes.
 	 *
 	 * @var string
@@ -1192,6 +1199,16 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 		$notification = apply_filters( 'gravityflow_notification', $notification, $form, $entry, $this );
 
+		$to = rgar( $notification, 'to' );
+
+		if ( in_array( $to, $this->_assignees_emailed ) ) {
+			$this->log_debug( __METHOD__ . '() - aborting. assignee has already been sent a notification.' );
+
+			return;
+		}
+
+		$this->_assignees_emailed[] = $to;
+
 		$this->log_debug( __METHOD__ . '() - sending notification: ' . print_r( $notification, true ) );
 
 		GFCommon::send_notification( $notification, $form, $entry );
@@ -1202,7 +1219,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * If Gravity PDF is enabled we'll generate the appropriate PDF and attach it to the current notification
 	 *
 	 * @param array $notification The notification array currently being sent
-	 * @param sting $gpdf_id      The Gravity PDF ID
+	 * @param string $gpdf_id      The Gravity PDF ID
 	 *
 	 * @return array
 	 */
