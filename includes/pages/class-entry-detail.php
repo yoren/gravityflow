@@ -216,8 +216,11 @@ class Gravity_Flow_Entry_Detail {
 									$editable_fields = $can_update ? $current_step->get_editable_fields() : array();
 
 									if ( $can_update && $display_instructions && $current_step->instructionsEnable ) {
+										$nl2br = apply_filters( 'gravityflow_auto_format_instructions', true );
+										$nl2br = apply_filters( "gravityflow_auto_format_instructions_{$form_id}", $nl2br );
+
 										$instructions = $current_step->instructionsValue;
-										$instructions = GFCommon::replace_variables( $instructions, $form, $entry, false, true, true );
+										$instructions = GFCommon::replace_variables( $instructions, $form, $entry, false, true, $nl2br );
 										$instructions = $current_step->replace_variables( $instructions, null );
 										$instructions = wp_kses_post( $instructions );
 										?>
