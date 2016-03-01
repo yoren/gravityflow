@@ -231,7 +231,19 @@ module.exports = function(grunt) {
                     nonull: true
                 }]
             }
-        }
+        },
+
+		slack_upload: {
+			gravityflow: {
+				options: {
+					token: config.slackUpload.token,
+					filetype: 'zip',
+					file: 'gravityflow_<%= grunt.getVersion() %>.zip',
+					title:'gravityflow_<%= grunt.getVersion() %>.zip',
+					channels: config.slackUpload.channel
+				}
+			}
+		}
 
 	});
 
