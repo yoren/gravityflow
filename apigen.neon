@@ -1,0 +1,17 @@
+source:
+    - ../../includes/class-api.php
+    - ../../includes/steps/class-step.php
+    - ../../includes/steps/class-step-feed-add-on.php
+
+destination: ../../docs
+
+title: Gravity Flow
+
+groups: none
+
+tree: false
+
+noSourceCode: false
+
+exclude:
+    - includes/EDD_SL_Pluging_Updater.php

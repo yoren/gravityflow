@@ -1,0 +1,24 @@
+{
+	"name": "gravityflow",
+	"description": "Build Gravity Flow.",
+	"keywords": ["wordpress", "gravity forms"],
+	"type": "wordpress-plugin",
+	"homepage": "https://www.gravityflow.io",
+	"license": "GPL-3.0+",
+	"authors": [
+		{
+			"name": "stevehenty",
+			"email": "support@gravityflow.io",
+			"homepage": "https://gravityflow.io"
+		}
+	],
+	"support": {
+		"issues": "https://gravityflow.io"
+	},
+	"require": {
+	  	"phpunit/phpunit": "4.2.4"
+	},
+	"require-dev": {
+		"apigen/apigen": "~4.0"
+	}
+}
