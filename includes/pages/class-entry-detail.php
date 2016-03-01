@@ -478,6 +478,8 @@ class Gravity_Flow_Entry_Detail {
 				// Not needed as we're always adminOnly
 				$field->adminOnly = false;
 
+				$is_product_field = GFCommon::is_product_field( $field->type );
+
 				$display_field = true;
 
 				if ( $display_fields_mode == 'selected_fields' ) {
@@ -485,7 +487,7 @@ class Gravity_Flow_Entry_Detail {
 						$display_field = false;
 					}
 				} else {
-					if ( GFFormsModel::is_field_hidden( $form, $field, array(), $entry ) ) {
+					if ( GFFormsModel::is_field_hidden( $form, $field, array(), $entry ) || $is_product_field) {
 						$display_field = false;
 					}
 				}
@@ -525,7 +527,7 @@ class Gravity_Flow_Entry_Detail {
 						break;
 					default :
 
-						if ( GFCommon::is_product_field( $field->type ) ) {
+						if ( $is_product_field ) {
 							$has_product_fields = true;
 						}
 
