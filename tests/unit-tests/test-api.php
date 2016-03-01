@@ -28,6 +28,7 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 
 	function setUp() {
 		parent::setUp();
+
 		$this->form_id = $this->factory->form->create();
 		$this->api = new Gravity_Flow_API( $this->form_id );
 	}

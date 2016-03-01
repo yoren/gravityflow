@@ -1,0 +1,16 @@
+{
+  "dropbox" : {
+    "access_token" : "your token",
+    "upload_path" : "My Builds"
+  },
+  "s3InlineDocs" : {
+    "accessKeyId" : "your id",
+    "secretAccessKey" : "your key",
+    "bucket" : "your bucket",
+    "region" : "your region"
+  },
+  "slackUpload" : {
+    "token" : "your token",
+    "channel" : "the channel"
+  }
+}

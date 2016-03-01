@@ -31,7 +31,7 @@ class GF_UnitTest_Factory_For_Form extends GF_UnitTest_Factory_For_Thing {
 			$filename = "standard.json";
 		}
 
-		$form_json = file_get_contents( dirname( __FILE__ ) . "/../data/forms/" . $filename );
+		$form_json = file_get_contents( dirname( __FILE__ ) . "/data/forms/" . $filename );
 		$forms     = json_decode( $form_json, true );
 		$form      = $forms[0];
 
