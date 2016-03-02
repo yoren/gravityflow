@@ -109,6 +109,7 @@ class Gravity_Flow_Entry_Editor {
 		// Remove page fields
 		$existing_fields = $form['fields'];
 		$fields = array();
+		/** @var GF_Field $field */
 		foreach ( $existing_fields as $field ) {
 			if ( $field->type !== 'page' ) {
 				if ( ! in_array( $field->id, $this->step->get_editable_fields() ) ) {
@@ -116,6 +117,13 @@ class Gravity_Flow_Entry_Editor {
 				}
 				$field->adminOnly = false;
 				$field->adminLabel = '';
+
+				if ( $field->type === 'hidden' ) {
+					// Render hidden fields as text fields
+					$field       = new GF_Field_Text( $field );
+					$field->type = 'text';
+				}
+
 				$fields[] = $field;
 			}
 		}

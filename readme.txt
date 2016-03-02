@@ -62,6 +62,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
     function sh_filter_gravityflow_permission_granted_entry_detail( $permission_granted, $entry ) {
         return true;
     }
+- Fixed an issue withe the user input step where hidden fields are not displayed.
 
 = 1.3.0.8 =
 - Fixed an issue on the entry detail page for entries on the approval step and completed entries where product fields are displayed in the list of fields. Product fields are displayed in the order summary but they can also be displayed in the list by selecting the fields in the display fields step setting.
