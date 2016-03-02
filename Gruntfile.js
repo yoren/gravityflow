@@ -50,7 +50,7 @@ module.exports = function(grunt) {
 		val = gfVersion;
 
 		if ( commitId ) {
-			val += '-' + commitId;
+			val += '-' + commitId.substring(0, 7);
 		}
 
         return val;
@@ -277,7 +277,7 @@ module.exports = function(grunt) {
 				options: {
 					token: config.slackNotification.token,
 					channel: '#builds',
-					text: 'New Build for Gravity Flow Version ' + grunt.getVersion(),
+					text: 'New Build for Gravity Flow v' + gfVersion,
 					username: 'Gravity Flow',
 					as_user: false,
 					parse: 'full',
@@ -287,9 +287,8 @@ module.exports = function(grunt) {
 							'fallback': 'New Gravity Flow Build.',
 							'color': '#36a64f',
 							'pretext': '',
-							'title': 'gravityflow_<%= grunt.getVersion() %>.zip',
+							'title': 'Download',
 							'title_link': 'https://s3.amazonaws.com/gravityflow/builds/gravityflow_<%= grunt.getVersion() %>.zip',
-							'text': '',
 							'fields': [
 								{
 									'title': 'Version',
@@ -298,7 +297,7 @@ module.exports = function(grunt) {
 								},
 								{
 									'title': 'Commit ID',
-									'value': commitId,
+									'value': '<https://github.com/gravityflow/gravityflow/commit/' + commitId + '|' + commitId.substring(0, 7) + '>',
 									'short': true
 								}
 							],
