@@ -319,7 +319,7 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('minimize', [ 'uglify:gravityflow', 'cssmin:gravityflow' ]);
 	grunt.registerTask('translations', [ 'makepot', 'shell:transifex', 'potomo' ]);
-	grunt.registerTask('default', [ 'clean', 'minimize', 'translations', 'compress', 'aws_s3:upload_zip', 'slack_notifier' ]);
-	grunt.registerTask('build', [ 'clean', 'minimize', 'translations', 'phpunit', 'compress', 'dropbox', 'clean' ]);
+	grunt.registerTask('default', [ 'clean', 'minimize', 'translations', 'compress', 'aws_s3:upload_zip' ]);
+	grunt.registerTask('build', [ 'clean', 'minimize', 'translations', 'phpunit', 'compress', 'dropbox', 'aws_s3:upload_zip', 'clean' ]);
 	grunt.registerTask('publish', [ 'clean', 'minimize', 'translations', 'phpunit', 'shell:apigen', 'compress', 'aws_s3', 'clean' ]);
 };
