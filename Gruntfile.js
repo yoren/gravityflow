@@ -287,7 +287,7 @@ module.exports = function(grunt) {
 							'color': '#36a64f',
 							'pretext': '',
 							'title': 'Download',
-							'title_link': 'https://s3.amazonaws.com/gravityflow/builds/gravityflow_<%= grunt.getVersion(true) %>.zip',
+							'title_link': 'https://s3.amazonaws.com/' + config.s3UploadZip.bucket + '/builds/gravityflow_<%= grunt.getVersion(true) %>.zip',
 							'mrkdwn_in': ["pretext", "text", "fields"],
 							'fields': [
 								{
