@@ -176,6 +176,14 @@ class Gravity_Flow_Entry_Detail {
 					}
 				}
 
+				/**
+				 * Allows the the permission check to be overridden for the workflow entry detail page.
+				 *
+				 * @param bool $permission_granted Whether permission is granted to open the entry.
+				 * @param array $entry
+				 */
+				$permission_granted = apply_filters( 'gravityflow_permission_granted_entry_detail', $permission_granted, $entry );
+
 				if ( ! $permission_granted ) {
 					$permission_denied_message = esc_attr__( "You don't have permission to view this entry.", 'gravityflow' );
 					$permission_denied_message = apply_filters( 'gravityflow_permission_denied_message_entry_detail', $permission_denied_message, $current_step );
