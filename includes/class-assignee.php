@@ -141,7 +141,7 @@ class Gravity_Flow_Assignee {
 	public function get_display_name() {
 		if ( $this->get_type() == 'user_id' ) {
 			$user = get_user_by( 'id', $this->get_id() );
-			$name = $user->display_name;
+			$name = $user ? $user->display_name : $this->get_id();
 		} else {
 			$name = $this->get_id();
 		}
