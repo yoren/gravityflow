@@ -62,6 +62,18 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
     function sh_filter_gravityflow_permission_granted_entry_detail( $permission_granted, $entry ) {
         return true;
     }
+- Added the gravityflow_complete_label_user_input filter to allow the 'complete' label to be modified on the User Input step.
+    Example:
+    add_filter( 'gravityflow_complete_label_user_input', 'sh_filter_gravityflow_complete_label_user_input', 10, 2 );
+    function sh_filter_gravityflow_complete_label_user_input( $complete_label, $step ) {
+        return 'Finished editing';
+    }
+- Added the gravityflow_in_progress_label_user_input filter to allow the 'in progress' label to be modified on the User Input step.
+    Example:
+    add_filter( 'gravityflow_in_progress_label_user_input', 'sh_filter_gravityflow_in_progress_label_user_input', 10, 2 );
+    function sh_filter_gravityflow_in_progress_label_user_input( $complete_label, $step ) {
+        return 'Save for later';
+    }
 - Fixed an issue with the user input step where hidden fields are not displayed.
 - Fixed an issue with status list when displaying names of assignees whose accounts no longer exist.
 

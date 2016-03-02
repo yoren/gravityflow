@@ -835,11 +835,30 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 					<input type="hidden" id="gravityflow_status_hidden" name="gravityflow_status" value="complete" />
 					<?php
 				} else {
+
+					$in_progress_label = esc_html__( 'In progress', 'gravityflow' );
+
+					/**
+					 * Allows the 'in progress' label to be modified on the User Input step.
+					 * @params string $in_progress_label
+					 * @params Gravity_Flow_Step $this The current step.
+					 */
+					$in_progress_label = apply_filters( 'gravityflow_in_progress_label_user_input', $in_progress_label, $this );
+
+
+					$complete_label = esc_html__( 'Complete', 'gravityflow' );
+
+					/**
+					 * Allows the 'complete' label to be modified on the User Input step.
+					 * @params string $complete_label
+					 * @params Gravity_Flow_Step $this The current step.
+					 */
+					$complete_label = apply_filters( 'gravityflow_complete_label_user_input', $complete_label, $this )
 					?>
 					<br /><br />
 					<div>
-						<label for="gravityflow_in_progress"><input type="radio" id="gravityflow_in_progress" name="gravityflow_status" <?php checked( $default_status, 'in_progress' ); ?> value="in_progress" /><?php esc_html_e( 'In progress', 'gravityflow' ); ?></label>&nbsp;&nbsp;
-						<label for="gravityflow_complete"><input type="radio" id="gravityflow_complete" name="gravityflow_status" value="complete" <?php checked( $default_status, 'complete' ); ?>/><?php esc_html_e( 'Complete', 'gravityflow' ); ?></label>
+						<label for="gravityflow_in_progress"><input type="radio" id="gravityflow_in_progress" name="gravityflow_status" <?php checked( $default_status, 'in_progress' ); ?> value="in_progress" /><?php echo $in_progress_label; ?></label>&nbsp;&nbsp;
+						<label for="gravityflow_complete"><input type="radio" id="gravityflow_complete" name="gravityflow_status" value="complete" <?php checked( $default_status, 'complete' ); ?>/><?php echo $complete_label; ?></label>
 					</div>
 					<?php
 				}
