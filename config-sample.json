@@ -9,7 +9,17 @@
     "bucket" : "your bucket",
     "region" : "your region"
   },
+  "s3UploadZip" : {
+    "accessKeyId" : "your id",
+    "secretAccessKey" : "your access key",
+    "bucket" : "your bucket",
+    "region" : "your region"
+  },
   "slackUpload" : {
+    "token" : "your token",
+    "channel" : "the channel"
+  },
+  "slackNotification" : {
     "token" : "your token",
     "channel" : "the channel"
   }

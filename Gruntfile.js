@@ -3,7 +3,6 @@ module.exports = function(grunt) {
     'use strict';
 
     var config;
-
 	if ( grunt.file.exists('config.json') ) {
 		config = grunt.file.readJSON('config.json');
 	} else {
@@ -18,13 +17,24 @@ module.exports = function(grunt) {
 				"bucket" : process.env.AWS_S3_BUCKET_INLINE_DOCS,
 				"region" : process.env.AWS_DEFAULT_REGION
 			},
+			"s3UploadZip" : {
+				"accessKeyId" : process.env.AWS_ACCESS_KEY_ID,
+				"secretAccessKey" : process.env.AWS_SECRET_ACCESS_KEY,
+				"bucket" : process.env.AWS_S3_BUCKET_UPLOAD_ZIP,
+				"region" : process.env.AWS_DEFAULT_REGION
+			},
 			"slackUpload" : {
 				"token" : process.env.SLACK_TOKEN_UPLOAD,
 				"channel" : process.env.SLACK_CHANNEL_UPLOAD
+			},
+			"slackNotification" : {
+				"token" : process.env.SLACK_NOTIFICATION_TOKEN,
+				"channel" : process.env.SLACK_CHANNEL_NOTIFICATION
 			}
 		};
 	}
     var gfVersion = '';
+	var commitId = process.env.CI_COMMIT_ID ? process.env.CI_COMMIT_ID : '';
 
     require('matchdep').filterDev('grunt-*').forEach( grunt.loadNpmTasks );
 
@@ -36,7 +46,14 @@ module.exports = function(grunt) {
             gfVersion = found[1];
         }
 
-        return gfVersion;
+		var val;
+		val = gfVersion;
+
+		if ( commitId ) {
+			val += '-' + commitId;
+		}
+
+        return val;
     };
 
     grunt.getDropboxConfig = function(){
@@ -200,12 +217,12 @@ module.exports = function(grunt) {
         aws_s3: {
             options: {
                 uploadConcurrency: 5, // 5 simultaneous uploads
-                downloadConcurrency: 5 // 5 simultaneous downloads
+                downloadConcurrency: 5, // 5 simultaneous downloads
+				accessKeyId: config.s3InlineDocs.accessKeyId,
+				secretAccessKey: config.s3InlineDocs.secretAccessKey
             },
             inlinedocs: {
                 options: {
-                    accessKeyId: config.s3InlineDocs.accessKeyId, // Use the variables
-                    secretAccessKey: config.s3InlineDocs.secretAccessKey, // You can also use env variables
                     region: config.s3InlineDocs.region,
                     bucket: config.s3InlineDocs.bucket,
                     access: 'public-read',
@@ -214,7 +231,17 @@ module.exports = function(grunt) {
                 files: [
                     {expand: true, cwd: 'docs', src: ['**'], dest: ''},
                 ]
-            }
+            },
+			upload_zip: {
+				options: {
+					region: config.s3UploadZip.region,
+					bucket: config.s3UploadZip.bucket,
+					access: 'public-read'
+				},
+				files: [
+					{expand: true, src: 'gravityflow_<%= grunt.getVersion() %>.zip', dest: 'builds'},
+				]
+			}
         },
 
         potomo: {
@@ -243,13 +270,56 @@ module.exports = function(grunt) {
 					channels: config.slackUpload.channel
 				}
 			}
+		},
+
+		slack_notifier: {
+			notification: {
+				options: {
+					token: config.slackNotification.token,
+					channel: '#builds',
+					text: 'New Build for Gravity Flow Version ' + grunt.getVersion(),
+					username: 'Gravity Flow',
+					as_user: false,
+					parse: 'full',
+					link_names: true,
+					attachments: [
+						{
+							'fallback': 'New Gravity Flow Build.',
+							'color': '#36a64f',
+							'pretext': '',
+							'title': 'gravityflow_<%= grunt.getVersion() %>.zip',
+							'title_link': 'https://s3.amazonaws.com/gravityflow/builds/gravityflow_<%= grunt.getVersion() %>.zip',
+							'text': '',
+							'fields': [
+								{
+									'title': 'Version',
+									'value': gfVersion,
+									'short': true
+								},
+								{
+									'title': 'Commit ID',
+									'value': commitId,
+									'short': true
+								}
+							],
+							'image_url': 'http://my-website.com/path/to/image.jpg',
+							'thumb_url': 'http://example.com/path/to/thumb.png'
+						}
+					],
+					unfurl_links: true,
+					unfurl_media: true,
+					icon_url: 'https://avatars3.githubusercontent.com/u/12782633?v=3&s=200'
+				}
+			}
 		}
 
 	});
 
+	grunt.getVersion();
+
 	grunt.registerTask('minimize', [ 'uglify:gravityflow', 'cssmin:gravityflow' ]);
 	grunt.registerTask('translations', [ 'makepot', 'shell:transifex', 'potomo' ]);
-	grunt.registerTask('default', [ 'clean', 'minimize', 'translations', 'compress' ]);
+	grunt.registerTask('default', [ 'clean', 'minimize', 'translations', 'compress', 'aws_s3:upload_zip', 'slack_notifier' ]);
 	grunt.registerTask('build', [ 'clean', 'minimize', 'translations', 'phpunit', 'compress', 'dropbox', 'clean' ]);
 	grunt.registerTask('publish', [ 'clean', 'minimize', 'translations', 'phpunit', 'shell:apigen', 'compress', 'aws_s3', 'clean' ]);
 };
