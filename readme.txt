@@ -55,12 +55,20 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.3.0.9 =
+- Added the gravityflow_permission_granted_entry_detail filter to allow the permission check to be overridden for the workflow entry detail page.
+    Example:
+    add_filter( 'gravityflow_permission_granted_entry_detail', 'sh_filter_gravityflow_permission_granted_entry_detail', 10, 2 );
+    function sh_filter_gravityflow_permission_granted_entry_detail( $permission_granted, $entry ) {
+        return true;
+    }
+
 = 1.3.0.8 =
 - Fixed an issue on the entry detail page for entries on the approval step and completed entries where product fields are displayed in the list of fields. Product fields are displayed in the order summary but they can also be displayed in the list by selecting the fields in the display fields step setting.
 
 = 1.3.0.7 =
 - Added the gravityflow_inbox_args filter so the inbox criteria can be modified.
-- Added the 'Required Reverted or Rejected' to the options in the Wordkflow note setting.
+- Added the 'Required Reverted or Rejected' to the options in the Workflow note setting.
 - Updated the entry meta so that the status columns don't appear automatically in the Gravity Forms entry list.
 
 = 1.3.0.6 =
