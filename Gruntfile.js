@@ -38,7 +38,7 @@ module.exports = function(grunt) {
 
     require('matchdep').filterDev('grunt-*').forEach( grunt.loadNpmTasks );
 
-    grunt.getVersion = function(){
+    grunt.getVersion = function( appendCommitId ){
         var p = 'gravityflow.php';
         if(gfVersion == '' && grunt.file.exists(p)){
             var source = grunt.file.read(p);
@@ -49,7 +49,7 @@ module.exports = function(grunt) {
 		var val;
 		val = gfVersion;
 
-		if ( commitId ) {
+		if ( appendCommitId && commitId ) {
 			val += '-' + commitId.substring(0, 7);
 		}
 
@@ -60,7 +60,7 @@ module.exports = function(grunt) {
         var key = config.dropbox.upload_path;
         var obj = {};
 		key += '/Releases';
-		obj[key] = [ 'gravityflow_<%= grunt.getVersion() %>.zip', 'gravityflow_docs_latest.zip'];
+		obj[key] = [ 'gravityflow_<%= grunt.getVersion(true) %>.zip', 'gravityflow_docs_latest.zip'];
         return obj;
     };
 
@@ -148,7 +148,7 @@ module.exports = function(grunt) {
         compress: {
             gravityflow: {
                 options: {
-                    archive: 'gravityflow_<%= grunt.getVersion() %>.zip'
+                    archive: 'gravityflow_<%= grunt.getVersion(true) %>.zip'
                 },
                 files: [
                     { src: 'includes/**', dest: 'gravityflow/' },
@@ -179,7 +179,7 @@ module.exports = function(grunt) {
             options: {
                 force: true
             },
-            all: [ 'apigen_tmp', 'docs', 'gravityflow_<%= grunt.getVersion() %>.zip', 'gravityflow_docs_latest.zip' ]
+            all: [ 'apigen_tmp', 'docs', 'gravityflow_<%= grunt.getVersion(true) %>.zip', 'gravityflow_docs_latest.zip' ]
         },
 
         /**
@@ -239,7 +239,7 @@ module.exports = function(grunt) {
 					access: 'public-read'
 				},
 				files: [
-					{expand: true, src: 'gravityflow_<%= grunt.getVersion() %>.zip', dest: 'builds'},
+					{expand: true, src: 'gravityflow_<%= grunt.getVersion(true) %>.zip', dest: 'builds'},
 				]
 			}
         },
@@ -265,8 +265,8 @@ module.exports = function(grunt) {
 				options: {
 					token: config.slackUpload.token,
 					filetype: 'zip',
-					file: 'gravityflow_<%= grunt.getVersion() %>.zip',
-					title:'gravityflow_<%= grunt.getVersion() %>.zip',
+					file: 'gravityflow_<%= grunt.getVersion(true) %>.zip',
+					title:'gravityflow_<%= grunt.getVersion(true) %>.zip',
 					channels: config.slackUpload.channel
 				}
 			}
@@ -277,10 +277,9 @@ module.exports = function(grunt) {
 				options: {
 					token: config.slackNotification.token,
 					channel: '#builds',
-					text: 'New Build for Gravity Flow v' + gfVersion,
+					text: 'New Build for Gravity Flow v' + grunt.getVersion(false),
 					username: 'Gravity Flow',
 					as_user: false,
-					parse: 'full',
 					link_names: true,
 					attachments: [
 						{
@@ -288,16 +287,17 @@ module.exports = function(grunt) {
 							'color': '#36a64f',
 							'pretext': '',
 							'title': 'Download',
-							'title_link': 'https://s3.amazonaws.com/gravityflow/builds/gravityflow_<%= grunt.getVersion() %>.zip',
+							'title_link': 'https://s3.amazonaws.com/gravityflow/builds/gravityflow_<%= grunt.getVersion(true) %>.zip',
+							'mrkdwn_in': ["pretext", "text", "fields"],
 							'fields': [
 								{
 									'title': 'Version',
-									'value': gfVersion,
+									'value': grunt.getVersion(false),
 									'short': true
 								},
 								{
 									'title': 'Commit ID',
-									'value': '<https://github.com/gravityflow/gravityflow/commit/' + commitId + '|' + commitId.substring(0, 7) + '>',
+									"value": '<https://github.com/gravityflow/gravityflow/commit/' + commitId + '|' + commitId.substring(0, 7) + '>',
 									'short': true
 								}
 							],
@@ -313,8 +313,6 @@ module.exports = function(grunt) {
 		}
 
 	});
-
-	grunt.getVersion();
 
 	grunt.registerTask('minimize', [ 'uglify:gravityflow', 'cssmin:gravityflow' ]);
 	grunt.registerTask('translations', [ 'makepot', 'shell:transifex', 'potomo' ]);
