@@ -1,7 +1,7 @@
-[ ![Codeship Status for gravityflow/gravityflow](https://codeship.com/projects/b13b4010-bf9d-0133-a48a-0a97d18729e7/status?branch=master)](https://codeship.com/projects/137156)
-
 Gravity Flow
 ==============================
+
+[ ![Codeship Status for gravityflow/gravityflow](https://codeship.com/projects/b13b4010-bf9d-0133-a48a-0a97d18729e7/status?branch=master)](https://codeship.com/projects/137156)
 
 Gravity Flow is a commercial plugin for WordPress which provides a Workflow platform for forms created in Gravity Forms.
 
