@@ -74,6 +74,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
     function sh_filter_gravityflow_in_progress_label_user_input( $complete_label, $step ) {
         return 'Save for later';
     }
+- Added timelines and page break options to bulk printing on the status page.
 - Fixed an issue with the user input step where hidden fields are not displayed.
 - Fixed an issue with status list when displaying names of assignees whose accounts no longer exist.
 

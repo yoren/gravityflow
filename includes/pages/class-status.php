@@ -333,7 +333,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 				),
 			),
 		);
-
+		wp_print_styles( array( 'thickbox' ) );
+		add_thickbox();
 		?>
 		<div id="gravityflow-status-filters">
 
@@ -426,6 +427,30 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 
 		</script>
+
+		<div id="print_modal_container" style="display:none;">
+			<div id="print_container">
+
+				<div class="tagsdiv">
+					<div id="print_options">
+
+						<p class="description"><?php esc_html_e( 'Print all of the selected entries at once.', 'gravityflow' ); ?></p>
+
+						<input type="checkbox" name="gravityflow-print-timelines" value="print_timelines" checked="checked" id="gravityflow-print-timelines" />
+						<label for="gravityflow-print-timelines"><?php esc_html_e( 'Include timelines', 'gravityforms' ); ?></label>
+						<br /><br />
+
+						<input type="checkbox" name="gravityflow-print-page-break" value="print_page_break" checked="checked" id="gravityflow-print-page-break" />
+						<label for="gravityflow-print-page-break"><?php esc_html_e( 'Add page break between entries', 'gravityflow' ); ?></label>
+						<br /><br />
+
+						<input id="gravityflow-bulk-print-button" type="button" value="<?php esc_attr_e( 'Print', 'gravityflow' ); ?>" class="button" />
+
+					</div>
+				</div>
+
+			</div>
+		</div>
 
 		<?php
 	}

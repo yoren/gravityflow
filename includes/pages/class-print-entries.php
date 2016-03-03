@@ -154,7 +154,7 @@ class Gravity_Flow_Print_Entries {
 
 				echo '</form>';
 
-				if ( rgget( 'notes' ) ) {
+				if ( rgget( 'timelines' ) ) {
 					Gravity_Flow_Entry_Detail::timeline( $entry, $form );
 				}
 

@@ -7,13 +7,20 @@
             var action = $('#bulk-action-selector-top').val();
 
             if ( action == 'print' ) {
-                var checkedValues = $('.gravityflow-cb-entry-id:checked').map(function() {
-                    return this.value;
-                }).get();
-                printPage( gravityflow_status_list_strings.ajaxurl + '?action=gravityflow_print_entries&lid=' + checkedValues.join(',') );
-                return false;
+				tb_show('Print Entries', '#TB_inline?width=350&amp;height=250&amp;inlineId=print_modal_container', '');
+				return false;
             }
 
+		});
+
+		$('#gravityflow-bulk-print-button').click(function(){
+			var checkedValues = $('.gravityflow-cb-entry-id:checked').map(function() {
+				return this.value;
+			}).get();
+			var timelinesQS = $('#gravityflow-print-timelines').is(':checked') ? '&timelines=1' : '';
+			var pageBreakQS = jQuery('#gravityflow-print-page-break').is(':checked') ? '&page_break=1' : '';
+			printPage( gravityflow_status_list_strings.ajaxurl + '?action=gravityflow_print_entries&lid=' + checkedValues.join(',') + timelinesQS + pageBreakQS );
+			return false;
 		});
 
         $('.gravityflow-export-status-button').click(function(){
