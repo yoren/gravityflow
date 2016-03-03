@@ -706,7 +706,7 @@ PRIMARY KEY  (id)
 					$step_type_choice['div_class'] = 'gravityflow-disabled';
 				}
 				if ( $step_class->is_supported() ) {
-				    $step_type_choices[] = $step_type_choice;
+					$step_type_choices[] = $step_type_choice;
 				} else {
 					unset( $step_classes[ $key ] );
 				}
@@ -769,7 +769,7 @@ PRIMARY KEY  (id)
 				$step_settings['class'] = 'gravityflow-step-settings';
 
 				if ( ! isset( $step_settings['fields'] ) ) {
-				    $step_settings['fields'] = array();
+					$step_settings['fields'] = array();
 				}
 				$status_options = $step_class->get_status_config();
 
@@ -835,11 +835,11 @@ PRIMARY KEY  (id)
 			if ( $current_step_id ) {
 				$current_step = $this->get_step( $current_step_id );
 				if ( empty( $current_step ) ) {
-				    $html = '<div class="delete-alert alert_red"><i class="fa fa-exclamation-triangle gf_invalid"></i> ' . esc_html__( 'This step type is missing.', 'gravityflow' ) . '</div>';
-				    echo $html;
+					$html = '<div class="delete-alert alert_red"><i class="fa fa-exclamation-triangle gf_invalid"></i> ' . esc_html__( 'This step type is missing.', 'gravityflow' ) . '</div>';
+					echo $html;
 					die();
 				} else {
-				    $entry_count = $current_step->entry_count();
+					$entry_count = $current_step->entry_count();
 				}
 			}
 			if ( $entry_count > 0 ) {
@@ -1122,7 +1122,7 @@ PRIMARY KEY  (id)
 			$steps = array();
 
 			foreach ( $feeds as $feed ) {
-			    $step = Gravity_Flow_Steps::create( $feed, $entry );
+				$step = Gravity_Flow_Steps::create( $feed, $entry );
 				if ( $step ) {
 					$steps[] = $step;
 				}
@@ -1788,7 +1788,8 @@ PRIMARY KEY  (id)
 			$step = $this->get_step( $item['id'] );
 			if ( empty( $step ) ) {
 				$type_key = $item['meta']['step_type'];
-			    return '<span class="validation_error"><i class="fa fa-exclamation-triangle gf_invalid"></i> ' . $type_key . '  ' . esc_html__( '(missing)', 'gravityflow' ) . '</span>';
+
+				return '<span class="validation_error"><i class="fa fa-exclamation-triangle gf_invalid"></i> ' . $type_key . '  ' . esc_html__( '(missing)', 'gravityflow' ) . '</span>';
 			}
 			$icon_url = $step->get_icon_url();
 			$icon_html = ( strpos( $icon_url, 'http' ) === 0 ) ? sprintf( '<img src="%s" style="width:20px;height:20px;margin-right:5px;vertical-align:middle;"/>', $icon_url ) : sprintf( '<span style="width:20px;height:20px;margin-right:5px;vertical-align:middle;">%s</span>', $icon_url );
@@ -4533,8 +4534,8 @@ AND m.meta_value='queued'";
 
 
 		/**
-		* Patch to fix signature add-on in the front-end until GF_Field is implemented. The input name is rendered with the form ID in the front-end but editing is expected to be done in admin.
-        */
+		 * Patch to fix signature add-on in the front-end until GF_Field is implemented. The input name is rendered with the form ID in the front-end but editing is expected to be done in admin.
+		 */
 		public function maybe_save_signature() {
 
 			//see if this is an entry and it needs to be updated. abort if not
@@ -4599,12 +4600,12 @@ AND m.meta_value='queued'";
 		}
 
 		/**
-		*  Patch until the Signature Add-On uses GF_Field
-		*
-		* @param $form
-		*
-		* @return mixed
-	    */
+		 *  Patch until the Signature Add-On uses GF_Field
+		 *
+		 * @param $form
+		 *
+		 * @return mixed
+		 */
 		public function delete_signature_script( $form ) {
 			$form_id = absint( $form['id'] );
 			?>
