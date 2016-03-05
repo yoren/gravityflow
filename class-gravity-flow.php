@@ -304,6 +304,15 @@ PRIMARY KEY  (id)
 					),
 				),
 				array(
+					'handle'   => 'gravityflow_generic_map_js',
+					'src'      => $this->get_base_url() . "/js/generic-map{$min}.js",
+					'version'  => $this->_version,
+					'enqueue'  => array(
+						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=_notempty_' ),
+						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=0' ),
+					),
+				),
+				array(
 					'handle'  => 'gravityflow_feed_list',
 					'src'     => $this->get_base_url() . "/js/feed-list{$min}.js",
 					'deps'    => array( 'jquery', 'jquery-ui-sortable' ),
@@ -4747,6 +4756,212 @@ AND m.meta_value='queued'";
 				$this->settings_checkbox( $display_summary_field );
 				echo '</div>';
 			}
+		}
+
+		public function settings_generic_map( $field, $echo = true ) {
+
+			$html = '';
+
+			if ( ! isset( $field['enable_custom_value'] ) ) {
+				$field['enable_custom_value'] = false;
+			}
+			$enable_custom_value = isset( $field['enable_custom_value'] ) ? (bool) $field['enable_custom_value'] : false;
+
+			// Support for dynamic field map migrations
+			$enable_custom_key = isset( $field['enable_custom_key'] ) ? (bool) $field['enable_custom_key'] : ! (bool) rgar( $field, 'disable_custom' );
+			if ( isset( $field['field_map'] ) ) {
+				$field['key_choices'] = $field['field_map'];
+			}
+
+			$value_field = $key_field = $custom_key_field = $custom_value_field = $field;
+			$form = $this->get_current_form();
+
+			/* Setup key field drop down */
+			$key_field['choices']  = ( isset( $field['key_choices'] ) ) ? $field['key_choices'] : null;
+			$key_field['name']    .= '_key';
+			$key_field['class']    = 'key key_{i}';
+			$key_field['style']    = 'width:200px;';
+
+			/* Setup custom key text field */
+			$custom_key_field['name']  .= '_custom_key_{i}';
+			$custom_key_field['class']  = 'custom_key custom_key_{i}';
+			$custom_key_field['style']  = 'width:200px;max-width:90%;';
+			$custom_key_field['value']  = '{custom_key}';
+
+			/* Setup value field drop down */
+			$value_field['choices']  = ( isset( $field['value_choices'] ) ) ? $field['value_choices'] : null;
+			$value_field['name']    .= '_custom_value';
+			$value_field['class']    = 'value value_{i}';
+			$value_field['style']    = 'width:200px;';
+
+			/* Setup custom value text field */
+			$custom_value_field['name']  .= '_custom_value_{i}';
+			$custom_value_field['class']  = 'custom_value custom_value_{i}';
+			$custom_value_field['style']  = 'width:200px;max-width:90%;';
+			$custom_value_field['value']  = '{custom_value}';
+
+
+			/* Remove unneeded values */
+			$unneeded_values = array( 'field_map', 'key_choices', 'value_choices', 'callback' );
+			foreach ( $unneeded_values as $unneeded_value ) {
+				unset( $field[ $unneeded_value ] );
+				unset( $value_field[ $unneeded_value ] );
+				unset( $key_field[ $unneeded_value ] );
+				unset( $custom_key_field[ $unneeded_value ] );
+				unset( $custom_value_field[ $unneeded_value ] );
+			}
+
+			//add on errors set when validation fails
+			if ( $this->field_failed_validation( $field ) ) {
+				$html .= $this->get_error_icon( $field );
+			}
+
+			/* Build key cell based on available field map choices */
+			if ( empty( $key_field['choices'] ) ) {
+
+				/* Set key field value to "gf_custom" so custom key is used. */
+				$key_field['value'] = 'gf_custom';
+
+				/* Build HTML string */
+				$key_field_html = '<td>' .
+				                  $this->settings_hidden( $key_field, false ) . '
+                <div class="custom-key-container">
+                    ' . $this->settings_text( $custom_key_field, false ) . '
+				</div>
+            </td>';
+
+			} else {
+
+				/* Ensure field map array has a custom key option. */
+				$has_gf_custom = false;
+				foreach ( $key_field['choices'] as $choice ) {
+					if ( rgar( $choice, 'name' ) == 'gf_custom' || rgar( $choice, 'value' ) == 'gf_custom' ) {
+						$has_gf_custom = true;
+					}
+					if ( rgar( $choice, 'choices' ) ) {
+						foreach ( $choice['choices'] as $subchoice ) {
+							if ( rgar( $subchoice, 'name' ) == 'gf_custom' || rgar( $subchoice, 'value' ) == 'gf_custom' ) {
+								$has_gf_custom = true;
+							}
+						}
+					}
+				}
+				if ( ! $has_gf_custom && $enable_custom_key ) {
+					$key_field['choices'][] = array(
+						'label' => esc_html__( 'Add Custom Key', 'gravityforms' ),
+						'value' => 'gf_custom'
+					);
+				}
+
+				/* Build HTML string */
+				$key_field_html = '<th>' .
+				                  $this->settings_select( $key_field, false ) . '
+                <div class="custom-key-container">
+                    <a href="#" class="custom-key-reset">Reset</a>' .
+				                  $this->settings_text( $custom_key_field, false ) . '
+				</div>
+            </th>';
+
+			}
+
+			/* Build value cell based on available field map choices */
+			if ( empty( $value_field['choices'] ) ) {
+
+				/* Set value field value to "gf_custom" so custom value is used. */
+				$value_field['value'] = 'gf_custom';
+
+				/* Build HTML string */
+				$value_field_html = '<td>' .
+				                    $this->settings_hidden( $value_field, false ) . '
+                <div class="custom-value-container">
+                    ' . $this->settings_text( $custom_value_field, false ) . '
+				</div>
+            </td>';
+
+			} else {
+
+				/* Ensure value choices have a custom value option. */
+				$has_gf_custom = false;
+				foreach ( $value_field['choices'] as $choice ) {
+					if ( rgar( $choice, 'name' ) == 'gf_custom' || rgar( $choice, 'value' ) == 'gf_custom' ) {
+						$has_gf_custom = true;
+					}
+					if ( rgar( $choice, 'choices' ) ) {
+						foreach ( $choice['choices'] as $subchoice ) {
+							if ( rgar( $subchoice, 'name' ) == 'gf_custom' || rgar( $subchoice, 'value' ) == 'gf_custom' ) {
+								$has_gf_custom = true;
+							}
+						}
+					}
+				}
+				if ( ! $has_gf_custom && $enable_custom_value ) {
+					$value_field['choices'][] = array(
+						'label' => esc_html__( 'Add Custom Value', 'gravityflowformconnector' ),
+						'value' => 'gf_custom'
+					);
+				}
+
+				$value_select = $this->settings_select( $value_field, false );
+
+				/* Build HTML string */
+				$value_field_html = '<th>' .
+				                    $value_select  . '
+                <div class="custom-value-container">
+                    <a href="#" class="custom-value-reset">Reset</a>' .
+				                    $this->settings_text( $custom_value_field, false ) . '
+				</div>
+            </th>';
+
+			}
+
+			$key_field_title = isset( $field['key_field_title'] ) ? $field['key_field_title'] : esc_html__( 'Key', 'gravityflowformconnector' );
+			$value_field_title = isset( $field['value_field_title'] ) ? $field['value_field_title'] : esc_html__( 'Value', 'gravityflowformconnector' );;
+
+			$html .= '
+            <table class="settings-field-map-table" cellspacing="0" cellpadding="0">
+            	<thead>
+					<tr>
+						<th>' . $key_field_title . '</th>
+						<th>' . $value_field_title . '</th>
+					</tr>
+				</thead>
+                <tbody class="repeater">
+	                <tr>
+	                    '. $key_field_html .
+			         $value_field_html . '
+						<td>
+							{buttons}
+						</td>
+	                </tr>
+                </tbody>
+            </table>';
+
+			$html .= $this->settings_hidden( $field, false );
+
+			$limit = empty( $field['limit'] ) ? 0 : $field['limit'];
+
+			$html .= "
+			<script type=\"text/javascript\">
+
+				var dynamicGenericMap". esc_attr( $field['name'] ) ." = new GravityFlowGenericMap({
+
+					'baseURL':      '". GFCommon::get_base_url() ."',
+					'fieldId':      '". esc_attr( $field['name'] ) ."',
+					'fieldName':    '". $field['name'] ."',
+					'keyFieldName': '". $key_field['name'] ."',
+					'valueFieldName': '". $value_field['name'] ."',
+					'limit':        '". $limit . "'
+
+				});
+
+			</script>";
+
+			if ( $echo ) {
+				echo $html;
+			}
+
+			return $html;
+
 		}
 
 
