@@ -114,6 +114,7 @@ class Gravity_Flow_Entry_Editor {
 			if ( $field->type !== 'page' ) {
 				if ( ! in_array( $field->id, $this->step->get_editable_fields() ) ) {
 					$field->description = null;
+					$field->maxLength = null;
 				}
 				$field->adminOnly = false;
 				$field->adminLabel = '';

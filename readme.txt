@@ -57,6 +57,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.3.0.10 =
 - Added the generic map step setting type.
+- Fixed an issue with the user input step when the max number of characters setting is set for a field that's not editable.
 
 = 1.3.0.9 =
 - Added the gravityflow_permission_granted_entry_detail filter to allow the permission check to be overridden for the workflow entry detail page.
