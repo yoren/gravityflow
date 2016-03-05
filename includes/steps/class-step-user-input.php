@@ -477,7 +477,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			do_action( "gform_after_update_entry_{$form['id']}", $form, $entry['id'] );
 
 			$entry = GFFormsModel::get_lead( $entry['id'] );
-			$entry = GFFormsModel::set_entry_meta( $entry, $form );
+			GFFormsModel::set_entry_meta( $entry, $form );
 
 			$this->refresh_entry();
 
@@ -940,9 +940,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		$current_fields   = $wpdb->get_results( $wpdb->prepare( "SELECT id, field_number FROM $lead_detail_table WHERE lead_id=%d", $lead['id'] ) );
 
 		$total_fields = array();
+
 		/* @var $calculation_fields GF_Field[] */
 		$calculation_fields = array();
-		$recalculate_total  = false;
 
 		GFCommon::log_debug( __METHOD__ . '(): Saving entry fields.' );
 
@@ -953,12 +953,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			if ( $field->displayOnly && $field->type != 'password' ) {
 				continue;
 			}
-
-			//ignore pricing fields in the entry detail
-			if ( RG_CURRENT_VIEW == 'entry' && GFCommon::is_pricing_field( $field->type ) ) {
-				//continue;
-			}
-
 
 			//process total field after all fields have been saved
 			if ( $field->type == 'total' ) {

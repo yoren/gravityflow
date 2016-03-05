@@ -24,7 +24,15 @@ class Gravity_Flow_Assignee {
 	/* @var Gravity_Flow_Step */
 	protected $step;
 
-	function __construct( $args = array(), $step = false ) {
+	/**
+	 * Gravity_Flow_Assignee constructor.
+	 *
+	 * @throws Exception
+	 *
+	 * @param array $args
+	 * @param bool|Gravity_Flow_Step $step
+	 */
+	public function __construct( $args = array(), $step = false ) {
 		$this->step = $step;
 		if ( is_string( $args ) ) {
 			$parts = explode( '|', $args );
@@ -75,19 +83,19 @@ class Gravity_Flow_Assignee {
 		$this->key = $this->type . '|' . $this->id;
 	}
 
-	function get_id() {
+	public function get_id() {
 		return $this->id;
 	}
 
-	function get_key() {
+	public function get_key() {
 		return $this->key;
 	}
 
-	function get_type() {
+	public function get_type() {
 		return $this->type;
 	}
 
-	function get_editable_fields() {
+	public function get_editable_fields() {
 		return $this->editable_fields;
 	}
 
@@ -113,9 +121,7 @@ class Gravity_Flow_Assignee {
 	 * @return string
 	 */
 	public function get_status_key() {
-		if ( empty( $assignee_id ) ) {
-			$assignee_id = $this->get_id();
-		}
+		$assignee_id = $this->get_id();
 
 		if ( empty( $assignee_type ) ) {
 			$assignee_type = $this->get_type();

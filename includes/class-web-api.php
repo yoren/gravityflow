@@ -145,7 +145,7 @@ class Gravity_Flow_Web_API {
 	 * @return array
 	 */
 	function get_assignees_array( $step ) {
-		$assignees = $step ? $step->get_assignees() : array();
+		$assignees = $step && $step instanceof Gravity_Flow_Step ? $step->get_assignees() : array();
 
 		$response = array();
 		foreach ( $assignees as $assignee ) {

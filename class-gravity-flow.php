@@ -872,6 +872,8 @@ PRIMARY KEY  (id)
 				$entry_count = $current_step->entry_count();
 			}
 
+			$assignee_settings = array();
+
 			if ( $entry_count > 0 && $current_step ) {
 				$assignee_settings['assignees'] = array();
 				$current_assignees = $current_step->get_assignees();
@@ -909,7 +911,7 @@ PRIMARY KEY  (id)
 
 			$current_step_id = $this->get_current_feed_id();
 			$current_step = $this->get_step( $current_step_id );
-			if ( empty ( $current_step ) ) {
+			if ( empty( $current_step ) ) {
 				return $results;
 			}
 			$assignee_settings['assignees'] = array();
@@ -4506,26 +4508,26 @@ AND m.meta_value='queued'";
 
 			$custom_label = rgar( $status_labels, $status );
 
-			if ( ! empty ( $custom_label ) ) {
+			if ( ! empty( $custom_label ) ) {
 				return $custom_label;
 			}
 
 			switch ( $status ) {
 				case 'pending' :
 					return esc_html__( 'Pending', 'gravityflow' );
-					break;
+
 				case 'complete' :
 					return esc_html__( 'Complete', 'gravityflow' );
-					break;
+
 				case 'approved' :
 					return esc_html__( 'Approved', 'gravityflow' );
-					break;
+
 				case 'rejected' :
 					return esc_html__( 'Rejected', 'gravityflow' );
-					break;
+
 				case 'cancelled' :
 					return esc_html__( 'Cancelled', 'gravityflow' );
-					break;
+
 			}
 
 			$steps = Gravity_Flow_Steps::get_all();
@@ -4774,7 +4776,6 @@ AND m.meta_value='queued'";
 			}
 
 			$value_field = $key_field = $custom_key_field = $custom_value_field = $field;
-			$form = $this->get_current_form();
 
 			/* Setup key field drop down */
 			$key_field['choices']  = ( isset( $field['key_choices'] ) ) ? $field['key_choices'] : null;
@@ -4799,7 +4800,6 @@ AND m.meta_value='queued'";
 			$custom_value_field['class']  = 'custom_value custom_value_{i}';
 			$custom_value_field['style']  = 'width:200px;max-width:90%;';
 			$custom_value_field['value']  = '{custom_value}';
-
 
 			/* Remove unneeded values */
 			$unneeded_values = array( 'field_map', 'key_choices', 'value_choices', 'callback' );
@@ -4835,7 +4835,7 @@ AND m.meta_value='queued'";
 				/* Ensure field map array has a custom key option. */
 				$has_gf_custom = false;
 				foreach ( $key_field['choices'] as $choice ) {
-					if ( rgar( $choice, 'name' ) == 'gf_custom' || rgar( $choice, 'value' ) == 'gf_custom' ) {
+					if ( 'gf_custom' === rgar( $choice, 'name' ) || rgar( $choice, 'value' ) == 'gf_custom' ) {
 						$has_gf_custom = true;
 					}
 					if ( rgar( $choice, 'choices' ) ) {
@@ -4888,7 +4888,7 @@ AND m.meta_value='queued'";
 					}
 					if ( rgar( $choice, 'choices' ) ) {
 						foreach ( $choice['choices'] as $subchoice ) {
-							if ( rgar( $subchoice, 'name' ) == 'gf_custom' || rgar( $subchoice, 'value' ) == 'gf_custom' ) {
+							if ( 'gf_custom' === rgar( $subchoice, 'name' ) || rgar( $subchoice, 'value' ) == 'gf_custom' ) {
 								$has_gf_custom = true;
 							}
 						}

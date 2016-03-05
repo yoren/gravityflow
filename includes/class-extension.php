@@ -28,7 +28,6 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 	public function init_admin() {
 		parent::init_admin();
 		add_filter( 'gravityflow_settings_menu_tabs', array( $this, 'app_settings_tabs' ) );
-
 	}
 
 	public function app_settings_tabs( $settings_tabs ) {
@@ -183,8 +182,9 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 			);
 			// Send the remote request
 			$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params ) );
-		}
 
+			$this->log_debug( __METHOD__ . '(): response: ' . print_r( $response ) );
+		}
 
 		if ( empty( $field_setting ) ) {
 			return;

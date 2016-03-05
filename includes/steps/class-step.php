@@ -55,7 +55,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * The entry for this step.
 	 *
-	 * @var null
+	 * @var array|null
 	 */
 	private $_entry;
 
@@ -88,7 +88,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @param array $feed Required. The Feed on which this step is based.
 	 * @param null|array $entry Optional. Instantiate with an entry to perform entry related tasks.
 	 */
-	function __construct( $feed = array(), $entry = null ) {
+	public function __construct( $feed = array(), $entry = null ) {
 
 		if ( empty( $feed ) ) {
 			return;
@@ -444,7 +444,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 *
 	 * @return bool
 	 */
-	function is_queued() {
+	public function is_queued() {
 		$entry = $this->get_entry();
 
 		return rgar( $entry, 'workflow_step_status_' . $this->get_id() ) == 'queued';
@@ -455,7 +455,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 *
 	 * @return bool Returns true if step is ready to proceed.
 	 */
-	function validate_schedule() {
+	public function validate_schedule() {
 		if ( ! $this->scheduled ) {
 			return true;
 		}
@@ -481,7 +481,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 *
 	 * @return int
 	 */
-	function get_schedule_timestamp() {
+	public function get_schedule_timestamp() {
 
 		if ( $this->schedule_type == 'date' ) {
 
@@ -525,7 +525,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return $schedule_timestamp;
 	}
 
-	function is_expired() {
+	public function is_expired() {
 		if ( ! $this->supports_expiration() ) {
 			return false;
 		}
@@ -559,7 +559,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 *
 	 * @return bool|int|mixed
 	 */
-	function get_expiration_timestamp() {
+	public function get_expiration_timestamp() {
 
 		if ( ! $this->expiration ) {
 			return false;
@@ -913,7 +913,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Updates the status for this step.
 	 *
-	 * @param bool $status
+	 * @param string|bool $status
 	 */
 	public function update_step_status( $status = false ) {
 		if ( empty( $status ) ) {
