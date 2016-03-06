@@ -57,6 +57,8 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.3.0.10 =
 - Added the generic map step setting type.
+- Added the workflow_current_status entry meta to track the status of steps that can end in a status other than 'complete'.
+- Fixed an issue with the final status when approval steps are not the last step.
 - Fixed an issue with the user input step when the max number of characters setting is set for a field that's not editable.
 
 = 1.3.0.9 =

@@ -1259,9 +1259,31 @@ abstract class Gravity_Flow_Step extends stdClass {
 		foreach ( $assignees as $assignee ) {
 			$assignee->remove();
 		}
-		do_action( 'gravityflow_step_complete', $this->get_id(), $this->get_entry_id(), $this->get_form_id(), $status, $this );
-		$this->log_debug( __METHOD__ . '() - ending step ' . $this->get_id() );
+
+		$entry_id = $this->get_entry_id();
+		$step_id = $this->get_id();
+
+		if ( $this->can_set_workflow_status() ) {
+
+			gform_update_meta( $entry_id , 'workflow_current_status', $status );
+			gform_update_meta( $entry_id , 'workflow_current_status_timestamp', time() );
+		}
+
+		do_action( 'gravityflow_step_complete', $step_id, $entry_id, $this->get_form_id(), $status, $this );
+		$this->log_debug( __METHOD__ . '() - ending step ' . $step_id );
 		$this->log_event( 'ended', $status, $duration );
+	}
+
+	/**
+	 * Returns TRUE if this step can alter the current and final status.
+	 * If the only status option available for this step is 'complete' then, by default, the status will not set the status.
+	 * The default final status for the workflow is 'complete'.
+	 *
+	 * @return bool
+	 */
+	public function can_set_workflow_status() {
+		$status_config = $this->get_status_config();
+		return ! ( count( $status_config ) === 1 && $status_config[0]['status'] = 'complete' );
 	}
 
 	/**

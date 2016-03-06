@@ -936,7 +936,7 @@ PRIMARY KEY  (id)
 				'added' => array(),
 			);
 			$current_step_id = $this->get_current_feed_id();
-			$form_id = absint( rgget( 'id' ) );
+
 			$current_step = $this->get_step( $current_step_id );
 
 			$entry_count = $current_step->entry_count();
@@ -1905,6 +1905,17 @@ PRIMARY KEY  (id)
 					'text'  => $this->translate_status_label( 'pending' ),
 				);
 
+				$entry_meta['workflow_current_status'] = array(
+					'label'                      => 'Current Status',
+					'is_numeric'                 => false,
+					'update_entry_meta_callback' => array( $this, 'callback_update_entry_meta_workflow_current_status' ),
+					'is_default_column'          => false, // this column will not be displayed by default on the entry list
+					'filter'                     => array(
+						'operators' => array( 'is', 'isnot' ),
+						'choices'   => $workflow_final_status_options,
+					),
+				);
+
 				$entry_meta['workflow_final_status'] = array(
 					'label'                      => 'Final Status',
 					'is_numeric'                 => false,
@@ -1962,6 +1973,28 @@ PRIMARY KEY  (id)
 				return $entry['workflow_step'];
 			} else {
 				return 0;
+			}
+		}
+
+		/**
+		 * The target of callback_update_entry_meta_workflow_current_status.
+		 *
+		 * @param string $key The entry meta key
+		 * @param array $entry The Entry Object
+		 * @param array $form The Form Object
+		 *
+		 * @return string|void
+		 */
+		function callback_update_entry_meta_workflow_current_status( $key, $entry, $form ) {
+
+			if ( ! isset( $entry['id'] ) ) {
+				return;
+			}
+
+			if ( isset( $entry['workflow_current_status'] ) && $entry['workflow_current_status'] != 'pending' && $entry[ $key ] !== false ) {
+				return $entry['workflow_current_status'];
+			} else {
+				return 'pending';
 			}
 		}
 
@@ -3302,16 +3335,16 @@ PRIMARY KEY  (id)
 				if ( $step == false ) {
 					$this->log_debug( __METHOD__ . '() - ending workflow.' );
 					gform_delete_meta( $entry_id, 'workflow_step' );
-					$step_status = gform_get_meta( $entry_id, 'workflow_step_status_' . $step_id );
-					if ( empty( $step_status ) ) {
-						$step_status = 'complete';
+					$final_status = gform_get_meta( $entry_id, 'workflow_current_status' );
+					if ( empty( $final_status ) || $final_status == 'pending' ) {
+						$final_status = 'complete';
 					}
-					gform_update_meta( $entry_id, 'workflow_final_status', $step_status );
-					gform_delete_meta( $entry_id, 'workflow_step_status' );
+					gform_delete_meta( $entry_id, 'workflow_current_status' );
+					gform_update_meta( $entry_id, 'workflow_final_status', $final_status );
 					$entry_created_timestamp = strtotime( $entry['date_created'] );
 					$duration = time() - $entry_created_timestamp;
-					$this->log_event( 'workflow', 'ended', $form['id'], $entry_id, $step_status, 0, $duration );
-					do_action( 'gravityflow_workflow_complete', $entry_id, $form, $step_status );
+					$this->log_event( 'workflow', 'ended', $form['id'], $entry_id, $final_status, 0, $duration );
+					do_action( 'gravityflow_workflow_complete', $entry_id, $form, $final_status );
 					// Refresh entry after action.
 					$entry = GFAPI::get_entry( $entry_id );
 					GFAPI::send_notifications( $form, $entry, 'workflow_complete' );
