@@ -29,7 +29,7 @@ class Gravity_Flow_Assignee {
 	 *
 	 * @throws Exception
 	 *
-	 * @param array $args
+	 * @param string|array $args An assignee key or array
 	 * @param bool|Gravity_Flow_Step $step
 	 */
 	public function __construct( $args = array(), $step = false ) {
@@ -130,6 +130,9 @@ class Gravity_Flow_Assignee {
 		return $key;
 	}
 
+	/**
+	 * @param string|bool $new_assignee_status
+	 */
 	public function update_status( $new_assignee_status = false ) {
 
 		$key = $this->get_status_key();

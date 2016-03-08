@@ -699,7 +699,7 @@ PRIMARY KEY  (id)
 		 *
 		 * @return array
 		 */
-		function feed_settings_fields() {
+		public function feed_settings_fields() {
 
 			$current_step_id = $this->get_current_feed_id();
 
@@ -965,10 +965,9 @@ PRIMARY KEY  (id)
 					$assignee_key = $assignee->get_key();
 
 					if ( ! isset( $assignee_status[ $assignee_key ] ) ) {
-						// New assignee - set & send
+						// New assignee
 						$step = $this->get_step( $current_step_id, $entry );
 						$assignee->update_status( 'pending' );
-						//$step->maybe_send_assignee_notification( $assignee );
 						$step->end_if_complete();
 						$results['added'][] = $assignee;
 						$updated = true;
@@ -1083,7 +1082,7 @@ PRIMARY KEY  (id)
 			return $value;
 		}
 
-		function ajax_save_feed_order() {
+		public function ajax_save_feed_order() {
 			$feed_ids = rgpost( 'feed_ids' );
 			$form_id  = absint( rgpost( 'form_id' ) );
 			foreach ( $feed_ids as &$feed_id ) {
@@ -1095,7 +1094,7 @@ PRIMARY KEY  (id)
 			die();
 		}
 
-		function ajax_print_entries() {
+		public function ajax_print_entries() {
 			require_once( $this->get_base_path() . '/includes/pages/class-print-entries.php' );
 			Gravity_Flow_Print_Entries::render();
 			exit();
@@ -1522,7 +1521,7 @@ PRIMARY KEY  (id)
 
 		}
 
-		function settings_tabs( $tabs_field ) {
+		public function settings_tabs( $tabs_field ) {
 			printf( '<div id="tabs-%s">', $tabs_field['name'] );
 			echo '<ul>';
 			foreach ( $tabs_field['tabs'] as $i => $tab ) {
@@ -1560,7 +1559,7 @@ PRIMARY KEY  (id)
 			<?php
 		}
 
-		function settings_checkbox_and_text( $field, $echo = true ) {
+		public function settings_checkbox_and_text( $field, $echo = true ) {
 			// prepare checkbox
 
 			$checkbox_input = rgars( $field, 'checkbox' );
@@ -1631,7 +1630,7 @@ PRIMARY KEY  (id)
 			return $html;
 		}
 
-		function settings_checkbox_and_textarea( $field, $echo = true ) {
+		public function settings_checkbox_and_textarea( $field, $echo = true ) {
 			// prepare checkbox
 
 			$checkbox_input = rgars( $field, 'checkbox' );
@@ -1702,7 +1701,7 @@ PRIMARY KEY  (id)
 			return $html;
 		}
 
-		function settings_visual_editor( $field ) {
+		public function settings_visual_editor( $field ) {
 
 			$default_value = rgar( $field, 'value' ) ? rgar( $field, 'value' ) : rgar( $field, 'default_value' );
 			$value         = $this->get_setting( $field['name'], $default_value );
@@ -1714,14 +1713,14 @@ PRIMARY KEY  (id)
 			) );
 		}
 
-		function settings_routing() {
+		public function settings_routing() {
 			echo '<div id="gform_routing_setting" class="gravityflow-routing" data-field_name="_gaddon_setting_routing" data-field_id="routing" ></div>';
 			$field['name'] = 'routing';
 
 			$this->settings_hidden( $field );
 		}
 
-		function settings_user_routing( $field ) {
+		public function settings_user_routing( $field ) {
 			$name = $field['name'];
 			$id = isset( $field['id'] ) ?  $field['id'] : 'gform_user_routing_setting_' . $name;
 
@@ -1730,7 +1729,7 @@ PRIMARY KEY  (id)
 			$this->settings_hidden( $field );
 		}
 
-		function settings_step_selector( $field ) {
+		public function settings_step_selector( $field ) {
 			$form = $this->get_current_form();
 			$feed_id = $this->get_current_feed_id();
 			$form_id = absint( $form['id'] );
@@ -1758,7 +1757,7 @@ PRIMARY KEY  (id)
 			$this->settings_select( $step_selector_field );
 		}
 
-		function settings_editable_fields( $field ) {
+		public function settings_editable_fields( $field ) {
 			$form = $this->get_current_form();
 			$choices = array();
 			if ( isset( $form['fields'] ) && is_array( $form['fields'] ) ) {
@@ -1781,7 +1780,7 @@ PRIMARY KEY  (id)
 		 *
 		 * @return array
 		 */
-		function feed_list_columns() {
+		public function feed_list_columns() {
 
 			$columns = array(
 				'step_name' => __( 'Step name', 'gravityflow' ),
@@ -1853,7 +1852,7 @@ PRIMARY KEY  (id)
 		 *
 		 * @return array The filtered entry meta array.
 		 */
-		function get_entry_meta( $entry_meta, $form_id ) {
+		public function get_entry_meta( $entry_meta, $form_id ) {
 			$steps = $this->get_steps( $form_id );
 
 			$step_choices = array();
@@ -1948,7 +1947,7 @@ PRIMARY KEY  (id)
 		 *
 		 * @return string|void
 		 */
-		function callback_update_entry_meta_workflow_step( $key, $entry, $form ) {
+		public function callback_update_entry_meta_workflow_step( $key, $entry, $form ) {
 
 			if ( ! isset( $entry['id'] ) ) {
 				return;
@@ -1974,7 +1973,7 @@ PRIMARY KEY  (id)
 		 *
 		 * @return string|void
 		 */
-		function callback_update_entry_meta_workflow_current_status( $key, $entry, $form ) {
+		public function callback_update_entry_meta_workflow_current_status( $key, $entry, $form ) {
 
 			if ( ! isset( $entry['id'] ) ) {
 				return;
@@ -1996,7 +1995,7 @@ PRIMARY KEY  (id)
 		 *
 		 * @return string|void
 		 */
-		function callback_update_entry_meta_workflow_final_status( $key, $entry, $form ) {
+		public function callback_update_entry_meta_workflow_final_status( $key, $entry, $form ) {
 
 			if ( ! isset( $entry['id'] ) ) {
 				return;
@@ -2018,7 +2017,7 @@ PRIMARY KEY  (id)
 		 *
 		 * @return string|void
 		 */
-		function callback_update_entry_meta_timestamp( $key, $entry, $form ) {
+		public function callback_update_entry_meta_timestamp( $key, $entry, $form ) {
 			if ( ! isset( $entry['id'] ) ) {
 				return;
 			}
@@ -2026,7 +2025,7 @@ PRIMARY KEY  (id)
 		}
 
 
-		function workflow_entry_detail_status_box( $form, $entry, $current_step = null ) {
+		public function workflow_entry_detail_status_box( $form, $entry, $current_step = null ) {
 
 			if ( is_null( $current_step ) ) {
 				$current_step = $this->get_current_step( $form, $entry );
@@ -2095,15 +2094,17 @@ PRIMARY KEY  (id)
 								$scheduled_timestamp = $current_step->get_schedule_timestamp();
 
 								switch ( $current_step->schedule_type ) {
-									case 'delay' :
-										$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
-										$scheduled_date = get_date_from_gmt( $scheduled_date_str );
-										break;
 									case 'date' :
 										$scheduled_date = $current_step->schedule_date;
 										break;
 									case 'date_field' :
 										$scheduled_date = $entry[ (string) $current_step->schedule_date_field ];
+										break;
+									case 'delay' :
+									default:
+										$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
+										$scheduled_date = get_date_from_gmt( $scheduled_date_str );
+
 								}
 
 
@@ -2180,7 +2181,7 @@ PRIMARY KEY  (id)
 		<?php
 		}
 
-		function entry_detail_status_box( $form, $entry ) {
+		public function entry_detail_status_box( $form, $entry ) {
 
 			if ( ! isset( $entry['workflow_final_status'] ) ) {
 				return;
@@ -2256,7 +2257,7 @@ PRIMARY KEY  (id)
 			$keep_looking = true;
 			$form_id = absint( $form['id'] );
 			$steps = $this->get_steps( $form_id, $entry );
-			while ( $keep_looking ) {
+			while ( $keep_looking && $step ) {
 
 				$next_step_id = $step->get_next_step_id();
 
@@ -2760,6 +2761,7 @@ PRIMARY KEY  (id)
 				);
 				// Send the remote request
 				$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params ) );
+				$this->log_debug( __METHOD__ . '() - response: ' . $response );
 			}
 
 
@@ -2914,6 +2916,7 @@ PRIMARY KEY  (id)
 							return;
 						}
 						if ( is_wp_error( $feedback ) ) {
+							/* @var WP_Error $feedback */
 							echo $feedback->get_error_message();
 							return;
 						}
@@ -3104,8 +3107,6 @@ PRIMARY KEY  (id)
 		<?php
 		}
 
-
-
 		public function toolbar() {
 			?>
 
@@ -3123,7 +3124,6 @@ PRIMARY KEY  (id)
 			</div>
 		<?php
 		}
-
 
 		public function get_toolbar_menu_items() {
 			$menu_items = array();
@@ -3195,7 +3195,7 @@ PRIMARY KEY  (id)
 			return $menu_items;
 		}
 
-		function maybe_process_admin_action( $form, $entry ) {
+		public function maybe_process_admin_action( $form, $entry ) {
 			$feedback = false;
 			if ( isset( $_POST['_gravityflow_admin_action'] ) && check_admin_referer( 'gravityflow_admin_action', '_gravityflow_admin_action_nonce' ) && GFAPI::current_user_can_any( 'gravityflow_workflow_detail_admin_actions' ) ) {
 				$admin_action = rgpost( 'gravityflow_admin_action' );
@@ -3244,7 +3244,7 @@ PRIMARY KEY  (id)
 			return $feedback;
 		}
 
-		function add_notification_event( $events ) {
+		public function add_notification_event( $events ) {
 			$events['workflow_approval'] = 'Workflow: approved or rejected';
 			$events['workflow_user_input'] = 'Workflow: user input';
 			$events['workflow_complete'] = 'Workflow: complete';
@@ -3252,7 +3252,7 @@ PRIMARY KEY  (id)
 			return $events;
 		}
 
-		function after_submission( $entry, $form ) {
+		public function after_submission( $entry, $form ) {
 			if ( ! isset( $entry['id'] ) ) {
 				return;
 			}
@@ -3347,7 +3347,7 @@ PRIMARY KEY  (id)
 			}
 		}
 
-		function get_first_step( $form_id, $entry ) {
+		public function get_first_step( $form_id, $entry ) {
 			$steps = $this->get_steps( $form_id, $entry );
 			foreach ( $steps as $step ) {
 				if ( $step->is_active() ) {
@@ -3517,7 +3517,7 @@ PRIMARY KEY  (id)
 		 * @param int $user_id (Optional) The ID of a user. Defaults to the current user.
 		 * @return bool
 		 */
-		function check_user_role( $role, $user_id = null ) {
+		public function check_user_role( $role, $user_id = null ) {
 
 			if ( is_numeric( $user_id ) ) {
 				$user = get_userdata( $user_id );
@@ -3532,7 +3532,7 @@ PRIMARY KEY  (id)
 			return in_array( $role, (array) $user->roles );
 		}
 
-		function get_user_roles( $user_id = null ) {
+		public function get_user_roles( $user_id = null ) {
 
 			if ( is_numeric( $user_id ) ) {
 				$user = get_userdata( $user_id );
@@ -3577,7 +3577,6 @@ PRIMARY KEY  (id)
 		}
 
 		public function maybe_auto_update( $update, $item ) {
-			//$this->log_debug( __METHOD__ . '() - $item.' . print_r( $item, true ) );
 			if ( isset( $item->slug ) && $item->slug == 'gravityflow' ) {
 
 				$this->log_debug( __METHOD__ . '() - Starting auto-update for gravityflow.' );
@@ -3748,21 +3747,6 @@ PRIMARY KEY  (id)
 			return parent::maybe_process_feed( $entry, $form );
 		}
 
-		public function get_feed_add_on_classes() {
-			$add_on_classes = GFAddOn::get_registered_addons();
-
-			$feed_add_on_classes = array();
-			foreach ( $add_on_classes as $add_on_class ) {
-				if ( $add_on_class == 'Gravity_Flow' ) {
-					continue;
-				}
-				if ( is_subclass_of( $add_on_class, 'GFFeedAddOn' ) && ! is_subclass_of( $add_on_class, 'GFPaymentAddOn' ) ) {
-					$feed_add_on_classes[] = $add_on_class;
-				}
-			}
-			return $feed_add_on_classes;
-		}
-
 		public function field_settings( $position, $form_id ) {
 
 			if ( $position == 20 ) { // After Description setting
@@ -3836,7 +3820,7 @@ PRIMARY KEY  (id)
 			return rgget( 'page' ) == 'gravityflow-inbox' && rgget( 'view' ) == 'entry' && ! empty( $id ) && ! empty( $lid );
 		}
 
-		function get_workflow_form_ids() {
+		public function get_workflow_form_ids() {
 			if ( isset( $this->form_ids ) ) {
 				return $this->form_ids;
 			}
@@ -4567,7 +4551,7 @@ AND m.meta_value='queued'";
 
 
 		/**
-		 * Patch to fix signature add-on in the front-end until GF_Field is implemented. The input name is rendered with the form ID in the front-end but editing is expected to be done in admin.
+		 * Hack to fix signature add-on in the front-end until GF_Field is implemented. The input name is rendered with the form ID in the front-end but editing is expected to be done in admin.
 		 */
 		public function maybe_save_signature() {
 
@@ -4607,7 +4591,6 @@ AND m.meta_value='queued'";
 
 					return;
 				}
-				$lead_id = $lead['id'];
 			}
 
 			//loop through form fields, get the field name of the signature field
@@ -4633,7 +4616,7 @@ AND m.meta_value='queued'";
 		}
 
 		/**
-		 *  Patch until the Signature Add-On uses GF_Field
+		 *  Hack until the Signature Add-On uses GF_Field
 		 *
 		 * @param $form
 		 *
@@ -5001,7 +4984,7 @@ AND m.meta_value='queued'";
 		 *
 		 * @return string
 		 */
-		function replace_variables( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
+		public function replace_variables( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
 			preg_match_all( '/{workflow_timeline(:(.*?))?}/', $text, $timeline_matches, PREG_SET_ORDER );
 			if ( is_array( $timeline_matches ) && isset( $timeline_matches[0] ) ) {
 				$full_tag = $timeline_matches[0][0];
