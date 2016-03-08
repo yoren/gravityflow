@@ -26,11 +26,11 @@ table.entry-detail-view td{
 
 #post-body-content {
     float: left;
-    min-width: 420px;
+    min-width: 400px;
     width: 100%;
 }
 #poststuff #post-body.columns-2 {
-    margin-right: 220px;
+    margin-right: 300px;
 }
 
 #poststuff .postbox-container {
