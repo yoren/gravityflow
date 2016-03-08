@@ -245,7 +245,7 @@ class Gravity_Flow_Entry_Detail {
 
 								self::entry_detail_grid( $form, $entry, $display_empty_fields, $editable_fields, $current_step );
 
-								do_action( 'gravityflow_entry_detail', $form, $entry );
+								do_action( 'gravityflow_entry_detail', $form, $entry, $current_step );
 
 								?>
 
