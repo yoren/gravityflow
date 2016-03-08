@@ -5005,9 +5005,8 @@ AND m.meta_value='queued'";
 			preg_match_all( '/{workflow_timeline(:(.*?))?}/', $text, $timeline_matches, PREG_SET_ORDER );
 			if ( is_array( $timeline_matches ) && isset( $timeline_matches[0] ) ) {
 				$full_tag = $timeline_matches[0][0];
-				$timeline = $this->get_timeline();
-
-				$text = str_replace( $full_tag, $html, $text );
+				$timeline = $this->get_timeline( $entry );
+				$text = str_replace( $full_tag, $timeline, $text );
 			}
 
 			preg_match_all( '/{created_by(:(.*?))?}/', $text, $created_by_matches, PREG_SET_ORDER );
