@@ -1233,7 +1233,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$entry_id = $this->get_entry_id();
 		$pdf_path = GPDFAPI::create_pdf( $entry_id, $gpdf_id );
 
-		if( ! is_wp_error( $pdf_path ) ) {
+		if ( ! is_wp_error( $pdf_path ) ) {
 			/* Ensure our notification has an array setup for the attachments key */
 			$notification['attachments']  = ( isset( $notification['attachments'] ) ) ? $notification['attachments'] : array();
 			$notification['attachments'][] = $pdf_path;
@@ -1276,7 +1276,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 	/**
 	 * Returns TRUE if this step can alter the current and final status.
-	 * If the only status option available for this step is 'complete' then, by default, the status will not set the status.
+	 * If the only status option available for this step is 'complete' then, by default, the step will not set the status.
 	 * The default final status for the workflow is 'complete'.
 	 *
 	 * @return bool
