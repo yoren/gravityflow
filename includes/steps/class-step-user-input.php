@@ -666,6 +666,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			}
 		}
 
+		if ( ! $valid ) {
+			$form['failed_validation'] = true;
+		}
+
 		$validation_result = array(
 			'is_valid' => $valid,
 			'form' => $form,
@@ -673,10 +677,12 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 		$validation_result = apply_filters( 'gravityflow_validation_user_input', $validation_result, $this );
 
-		if ( ! is_wp_error( $validation_result ) ) {
-			if ( ! $validation_result['is_valid'] ) {
-				$valid = new WP_Error( 'validation_result', esc_html__( 'There was a problem while updating your form.', 'gravityflow' ), $validation_result );
-			}
+		if ( is_wp_error( $validation_result ) ) {
+			return $validation_result;
+		}
+
+		if ( ! $validation_result['is_valid'] ) {
+			$valid = new WP_Error( 'validation_result', esc_html__( 'There was a problem while updating your form.', 'gravityflow' ), $validation_result );
 		}
 
 		return $valid;
@@ -781,13 +787,11 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 						}
 					}
 
-					$field_ids_str = join( ', ', $field_ids );
 					?>
 					<script>
 						(function (GFFlowInput, $) {
 							$(document).ready(function () {
 								$('#gravityflow_update_button').prop('disabled', false);
-								//$(<?php  echo json_encode( $field_ids_str ) ?>).closest('td').addClass('gravityflow-input-required');
 							});
 						}(window.GFFlowInput = window.GFFlowInput || {}, jQuery));
 					</script>
@@ -804,6 +808,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 				if ( $this->note_mode !== 'hidden' ) {
 					$invalid_note = ( isset( $form['workflow_note'] ) && is_array( $form['workflow_note'] ) && $form['workflow_note']['failed_validation'] );
+					$posted_note = '';
+					if ( rgar( $form, 'failed_validation' ) ) {
+						$posted_note = rgpost( 'gravityflow_note' );
+					}
 					?>
 
 					<div>
@@ -818,12 +826,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 					</div>
 
 					<textarea id="gravityflow-note" style="width:100%;" rows="4" class="wide"
-					          name="gravityflow_note"><?php
-						$posted_note = rgpost( 'gravityflow_note' );
-						if ( $posted_note ) {
-							echo esc_html( $posted_note );
-						}
-						?></textarea>
+					          name="gravityflow_note"><?php echo esc_textarea( $posted_note )?></textarea>
 					<?php
 
 					if ( $invalid_note ) {
