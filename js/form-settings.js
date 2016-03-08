@@ -41,6 +41,7 @@
             $('#gaddon-setting-tab-field-assignee_notification_subject').fadeToggle();
             $('#gaddon-setting-tab-field-resend_assignee_email').fadeToggle();
             $('#gaddon-setting-tab-field-assignee_notification_gpdf').fadeToggle();
+            $('#gaddon-setting-tab-field-assignee_notification_autoformat').fadeToggle();
             $('#gaddon-setting-tab-tab_assignee_notification i.gravityflow-tab-checked').toggle();
             $('#gaddon-setting-tab-tab_assignee_notification i.gravityflow-tab-unchecked').toggle();
         });
@@ -53,6 +54,7 @@
         $('#gaddon-setting-tab-field-assignee_notification_subject').toggle( assigneeNotificationChecked );
         $('#gaddon-setting-tab-field-resend_assignee_email').toggle( assigneeNotificationChecked );
         $('#gaddon-setting-tab-field-assignee_notification_gpdf').toggle( assigneeNotificationChecked );
+        $('#gaddon-setting-tab-field-assignee_notification_autoformat').toggle(assigneeNotificationChecked );
         $('#gaddon-setting-tab-tab_assignee_notification i.gravityflow-tab-checked').toggle(assigneeNotificationChecked);
         $('#gaddon-setting-tab-tab_assignee_notification i.gravityflow-tab-unchecked').toggle(!assigneeNotificationChecked);
 
@@ -321,24 +323,24 @@
 
     function toggleRejectionNotificationType(showType) {
         var fields = {
-            select: ['rejection_notification_users', 'rejection_notification_from_name', 'rejection_notification_from_email', 'rejection_notification_reply_to', 'rejection_notification_bcc', 'rejection_notification_subject', 'rejection_notification_message', 'rejection_notification_gpdf'],
-            routing: ['rejection_notification_routing', 'rejection_notification_from_name', 'rejection_notification_from_email', 'rejection_notification_reply_to', 'rejection_notification_bcc', 'rejection_notification_subject', 'rejection_notification_message', 'rejection_notification_gpdf']
+            select: ['rejection_notification_users', 'rejection_notification_from_name', 'rejection_notification_from_email', 'rejection_notification_reply_to', 'rejection_notification_bcc', 'rejection_notification_subject', 'rejection_notification_message', 'rejection_notification_gpdf', 'rejection_notification_autoformat'],
+            routing: ['rejection_notification_routing', 'rejection_notification_from_name', 'rejection_notification_from_email', 'rejection_notification_reply_to', 'rejection_notification_bcc', 'rejection_notification_subject', 'rejection_notification_message', 'rejection_notification_gpdf', 'rejection_notification_autoformat']
         };
         toggleFields(fields, showType, true);
     }
 
     function toggleApprovalNotificationType(showType) {
         var fields = {
-            select: ['approval_notification_users', 'approval_notification_from_name', 'approval_notification_from_email', 'approval_notification_reply_to', 'approval_notification_bcc', 'approval_notification_subject', 'approval_notification_message', 'approval_notification_gpdf'],
-            routing: ['approval_notification_routing', 'approval_notification_from_name', 'approval_notification_from_email', 'approval_notification_reply_to', 'approval_notification_bcc', 'approval_notification_subject', 'approval_notification_message', 'approval_notification_gpdf']
+            select: ['approval_notification_users', 'approval_notification_from_name', 'approval_notification_from_email', 'approval_notification_reply_to', 'approval_notification_bcc', 'approval_notification_subject', 'approval_notification_message', 'approval_notification_gpdf', 'approval_notification_autoformat'],
+            routing: ['approval_notification_routing', 'approval_notification_from_name', 'approval_notification_from_email', 'approval_notification_reply_to', 'approval_notification_bcc', 'approval_notification_subject', 'approval_notification_message', 'approval_notification_gpdf', 'approval_notification_autoformat']
         };
         toggleFields(fields, showType, true);
     }
 
 	function toggleWorkflowNotificationType(showType) {
 		var fields = {
-			select: ['workflow_notification_users\\[\\]', 'workflow_notification_from_name', 'workflow_notification_from_email', 'workflow_notification_reply_to', 'workflow_notification_bcc', 'workflow_notification_subject', 'workflow_notification_message'],
-			routing: ['workflow_notification_routing', 'workflow_notification_from_name', 'workflow_notification_from_email', 'workflow_notification_reply_to', 'workflow_notification_bcc', 'workflow_notification_subject', 'workflow_notification_message']
+			select: ['workflow_notification_users\\[\\]', 'workflow_notification_from_name', 'workflow_notification_from_email', 'workflow_notification_reply_to', 'workflow_notification_bcc', 'workflow_notification_subject', 'workflow_notification_message', 'workflow_notification_autoformat'],
+			routing: ['workflow_notification_routing', 'workflow_notification_from_name', 'workflow_notification_from_email', 'workflow_notification_reply_to', 'workflow_notification_bcc', 'workflow_notification_subject', 'workflow_notification_message', 'workflow_notification_autoformat']
 		};
 		toggleFields(fields, showType, false);
 	}
@@ -421,17 +423,20 @@
             'assignee_notification_bcc',
             'assignee_notification_subject',
             'assignee_notification_message',
+            'assignee_notification_autoformat',
             'resend_assignee_email',
             'rejection_notification_type',
             'rejection_notification_users\\[\\]',
             'rejection_notification_user_field',
             'rejection_notification_routing',
             'rejection_notification_message',
+            'rejection_notification_autoformat',
             'approval_notification_type',
             'approval_notification_users\\[\\]',
             'approval_notification_user_field',
             'approval_notification_routing',
             'approval_notification_message',
+            'approval_notification_autoformat',
 
 			'workflow_notification_type',
 			'workflow_notification_users\\[\\]',
@@ -443,6 +448,7 @@
             'workflow_notification_bcc',
             'workflow_notification_subject',
 			'workflow_notification_message',
+            'workflow_notification_autoformat',
 
             'assignees\\[\\]',
             'editable_fields\\[\\]',

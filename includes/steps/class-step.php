@@ -655,14 +655,15 @@ abstract class Gravity_Flow_Step extends stdClass {
 	public function send_assignee_notification( $assignee ) {
 		$this->log_debug( __METHOD__ . '() starting. assignee: ' . $assignee->get_key() );
 
-		$form = $this->get_form();
+		$form                                       = $this->get_form();
 		$notification['workflow_notification_type'] = 'assignee';
-		$notification['fromName'] = empty( $this->assignee_notification_from_name ) ? get_bloginfo() : $this->assignee_notification_from_name;
-		$notification['from'] = empty( $this->assignee_notification_from_email ) ? get_bloginfo( 'admin_email' ) : $this->assignee_notification_from_email;
-		$notification['replyTo'] = $this->assignee_notification_reply_to;
-		$notification['bcc'] = $this->assignee_notification_bcc;
-		$notification['subject'] = empty( $this->assignee_notification_subject ) ? $form['title'] . ': ' . $this->get_name() : $this->assignee_notification_subject;
-		$notification['message'] = $this->assignee_notification_message;
+		$notification['fromName']                   = empty( $this->assignee_notification_from_name ) ? get_bloginfo() : $this->assignee_notification_from_name;
+		$notification['from']                       = empty( $this->assignee_notification_from_email ) ? get_bloginfo( 'admin_email' ) : $this->assignee_notification_from_email;
+		$notification['replyTo']                    = $this->assignee_notification_reply_to;
+		$notification['bcc']                        = $this->assignee_notification_bcc;
+		$notification['subject']                    = empty( $this->assignee_notification_subject ) ? $form['title'] . ': ' . $this->get_name() : $this->assignee_notification_subject;
+		$notification['message']                    = $this->assignee_notification_message;
+		$notification['disableAutoformat']          = $this->assignee_notification_disable_autoformat;
 
 		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-RC2' , '>=' ) ) {
 			if ( $this->assignee_notification_gpdfEnable ) {

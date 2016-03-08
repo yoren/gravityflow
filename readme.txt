@@ -55,6 +55,9 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.3.0.11 =
+- Added the Disable auto-formatting setting for the assignee, rejection, and approval email messages.
+
 = 1.3.0.10 =
 - Added the generic map step setting type.
 - Added the workflow_current_status entry meta to track the status of steps that can end in a status other than 'complete'.

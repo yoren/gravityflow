@@ -110,6 +110,20 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				'default_value' => __( 'A new entry is pending your approval. Please check your Workflow Inbox.', 'gravityflow' ),
 			),
 			array(
+				'name'    => 'assignee_notification_autoformat',
+				'label'   => '',
+				'type'    => 'checkbox',
+				'choices' => array(
+					array(
+						'label'         => __( 'Disable auto-formatting', 'gravityflow' ),
+						'name'          => 'assignee_notification_disable_autoformat',
+						'default_value' => false,
+						'tooltip'       => __( 'Disable auto-formatting to prevent paragraph breaks being automatically inserted when using HTML to create the email message.', 'gravityflow' ),
+
+					),
+				),
+			),
+			array(
 				'name' => 'resend_assignee_email',
 				'label' => '',
 				'type' => 'checkbox_and_text',
@@ -197,6 +211,20 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				'type'  => 'visual_editor',
 				'default_value' => __( 'Entry {entry_id} has been rejected', 'gravityflow' ),
 			),
+			array(
+				'name'    => 'rejection_notification_autoformat',
+				'label'   => '',
+				'type'    => 'checkbox',
+				'choices' => array(
+					array(
+						'label'         => __( 'Disable auto-formatting', 'gravityflow' ),
+						'name'          => 'rejection_notification_disable_autoformat',
+						'default_value' => false,
+						'tooltip'       => __( 'Disable auto-formatting to prevent paragraph breaks being automatically inserted when using HTML to create the email message.', 'gravityflow' ),
+
+					),
+				),
+			),
 		);
 
 		$approval_notification_fields = array(
@@ -274,6 +302,19 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				'label' => __( 'Approval Message', 'gravityflow' ),
 				'type'  => 'visual_editor',
 				'default_value' => __( 'Entry {entry_id} has been approved', 'gravityflow' ),
+			),
+			array(
+				'name'    => 'approval_notification_autoformat',
+				'label'   => '',
+				'type'    => 'checkbox',
+				'choices' => array(
+					array(
+						'label'         => __( 'Disable auto-formatting', 'gravityflow' ),
+						'name'          => 'approval_notification_disable_autoformat',
+						'default_value' => false,
+						'tooltip'       => __( 'Disable auto-formatting to prevent paragraph breaks being automatically inserted when using HTML to create the email message.', 'gravityflow' ),
+					),
+				),
 			),
 		);
 
@@ -996,12 +1037,13 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		}
 
 		$notification['workflow_notification_type'] = 'approval';
-		$notification['fromName'] = $this->approval_notification_from_name;
-		$notification['from'] = $this->approval_notification_from_email;
-		$notification['replyTo'] = $this->approval_notification_reply_to;
-		$notification['bcc'] = $this->approval_notification_bcc;
-		$notification['subject'] = $this->approval_notification_subject;
-		$notification['message'] = $this->approval_notification_message;
+		$notification['fromName']                   = $this->approval_notification_from_name;
+		$notification['from']                       = $this->approval_notification_from_email;
+		$notification['replyTo']                    = $this->approval_notification_reply_to;
+		$notification['bcc']                        = $this->approval_notification_bcc;
+		$notification['subject']                    = $this->approval_notification_subject;
+		$notification['message']                    = $this->approval_notification_message;
+		$notification['disableAutoformat']          = $this->approval_notification_disable_autoformat;
 
 		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-RC2' , '>=' ) ) {
 			if ( $this->approval_notification_gpdfEnable ) {
@@ -1050,12 +1092,13 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		}
 
 		$notification['workflow_notification_type'] = 'rejection';
-		$notification['fromName'] = $this->rejection_notification_from_name;
-		$notification['from'] = $this->rejection_notification_from_email;
-		$notification['replyTo'] = $this->rejection_notification_reply_to;
-		$notification['bcc'] = $this->rejection_notification_bcc;
-		$notification['subject'] = $this->rejection_notification_subject;
-		$notification['message'] = $this->rejection_notification_message;
+		$notification['fromName']                   = $this->rejection_notification_from_name;
+		$notification['from']                       = $this->rejection_notification_from_email;
+		$notification['replyTo']                    = $this->rejection_notification_reply_to;
+		$notification['bcc']                        = $this->rejection_notification_bcc;
+		$notification['subject']                    = $this->rejection_notification_subject;
+		$notification['message']                    = $this->rejection_notification_message;
+		$notification['disableAutoformat']          = $this->rejection_notification_disable_autoformat;
 
 		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-RC2', '>=' ) ) {
 			if ( $this->rejection_notification_gpdfEnable ) {
