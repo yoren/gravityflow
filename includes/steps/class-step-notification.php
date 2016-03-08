@@ -222,7 +222,7 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 		$notification['bcc']                        = $this->workflow_notification_bcc;
 		$notification['subject']                    = $this->workflow_notification_subject;
 		$notification['message']                    = $this->workflow_notification_message;
-		$notification['disableAutoformat']          = $this->workflow_notification_autoformat;
+		$notification['disableAutoformat']          = $this->workflow_notification_disable_autoformat;
 
 		$this->send_notifications( $assignees, $notification );
 
