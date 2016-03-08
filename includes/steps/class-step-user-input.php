@@ -801,6 +801,14 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			</div>
 			<?php
 
+			/**
+			 * Allows content to be added in the workflow box below the status list.
+			 *
+			 * @param Gravity_Flow_Step $this
+			 * @param array $form
+			 */
+			do_action( 'gravityflow_below_status_list_user_input', $this, $form );
+
 			$can_update = $assignee_status == 'pending' || $role_status == 'pending';
 
 			if ( $can_update ) {
