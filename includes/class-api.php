@@ -241,5 +241,16 @@ class Gravity_Flow_API {
 	public function log_activity( $log_type, $event, $form_id = 0, $entry_id = 0, $log_value = '', $step_id = 0, $duration = 0, $assignee_id = 0, $assignee_type = '', $display_name = '' ) {
 		gravity_flow()->log_event( $log_type, $event, $form_id, $entry_id, $log_value, $step_id, $duration, $assignee_id, $assignee_type, $display_name );
 	}
+
+	/**
+	 * Returns the timeline for the specified entry with simple formatting.
+	 *
+	 * @param $entry
+	 *
+	 * @return string
+	 */
+	public function get_timeline( $entry ) {
+		return gravity_flow()->get_timeline( $entry );
+	}
 }
 

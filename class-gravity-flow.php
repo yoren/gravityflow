@@ -5005,30 +5005,7 @@ AND m.meta_value='queued'";
 			preg_match_all( '/{workflow_timeline(:(.*?))?}/', $text, $timeline_matches, PREG_SET_ORDER );
 			if ( is_array( $timeline_matches ) && isset( $timeline_matches[0] ) ) {
 				$full_tag = $timeline_matches[0][0];
-				require_once( gravity_flow()->get_base_path() . '/includes/pages/class-entry-detail.php' );
-				$notes = Gravity_Flow_Entry_Detail::get_timeline_notes( $entry );
-
-				$html = '';
-				foreach ( $notes as  $note ) {
-					$html .= '<br />';
-					$html .= GFCommon::format_date( $note->date_created, false, 'd M Y g:i a', false );
-					$html .= ': ';
-					if ( empty( $note->user_id ) ) {
-						if ( $note->user_name !== 'gravityflow' ) {
-							$step = Gravity_Flow_Steps::get( $note->user_name );
-							if ( $step ) {
-								$html .= $step->get_label();
-							}
-						} else {
-							$html .= esc_html( gravity_flow()->translate_navigation_label( 'Workflow' ) );
-						}
-					} else {
-						$html .= esc_html( $note->user_name );
-					}
-					$html .= '<br />';
-					$html .= nl2br( esc_html( $note->value ) );
-					$html .= '<br />';
-				}
+				$timeline = $this->get_timeline();
 
 				$text = str_replace( $full_tag, $html, $text );
 			}
@@ -5062,6 +5039,34 @@ AND m.meta_value='queued'";
 			}
 
 			return $text;
+		}
+
+		public function get_timeline( $entry ) {
+			require_once( gravity_flow()->get_base_path() . '/includes/pages/class-entry-detail.php' );
+			$notes = Gravity_Flow_Entry_Detail::get_timeline_notes( $entry );
+
+			$html = '';
+			foreach ( $notes as  $note ) {
+				$html .= '<br />';
+				$html .= GFCommon::format_date( $note->date_created, false, 'd M Y g:i a', false );
+				$html .= ': ';
+				if ( empty( $note->user_id ) ) {
+					if ( $note->user_name !== 'gravityflow' ) {
+						$step = Gravity_Flow_Steps::get( $note->user_name );
+						if ( $step ) {
+							$html .= $step->get_label();
+						}
+					} else {
+						$html .= esc_html( gravity_flow()->translate_navigation_label( 'Workflow' ) );
+					}
+				} else {
+					$html .= esc_html( $note->user_name );
+				}
+				$html .= '<br />';
+				$html .= nl2br( esc_html( $note->value ) );
+				$html .= '<br />';
+			}
+			return $html;
 		}
 
 		public function fields_have_conditional_logic( $form ) {
