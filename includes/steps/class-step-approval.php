@@ -644,6 +644,12 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 			$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
 
+			$entry = $this->refresh_entry();
+
+			do_action( 'gravityflow_post_status_update_approval', $entry, $assignee, $new_status, $form );
+
+			apply_filters( 'gravityflow_feedback_approval', $feedback, $entry, $assignee, $new_status, $form );
+
 		}
 		return $feedback;
 	}
@@ -733,6 +739,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				$feedback = __( 'Entry Rejected', 'gravityflow' );
 				break;
 		}
+
 		return $feedback;
 	}
 
@@ -764,7 +771,9 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				}
 		}
 
+
 		if ( ! $valid ) {
+			$form['failed_validation'] = true;
 			$form['workflow_note'] = array( 'failed_validation' => true, 'validation_message' => esc_html__( 'A note is required' ) );
 		}
 
@@ -775,10 +784,12 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 		$validation_result = apply_filters( 'gravityflow_validation_approval', $validation_result, $this );
 
-		if ( ! is_wp_error( $validation_result ) ) {
-			if ( ! $validation_result['is_valid'] ) {
-				$valid = new WP_Error( 'validation_result', esc_html__( 'The note field is required.', 'gravityflow' ), $validation_result );
-			}
+		if ( is_wp_error( $validation_result ) ) {
+			return $validation_result;
+		}
+
+		if ( ! $validation_result['is_valid'] ) {
+			$valid = new WP_Error( 'validation_result', esc_html__( 'There was a problem while updating the form.', 'gravityflow' ), $validation_result );
 		}
 
 		return $valid;
@@ -870,10 +881,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 							</label>
 						</div>
 						<textarea id="gravityflow-note" style="width:100%;" rows="4" class="wide" name="gravityflow_note" ><?php
-							$posted_note = rgpost( 'gravityflow_note' );
-							if ( $posted_note ) {
-								echo esc_html( $posted_note );
-							}
+							echo rgar( $form, 'failed_validation' ) ? esc_textarea( rgpost( 'gravityflow_note' ) ) : '';
 							?></textarea>
 						<?php
 						$invalid_note = ( isset( $form['workflow_note'] ) && is_array( $form['workflow_note'] ) && $form['workflow_note']['failed_validation'] );
@@ -881,6 +889,8 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 							printf( "<div class='gfield_description validation_message'>%s</div>", $form['workflow_note']['validation_message'] );
 						}
 					}
+
+					do_action( 'gravityflow_above_approval_buttons', $this, $form );
 					?>
 					<br /><br />
 					<div style="text-align:right;">
