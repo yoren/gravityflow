@@ -126,6 +126,20 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 					'label' => __( 'Message', 'gravityflow' ),
 					'type'  => 'visual_editor',
 				),
+				array(
+					'name'    => 'workflow_notification_autoformat',
+					'label'   => '',
+					'type'    => 'checkbox',
+					'choices' => array(
+						array(
+							'label'         => __( 'Disable auto-formatting', 'gravityflow' ),
+							'name'          => 'workflow_notification_disable_autoformat',
+							'default_value' => false,
+							'tooltip'       => __( 'Disable auto-formatting to prevent paragraph breaks being automatically inserted when using HTML to create the email message.', 'gravityflow' ),
+
+						),
+					),
+				),
 			),
 		);
 	}
@@ -202,12 +216,13 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 		}
 
 		$notification['workflow_notification_type'] = 'workflow';
-		$notification['fromName'] = $this->workflow_notification_from_name;
-		$notification['from'] = $this->workflow_notification_from_email;
-		$notification['replyTo'] = $this->workflow_notification_reply_to;
-		$notification['bcc'] = $this->workflow_notification_bcc;
-		$notification['subject'] = $this->workflow_notification_subject;
-		$notification['message'] = $this->workflow_notification_message;
+		$notification['fromName']                   = $this->workflow_notification_from_name;
+		$notification['from']                       = $this->workflow_notification_from_email;
+		$notification['replyTo']                    = $this->workflow_notification_reply_to;
+		$notification['bcc']                        = $this->workflow_notification_bcc;
+		$notification['subject']                    = $this->workflow_notification_subject;
+		$notification['message']                    = $this->workflow_notification_message;
+		$notification['disableAutoformat']          = $this->workflow_notification_autoformat;
 
 		$this->send_notifications( $assignees, $notification );
 
