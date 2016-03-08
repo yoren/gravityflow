@@ -1905,17 +1905,6 @@ PRIMARY KEY  (id)
 					'text'  => $this->translate_status_label( 'pending' ),
 				);
 
-				$entry_meta['workflow_current_status'] = array(
-					'label'                      => 'Current Status',
-					'is_numeric'                 => false,
-					'update_entry_meta_callback' => array( $this, 'callback_update_entry_meta_workflow_current_status' ),
-					'is_default_column'          => false, // this column will not be displayed by default on the entry list
-					'filter'                     => array(
-						'operators' => array( 'is', 'isnot' ),
-						'choices'   => $workflow_final_status_options,
-					),
-				);
-
 				$entry_meta['workflow_final_status'] = array(
 					'label'                      => 'Final Status',
 					'is_numeric'                 => false,
