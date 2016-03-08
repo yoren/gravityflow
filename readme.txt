@@ -60,6 +60,8 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Added the workflow_current_status entry meta to track the status of steps that can end in a status other than 'complete'.
 - Fixed an issue with the final status when approval steps are not the last step.
 - Fixed an issue with the user input step when the max number of characters setting is set for a field that's not editable.
+- Fixed an issue with the widths of the columns on the workflow detail page on some themes.
+- Fixed an issue with the workflow note retaining the value after updating the entry.
 
 = 1.3.0.9 =
 - Added the gravityflow_permission_granted_entry_detail filter to allow the permission check to be overridden for the workflow entry detail page.
