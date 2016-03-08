@@ -59,6 +59,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Added the generic map step setting type.
 - Added the workflow_current_status entry meta to track the status of steps that can end in a status other than 'complete'.
 - Added the gravityflow_below_status_list_user_input action to allow content to be added in the workflow box below the status list.
+- Added Gravity_Flow_API::get_timeline()
 - Fixed an issue with the final status when approval steps are not the last step.
 - Fixed an issue with the user input step when the max number of characters setting is set for a field that's not editable.
 - Fixed an issue with the widths of the columns on the workflow detail page on some themes.
