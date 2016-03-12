@@ -526,6 +526,9 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$m[]     = '<ul id="' . $id . '" style="display:none;">';
 			$step    = gravity_flow()->get_step( $item['workflow_step'], $item );
 
+			$meta_key = '';
+			$assignee = false;
+
 			if ( $step ) {
 				$step_type = $step->get_type();
 				if ( ( $step_type == 'approval' && ! $step->unanimous_approval ) || $step->assignee_policy == 'any' ) {

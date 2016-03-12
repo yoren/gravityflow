@@ -21,7 +21,7 @@ class Gravity_Flow_Assignee {
 	protected $key;
 	protected $editable_fields = array();
 
-	/* @var Gravity_Flow_Step */
+	/* @var Gravity_Flow_Step|bool */
 	protected $step;
 
 	/**
@@ -123,9 +123,8 @@ class Gravity_Flow_Assignee {
 	public function get_status_key() {
 		$assignee_id = $this->get_id();
 
-		if ( empty( $assignee_type ) ) {
-			$assignee_type = $this->get_type();
-		}
+		$assignee_type = $this->get_type();
+
 		$key = 'workflow_' . $assignee_type . '_' . $assignee_id;
 		return $key;
 	}

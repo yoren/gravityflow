@@ -82,6 +82,7 @@ class Gravity_Flow_Inbox {
 			$id_style = $args['id_column'] ? '' : 'style="display:none;"';
 			$submitter_style = $args['submitter_column'] ? '' : 'style="display:none;"';
 			$step_style = $args['step_column'] ? '' : 'style="display:none;"';
+			$columns = array();
 			?>
 
 			<table id="gravityflow-inbox" class="widefat gravityflow-inbox" cellspacing="0" style="border:0px;">

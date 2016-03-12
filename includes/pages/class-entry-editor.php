@@ -75,7 +75,7 @@ class Gravity_Flow_Entry_Editor {
 		add_filter( 'gform_field_container', array( $this, 'filter_gform_field_container' ), 10, 6 );
 		add_filter( 'gform_has_conditional_logic', array( $this, 'filter_gform_has_conditional_logic' ), 10, 2 );
 
-		add_filter( 'gform_field_css_class',  array( $this, 'filter_gform_field_css_class' ), 10, 3 );
+		add_filter( 'gform_field_css_class', array( $this, 'filter_gform_field_css_class' ), 10, 3 );
 
 		// Impersonate front-end form
 		unset( $_GET['page'] );

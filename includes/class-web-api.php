@@ -140,7 +140,7 @@ class Gravity_Flow_Web_API {
 	}
 
 	/**
-	 * @param Gravity_Flow_Step $step
+	 * @param Gravity_Flow_Step|bool $step
 	 *
 	 * @return array
 	 */

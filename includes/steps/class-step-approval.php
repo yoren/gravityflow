@@ -633,6 +633,14 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return $is_valid;
 	}
 
+	/**
+	 * Handles POSTed values from the workflow detail page.
+	 *
+	 * @param $form
+	 * @param $entry
+	 *
+	 * @return string|bool|WP_Error Return a success feedback message or a WP_Error instance with an error.
+	 */
 	public function maybe_process_status_update( $form, $entry ) {
 
 		$feedback = false;

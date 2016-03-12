@@ -28,7 +28,7 @@ class Gravity_Flow_Print_Entries {
 			$status                    = in_array( $filter, array( 'trash', 'spam' ) ) ? $filter : 'active';
 			$search_criteria['status'] = $status;
 
-			if ( $star ) {
+			if ( $star !== null ) {
 				$search_criteria['field_filters'][] = array( 'key' => 'is_starred', 'value' => (bool) $star );
 			}
 			if ( ! is_null( $read ) ) {

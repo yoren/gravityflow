@@ -181,7 +181,7 @@ class Gravity_Flow_API {
 	public function get_status( $entry ) {
 		$current_step = $this->get_current_step( $entry );
 
-		if ( $current_step === false ) {
+		if ( false === $current_step ) {
 			$status = gform_get_meta( $entry['id'], 'workflow_final_status' );
 		} else {
 			$status = $current_step->evaluate_status();

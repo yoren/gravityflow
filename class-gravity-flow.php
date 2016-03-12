@@ -193,6 +193,9 @@ if ( class_exists( 'GFForms' ) ) {
 		private function setup_db() {
 			global $wpdb;
 
+			// Default collatation
+			$charset_collate = 'utf8_unicode_ci';
+
 			require_once( ABSPATH . '/wp-admin/includes/upgrade.php' );
 			if ( ! empty( $wpdb->charset ) ) {
 				$charset_collate = "DEFAULT CHARACTER SET $wpdb->charset";
@@ -2259,6 +2262,10 @@ PRIMARY KEY  (id)
 			$steps = $this->get_steps( $form_id, $entry );
 			while ( $keep_looking && $step ) {
 
+				if ( ! $step instanceof Gravity_Flow_Step ) {
+					return false;
+				}
+
 				$next_step_id = $step->get_next_step_id();
 
 				if ( $next_step_id == 'complete' ) {
@@ -2293,8 +2300,11 @@ PRIMARY KEY  (id)
 		}
 
 		/**
-		 * @param int $form_id
+		 * Returns the next step in the list. FALSE if there isn't a next step.
+		 *
+		 * @param array $form
 		 * @param Gravity_Flow_Step $current_step
+		 * @param array $entry
 		 * @param array $steps
 		 *
 		 * @return bool|Gravity_Flow_Step
@@ -4676,7 +4686,7 @@ AND m.meta_value='queued'";
 			$api = new Gravity_Flow_API( $form['id'] );
 			$steps = $api->get_steps();
 
-			if ( $steps ) {
+			if ( ! empty( $steps ) ) {
 				$this->log_debug( __METHOD__ . '(): triggering workflow for entry ID: ' . $entry['id'] );
 				gravity_flow()->maybe_process_feed( $entry, $form );
 				$api->process_workflow( $entry['id'] );

@@ -106,7 +106,7 @@ function gravityflow_edd_plugin_updater() {
 			$license_key = trim( rgar( $settings, 'license_key' ) );
 		}
 
-		$edd_updater = new Gravity_Flow_EDD_SL_Plugin_Updater( GRAVITY_FLOW_EDD_STORE_URL, __FILE__, array(
+		new Gravity_Flow_EDD_SL_Plugin_Updater( GRAVITY_FLOW_EDD_STORE_URL, __FILE__, array(
 			'version'   => GRAVITY_FLOW_VERSION,
 			'license'   => $license_key,
 			'item_name' => GRAVITY_FLOW_EDD_ITEM_NAME,

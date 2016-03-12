@@ -464,7 +464,7 @@ class Gravity_Flow_Entry_Detail {
 	 * @param $form
 	 * @param $entry
 	 * @param $display_empty_fields
-	 * @param Gravity_Flow_Step $current_step
+	 * @param Gravity_Flow_Step|null $current_step
 	 * @param $editable_fields
 	 * @param $dynamic_conditional_logic_enabled
 	 * @param $format
