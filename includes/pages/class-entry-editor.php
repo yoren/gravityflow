@@ -172,6 +172,11 @@ class Gravity_Flow_Entry_Editor {
 			return $this->get_display_field( $field, $value, $lead_id, $form_id );
 		}
 
+		if ( ! empty( $html ) ) {
+			// the field input has already been set via the gform_field_input filter. e.g. the Signature Add-On < v3
+			return $html;
+		}
+
 		$dynamic_conditional_logic_enabled = $this->is_dynamic_conditional_logic_enabled();
 
 		if ( ! $dynamic_conditional_logic_enabled ) {
