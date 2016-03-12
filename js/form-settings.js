@@ -130,7 +130,7 @@
         var routing_items = json ? $.parseJSON(json) : null;
 
 		var options;
-		if ( selectedStepType == 'user_input' ) {
+		if ( $('#editable_fields').length > 0 ) {
 			if (!routing_items) {
 				routing_items = [{
 					assignee: gf_routing_setting_strings['accounts'][0]['choices'][0]['value'],
