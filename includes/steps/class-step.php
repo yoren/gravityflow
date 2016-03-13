@@ -1520,9 +1520,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 	/**
 	 * Removes assignees from and/or adds assignees to a step. Call after updating entry values.
-	 * Make sure you call get_assignees() before you update the entry or the previous assignees may not get removed.
+	 * Make sure you call get_assignees() to get the assignees before you update the entry before you update the entry or the previous assignees may not get removed.
 	 *
-	 * @param Gravity_Flow_Assignee[] $previous_assignees The previous assign
+	 * @param Gravity_Flow_Assignee[] $previous_assignees The previous assignees.
 	 */
 	public function maybe_adjust_assignment( $previous_assignees ) {
 
