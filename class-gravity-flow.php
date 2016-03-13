@@ -2077,17 +2077,27 @@ PRIMARY KEY  (id)
 						$workflow_status_label = $this->translate_status_label( $workflow_status );
 						printf( '%s: %s', esc_html__( 'Status', 'gravityflow' ), $workflow_status_label );
 
-						if ( $current_step !== false ) {
+						if ( $current_step !== false && $current_step instanceof Gravity_Flow_Step ) {
 
 							if ( $current_step->supports_expiration() && $current_step->expiration ) {
 								$expiration_timestamp = $current_step->get_expiration_timestamp();
-								$expiration_date_str = date( 'Y-m-d H:i:s', $expiration_timestamp );
-								$expiration_date = get_date_from_gmt( $expiration_date_str );
+								$expiration_date_str  = date( 'Y-m-d H:i:s', $expiration_timestamp );
+								$expiration_date      = get_date_from_gmt( $expiration_date_str );
 								echo '<br /><br />';
 								printf( '%s: %s', esc_html__( 'Expires', 'gravityflow' ), $expiration_date );
-
 							}
+						}
 
+						/**
+						 * Allows content to be added in the workflow box below the workflow status info.
+						 *
+						 * @param array $form
+						 * @param array $entry
+						 * @param Gravity_Flow_Step $current_step
+						 */
+						do_action( 'gravityflow_below_workflow_info_entry_detail', $form, $entry, $current_step );
+
+						if ( $current_step !== false && $current_step instanceof Gravity_Flow_Step ) {
 							?>
 							<hr style="margin-top:10px;"/>
 							<?php
