@@ -55,6 +55,21 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.3.0.12 =
+- Added the gravityflow_assignee_status_list_user_input filter to allow the assignee status list to be hidden.
+    Example:
+    add_action( 'gravityflow_assignee_status_list_user_input', 'sh_filter_gravityflow_assignee_status_list_user_input', 10, 3 );
+    function sh_filter_gravityflow_assignee_status_list_user_input( $display, $form, $step ) {
+        return false;
+    }
+- Added the gravityflow_below_workflow_info_entry_detail filter to allow content to be added below the workflow info on the entry detail page.
+    Example:
+    add_action( 'gravityflow_below_workflow_info_entry_detail', 'sh_action_gravityflow_below_workflow_info_entry_detail', 10, 3 );
+    function sh_action_gravityflow_below_workflow_info_entry_detail( $form, $entry, $step ) {
+        echo 'My content';
+    }
+
+
 = 1.3.0.11 =
 - Added the Disable auto-formatting setting for the assignee, rejection, and approval email messages.
 
