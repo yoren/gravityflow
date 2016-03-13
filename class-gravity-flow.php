@@ -2077,7 +2077,7 @@ PRIMARY KEY  (id)
 						$workflow_status_label = $this->translate_status_label( $workflow_status );
 						printf( '%s: %s', esc_html__( 'Status', 'gravityflow' ), $workflow_status_label );
 
-						if ( $current_step !== false && $current_step instanceof Gravity_Flow_Step ) {
+						if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step ) {
 
 							if ( $current_step->supports_expiration() && $current_step->expiration ) {
 								$expiration_timestamp = $current_step->get_expiration_timestamp();
@@ -2097,7 +2097,7 @@ PRIMARY KEY  (id)
 						 */
 						do_action( 'gravityflow_below_workflow_info_entry_detail', $form, $entry, $current_step );
 
-						if ( $current_step !== false && $current_step instanceof Gravity_Flow_Step ) {
+						if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step ) {
 							?>
 							<hr style="margin-top:10px;"/>
 							<?php
@@ -2224,25 +2224,6 @@ PRIMARY KEY  (id)
 			</div>
 		<?php
 		}
-
-		public function trigger_workflow_complete( $form, $entry ) {
-
-
-			// Integration with the User Registration Add-On
-			if ( class_exists( 'GFUser' ) ) {
-				GFUser::gf_create_user( $entry, $form );
-			}
-
-			// Integration with the Zapier Add-On
-			if ( class_exists( 'GFZapier' ) ) {
-				GFZapier::send_form_data_to_zapier( $entry, $form );
-			}
-
-
-			GFAPI::send_notifications( $form, $entry, 'workflow_complete' );
-
-		}
-
 
 		public function get_current_step( $form, $entry ) {
 
@@ -2828,7 +2809,7 @@ PRIMARY KEY  (id)
 			<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_submit">
 				<?php if ( $admin_ui ) :	?>
 				<h2 class="gf_admin_page_title">
-					<img width="45" height="22" src="<?php echo gravity_flow()->get_base_url(); ?>/images/gravityflow-icon-blue-grad.svg" style="margin-right:5px;"/>
+					<img width="45" height="22" src="<?php echo esc_url( gravity_flow()->get_base_url() ); ?>/images/gravityflow-icon-blue-grad.svg" style="margin-right:5px;"/>
 
 					<span><?php esc_html_e( 'Submit a Workflow Form', 'gravityflow' ); ?></span>
 
