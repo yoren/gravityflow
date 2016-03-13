@@ -57,7 +57,7 @@ class Gravity_Flow_API {
 	/**
 	 * Returns the step with the given step ID. Optionally pass an Entry object to perform entry-specific functions.
 	 *
-	 * @param $step_id
+	 * @param int $step_id
 	 * @param null $entry
 	 *
 	 * @return Gravity_Flow_Step|bool Returns the Step. False if not found.

@@ -2,14 +2,14 @@
 
 class Gravity_Flow_Web_API {
 
-	function __construct() {
+	public function __construct() {
 		add_action( 'gform_webapi_get_entries_assignees', array( $this, 'get_entries_assignees' ), 10, 2 );
 		add_action( 'gform_webapi_post_entries_assignees', array( $this, 'post_entries_assignees' ), 10, 2 );
 		add_action( 'gform_webapi_get_forms_steps', array( $this, 'get_forms_steps' ) );
 		add_action( 'gform_webapi_get_entries_steps', array( $this, 'get_entries_steps' ) );
 	}
 
-	function get_entries_steps( $entry_id ) {
+	public function get_entries_steps( $entry_id ) {
 
 		$capability = apply_filters( 'gravityflow_web_api_capability_get_entries_steps', 'gravityflow_create_steps' );
 		$this->authorize( $capability );
@@ -48,7 +48,7 @@ class Gravity_Flow_Web_API {
 		$this->end( 200, $response );
 	}
 
-	function get_forms_steps( $form_id ) {
+	public function get_forms_steps( $form_id ) {
 
 		$capability = apply_filters( 'gravityflow_web_api_capability_get_forms_steps', 'gravityflow_create_steps' );
 		$this->authorize( $capability );
@@ -72,7 +72,7 @@ class Gravity_Flow_Web_API {
 		$this->end( 200, $response );
 	}
 
-	function get_entries_assignees( $entry_id, $assignee_key = null ) {
+	public function get_entries_assignees( $entry_id, $assignee_key = null ) {
 
 		$capability = apply_filters( 'gravityflow_web_api_capability_get_entries_assignees', 'gravityflow_create_steps' );
 		$this->authorize( $capability );
@@ -98,8 +98,8 @@ class Gravity_Flow_Web_API {
 	 * @param $entry_id
 	 * @param string $assignee_key
 	 */
-	function post_entries_assignees( $entry_id, $assignee_key = null ) {
-		global $HTTP_RAW_POST_DATA;
+	public function post_entries_assignees( $entry_id, $assignee_key = null ) {
+	 	global $HTTP_RAW_POST_DATA;
 
 		$capability = apply_filters( 'gravityflow_web_api_capability_post_entries_assignees', 'gravityflow_create_steps' );
 		$this->authorize( $capability );
@@ -144,7 +144,7 @@ class Gravity_Flow_Web_API {
 	 *
 	 * @return array
 	 */
-	function get_assignees_array( $step ) {
+	public function get_assignees_array( $step ) {
 		$assignees = $step && $step instanceof Gravity_Flow_Step ? $step->get_assignees() : array();
 
 		$response = array();
@@ -159,7 +159,7 @@ class Gravity_Flow_Web_API {
 	 *
 	 * @return array
 	 */
-	function get_assignee_array( $assignee ) {
+	public function get_assignee_array( $assignee ) {
 		return array(
 			'key' => $assignee->get_key(),
 			'id' => $assignee->get_id(),
@@ -169,10 +169,20 @@ class Gravity_Flow_Web_API {
 		);
 	}
 
-	function end( $status, $response ) {
+	/**
+	 * @param $status
+	 * @param $response
+	 */
+	public function end( $status, $response ) {
 		GFWebAPI::end( $status, $response );
 	}
 
+
+	/**
+	 * @param array $caps
+	 *
+	 * @return bool
+	 */
 	public function authorize( $caps = array() ) {
 
 		if ( GFCommon::current_user_can_any( $caps ) ) {

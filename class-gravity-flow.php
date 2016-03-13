@@ -3015,7 +3015,7 @@ PRIMARY KEY  (id)
 
 				<?php if ( $args['display_header'] ) : ?>
 					<h2 class="gf_admin_page_title">
-						<img width="45" height="22" src="<?php echo gravity_flow()->get_base_url(); ?>/images/gravityflow-icon-blue-grad.svg" style="margin-right:5px;"/>
+						<img width="45" height="22" src="<?php echo esc_url( gravity_flow()->get_base_url() ); ?>/images/gravityflow-icon-blue-grad.svg" style="margin-right:5px;"/>
 						<span><?php esc_html_e( 'Workflow Status', 'gravityflow' ); ?></span>
 					</h2>
 
@@ -3052,7 +3052,7 @@ PRIMARY KEY  (id)
 
 				<?php if ( $args['display_header'] ) : ?>
 					<h2 class="gf_admin_page_title">
-						<img width="45" height="22" src="<?php echo gravity_flow()->get_base_url(); ?>/images/gravityflow-icon-blue-grad.svg" style="margin-right:5px;"/>
+						<img width="45" height="22" src="<?php echo esc_url( gravity_flow()->get_base_url() ); ?>/images/gravityflow-icon-blue-grad.svg" style="margin-right:5px;"/>
 
 						<span><?php esc_html_e( 'Workflow Activity', 'gravityflow' ); ?></span>
 
@@ -3091,7 +3091,7 @@ PRIMARY KEY  (id)
 
 				<?php if ( $args['display_header'] ) : ?>
 					<h2 class="gf_admin_page_title">
-						<img width="45" height="22" src="<?php echo gravity_flow()->get_base_url(); ?>/images/gravityflow-icon-blue-grad.svg" style="margin-right:5px;"/>
+						<img width="45" height="22" src="<?php echo esc_url( gravity_flow()->get_base_url() ); ?>/images/gravityflow-icon-blue-grad.svg" style="margin-right:5px;"/>
 
 						<span><?php esc_html_e( 'Workflow Reports', 'gravityflow' ); ?></span>
 
@@ -3750,7 +3750,8 @@ PRIMARY KEY  (id)
 
 		public function field_settings( $position, $form_id ) {
 
-			if ( $position == 20 ) { // After Description setting
+			if ( $position == 20 ) {
+				// After Description setting
 				?>
 
 				<li class="gravityflow_setting_assignees field_setting">
@@ -4439,7 +4440,7 @@ AND m.meta_value='queued'";
 			die();
 		}
 
-		public function ajax_download_export(){
+		public function ajax_download_export() {
 
 			if ( ! wp_verify_nonce( rgget( 'nonce' ), 'gravityflow_download_export' ) || ! GFAPI::current_user_can_any( 'gravityflow_status' ) ) {
 				$response['status'] = 'error';

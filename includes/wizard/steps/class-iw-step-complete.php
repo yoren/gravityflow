@@ -4,7 +4,7 @@ class Gravity_Flow_Installation_Wizard_Step_Complete extends Gravity_Flow_Instal
 
 	protected $_name = 'complete';
 
-	function display() {
+	public function display() {
 
 		$url = admin_url( 'admin.php?page=gf_edit_forms&view=settings&subview=gravityflow&id=' );
 
@@ -94,15 +94,15 @@ class Gravity_Flow_Installation_Wizard_Step_Complete extends Gravity_Flow_Instal
 	<?php
 	}
 
-	function get_title() {
+	public function get_title() {
 		return esc_html__( 'Installation Complete', 'gravityflow' );
 	}
 
-	function get_next_button_text() {
+	public function get_next_button_text() {
 		return '';
 	}
 
-	function get_previous_button_text() {
+	public function get_previous_button_text() {
 		return '';
 	}
 }

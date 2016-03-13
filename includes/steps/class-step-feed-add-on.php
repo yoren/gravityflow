@@ -26,7 +26,7 @@ if ( ! class_exists( 'GFForms' ) ) {
  *
  * @since		1.0
  */
-abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step{
+abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 
 	/**
 	 * The name of the class used by the add-on. Example: GFMailChimp.

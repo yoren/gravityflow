@@ -5,7 +5,7 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 
 	protected $_name = 'license_key';
 
-	function display() {
+	public function display() {
 
 		if ( ! $this->license_key && defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ) {
 			$this->license_key = GRAVITY_FLOW_LICENSE_KEY;
@@ -45,11 +45,11 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 		}
 	}
 
-	function get_title() {
+	public function get_title() {
 		return esc_html__( 'License Key', 'gravityflow' );
 	}
 
-	function validate( $posted_values ) {
+	public function validate( $posted_values ) {
 
 		$valid_key = true;
 		$terms_accepted = true;
@@ -78,7 +78,7 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 		return $valid;
 	}
 
-	function install() {
+	public function install() {
 		if ( $this->license_key ) {
 			$gravityflow = gravity_flow();
 
@@ -88,7 +88,7 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 		}
 	}
 
-	function get_previous_button_text() {
+	public function get_previous_button_text() {
 		return '';
 	}
 }

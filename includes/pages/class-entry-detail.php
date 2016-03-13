@@ -403,7 +403,7 @@ class Gravity_Flow_Entry_Detail {
 				?>
 				<tbody>
 				<?php
-				self::fields( $form, $entry, $display_empty_fields, $current_step, $editable_fields, $dynamic_conditional_logic_enabled, 'table' );
+				self::fields( $form, $entry, $display_empty_fields, $current_step, 'table' );
 				?>
 				</tbody>
 				<?php
@@ -461,15 +461,15 @@ class Gravity_Flow_Entry_Detail {
 	}
 
 	/**
-	 * @param $form
-	 * @param $entry
-	 * @param $display_empty_fields
+	 * @param array $form
+	 * @param array $entry
+	 * @param bool $display_empty_fields
 	 * @param Gravity_Flow_Step|null $current_step
-	 * @param $editable_fields
-	 * @param $dynamic_conditional_logic_enabled
+	 * @param array $editable_fields
+	 * @param bool $dynamic_conditional_logic_enabled
 	 * @param $format
 	 */
-	public static function fields( $form, $entry, $display_empty_fields, $current_step, $editable_fields, $dynamic_conditional_logic_enabled, $format ) {
+	public static function fields( $form, $entry, $display_empty_fields, $current_step, $format ) {
 		$form_id = absint( $form['id'] );
 		?>
 

@@ -49,11 +49,18 @@ class Gravity_Flow_Entry_Editor {
 	 */
 	public $display_empty_fields;
 
+	/**
+	 * Gravity_Flow_Entry_Editor constructor.
+	 *
+	 * @param array $form
+	 * @param array $entry
+	 * @param Gravity_Flow_Step $step
+	 * @param bool $display_empty_fields
+	 */
 	public function __construct( $form, $entry, $step, $display_empty_fields ) {
 		$this->form = $form;
 		$this->entry = $entry;
 		$this->step = $step;
-
 		$this->display_empty_fields = $display_empty_fields;
 	}
 

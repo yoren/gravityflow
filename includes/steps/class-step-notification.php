@@ -24,8 +24,6 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 		return '<i class="fa fa-envelope-o"></i>';
 	}
 
-
-
 	public function get_settings() {
 
 		$form = $this->get_form();

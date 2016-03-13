@@ -14,7 +14,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
-class Gravity_Flow_Step_Feed_Emma extends Gravity_Flow_Step_Feed_Add_On{
+class Gravity_Flow_Step_Feed_Emma extends Gravity_Flow_Step_Feed_Add_On {
 	public $_step_type = 'emma';
 
 	protected $_class_name = 'GFEmma';
@@ -27,6 +27,5 @@ class Gravity_Flow_Step_Feed_Emma extends Gravity_Flow_Step_Feed_Add_On{
 		$label = $feed['meta']['feed_name'];
 		return $label;
 	}
-
 }
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_Emma() );

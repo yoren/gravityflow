@@ -196,7 +196,7 @@ class Gravity_Flow_Installation_Wizard {
 	}
 
 	/**
-	 * @param $current_step
+	 * @param Gravity_Flow_Installation_Wizard_Step $current_step
 	 *
 	 * @return bool|Gravity_Flow_Installation_Wizard_Step
 	 */
@@ -287,6 +287,11 @@ class Gravity_Flow_Installation_Wizard {
 		return $html;
 	}
 
+	/**
+	 * @param Gravity_Flow_Installation_Wizard_Step $step
+	 *
+	 * @return mixed
+	 */
 	public function get_step_index( $step ) {
 		$i = array_search( $step->get_name(), array_keys( $this->_step_class_names ) );
 		return $i;

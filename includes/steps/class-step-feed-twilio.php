@@ -14,7 +14,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
-class Gravity_Flow_Step_Feed_Twilio extends Gravity_Flow_Step_Feed_Add_On{
+class Gravity_Flow_Step_Feed_Twilio extends Gravity_Flow_Step_Feed_Add_On {
 	public $_step_type = 'twilio';
 
 	protected $_class_name = 'GFTwilio';
