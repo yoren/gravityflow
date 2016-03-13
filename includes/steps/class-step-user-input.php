@@ -720,59 +720,58 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		<h4 style="margin-bottom:10px;"><?php echo $this->get_name() . ' (' . $status_str . ')'?></h4>
 
 		<div>
-			<ul>
-				<?php
-				$assignees = $this->get_assignees();
+			<?php
+			/**
+			 * Allows the assignee status list to be hidden.
+			 *
+			 * @param array $form
+			 * @param array $entry
+			 * @param Gravity_Flow_Step $current_step
+			 */
+			$display_assignee_status_list = apply_filters( 'gravityflow_assignee_status_list_user_input', true, $form, $this );
+			if ( $display_assignee_status_list ) {
+				?>
+				<ul>
+					<?php
+					$assignees = $this->get_assignees();
 
-				gravity_flow()->log_debug( __METHOD__ . '(): assignee details: ' . print_r( $assignees, true ) );
+					gravity_flow()->log_debug( __METHOD__ . '(): assignee details: ' . print_r( $assignees, true ) );
 
-				$editable_fields = array();
-				foreach ( $assignees as $assignee ) {
+					foreach ( $assignees as $assignee ) {
 
-					gravity_flow()->log_debug( __METHOD__ . '(): showing status for: ' . $assignee->get_key() );
+						gravity_flow()->log_debug( __METHOD__ . '(): showing status for: ' . $assignee->get_key() );
 
-					$assignee_status = $assignee->get_status();
+						$assignee_status = $assignee->get_status();
 
-					gravity_flow()->log_debug( __METHOD__ . '(): assignee status: ' . $assignee_status );
+						gravity_flow()->log_debug( __METHOD__ . '(): assignee status: ' . $assignee_status );
 
+						if ( ! empty( $assignee_status ) ) {
 
-					if ( ! empty( $assignee_status ) ) {
+							$assignee_type = $assignee->get_type();
+							$assignee_id = $assignee->get_id();
 
-						$assignee_type = $assignee->get_type();
-						$assignee_id = $assignee->get_id();
-
-						if ( $assignee_type == 'user_id' ) {
-							$user_info = get_user_by( 'id', $assignee_id );
-							$status_label = $this->get_status_label( $assignee_status );
-							echo sprintf( '<li>%s: %s (%s)</li>', esc_html__( 'User', 'gravityflow' ), $user_info->display_name,  $status_label );
-							if ( $assignee_id == $current_user->ID ) {
-								$editable_fields = $assignee->get_editable_fields();
-							}
-						} elseif ( $assignee_type == 'email' ) {
-							$email = $assignee_id;
-							$status_label = $this->get_status_label( $assignee_status );
-							echo sprintf( '<li>%s: %s (%s)</li>', esc_html__( 'Email', 'gravityflow' ), $email,  $status_label );
-							if ( $email == rgget( 'gflow_access_email' ) ) {
-								$editable_fields = $assignee['editable_fields'];
-							} elseif ( $token = gravity_flow()->decode_access_token() ) {
-								if ( $email == gravity_flow()->parse_token_assignee( $token )->get_id() ) {
-									$editable_fields = $assignee->get_editable_fields();
-								}
-							}
-						} elseif ( $assignee_type == 'role' ) {
-							$status_label = $this->get_status_label( $assignee_status );
-							$role_name = translate_user_role( $assignee_id );
-							echo sprintf( '<li>%s: (%s)</li>', esc_html__( 'Role', 'gravityflow' ), $role_name, $status_label );
-							echo '<li>' . $role_name . ': ' . $assignee_status . '</li>';
-							if ( gravity_flow()->check_user_role( $assignee_id, $current_user->ID ) ) {
-								$editable_fields = $assignee->get_editable_fields();
+							if ( $assignee_type == 'user_id' ) {
+								$user_info = get_user_by( 'id', $assignee_id );
+								$status_label = $this->get_status_label( $assignee_status );
+								echo sprintf( '<li>%s: %s (%s)</li>', esc_html__( 'User', 'gravityflow' ), $user_info->display_name,  $status_label );
+							} elseif ( $assignee_type == 'email' ) {
+								$email = $assignee_id;
+								$status_label = $this->get_status_label( $assignee_status );
+								echo sprintf( '<li>%s: %s (%s)</li>', esc_html__( 'Email', 'gravityflow' ), $email,  $status_label );
+							} elseif ( $assignee_type == 'role' ) {
+								$status_label = $this->get_status_label( $assignee_status );
+								$role_name = translate_user_role( $assignee_id );
+								echo sprintf( '<li>%s: (%s)</li>', esc_html__( 'Role', 'gravityflow' ), $role_name, $status_label );
+								echo '<li>' . $role_name . ': ' . $assignee_status . '</li>';
 							}
 						}
 					}
-				}
 
-				?>
-			</ul>
+					?>
+				</ul>
+				<?php
+			}
+			?>
 			<div>
 				<?php
 
@@ -793,14 +792,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				}
 
 				if ( $assignee_status == 'pending' || $role_status == 'pending' ) {
-
-					$field_ids = array();
-					if ( is_array( $editable_fields ) ) {
-						foreach ( $editable_fields as $editable_field ) {
-							$field_ids[] = '#field_' . $form_id . '_' . str_replace( '.', '_', $editable_field );
-						}
-					}
-
 					?>
 					<script>
 						(function (GFFlowInput, $) {
