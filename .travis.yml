@@ -15,6 +15,7 @@ env:
   - WP_VERSION=4.0 WP_MULTISITE=0
 
 before_script:
+  - git clone https://${GFTOKEN}@github.com/stevehenty/gravityforms.git $PWD/tmp/gravityforms
   - bash tests/bin/install.sh wordpress_unit_tests root '' localhost $WP_VERSION
 
 script: phpunit

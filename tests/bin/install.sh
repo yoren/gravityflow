@@ -69,9 +69,6 @@ install_wp() {
 install_gravity_forms(){
 	if [ -d ${PWD}/../gravityforms ]; then
 	    cp -r ${PWD}/../gravityforms $PWD/tmp/gravityforms
-    else
-        # check out github repo
-        git clone https://${GFTOKEN}@github.com/gravityforms/gravityforms.git $PWD/tmp/gravityforms
     fi
 }
 
