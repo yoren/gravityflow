@@ -545,6 +545,17 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 		$feedback = $new_status == 'complete' ?  __( 'Entry updated and marked complete.', 'gravityflow' ) : __( 'Entry updated - in progress.', 'gravityflow' );
 
+		/**
+		 * Allow the feedback message to be modified on the user input step.
+		 *
+		 * @param string $feedback
+		 * @param string $new_status
+		 * @param Gravity_Flow_Assignee $assignee
+		 * @param array $form
+		 * @param Gravity_Flow_Step $this
+		 */
+		$feedback = apply_filters( 'gravityflow_feedback_message_user_input', $feedback, $new_status, $assignee, $form, $this );
+
 		$note = sprintf( '%s: %s', $this->get_name(), $feedback );
 
 		$user_note = rgpost( 'gravityflow_note' );
@@ -599,6 +610,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		} else {
 			$entry = GFFormsModel::create_lead( $form );
 		}
+
 		foreach ( $form['fields'] as $field ) {
 			/* @var GF_Field $field */
 			if ( in_array( $field->id, $editable_fields ) ) {
@@ -689,7 +701,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			'form' => $form,
 		);
 
-		$validation_result = apply_filters( 'gravityflow_validation_user_input', $validation_result, $this );
+		$validation_result = apply_filters( 'gravityflow_validation_user_input', $validation_result, $this, $new_status );
 
 		if ( is_wp_error( $validation_result ) ) {
 			return $validation_result;
@@ -697,6 +709,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 		if ( ! $validation_result['is_valid'] ) {
 			$valid = new WP_Error( 'validation_result', esc_html__( 'There was a problem while updating your form.', 'gravityflow' ), $validation_result );
+		}
+
+		if ( $validation_result['is_valid'] ) {
+			return true;
 		}
 
 		return $valid;

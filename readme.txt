@@ -68,7 +68,22 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
     function sh_action_gravityflow_below_workflow_info_entry_detail( $form, $entry, $step ) {
         echo 'My content';
     }
+- Added the gravityflow_feedback_message_user_input filter to allow the feedback message to be modified on the user input step.
+    Example:
+    add_filter( 'gravityflow_feedback_message_user_input', 'sh_filter_gravityflow_feedback_message_user_input', 10, 5 );
+    function sh_filter_gravityflow_feedback_message_user_input( $feedback, $new_status, $assignee, $form, $step ) {
+        return 'Success!';
+    }
 
+- Added the gravityflow_step_column_status_page filter to allow the value of the step column to be modified on the status page.
+    Example:
+    add_filter( 'gravityflow_step_column_status_page', 'sh_filter_gravityflow_step_column_status_page', 10, 2 );
+    function sh_filter_gravityflow_step_column_status_page( $output, $entry ) {
+        if ( empty( $entry['workflow_step'] ) ) {
+            $output = 'Workflow Ended';
+        }
+        return $output;
+    }
 
 = 1.3.0.11 =
 - Added the Disable auto-formatting setting for the assignee, rejection, and approval email messages.

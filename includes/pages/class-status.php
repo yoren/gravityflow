@@ -625,10 +625,19 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 			$label = $step ? esc_html( $step->get_name() ) : '';
 			$link  = "<a href='{$url_entry}'>$label</a>";
-			echo $link;
+			$output = $link;
 		} else {
-			echo '<span class="gravityflow-empty">&dash;</span>';
+			$output = '<span class="gravityflow-empty">&dash;</span>';
 		}
+
+		/**
+		 * Allow the value in the step column on the status page to be modified.
+		 *
+		 * @param string $output
+		 * @param array $item The Entry
+		 */
+		$output = apply_filters( 'gravityflow_step_column_status_page', $output, $item );
+		echo $output;
 	}
 
 	function column_date_created( $item ) {
