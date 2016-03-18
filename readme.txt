@@ -55,6 +55,9 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.3.0.13 =
+- Added support for Signature Add-On v3.0.
+
 = 1.3.0.12 =
 - Added the gravityflow_assignee_status_list_user_input filter to allow the assignee status list to be hidden.
     Example:

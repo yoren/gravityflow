@@ -161,7 +161,7 @@ if ( class_exists( 'GFForms' ) ) {
 		public function init_frontend() {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_scripts' ), 10 );
 			add_action( 'template_redirect', array( $this, 'action_template_redirect' ), 2 );
-			if ( class_exists( 'GFSignature' ) ) {
+			if ( class_exists( 'GFSignature' ) && ! class_exists( 'GF_Field_Signature' ) ) {
 				add_filter( 'gform_admin_pre_render', array( $this, 'delete_signature_script' ) );
 				$this->maybe_save_signature();
 			}
