@@ -1,7 +1,7 @@
 Gravity Flow
 ==============================
 
-[ ![Codeship Status for gravityflow/gravityflow](https://codeship.com/projects/b13b4010-bf9d-0133-a48a-0a97d18729e7/status?branch=master)](https://codeship.com/projects/137156)
+[![Build Status](https://travis-ci.org/gravityflow/gravityflow.svg?branch=master)](https://travis-ci.org/gravityflow/gravityflow)
 
 Gravity Flow is a commercial plugin for WordPress which provides a Workflow platform for forms created in Gravity Forms.
 
@@ -16,10 +16,10 @@ To enable script debug mode just add the following line to your wp-config.php fi
 
 define( 'SCRIPT_DEBUG', true );
 
-## (No) Support
+## Support
 If you'd like to receive the stable release version, automatic updates and support please purchase a license here: https://gravityflow.io. 
 
-Support requests without a valid license will be ignored.
+We cannot provide support to anyone without a valid license.
 
 ## Documentation
 User Guides, FAQ, Walkthroughs and Developer Docs: http://docs.gravityflow.io
