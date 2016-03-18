@@ -2168,7 +2168,6 @@ PRIMARY KEY  (id)
 								<?php endif; ?>
 								<option value="restart_workflow"><?php esc_html_e( 'Restart Workflow', 'gravityflow' ) ?></option>
 								<?php
-								$steps = $this->get_steps( $form['id'] );
 								if ( $current_step && count( $steps ) > 1 ) :
 								?>
 								<optgroup label="<?php esc_html_e( 'Send to step:', 'gravityflow' ); ?>" >
