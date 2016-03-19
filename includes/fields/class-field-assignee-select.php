@@ -201,11 +201,29 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 				$value = translate_user_role( $value );
 				break;
 			case 'user_id' :
-				$user = get_user_by( 'id', $value );
-				$value = $user->display_name;
+				$user  = get_user_by( 'id', $value );
+				$value = is_object( $user ) ? $user->display_name : $assignee;
 		}
 
 		return $value;
+	}
+
+	/**
+	 * Format the entry value before it is used in entry exports and by framework add-ons using GFAddOn::get_field_value().
+	 *
+	 * @param array $entry The entry currently being processed.
+	 * @param string $input_id The field or input ID.
+	 * @param bool|false $use_text When processing choice based fields should the choice text be returned instead of the value.
+	 * @param bool|false $is_csv Is the value going to be used in the .csv entries export?
+	 *
+	 * @return string
+	 */
+	public function get_value_export( $entry, $input_id = '', $use_text = false, $is_csv = false ) {
+		if ( empty( $input_id ) ) {
+			$input_id = $this->id;
+		}
+
+		return $this->get_display_name( rgar( $entry, $input_id ) );
 	}
 }
 

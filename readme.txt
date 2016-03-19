@@ -114,6 +114,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Added the gravityflow-instructions and gravityflow-timeline CSS classes.
 - Added the gravityflow_webhook_args_[Form ID] filter immediately after the gravityflow_webhook_args filter.
 
+- Updated $field->get_value_export() for the Workflow fields to return the display name.
 - Updated the entry meta so that the status columns don't appear automatically in the Gravity Forms entry list.
 - Updated the styles of the workflow detail page for narrow screens to display the entry first and then the info box below.
 
