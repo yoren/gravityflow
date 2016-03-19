@@ -55,10 +55,8 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
-= 1.3.0.13 =
+= 1.3.1=
 - Added support for Signature Add-On v3.0.
-
-= 1.3.0.12 =
 - Added the gravityflow_assignee_status_list_user_input filter to allow the assignee status list to be hidden.
     Example:
     add_action( 'gravityflow_assignee_status_list_user_input', 'sh_filter_gravityflow_assignee_status_list_user_input', 10, 3 );
@@ -77,7 +75,6 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
     function sh_filter_gravityflow_feedback_message_user_input( $feedback, $new_status, $assignee, $form, $step ) {
         return 'Success!';
     }
-
 - Added the gravityflow_step_column_status_page filter to allow the value of the step column to be modified on the status page.
     Example:
     add_filter( 'gravityflow_step_column_status_page', 'sh_filter_gravityflow_step_column_status_page', 10, 2 );
@@ -87,21 +84,11 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
         }
         return $output;
     }
-
-= 1.3.0.11 =
 - Added the Disable auto-formatting setting for the assignee, rejection, and approval email messages.
-
-= 1.3.0.10 =
 - Added the generic map step setting type.
 - Added the workflow_current_status entry meta to track the status of steps that can end in a status other than 'complete'.
 - Added the gravityflow_below_status_list_user_input action to allow content to be added in the workflow box below the status list.
 - Added Gravity_Flow_API::get_timeline()
-- Fixed an issue with the final status when approval steps are not the last step.
-- Fixed an issue with the user input step when the max number of characters setting is set for a field that's not editable.
-- Fixed an issue with the widths of the columns on the workflow detail page on some themes.
-- Fixed an issue with the workflow note retaining the value after updating the entry.
-
-= 1.3.0.9 =
 - Added the gravityflow_permission_granted_entry_detail filter to allow the permission check to be overridden for the workflow entry detail page.
     Example:
     add_filter( 'gravityflow_permission_granted_entry_detail', 'sh_filter_gravityflow_permission_granted_entry_detail', 10, 2 );
@@ -121,37 +108,27 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
         return 'Save for later';
     }
 - Added timelines and page break options to bulk printing on the status page.
-- Fixed an issue with the user input step where hidden fields are not displayed.
-- Fixed an issue with status list when displaying names of assignees whose accounts no longer exist.
-
-= 1.3.0.8 =
-- Fixed an issue on the entry detail page for entries on the approval step and completed entries where product fields are displayed in the list of fields. Product fields are displayed in the order summary but they can also be displayed in the list by selecting the fields in the display fields step setting.
-
-= 1.3.0.7 =
 - Added the gravityflow_inbox_args filter so the inbox criteria can be modified.
 - Added the 'Required Reverted or Rejected' to the options in the Workflow note setting.
-- Updated the entry meta so that the status columns don't appear automatically in the Gravity Forms entry list.
-
-= 1.3.0.6 =
-- Added the gravityflow-instructions and gravityflow-timeline CSS classes.
-- Fixed an issue with the styles of the timeline.
-
-= 1.3.0.5 =
 - Added the gravityflow_status_args filter to allow the status table to be modified.
-
-= 1.3.0.4 =
-- Fixed an issue with Gravity_Flow_API::get_current_step() for entries that have not started the workflow.
-
-= 1.3.0.3 =
+- Added the gravityflow-instructions and gravityflow-timeline CSS classes.
 - Added the gravityflow_webhook_args_[Form ID] filter immediately after the gravityflow_webhook_args filter.
+
+- Updated the entry meta so that the status columns don't appear automatically in the Gravity Forms entry list.
+- Updated the styles of the workflow detail page for narrow screens to display the entry first and then the info box below.
+
+- Fixed an issue with the final status when approval steps are not the last step.
+- Fixed an issue with the user input step when the max number of characters setting is set for a field that's not editable.
+- Fixed an issue with the widths of the columns on the workflow detail page on some themes.
+- Fixed an issue with the workflow note retaining the value after updating the entry.
+- Fixed an issue with the styles of the timeline.
+- Fixed an issue with the user input step where hidden fields are not displayed.
+- Fixed an issue with status list when displaying names of assignees whose accounts no longer exist.
+- Fixed an issue on the entry detail page for entries on the approval step and completed entries where product fields are displayed in the list of fields. Product fields are displayed in the order summary but they can also be displayed in the list by selecting the fields in the display fields step setting.
+- Fixed an issue with Gravity_Flow_API::get_current_step() for entries that have not started the workflow.
 - Fixed an issue with the support form.
 - Fixed an issue with the user input step where conditional logic is not disabled correctly in some cases.
-
-= 1.3.0.2 =
 - Fixed an issue with the user input step where the save and continue button might appear.
-
-= 1.3.0.1 =
-- Updated the styles of the workflow detail page for narrow screens to display the entry first and then the info box below.
 - Fixed an issue with the update button on the user input step under certain conditions.
 - Fixed an issue with the field label showing the admin label on approval steps.
 
