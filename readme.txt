@@ -131,6 +131,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Fixed an issue with the user input step where the save and continue button might appear.
 - Fixed an issue with the update button on the user input step under certain conditions.
 - Fixed an issue with the field label showing the admin label on approval steps.
+- Fixed the feedback after sending an entry to a different step.
 
 = 1.3 =
 - Added support for the id, user_email and display_name modifiers for the User field merge tag.
