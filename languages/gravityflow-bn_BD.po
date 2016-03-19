@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2016-02-27 09:12:05+00:00\n"
+"POT-Creation-Date: 2016-03-02 19:33:20+00:00\n"
 "PO-Revision-Date: 2016-02-28 10:30+0000\n"
 "Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
 "Language-Team: Bengali (Bangladesh) (http://www.transifex.com/gravityflow/gravityflow/language/bn_BD/)\n"
@@ -325,7 +325,7 @@ msgstr "প্রশাষক"
 msgid "Select an action"
 msgstr "একটি কাজ নির্বাচন করুন"
 
-#: class-gravity-flow.php:2117 includes/steps/class-step.php:815
+#: class-gravity-flow.php:2117 includes/steps/class-step.php:822
 msgid "Cancel Workflow"
 msgstr "ওয়ার্কফ্লো বাতিল করুন"
 
@@ -378,7 +378,7 @@ msgid "Status Labels"
 msgstr ""
 
 #: class-gravity-flow.php:2459 class-gravity-flow.php:4505
-#: includes/steps/class-step.php:175
+#: includes/steps/class-step.php:182
 msgid "Pending"
 msgstr "স্থগিত"
 
@@ -658,7 +658,7 @@ msgstr "সহায়তা কেন্দ্র"
 #: class-gravity-flow.php:4508 includes/steps/class-step-user-input.php:192
 #: includes/steps/class-step-user-input.php:695
 #: includes/steps/class-step-user-input.php:842
-#: includes/steps/class-step.php:149
+#: includes/steps/class-step.php:156
 msgid "Complete"
 msgstr ""
 
@@ -676,7 +676,7 @@ msgstr ""
 msgid "Oops! We couldn't find your lead. Please try again"
 msgstr ""
 
-#: class-gravity-flow.php:4615 includes/pages/class-entry-detail.php:56
+#: class-gravity-flow.php:4615 includes/pages/class-entry-detail.php:58
 msgid "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete"
 msgstr ""
 
@@ -785,72 +785,72 @@ msgstr ""
 msgid "Waiting for workflow activity"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:67
+#: includes/pages/class-entry-detail.php:69
 msgid "Ajax error while deleting file."
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:120
+#: includes/pages/class-entry-detail.php:122
 msgid "Workflow Entry #"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:120
+#: includes/pages/class-entry-detail.php:122
 #: includes/pages/class-status.php:362
 msgid "Workflow Form"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:178
+#: includes/pages/class-entry-detail.php:188
 #: includes/pages/class-print-entries.php:147
 msgid "You don't have permission to view this entry."
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:252
+#: includes/pages/class-entry-detail.php:265
 #: includes/pages/class-status.php:207
 msgid "Print"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:258
+#: includes/pages/class-entry-detail.php:271
 msgid "include timeline"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:271
+#: includes/pages/class-entry-detail.php:284
 msgid "Timeline"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:322
+#: includes/pages/class-entry-detail.php:335
 msgid "Workflow Submitted"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:371
+#: includes/pages/class-entry-detail.php:384
 #: includes/pages/class-print-entries.php:88
 msgid "Entry # "
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:380
+#: includes/pages/class-entry-detail.php:393
 msgid "show empty fields"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:424
-#: includes/pages/class-entry-detail.php:600
+#: includes/pages/class-entry-detail.php:437
+#: includes/pages/class-entry-detail.php:615
 msgid "Order"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:630
+#: includes/pages/class-entry-detail.php:645
 msgid "Product"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:631
+#: includes/pages/class-entry-detail.php:646
 msgid "Qty"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:632
+#: includes/pages/class-entry-detail.php:647
 msgid "Unit Price"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:633
+#: includes/pages/class-entry-detail.php:648
 msgid "Price"
 msgstr ""
 
-#: includes/pages/class-entry-detail.php:696
+#: includes/pages/class-entry-detail.php:711
 msgid "Total"
 msgstr ""
 
@@ -1648,19 +1648,19 @@ msgstr ""
 msgid "Format"
 msgstr ""
 
-#: includes/steps/class-step.php:150
+#: includes/steps/class-step.php:157
 msgid "Next Step"
 msgstr ""
 
-#: includes/steps/class-step.php:619
+#: includes/steps/class-step.php:626
 msgid "%s: not required"
 msgstr ""
 
-#: includes/steps/class-step.php:750
+#: includes/steps/class-step.php:757
 msgid "Entry"
 msgstr ""
 
-#: includes/steps/class-step.php:1462
+#: includes/steps/class-step.php:1479
 msgid "Processed"
 msgstr ""
 
