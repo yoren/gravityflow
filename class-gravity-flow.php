@@ -3237,6 +3237,7 @@ PRIMARY KEY  (id)
 					$step_id = $action_id;
 					$api = new Gravity_Flow_API( $form['id'] );
 					$api->send_to_step( $entry, $step_id );
+					$entry = GFAPI::get_entry( $entry['id'] );
 					$new_step = $api->get_current_step( $entry );
 					$feedback = sprintf( esc_html__( 'Sent to step: %s',  'gravityflow' ), $new_step->get_name() );
 				}
