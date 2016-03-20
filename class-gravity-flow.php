@@ -2161,26 +2161,7 @@ PRIMARY KEY  (id)
 							<select id="gravityflow-admin-action" name="gravityflow_admin_action">
 
 								<option value=""><?php esc_html_e( 'Select an action', 'gravityflow' ) ?></option>
-								<?php if ( $current_step ) : ?>
-									<option value="cancel_workflow"><?php esc_html_e( 'Cancel Workflow', 'gravityflow' ); ?></option>
-
-									<option	value="restart_step"><?php esc_html_e( 'Restart this step', 'gravityflow' ); ?></option>
-								<?php endif; ?>
-								<option value="restart_workflow"><?php esc_html_e( 'Restart Workflow', 'gravityflow' ) ?></option>
-								<?php
-								if ( $current_step && count( $steps ) > 1 ) :
-								?>
-								<optgroup label="<?php esc_html_e( 'Send to step:', 'gravityflow' ); ?>" >
-									<?php
-									foreach ( $steps as $step ) {
-										$step_id = $step->get_id();
-										if ( ! $current_step || ( $current_step && $current_step->get_id() != $step_id ) ) {
-											printf( '<option value="send_to_step|%d">%s</option>', $step->get_id(), $step->get_name() );
-										}
-									}
-									?>
-								</optgroup>
-								<?php endif; ?>
+								<?php echo $this->get_admin_action_select_options( $current_step, $steps, $form, $entry ); ?>
 							</select>
 							<input type="submit" class="button " name="_gravityflow_admin_action" value="<?php esc_html_e( 'Apply', 'gravityflow' ) ?>" />
 
@@ -2191,6 +2172,70 @@ PRIMARY KEY  (id)
 			<?php endif; ?>
 
 		<?php
+		}
+
+		/**
+		 * Prepares a string containing the HTML options and optgroups for the admin actions drop down.
+		 *
+		 * @param bool|Gravity_Flow_Step $current_step The current step.
+		 * @param Gravity_Flow_Step[] $steps The steps for this form.
+		 * @param array $form The current form.
+		 * @param array $entry The current entry,
+		 *
+		 * @return string
+		 */
+		public function get_admin_action_select_options( $current_step, $steps, $form, $entry ) {
+
+			if ( $current_step ) {
+				$admin_actions = array(
+					array(
+						'label' => esc_html__( 'Cancel Workflow', 'gravityflow' ),
+						'value' => 'cancel_workflow'
+					),
+					array(
+						'label' => esc_html__( 'Restart this step', 'gravityflow' ),
+						'value' => 'restart_step'
+					),
+				);
+			} else {
+				$admin_actions = array();
+			}
+
+			$admin_actions[] = array(
+				'label' => esc_html__( 'Restart Workflow', 'gravityflow' ),
+				'value' => 'restart_workflow'
+			);
+
+			if ( $current_step && count( $steps ) > 1 ) {
+				$choices = array();
+				foreach ( $steps as $step ) {
+					$step_id = $step->get_id();
+					if ( ! $current_step || ( $current_step && $current_step->get_id() != $step_id ) ) {
+						$choices[] = array(
+							'label' => $step->get_name(),
+							'value' => 'send_to_step|' . $step->get_id()
+						);
+					}
+				}
+
+				$admin_actions[] = array(
+					'label'   => esc_html__( 'Send to step:', 'gravityflow' ),
+					'choices' => $choices
+				);
+			}
+
+			/**
+			 * Filter the choices which appear in the admin actions drop down.
+			 *
+			 * @param array $admin_actions Contains the properties for the options and optgroups.
+			 * @param bool|Gravity_Flow_Step $current_step The current step.
+			 * @param Gravity_Flow_Step[] $steps The steps for this form.
+			 * @param array $form The current form.
+			 * @param array $entry The current entry,
+			 */
+			$admin_actions = apply_filters( 'gravityflow_admin_actions_workflow_detail', $admin_actions, $current_step, $steps, $form, $entry );
+
+			return $this->get_select_options( $admin_actions, '' );
 		}
 
 		public function entry_detail_status_box( $form, $entry ) {

@@ -55,6 +55,16 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.3.1.1=
+- Added the gravityflow_admin_actions_workflow_detail filter to allow the choices in the admin actions drop down on the entry detail page to be modified.
+    Example:
+    add_filter( 'gravityflow_admin_actions_workflow_detail', 'filter_admin_actions_workflow_detail', 10, 5 );
+    function filter_admin_actions_workflow_detail( $admin_actions, $current_step, $steps, $form, $entry ) {
+        $admin_actions[] = array( 'label' => 'your new action', 'value' => 'your_new_action' );
+
+        return $admin_actions;
+    }
+
 = 1.3.1=
 - Added support for Signature Add-On v3.0.
 - Added the gravityflow_assignee_status_list_user_input filter to allow the assignee status list to be hidden.
