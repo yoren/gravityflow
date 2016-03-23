@@ -945,16 +945,49 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					<div style="text-align:right;">
 						<button name="gravityflow_approval_new_status_step_<?php echo $this->get_id() ?>" value="approved" type="submit"
 						        class="button">
-							<?php echo $approve_icon; ?> <?php esc_html_e( 'Approve', 'gravityflow' ); ?>
+							<?php
+							$approve_label = esc_html__( 'Approve', 'gravityflow' );
+
+							/**
+							 * Allows the 'Approve' label to be modified on the Approval step.
+							 *
+							 * @params string $approve_label The label to be modified.
+							 * @params Gravity_Flow_Step $this The current step.
+							 */
+							$approve_label = apply_filters( 'gravityflow_approve_label_workflow_detail', $approve_label, $this );
+
+							echo $approve_icon . ' ' . $approve_label; ?>
 						</button>
 						<button name="gravityflow_approval_new_status_step_<?php echo $this->get_id() ?>" value="rejected" type="submit"
 						        class="button">
-							<?php echo $reject_icon; ?> <?php esc_html_e( 'Reject', 'gravityflow' ); ?>
+							<?php
+							$reject_label = esc_html__( 'Reject', 'gravityflow' );
+
+							/**
+							 * Allows the 'Reject' label to be modified on the Approval step.
+							 *
+							 * @params string $reject_label The label to be modified.
+							 * @params Gravity_Flow_Step $this The current step.
+							 */
+							$reject_label = apply_filters( 'gravityflow_reject_label_workflow_detail', $reject_label, $this );
+
+							echo $reject_icon . ' ' . $reject_label; ?>
 						</button>
                         <?php if ( $this->revertEnable ) :  ?>
                             <button name="gravityflow_approval_new_status_step_<?php echo $this->get_id() ?>" value="revert" type="submit"
                                     class="button">
-                                <?php echo $revert_icon; ?> <?php esc_html_e( 'Revert', 'gravityflow' ); ?>
+	                            <?php
+	                            $revert_label = esc_html__( 'Revert', 'gravityflow' );
+
+	                            /**
+	                             * Allows the 'Revert' label to be modified on the Approval step.
+	                             *
+	                             * @params string $revert_label The label to be modified.
+	                             * @params Gravity_Flow_Step $this The current step.
+	                             */
+	                            $revert_label = apply_filters( 'gravityflow_revert_label_workflow_detail', $revert_label, $this );
+
+	                            echo $revert_icon . ' ' . $revert_label; ?>
                             </button>
                             <?php
 						endif;

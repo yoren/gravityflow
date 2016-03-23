@@ -55,6 +55,16 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.3.1.3=
+- Added the gravityflow_revert_label_workflow_detail filter to allow the 'Revert' label to be modified on the Approval step.
+- Added the gravityflow_reject_label_workflow_detail filter to allow the 'Reject' label to be modified on the Approval step.
+- Added the gravityflow_approve_label_workflow_detail filter to allow the 'Approve' label to be modified on the Approval step.
+    Example:
+    add_action( 'gravityflow_approve_label_workflow_detail', 'filter_approve_label_workflow_detail', 10, 2 );
+    function filter_approve_label_workflow_detail( $approve_label, $step ) {
+        return 'Your new label';
+    }
+
 = 1.3.1.2=
 - Added support for configuring a step to process feeds for the Gravity Forms ActiveCampaign add-on.
 - Added 'complete' to the list of available options for final status.
