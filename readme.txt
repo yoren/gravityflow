@@ -60,7 +60,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Added the gravityflow_reject_label_workflow_detail filter to allow the 'Reject' label to be modified on the Approval step.
 - Added the gravityflow_approve_label_workflow_detail filter to allow the 'Approve' label to be modified on the Approval step.
     Example:
-    add_action( 'gravityflow_approve_label_workflow_detail', 'filter_approve_label_workflow_detail', 10, 2 );
+    add_filter( 'gravityflow_approve_label_workflow_detail', 'filter_approve_label_workflow_detail', 10, 2 );
     function filter_approve_label_workflow_detail( $approve_label, $step ) {
         return 'Your new label';
     }
