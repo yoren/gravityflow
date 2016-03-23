@@ -1907,6 +1907,11 @@ PRIMARY KEY  (id)
 					'text'  => $this->translate_status_label( 'pending' ),
 				);
 
+				$workflow_final_status_options[] = array(
+					'value' => 'complete',
+					'text'  => $this->translate_status_label( 'complete' ),
+				);
+
 				$entry_meta['workflow_final_status'] = array(
 					'label'                      => 'Final Status',
 					'is_numeric'                 => false,
