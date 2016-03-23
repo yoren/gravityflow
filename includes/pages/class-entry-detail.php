@@ -263,7 +263,7 @@ class Gravity_Flow_Entry_Detail {
 								<!-- begin print button -->
 								<div class="detail-view-print">
 									<a href="javascript:;"
-									   onclick="var notes_qs = jQuery('#gform_print_notes').is(':checked') ? '&notes=1' : ''; var url='<?php echo admin_url( 'admin-ajax.php' )?>?action=gravityflow_print_entries&lid=<?php echo absint( $entry['id'] ); ?>' + notes_qs; printPage(url);"
+									   onclick="var notes_qs = jQuery('#gform_print_notes').is(':checked') ? '&timelines=1' : ''; var url='<?php echo admin_url( 'admin-ajax.php' )?>?action=gravityflow_print_entries&lid=<?php echo absint( $entry['id'] ); ?>' + notes_qs; printPage(url);"
 									   class="button"><?php esc_html_e( 'Print', 'gravityflow' ) ?></a>
 
 									<?php if ( $show_timeline ) { ?>

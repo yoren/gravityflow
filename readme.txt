@@ -58,6 +58,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 = 1.3.1.2=
 - Added support for configuring a step to process feeds for the Gravity Forms ActiveCampaign add-on.
 - Added 'complete' to the list of available options for final status.
+- Fixed an issue with including the timelines with the printout from the entry detail page.
 
 = 1.3.1.1=
 - Added the gravityflow_admin_actions_workflow_detail filter to allow the choices in the admin actions drop down on the entry detail page to be modified.
