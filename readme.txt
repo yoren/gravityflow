@@ -58,6 +58,8 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 = 1.3.1.4=
 - Added support for configuring a step to process feeds for the Gravity Forms Agile CRM Add-On.
 - Added support for configuring a step to process feeds for the Gravity Forms AWeber Add-On.
+- Added support for configuring a step to process feeds for the Gravity Forms Batchbook Add-On.
+- Added support for configuring a step to process feeds for the Gravity Forms Campfire Add-On.
 
 = 1.3.1.3=
 - Added the gravityflow_revert_label_workflow_detail filter to allow the 'Revert' label to be modified on the Approval step.
