@@ -2811,7 +2811,7 @@ PRIMARY KEY  (id)
 				);
 				// Send the remote request
 				$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params ) );
-				$this->log_debug( __METHOD__ . '() - response: ' . $response );
+				$this->log_debug( __METHOD__ . '() - response: ' . print_r( $response, 1 ) );
 			}
 
 
