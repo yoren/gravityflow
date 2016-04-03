@@ -47,7 +47,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return '<i class="fa fa-check" style="color:darkgreen;"></i>';
 	}
 
-
 	public function get_settings() {
 
 		$account_choices = gravity_flow()->get_users_as_choices();
@@ -56,7 +55,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			array( 'label' => __( 'Select', 'gravityflow' ), 'value' => 'select' ),
 			array( 'label' => __( 'Conditional Routing', 'gravityflow' ), 'value' => 'routing' ),
 		);
-
 
 		$assignee_notification_fields = array(
 			array(
@@ -231,7 +229,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			array(
 				'name'    => 'approval_notification_enabled',
 				'label'   => '',
-
 				'type'    => 'checkbox',
 				'choices' => array(
 					array(
@@ -840,6 +837,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				if ( $new_status == 'revert' && empty( $note ) ) {
 					$valid = false;
 				}
+				break;
 			case 'required_if_reverted_or_rejected' :
 				if ( ( $new_status == 'revert' || $new_status == 'rejected' ) && empty( $note ) ) {
 					$valid = false;
