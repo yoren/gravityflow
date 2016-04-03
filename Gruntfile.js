@@ -73,6 +73,7 @@ module.exports = function(grunt) {
             all: {
                 options: {
                     cwd: '.',
+					exclude: ['tmp/.*', 'tests/.*'],
                     mainFile: 'gravityflow.php',
                     domainPath: 'languages',
                     potComments: 'Copyright 2015-{year} Steven Henty.',
