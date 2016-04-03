@@ -495,6 +495,32 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 		$settings['fields'][] = $note_mode_setting;
 
+		$form = gravity_flow()->get_current_form();
+		if ( GFCommon::has_post_field( $form['fields'] ) ) {
+			$settings['fields'][] = array(
+				'name'    => 'post_action_on_rejection',
+				'label'   => __( 'Post Action if Rejected:', 'gravityflow' ),
+				'type'    => 'select',
+				'choices' => array(
+					array( 'label' => '' ),
+					array( 'label' => __( 'Mark Post as Draft', 'gravityflow' ), 'value' => 'draft' ),
+					array( 'label' => __( 'Trash Post', 'gravityflow' ), 'value' => 'trash' ),
+					array( 'label' => __( 'Delete Post', 'gravityflow' ), 'value' => 'delete' ),
+
+				),
+			);
+
+			$settings['fields'][] = array(
+				'name'    => 'post_action_on_approval',
+				'label'   => __( 'Post Action if Approved:', 'gravityflow' ),
+				'type'    => 'checkbox',
+				'choices' => array(
+					array( 'label' => __( 'Publish Post', 'gravityflow' ), 'name' => 'publish_post_on_approval' ),
+
+				),
+			);
+		}
+
 		return $settings;
 	}
 
@@ -1328,15 +1354,52 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 	public function end() {
 		$status = $this->evaluate_status();
+		$entry = $this->get_entry();
 		if ( $status == 'approved' ) {
 			$this->send_approval_notification();
+			$this->maybe_perform_post_action( $entry, $this->publish_post_on_approval ? 'publish' : '' );
 		} elseif ( $status == 'rejected' ) {
 			$this->send_rejection_notification();
+			$this->maybe_perform_post_action( $entry, $this->post_action_on_rejection );
 		}
 		if ( $status == 'approved' || $status == 'rejected'  ) {
-			GFAPI::send_notifications( $this->get_form(), $this->get_entry(), 'workflow_approval' );
+			GFAPI::send_notifications( $this->get_form(), $entry, 'workflow_approval' );
 		}
 		parent::end();
 	}
+
+	/**
+	 * If a post exists for the entry perform the configured approval or rejection action.
+	 *
+	 * @param array $entry The current entry.
+	 * @param string $action The action to perform.
+	 */
+	public function maybe_perform_post_action( $entry, $action ) {
+		$post_id = rgar( $entry, 'post_id' );
+		if ( $post_id && $action ) {
+			$post = get_post( $post_id );
+			if ( $post instanceof WP_Post ) {
+				$result = '';
+				switch ( $action ) {
+					case 'publish' :
+					case 'draft' :
+						$post->post_status = $action;
+						$result            = wp_update_post( $post );
+						break;
+
+					case 'trash' :
+						$result = wp_delete_post( $post_id );
+						break;
+
+					case 'delete' :
+						$result = wp_delete_post( $post_id, true );
+						break;
+				}
+
+				gravity_flow()->log_debug( __METHOD__ . "() - Post: {$post_id}. Action: {$action}. Result: " . var_export( (bool) $result, 1 ) );
+			}
+		}
+	}
+
 }
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Approval() );
