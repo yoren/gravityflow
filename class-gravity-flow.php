@@ -5130,6 +5130,14 @@ AND m.meta_value='queued'";
 			}
 			return $has_conditional_logic;
 		}
+
+		/**
+		 * Returns the current form object based on the id query var. Otherwise returns false
+		 */
+		public function get_current_form() {
+
+			return rgempty( 'id', $_GET ) ? false : GFFormsModel::get_form_meta( rgget( 'id' ) );
+		}
 	}
 }
 
