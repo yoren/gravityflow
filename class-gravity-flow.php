@@ -1940,7 +1940,6 @@ PRIMARY KEY  (id)
 					'update_entry_meta_callback' => array( $this, 'callback_update_entry_meta_timestamp' ),
 					'is_default_column'          => false, // this column will be displayed by default on the entry list
 				);
-
 			}
 
 			return $entry_meta;
