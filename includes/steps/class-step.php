@@ -467,8 +467,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$this->log_debug( __METHOD__ . '() schedule_timestamp: ' . $schedule_timestamp );
 		$this->log_debug( __METHOD__ . '() schedule_timestamp formatted: ' . date( 'Y-m-d H:i:s', $schedule_timestamp ) );
 
-		// Schedule delay is relative to UTC. Schedule date is relative to timezone of the site.
-		$current_time = in_array( $this->schedule_type, array( 'date', 'date_field' ) ) ? current_time( 'timestamp' ) : time();
+		$current_time = time();
 
 		$this->log_debug( __METHOD__ . '() current_time: ' . $current_time );
 		$this->log_debug( __METHOD__ . '() current_time formatted: ' . date( 'Y-m-d H:i:s', $current_time ) );
@@ -487,6 +486,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 			$this->log_debug( __METHOD__ . '() schedule_date: ' . $this->schedule_date );
 			$schedule_datetime = strtotime( $this->schedule_date );
+			$schedule_date = date( 'Y-m-d H:i:s', $schedule_datetime );
+			$schedule_date_gmt = get_gmt_from_date( $schedule_date );
+			$schedule_datetime = strtotime( $schedule_date_gmt );
 
 			return $schedule_datetime;
 		}
@@ -500,6 +502,32 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$this->log_debug( __METHOD__ . '() schedule_date: ' . $schedule_date );
 
 			$schedule_datetime = strtotime( $schedule_date );
+			$schedule_date = date( 'Y-m-d H:i:s', $schedule_datetime );
+			$schedule_date_gmt = get_gmt_from_date( $schedule_date );
+			$schedule_datetime = strtotime( $schedule_date_gmt );
+
+			// Calculate offset
+			if ( $this->schedule_date_field_offset ) {
+				switch ( $this->schedule_date_field_offset_unit ) {
+					case 'minutes' :
+						$offset = ( MINUTE_IN_SECONDS * $this->schedule_date_field_offset );
+						break;
+					case 'hours' :
+						$offset = ( HOUR_IN_SECONDS * $this->schedule_date_field_offset );
+						break;
+					case 'days' :
+						$offset = ( DAY_IN_SECONDS * $this->schedule_date_field_offset );
+						break;
+					case 'weeks' :
+						$offset = ( WEEK_IN_SECONDS * $this->schedule_date_field_offset );
+						break;
+				}
+				if ( $this->schedule_date_field_before_after == 'before' ) {
+					$schedule_datetime = $schedule_datetime - $offset;
+				} else {
+					$schedule_datetime += $offset;
+				}
+			}
 
 			return $schedule_datetime;
 		}

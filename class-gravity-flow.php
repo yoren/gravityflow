@@ -1357,8 +1357,31 @@ PRIMARY KEY  (id)
 				</div>
 				<div class="gravityflow-schedule-date-field-container" <?php echo $schedule_date_fields_style ?>>
 					<?php
-					esc_html_e( 'Start this step on the date specified in the selected field.', 'gravityflow' );
-					echo '<br />';
+					esc_html_e( 'Start this step', 'gravityflow' );
+					echo '&nbsp;';
+					$delay_offset_field['name'] = 'schedule_date_field_offset';
+					$delay_offset_field['default_value'] = '0';
+					$this->settings_text( $delay_offset_field );
+					$unit_field['name'] = 'schedule_date_field_offset_unit';
+					$this->settings_select( $unit_field );
+					echo '&nbsp;';
+					$before_after_field = array(
+						'name' => 'schedule_date_field_before_after',
+						'label' => esc_html__( 'Schedule', 'gravityflow' ),
+						'default_value' => 'after',
+						'choices' => array(
+							array(
+								'label' => esc_html__( 'after', 'gravityflow' ),
+								'value' => 'after',
+							),
+							array(
+								'label' => esc_html__( 'before', 'gravityflow' ),
+								'value' => 'before',
+							),
+						),
+					);
+					$this->settings_select( $before_after_field );
+
 					$this->settings_select( $schedule_date_fields );
 					?>
 				</div>
@@ -2115,15 +2138,14 @@ PRIMARY KEY  (id)
 										$scheduled_date = $current_step->schedule_date;
 										break;
 									case 'date_field' :
-										$scheduled_date = $entry[ (string) $current_step->schedule_date_field ];
+										$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
+										$scheduled_date = get_date_from_gmt( $scheduled_date_str );
 										break;
 									case 'delay' :
 									default:
 										$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
 										$scheduled_date = get_date_from_gmt( $scheduled_date_str );
-
 								}
-
 
 								printf( '<h4>%s: %s</h4>', esc_html__( 'Scheduled', 'gravityflow' ), $scheduled_date );
 							} elseif ( $current_step->is_expired() ) {
@@ -2400,14 +2422,6 @@ PRIMARY KEY  (id)
 				'callback' => array( $this, 'status' ),
 			);
 			$menu_items[] = $status_item;
-
-			$help_item = array(
-				'name' => 'gravityflow-help',
-				'label' => esc_html( $this->translate_navigation_label( 'help' ) ),
-				'permission' => 'gform_full_access',
-				'callback' => array( $this, 'help' ),
-			);
-			$menu_items[] = $help_item;
 
 			$support_item = array(
 				'name' => 'gravityflow-support',
@@ -3611,15 +3625,6 @@ PRIMARY KEY  (id)
 			parent::app_tab_page();
 		}
 
-		public function help() {
-			if ( $this->maybe_display_installation_wizard() ) {
-				return;
-			}
-
-			require_once( $this->get_base_path() . '/includes/pages/class-help.php' );
-			Gravity_Flow_Help::display();
-		}
-
 		public function get_app_settings() {
 			return parent::get_app_settings();
 		}
@@ -4549,7 +4554,6 @@ AND m.meta_value='queued'";
 				'inbox' => esc_html__( 'Inbox', 'gravityflow' ),
 				'submit' => esc_html__( 'Submit', 'gravityflow' ),
 				'status' => esc_html__( 'Status', 'gravityflow' ),
-				'help' => esc_html__( 'Help', 'gravityflow' ),
 				'support' => esc_html__( 'Support', 'gravityflow' ),
 				'reports' => esc_html__( 'Reports', 'gravityflow' ),
 				'activity' => esc_html__( 'Activity', 'gravityflow' ),
