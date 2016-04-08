@@ -55,6 +55,12 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.3.1.6=
+- Added support for configuring a step to process feeds for the Gravity Forms Capsule CRM Add-On.
+- Added support for configuring a step to process feeds for the Gravity Forms CleverReach Add-On.
+- Added support for configuring a step to process feeds for the Gravity Forms Freshbooks Add-On.
+- Added support for configuring a step to process feeds for the Gravity Forms GetResponse Add-On.
+
 = 1.3.1.5=
 - Added post action settings to the Approval step if the form has post fields.
 - Added support for a delay offset to the date field option of the schedule step setting.
