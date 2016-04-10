@@ -57,10 +57,6 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.3.2-dev =
 
-- Added support for configuring a step to process feeds for the Gravity Forms Capsule CRM Add-On.
-- Added support for configuring a step to process feeds for the Gravity Forms CleverReach Add-On.
-- Added support for configuring a step to process feeds for the Gravity Forms Freshbooks Add-On.
-- Added support for configuring a step to process feeds for the Gravity Forms GetResponse Add-On.
 - Added post action settings to the Approval step if the form has post fields.
 - Added support for a delay offset to the date field option of the schedule step setting.
 - Added support for configuring a step to process feeds for the Gravity Forms Capsule CRM Add-On.
@@ -71,8 +67,6 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Added support for configuring a step to process feeds for the Gravity Forms AWeber Add-On.
 - Added support for configuring a step to process feeds for the Gravity Forms Batchbook Add-On.
 - Added support for configuring a step to process feeds for the Gravity Forms Campfire Add-On.
-- Added post action settings to the Approval step if the form has post fields.
-- Added support for a delay offset to the date field option of the schedule step setting.
 - Added the gravityflow_revert_label_workflow_detail filter to allow the 'Revert' label to be modified on the Approval step.
 - Added the gravityflow_reject_label_workflow_detail filter to allow the 'Reject' label to be modified on the Approval step.
 - Added the gravityflow_approve_label_workflow_detail filter to allow the 'Approve' label to be modified on the Approval step.
