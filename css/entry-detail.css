@@ -1,3 +1,8 @@
+.gravityflow-dicussion-item-header{
+    font-size:90%;
+    color:silver;
+}
+
 /* The little triangle indicator */
 .gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label {
     width:100%;

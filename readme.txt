@@ -85,11 +85,13 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
     }
 - Added support for configuring a step to process feeds for the Gravity Forms ActiveCampaign add-on.
 - Added 'complete' to the list of available options for final status.
+- Added the Discussion Field.
+
 - Updated to only add workflow notification events if a step has been configured for the form.
 - Updated choices for the notification events setting to be translatable.
+
 - Fixed an issue with the license validation logging statement.
 - Fixed an issue with including the timelines with the printout from the entry detail page.
-
 
 = 1.3.1 =
 - Added support for Signature Add-On v3.0.
