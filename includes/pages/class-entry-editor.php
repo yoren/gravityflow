@@ -87,6 +87,8 @@ class Gravity_Flow_Entry_Editor {
 		// Impersonate front-end form
 		unset( $_GET['page'] );
 
+		require_once( GFCommon::get_base_path() . '/form_display.php' );
+
 		$html = GFFormDisplay::get_form( $this->form['id'], false, false, true, $this->entry );
 
 		remove_filter( 'gform_pre_render', array( $this, 'filter_gform_pre_render' ), 999 );
