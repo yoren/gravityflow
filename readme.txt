@@ -55,20 +55,18 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
-= 1.3.1.5=
-- Added post action settings to the Approval step if the form has post fields.
-- Added support for a delay offset to the date field option of the schedule step setting.
+= 1.3.2-dev =
 
-= 1.3.1.4=
+- Added support for configuring a step to process feeds for the Gravity Forms Capsule CRM Add-On.
+- Added support for configuring a step to process feeds for the Gravity Forms CleverReach Add-On.
+- Added support for configuring a step to process feeds for the Gravity Forms Freshbooks Add-On.
+- Added support for configuring a step to process feeds for the Gravity Forms GetResponse Add-On.
 - Added support for configuring a step to process feeds for the Gravity Forms Agile CRM Add-On.
 - Added support for configuring a step to process feeds for the Gravity Forms AWeber Add-On.
 - Added support for configuring a step to process feeds for the Gravity Forms Batchbook Add-On.
 - Added support for configuring a step to process feeds for the Gravity Forms Campfire Add-On.
-- Updated to only add workflow notification events if a step has been configured for the form.
-- Updated choices for the notification events setting to be translatable.
-- Fixed an issue with the license validation logging statement.
-
-= 1.3.1.3=
+- Added post action settings to the Approval step if the form has post fields.
+- Added support for a delay offset to the date field option of the schedule step setting.
 - Added the gravityflow_revert_label_workflow_detail filter to allow the 'Revert' label to be modified on the Approval step.
 - Added the gravityflow_reject_label_workflow_detail filter to allow the 'Reject' label to be modified on the Approval step.
 - Added the gravityflow_approve_label_workflow_detail filter to allow the 'Approve' label to be modified on the Approval step.
@@ -77,13 +75,6 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
     function filter_approve_label_workflow_detail( $approve_label, $step ) {
         return 'Your new label';
     }
-
-= 1.3.1.2=
-- Added support for configuring a step to process feeds for the Gravity Forms ActiveCampaign add-on.
-- Added 'complete' to the list of available options for final status.
-- Fixed an issue with including the timelines with the printout from the entry detail page.
-
-= 1.3.1.1=
 - Added the gravityflow_admin_actions_workflow_detail filter to allow the choices in the admin actions drop down on the entry detail page to be modified.
     Example:
     add_filter( 'gravityflow_admin_actions_workflow_detail', 'filter_admin_actions_workflow_detail', 10, 5 );
@@ -92,8 +83,15 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
         return $admin_actions;
     }
+- Added support for configuring a step to process feeds for the Gravity Forms ActiveCampaign add-on.
+- Added 'complete' to the list of available options for final status.
+- Updated to only add workflow notification events if a step has been configured for the form.
+- Updated choices for the notification events setting to be translatable.
+- Fixed an issue with the license validation logging statement.
+- Fixed an issue with including the timelines with the printout from the entry detail page.
 
-= 1.3.1=
+
+= 1.3.1 =
 - Added support for Signature Add-On v3.0.
 - Added the gravityflow_assignee_status_list_user_input filter to allow the assignee status list to be hidden.
     Example:
