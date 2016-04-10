@@ -106,9 +106,9 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 				$display_name = $assignee->get_display_name();
 				$display_name = apply_filters( 'gravityflowdiscussion_display_name_discussion_field', $display_name, $item, $this );
 				if ( $format == 'html' ) {
-					$content = '<div class="gravityflow-dicussion-item-header">[' . $date . ': ' . $display_name . ']</div>';
-					$content .= '<div>' . esc_html( $item['value'] ) . '</div>';
-					$return .= sprintf( '<div id="gravityflow-discussion-item-%s">%s</div>', $item['id'], $content );
+					$content = '<div class="gravityflow-dicussion-item-header"><span class="gravityflow-dicussion-item-name">' . $display_name  . '</span><span class="gravityflow-dicussion-item-date">' . $date . '</span></div>';
+					$content .= '<div class="gravityflow-dicussion-item-value">' . esc_html( $item['value'] ) . '</div>';
+					$return .= sprintf( '<div id="gravityflow-discussion-item-%s" class="gravityflow-discussion-item">%s</div>', $item['id'], $content );
 				} elseif ( $format == 'text' ) {
 					$return = $date . ': ' . $display_name . "\n";
 					$return .= $item['value'] ;

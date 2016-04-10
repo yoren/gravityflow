@@ -1,7 +1,23 @@
+.gravityflow-discussion-item{
+    margin-bottom:10px;
+}
+
 .gravityflow-dicussion-item-header{
     font-size:90%;
-    color:silver;
 }
+
+.gravityflow-dicussion-item-name {
+    color:#888888;
+    text-shadow: 1px 0 #888888;
+    letter-spacing:1px;
+    font-weight:bold;
+}
+
+.gravityflow-dicussion-item-date {
+    color: silver;
+    margin-left:8px;
+}
+
 
 /* The little triangle indicator */
 .gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label {
