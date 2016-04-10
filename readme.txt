@@ -61,6 +61,12 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Added support for configuring a step to process feeds for the Gravity Forms CleverReach Add-On.
 - Added support for configuring a step to process feeds for the Gravity Forms Freshbooks Add-On.
 - Added support for configuring a step to process feeds for the Gravity Forms GetResponse Add-On.
+- Added post action settings to the Approval step if the form has post fields.
+- Added support for a delay offset to the date field option of the schedule step setting.
+- Added support for configuring a step to process feeds for the Gravity Forms Capsule CRM Add-On.
+- Added support for configuring a step to process feeds for the Gravity Forms CleverReach Add-On.
+- Added support for configuring a step to process feeds for the Gravity Forms Freshbooks Add-On.
+- Added support for configuring a step to process feeds for the Gravity Forms GetResponse Add-On.
 - Added support for configuring a step to process feeds for the Gravity Forms Agile CRM Add-On.
 - Added support for configuring a step to process feeds for the Gravity Forms AWeber Add-On.
 - Added support for configuring a step to process feeds for the Gravity Forms Batchbook Add-On.
