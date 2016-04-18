@@ -59,6 +59,9 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 - Added post action settings to the Approval step if the form has post fields.
 - Added support for a delay offset to the date field option of the schedule step setting.
+- Added support for configuring a step to process feeds for the Gravity Forms Help Scout Add-On.
+- Added support for configuring a step to process feeds for the Gravity Forms Highrise Add-On.
+- Added support for configuring a step to process feeds for the Gravity Forms HipChat Add-On.
 - Added support for configuring a step to process feeds for the Gravity Forms Capsule CRM Add-On.
 - Added support for configuring a step to process feeds for the Gravity Forms CleverReach Add-On.
 - Added support for configuring a step to process feeds for the Gravity Forms Freshbooks Add-On.
@@ -90,6 +93,8 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Updated to only add workflow notification events if a step has been configured for the form.
 - Updated choices for the notification events setting to be translatable.
 
+- Fixed an issue which caused all the Zapier feeds for a form to be processed on the Zapier step. Requires Zapier 1.8.3.
+- Fixed an issue with feed conditional logic evaluation for the Zapier step.
 - Fixed an issue with the license validation logging statement.
 - Fixed an issue with including the timelines with the printout from the entry detail page.
 
