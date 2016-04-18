@@ -42,7 +42,11 @@ class Gravity_Flow_Step_Feed_Zapier extends Gravity_Flow_Step_Feed_Add_On {
 		$form  = $this->get_form();
 		$entry = $this->get_entry();
 
-		GFZapier::send_form_data_to_zapier( $entry, $form );
+		if ( method_exists( 'GFZapier', 'process_feed' ) ) {
+			GFZapier::process_feed( $feed, $entry, $form );
+		} else {
+			GFZapier::send_form_data_to_zapier( $entry, $form );
+		}
 	}
 
 	function intercept_submission() {
@@ -51,6 +55,11 @@ class Gravity_Flow_Step_Feed_Zapier extends Gravity_Flow_Step_Feed_Add_On {
 
 	function get_feed_label( $feed ) {
 		return $feed['name'];
+	}
+
+	public function is_feed_condition_met( $feed, $form, $entry ) {
+
+		return GFZapier::conditions_met( $form, $feed, $entry );
 	}
 }
 

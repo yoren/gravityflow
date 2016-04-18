@@ -129,7 +129,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 		foreach ( $feeds as $feed ) {
 			$setting_key = 'feed_' . $feed['id'];
 			if ( $this->{$setting_key} ) {
-				if ( gravity_flow()->is_feed_condition_met( $feed, $form, $entry ) ) {
+				if ( $this->is_feed_condition_met( $feed, $form, $entry ) ) {
 
 					$this->process_feed( $feed );
 					$label = $this->get_feed_label( $feed );
@@ -198,5 +198,19 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	function get_feed_label( $feed ) {
 		$label = $feed['meta']['feedName'];
 		return $label;
+	}
+
+	/**
+	 * Determines if the supplied feed should be processed. 
+	 * 
+	 * @param array $feed The current feed.
+	 * @param array $form The current form.
+	 * @param array $entry The current entry.
+	 *
+	 * @return bool
+	 */
+	public function is_feed_condition_met( $feed, $form, $entry ) {
+
+		return gravity_flow()->is_feed_condition_met( $feed, $form, $entry );
 	}
 }
