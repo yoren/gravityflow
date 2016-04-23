@@ -101,7 +101,8 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 		$discussion = json_decode( $value, ARRAY_A );
 		if ( is_array( $discussion ) ) {
 			foreach ( $discussion as $item ) {
-				$date = esc_html( GFCommon::format_date( $item['timestamp'], false, 'd M Y g:i a', false ) );
+				$item_datetime = date( 'Y-m-d H:i:s', $item['timestamp'] );
+				$date = esc_html( GFCommon::format_date( $item_datetime , false, 'd M Y g:i a', false ) );
 				$assignee = new Gravity_Flow_Assignee( $item['assignee_key'] );
 				$display_name = $assignee->get_display_name();
 				$display_name = apply_filters( 'gravityflowdiscussion_display_name_discussion_field', $display_name, $item, $this );
