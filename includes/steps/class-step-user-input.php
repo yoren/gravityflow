@@ -719,7 +719,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	}
 
 
-	public function workflow_detail_status_box( $form ) {
+	public function workflow_detail_status_box( $form, $args ) {
 		global $current_user;
 
 		$form_id = absint( $form['id'] );
@@ -732,9 +732,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		} elseif ( $input_step_status == 'queued' ) {
 			$status_str = __( 'Queued', 'gravityflow' );
 		}
-		?>
-		<h4 style="margin-bottom:10px;"><?php echo $this->get_name() . ' (' . $status_str . ')'?></h4>
 
+		$display_step_status = (bool) $args['step_status'];
+
+		?>
 		<div>
 			<?php
 			/**
@@ -744,9 +745,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			 * @param array $entry
 			 * @param Gravity_Flow_Step $current_step
 			 */
-			$display_assignee_status_list = apply_filters( 'gravityflow_assignee_status_list_user_input', true, $form, $this );
+			$display_assignee_status_list = apply_filters( 'gravityflow_assignee_status_list_user_input', $display_step_status, $form, $this );
 			if ( $display_assignee_status_list ) {
 				?>
+				<h4 style="margin-bottom:10px;"><?php echo $this->get_name() . ' (' . $status_str . ')'?></h4>
 				<ul>
 					<?php
 					$assignees = $this->get_assignees();

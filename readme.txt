@@ -70,6 +70,8 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Added support for configuring a step to process feeds for the Gravity Forms AWeber Add-On.
 - Added support for configuring a step to process feeds for the Gravity Forms Batchbook Add-On.
 - Added support for configuring a step to process feeds for the Gravity Forms Campfire Add-On.
+- Added the following attributes to the shortcode: step_status, workflow_info and sidebar.
+    Example: ​step_status="false" workflow_info="false" sidebar="false"
 - Added the gravityflow_revert_label_workflow_detail filter to allow the 'Revert' label to be modified on the Approval step.
 - Added the gravityflow_reject_label_workflow_detail filter to allow the 'Reject' label to be modified on the Approval step.
 - Added the gravityflow_approve_label_workflow_detail filter to allow the 'Approve' label to be modified on the Approval step.

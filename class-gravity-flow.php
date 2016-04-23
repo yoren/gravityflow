@@ -2055,11 +2055,13 @@ PRIMARY KEY  (id)
 		}
 
 
-		public function workflow_entry_detail_status_box( $form, $entry, $current_step = null ) {
+		public function workflow_entry_detail_status_box( $form, $entry, $current_step = null, $args = array() ) {
 
 			if ( is_null( $current_step ) ) {
 				$current_step = $this->get_current_step( $form, $entry );
 			}
+
+			$display_workflow_info = (bool) $args['workflow_info'];
 
 			$lead = $entry;
 
@@ -2072,62 +2074,69 @@ PRIMARY KEY  (id)
 			}
 			?>
 			<div class="postbox">
+
 				<h3 class="hndle" style="cursor:default;">
-					<span><?php echo esc_html( $this->translate_navigation_label( 'workflow' ) ); ?></span>
+					<span><?php if ( $display_workflow_info ) { echo esc_html( $this->translate_navigation_label( 'workflow' ) ); } ?></span>
 				</h3>
 
 				<div id="submitcomment" class="submitbox">
 					<div id="minor-publishing" style="padding:10px;">
-						<?php esc_html_e( 'Entry Id', 'gravityflow' ); ?>: <?php echo $entry_id_link ?><br /><br />
-						<?php esc_html_e( 'Submitted', 'gravityflow' ); ?>: <?php echo esc_html( GFCommon::format_date( $lead['date_created'], true, 'Y/m/d' ) ) ?>
 						<?php
-						if ( isset( $lead['workflow_timestamp'] ) ) {
-							$last_updated = date( 'Y-m-d H:i:s', $lead['workflow_timestamp'] );
-							if ( $lead['date_created'] != $last_updated ) {
-								echo '<br /><br />';
-								esc_html_e( 'Last updated', 'gravityflow' ); ?>: <?php echo esc_html( GFCommon::format_date( $last_updated, true, 'Y/m/d' ) );
-							}
-						}
-						?>
-						<br /><br />
-						<?php
-						if ( ! empty( $lead['created_by'] ) && $usermeta = get_userdata( $lead['created_by'] ) ) {
-							?>
-							<?php _e( 'Submitted by', 'gravityflow' ); ?>:
-							<?php echo esc_html( $usermeta->display_name ) ?>
-							<br /><br />
-						<?php
-						}
-
-						$workflow_status = gform_get_meta( $entry['id'], 'workflow_final_status' );
-
-						$workflow_status_label = $this->translate_status_label( $workflow_status );
-						printf( '%s: %s', esc_html__( 'Status', 'gravityflow' ), $workflow_status_label );
-
-						if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step ) {
-
-							if ( $current_step->supports_expiration() && $current_step->expiration ) {
-								$expiration_timestamp = $current_step->get_expiration_timestamp();
-								$expiration_date_str  = date( 'Y-m-d H:i:s', $expiration_timestamp );
-								$expiration_date      = get_date_from_gmt( $expiration_date_str );
-								echo '<br /><br />';
-								printf( '%s: %s', esc_html__( 'Expires', 'gravityflow' ), $expiration_date );
-							}
-						}
-
-						/**
-						 * Allows content to be added in the workflow box below the workflow status info.
-						 *
-						 * @param array $form
-						 * @param array $entry
-						 * @param Gravity_Flow_Step $current_step
-						 */
-						do_action( 'gravityflow_below_workflow_info_entry_detail', $form, $entry, $current_step );
-
-						if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step ) {
-							?>
-							<hr style="margin-top:10px;"/>
+						if ( $display_workflow_info ) : ?>
+							<?php esc_html_e( 'Entry Id', 'gravityflow' ); ?>: <?php echo $entry_id_link ?><br /><br />
+							<?php esc_html_e( 'Submitted', 'gravityflow' ); ?>: <?php echo esc_html( GFCommon::format_date( $lead['date_created'], true, 'Y/m/d' ) ) ?>
 							<?php
+							if ( isset( $lead['workflow_timestamp'] ) ) {
+								$last_updated = date( 'Y-m-d H:i:s', $lead['workflow_timestamp'] );
+								if ( $lead['date_created'] != $last_updated ) {
+									echo '<br /><br />';
+									esc_html_e( 'Last updated', 'gravityflow' ); ?>: <?php echo esc_html( GFCommon::format_date( $last_updated, true, 'Y/m/d' ) );
+								}
+							}
+							?>
+							<br /><br />
+							<?php
+							if ( ! empty( $lead['created_by'] ) && $usermeta = get_userdata( $lead['created_by'] ) ) {
+								?>
+								<?php _e( 'Submitted by', 'gravityflow' ); ?>:
+								<?php echo esc_html( $usermeta->display_name ) ?>
+								<br /><br />
+							<?php
+							}
+
+							$workflow_status = gform_get_meta( $entry['id'], 'workflow_final_status' );
+
+							$workflow_status_label = $this->translate_status_label( $workflow_status );
+							printf( '%s: %s', esc_html__( 'Status', 'gravityflow' ), $workflow_status_label );
+
+							if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step ) {
+
+								if ( $current_step->supports_expiration() && $current_step->expiration ) {
+									$expiration_timestamp = $current_step->get_expiration_timestamp();
+									$expiration_date_str  = date( 'Y-m-d H:i:s', $expiration_timestamp );
+									$expiration_date      = get_date_from_gmt( $expiration_date_str );
+									echo '<br /><br />';
+									printf( '%s: %s', esc_html__( 'Expires', 'gravityflow' ), $expiration_date );
+								}
+							}
+
+							/**
+							 * Allows content to be added in the workflow box below the workflow status info.
+							 *
+							 * @param array $form
+							 * @param array $entry
+							 * @param Gravity_Flow_Step $current_step
+							 */
+							do_action( 'gravityflow_below_workflow_info_entry_detail', $form, $entry, $current_step );
+
+						endif; // end if $display_workflow_info
+
+						if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step ) {
+							if ( $display_workflow_info ) {
+								?>
+								<hr style="margin-top:10px;"/>
+								<?php
+							}
 							if ( $current_step->is_queued() ) {
 								printf( '<h4>%s (%s)</h4>', $current_step->get_name(), esc_html__( 'Queued', 'gravityflow' ) );
 
@@ -2153,7 +2162,7 @@ PRIMARY KEY  (id)
 								$current_step = null;
 								printf( '<h4>%s</h4>', esc_html__( 'Expired: refresh the page', 'gravityflow' ) );
 							} else {
-								$current_step->workflow_detail_status_box( $form );
+								$current_step->workflow_detail_status_box( $form, $args );
 							}
 						}
 
@@ -3442,6 +3451,9 @@ PRIMARY KEY  (id)
 				'status_column' => true,
 				'timeline' => true,
 				'last_updated' => false,
+				'step_status' => true,
+				'workflow_info' => true,
+				'sidebar' => true,
 			), $atts );
 
 			if ( $a['form_id'] > 0 ) {
@@ -3455,6 +3467,9 @@ PRIMARY KEY  (id)
 			$a['step_column'] = strtolower( $a['step_column'] ) == 'false' ? false : true;
 			$a['status_column'] = strtolower( $a['status_column'] ) == 'false' ? false : true;
 			$a['timeline'] = strtolower( $a['timeline'] ) == 'false' ? false : true;
+			$a['step_status'] = strtolower( $a['step_status'] ) == 'false' ? false : true;
+			$a['workflow_info'] = strtolower( $a['workflow_info'] ) == 'false' ? false : true;
+			$a['sidebar'] = strtolower( $a['sidebar'] ) == 'false' ? false : true;
 
 			if ( is_null( $a['display_all'] ) ) {
 				$a['display_all'] = GFAPI::current_user_can_any( 'gravityflow_status_view_all' );
@@ -3503,6 +3518,9 @@ PRIMARY KEY  (id)
 						'detail_base_url' => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
 						'timeline' => $a['timeline'],
 						'last_updated' => $a['last_updated'],
+						'step_status' => $a['step_status'],
+						'workflow_info' => $a['workflow_info'],
+						'sidebar' => $a['sidebar'],
 					);
 
 					ob_start();
@@ -3557,6 +3575,9 @@ PRIMARY KEY  (id)
 							'step_column' => $a['step_column'],
 							'status_column' => $a['status_column'],
 							'last_updated' => $a['last_updated'],
+							'step_status' => $a['step_status'],
+							'workflow_info' => $a['workflow_info'],
+							'sidebar' => $a['sidebar'],
 						);
 
 						if ( ! is_user_logged_in() && $a['allow_anonymous'] ) {

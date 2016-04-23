@@ -868,162 +868,176 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return $valid;
 	}
 
-	public function workflow_detail_status_box( $form ) {
+	public function workflow_detail_status_box( $form, $args ) {
 		$status               = esc_html__( 'Pending Approval', 'gravityflow' );
 		$approve_icon         = '<i class="fa fa-check" style="color:green"></i>';
 		$reject_icon          = '<i class="fa fa-times" style="color:red"></i>';
-		$revert_icon          = '<i class="fa fa-undo" style="color:blue"></i>';
 		$approval_step_status = $this->get_status();
 		if ( $approval_step_status == 'approved' ) {
-			$status = $approve_icon . ' ' . __( 'Approved', 'gravityflow' );
+			$status = $approve_icon . ' ' . esc_html__( 'Approved', 'gravityflow' );
 		} elseif ( $approval_step_status == 'rejected' ) {
-			$status = $reject_icon . ' ' . __( 'Rejected', 'gravityflow' );
+			$status = $reject_icon . ' ' . esc_html__( 'Rejected', 'gravityflow' );
 		} elseif ( $approval_step_status == 'queued' ) {
-			$status = __( 'Queued', 'gravityflow' );
+			$status = esc_html__( 'Queued', 'gravityflow' );
 		}
-		?>
-
-		<h4>
-			<?php printf( '%s (%s)', $this->get_name(), $status ); ?>
-		</h4>
-		<div>
-			<ul>
-				<?php
-				$assignees = $this->get_assignees();
-				foreach ( $assignees as $assignee ) {
-					$user_approval_status = $assignee->get_status();
-					$status_label = $this->get_status_label( $user_approval_status );
-					if ( ! empty( $user_approval_status ) ) {
-						$assignee_type = $assignee->get_type();
-
-						switch ( $assignee_type ) {
-							case 'email' :
-								$type_label = esc_html__( 'Email', 'gravityflow' );
-								$display_name = $assignee->get_id();
-								break;
-							case 'role' :
-								$type_label = esc_html__( 'Role', 'gravityflow' );
-								$display_name = translate_user_role( $assignee->get_id() );
-								break;
-							case 'user_id' :
-								$user = get_user_by( 'id', $assignee->get_id() );
-								$display_name = $user ? $user->display_name : $assignee->get_id() . ' ' . esc_html__( '(Missing)', 'gravityflow' );
-								$type_label = esc_html__( 'User', 'gravityflow' );
-								break;
-							default :
-								$display_name = $assignee->get_id();
-								$type_label = $assignee->get_type();
-						}
-						$assignee_status_label = sprintf( '%s: %s (%s)', $type_label, $display_name,  $status_label );
-
-						$assignee_status_label = apply_filters( 'gravityflow_assignee_status_workflow_detail', $assignee_status_label, $assignee, $this );
-
-						$assignee_status_li = sprintf( '<li>%s</li>', $assignee_status_label );
-
-						echo $assignee_status_li;
-
-					}
-				}
-				?>
-			</ul>
+		$display_step_status = (bool) $args['step_status'];
+		if ( $display_step_status ) : ?>
+			<h4>
+				<?php printf( '%s (%s)', $this->get_name(), $status ); ?>
+			</h4>
 			<div>
-				<?php
-
-				$user_approval_status = $this->get_user_status();
-
-				$role_approval_status = false;
-				foreach ( gravity_flow()->get_user_roles() as $role ) {
-					$role_approval_status = $this->get_role_status( $role );
-					if ( $role_approval_status == 'pending' ) {
-						break;
-					}
-				}
-
-				if ( $user_approval_status == 'pending' || $role_approval_status == 'pending' ) {
-					wp_nonce_field( 'gravityflow_approvals_' . $this->get_id() );
-
-					if ( $this->note_mode !== 'hidden' ) { ?>
-						<br />
-						<div>
-							<label for="gravityflow-note">
-								<?php
-								esc_html_e( 'Note', 'gravityflow' );
-								$required_indicator = ( $this->note_mode == 'required' ) ? '*' : '';
-								printf( "<span class='gfield_required'>%s</span>", $required_indicator );
-								?>
-							</label>
-						</div>
-						<textarea id="gravityflow-note" style="width:100%;" rows="4" class="wide" name="gravityflow_note" ><?php
-							echo rgar( $form, 'failed_validation' ) ? esc_textarea( rgpost( 'gravityflow_note' ) ) : '';
-							?></textarea>
-						<?php
-						$invalid_note = ( isset( $form['workflow_note'] ) && is_array( $form['workflow_note'] ) && $form['workflow_note']['failed_validation'] );
-						if ( $invalid_note ) {
-							printf( "<div class='gfield_description validation_message'>%s</div>", $form['workflow_note']['validation_message'] );
-						}
-					}
-
-					do_action( 'gravityflow_above_approval_buttons', $this, $form );
-					?>
-					<br /><br />
-					<div style="text-align:right;">
-						<button name="gravityflow_approval_new_status_step_<?php echo $this->get_id() ?>" value="approved" type="submit"
-						        class="button">
-							<?php
-							$approve_label = esc_html__( 'Approve', 'gravityflow' );
-
-							/**
-							 * Allows the 'Approve' label to be modified on the Approval step.
-							 *
-							 * @params string $approve_label The label to be modified.
-							 * @params Gravity_Flow_Step $this The current step.
-							 */
-							$approve_label = apply_filters( 'gravityflow_approve_label_workflow_detail', $approve_label, $this );
-
-							echo $approve_icon . ' ' . $approve_label; ?>
-						</button>
-						<button name="gravityflow_approval_new_status_step_<?php echo $this->get_id() ?>" value="rejected" type="submit"
-						        class="button">
-							<?php
-							$reject_label = esc_html__( 'Reject', 'gravityflow' );
-
-							/**
-							 * Allows the 'Reject' label to be modified on the Approval step.
-							 *
-							 * @params string $reject_label The label to be modified.
-							 * @params Gravity_Flow_Step $this The current step.
-							 */
-							$reject_label = apply_filters( 'gravityflow_reject_label_workflow_detail', $reject_label, $this );
-
-							echo $reject_icon . ' ' . $reject_label; ?>
-						</button>
-                        <?php if ( $this->revertEnable ) :  ?>
-                            <button name="gravityflow_approval_new_status_step_<?php echo $this->get_id() ?>" value="revert" type="submit"
-                                    class="button">
-	                            <?php
-	                            $revert_label = esc_html__( 'Revert', 'gravityflow' );
-
-	                            /**
-	                             * Allows the 'Revert' label to be modified on the Approval step.
-	                             *
-	                             * @params string $revert_label The label to be modified.
-	                             * @params Gravity_Flow_Step $this The current step.
-	                             */
-	                            $revert_label = apply_filters( 'gravityflow_revert_label_workflow_detail', $revert_label, $this );
-
-	                            echo $revert_icon . ' ' . $revert_label; ?>
-                            </button>
-                            <?php
-						endif;
-						?>
-					</div>
-				<?php
-				}
-				?>
+				<?php $this->workflow_detail_status_box_status() ?>
 			</div>
-		</div>
+		<?php endif; ?>
+		<?php $this->workflow_detail_status_box_actions( $form ) ?>
+
 		<?php
 
+	}
+
+	public function workflow_detail_status_box_status() {
+		?>
+		<ul>
+			<?php
+			$assignees = $this->get_assignees();
+			foreach ( $assignees as $assignee ) {
+				$user_approval_status = $assignee->get_status();
+				$status_label = $this->get_status_label( $user_approval_status );
+				if ( ! empty( $user_approval_status ) ) {
+					$assignee_type = $assignee->get_type();
+
+					switch ( $assignee_type ) {
+						case 'email' :
+							$type_label = esc_html__( 'Email', 'gravityflow' );
+							$display_name = $assignee->get_id();
+							break;
+						case 'role' :
+							$type_label = esc_html__( 'Role', 'gravityflow' );
+							$display_name = translate_user_role( $assignee->get_id() );
+							break;
+						case 'user_id' :
+							$user = get_user_by( 'id', $assignee->get_id() );
+							$display_name = $user ? $user->display_name : $assignee->get_id() . ' ' . esc_html__( '(Missing)', 'gravityflow' );
+							$type_label = esc_html__( 'User', 'gravityflow' );
+							break;
+						default :
+							$display_name = $assignee->get_id();
+							$type_label = $assignee->get_type();
+					}
+					$assignee_status_label = sprintf( '%s: %s (%s)', $type_label, $display_name,  $status_label );
+
+					$assignee_status_label = apply_filters( 'gravityflow_assignee_status_workflow_detail', $assignee_status_label, $assignee, $this );
+
+					$assignee_status_li = sprintf( '<li>%s</li>', $assignee_status_label );
+
+					echo $assignee_status_li;
+
+				}
+			}
+			?>
+		</ul>
+		<?php
+	}
+
+	public function workflow_detail_status_box_actions( $form ) {
+
+		$approve_icon = '<i class="fa fa-check" style="color:green"></i>';
+		$reject_icon  = '<i class="fa fa-times" style="color:red"></i>';
+		$revert_icon  = '<i class="fa fa-undo" style="color:blue"></i>';
+
+		$user_approval_status = $this->get_user_status();
+
+		$role_approval_status = false;
+		foreach ( gravity_flow()->get_user_roles() as $role ) {
+			$role_approval_status = $this->get_role_status( $role );
+			if ( $role_approval_status == 'pending' ) {
+				break;
+			}
+		}
+
+		if ( $user_approval_status == 'pending' || $role_approval_status == 'pending' ) {
+			wp_nonce_field( 'gravityflow_approvals_' . $this->get_id() );
+
+			if ( $this->note_mode !== 'hidden' ) { ?>
+				<br/>
+				<div>
+					<label for="gravityflow-note">
+						<?php
+						esc_html_e( 'Note', 'gravityflow' );
+						$required_indicator = ( $this->note_mode == 'required' ) ? '*' : '';
+						printf( "<span class='gfield_required'>%s</span>", $required_indicator );
+						?>
+					</label>
+				</div>
+				<textarea id="gravityflow-note" style="width:100%;" rows="4" class="wide" name="gravityflow_note"><?php
+					echo rgar( $form, 'failed_validation' ) ? esc_textarea( rgpost( 'gravityflow_note' ) ) : '';
+					?></textarea>
+				<?php
+				$invalid_note = ( isset( $form['workflow_note'] ) && is_array( $form['workflow_note'] ) && $form['workflow_note']['failed_validation'] );
+				if ( $invalid_note ) {
+					printf( "<div class='gfield_description validation_message'>%s</div>", $form['workflow_note']['validation_message'] );
+				}
+			}
+
+			do_action( 'gravityflow_above_approval_buttons', $this, $form );
+			?>
+			<br/><br/>
+			<div style="text-align:right;">
+				<button name="gravityflow_approval_new_status_step_<?php echo $this->get_id() ?>" value="approved"
+				        type="submit"
+				        class="button">
+					<?php
+					$approve_label = esc_html__( 'Approve', 'gravityflow' );
+
+					/**
+					 * Allows the 'Approve' label to be modified on the Approval step.
+					 *
+					 * @params string $approve_label The label to be modified.
+					 * @params Gravity_Flow_Step $this The current step.
+					 */
+					$approve_label = apply_filters( 'gravityflow_approve_label_workflow_detail', $approve_label, $this );
+
+					echo $approve_icon . ' ' . $approve_label; ?>
+				</button>
+				<button name="gravityflow_approval_new_status_step_<?php echo $this->get_id() ?>" value="rejected"
+				        type="submit"
+				        class="button">
+					<?php
+					$reject_label = esc_html__( 'Reject', 'gravityflow' );
+
+					/**
+					 * Allows the 'Reject' label to be modified on the Approval step.
+					 *
+					 * @params string $reject_label The label to be modified.
+					 * @params Gravity_Flow_Step $this The current step.
+					 */
+					$reject_label = apply_filters( 'gravityflow_reject_label_workflow_detail', $reject_label, $this );
+
+					echo $reject_icon . ' ' . $reject_label; ?>
+				</button>
+				<?php if ( $this->revertEnable ) : ?>
+					<button name="gravityflow_approval_new_status_step_<?php echo $this->get_id() ?>" value="revert"
+					        type="submit"
+					        class="button">
+						<?php
+						$revert_label = esc_html__( 'Revert', 'gravityflow' );
+
+						/**
+						 * Allows the 'Revert' label to be modified on the Approval step.
+						 *
+						 * @params string $revert_label The label to be modified.
+						 * @params Gravity_Flow_Step $this The current step.
+						 */
+						$revert_label = apply_filters( 'gravityflow_revert_label_workflow_detail', $revert_label, $this );
+
+						echo $revert_icon . ' ' . $revert_label; ?>
+					</button>
+					<?php
+				endif;
+				?>
+			</div>
+			<?php
+		}
 	}
 
 	public function entry_detail_status_box( $form ) {

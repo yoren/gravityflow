@@ -24,7 +24,7 @@ table.entry-detail-view td{
     margin: 10px 20px 0 2px;
 }
 
-#post-body-content {
+#post-body.columns-2 #post-body-content {
     float: left;
     min-width: 400px;
     width: 100%;

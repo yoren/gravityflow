@@ -23,6 +23,9 @@ class Gravity_Flow_Entry_Detail {
 	 */
 	public static function entry_detail( $form, $entry, $current_step = null, $args = array() ) {
 
+		// In case fields need the GFEntryDetail class
+		require_once( GFCommon::get_base_path() . '/entry_detail.php' );
+
 		$form_id      = absint( $form['id'] );
 		$ajax         = false;
 		$field_values = null;
@@ -35,6 +38,9 @@ class Gravity_Flow_Entry_Detail {
 			'show_header' => true,
 			'timeline' => true,
 			'display_instructions' => true,
+			'sidebar' => true,
+			'step_status' => true,
+			'workflow_info' => true,
 		);
 
 		$args = array_merge( $defaults, $args );
@@ -44,6 +50,7 @@ class Gravity_Flow_Entry_Detail {
 		$show_header = (bool) $args['show_header'];
 		$show_timeline = (bool) $args['timeline'];
 		$display_instructions = (bool) $args['display_instructions'];
+		$sidebar = (bool) $args['sidebar'];
 
 		gravity_flow()->log_debug( __METHOD__ . '() args: ' . print_r( $args, true ) );
 		?>
@@ -192,17 +199,15 @@ class Gravity_Flow_Entry_Detail {
 					echo $permission_denied_message;
 					return;
 				}
-
 			}
 			$url = remove_query_arg( array( 'gworkflow_token', 'new_status' ) );
 
 			?>
-
 				<form id="gform_<?php echo $form_id; ?>" method="post" enctype='multipart/form-data' action="<?php echo esc_url( $url ); ?>">
 					<?php wp_nonce_field( 'gforms_save_entry', 'gforms_save_entry' ) ?>
 					<input type="hidden" name="step_id" value="<?php echo $current_step ? $current_step->get_id() : ''; ?>" />
 					<div id="poststuff">
-						<div id="post-body" class="metabox-holder columns-2">
+						<div id="post-body" class="metabox-holder <?php echo $sidebar ? 'columns-2' : 'columns-1'; ?>">
 							<div id="post-body-content">
 								<?php
 
@@ -238,7 +243,6 @@ class Gravity_Flow_Entry_Detail {
 											<div class="inside">
 												<?php echo $instructions; ?>
 											</div>
-
 										</div>
 
 										<?php
@@ -249,34 +253,24 @@ class Gravity_Flow_Entry_Detail {
 
 								do_action( 'gravityflow_entry_detail', $form, $entry, $current_step );
 
+								if ( ! $sidebar ) {
+									gravity_flow()->workflow_entry_detail_status_box( $form, $entry, $current_step, $args );
+									self::print_button( $entry, $show_timeline, $check_view_entry_permissions );
+								}
 								?>
 
 							</div>
 							<div id="postbox-container-1" class="postbox-container">
 
 							<?php
-							gravity_flow()->workflow_entry_detail_status_box( $form, $entry, $current_step );
+							if ( $sidebar ) {
+								gravity_flow()->workflow_entry_detail_status_box( $form, $entry, $current_step, $args );
+								self::print_button( $entry, $show_timeline, $check_view_entry_permissions );
+							}
 
-							if ( is_user_logged_in() || $check_view_entry_permissions ) :
-								?>
-
-								<!-- begin print button -->
-								<div class="detail-view-print">
-									<a href="javascript:;"
-									   onclick="var notes_qs = jQuery('#gform_print_notes').is(':checked') ? '&timelines=1' : ''; var url='<?php echo admin_url( 'admin-ajax.php' )?>?action=gravityflow_print_entries&lid=<?php echo absint( $entry['id'] ); ?>' + notes_qs; printPage(url);"
-									   class="button"><?php esc_html_e( 'Print', 'gravityflow' ) ?></a>
-
-									<?php if ( $show_timeline ) { ?>
-
-										<input type="checkbox" name="print_notes" value="print_notes" checked="checked"
-										       id="gform_print_notes"/>
-										<label for="print_notes"><?php esc_html_e( 'include timeline', 'gravityflow' ) ?></label>
-									<?php } ?>
-
-								</div>
-								<!-- end print button -->
+							?>
 							</div>
-							<?php endif;
+							<?php
 
 							if ( $show_timeline ) {
 								?>
@@ -301,6 +295,30 @@ class Gravity_Flow_Entry_Detail {
 
 		</div>
 		<?php
+	}
+
+	public static function print_button( $entry, $show_timeline, $check_view_entry_permissions ) {
+
+		if ( is_user_logged_in() || $check_view_entry_permissions ) :
+			?>
+
+			<!-- begin print button -->
+			<div class="detail-view-print">
+				<a href="javascript:;"
+				   onclick="var notes_qs = jQuery('#gform_print_notes').is(':checked') ? '&timelines=1' : ''; var url='<?php echo admin_url( 'admin-ajax.php' ) ?>?action=gravityflow_print_entries&lid=<?php echo absint( $entry['id'] ); ?>' + notes_qs; printPage(url);"
+				   class="button"><?php esc_html_e( 'Print', 'gravityflow' ) ?></a>
+
+				<?php if ( $show_timeline ) { ?>
+
+					<input type="checkbox" name="print_notes" value="print_notes" checked="checked"
+					       id="gform_print_notes"/>
+					<label for="print_notes"><?php esc_html_e( 'include timeline', 'gravityflow' ) ?></label>
+				<?php } ?>
+
+			</div>
+			<!-- end print button -->
+
+		<?php endif;
 	}
 
 	public static function timeline( $entry, $form ) {
@@ -495,7 +513,7 @@ class Gravity_Flow_Entry_Detail {
 						$display_field = false;
 					}
 				} else {
-					if ( GFFormsModel::is_field_hidden( $form, $field, array(), $entry ) || $is_product_field) {
+					if ( GFFormsModel::is_field_hidden( $form, $field, array(), $entry ) || $is_product_field ) {
 						$display_field = false;
 					}
 				}

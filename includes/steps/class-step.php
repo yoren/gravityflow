@@ -1191,9 +1191,10 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Displays content inside the Workflow metabox on the workflow detail page.
 	 *
-	 * @param $form
+	 * @param array $form The Form array which may contain validation details
+	 * @param array $args Additional args which may affect the display.
 	 */
-	public function workflow_detail_status_box( $form ) {
+	public function workflow_detail_status_box( $form, $args ) {
 
 	}
 
