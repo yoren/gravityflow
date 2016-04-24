@@ -2162,7 +2162,7 @@ PRIMARY KEY  (id)
 								$current_step = null;
 								printf( '<h4>%s</h4>', esc_html__( 'Expired: refresh the page', 'gravityflow' ) );
 							} else {
-								$current_step->workflow_detail_status_box( $form, $args );
+								$current_step->workflow_detail_box( $form, $args );
 							}
 						}
 

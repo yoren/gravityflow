@@ -1189,12 +1189,35 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
+	 * @deprecated since 1.3.2
+	 *
+	 * @param array $form The Form array which may contain validation details
+	 */
+	public function workflow_detail_status_box( $form ) {
+
+		_deprecated_function( 'workflow_detail_status_box', '1.3.2', 'workflow_detail_box' );
+
+		$default_args = array(
+			'display_empty_fields' => true,
+			'check_permissions' => true,
+			'show_header' => true,
+			'timeline' => true,
+			'display_instructions' => true,
+			'sidebar' => true,
+			'step_status' => true,
+			'workflow_info' => true,
+		);
+
+		$this->workflow_detail_box( $form, $default_args );
+	}
+
+	/**
 	 * Displays content inside the Workflow metabox on the workflow detail page.
 	 *
 	 * @param array $form The Form array which may contain validation details
 	 * @param array $args Additional args which may affect the display.
 	 */
-	public function workflow_detail_status_box( $form, $args ) {
+	public function workflow_detail_box( $form, $args ) {
 
 	}
 

@@ -868,7 +868,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return $valid;
 	}
 
-	public function workflow_detail_status_box( $form, $args ) {
+	public function workflow_detail_box( $form, $args ) {
 		$status               = esc_html__( 'Pending Approval', 'gravityflow' );
 		$approve_icon         = '<i class="fa fa-check" style="color:green"></i>';
 		$reject_icon          = '<i class="fa fa-times" style="color:red"></i>';

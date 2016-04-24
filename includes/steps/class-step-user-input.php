@@ -719,7 +719,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	}
 
 
-	public function workflow_detail_status_box( $form, $args ) {
+	public function workflow_detail_box( $form, $args ) {
 		global $current_user;
 
 		$form_id = absint( $form['id'] );
