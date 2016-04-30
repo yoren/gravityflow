@@ -27,5 +27,9 @@ class Gravity_Flow_Step_Feed_ActiveCampaign extends Gravity_Flow_Step_Feed_Add_O
 		$label = $feed['meta']['feed_name'];
 		return $label;
 	}
+
+	public function get_icon_url() {
+		return $this->get_base_url() . '/images/activecampaign-icon.svg';
+	}
 }
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_ActiveCampaign() );
