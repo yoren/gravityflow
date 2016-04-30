@@ -2244,6 +2244,9 @@ PRIMARY KEY  (id)
 			if ( $current_step && count( $steps ) > 1 ) {
 				$choices = array();
 				foreach ( $steps as $step ) {
+					if ( ! $step->is_active() ) {
+						continue;
+					}
 					$step_id = $step->get_id();
 					if ( ! $current_step || ( $current_step && $current_step->get_id() != $step_id ) ) {
 						$choices[] = array(

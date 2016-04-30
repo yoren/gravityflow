@@ -98,6 +98,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 - Updated to only add workflow notification events if a step has been configured for the form.
 - Updated choices for the notification events setting to be translatable.
+- Updated the list of steps in the 'Send to Step' section of the admin actions to display only active steps.
 
 - Fixed an issue which caused all the Zapier feeds for a form to be processed on the Zapier step. Requires Zapier 1.8.3.
 - Fixed an issue with feed conditional logic evaluation for the Zapier step.
