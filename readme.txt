@@ -57,6 +57,10 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.3.2-dev =
 
+- Added support for configuring a step to process feeds for the Gravity Forms iContact Add-On.
+- Added support for configuring a step to process feeds for the Gravity Forms Mad Mimi Add-On.
+- Added support for configuring a step to process feeds for the Gravity Forms Slack Add-On.
+- Added support for configuring a step to process feeds for the Gravity Forms Trello Add-On.
 - Added post action settings to the Approval step if the form has post fields.
 - Added support for a delay offset to the date field option of the schedule step setting.
 - Added support for configuring a step to process feeds for the Gravity Forms Help Scout Add-On.
