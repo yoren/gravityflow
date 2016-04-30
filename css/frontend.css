@@ -479,9 +479,27 @@ table.wp-list-table.entries {
     width:100%;
 }
 
+table.wp-list-table.entries tr:nth-child(2n) {
+    background: #f9f9f9 none repeat scroll 0 0;
+}
+
 table.wp-list-table.entries td a,
-table.wp-list-table.entries td .gravityflow-empty
-{text-decoration:none!important; display:block; padding:10px; height:100%; border-bottom:none;}
+table.wp-list-table.entries td .gravityflow-empty {
+    text-decoration:none!important;
+    padding:10px;
+    height:100%;
+    border-bottom:none;
+}
+
+table.wp-list-table.entries th,
+table.wp-list-table.entries td.column-cb {
+    border-bottom:1px solid #ddd;
+    padding: 10px;
+}
+
+table.wp-list-table.entries td.column-cb{
+    border-top:0;
+}
 
 table.wp-list-table.entries th[data-label="ID"],
 table.wp-list-table.entries td[data-label="ID"] {

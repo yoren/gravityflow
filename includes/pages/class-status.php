@@ -701,20 +701,20 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		$args = $this->get_filter_args();
 
-		$columns['cb']           = esc_html__( 'Checkbox', 'gravityflow' );
+		$columns['cb'] = esc_html__( 'Checkbox', 'gravityflow' );
 		if ( $this->id_column ) {
-			$columns['id']           = esc_html__( 'ID', 'gravityflow' );
+			$columns['id'] = esc_html__( 'ID', 'gravityflow' );
 		}
 		$columns['date_created'] = esc_html__( 'Date', 'gravityflow' );
 		if ( ! isset( $args['form-id'] ) ) {
 			$columns['form_id'] = esc_html__( 'Form', 'gravityflow' );
 		}
 		if ( $this->submitter_column ) {
-			$columns['created_by']            = esc_html__( 'Submitter', 'gravityflow' );
+			$columns['created_by'] = esc_html__( 'Submitter', 'gravityflow' );
 		}
 
 		if ( $this->step_column ) {
-			$columns['workflow_step']         = esc_html__( 'Step', 'gravityflow' );
+			$columns['workflow_step'] = esc_html__( 'Step', 'gravityflow' );
 		}
 
 		if ( $this->status_column ) {
