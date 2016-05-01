@@ -898,7 +898,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				}
 				?>
 				<br />
-				<div style="text-align:right;">
+				<div class="gravityflow-action-buttons">
 				<?php
 				$button_text      = esc_html__( 'Update', 'gravityflow' );
 				$button_text      = apply_filters( 'gravityflow_update_button_text_user_input', $button_text, $form, $this );

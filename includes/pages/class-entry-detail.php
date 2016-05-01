@@ -51,6 +51,8 @@ class Gravity_Flow_Entry_Detail {
 		$show_timeline = (bool) $args['timeline'];
 		$display_instructions = (bool) $args['display_instructions'];
 		$sidebar = (bool) $args['sidebar'];
+		$display_workflow_info = (bool) $args['workflow_info'];
+		$display_step_info = (bool) $args['step_status'];
 
 		gravity_flow()->log_debug( __METHOD__ . '() args: ' . print_r( $args, true ) );
 		?>
@@ -201,13 +203,31 @@ class Gravity_Flow_Entry_Detail {
 				}
 			}
 			$url = remove_query_arg( array( 'gworkflow_token', 'new_status' ) );
+			$classes = $sidebar ? 'columns-2' : 'columns-1';
+			if ( $sidebar ) {
+				$classes .= ' gravityflow-has-sidebar';
+			} else {
+				$classes .= ' gravityflow-no-sidebar';
+			}
+
+			if ( $display_workflow_info ) {
+				$classes .= ' gravityflow-has-workflow-info';
+			} else {
+				$classes .= ' gravityflow-no-workflow-info';
+			}
+
+			if ( $display_step_info ) {
+				$classes .= ' gravityflow-has-step-info';
+			} else {
+				$classes .= ' gravityflow-no-step-info';
+			}
 
 			?>
 				<form id="gform_<?php echo $form_id; ?>" method="post" enctype='multipart/form-data' action="<?php echo esc_url( $url ); ?>">
 					<?php wp_nonce_field( 'gforms_save_entry', 'gforms_save_entry' ) ?>
 					<input type="hidden" name="step_id" value="<?php echo $current_step ? $current_step->get_id() : ''; ?>" />
 					<div id="poststuff">
-						<div id="post-body" class="metabox-holder <?php echo $sidebar ? 'columns-2' : 'columns-1'; ?>">
+						<div id="post-body" class="metabox-holder <?php echo $classes; ?>">
 							<div id="post-body-content">
 								<?php
 

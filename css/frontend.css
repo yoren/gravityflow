@@ -9,22 +9,32 @@ table.entry-detail-view th,
 table.entry-detail-view td{
     border-right:0;
 }
+.gravityflow-has-sidebar .gravityflow-action-buttons{
+    text-align:right;
+}
 .postbox {
     background: #fff none repeat scroll 0 0;
-    border: 1px solid #e5e5e5;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
     min-width: 200px;
     position: relative;
     line-height: 1;
     margin-bottom: 20px;
     padding: 0;
+
+}
+.gravityflow-has-sidebar {
     font-size:11px;
 }
-.postbox.gravityflow-instructions{
+.gravityflow-has-sidebar .postbox,
+.gravityflow-has-workflow-info .postbox,
+.gravityflow-has-step-info .postbox{
+    border: 1px solid #e5e5e5;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+.postbox.gravityflow-instructions {
     padding:10px;
     font-size:inherit;
 }
-.gfield{
+.gfield {
     margin-bottom:10px;
 }
 .wrap {
@@ -111,7 +121,7 @@ table.entry-detail-view td{
     white-space: nowrap;
 }
 
-.postbox-container input[type=radio]{
+.postbox input[type=radio]{
     margin-right:5px;
     white-space: nowrap;
 }

@@ -982,7 +982,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			do_action( 'gravityflow_above_approval_buttons', $this, $form );
 			?>
 			<br/><br/>
-			<div style="text-align:right;">
+			<div class="gravityflow-action-buttons">
 				<button name="gravityflow_approval_new_status_step_<?php echo $this->get_id() ?>" value="approved"
 				        type="submit"
 				        class="button">
