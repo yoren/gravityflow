@@ -118,9 +118,19 @@ class Gravity_Flow_Inbox {
 				<tbody class="list:user user-list">
 				<?php
 				foreach ( $entries as $entry ) {
-					$form      = GFAPI::get_form( $entry['form_id'] );
-					$user      = get_user_by( 'id', (int) $entry['created_by'] );
-					$name      = $user ? $user->display_name : $entry['ip'];
+					$form           = GFAPI::get_form( $entry['form_id'] );
+					$user           = get_user_by( 'id', (int) $entry['created_by'] );
+					$submitter_name = $user ? $user->display_name : $entry['ip'];
+
+					/**
+					 * Allow the value displayed in the Submitter column to be overridden.
+					 * 
+					 * @param string $submitter_name The display_name of the logged-in user who submitted the form or the guest ip address.
+					 * @param array $entry The entry object for the row currently being processed.
+					 * @param array $form The form object for the current entry.
+					 */
+					$submitter_name = apply_filters( 'gravityflow_inbox_submitter_name', $submitter_name, $entry, $form );
+					
 					$base_url  = $args['detail_base_url'];
 					$url_entry = $base_url . sprintf( '&id=%d&lid=%d', $entry['form_id'], $entry['id'] );
 					$url_entry = esc_url_raw( $url_entry );
@@ -141,7 +151,7 @@ class Gravity_Flow_Inbox {
 						<?php endif; ?>
 						<td data-label="<?php esc_html_e( 'Submitter', 'gravityflow' ); ?>" <?php echo $submitter_style ?>>
 							<?php
-							printf( $link, $url_entry, $name );
+							printf( $link, $url_entry, $submitter_name );
 
 							?>
 						</td>

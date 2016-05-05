@@ -57,6 +57,12 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.3.2-dev =
 
+- Added the gravityflow_inbox_submitter_name to allow the value displayed in the Submitter column to be overridden.
+    Example:
+    add_filter( 'gravityflow_inbox_submitter_name', 'inbox_submitter_name', 10, 3 );
+    function inbox_submitter_name( $submitter_name, $entry, $form ) {
+        return 'the new submitter name';
+    }
 - Added support for configuring a step to process feeds for the following Gravity Forms Add-Ons:
     ActiveCampaign, Agile CRM, AWeber, Batchbook, Campfire, Capsule, CleverReach, Freshbooks, GetResponse, Help Scout, HipChat, Highrise, iContact, Mad Mimi, Slack, Trello, and Zoho CRM.
 - Added post action settings to the Approval step if the form has post fields.
