@@ -58,7 +58,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 = 1.3.2-dev =
 
 - Added support for configuring a step to process feeds for the following Gravity Forms Add-Ons:
-    ActiveCampaign, Agile CRM, AWeber, Batchbook, Campfire, Capsule, CleverReach, Freshbooks, GetResponse, Help Scout, HipChat, Highrise, iContact, Mad Mimi, Slack, Trello.
+    ActiveCampaign, Agile CRM, AWeber, Batchbook, Campfire, Capsule, CleverReach, Freshbooks, GetResponse, Help Scout, HipChat, Highrise, iContact, Mad Mimi, Slack, Trello, and Zoho CRM.
 - Added post action settings to the Approval step if the form has post fields.
 - Added support for a delay offset to the date field option of the schedule step setting.
 - Added the following attributes to the shortcode: step_status, workflow_info and sidebar.
