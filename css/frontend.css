@@ -9,8 +9,8 @@ table.entry-detail-view th,
 table.entry-detail-view td{
     border-right:0;
 }
-.gravityflow-has-sidebar .gravityflow-action-buttons{
-    text-align:right;
+.gravityflow-no-sidebar .gravityflow-action-buttons{
+    text-align:left;
 }
 .postbox {
     background: #fff none repeat scroll 0 0;

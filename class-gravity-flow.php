@@ -159,6 +159,7 @@ if ( class_exists( 'GFForms' ) ) {
 		}
 
 		public function init_frontend() {
+			parent::init_frontend();
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_scripts' ), 10 );
 			add_action( 'template_redirect', array( $this, 'action_template_redirect' ), 2 );
 			if ( class_exists( 'GFSignature' ) && ! class_exists( 'GF_Field_Signature' ) ) {
@@ -572,6 +573,14 @@ PRIMARY KEY  (id)
 						array( 'query' => 'page=gravityflow_settings&view=_empty_' ),
 						array( 'query' => 'page=gravityflow_settings&view=settings' ),
 						array( 'query' => 'page=gravityflow_settings&view=labels' ),
+					),
+				),
+				array(
+					'handle'  => 'gravityflow_discussion_field',
+					'src'     => $this->get_base_url() . "/css/discussion-field{$min}.css",
+					'version' => $this->_version,
+					'enqueue' => array(
+						array( 'field_types' => array( 'workflow_discussion' ) ),
 					),
 				),
 			);

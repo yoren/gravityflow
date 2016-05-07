@@ -103,8 +103,13 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 			foreach ( $discussion as $item ) {
 				$item_datetime = date( 'Y-m-d H:i:s', $item['timestamp'] );
 				$date = esc_html( GFCommon::format_date( $item_datetime , false, 'd M Y g:i a', false ) );
-				$assignee = new Gravity_Flow_Assignee( $item['assignee_key'] );
-				$display_name = $assignee->get_display_name();
+				if ( $item['assignee_key'] ) {
+					$assignee = new Gravity_Flow_Assignee( $item['assignee_key'] );
+					$display_name = $assignee->get_display_name();
+				} else {
+					$display_name = '';
+				}
+
 				$display_name = apply_filters( 'gravityflowdiscussion_display_name_discussion_field', $display_name, $item, $this );
 				if ( $format == 'html' ) {
 					$content = '<div class="gravityflow-dicussion-item-header"><span class="gravityflow-dicussion-item-name">' . $display_name  . '</span><span class="gravityflow-dicussion-item-date">' . $date . '</span></div>';
