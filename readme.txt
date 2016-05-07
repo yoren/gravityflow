@@ -55,7 +55,11 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
-= 1.3.2-dev =
+= 1.3.3 =
+
+- Added the gravityflow_inbox_
+
+= 1.3.2 =
 
 - Added the gravityflow_inbox_submitter_name to allow the value displayed in the Submitter column to be overridden.
     Example:

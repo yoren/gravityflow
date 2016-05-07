@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2016-04-08 12:55:58+00:00\n"
-"PO-Revision-Date: 2016-04-09 08:59+0000\n"
+"POT-Creation-Date: 2016-04-21 19:33:53+00:00\n"
+"PO-Revision-Date: 2016-04-22 08:24+0000\n"
 "Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
 "Language-Team: Spanish (Spain) (http://www.transifex.com/gravityflow/gravityflow/language/es_ES/)\n"
 "MIME-Version: 1.0\n"
@@ -694,6 +694,7 @@ msgstr "¿Quieres eliminar este archivo? 'Cancelar' para parar. 'Aceptar' para b
 
 #: class-gravity-flow.php:4713
 #: includes/fields/class-field-assignee-select.php:31
+#: includes/fields/class-field-discussion.php:23
 #: includes/fields/class-field-role.php:23
 #: includes/fields/class-field-user.php:23
 msgid "Workflow Fields"
@@ -765,6 +766,10 @@ msgstr ""
 #: includes/pages/class-reports.php:498
 msgid "Assignee"
 msgstr "Encargado"
+
+#: includes/fields/class-field-discussion.php:55
+msgid "Discussion"
+msgstr ""
 
 #: includes/pages/class-activity.php:29 includes/pages/class-reports.php:53
 msgid "You don't have permission to view this page"
@@ -1560,6 +1565,22 @@ msgstr "Emma"
 
 #: includes/steps/class-step-feed-freshbooks.php:23
 msgid "FreshBooks"
+msgstr ""
+
+#: includes/steps/class-step-feed-getresponse.php:23
+msgid "GetResponse"
+msgstr ""
+
+#: includes/steps/class-step-feed-helpscout.php:23
+msgid "Help Scout"
+msgstr ""
+
+#: includes/steps/class-step-feed-highrise.php:23
+msgid "Highrise"
+msgstr ""
+
+#: includes/steps/class-step-feed-hipchat.php:23
+msgid "HipChat"
 msgstr ""
 
 #: includes/steps/class-step-feed-mailchimp.php:23
