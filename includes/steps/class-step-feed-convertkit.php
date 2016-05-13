@@ -27,5 +27,9 @@ class Gravity_Flow_Step_Feed_ConvertKit extends Gravity_Flow_Step_Feed_Add_On {
 		$label = $feed['meta']['feed_name'];
 		return $label;
 	}
+
+	public function get_icon_url() {
+		return $this->get_base_url() . '/images/convertkit-icon.png';
+	}
 }
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_ConvertKit() );
