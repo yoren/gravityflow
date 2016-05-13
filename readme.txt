@@ -57,6 +57,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.3.3-dev =
 
+- Added support for configuring a step to process feeds for the Gravity Forms Breeze Add-On.
 - Added support for configuring a step to process feeds for the following third-party add-ons:
     Gravity Forms ConvertKit Add-On, HubSpot for Gravity Forms
 - Fixed an issue with add-on feed interception running when the step is inactive.
