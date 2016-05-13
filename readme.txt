@@ -57,7 +57,8 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.3.3-dev =
 
-- Added support for configuring a step to process feeds for the HubSpot for Gravity Forms add-on.
+- Added support for configuring a step to process feeds for the following third-party add-ons:
+    Gravity Forms ConvertKit Add-On, HubSpot for Gravity Forms
 - Fixed a fatal error which could occur if a Zapier step is configured and the add-on isn't active during step processing.
 
 = 1.3.2 =
