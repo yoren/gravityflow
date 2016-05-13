@@ -3820,7 +3820,7 @@ PRIMARY KEY  (id)
 
 			foreach ( $steps as $step ) {
 
-				if ( ! $step instanceof Gravity_Flow_Step_Feed_Add_On ) {
+				if ( ! $step instanceof Gravity_Flow_Step_Feed_Add_On || ! $step->is_active() ) {
 					continue;
 				}
 				$add_on_feeds = $step->get_feeds();
