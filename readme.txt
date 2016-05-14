@@ -33,7 +33,7 @@ Twitter: [Gravity Flow](https://twitter.com/gravityflowapp)
 
 1. [Purchase and install Gravity Forms](https://gravityflow.io/out/gravityforms)
 2. Wordpress 4.2+
-3. Gravity Forms 1.9.10+
+3. Gravity Forms 1.9.14+
 
 
 = Support =
@@ -59,7 +59,12 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 - Added support for configuring a step to process feeds for the Gravity Forms Breeze Add-On.
 - Added support for configuring a step to process feeds for the following third-party add-ons:
-    Gravity Forms ConvertKit Add-On, HubSpot for Gravity Forms
+    Drip Email Campaigns + Gravity Forms, Gravity Forms ConvertKit Add-On, HubSpot for Gravity Forms
+
+- Updated minimum Gravity Forms version to 1.9.14.
+- Updated feed interception to use the gform_is_delayed_pre_process_feed filter with GF1.9.14+ or gform_pre_process_feeds filter with GF2.0+.
+
+- Fixed notice caused by step processing occurring when the associated feed add-on is inactive.
 - Fixed an issue with add-on feed interception running when the step is inactive.
 - Fixed a fatal error which could occur if a Zapier step is configured and the add-on isn't active during step processing.
 
