@@ -25,7 +25,7 @@ if ( class_exists( 'GFForms' ) ) {
 		public $_version = GRAVITY_FLOW_VERSION;
 
 		// The Framework will display an appropriate message on the plugins page if necessary
-		protected $_min_gravityforms_version = '1.9.10';
+		protected $_min_gravityforms_version = '1.9.14';
 
 		protected $_slug = 'gravityflow';
 
@@ -3807,31 +3807,23 @@ PRIMARY KEY  (id)
 		public function maybe_process_feed( $entry, $form ) {
 
 			if ( ! isset( $entry['id'] ) ) {
-				return;
+				return $entry;
 			}
 
 			$form_id = absint( $form['id'] );
 
 			if ( empty( $form_id ) ) {
-				return;
+				return $entry;
 			}
 
 			$steps = $this->get_steps( $form_id );
 
 			foreach ( $steps as $step ) {
-
 				if ( ! $step instanceof Gravity_Flow_Step_Feed_Add_On || ! $step->is_active() ) {
 					continue;
 				}
-				$add_on_feeds = $step->get_feeds();
 
-				foreach ( $add_on_feeds as $feed ) {
-					$setting_key = 'feed_' . $feed['id'];
-					if ( $step->{$setting_key} ) {
-						$step->intercept_submission();
-						continue 2;
-					}
-				}
+				$step->intercept_submission();
 			}
 
 			return parent::maybe_process_feed( $entry, $form );

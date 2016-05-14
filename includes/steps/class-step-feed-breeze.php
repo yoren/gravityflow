@@ -23,11 +23,6 @@ class Gravity_Flow_Step_Feed_Breeze extends Gravity_Flow_Step_Feed_Add_On {
 		return esc_html__( 'Breeze', 'gravityflow' );
 	}
 
-	function get_feed_label( $feed ) {
-		$label = $feed['meta']['feedName'];
-		return $label;
-	}
-
 	public function get_icon_url() {
 		return $this->get_base_url() . '/images/breeze-icon.svg';
 	}
