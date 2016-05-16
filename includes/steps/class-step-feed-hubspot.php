@@ -18,6 +18,7 @@ class Gravity_Flow_Step_Feed_HubSpot extends Gravity_Flow_Step_Feed_Add_On {
 	public $_step_type = 'hubspot';
 
 	protected $_class_name = 'GF_HubSpot';
+	protected $_slug = 'gravityforms-hubspot';
 
 	public function get_label() {
 		return esc_html__( 'HubSpot', 'gravityflow' );
