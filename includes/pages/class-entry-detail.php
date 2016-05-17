@@ -565,7 +565,7 @@ class Gravity_Flow_Entry_Detail {
 						if ( $display_field ) {
 							?>
 							<tr>
-								<td colspan="2" class="entry-view-field-value"><?php echo $field->content; ?></td>
+								<td colspan="2" class="entry-view-field-value"><?php echo GFCommon::replace_variables( $field->content, $form, $entry, false, true, false, 'html' ); ?></td>
 							</tr>
 							<?php
 						}
