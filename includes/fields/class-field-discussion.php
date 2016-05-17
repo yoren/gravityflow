@@ -80,13 +80,19 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	}
 
 	public function get_field_input( $form, $value = '', $entry = null ) {
-		$input = parent::get_field_input( $form, '', $entry );
+		$input = '';
+		if ( is_array( $entry ) ) {
+			$entry_value = rgar( $entry, $this->id );
 
-		if ( $value ) {
-			$value = $this->format_discussion_value( $value );
+			if ( $value == $entry_value ) {
+				$value = '';
+			}
+
+			$input = $this->format_discussion_value( $entry_value );
 		}
 
-		$input = $value . $input;
+		$input .= parent::get_field_input( $form, $value, $entry );
+
 		return $input;
 	}
 

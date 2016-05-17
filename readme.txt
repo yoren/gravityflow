@@ -65,6 +65,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Updated minimum Gravity Forms version to 1.9.14.
 - Updated feed interception to use the gform_is_delayed_pre_process_feed filter with GF1.9.14+ or gform_pre_process_feeds filter with GF2.0+.
 
+- Fixed an issue with the Discussion field when the form or user input step returns a validation error.
 - Fixed notice caused by step processing occurring when the associated feed add-on is inactive.
 - Fixed an issue with add-on feed interception running when the step is inactive.
 - Fixed a fatal error which could occur if a Zapier step is configured and the add-on isn't active during step processing.
