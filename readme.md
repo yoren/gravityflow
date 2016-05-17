@@ -43,6 +43,7 @@ Thank you also to all the translators for doing such a great job of keeping up w
 * Samuel Aguilera @samuelaguilera (samuelaguilera.com) - Spanish
 * FX Bénard @fxbenard (fxbenard.com) - French
 * Erik van Beek @ErikvanBeek (erikvanbeek.nl) - Dutch
+* Alexander (Anticisco) Gladkov - Russian
 
 Thank you to all my colleagues at Rocketgenius, Zack Katz (GravityView), Naomi C Bush (Gravity Plus) and Jake Jackson (Gravity PDF) for all their collaboration, support and encouragement.
 
