@@ -7,7 +7,7 @@
  * @subpackage  Classes/Gravity_Flow_Step_Feed_Esign
  * @copyright   Copyright (c) 2016, Steven Henty
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.3.2-dev
+ * @since       1.3.3-dev
  */
 
 if ( ! class_exists( 'GFForms' ) ) {
