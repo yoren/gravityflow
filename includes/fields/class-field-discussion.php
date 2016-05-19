@@ -8,6 +8,15 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 
 	public $type = 'workflow_discussion';
 
+	/**
+	 * Input values are repopulated following validation errors, which is the desired behaviour.
+	 * It also happened when an in progress user input step was redisplayed following a successful update, which is not desired.
+	 * This is set to true in get_value_save_entry() and then set back to false after the value is cleared in get_field_input().
+	 * 
+	 * @var bool Should the input value be cleared?
+	 */
+	private $_clear_input_value = false;
+
 	public function add_button( $field_groups ) {
 		$field_groups = $this->maybe_add_workflow_field_group( $field_groups );
 
@@ -60,20 +69,21 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 		if ( $return ) {
 			$discussion = json_decode( $value, ARRAY_A );
 			if ( is_array( $discussion ) ) {
-				$item = array_pop( $discussion );
+				$item   = array_pop( $discussion );
 				$return = $item['value'];
 			}
 		}
+
 		return esc_html( $return );
 	}
 
 	public function get_value_merge_tag( $value, $input_id, $entry, $form, $modifier, $raw_value, $url_encode, $esc_html, $format, $nl2br ) {
 		$value = $this->format_discussion_value( $value );
+
 		return $value;
 	}
 
 	public function get_value_entry_detail( $value, $currency = '', $use_text = false, $format = 'html', $media = 'screen' ) {
-
 		$value = $this->format_discussion_value( $value );
 
 		return $value;
@@ -83,12 +93,12 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 		$input = '';
 		if ( is_array( $entry ) ) {
 			$entry_value = rgar( $entry, $this->id );
+			$input       = $this->format_discussion_value( $entry_value );
 
-			if ( $value == $entry_value ) {
-				$value = '';
+			if ( $value == $entry_value || $this->_clear_input_value ) {
+				$value                    = '';
+				$this->_clear_input_value = false;
 			}
-
-			$input = $this->format_discussion_value( $entry_value );
 		}
 
 		$input .= parent::get_field_input( $form, $value, $entry );
@@ -103,14 +113,14 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	 * @return string
 	 */
 	public function format_discussion_value( $value, $format = 'html' ) {
-		$return = '';
+		$return     = '';
 		$discussion = json_decode( $value, ARRAY_A );
 		if ( is_array( $discussion ) ) {
 			foreach ( $discussion as $item ) {
 				$item_datetime = date( 'Y-m-d H:i:s', $item['timestamp'] );
-				$date = esc_html( GFCommon::format_date( $item_datetime , false, 'd M Y g:i a', false ) );
+				$date          = esc_html( GFCommon::format_date( $item_datetime, false, 'd M Y g:i a', false ) );
 				if ( $item['assignee_key'] ) {
-					$assignee = new Gravity_Flow_Assignee( $item['assignee_key'] );
+					$assignee     = new Gravity_Flow_Assignee( $item['assignee_key'] );
 					$display_name = $assignee->get_display_name();
 				} else {
 					$display_name = '';
@@ -118,15 +128,16 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 
 				$display_name = apply_filters( 'gravityflowdiscussion_display_name_discussion_field', $display_name, $item, $this );
 				if ( $format == 'html' ) {
-					$content = '<div class="gravityflow-dicussion-item-header"><span class="gravityflow-dicussion-item-name">' . $display_name  . '</span><span class="gravityflow-dicussion-item-date">' . $date . '</span></div>';
+					$content = '<div class="gravityflow-dicussion-item-header"><span class="gravityflow-dicussion-item-name">' . $display_name . '</span><span class="gravityflow-dicussion-item-date">' . $date . '</span></div>';
 					$content .= '<div class="gravityflow-dicussion-item-value">' . esc_html( $item['value'] ) . '</div>';
 					$return .= sprintf( '<div id="gravityflow-discussion-item-%s" class="gravityflow-discussion-item">%s</div>', $item['id'], $content );
 				} elseif ( $format == 'text' ) {
 					$return = $date . ': ' . $display_name . "\n";
-					$return .= $item['value'] ;
+					$return .= $item['value'];
 				}
 			}
 		}
+
 		return $return;
 	}
 
@@ -134,11 +145,15 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 		$value = $this->sanitize_entry_value( $value, $form['id'] );
 
 		if ( $entry_id ) {
-			$entry = GFAPI::get_entry( $entry_id );
+			$entry               = GFAPI::get_entry( $entry_id );
 			$previous_value_json = rgar( $entry, $this->id );
-			$assignee_key = gravity_flow()->get_current_user_assignee_key();
+			$assignee_key        = gravity_flow()->get_current_user_assignee_key();
 
-			$new_comment = array( 'id' => uniqid( '', true ), 'assignee_key' => $assignee_key, 'timestamp' => time(), 'value' => $value );
+			$new_comment = array( 'id'           => uniqid( '', true ),
+			                      'assignee_key' => $assignee_key,
+			                      'timestamp'    => time(),
+			                      'value'        => $value
+			);
 			if ( empty( $previous_value_json ) ) {
 				if ( ! empty( $value ) ) {
 					$value = json_encode( array( $new_comment ) );
@@ -155,6 +170,8 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 				}
 				$value = json_encode( $discussion );
 			}
+
+			$this->_clear_input_value = true;
 		}
 
 		return $value;
