@@ -45,21 +45,58 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 	}
 
 	public function process_feed( $feed ) {
+		$previous_step  = $this->get_previous_step();
+		$was_user_input = $previous_step && $previous_step->get_type() == 'user_input';
+
+		if ( ! $was_user_input ) {
+			$feed['meta']['esign_gf_logic'] = 'email';
+		}
+
 		parent::process_feed( $feed );
 
-		// should we redirect to the sig page? seems like that should only be possible if the previous step was assigned to the user?
-		// if we don't redirect should we filter the feed to change the action so the add-on sends the email requesting the signature
-		// filtering the feed is possible with GF2.0 and the gform_pre_process_feeds filter
-		if ( rgars( $feed, 'meta/esign_gf_logic' ) == 'redirect' ) {
+		// only perform the redirect when the previous step type was user_input
+		if ( $was_user_input && rgars( $feed, 'meta/esign_gf_logic' ) == 'redirect' ) {
 			$redirect = get_transient( 'esig-gf-redirect-' . $this->get_add_on_instance()->get_the_user_ip() );
 			if ( $redirect ) {
 				wp_redirect( $redirect );
-			}	
+			}
 		}
 	}
 	
 	public function is_supported() {
 		return parent::is_supported() && class_exists( 'esig_sad_document' ) && class_exists( 'WP_E_Document' );
+	}
+
+	/**
+	 * Retrieve the previous step.
+	 *
+	 * @todo maybe move to Gravity_Flow or Gravity_Flow_API
+	 *
+	 * @return bool|Gravity_Flow_Step
+	 */
+	public function get_previous_step() {
+		$entry           = $this->get_entry();
+		$current_step_id = rgar( $entry, 'workflow_step' );
+		$previous_step   = false;
+
+		if ( $current_step_id ) {
+			$steps = gravity_flow()->get_steps( $this->get_form_id(), $entry );
+
+			foreach ( $steps as $step ) {
+				if ( $current_step_id == $step->get_id() ) {
+
+					return $previous_step;
+				}
+
+				$status = rgar( $entry, 'workflow_step_status_' . $step->get_id() );
+
+				if ( $status && ! in_array( $status, array( 'pending', 'queued' ) ) ) {
+					$previous_step = $step;
+				}
+			}
+		}
+
+		return $previous_step;
 	}
 
 }
