@@ -58,9 +58,9 @@ class Gravity_Flow_Entry_Editor {
 	 * @param bool $display_empty_fields
 	 */
 	public function __construct( $form, $entry, $step, $display_empty_fields ) {
-		$this->form = $form;
-		$this->entry = $entry;
-		$this->step = $step;
+		$this->form                 = $form;
+		$this->entry                = $entry;
+		$this->step                 = $step;
 		$this->display_empty_fields = $display_empty_fields;
 	}
 
@@ -117,15 +117,15 @@ class Gravity_Flow_Entry_Editor {
 	public function filter_gform_pre_render( $form ) {
 		// Remove page fields
 		$existing_fields = $form['fields'];
-		$fields = array();
+		$fields          = array();
 		/** @var GF_Field $field */
 		foreach ( $existing_fields as $field ) {
 			if ( $field->type !== 'page' ) {
 				if ( ! in_array( $field->id, $this->step->get_editable_fields() ) ) {
 					$field->description = null;
-					$field->maxLength = null;
+					$field->maxLength   = null;
 				}
-				$field->adminOnly = false;
+				$field->adminOnly  = false;
 				$field->adminLabel = '';
 
 				if ( $field->type === 'hidden' ) {
@@ -173,8 +173,7 @@ class Gravity_Flow_Entry_Editor {
 	 */
 	public function filter_gform_field_input( $html, $field, $value, $lead_id, $form_id ) {
 
-		$field_id = $field->id;
-
+		$field_id        = $field->id;
 		$editable_fields = $this->step->get_editable_fields();
 
 		if ( ! in_array( $field_id, $editable_fields ) ) {
@@ -239,6 +238,7 @@ class Gravity_Flow_Entry_Editor {
 	public function filter_gform_get_form_filter( $form_string, $form ) {
 		$form_string = str_replace( 'gform_submit', 'gravityflow_submit', $form_string );
 		$form_string = str_replace( '</form>', '', $form_string );
+
 		return $form_string;
 	}
 
@@ -268,33 +268,30 @@ class Gravity_Flow_Entry_Editor {
 	 */
 	public function get_display_field( $field, $value, $lead_id, $form_id ) {
 
-		if ( $field->type == 'section' && ( GFCommon::is_section_empty( $field, $this->form, $this->entry ) || ! $this->display_empty_fields ) ) {
-			$html = '<!-- gravityflow_hidden -->';
-			return $html;
-		}
-
 		if ( GFCommon::is_product_field( $field->type ) ) {
 			$this->has_product_fields = true;
 		}
-		$html = '';
-		$value = RGFormsModel::get_lead_field_value( $this->entry, $field );
+		$html                              = '';
+		$value                             = RGFormsModel::get_lead_field_value( $this->entry, $field );
 		$dynamic_conditional_logic_enabled = $this->is_dynamic_conditional_logic_enabled();
 		if ( $dynamic_conditional_logic_enabled ) {
 			$conditional_logic_fields = GFFormDisplay::get_conditional_logic_fields( $this->form, $field->id );
 			if ( ! empty( $conditional_logic_fields ) ) {
 				$field->conditionalLogicFields = $conditional_logic_fields;
-				$field_input = $field->get_field_input( $this->form, $value, $this->entry );
-				$html = '<div style="display:none;">' . $field_input . '</div>';
+				$field_input                   = $field->get_field_input( $this->form, $value, $this->entry );
+				$html                          = '<div style="display:none;">' . $field_input . '</div>';
 			}
 		}
 
 		if ( ! $this->is_display_field( $field ) ) {
 			$html = '<!-- gravityflow_hidden -->' . $html;
+
 			return $html;
 		}
 
 		if ( $field->type == 'html' ) {
 			$html = GFCommon::replace_variables( $field->content, $this->form, $this->entry, false, true, false, 'html' );
+
 			return $html;
 		}
 
@@ -341,6 +338,7 @@ class Gravity_Flow_Entry_Editor {
 		}
 
 		$html .= $display_value;
+
 		return $html;
 	}
 
@@ -352,10 +350,8 @@ class Gravity_Flow_Entry_Editor {
 	 * @return bool
 	 */
 	public function is_display_field( $field ) {
-		$display_field = true;
-
-		$display_fields_mode = $this->step->display_fields_mode;
-
+		$display_field           = true;
+		$display_fields_mode     = $this->step->display_fields_mode;
 		$display_fields_selected = is_array( $this->step->display_fields_selected ) ? $this->step->display_fields_selected : array();
 
 		if ( $display_fields_mode == 'selected_fields' ) {
@@ -400,7 +396,7 @@ class Gravity_Flow_Entry_Editor {
 	public function filter_gform_field_content( $content, $field, $value, $lead_id, $form_id ) {
 
 		$hidden_token = '<!-- gravityflow_hidden -->';
-		$pos = strpos( $content, $hidden_token );
+		$pos          = strpos( $content, $hidden_token );
 		if ( $pos !== false ) {
 			$len_token = strlen( $hidden_token );
 			if ( strlen( $content ) > $len_token ) {
@@ -426,21 +422,20 @@ class Gravity_Flow_Entry_Editor {
 	 * @return bool
 	 */
 	public function is_section_hidden( $section_field ) {
-
-		$has_an_editable_field = false;
 		$section_fields = GFCommon::get_section_fields( $this->form, $section_field->id );
 		foreach ( $section_fields as $field ) {
-			if ( $this->is_editable_field( $field ) ) {
-				$has_an_editable_field = true;
-				break;
+			if ( $this->is_editable_field( $field ) || $this->is_display_field( $field ) ) {
+
+				return false;
 			}
 		}
 
-		if ( $has_an_editable_field ) {
-			return false;
+		if ( $this->step->display_fields_mode == 'all_fields' ) {
+
+			return GFCommon::is_section_empty( $section_field, $this->form, $this->entry ) || ! $this->display_empty_fields;
 		}
 
-		return GFCommon::is_section_empty( $section_field, $this->form, $this->entry ) && ! $this->display_empty_fields;
+		return true;
 	}
 
 	/**
@@ -474,6 +469,7 @@ class Gravity_Flow_Entry_Editor {
 	 */
 	public function filter_gform_has_conditional_logic() {
 		$dynamic_conditional_logic_enabled = $this->is_dynamic_conditional_logic_enabled();
+
 		return $dynamic_conditional_logic_enabled;
 	}
 
@@ -490,12 +486,13 @@ class Gravity_Flow_Entry_Editor {
 	 */
 	public function filter_gform_field_css_class( $classes, $field, $form ) {
 		$is_editable = $this->is_editable_field( $field );
-		$class = $is_editable ? 'gravityflow-editable-field' : 'gravityflow-display-field';
+		$class       = $is_editable ? 'gravityflow-editable-field' : 'gravityflow-display-field';
 		if ( $is_editable && $this->step->highlight_editable_fields_enabled ) {
 			$class .= ' ' . $this->step->highlight_editable_fields_class;
 		}
 
 		$classes .= ' ' . $class;
+
 		return $classes;
 	}
 }
