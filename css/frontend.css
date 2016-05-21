@@ -37,7 +37,7 @@ table.entry-detail-view td{
 .gfield {
     margin-bottom:10px;
 }
-.wrap {
+.gravityflow_workflow_wrap {
     margin: 10px 20px 0 2px;
 }
 #post-body.columns-2 #post-body-content {
@@ -308,7 +308,7 @@ input.small-text{
 
 /**** STATUS PAGE ****/
 
-.subsubsub li a,
+#gravityflow-status-filter .subsubsub li a,
 .pagination-links a{
     border-bottom: 0;
 }
@@ -419,7 +419,7 @@ input.small-text{
 }
 
 
-.subsubsub {
+#gravityflow-status-filter .subsubsub {
 	list-style: none;
 	margin: 8px 0 0;
 	padding: 0;
@@ -428,24 +428,24 @@ input.small-text{
 	color: #666;
 }
 
-.subsubsub a {
+#gravityflow-status-filter .subsubsub a {
 	line-height: 2;
 	padding: .2em;
 	text-decoration: none;
 }
 
-.subsubsub a .count,
-.subsubsub a.current .count {
+#gravityflow-status-filter .subsubsub a .count,
+#gravityflow-status-filter .subsubsub a.current .count {
 	color: #999;
 	font-weight: normal;
 }
 
-.subsubsub a.current {
+#gravityflow-status-filter .subsubsub a.current {
 	font-weight: 600;
 	border: none;
 }
 
-.subsubsub li {
+#gravityflow-status-filter .subsubsub li {
 	display: inline-block;
 	margin: 0;
 	padding: 0;

@@ -1,24 +1,48 @@
 
-table#gravityflow-inbox thead tr {background: #FFF}
-table#gravityflow-inbox tr:nth-child(even) {background: #f9f9f9}
-table#gravityflow-inbox tr:nth-child(odd) {background: #FFF}
+table#gravityflow-inbox thead tr {
+    background: #FFF
+}
 
-table#gravityflow-inbox {border-collapse:collapse;}
-table#workflow-inbox tr:hover {background-color:#808080;}
-table#gravityflow-inbox td {display:table-cell;padding:0px;}
-table#gravityflow-inbox td a {text-decoration:none; display:block; padding:10px; height:100%;}
+table#gravityflow-inbox tr:nth-child(even) {
+    background: #f9f9f9
+}
 
-#gravityflow-no-pending-tasks-container{
+table#gravityflow-inbox tr:nth-child(odd) {
+    background: #FFF
+}
+
+table#gravityflow-inbox {
+    border-collapse: collapse;
+    margin-top:10px;
+}
+
+table#workflow-inbox tr:hover {
+    background-color: #808080;
+}
+
+table#gravityflow-inbox td {
+    display: table-cell;
+    padding: 0px;
+}
+
+table#gravityflow-inbox td a {
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    height: 100%;
+}
+
+#gravityflow-no-pending-tasks-container {
 
     -webkit-transform-style: preserve-3d;
     -moz-transform-style: preserve-3d;
     transform-style: preserve-3d;
 
-    height:400px;
-    text-align:center;
+    height: 400px;
+    text-align: center;
 }
 
-#gravityflow-no-pending-tasks-content{
+#gravityflow-no-pending-tasks-content {
     color: silver;
     font-size: 2em;
     position: relative;
@@ -26,12 +50,12 @@ table#gravityflow-inbox td a {text-decoration:none; display:block; padding:10px;
     transform: translateY(-50%);
 }
 
-i.gravityflow-inbox-check{
+i.gravityflow-inbox-check {
     font-size: 5em;
 }
 
 table#gravityflow-inbox th[data-label="ID"],
 table#gravityflow-inbox td[data-label="ID"] {
-    width:70px!important;
+    width: 70px !important;
 }
 

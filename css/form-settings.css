@@ -37,10 +37,9 @@
 }
 
 #assignees,
-#editable_fields,
 #editable_fields{
-    width:18em;
-    height:10em;
+    position: absolute;
+    left: -9999px;
 }
 
 table.gforms_form_settings th{

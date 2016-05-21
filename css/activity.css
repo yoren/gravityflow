@@ -29,3 +29,7 @@ table#gravityflow-activity th[data-label="ID"],
 table#gravityflow-activity td[data-label="ID"] {
     width:70px!important;
 }
+
+table#gravityflow-activity{
+    margin-top:10px;
+}

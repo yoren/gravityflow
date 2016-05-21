@@ -65,7 +65,7 @@ class Gravity_Flow_Reports {
 		?>
 		<script>var gravityflowFilterVars = <?php echo json_encode( $filter_vars ); ?>;</script>
 
-		<div id="gravityflow-reports-filter" style="margin-bottom:10px;">
+		<div id="gravityflow-reports-filter" style="margin:10px 0;">
 		<form method="GET" action="<?php echo esc_url( $args['base_url'] );?>">
 			<input type="hidden" value="gravityflow-reports" name="page" />
 			<?php self::range_drop_down( $args['range'] ); ?>
