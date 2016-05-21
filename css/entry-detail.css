@@ -278,3 +278,21 @@ td.gravityflow-order-summary{
 .gravityflow-instructions div.inside ol li {
     list-style-type: decimal;
 }
+
+span.gf_admin_page_formid {
+    background-color: #d4662c;
+    border: medium none;
+    border-radius: 2px;
+    color: #fff;
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 2;
+    margin: 0 2px 0 12px;
+    padding: 0 8px;
+    position: relative;
+    text-decoration: none;
+    text-shadow: none;
+    top: -3px;
+    white-space: nowrap;
+}
