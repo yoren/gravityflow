@@ -18,6 +18,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 	public $_step_type = 'user_input';
 
+	protected $_editable_fields = array();
+	protected $_assignee_details = array();
+
 	public function get_label() {
 		return esc_html__( 'User Input', 'gravityflow' );
 	}
@@ -311,11 +314,13 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	 */
 	public function get_assignees() {
 
-		$assignees = array();
+		if ( ! empty( $this->_assignee_details ) ) {
+			return $this->_assignee_details;
+		}
 
+		$assignees        = array();
 		$assignee_details = array();
-
-		$input_type = $this->type;
+		$input_type       = $this->type;
 
 		switch ( $input_type ) {
 			case 'select':
@@ -346,7 +351,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 									'type'            => $assignee_type,
 									'editable_fields' => $editable_fields,
 								), $this );
-								$assignees[] = $assignee_key;
+								$assignees[]        = $assignee_key;
 							}
 						} else {
 							$assignee_details[] = new Gravity_Flow_Assignee( array(
@@ -354,7 +359,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 								'type'            => $assignee_type,
 								'editable_fields' => $editable_fields,
 							), $this );
-							$assignees[] = $assignee_key;
+							$assignees[]        = $assignee_key;
 						}
 					}
 				}
@@ -363,6 +368,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		}
 
 		gravity_flow()->log_debug( __METHOD__ . '(): assignees: ' . print_r( $assignees, true ) );
+
+		$this->_assignee_details = $assignee_details;
 
 		return $assignee_details;
 	}
@@ -419,6 +426,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	}
 
 	public function get_editable_fields() {
+		if ( $this->_editable_fields ) {
+			return $this->_editable_fields;
+		}
+
 		if ( $token = gravity_flow()->decode_access_token() ) {
 			$current_user_key = sanitize_text_field( $token['sub'] );
 		} else {
@@ -426,12 +437,12 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			$current_user_key = 'user_id|' . $current_user->ID;
 		}
 
-		$editable_fields = array();
+		$editable_fields  = array();
 		$assignee_details = $this->get_assignees();
 
 		foreach ( $assignee_details as $assignee ) {
 
-			$assignee_key = $assignee->get_key();
+			$assignee_key  = $assignee->get_key();
 			$assignee_type = $assignee->get_type();
 
 			$match = false;
@@ -446,7 +457,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			}
 		}
 
-		$editable_fields = apply_filters( 'gravityflow_editable_fields_user_input', $editable_fields, $this );
+		$editable_fields        = apply_filters( 'gravityflow_editable_fields_user_input', $editable_fields, $this );
+		$this->_editable_fields = $editable_fields;
 
 		return $editable_fields;
 	}
