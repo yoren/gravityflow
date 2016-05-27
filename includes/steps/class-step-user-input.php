@@ -426,7 +426,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	}
 
 	public function get_editable_fields() {
-		if ( $this->_editable_fields ) {
+		if ( ! empty( $this->_editable_fields ) ) {
 			return $this->_editable_fields;
 		}
 
