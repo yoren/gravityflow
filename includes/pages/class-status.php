@@ -684,11 +684,16 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$args = $this->get_filter_args();
 
 		if ( ! empty( $args['form-id'] ) && ! empty( $this->field_ids ) ) {
+			$form = GFAPI::get_form( $args['form-id'] );
 			$grid_columns = RGFormsModel::get_grid_columns( $args['form-id'], true );
 			$field_ids    = array_keys( $grid_columns );
 			foreach ( $this->field_ids as $field_id ) {
 				$field_id = trim( $field_id );
 				if ( in_array( $field_id, $field_ids ) ) {
+					$field = GFFormsModel::get_field( $form, $field_id );
+					if ( in_array( GFFormsModel::get_input_type( $field ), array( 'workflow_user', 'workflow_assignee_select', 'workflow_role' ) ) ) {
+						continue;
+					}
 					$sortable_columns[ $field_id ] = array( $field_id, false );
 				}
 			}
@@ -728,9 +733,6 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$field_ids    = array_keys( $grid_columns );
 			foreach ( $this->field_ids as $field_id ) {
 				$field = GFFormsModel::get_field( $form, $field_id );
-				if ( in_array( GFFormsModel::get_input_type( $field ), array( 'workflow_user', 'workflow_assignee_select', 'workflow_role' ) ) ) {
-					continue;
-				}
 				$field_id = trim( $field_id );
 				if ( in_array( $field_id, $field_ids ) ) {
 					$field_info           = $grid_columns[ $field_id ];
