@@ -51,7 +51,7 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 	function process_feed( $feed ) {
 		if ( class_exists( 'GF_User_Registration' ) ) {
 			parent::process_feed( $feed );
-			return;
+			return true;
 		}
 		$form  = $this->get_form();
 		$entry = $this->get_entry();
@@ -60,6 +60,8 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 
 		// Make sure it's not run twice
 		add_filter( 'gform_disable_registration', '__return_true' );
+		
+		return true;
 	}
 
 	function intercept_submission() {

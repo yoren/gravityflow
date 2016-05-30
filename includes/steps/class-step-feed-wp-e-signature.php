@@ -61,6 +61,8 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 				wp_redirect( $redirect );
 			}
 		}
+		
+		return true;
 	}
 	
 	public function is_supported() {

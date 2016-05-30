@@ -50,6 +50,8 @@ class Gravity_Flow_Step_Feed_Zapier extends Gravity_Flow_Step_Feed_Add_On {
 		} else {
 			GFZapier::send_form_data_to_zapier( $entry, $form );
 		}
+		
+		return true;
 	}
 
 	function intercept_submission() {

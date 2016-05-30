@@ -128,8 +128,9 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	 */
 	public function process() {
 
-		$form  = $this->get_form();
-		$entry = $this->get_entry();
+		$form     = $this->get_form();
+		$entry    = $this->get_entry();
+		$complete = true;
 
 		$feeds = $this->get_feeds();
 		foreach ( $feeds as $feed ) {
@@ -137,18 +138,25 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 			if ( $this->{$setting_key} ) {
 				if ( $this->is_feed_condition_met( $feed, $form, $entry ) ) {
 
-					$this->process_feed( $feed );
-					$label = $this->get_feed_label( $feed );
-					$note  = sprintf( esc_html__( 'Feed processed: %s', 'gravityflow' ), $label );
+					$complete = $this->process_feed( $feed );
+					$label    = $this->get_feed_label( $feed );
+					
+					if ( $complete ) {
+						$note = sprintf( esc_html__( 'Feed processed: %s', 'gravityflow' ), $label );
+						$this->log_debug( __METHOD__ . '() - Feed processed: ' . $label );
+					} else {
+						$note = sprintf( esc_html__( 'Feed processing initiated: %s', 'gravityflow' ), $label );
+						$this->log_debug( __METHOD__ . '() - Feed processing initiated: ' . $label );
+					}
+
 					$this->add_note( $note, 0, $this->get_type() );
-					$this->log_debug( __METHOD__ . '() - Feed processed' );
 				} else {
 					$this->log_debug( __METHOD__ . '() - Feed condition not met' );
 				}
 			}
 		}
 
-		return true;
+		return $complete;
 	}
 
 	/**
@@ -174,6 +182,8 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	 * Processes the given feed for the add-on.
 	 *
 	 * @param $feed
+	 *
+	 * @return bool Is feed processing complete?
 	 */
 	public function process_feed( $feed ) {
 		$form   = $this->get_form();
@@ -181,6 +191,8 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 		$add_on = $this->get_add_on_instance();
 
 		$add_on->process_feed( $feed, $entry, $form );
+		
+		return true;
 	}
 
 	/**
@@ -309,12 +321,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	function get_slug() {
 		$slug = $this->_slug;
 		if ( ! $slug ) {
-			if ( gravity_flow()->is_gravityforms_supported( '2.0-beta-3' ) ) {
-				$slug = $this->get_add_on_instance()->get_slug();
-			} else {
-				$slug = 'gravityforms' . str_replace( '_', '', $this->get_type() );
-			}
-
+			$slug        = 'gravityforms' . str_replace( '_', '', $this->get_type() );
 			$this->_slug = $slug;
 		}
 
