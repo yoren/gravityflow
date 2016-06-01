@@ -311,13 +311,45 @@ module.exports = function(grunt) {
 					icon_url: 'https://avatars3.githubusercontent.com/u/12782633?v=3&s=200'
 				}
 			}
+		},
+
+		replace: {
+			dist: {
+				options: {
+					patterns: [
+						{
+							match: 'Version: ' + grunt.getPluginVersion(false),
+							replacement: 'Version: ' + grunt.getPluginVersion(true),
+						}
+					]
+				},
+				files: [
+					{expand: true, flatten: true, src: ['gravityflow.php'], dest: 'gravityflow.php'}
+				]
+			}
+		},
+
+		'string-replace': {
+			inline: {
+				files: {
+					'./': 'gravityflow.php',
+				},
+				options: {
+					replacements: [
+						{
+							pattern: 'Version: ' + grunt.getPluginVersion(false),
+							replacement: 'Version: ' + grunt.getPluginVersion(true)
+						}
+					]
+				}
+			}
 		}
 
 	});
 
 	grunt.registerTask('minimize', [ 'uglify:gravityflow', 'cssmin:gravityflow' ]);
 	grunt.registerTask('translations', [ 'makepot', 'shell:transifex', 'potomo' ]);
-	grunt.registerTask('default', [ 'clean', 'minimize', 'translations', 'compress', 'aws_s3:upload_zip' ]);
-	grunt.registerTask('build', [ 'clean', 'minimize', 'translations', 'compress', 'dropbox', 'aws_s3:upload_zip', 'clean' ]);
-	grunt.registerTask('publish', [ 'clean', 'minimize', 'translations', 'phpunit', 'shell:apigen', 'compress', 'dropbox', 'aws_s3:inlinedocs', 'clean', 'slack_notifier' ]);
+	grunt.registerTask('default', [ 'clean', 'string-replace', 'minimize', 'translations', 'compress', 'aws_s3:upload_zip' ]);
+	grunt.registerTask('build', [ 'clean', 'string-replace', 'minimize', 'translations', 'compress', 'dropbox', 'aws_s3:upload_zip', 'clean' ]);
+	grunt.registerTask('publish', [ 'clean', 'string-replace', 'minimize', 'translations', 'phpunit', 'shell:apigen', 'compress', 'dropbox', 'aws_s3:inlinedocs', 'clean', 'slack_notifier' ]);
 };
