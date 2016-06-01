@@ -34,11 +34,13 @@ module.exports = function(grunt) {
 		};
 	}
     var gfVersion = '';
+
 	var commitId = process.env.CI_COMMIT_ID ? process.env.CI_COMMIT_ID : '';
 
     require('matchdep').filterDev('grunt-*').forEach( grunt.loadNpmTasks );
 
     grunt.getPluginVersion = function( appendCommitId ){
+
         var p = 'gravityflow.php';
         if(gfVersion == '' && grunt.file.exists(p)){
             var source = grunt.file.read(p);
@@ -46,14 +48,11 @@ module.exports = function(grunt) {
             gfVersion = found[1];
         }
 
-		var val;
-		val = gfVersion;
-
 		if ( appendCommitId && commitId ) {
-			val += '-' + commitId.substring(0, 7);
+			return gfVersion + '-' + commitId.substring(0, 7);
 		}
 
-        return val;
+        return gfVersion;
     };
 
     grunt.getDropboxConfig = function(){
