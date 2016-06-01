@@ -103,7 +103,6 @@ if ( class_exists( 'GFForms' ) ) {
 
 			add_action( 'gform_after_submission', array( $this, 'after_submission' ), 9, 2 );
 			add_action( 'gform_after_update_entry', array( $this, 'filter_after_update_entry' ), 10, 2 );
-			add_action( 'gform_dropbox_post_upload', array( $this, 'dropbox_post_upload' ), 10, 3 );
 
 			add_shortcode( 'gravityflow', array( $this, 'shortcode' ) );
 
@@ -3354,39 +3353,6 @@ PRIMARY KEY  (id)
 			$entry = GFAPI::get_entry( $entry_id );
 			if ( isset( $entry['workflow_final_status'] ) && $entry['workflow_final_status'] == 'pending' ) {
 				$this->process_workflow( $form, $entry_id );
-			}
-		}
-
-		/**
-		 * If the feed for a Dropbox step was processed maybe resume the workflow.
-		 *
-		 * @param array $feed The Dropbox feed for which uploading has just completed.
-		 * @param array $entry The entry which was processed.
-		 * @param array $form The form object for this entry.
-		 */
-		public function dropbox_post_upload( $feed, $entry, $form ) {
-			$workflow_pending = rgar( $entry, 'workflow_final_status' ) == 'pending';
-			$feed_step_id     = rgar( $feed['meta'], 'workflow_step' );
-			$entry_step_id    = rgar( $entry, 'workflow_step' );
-
-			if ( $workflow_pending && ! empty( $feed_step_id ) && $feed_step_id == $entry_step_id ) {
-				$processed_feeds = gform_get_meta( $entry['id'], 'processed_feeds' );
-				if ( empty( $processed_feeds ) ) {
-					$processed_feeds = array();
-				}
-
-				$slug          = 'gravityformsdropbox';
-				$dropbox_feeds = rgar( $processed_feeds, $slug );
-				if ( empty( $dropbox_feeds ) ) {
-					$dropbox_feeds = array();
-				}
-
-				if ( ! in_array( $feed['id'], $dropbox_feeds ) ) {
-					$dropbox_feeds[]          = $feed['id'];
-					$processed_feeds[ $slug ] = $dropbox_feeds;
-					gform_update_meta( $entry['id'], 'processed_feeds', $processed_feeds );
-					$this->process_workflow( $form, $entry['id'] );
-				}
 			}
 		}
 

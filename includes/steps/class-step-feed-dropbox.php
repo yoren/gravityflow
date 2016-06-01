@@ -38,25 +38,13 @@ class Gravity_Flow_Step_Feed_Dropbox extends Gravity_Flow_Step_Feed_Add_On {
 		$feed['meta']['workflow_step'] = $this->get_id();
 		parent::process_feed( $feed );
 
-		$processed_feeds = $this->get_processed_feeds();
-		$dropbox_feeds   = $this->get_processed_dropbox_feeds( $processed_feeds );
-
-		foreach ( $dropbox_feeds as $key => $feed_id ) {
-			if ( $feed_id == $feed['id'] ) {
-				unset( $dropbox_feeds[ $key ] );
-				$processed_feeds[ $this->get_slug() ] = $dropbox_feeds;
-				$this->update_processed_feeds( $processed_feeds );
-				break;
-			}
-		}
-
 		return false;
 	}
 
 	/**
 	 * Evaluates the status for the step.
 	 *
-	 * The step is only complete after Gravity_Flow::dropbox_post_upload() has added all the feeds for this step back into the entry meta processed_feeds array.
+	 * The step is only complete after gravity_flow_step_dropbox_post_upload() has added all the feeds for this step back into the entry meta processed_feeds array.
 	 *
 	 * @return string 'pending' or 'complete'
 	 */
@@ -68,11 +56,11 @@ class Gravity_Flow_Step_Feed_Dropbox extends Gravity_Flow_Step_Feed_Add_On {
 		}
 
 		if ( $status == 'pending' ) {
-			$dropbox_feeds = $this->get_processed_dropbox_feeds();
-			$feeds         = $this->get_feeds();
+			$add_on_feeds = $this->get_processed_add_on_feeds();
+			$feeds        = $this->get_feeds();
 			foreach ( $feeds as $feed ) {
 				$setting_key = 'feed_' . $feed['id'];
-				if ( $this->{$setting_key} && ! in_array( $feed['id'], $dropbox_feeds ) ) {
+				if ( $this->{$setting_key} && ! in_array( $feed['id'], $add_on_feeds ) ) {
 					return 'pending';
 				}
 			}
@@ -81,49 +69,32 @@ class Gravity_Flow_Step_Feed_Dropbox extends Gravity_Flow_Step_Feed_Add_On {
 		return 'complete';
 	}
 
-	/**
-	 * Retrieve an array containing the IDs of all the feeds processed for the current entry.
-	 *
-	 * @return array
-	 */
-	public function get_processed_feeds() {
-		$processed_feeds = gform_get_meta( $this->get_entry_id(), 'processed_feeds' );
-		if ( empty( $processed_feeds ) ) {
-			$processed_feeds = array();
-		}
-
-		return $processed_feeds;
-	}
-
-
-	/**
-	 * Retrieve an array of dropbox feed IDs which have been processed for the current entry.
-	 *
-	 * @param bool|array $processed_feeds False if the array of processed feeds needs to be retrieved or the array to use.
-	 *
-	 * @return array
-	 */
-	public function get_processed_dropbox_feeds( $processed_feeds = false ) {
-		if ( $processed_feeds === false ) {
-			$processed_feeds = $this->get_processed_feeds();
-		}
-
-		$dropbox_feeds = rgar( $processed_feeds, $this->get_slug() );
-		if ( empty( $dropbox_feeds ) ) {
-			$dropbox_feeds = array();
-		}
-
-		return $dropbox_feeds;
-	}
-
-	/**
-	 * Update the processed_feeds array for the current entry.
-	 *
-	 * @param array $processed_feeds The array to be stored in the entry meta.
-	 */
-	public function update_processed_feeds( $processed_feeds ) {
-		gform_update_meta( $this->get_entry_id(), 'processed_feeds', $processed_feeds );
-	}
-
 }
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_Dropbox() );
+
+/**
+ * If the feed for a Dropbox step was processed maybe resume the workflow.
+ *
+ * @param array $feed The Dropbox feed for which uploading has just completed.
+ * @param array $entry The entry which was processed.
+ * @param array $form The form object for this entry.
+ */
+function gravity_flow_step_dropbox_post_upload( $feed, $entry, $form ) {
+	$workflow_is_pending = rgar( $entry, 'workflow_final_status' ) == 'pending';
+	$feed_step_id        = rgar( $feed['meta'], 'workflow_step' );
+	$entry_step_id       = rgar( $entry, 'workflow_step' );
+
+	if ( $workflow_is_pending && ! empty( $feed_step_id ) && $feed_step_id == $entry_step_id ) {
+		$step = Gravity_Flow_Steps::get( 'dropbox' );
+		if ( $step ) {
+			$add_on_feeds = $step->get_processed_add_on_feeds( $entry['id'] );
+
+			if ( ! in_array( $feed['id'], $add_on_feeds ) ) {
+				$add_on_feeds[] = $feed['id'];
+				$step->update_processed_feeds( $add_on_feeds, $entry['id'] );
+				gravity_flow()->process_workflow( $form, $entry['id'] );
+			}
+		}
+	}
+}
+add_action( 'gform_dropbox_post_upload', 'gravity_flow_step_dropbox_post_upload', 10, 3 );
