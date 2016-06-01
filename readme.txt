@@ -65,6 +65,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Updated minimum Gravity Forms version to 1.9.14.
 - Updated feed interception to use the gform_is_delayed_pre_process_feed filter with GF1.9.14+ or gform_pre_process_feeds filter with GF2.0+.
 
+- Fixed an issue with the reminders not being sent when steps are repeated.
 - Fixed an issue with the status page preventing the workflow user, assignee and role fields from being displayed.
 - Fixed an issue with the admin actions button on the user input step when form button conditional logic is enabled.
 - Fixed a performance issue with the user input step.
