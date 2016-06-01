@@ -332,7 +332,7 @@ module.exports = function(grunt) {
 					replacements: [
 						{
 							pattern: 'Version: ' + grunt.getPluginVersion(),
-							replacement: commidId ? 'Version: ' + grunt.getPluginVersion() + '-' + commitId.substring(0, 7) : 'Version: ' + grunt.getPluginVersion()
+							replacement: commitId ? 'Version: ' + grunt.getPluginVersion() + '-' + commitId.substring(0, 7) : 'Version: ' + grunt.getPluginVersion()
 						}
 					]
 				}
