@@ -116,7 +116,7 @@ class Gravity_Flow_Assignee {
 	}
 
 	/**
-	 * Returns the status key. Defaults to this assignee.
+	 * Returns the status key.
 	 *
 	 * @return string
 	 */
@@ -162,6 +162,10 @@ class Gravity_Flow_Assignee {
 
 		gform_delete_meta( $this->step->get_entry_id(), $key );
 		gform_delete_meta( $this->step->get_entry_id(), $key . '_timestamp' );
+
+		$reminder_timestamp_key = $key . '_reminder_timestamp';
+
+		gform_delete_meta( $this->step->get_entry_id(), $reminder_timestamp_key );
 	}
 
 	/**
