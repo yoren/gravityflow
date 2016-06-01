@@ -21,6 +21,7 @@
     "grunt-shell": "^1.1.1",
     "grunt-slack-notifier": "^0.1.0",
     "grunt-slack-upload": "^1.0.0",
+    "grunt-string-replace": "^1.2.1",
     "grunt-version": "^0.3.1",
     "grunt-wp-i18n": "^0.4.5",
     "matchdep": "~0.1.2"
