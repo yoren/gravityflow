@@ -331,6 +331,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 						'type'            => $assignee_type,
 						'editable_fields' => $this->editable_fields,
 					), $this );
+					$assignees[]        = $assignee_key;
 				}
 				break;
 			case 'routing' :
