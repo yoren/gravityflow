@@ -202,7 +202,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 	public $last_updated;
 
-	function __construct( $args = array() ) {
+	public function __construct( $args = array() ) {
 
 		$default_bulk_actions = array( 'print' => esc_html__( 'Print', 'gravityflow' ) );
 
@@ -256,7 +256,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$this->last_updated = $args['last_updated'];
 	}
 
-	function no_items() {
+	public function no_items() {
 		esc_html_e( "You haven't submitted any workflow forms yet." );
 	}
 
@@ -293,7 +293,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		return $views;
 	}
 
-	function filters() {
+	public function filters() {
 
 		$start_date      = isset( $_REQUEST['start-date'] ) ? sanitize_text_field( $_REQUEST['start-date'] ) : null;
 		$end_date        = isset( $_REQUEST['end-date'] ) ? sanitize_text_field( $_REQUEST['end-date'] ) : null;
@@ -455,13 +455,13 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		<?php
 	}
 
-	function column_cb( $item ) {
+	public function column_cb( $item ) {
 		$feed_id = rgar( $item, 'id' );
 
 		return sprintf( '<input type="checkbox" class="gravityflow-cb-entry-id" name="entry_ids[]" value="%s" />', esc_attr( $feed_id ) );
 	}
 
-	function column_id( $item ) {
+	public function column_id( $item ) {
 		$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
 		$url_entry = esc_url_raw( $url_entry );
 		$label = absint( $item['id'] );
@@ -470,7 +470,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		echo $link;
 	}
 
-	function column_default( $item, $column_name ) {
+	public function column_default( $item, $column_name ) {
 		$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
 		$url_entry = esc_url_raw( $url_entry );
 		$form_id = rgar( $item, 'form_id' );
@@ -490,7 +490,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		echo $link;
 	}
 
-	function column_workflow_final_status( $item ) {
+	public function column_workflow_final_status( $item ) {
 		$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
 		$final_status = rgar( $item, 'workflow_final_status' );
 		$label = empty( $final_status ) ? '' : gravity_flow()->translate_status_label( $final_status );
@@ -587,7 +587,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 	}
 
-	function column_created_by( $item ) {
+	public function column_created_by( $item ) {
 		$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
 
 		$user_id = $item['created_by'];
@@ -606,7 +606,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		echo $link;
 	}
 
-	function column_form_id( $item ) {
+	public function column_form_id( $item ) {
 		$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
 
 		$form_id = $item['form_id'];
@@ -617,7 +617,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		echo $link;
 	}
 
-	function column_workflow_step( $item ) {
+	public function column_workflow_step( $item ) {
 		$step_id = rgar( $item, 'workflow_step' );
 		if ( $step_id > 0 ) {
 			$step      = gravity_flow()->get_step( $step_id );
@@ -640,7 +640,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		echo $output;
 	}
 
-	function column_date_created( $item ) {
+	public function column_date_created( $item ) {
 		$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
 
 		$label = GFCommon::format_date( $item['date_created'] );
@@ -648,7 +648,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		echo $link;
 	}
 
-	function column_workflow_timestamp( $item ) {
+	public function column_workflow_timestamp( $item ) {
 		$label = '-';
 
 		if ( isset( $item['workflow_timestamp'] ) ) {
@@ -663,13 +663,35 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		echo $label;
 	}
 
-	function get_bulk_actions() {
+	/**
+	 * Get an associative array ( option_name => option_title ) with the list
+	 * of bulk actions available on this table.
+	 *
+	 * @since 1.0
+	 * @access protected
+	 *
+	 * @return array
+	 */
+	public function get_bulk_actions() {
 		$bulk_actions = $this->bulk_actions;
 
 		return $bulk_actions;
 	}
 
-	function get_sortable_columns() {
+	/**
+	 * Get a list of sortable columns. The format is:
+	 * 'internal-name' => 'orderby'
+	 * or
+	 * 'internal-name' => array( 'orderby', true )
+	 *
+	 * The second format will make the initial sorting order be descending
+	 *
+	 * @since 1.3.3
+	 * @access protected
+	 *
+	 * @return array
+	 */
+	public function get_sortable_columns() {
 		$sortable_columns = array(
 			'id'                    => array( 'id', false ),
 			'created_by'            => array( 'created_by', false ),
@@ -702,7 +724,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		return $sortable_columns;
 	}
 
-	function get_columns() {
+	public function get_columns() {
 
 		$args = $this->get_filter_args();
 
@@ -828,7 +850,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$this->cancelled_count = $counts->cancelled;
 	}
 
-	function get_counts( $args ) {
+	public function get_counts( $args ) {
 
 		if ( ! empty( $args['field_filters'] ) ) {
 			if ( isset( $args['form-id'] ) ) {
@@ -924,7 +946,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		return $results[0];
 	}
 
-	function prepare_start_date_gmt( $start_date ) {
+	public function prepare_start_date_gmt( $start_date ) {
 		$start_date     = new DateTime( $start_date );
 		$start_date_str = $start_date->format( 'Y-m-d H:i:s' );
 		$start_date_gmt = get_gmt_from_date( $start_date_str );
@@ -932,7 +954,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		return $start_date_gmt;
 	}
 
-	function prepare_end_date_gmt( $end_date ) {
+	public function prepare_end_date_gmt( $end_date ) {
 		$end_date = new DateTime( $end_date );
 
 		$end_datetime_str = $end_date->format( 'Y-m-d H:i:s' );
@@ -949,7 +971,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		return $end_date_gmt;
 	}
 
-	function get_workflow_form_ids() {
+	public function get_workflow_form_ids() {
 		return gravity_flow()->get_workflow_form_ids();
 	}
 
@@ -984,7 +1006,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		}
 	}
 
-	function prepare_items() {
+	public function prepare_items() {
 
 		$this->process_bulk_action();
 
