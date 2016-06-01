@@ -43,6 +43,13 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	protected $_slug = '';
 
 	/**
+	 * The feeds processed for the current entry.
+	 *
+	 * @var array
+	 */
+	private $_processed_feeds = array();
+
+	/**
 	 * Returns the class name for the add-on.
 	 *
 	 * @return string
@@ -132,7 +139,9 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 		$entry    = $this->get_entry();
 		$complete = true;
 
-		$feeds = $this->get_feeds();
+		$add_on_feeds = $this->get_processed_add_on_feeds();
+		$feeds        = $this->get_feeds();
+		
 		foreach ( $feeds as $feed ) {
 			$setting_key = 'feed_' . $feed['id'];
 			if ( $this->{$setting_key} ) {
@@ -144,9 +153,11 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 					if ( $complete ) {
 						$note = sprintf( esc_html__( 'Feed processed: %s', 'gravityflow' ), $label );
 						$this->log_debug( __METHOD__ . '() - Feed processed: ' . $label );
+						$add_on_feeds = $this->maybe_set_processed_feed( $add_on_feeds, $feed['id'] );
 					} else {
 						$note = sprintf( esc_html__( 'Feed processing initiated: %s', 'gravityflow' ), $label );
 						$this->log_debug( __METHOD__ . '() - Feed processing initiated: ' . $label );
+						$add_on_feeds = $this->maybe_unset_processed_feed( $add_on_feeds, $feed['id'] );
 					}
 
 					$this->add_note( $note, 0, $this->get_type() );
@@ -155,6 +166,8 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 				}
 			}
 		}
+
+		$this->update_processed_feeds( $add_on_feeds );
 
 		return $complete;
 	}
@@ -326,6 +339,104 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 		}
 
 		return $slug;
+	}
+
+	/**
+	 * Retrieve an array containing the IDs of all the feeds processed for the current entry.
+	 *
+	 * @param bool|int $entry_id False or the ID of the entry the meta should be retrieved from.
+	 *
+	 * @return array
+	 */
+	public function get_processed_feeds( $entry_id = false ) {
+		if ( ! empty( $this->_processed_feeds ) ) {
+			return $this->_processed_feeds;
+		}
+
+		if ( ! $entry_id ) {
+			$entry_id = $this->get_entry_id();
+		}
+
+		$processed_feeds = gform_get_meta( $entry_id, 'processed_feeds' );
+		if ( empty( $processed_feeds ) ) {
+			$processed_feeds = array();
+		}
+
+		$this->_processed_feeds = $processed_feeds;
+
+		return $processed_feeds;
+	}
+
+
+	/**
+	 * Retrieve an array of this add-ons feed IDs which have been processed for the current entry.
+	 *
+	 * @param bool|int $entry_id False or the ID of the entry the meta should be retrieved from.
+	 *
+	 * @return array
+	 */
+	public function get_processed_add_on_feeds( $entry_id = false ) {
+		$processed_feeds = $this->get_processed_feeds( $entry_id );
+		$add_on_feeds    = rgar( $processed_feeds, $this->get_slug() );
+		if ( empty( $add_on_feeds ) ) {
+			$add_on_feeds = array();
+		}
+
+		return $add_on_feeds;
+	}
+
+	/**
+	 * Add the ID of the current feed to the processed feeds array for the current add-on.
+	 * 
+	 * @param array $add_on_feeds The IDs of the processed feeds.
+	 * @param int $feed_id The ID of the processed feed.
+	 *
+	 * @return array
+	 */
+	public function maybe_set_processed_feed( $add_on_feeds, $feed_id ) {
+		if ( ! in_array( $feed_id, $add_on_feeds ) ) {
+			$add_on_feeds[] = $feed_id;
+		}
+
+		return $add_on_feeds;
+	}
+
+	/**
+	 * For old Gravity Forms the ID of the current feed needs to be removed from the processed feeds array for the current add-on.
+	 *
+	 * @param array $add_on_feeds The IDs of the processed feeds.
+	 * @param int $feed_id The ID of the processed feed.
+	 *
+	 * @return array
+	 */
+	public function maybe_unset_processed_feed( $add_on_feeds, $feed_id ) {
+		if ( ! gravity_flow()->is_gravityforms_supported( '2.0-beta-2' ) ) {
+			foreach ( $add_on_feeds as $key => $id ) {
+				if ( $id == $feed_id ) {
+					unset( $add_on_feeds[ $key ] );
+					break;
+				}
+			}
+		}
+
+		return $add_on_feeds;
+	}
+
+	/**
+	 * Update the processed_feeds array for the current entry.
+	 *
+	 * @param array $add_on_feeds The IDs of the processed feeds for the current add-on.
+	 * @param bool|int $entry_id False or the ID of the entry the meta should be saved for.
+	 */
+	public function update_processed_feeds( $add_on_feeds, $entry_id = false ) {
+		if ( ! $entry_id ) {
+			$entry_id = $this->get_entry_id();
+		}
+
+		$processed_feeds                      = $this->get_processed_feeds( $entry_id );
+		$processed_feeds[ $this->get_slug() ] = $add_on_feeds;
+
+		gform_update_meta( $entry_id, 'processed_feeds', $processed_feeds );
 	}
 
 }
