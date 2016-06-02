@@ -47,62 +47,16 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 	}
 
 	public function process_feed( $feed ) {
-		$previous_step  = $this->get_previous_step();
-		$was_user_input = $previous_step && $previous_step->get_type() == 'user_input';
-
-		if ( ! $was_user_input ) {
-			$feed['meta']['esign_gf_logic'] = 'email';
-		}
-
 		$this->_feed_id = $feed['id'];
 		add_action( 'esig_sad_document_invite_send', array( $this, 'sad_document_invite_send' ) );
+		$feed['meta']['esign_gf_logic'] = 'email';
 		parent::process_feed( $feed );
-
-		// only perform the redirect when the previous step type was user_input
-		if ( $was_user_input && rgars( $feed, 'meta/esign_gf_logic' ) == 'redirect' ) {
-			$redirect = get_transient( 'esig-gf-redirect-' . $this->get_add_on_instance()->get_the_user_ip() );
-			if ( $redirect ) {
-				wp_redirect( $redirect );
-			}
-		}
 		
-		return true;
+		return false;
 	}
 	
 	public function is_supported() {
 		return parent::is_supported() && class_exists( 'esig_sad_document' ) && class_exists( 'WP_E_Document' );
-	}
-
-	/**
-	 * Retrieve the previous step.
-	 *
-	 * @todo maybe move to Gravity_Flow or Gravity_Flow_API
-	 *
-	 * @return bool|Gravity_Flow_Step
-	 */
-	public function get_previous_step() {
-		$entry           = $this->get_entry();
-		$current_step_id = rgar( $entry, 'workflow_step' );
-		$previous_step   = false;
-
-		if ( $current_step_id ) {
-			$steps = gravity_flow()->get_steps( $this->get_form_id(), $entry );
-
-			foreach ( $steps as $step ) {
-				if ( $current_step_id == $step->get_id() ) {
-
-					return $previous_step;
-				}
-
-				$status = rgar( $entry, 'workflow_step_status_' . $step->get_id() );
-
-				if ( $status && ! in_array( $status, array( 'pending', 'queued' ) ) ) {
-					$previous_step = $step;
-				}
-			}
-		}
-
-		return $previous_step;
 	}
 
 	/**
@@ -142,6 +96,65 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 		if ( ! empty( $this->_feed_id ) && class_exists( 'WP_E_Meta' ) ) {
 			$sig_meta_api = new WP_E_Meta();
 			$sig_meta_api->add( $args['document']->document_id, 'esig_gravity_feed_id', $this->_feed_id );
+			$this->save_document_id( $args['document']->document_id );
+		}
+	}
+
+	/**
+	 * Store the current document ID in the entry meta for this step.
+	 *
+	 * @param int $document_id The documents unique ID assigned by WP E-Signature.
+	 */
+	public function save_document_id( $document_id ) {
+		$document_ids = $this->get_document_ids();
+		if ( ! in_array( $document_id, $document_ids ) ) {
+			$document_ids[] = $document_id;
+		}
+
+		gform_update_meta( $this->get_entry_id(), 'workflow_step_' . $this->get_id() . '_document_ids', $document_ids );
+	}
+
+	/**
+	 * Retrieve this entries document IDs for the current step.
+	 *
+	 * @return array
+	 */
+	public function get_document_ids() {
+		$document_ids = gform_get_meta( $this->get_entry_id(), 'workflow_step_' . $this->get_id() . '_document_ids' );
+		if ( empty( $document_ids ) ) {
+			$document_ids = array();
+		}
+
+		return $document_ids;
+	}
+
+	public function workflow_detail_box( $form, $args ) {
+		$document_ids = $this->get_document_ids();
+
+		if ( ! empty( $document_ids ) && class_exists( 'WP_E_Document' ) ) {
+			echo sprintf( '<h4 style="margin-bottom:10px;">%s</h4>', $this->get_label() );
+
+			$doc_api    = new WP_E_Document();
+			$invite_api = new WP_E_Invite();
+
+			foreach ( $document_ids as $document_id ) {
+				$document = $doc_api->getDocument( $document_id );
+
+				echo sprintf( '%s: <a href="%s" target="_blank" title="Preview">%s</a><br><br>',
+					esc_html__( 'Title', 'gravityflow' ),
+					$invite_api->get_preview_url( $document_id ),
+					esc_html( $document->document_title )
+				);
+
+				echo sprintf( '%s: %s<br><br>', esc_html__( 'Invite Status', 'gravityflow' ), $invite_api->is_invite_sent( $document_id ) ? esc_html__( 'Sent', 'gravityflow' ) : esc_html__( 'Error - Not Sent', 'gravityflow' ) );
+
+				$params = array(
+					'page'        => 'esign-resend_invite-document',
+					'document_id' => $document_id
+				);
+				$resend_url = add_query_arg( $params, admin_url() );
+				echo sprintf( '<a href="%s" class="button">%s</a><br><br>', esc_url( $resend_url ), esc_html__( 'Resend Invite', 'gravityflow' ) );
+			}
 		}
 	}
 
