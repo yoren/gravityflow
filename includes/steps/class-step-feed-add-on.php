@@ -435,7 +435,8 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 
 		$processed_feeds                      = $this->get_processed_feeds( $entry_id );
 		$processed_feeds[ $this->get_slug() ] = $add_on_feeds;
-
+		$this->_processed_feeds               = $processed_feeds;
+		
 		gform_update_meta( $entry_id, 'processed_feeds', $processed_feeds );
 	}
 
