@@ -40,10 +40,170 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 		return $this->get_base_url() . '/images/esig-icon.png';
 	}
 
+	public function get_settings() {
+		$settings = parent::get_settings();
+
+		if ( ! $this->is_supported() ) {
+			return $settings;
+		}
+
+		$assignee_notification_fields = array(
+			array(
+				'name'    => 'assignee_notification_enabled',
+				'label'   => '',
+				'type'    => 'checkbox',
+				'choices' => array(
+					array(
+						'label'         => __( 'Send Email to the assignee(s).', 'gravityflow' ),
+						'tooltip'       => __( 'Enable this setting to send email to each of the assignees as soon as the entry has been assigned. If a role is configured to receive emails then all the users with that role will receive the email.', 'gravityflow' ),
+						'name'          => 'assignee_notification_enabled',
+						'default_value' => false,
+					),
+				),
+			),
+			array(
+				'name'  => 'assignee_notification_from_name',
+				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+				'label' => __( 'From Name', 'gravityflow' ),
+				'type'  => 'text',
+			),
+			array(
+				'name'          => 'assignee_notification_from_email',
+				'class'         => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+				'label'         => __( 'From Email', 'gravityflow' ),
+				'type'          => 'text',
+				'default_value' => '{admin_email}',
+			),
+			array(
+				'name'  => 'assignee_notification_reply_to',
+				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+				'label' => __( 'Reply To', 'gravityflow' ),
+				'type'  => 'text',
+			),
+			array(
+				'name'  => 'assignee_notification_bcc',
+				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+				'label' => __( 'BCC', 'gravityflow' ),
+				'type'  => 'text',
+			),
+			array(
+				'name'  => 'assignee_notification_subject',
+				'class' => 'large fieldwidth-1 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+				'label' => __( 'Subject', 'gravityflow' ),
+				'type'  => 'text',
+			),
+			array(
+				'name'          => 'assignee_notification_message',
+				'label'         => __( 'Message to Assignee(s)', 'gravityflow' ),
+				'type'          => 'visual_editor',
+				'default_value' => __( 'A new entry is pending your approval. Please check your Workflow Inbox.', 'gravityflow' ),
+			),
+			array(
+				'name'    => 'assignee_notification_autoformat',
+				'label'   => '',
+				'type'    => 'checkbox',
+				'choices' => array(
+					array(
+						'label'         => __( 'Disable auto-formatting', 'gravityflow' ),
+						'name'          => 'assignee_notification_disable_autoformat',
+						'default_value' => false,
+						'tooltip'       => __( 'Disable auto-formatting to prevent paragraph breaks being automatically inserted when using HTML to create the email message.', 'gravityflow' ),
+
+					),
+				),
+			),
+			array(
+				'name'     => 'resend_assignee_email',
+				'label'    => '',
+				'type'     => 'checkbox_and_text',
+				'checkbox' => array(
+					'label' => __( 'Send reminder', 'gravityflow' ),
+				),
+				'text'     => array(
+					'default_value' => 7,
+					'before_input'  => __( 'Resend the assignee email after', 'gravityflow' ),
+					'after_input'   => ' ' . __( 'day(s)', 'gravityflow' ),
+				),
+			),
+		);
+
+		$fields = array(
+			array(
+				'name'          => 'type',
+				'label'         => __( 'Assign To:', 'gravityflow' ),
+				'type'          => 'radio',
+				'default_value' => 'select',
+				'horizontal'    => true,
+				'choices'       => array(
+					array( 'label' => __( 'Select', 'gravityflow' ), 'value' => 'select' ),
+					array( 'label' => __( 'Conditional Routing', 'gravityflow' ), 'value' => 'routing' ),
+				),
+			),
+			array(
+				'id'       => 'assignees',
+				'name'     => 'assignees[]',
+				'label'    => __( 'Select Assignee', 'gravityflow' ),
+				'type'     => 'select',
+				'multiple' => 'multiple',
+				'choices'  => gravity_flow()->get_users_as_choices(),
+			),
+			array(
+				'name'    => 'routing',
+				'tooltip' => __( 'Build assignee routing rules by adding conditions. Users and roles fields will appear in the first drop-down field. If the form contains any assignee fields they will also appear here. Select the assignee and define the condition for that assignee. Add as many routing rules as you need.', 'gravityflow' ),
+				'label'   => __( 'Routing', 'gravityflow' ),
+				'type'    => 'routing',
+			),
+			array(
+				'name'    => 'notification_tabs',
+				'label'   => __( 'Emails', 'gravityflow' ),
+				'tooltip' => __( 'Configure the emails that should be sent for this step.', 'gravityflow' ),
+				'type'    => 'tabs',
+				'tabs'    => array(
+					array(
+						'label'  => __( 'Assignee Email', 'gravityflow' ),
+						'id'     => 'tab_assignee_notification',
+						'fields' => $assignee_notification_fields,
+					),
+				),
+			),
+			array(
+				'name'     => 'instructions',
+				'label'    => __( 'Instructions', 'gravityflow' ),
+				'type'     => 'checkbox_and_textarea',
+				'tooltip'  => esc_html__( 'Activate this setting to display instructions to the user for the current step.', 'gravityflow' ),
+				'checkbox' => array(
+					'label' => esc_html__( 'Display instructions', 'gravityflow' ),
+				),
+				'textarea' => array(
+					'use_editor'    => true,
+					'default_value' => esc_html__( 'Instructions: check the signature invite status in the WP E-Signature section of the Workflow sidebar and resend if necessary.', 'gravityflow' ),
+				),
+			),
+			array(
+				'name'    => 'display_fields',
+				'label'   => __( 'Display Fields', 'gravityflow' ),
+				'tooltip' => __( 'Select the fields to hide or display.', 'gravityflow' ),
+				'type'    => 'display_fields',
+			),
+		);
+
+		$settings['fields'] = array_merge( $settings['fields'], $fields );
+
+		return $settings;
+	}
+
+
 	function intercept_submission() {
 		parent::intercept_submission();
 
 		remove_filter( 'gform_confirmation', array( ESIG_GRAVITY_Admin::get_instance(), 'reroute_confirmation' ) );
+	}
+
+	public function process() {
+		$complete = parent::process();
+		$this->assign();
+
+		return $complete;
 	}
 
 	public function process_feed( $feed ) {
@@ -156,6 +316,44 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 				echo sprintf( '<a href="%s" class="button">%s</a><br><br>', esc_url( $resend_url ), esc_html__( 'Resend Invite', 'gravityflow' ) );
 			}
 		}
+	}
+
+	public function get_assignees() {
+		$approvers = array();
+
+		$type = $this->type;
+
+		switch ( $type ) {
+			case 'select' :
+				if ( is_array( $this->assignees ) ) {
+					foreach ( $this->assignees as $assignee_key ) {
+						$approvers[] = new Gravity_Flow_Assignee( $assignee_key, $this );
+					}
+				}
+				break;
+			case 'routing' :
+				$routings = $this->routing;
+				if ( is_array( $routings ) ) {
+					$entry = $this->get_entry();
+					foreach ( $routings as $routing ) {
+						$assignee_key = rgar( $routing, 'assignee' );
+						if ( in_array( $assignee_key, $approvers ) ) {
+							continue;
+						}
+						if ( $entry ) {
+							if ( $this->evaluate_routing_rule( $routing ) ) {
+								$approvers[] = new Gravity_Flow_Assignee( $assignee_key, $this );
+							}
+						} else {
+							$approvers[] = new Gravity_Flow_Assignee( $assignee_key, $this );
+						}
+					}
+				}
+
+				break;
+		}
+		
+		return $approvers;
 	}
 
 }
