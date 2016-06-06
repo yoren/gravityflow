@@ -402,7 +402,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	}
 
 	/**
-	 * For old Gravity Forms the ID of the current feed needs to be removed from the processed feeds array for the current add-on.
+	 * If necessary remove the current feed from the processed feeds array for the current add-on.
 	 *
 	 * @param array $add_on_feeds The IDs of the processed feeds.
 	 * @param int $feed_id The ID of the processed feed.
@@ -410,12 +410,10 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	 * @return array
 	 */
 	public function maybe_unset_processed_feed( $add_on_feeds, $feed_id ) {
-		if ( ! gravity_flow()->is_gravityforms_supported( '2.0-beta-2' ) ) {
-			foreach ( $add_on_feeds as $key => $id ) {
-				if ( $id == $feed_id ) {
-					unset( $add_on_feeds[ $key ] );
-					break;
-				}
+		foreach ( $add_on_feeds as $key => $id ) {
+			if ( $id == $feed_id ) {
+				unset( $add_on_feeds[ $key ] );
+				break;
 			}
 		}
 

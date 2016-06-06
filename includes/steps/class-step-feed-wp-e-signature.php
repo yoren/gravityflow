@@ -96,7 +96,7 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 				'name'          => 'assignee_notification_message',
 				'label'         => __( 'Message to Assignee(s)', 'gravityflow' ),
 				'type'          => 'visual_editor',
-				'default_value' => __( 'A new entry is pending your approval. Please check your Workflow Inbox.', 'gravityflow' ),
+				'default_value' => __( 'A new entry has been assigned to you for monitoring. Please check your Workflow Inbox.', 'gravityflow' ),
 			),
 			array(
 				'name'    => 'assignee_notification_autoformat',
@@ -319,7 +319,7 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 	}
 
 	public function get_assignees() {
-		$approvers = array();
+		$assignees = array();
 
 		$type = $this->type;
 
@@ -327,7 +327,7 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 			case 'select' :
 				if ( is_array( $this->assignees ) ) {
 					foreach ( $this->assignees as $assignee_key ) {
-						$approvers[] = new Gravity_Flow_Assignee( $assignee_key, $this );
+						$assignees[] = new Gravity_Flow_Assignee( $assignee_key, $this );
 					}
 				}
 				break;
@@ -337,15 +337,15 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 					$entry = $this->get_entry();
 					foreach ( $routings as $routing ) {
 						$assignee_key = rgar( $routing, 'assignee' );
-						if ( in_array( $assignee_key, $approvers ) ) {
+						if ( in_array( $assignee_key, $assignees ) ) {
 							continue;
 						}
 						if ( $entry ) {
 							if ( $this->evaluate_routing_rule( $routing ) ) {
-								$approvers[] = new Gravity_Flow_Assignee( $assignee_key, $this );
+								$assignees[] = new Gravity_Flow_Assignee( $assignee_key, $this );
 							}
 						} else {
-							$approvers[] = new Gravity_Flow_Assignee( $assignee_key, $this );
+							$assignees[] = new Gravity_Flow_Assignee( $assignee_key, $this );
 						}
 					}
 				}
@@ -353,7 +353,11 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 				break;
 		}
 		
-		return $approvers;
+		return $assignees;
+	}
+
+	public function restart_action() {
+		gform_delete_meta( $this->get_entry_id(), 'workflow_step_' . $this->get_id() . '_document_ids' );
 	}
 
 }
