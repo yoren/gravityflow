@@ -1602,5 +1602,12 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$assignee_to_remove->remove();
 		}
 	}
+
+	/**
+	 * Override this to perform any tasks for the current step when restarting the workflow or step, such as cleaning up custom entry meta.
+	 */
+	public function restart_action() {
+
+	}
 }
 

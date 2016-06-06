@@ -136,6 +136,7 @@ class Gravity_Flow_API {
 		}
 		$entry_id = $entry['id'];
 		$this->log_activity( 'step', 'restarted', $this->form_id, $entry_id );
+		$step->restart_action();
 		$step->start();
 		$feedback = esc_html__( 'Workflow Step restarted.',  'gravityflow' );
 		$this->add_timeline_note( $entry_id, $feedback );
@@ -162,6 +163,7 @@ class Gravity_Flow_API {
 			// Create a step based on the entry and use it to reset the status.
 			$step_for_entry = $this->get_step( $step->get_id(), $entry );
 			$step_for_entry->update_step_status( 'pending' );
+			$step_for_entry->restart_action();
 		}
 		$feedback = esc_html__( 'Workflow restarted.',  'gravityflow' );
 		$this->add_timeline_note( $entry_id, $feedback );
