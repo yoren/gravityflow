@@ -327,32 +327,36 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				/* Format the PDFs in the appropriate format for use in a select field */
 				$gpdf_choices = array();
 				foreach ( $gpdf_feeds as $gpdf_feed ) {
-					$gpdf_choices[] = array( 'label' => $gpdf_feed['name'], 'value' => $gpdf_feed['id'] );
+					if ( true === $gpdf_feed['active'] ) {
+						$gpdf_choices[] = array( 'label' => $gpdf_feed['name'], 'value' => $gpdf_feed['id'] );
+					}
 				}
 
-				/* Create a select box for the Gravity PDFs */
-				$pdf_setting = array(
-					'name'     => 'assignee_notification_gpdf',
-					'label'    => '',
-					'type'     => 'checkbox_and_select',
-					'checkbox' => array(
-						'label' => esc_html__( 'Attach PDF', 'gravityflow' ),
-					),
-					'select'   => array(
-						'choices' => $gpdf_choices,
-					),
-				);
+				/* Create a select box for the Gravity PDFs if there are active PDFs */
+				if ( 0 < sizeof( $gpdf_choices ) ) {
+					$pdf_setting = array(
+						'name'     => 'assignee_notification_gpdf',
+						'label'    => '',
+						'type'     => 'checkbox_and_select',
+						'checkbox' => array(
+							'label' => esc_html__( 'Attach PDF', 'gravityflow' ),
+						),
+						'select'   => array(
+							'choices' => $gpdf_choices,
+						),
+					);
 
-				/* Include PDF select box in assignee notification settings */
-				$assignee_notification_fields[]  = $pdf_setting;
+					/* Include PDF select box in assignee notification settings */
+					$assignee_notification_fields[] = $pdf_setting;
 
-				/* Include PDF select box in rejection notification settings */
-				$pdf_setting['name']             = 'rejection_notification_gpdf';
-				$rejection_notification_fields[] = $pdf_setting;
+					/* Include PDF select box in rejection notification settings */
+					$pdf_setting['name']             = 'rejection_notification_gpdf';
+					$rejection_notification_fields[] = $pdf_setting;
 
-				/* Include PDF select box in aproval notification settings */
-				$pdf_setting['name']             = 'approval_notification_gpdf';
-				$approval_notification_fields[]  = $pdf_setting;
+					/* Include PDF select box in aproval notification settings */
+					$pdf_setting['name']            = 'approval_notification_gpdf';
+					$approval_notification_fields[] = $pdf_setting;
+				}
 			}
 		}
 

@@ -1281,14 +1281,22 @@ abstract class Gravity_Flow_Step extends stdClass {
 			return $notification;
 		}
 
-		/* Generate and save the PDF */
+		/* Check if our PDF is active (might have been deactivated by users after saving Workflow) */
+		$form_id  = $this->get_form_id();
 		$entry_id = $this->get_entry_id();
-		$pdf_path = GPDFAPI::create_pdf( $entry_id, $gpdf_id );
 
-		if ( ! is_wp_error( $pdf_path ) ) {
-			/* Ensure our notification has an array setup for the attachments key */
-			$notification['attachments']  = ( isset( $notification['attachments'] ) ) ? $notification['attachments'] : array();
-			$notification['attachments'][] = $pdf_path;
+		$pdf = GPDFAPI::get_pdf( $form_id, $gpdf_id );
+
+		if( ! is_wp_error( $pdf ) && true === $pdf['active'] ) {
+
+			/* Generate and save the PDF */
+			$pdf_path = GPDFAPI::create_pdf( $entry_id, $gpdf_id );
+
+			if ( ! is_wp_error( $pdf_path ) ) {
+				/* Ensure our notification has an array setup for the attachments key */
+				$notification['attachments']   = ( isset( $notification['attachments'] ) ) ? $notification['attachments'] : array();
+				$notification['attachments'][] = $pdf_path;
+			}
 		}
 
 		return $notification;

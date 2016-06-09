@@ -302,24 +302,28 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				/* Format the PDFs in the appropriate format for use in a select field */
 				$gpdf_choices = array();
 				foreach ( $gpdf_feeds as $gpdf_feed ) {
-					$gpdf_choices[] = array( 'label' => $gpdf_feed['name'], 'value' => $gpdf_feed['id'] );
+					if ( true === $gpdf_feed['active'] ) {
+						$gpdf_choices[] = array( 'label' => $gpdf_feed['name'], 'value' => $gpdf_feed['id'] );
+					}
 				}
 
 				/* Create a select box for the Gravity PDFs */
-				$pdf_setting = array(
-					'name'     => 'assignee_notification_gpdf',
-					'label'    => '',
-					'type'     => 'checkbox_and_select',
-					'checkbox' => array(
-						'label' => esc_html__( 'Attach PDF', 'gravityflow' ),
-					),
-					'select'   => array(
-						'choices' => $gpdf_choices,
-					),
-				);
+				if ( 0 < sizeof( $gpdf_choices ) ) {
+					$pdf_setting = array(
+						'name'     => 'assignee_notification_gpdf',
+						'label'    => '',
+						'type'     => 'checkbox_and_select',
+						'checkbox' => array(
+							'label' => esc_html__( 'Attach PDF', 'gravityflow' ),
+						),
+						'select'   => array(
+							'choices' => $gpdf_choices,
+						),
+					);
 
-				/* Include PDF select box in assignee notification settings */
-				$settings2[]  = $pdf_setting;
+					/* Include PDF select box in assignee notification settings */
+					$settings2[] = $pdf_setting;
+				}
 			}
 		}
 
