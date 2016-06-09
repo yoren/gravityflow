@@ -185,6 +185,19 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 				'tooltip' => __( 'Select the fields to hide or display.', 'gravityflow' ),
 				'type'    => 'display_fields',
 			),
+			array(
+				'name'    => 'document_link',
+				'label'   => esc_html__( 'Link to document', 'gravityflow' ),
+				'tooltip' => esc_html__( 'Display a link to the document in the WP E-Signature section of the Workflow sidebar.', 'gravityflow' ),
+				'type'    => 'checkbox',
+				'choices' => array(
+					array(
+						'label'         => __( 'Display link to document', 'gravityflow' ),
+						'name'          => 'document_link',
+						'default_value' => false,
+					),
+				),
+			),
 		);
 
 		$settings['fields'] = array_merge( $settings['fields'], $fields );
@@ -297,14 +310,36 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 			$doc_api    = new WP_E_Document();
 			$invite_api = new WP_E_Invite();
 
+			global $current_user;
+			$user_email = $current_user->user_email;
+
 			foreach ( $document_ids as $document_id ) {
 				$document = $doc_api->getDocument( $document_id );
 
-				echo sprintf( '%s: <a href="%s" target="_blank" title="Preview">%s</a><br><br>',
-					esc_html__( 'Title', 'gravityflow' ),
-					$invite_api->get_preview_url( $document_id ),
-					esc_html( $document->document_title )
-				);
+				echo sprintf( '%s: %s<br><br>', esc_html__( 'Title', 'gravityflow' ), esc_html( $document->document_title ) );
+
+				if ( $this->document_link ) {
+					if ( ! empty( $user_email ) ) {
+						$invitations = $invite_api->getInvitations( $document_id );
+
+						if ( $user_email == $invitations[0]->user_email ) {
+							$url  = $invite_api->get_invite_url( $invitations[0]->invite_hash, $document->document_checksum );
+							$text = esc_html__( 'Review &amp; Sign', 'gravityflow' );
+						}
+					}
+
+					if ( empty( $url ) || empty( $text ) ) {
+						$url  = $invite_api->get_preview_url( $document_id );
+						$text = esc_html__( 'Preview', 'gravityflow' );
+					}
+
+					echo sprintf( '%s: <a href="%s" target="_blank" title="%s">%s</a><br><br>',
+						esc_html__( 'Document URL', 'gravityflow' ),
+						$url,
+						$text,
+						$text
+					);
+				}
 
 				echo sprintf( '%s: %s<br><br>', esc_html__( 'Invite Status', 'gravityflow' ), $invite_api->is_invite_sent( $document_id ) ? esc_html__( 'Sent', 'gravityflow' ) : esc_html__( 'Error - Not Sent', 'gravityflow' ) );
 
@@ -368,7 +403,7 @@ Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_Esign() );
  *
  * @param array $args The properties related to the completed document.
  */
-function gravity_flow_step_esign_document_complete( $args ) {
+function gravity_flow_step_esign_signature_saved( $args ) {
 	if ( class_exists( 'WP_E_Meta' ) ) {
 		$sig_meta_api = new WP_E_Meta();
 		$entry_id     = $sig_meta_api->get( $args['invitation']->document_id, 'esig_gravity_entry_id' );
@@ -394,4 +429,4 @@ function gravity_flow_step_esign_document_complete( $args ) {
 		}
 	}
 }
-add_action( 'esig_document_complate', 'gravity_flow_step_esign_document_complete' );
+add_action( 'esig_signature_saved', 'gravity_flow_step_esign_signature_saved' );
