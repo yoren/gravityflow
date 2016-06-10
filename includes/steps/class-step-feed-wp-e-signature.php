@@ -312,6 +312,11 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 
 			global $current_user;
 			$user_email = $current_user->user_email;
+			if ( empty( $user_email ) ) {
+				$assignee_key = gravity_flow()->get_current_user_assignee_key();
+				list( $type, $user_id ) = rgexplode( '|', $assignee_key, 2 );
+				$user_email = $type == 'email' ? $user_id : '';
+			}
 
 			foreach ( $document_ids as $document_id ) {
 				$document = $doc_api->getDocument( $document_id );
