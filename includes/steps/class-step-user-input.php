@@ -59,7 +59,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 					'id'       => 'assignees',
 					'name'     => 'assignees[]',
 					'multiple' => 'multiple',
-					'label'    => 'Select Assignees',
+					'label'    => esc_html__( 'Select Assignees', 'gravityflow' ),
 					'type'     => 'select',
 					'choices'  => $account_choices,
 				),
@@ -83,7 +83,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			if ( $display_page_load_logic_setting && GFCommon::has_pages( $form ) && $this->pages_have_conditional_logic( $form ) ) {
 				$settings['fields'][] = array(
 					'name'     => 'conditional_logic_editable_fields_enabled',
-					'label'    => 'Conditional Logic',
+					'label'    => esc_html__( 'Conditional Logic', 'gravityflow' ),
 					'type'     => 'checkbox_and_select',
 					'checkbox' => array(
 						'label'          => esc_html__( 'Enable field conditional logic', 'gravityflow' ),
@@ -108,11 +108,11 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			} else {
 				$settings['fields'][] = array(
 					'name'    => 'conditional_logic_editable_fields_enabled',
-					'label'   => 'Conditional Logic',
+					'label'   => esc_html__( 'Conditional Logic', 'gravityflow' ),
 					'type'    => 'checkbox',
 					'choices' => array(
 						array(
-							'label'          => esc_html__( 'Enable field conditional logic' ),
+							'label'          => esc_html__( 'Enable field conditional logic', 'gravityflow' ),
 							'name'           => 'conditional_logic_editable_fields_enabled',
 							'defeault_value' => '0',
 						),
@@ -124,10 +124,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 		$settings2 = array(
 			array(
 				'name'     => 'highlight_editable_fields',
-				'label'    => 'Highlight Editable Fields',
+				'label'    => esc_html__( 'Highlight Editable Fields', 'gravityflow' ),
 				'type'     => 'checkbox_and_select',
 				'checkbox' => array(
-					'label'          => esc_html__( 'Enable' ),
+					'label'          => esc_html__( 'Enable', 'gravityflow' ),
 					'name'           => 'highlight_editable_fields_enabled',
 					'defeault_value' => '0',
 				),
