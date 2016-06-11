@@ -1,25 +1,28 @@
 language: php
 php:
-  - 5.2
-  - 5.3
-  - 5.4
-  - 5.5
-  - 5.6
-  - 7.0
-  - hhvm
+- 5.2
+- 5.3
+- 5.4
+- 5.5
+- 5.6
+- 7.0
+- hhvm
 env:
-  - WP_VERSION=latest WP_MULTISITE=0
-  - WP_VERSION=4.4 WP_MULTISITE=0
-  - WP_VERSION=4.3 WP_MULTISITE=0
-  - WP_VERSION=4.2 WP_MULTISITE=0
-  - WP_VERSION=4.1 WP_MULTISITE=0
-  - WP_VERSION=4.0 WP_MULTISITE=0
+- WP_VERSION=latest WP_MULTISITE=0
+- WP_VERSION=4.4 WP_MULTISITE=0
+- WP_VERSION=4.3 WP_MULTISITE=0
+- WP_VERSION=4.2 WP_MULTISITE=0
+- WP_VERSION=4.1 WP_MULTISITE=0
+- WP_VERSION=4.0 WP_MULTISITE=0
 before_script:
-  - npm install -g grunt-cli
-  - npm install
-  - git clone https://${GFTOKEN}@github.com/stevehenty/gravityforms.git $PWD/tmp/gravityforms
-  - bash tests/bin/install.sh wordpress_unit_tests root '' localhost $WP_VERSION
+- npm install -g grunt-cli
+- npm install
+- git clone https://${GFTOKEN}@github.com/stevehenty/gravityforms.git $PWD/tmp/gravityforms
+- bash tests/bin/install.sh wordpress_unit_tests root '' localhost $WP_VERSION
 script: phpunit
 notifications:
   slack:
     secure: RrZ3tDCpJ4G/VmiKVgnAKaPM9vkbrq0c2Qhyxbrg6dMBQEIBzJZJnimq0VuJWzJSjtmGgQmbU8Dg54TEVNIU7zZAi2/9M1CQLRY+dH3PWBjv55+YDtXQRXiChnnR8C47dW9QPV/9EgJ2ksy7K4gIDTuhzNdVjBdPjU4xk4c2Y5sfS7F3EaWw16hXCcIL2PsksUFAtdtaCPpC/JSPS6hjQWc2Uxr4iBeVW8aZW06F9guAF12Dsp9voVZUnUZDso/aCfoqC5QPLu1G5WbYDzL+Fd0ph7W5RHP+koMW+cuFQIj6Fl0A8CfILJWhp+REQx1rxTHJgJ77oNuefv3xwcD7U6NNp1zuKYAQaJAlPYMv+rHngB1zwYdcL/VMg5k4KUUMsG3b/mN+yuW9HYfgNlYAUriE+HKECBdphCfOx5PhG0IXIfa3yVP92sH0Yo7CCQRBwfYKatLDAsTarTBAq/yFSGbeI8ivUBLp9tpG6/mxgkngPuSMtODyCm4EPC+0CuCm//ta+xOGNxxZ8Q+Rg+X7q/vlz6ygC7IMKFa7TKlCeA9dGwro9My8Os8TVBdqwjhBiIY/kMDwCNis1M4bHd7Yds2HfCq4CRJJln6+N9mEC+jjxKmtL3dB+/yWT6Hjkk9Qa4FtDHe1Dk6E7cfBDQjdKJLpNydJPxuazbInvURYnOc=
+  webhooks:
+    urls:
+      secure: gEfRUPngUkfJIke6ZBxED14AHlcDLoKyX+j7UJR9hHWiI9ydoBVU7X+td8sgx0oBgckDvbXdHgZl+LR7ftV5CIAhyeWTgJPny5+YsECU3+SSnL6NvwL3SGGavhhgt495NkW0fyvW2m92TqBSgcQMnDkd7Klxb+7euxOIwEKsVtVWd0UAQgr2Pkg4T35ZHtvqPFsIOdOqUB8l93H6cTl4Z1/bHHlPKWKaGMNkGca/VEP/+NIyi2uYVqcbsGR439vvOw/tJI+pn6202K0glPF7zZDjCvzZ4litSgzHh3n6C4qOciVFqvCWmC2JSFVfii5ZhrLORsvHRmph7iuiXvsrdJ+U/RydB1kP5K0ONGf9NR79ulLT07s+FNd4tRO+YHjfKtPfxpbkRMQG7IMyay2tym2cI55nw2Zm3xkgXmU33NHNczDbQujY+qs7vKnnFX4ExyPKUWFrKQMNaD3102kIf2O5jeyNOnLxokYu4yyC0thPenCsBwLysD0VLDG4Mu/Gw9kVLp7BtR4tBqzRzwf0fcXMpkmuzQlaCExJScwyk6TwpFvW/GQ4DIKAHVFagMNme2Ka3piQG88mJJuGDqcFMiWsvyBVGPb24U0SvALB8EWcceWVyJ7QDshjE1zkUjBnSTlaOzQbAxTf/19Ipd/rQnbN02mE90HN/2CV2AHlF9U=
