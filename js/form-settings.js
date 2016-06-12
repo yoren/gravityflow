@@ -425,6 +425,7 @@
             'assignee_notification_message',
             'assignee_notification_autoformat',
             'resend_assignee_email',
+	        'assignee_notification_gpdf',
             'rejection_notification_type',
             'rejection_notification_users\\[\\]',
             'rejection_notification_user_field',

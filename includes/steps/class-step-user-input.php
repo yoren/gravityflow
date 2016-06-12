@@ -291,6 +291,42 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 
 		);
 
+		// Support for Gravity PDF 4
+		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-RC2', '>=' ) ) {
+
+			$form_id    = $this->get_form_id();
+			$gpdf_feeds = GPDFAPI::get_form_pdfs( $form_id );
+
+			if ( ! is_wp_error( $gpdf_feeds ) ) {
+
+				/* Format the PDFs in the appropriate format for use in a select field */
+				$gpdf_choices = array();
+				foreach ( $gpdf_feeds as $gpdf_feed ) {
+					if ( true === $gpdf_feed['active'] ) {
+						$gpdf_choices[] = array( 'label' => $gpdf_feed['name'], 'value' => $gpdf_feed['id'] );
+					}
+				}
+
+				/* Create a select box for the Gravity PDFs */
+				if ( 0 < sizeof( $gpdf_choices ) ) {
+					$pdf_setting = array(
+						'name'     => 'assignee_notification_gpdf',
+						'label'    => '',
+						'type'     => 'checkbox_and_select',
+						'checkbox' => array(
+							'label' => esc_html__( 'Attach PDF', 'gravityflow' ),
+						),
+						'select'   => array(
+							'choices' => $gpdf_choices,
+						),
+					);
+
+					/* Include PDF select box in assignee notification settings */
+					$settings2[] = $pdf_setting;
+				}
+			}
+		}
+
 		$settings['fields'] = array_merge( $settings['fields'], $settings2 );
 
 		return $settings;
