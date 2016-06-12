@@ -796,11 +796,13 @@ PRIMARY KEY  (id)
 
 				if ( $step_class->supports_expiration() ) {
 					$final_status_choices = array();
-					if ( count( $status_options ) > 1 ) {
-						foreach ( $status_options as $status_option ) {
-							$final_status_choices[] = array( 'label' => $status_option['status_label'], 'value' => $status_option['status'] );
-						}
+
+					foreach ( $status_options as $status_option ) {
+						$final_status_choices[] = array( 'label' => $status_option['status_label'], 'value' => $status_option['status'] );
 					}
+
+					$final_status_choices[] = array( 'label' => esc_html__( 'Expired', 'gravityflow' ), 'value' => 'expired' );
+
 					$step_settings['fields'][] = array(
 						'name' => 'expiration',
 						'label' => esc_html__( 'Expiration', 'gravityflow' ),
@@ -1500,7 +1502,7 @@ PRIMARY KEY  (id)
 			$expiration_delay_style = ( $expiration_type_setting !== 'date' ) ? '' : 'style="display:none;"';
 			?>
 			<div class="gravityflow-expiration-settings" <?php echo $expiration_style ?> >
-				<div class="gravityflow-expiration-type-container">
+				<div class="gravityflow-expiration-type-container" class="gravityflow-sub-setting">
 					<?php $this->settings_radio( $expiration_type ); ?>
 				</div>
 				<div class="gravityflow-expiration-date-container" <?php echo $expiration_date_style ?> >
@@ -1511,7 +1513,7 @@ PRIMARY KEY  (id)
 					?>
 					<input type="hidden" id="gforms_calendar_icon_expiration_date" class="gform_hidden" value="<?php echo GFCommon::get_base_url() . '/images/calendar.png'; ?>" />
 				</div>
-				<div class="gravityflow-expiration-delay-container" <?php echo $expiration_delay_style ?>>
+				<div class="gravityflow-expiration-delay-container" <?php echo $expiration_delay_style ?> class="gravityflow-sub-setting">
 					<?php
 					esc_html_e( 'This step will expire', 'gravityflow' );
 					echo '&nbsp;';
@@ -1521,6 +1523,7 @@ PRIMARY KEY  (id)
 					esc_html_e( 'after the workflow step has started.' );
 					?>
 				</div>
+				<div class="gravityflow-sub-setting">
 				<?php
 				$status_choices = rgar( $field, 'status_choices' );
 				if ( is_array( $status_choices ) && ! empty( $status_choices ) ) {
@@ -1534,8 +1537,21 @@ PRIMARY KEY  (id)
 					);
 					$this->settings_select( $status_choices_field );
 				}
-
 				?>
+				</div>
+				<div id="expiration_sub_setting_destination_expired" class="gravityflow-sub-setting">
+					<?php
+					esc_html_e( 'Next Step if Expired', 'gravityflow' );
+					echo ': ';
+					$next_step_field = array(
+						'name'          => 'destination_expired',
+						'label'         => esc_html__( 'Next Step if Expired', 'gravityflow' ),
+						'type'          => 'step_selector',
+						'default_value' => 'next',
+					);
+					$this->settings_step_selector( $next_step_field );
+					?>
+				</div>
 			</div>
 			<script>
 				(function($) {
@@ -2167,6 +2183,9 @@ PRIMARY KEY  (id)
 
 								printf( '<h4>%s: %s</h4>', esc_html__( 'Scheduled', 'gravityflow' ), $scheduled_date );
 							} elseif ( $current_step->is_expired() ) {
+								$current_step->log_event( esc_html__( 'Step expired', 'gravityflow' ) );
+								$note = esc_html__( 'Step expired', 'gravityflow' ) .': ' . $current_step->get_name();
+								$current_step->add_note( $note, 0, $current_step->get_type() );
 								$this->process_workflow( $form, $entry_id );
 								$current_step = null;
 								printf( '<h4>%s</h4>', esc_html__( 'Expired: refresh the page', 'gravityflow' ) );
@@ -4034,7 +4053,7 @@ AND m.meta_value='queued'";
 
 							$current_step->log_event( esc_html__( 'Step expired', 'gravityflow' ) );
 
-							$current_step->add_note( esc_html__( 'Step expired', 'gravityflow' ), 0, 'gravityflow' );
+							$current_step->add_note( esc_html__( 'Step expired', 'gravityflow' ), 0, $current_step->get_type() );
 
 							$form = GFAPI::get_form( $form_id );
 
@@ -4612,6 +4631,9 @@ AND m.meta_value='queued'";
 
 				case 'rejected' :
 					return esc_html__( 'Rejected', 'gravityflow' );
+
+				case 'expired' :
+					return esc_html__( 'Expired', 'gravityflow' );
 
 				case 'cancelled' :
 					return esc_html__( 'Cancelled', 'gravityflow' );

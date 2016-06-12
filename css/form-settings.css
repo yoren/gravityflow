@@ -205,3 +205,7 @@ tr#gaddon-setting-row-step_type label > span > i {
 }
 
 .settings-field-map-table .custom-value-container:hover .custom-value-reset { display:block; }
+
+.gravityflow-sub-setting{
+    margin-bottom: 10px;
+}

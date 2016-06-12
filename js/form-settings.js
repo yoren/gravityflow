@@ -28,6 +28,14 @@
 		var $stepType = $('input[name=_gaddon_setting_step_type]:checked');
 		var selectedStepType = $stepType.val();
 
+		var $statusExpiration = $('#status_expiration');
+		var expiredSelected = $statusExpiration.val() == 'expired';
+		$('#expiration_sub_setting_destination_expired').toggle(expiredSelected);
+		$statusExpiration.change(function(){
+			var show=$(this).val() == 'expired';
+			$('#expiration_sub_setting_destination_expired').fadeToggle(show);
+		});
+
         setSubSettings();
 
         var $assigneeNotificationEnabled = $('#assignee_notification_enabled'),

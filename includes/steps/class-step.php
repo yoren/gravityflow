@@ -1353,7 +1353,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 */
 	public function is_complete() {
 		$status = $this->evaluate_status();
-		return $status == 'complete';
+		return $status == 'complete' || $status == 'expired';
 	}
 
 	/**
@@ -1366,7 +1366,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	public function add_note( $note, $user_id = false, $user_name = false ) {
 		global $current_user;
 
-		if ( empty( $user_id ) ) {
+		if ( $user_id === false ) {
 			$type = '';
 			if ( $token = gravity_flow()->decode_access_token() ) {
 				$assignee_key = sanitize_text_field( $token['sub'] );
@@ -1559,7 +1559,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	public function process_assignee_status( $assignee, $new_status, $form ) {
 		$assignee->update_status( $new_status );
 		$note = $this->get_name() . ': ' . esc_html__( 'Processed', 'gravityflow' );
-		$this->add_note( $note );
+		$this->add_note( $note, 0, $this->get_type() );
 		return $note;
 	}
 

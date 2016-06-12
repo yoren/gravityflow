@@ -169,7 +169,7 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 				$this->log_debug( __METHOD__ . "(): Notification sent (#{$notification_id} - {$notification['name']})." );
 
 				$note = sprintf( esc_html__( 'Sent Notification: %s', 'gravityflow' ), $notification['name'] );
-				$this->add_note( $note );
+				$this->add_note( $note, 0, $this->get_type() );
 			}
 		}
 
@@ -225,7 +225,7 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 		$this->send_notifications( $assignees, $notification );
 
 		$note = esc_html__( 'Sent Notification: ', 'gravityflow' ) . $this->get_name();
-		$this->add_note( $note );
+		$this->add_note( $note, 0, $this->get_type() );
 
 	}
 

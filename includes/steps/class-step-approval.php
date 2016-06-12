@@ -529,18 +529,8 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return $this->assign();
 	}
 
-
-	public function get_next_step_id() {
-		if ( isset( $this->_next_step_id ) ) {
-			return $this->_next_step_id;
-		}
-
-		$status = $this->evaluate_status();
-		$this->_next_step_id = $status == 'rejected' ? $this->destination_rejected : $this->destination_approved;
-		return $this->_next_step_id;
-	}
-
 	/**
+	 * Returns an array of assignees for this step.
 	 *
 	 * @return Gravity_Flow_Assignee[]
 	 */

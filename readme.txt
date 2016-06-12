@@ -57,6 +57,9 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.3.3-dev =
 
+- Added the "Expired" status to the approval and user input steps.
+- Added the "Next step if Expired" sub-setting to the expiration settings.
+- Added support for GravityPDF v4.0 to the User Input step.
 - Added support for merge tag replacement in HTML fields for the User Input and Approval Steps.
 - Added support for configuring a step to process feeds for the Gravity Forms Breeze and Dropbox add-ons.
 - Added support for configuring a step to process feeds for the following third-party add-ons:
