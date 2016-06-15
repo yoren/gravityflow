@@ -141,7 +141,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 
 		$add_on_feeds = $this->get_processed_add_on_feeds();
 		$feeds        = $this->get_feeds();
-		
+
 		foreach ( $feeds as $feed ) {
 			$setting_key = 'feed_' . $feed['id'];
 			if ( $this->{$setting_key} ) {
@@ -149,13 +149,13 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 
 					$complete = $this->process_feed( $feed );
 					$label    = $this->get_feed_label( $feed );
-					
+
 					if ( $complete ) {
-						$note = sprintf( esc_html__( 'Feed processed: %s', 'gravityflow' ), $label );
+						$note = sprintf( esc_html__( 'Processed: %s', 'gravityflow' ), $label );
 						$this->log_debug( __METHOD__ . '() - Feed processed: ' . $label );
 						$add_on_feeds = $this->maybe_set_processed_feed( $add_on_feeds, $feed['id'] );
 					} else {
-						$note = sprintf( esc_html__( 'Feed processing initiated: %s', 'gravityflow' ), $label );
+						$note = sprintf( esc_html__( 'Initiated: %s', 'gravityflow' ), $label );
 						$this->log_debug( __METHOD__ . '() - Feed processing initiated: ' . $label );
 						$add_on_feeds = $this->maybe_unset_processed_feed( $add_on_feeds, $feed['id'] );
 					}
@@ -204,7 +204,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 		$add_on = $this->get_add_on_instance();
 
 		$add_on->process_feed( $feed, $entry, $form );
-		
+
 		return true;
 	}
 
