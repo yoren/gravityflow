@@ -354,20 +354,21 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 			return $this->_assignee_details;
 		}
 
-		$assignees        = array();
-		$assignee_details = array();
-		$input_type       = $this->type;
+		$assignees  = array(
+			'details' => array(),
+			'keys'    => array()
+		);
+		$input_type = $this->type;
 
 		switch ( $input_type ) {
 			case 'select':
 				foreach ( $this->assignees as $assignee_key ) {
 					list( $assignee_type, $assignee_id ) = explode( '|', $assignee_key );
-					$assignee_details[] = new Gravity_Flow_Assignee( array(
+					$assignees = $this->maybe_add_assignee( $assignees, array(
 						'id'              => $assignee_id,
 						'type'            => $assignee_type,
 						'editable_fields' => $this->editable_fields,
-					), $this );
-					$assignees[]        = $assignee_key;
+					) );
 				}
 				break;
 			case 'routing' :
@@ -383,20 +384,18 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 						$editable_fields = rgar( $routing, 'editable_fields' );
 						if ( $entry ) {
 							if ( $this->evaluate_routing_rule( $routing ) ) {
-								$assignee_details[] = new Gravity_Flow_Assignee( array(
+								$assignees = $this->maybe_add_assignee( $assignees, array(
 									'id'              => $assignee_id,
 									'type'            => $assignee_type,
 									'editable_fields' => $editable_fields,
-								), $this );
-								$assignees[]        = $assignee_key;
+								) );
 							}
 						} else {
-							$assignee_details[] = new Gravity_Flow_Assignee( array(
+							$assignees = $this->maybe_add_assignee( $assignees, array(
 								'id'              => $assignee_id,
 								'type'            => $assignee_type,
 								'editable_fields' => $editable_fields,
-							), $this );
-							$assignees[]        = $assignee_key;
+							) );
 						}
 					}
 				}
@@ -404,11 +403,22 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				break;
 		}
 
-		gravity_flow()->log_debug( __METHOD__ . '(): assignees: ' . print_r( $assignees, true ) );
+		gravity_flow()->log_debug( __METHOD__ . '(): assignees: ' . print_r( $assignees['keys'], true ) );
 
-		$this->_assignee_details = $assignee_details;
+		$this->_assignee_details = $assignees['details'];
 
-		return $assignee_details;
+		return $assignees['details'];
+	}
+
+	public function maybe_add_assignee( $assignees, $args ) {
+		$assignee = new Gravity_Flow_Assignee( $args, $this );
+
+		if ( ! empty( $assignee->get_id() ) ) {
+			$assignees['details'][] = $assignee;
+			$assignees['keys'][]    = $assignee->get_key();
+		}
+
+		return $assignees;
 	}
 
 	public function evaluate_status() {

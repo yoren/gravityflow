@@ -352,7 +352,7 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 			case 'select' :
 				if ( is_array( $this->assignees ) ) {
 					foreach ( $this->assignees as $assignee_key ) {
-						$assignees[] = new Gravity_Flow_Assignee( $assignee_key, $this );
+						$assignees = $this->maybe_add_assignee( $assignees, $assignee_key );
 					}
 				}
 				break;
@@ -367,10 +367,10 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 						}
 						if ( $entry ) {
 							if ( $this->evaluate_routing_rule( $routing ) ) {
-								$assignees[] = new Gravity_Flow_Assignee( $assignee_key, $this );
+								$assignees = $this->maybe_add_assignee( $assignees, $assignee_key );
 							}
 						} else {
-							$assignees[] = new Gravity_Flow_Assignee( $assignee_key, $this );
+							$assignees = $this->maybe_add_assignee( $assignees, $assignee_key );
 						}
 					}
 				}

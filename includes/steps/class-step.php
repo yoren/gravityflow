@@ -1163,6 +1163,24 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
+	 * Adds the assignee to the assignees array if the assignee id is populated.
+	 * 
+	 * @param array $assignees The assignees for this step.
+	 * @param string|array $args An assignee key or array containing the id, type and editable_fields (if applicable).
+	 *
+	 * @return array
+	 */
+	public function maybe_add_assignee( $assignees, $args ) {
+		$assignee = new Gravity_Flow_Assignee( $args, $this );
+
+		if ( ! empty( $assignee->get_id() ) ) {
+			$assignees[] = $assignee;
+		}
+
+		return $assignees;
+	}
+
+	/**
 	 * Removes assignee from the step. This is only used for maintenance when the assignee settings change.
 	 *
 	 * @param Gravity_Flow_Assignee|bool $assignee
