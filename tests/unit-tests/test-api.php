@@ -296,6 +296,10 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 		$current_step = $this->api->get_current_step( $entry );
 		$this->assertEquals( $step1_id, $current_step->get_id() );
 
+
+		$step2 = $this->api->get_step( $step2_id, $entry );
+		$this->assertEquals( 'cancelled', $step2->get_status() );
+
 	}
 
 	function test_user_input_process() {

@@ -205,6 +205,7 @@ class Gravity_Flow_API {
 			foreach ( $assignees as $assignee ) {
 				$assignee->remove();
 			}
+			$current_step->update_step_status( 'cancelled' );
 		}
 		$entry_id = $entry['id'];
 		$new_step = $this->get_step( $step_id, $entry );

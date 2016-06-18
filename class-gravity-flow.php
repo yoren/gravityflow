@@ -3987,7 +3987,7 @@ AND m.meta_value='queued'";
 				$form = GFAPI::get_form( $result->form_id );
 				$entry = GFAPI::get_entry( $result->id );
 				$step = $this->get_current_step( $form, $entry );
-				if ( $step ) {
+				if ( $step && $step->is_queued() ) {
 					$complete = $step->start();
 					if ( $complete ) {
 						$this->process_workflow( $form, $entry['id'] );
@@ -3995,7 +3995,7 @@ AND m.meta_value='queued'";
 						$this->log_debug( __METHOD__ . '() queued entry started step but step is not complete: ' . $entry['id'] );
 					}
 				} else {
-					$this->log_debug( __METHOD__ . '() queued entry not on a step: ' . $entry['id'] );
+					$this->log_debug( __METHOD__ . '() queued entry not on a queued step: ' . $entry['id'] );
 				}
 			}
 		}
