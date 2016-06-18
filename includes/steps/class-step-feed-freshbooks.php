@@ -22,6 +22,7 @@ class Gravity_Flow_Step_Feed_FreshBooks extends Gravity_Flow_Step_Feed_Add_On {
 	public function get_label() {
 		return esc_html__( 'FreshBooks', 'gravityflow' );
 	}
-	
+
 }
+
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_FreshBooks() );

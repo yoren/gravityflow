@@ -29,7 +29,6 @@ class Gravity_Flow_Step_Feed_Zapier extends Gravity_Flow_Step_Feed_Add_On {
 	}
 
 	function get_feeds() {
-		
 		if ( class_exists( 'GFZapierData' ) ) {
 			$form_id = $this->get_form_id();
 			$feeds   = GFZapierData::get_feed_by_form( $form_id );
@@ -41,7 +40,6 @@ class Gravity_Flow_Step_Feed_Zapier extends Gravity_Flow_Step_Feed_Add_On {
 	}
 
 	function process_feed( $feed ) {
-
 		$form  = $this->get_form();
 		$entry = $this->get_entry();
 
@@ -50,7 +48,7 @@ class Gravity_Flow_Step_Feed_Zapier extends Gravity_Flow_Step_Feed_Add_On {
 		} else {
 			GFZapier::send_form_data_to_zapier( $entry, $form );
 		}
-		
+
 		return true;
 	}
 

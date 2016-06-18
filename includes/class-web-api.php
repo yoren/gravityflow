@@ -14,34 +14,34 @@ class Gravity_Flow_Web_API {
 		$capability = apply_filters( 'gravityflow_web_api_capability_get_entries_steps', 'gravityflow_create_steps' );
 		$this->authorize( $capability );
 
-		$entry = GFAPI::get_entry( $entry_id );
+		$entry   = GFAPI::get_entry( $entry_id );
 		$form_id = absint( $entry['form_id'] );
-		$api = new Gravity_Flow_API( $form_id );
+		$api     = new Gravity_Flow_API( $form_id );
 
 		$form_steps = $api->get_steps();
 
-		$current_step = $api->get_current_step( $entry );
+		$current_step    = $api->get_current_step( $entry );
 		$current_step_id = $current_step->get_id();
-		$response = array();
+		$response        = array();
 
 		foreach ( $form_steps as $form_step ) {
-			$step = $api->get_step( $form_step->get_id(), $entry );
+			$step            = $api->get_step( $form_step->get_id(), $entry );
 			$is_current_step = ( $current_step_id == $step->get_id() );
-			$response[] = array(
-				'id' => $step->get_id(),
-				'type' => $step->get_type(),
-				'label' => $step->get_label(),
-				'name' => $step->get_name(),
-				'is_current_step' => $is_current_step,
-				'is_active' => $step->is_active(),
-				'supports_expiration' => $step->supports_expiration(),
-				'assignees' => $this->get_assignees_array( $step ),
-				'settings' => $step->get_feed_meta(),
-				'status' => $is_current_step ? $step->evaluate_status() : rgar( $entry, 'workflow_step_status_' . $step->get_id() ),
+			$response[]      = array(
+				'id'                   => $step->get_id(),
+				'type'                 => $step->get_type(),
+				'label'                => $step->get_label(),
+				'name'                 => $step->get_name(),
+				'is_current_step'      => $is_current_step,
+				'is_active'            => $step->is_active(),
+				'supports_expiration'  => $step->supports_expiration(),
+				'assignees'            => $this->get_assignees_array( $step ),
+				'settings'             => $step->get_feed_meta(),
+				'status'               => $is_current_step ? $step->evaluate_status() : rgar( $entry, 'workflow_step_status_' . $step->get_id() ),
 				'expiration_timestamp' => $step->get_expiration_timestamp(),
-				'is_expired' => $step->is_expired(),
-				'is_queued' => $step->is_queued(),
-				'entry_count' => $step->entry_count(),
+				'is_expired'           => $step->is_expired(),
+				'is_queued'            => $step->is_queued(),
+				'entry_count'          => $step->entry_count(),
 			);
 		}
 
@@ -53,20 +53,20 @@ class Gravity_Flow_Web_API {
 		$capability = apply_filters( 'gravityflow_web_api_capability_get_forms_steps', 'gravityflow_create_steps' );
 		$this->authorize( $capability );
 
-		$api = new Gravity_Flow_API( $form_id );
-		$steps = $api->get_steps();
+		$api      = new Gravity_Flow_API( $form_id );
+		$steps    = $api->get_steps();
 		$response = array();
 		foreach ( $steps as $step ) {
 			$response[] = array(
-				'id' => $step->get_id(),
-				'type' => $step->get_type(),
-				'label' => $step->get_label(),
-				'name' => $step->get_name(),
-				'is_active' => $step->is_active(),
-				'entry_count' => $step->entry_count(),
+				'id'                  => $step->get_id(),
+				'type'                => $step->get_type(),
+				'label'               => $step->get_label(),
+				'name'                => $step->get_name(),
+				'is_active'           => $step->is_active(),
+				'entry_count'         => $step->entry_count(),
 				'supports_expiration' => $step->supports_expiration(),
-				'assignees' => $this->get_assignees_array( $step ),
-				'settings' => $step->get_feed_meta(),
+				'assignees'           => $this->get_assignees_array( $step ),
+				'settings'            => $step->get_feed_meta(),
 			);
 		}
 		$this->end( 200, $response );
@@ -77,9 +77,9 @@ class Gravity_Flow_Web_API {
 		$capability = apply_filters( 'gravityflow_web_api_capability_get_entries_assignees', 'gravityflow_create_steps' );
 		$this->authorize( $capability );
 
-		$entry = GFAPI::get_entry( $entry_id );
+		$entry   = GFAPI::get_entry( $entry_id );
 		$form_id = absint( $entry['form_id'] );
-		$api = new Gravity_Flow_API( $form_id );
+		$api     = new Gravity_Flow_API( $form_id );
 
 		$step = $api->get_current_step( $entry );
 		if ( empty( $assignee_key ) ) {
@@ -99,7 +99,7 @@ class Gravity_Flow_Web_API {
 	 * @param string $assignee_key
 	 */
 	public function post_entries_assignees( $entry_id, $assignee_key = null ) {
-	 	global $HTTP_RAW_POST_DATA;
+		global $HTTP_RAW_POST_DATA;
 
 		$capability = apply_filters( 'gravityflow_web_api_capability_post_entries_assignees', 'gravityflow_create_steps' );
 		$this->authorize( $capability );
@@ -115,9 +115,9 @@ class Gravity_Flow_Web_API {
 		}
 
 		$form_id = absint( $entry['form_id'] );
-		$api = new Gravity_Flow_API( $form_id );
+		$api     = new Gravity_Flow_API( $form_id );
 
-		$step = $api->get_current_step( $entry );
+		$step     = $api->get_current_step( $entry );
 		$assignee = new Gravity_Flow_Assignee( $assignee_key, $step );
 
 		if ( ! isset( $HTTP_RAW_POST_DATA ) ) {
@@ -151,6 +151,7 @@ class Gravity_Flow_Web_API {
 		foreach ( $assignees as $assignee ) {
 			$response[] = $this->get_assignee_array( $assignee );
 		}
+
 		return $response;
 	}
 
@@ -161,11 +162,11 @@ class Gravity_Flow_Web_API {
 	 */
 	public function get_assignee_array( $assignee ) {
 		return array(
-			'key' => $assignee->get_key(),
-			'id' => $assignee->get_id(),
-			'type' => $assignee->get_type(),
+			'key'          => $assignee->get_key(),
+			'id'           => $assignee->get_id(),
+			'type'         => $assignee->get_type(),
 			'display_name' => $assignee->get_display_name(),
-			'status' => $assignee->get_status(),
+			'status'       => $assignee->get_status(),
 		);
 	}
 

@@ -20,7 +20,7 @@ if ( ! class_exists( 'GFForms' ) ) {
  * Class Gravity_Flow_Step
  *
  *
- * @since		1.0
+ * @since 1.0
  */
 abstract class Gravity_Flow_Step extends stdClass {
 
@@ -103,19 +103,16 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @param null|array $entry Optional. Instantiate with an entry to perform entry related tasks.
 	 */
 	public function __construct( $feed = array(), $entry = null ) {
-
 		if ( empty( $feed ) ) {
 			return;
 		}
-		$this->_id = absint( $feed['id'] );
+
+		$this->_id        = absint( $feed['id'] );
 		$this->_is_active = (bool) $feed['is_active'];
-		$this->_form_id = absint( $feed['form_id'] );
-
+		$this->_form_id   = absint( $feed['form_id'] );
 		$this->_step_type = $feed['meta']['step_type'];
-
-		$this->_meta = $feed['meta'];
-
-		$this->_entry = $entry;
+		$this->_meta      = $feed['meta'];
+		$this->_entry     = $entry;
 	}
 
 	/**
@@ -136,7 +133,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 	public function __set( $key, $value ) {
 		$this->_meta[ $key ] = $value;
-		$this->$key = $value;
+		$this->$key          = $value;
 	}
 
 	public function __isset( $key ) {
@@ -166,25 +163,25 @@ abstract class Gravity_Flow_Step extends stdClass {
 	public function get_status_config() {
 		return array(
 			array(
-				'status' => 'complete',
-				'status_label' => __( 'Complete', 'gravityflow' ),
+				'status'                    => 'complete',
+				'status_label'              => __( 'Complete', 'gravityflow' ),
 				'destination_setting_label' => __( 'Next Step', 'gravityflow' ),
-				'default_destination' => 'next',
+				'default_destination'       => 'next',
 			),
 		);
 	}
 
-    /**
-     * @deprecated
-     *
-     * @return array
-     */
-    public function get_final_status_config() {
-        return $this->get_status_config();
-    }
+	/**
+	 * @deprecated
+	 *
+	 * @return array
+	 */
+	public function get_final_status_config() {
+		return $this->get_status_config();
+	}
 
 
-    /**
+	/**
 	 * Returns the translated label for a status key.
 	 *
 	 * @param $status
@@ -201,6 +198,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 				return isset( $status_config['status_label'] ) ? $status_config['status_label'] : $status;
 			}
 		}
+
 		return $status;
 	}
 
@@ -224,6 +222,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		if ( empty( $this->_entry ) ) {
 			$this->refresh_entry();
 		}
+
 		return $this->_entry;
 	}
 
@@ -255,6 +254,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		}
 
 		$form = GFAPI::get_form( $form_id );
+
 		return $form;
 	}
 
@@ -268,6 +268,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 			return rgget( 'lid' );
 		}
 		$id = absint( $this->_entry['id'] );
+
 		return $id;
 	}
 
@@ -277,7 +278,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return string
 	 */
 	public function get_type() {
-
 		return $this->_step_type;
 	}
 
@@ -299,14 +299,14 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return $this->_is_active;
 	}
 
-    /**
-     * Is this step supported on this server? Override to hide this step in the list of step types if the requirements are not met.
-     *
-     * @return bool
-     */
-    public function is_supported() {
-        return true;
-    }
+	/**
+	 * Is this step supported on this server? Override to hide this step in the list of step types if the requirements are not met.
+	 *
+	 * @return bool
+	 */
+	public function is_supported() {
+		return true;
+	}
 
 	/**
 	 * Returns the ID of the Form object for the step.
@@ -315,7 +315,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 */
 	public function get_form_id() {
 		if ( empty( $this->_form_id ) ) {
-
 			$this->_form_id = absint( rgget( 'id' ) );
 		}
 
@@ -377,7 +376,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		if ( isset( $this->_next_step_id ) ) {
 			return $this->_next_step_id;
 		}
-		$status = $this->evaluate_status();
+		$status                 = $this->evaluate_status();
 		$destination_status_key = 'destination_' . $status;
 		if ( isset( $this->{$destination_status_key} ) ) {
 			$next_step_id = $this->{$destination_status_key};
@@ -386,6 +385,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		}
 
 		$this->set_next_step_id( $next_step_id );
+
 		return $next_step_id;
 	}
 
@@ -407,11 +407,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 		$entry_id = $this->get_entry_id();
 
-		$this->log_debug( __METHOD__ . '() - triggered step: ' . $this->get_name() . ' for entry id ' .$entry_id );
+		$this->log_debug( __METHOD__ . '() - triggered step: ' . $this->get_name() . ' for entry id ' . $entry_id );
 
 		$step_id = $this->get_id();
 
-		gform_update_meta( $entry_id , 'workflow_step', $step_id );
+		gform_update_meta( $entry_id, 'workflow_step', $step_id );
 
 		$step_timestamp = $this->get_step_timestamp();
 		if ( empty( $step_timestamp ) ) {
@@ -500,7 +500,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 			$this->log_debug( __METHOD__ . '() schedule_date: ' . $this->schedule_date );
 			$schedule_datetime = strtotime( $this->schedule_date );
-			$schedule_date = date( 'Y-m-d H:i:s', $schedule_datetime );
+			$schedule_date     = date( 'Y-m-d H:i:s', $schedule_datetime );
 			$schedule_date_gmt = get_gmt_from_date( $schedule_date );
 			$schedule_datetime = strtotime( $schedule_date_gmt );
 
@@ -516,7 +516,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$this->log_debug( __METHOD__ . '() schedule_date: ' . $schedule_date );
 
 			$schedule_datetime = strtotime( $schedule_date );
-			$schedule_date = date( 'Y-m-d H:i:s', $schedule_datetime );
+			$schedule_date     = date( 'Y-m-d H:i:s', $schedule_datetime );
 			$schedule_date_gmt = get_gmt_from_date( $schedule_date );
 			$schedule_datetime = strtotime( $schedule_date_gmt );
 
@@ -564,6 +564,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 				$schedule_timestamp += ( WEEK_IN_SECONDS * $this->schedule_delay_offset );
 				break;
 		}
+
 		return $schedule_timestamp;
 	}
 
@@ -602,7 +603,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return bool|int|mixed
 	 */
 	public function get_expiration_timestamp() {
-
 		if ( ! $this->expiration ) {
 			return false;
 		}
@@ -611,7 +611,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 			$this->log_debug( __METHOD__ . '() expiration_date: ' . $this->expiration_date );
 			$expiration_datetime = strtotime( $this->expiration_date );
-			$expiration_date = date( 'Y-m-d H:i:s', $expiration_datetime );
+			$expiration_date     = date( 'Y-m-d H:i:s', $expiration_datetime );
 			$expiration_date_gmt = get_gmt_from_date( $expiration_date );
 			$expiration_datetime = strtotime( $expiration_date_gmt );
 
@@ -636,6 +636,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 				$expiration_timestamp += ( WEEK_IN_SECONDS * $this->expiration_delay_offset );
 				break;
 		}
+
 		return $expiration_timestamp;
 	}
 
@@ -644,6 +645,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 		return $entry['workflow_timestamp'];
 	}
+
 	public function get_step_timestamp() {
 		$timestamp = gform_get_meta( $this->get_entry_id(), 'workflow_step_' . $this->get_id() . '_timestamp' );
 
@@ -666,7 +668,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 		if ( empty( $assignees ) ) {
 			$note = sprintf( __( '%s: not required', 'gravityflow' ), $this->get_name() );
-			$this->add_note( $note, 0 , 'gravityflow' );
+			$this->add_note( $note, 0, 'gravityflow' );
 		} else {
 			foreach ( $assignees as $assignee ) {
 				$assignee->update_status( 'pending' );
@@ -675,6 +677,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 				$complete = false;
 			}
 		}
+
 		return $complete;
 	}
 
@@ -707,9 +710,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$notification['message']                    = $this->assignee_notification_message;
 		$notification['disableAutoformat']          = $this->assignee_notification_disable_autoformat;
 
-		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-RC2' , '>=' ) ) {
+		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-RC2', '>=' ) ) {
 			if ( $this->assignee_notification_gpdfEnable ) {
-				$gpdf_id = $this->assignee_notification_gpdfValue;
+				$gpdf_id      = $this->assignee_notification_gpdfValue;
 				$notification = $this->gpdf_add_notification_attachment( $notification, $gpdf_id );
 			}
 		}
@@ -719,12 +722,13 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$assignee_id = $assignee->get_id();
 
 		if ( $assignee_type == 'email' ) {
-			$email = $assignee_id;
+			$email                   = $assignee_id;
 			$notification['id']      = 'workflow_step_' . $this->get_id() . '_user_' . $email;
 			$notification['name']    = $notification['id'];
 			$notification['to']      = $email;
 			$notification['message'] = $this->replace_variables( $this->assignee_notification_message, $assignee );
 			$this->send_notification( $notification );
+
 			return;
 		}
 
@@ -767,7 +771,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 				$a = shortcode_atts(
 					array(
 						'page_id' => 'admin',
-						'token' => false,
+						'token'   => false,
 					), $options
 				);
 
@@ -776,9 +780,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 				$entry_token = '';
 
 				if ( $assignee && $force_token ) {
-					$token_lifetime_days = apply_filters( 'gravityflow_entry_token_expiration_days', 30, $assignee );
+					$token_lifetime_days        = apply_filters( 'gravityflow_entry_token_expiration_days', 30, $assignee );
 					$token_expiration_timestamp = strtotime( '+' . (int) $token_lifetime_days . ' days' );
-					$entry_token = gravity_flow()->generate_access_token( $assignee, null, $token_expiration_timestamp );
+					$entry_token                = gravity_flow()->generate_access_token( $assignee, null, $token_expiration_timestamp );
 				}
 
 				$entry_url = $this->get_entry_url( $a['page_id'], $assignee, $entry_token );
@@ -797,8 +801,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 				$a = shortcode_atts(
 					array(
 						'page_id' => 'admin',
-						'text' => esc_html__( 'Entry', 'gravityflow' ),
-						'token' => false,
+						'text'    => esc_html__( 'Entry', 'gravityflow' ),
+						'token'   => false,
 					), $options
 				);
 
@@ -807,15 +811,15 @@ abstract class Gravity_Flow_Step extends stdClass {
 				$entry_token = '';
 
 				if ( $assignee && $force_token ) {
-					$token_lifetime_days = apply_filters( 'gravityflow_entry_token_expiration_days', 30, $assignee );
+					$token_lifetime_days        = apply_filters( 'gravityflow_entry_token_expiration_days', 30, $assignee );
 					$token_expiration_timestamp = strtotime( '+' . (int) $token_lifetime_days . ' days' );
-					$entry_token = gravity_flow()->generate_access_token( $assignee, null, $token_expiration_timestamp );
+					$entry_token                = gravity_flow()->generate_access_token( $assignee, null, $token_expiration_timestamp );
 				}
 
 				$entry_url = $this->get_entry_url( $a['page_id'], $assignee, $entry_token );
 
 				$entry_link = sprintf( '<a href="%s">%s</a>', $entry_url, $a['text'] );
-				$text = str_replace( $full_tag, $entry_link, $text );
+				$text       = str_replace( $full_tag, $entry_link, $text );
 			}
 		}
 
@@ -826,9 +830,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$expiration_timestamp = strtotime( $expiration_str );
 
 		$scopes = array(
-			'pages' => array( 'inbox' ),
+			'pages'    => array( 'inbox' ),
 			'entry_id' => $this->get_entry_id(),
-			'action' => 'cancel_workflow',
+			'action'   => 'cancel_workflow',
 		);
 
 		if ( $assignee ) {
@@ -862,14 +866,14 @@ abstract class Gravity_Flow_Step extends stdClass {
 					$a = shortcode_atts(
 						array(
 							'page_id' => 'admin',
-							'text' => esc_html__( 'Cancel Workflow', 'gravityflow' ),
+							'text'    => esc_html__( 'Cancel Workflow', 'gravityflow' ),
 						), $options
 					);
 
 					$entry_url = $this->get_entry_url( $a['page_id'], $assignee, $cancel_token );
 
 					$entry_link = sprintf( '<a href="%s">%s</a>', $entry_url, $a['text'] );
-					$text = str_replace( $full_tag, $entry_link, $text );
+					$text       = str_replace( $full_tag, $entry_link, $text );
 				}
 			}
 		}
@@ -881,19 +885,19 @@ abstract class Gravity_Flow_Step extends stdClass {
 				$options_string = isset( $assignees_match[2] ) ? $assignees_match[2] : '';
 				$options        = shortcode_parse_atts( $options_string );
 
-				$a = shortcode_atts(
+				$a                 = shortcode_atts(
 					array(
-						'status' => true,
-						'user_email' => true,
+						'status'       => true,
+						'user_email'   => true,
 						'display_name' => true,
 					), $options
 				);
-				$a['status'] = strtolower( $a['status'] ) == 'false' ? false : true;
-				$a['user_email'] = strtolower( $a['user_email'] ) == 'false' ? false : true;
+				$a['status']       = strtolower( $a['status'] ) == 'false' ? false : true;
+				$a['user_email']   = strtolower( $a['user_email'] ) == 'false' ? false : true;
 				$a['display_name'] = strtolower( $a['display_name'] ) == 'false' ? false : true;
 
 				$assignees_text_arr = array();
-				$assignees = $this->get_assignees();
+				$assignees          = $this->get_assignees();
 				foreach ( $assignees as $step_assignee ) {
 					$assignee_line = '';
 					if ( $a['display_name'] ) {
@@ -912,7 +916,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 					$assignees_text_arr[] = $assignee_line;
 				}
 				$assignees_text = join( "\n", $assignees_text_arr );
-				$text = str_replace( $full_tag, $assignees_text, $text );
+				$text           = str_replace( $full_tag, $assignees_text, $text );
 			}
 		}
 
@@ -929,9 +933,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 	public function get_entry_url( $page_id = null, $assignee = null, $access_token = '' ) {
 
 		if ( $assignee && $assignee->get_type() == 'email' ) {
-			$token_lifetime_days = apply_filters( 'gravityflow_entry_token_expiration_days', 30, $assignee );
+			$token_lifetime_days        = apply_filters( 'gravityflow_entry_token_expiration_days', 30, $assignee );
 			$token_expiration_timestamp = strtotime( '+' . (int) $token_lifetime_days . ' days' );
-			$access_token = $access_token ? $access_token : gravity_flow()->generate_access_token( $assignee, null, $token_expiration_timestamp );
+			$access_token               = $access_token ? $access_token : gravity_flow()->generate_access_token( $assignee, null, $token_expiration_timestamp );
 		}
 
 		if ( empty( $page_id ) || $page_id == 'admin' ) {
@@ -942,9 +946,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$url = add_query_arg( array(
 			'page' => 'gravityflow-inbox',
 			'view' => 'entry',
-			'id' => $this->get_form_id(),
-			'lid' => $this->get_entry_id(),
-		), $base_url);
+			'id'   => $this->get_form_id(),
+			'lid'  => $this->get_entry_id(),
+		), $base_url );
 
 		if ( ! empty( $access_token ) ) {
 			$url = add_query_arg( array( 'gflow_access_token' => $access_token ), $url );
@@ -963,9 +967,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$status = 'pending';
 		}
 		$entry_id = $this->get_entry_id();
-		$step_id = $this->get_id();
-		gform_update_meta( $entry_id , 'workflow_step_status_' . $step_id, $status );
-		gform_update_meta( $entry_id , 'workflow_step_status_' . $step_id . '_timestamp', time() );
+		$step_id  = $this->get_id();
+		gform_update_meta( $entry_id, 'workflow_step_status_' . $step_id, $status );
+		gform_update_meta( $entry_id, 'workflow_step_status_' . $step_id . '_timestamp', time() );
 	}
 
 	/**
@@ -974,7 +978,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return bool Is the step complete?
 	 */
 	public function end_if_complete() {
-
 		$id = $this->get_next_step_id();
 		$this->set_next_step_id( $id );
 
@@ -1007,7 +1010,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return string
 	 */
 	public function get_status_key( $assignee, $type = false ) {
-
 		if ( $type === false ) {
 			list( $type, $value ) = rgexplode( '|', $assignee, 2 );
 		} else {
@@ -1015,6 +1017,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		}
 
 		$key = 'workflow_' . $type . '_' . $value;
+
 		return $key;
 	}
 
@@ -1027,7 +1030,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return string
 	 */
 	public function get_status_timestamp_key( $assignee_key, $type = false ) {
-
 		if ( $type === false ) {
 			list( $type, $value ) = rgexplode( '|', $assignee_key, 2 );
 		} else {
@@ -1035,12 +1037,14 @@ abstract class Gravity_Flow_Step extends stdClass {
 		}
 
 		$key = 'workflow_' . $type . '_' . $value . '_timestamp';
+
 		return $key;
 	}
 
 	public function get_status() {
 		$status_key = 'workflow_step_status_' . $this->get_id();
-		$status = gform_get_meta( $this->get_entry_id(), $status_key );
+		$status     = gform_get_meta( $this->get_entry_id(), $status_key );
+
 		return $status;
 	}
 
@@ -1084,6 +1088,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 			return true;
 		}
 		$entry = $this->get_entry();
+
 		return GFCommon::evaluate_conditional_logic( $logic, $form, $entry );
 	}
 
@@ -1095,7 +1100,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return bool|mixed
 	 */
 	public function get_user_status( $user_id = false ) {
-
 		global $current_user;
 
 		$type = 'user_id';
@@ -1122,11 +1126,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return bool|mixed
 	 */
 	public function get_role_status( $role ) {
-
 		if ( empty( $role ) ) {
 			return false;
 		}
 		$key = $this->get_status_key( $role, 'role' );
+
 		return gform_get_meta( $this->get_entry_id(), $key );
 	}
 
@@ -1155,12 +1159,12 @@ abstract class Gravity_Flow_Step extends stdClass {
 	public function update_role_status( $role = false, $new_assignee_status = false ) {
 		if ( $role == false ) {
 			$roles = gravity_flow()->get_user_roles( $role );
-			$role = current( $roles );
+			$role  = current( $roles );
 		}
-		$entry_id = $this->get_entry_id();
-		$key = $this->get_status_key( $role, 'role' );
+		$entry_id  = $this->get_entry_id();
+		$key       = $this->get_status_key( $role, 'role' );
 		$timestamp = gform_get_meta( $entry_id, $key . '_timestamp' );
-		$duration = $timestamp ? time() - $timestamp : 0;
+		$duration  = $timestamp ? time() - $timestamp : 0;
 
 		gform_update_meta( $entry_id, $key, $new_assignee_status );
 		gform_update_meta( $entry_id, $key . '_timestamp', time() );
@@ -1196,7 +1200,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 	/**
 	 * Adds the assignee to the step if certain conditions are met.
-	 * 
+	 *
 	 * @param string|array $args An assignee key or array containing the id, type and editable_fields (if applicable).
 	 */
 	public function maybe_add_assignee( $args ) {
@@ -1214,11 +1218,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 				case 'role' :
 					$object = get_role( $id );
 					break;
-				
+
 				default :
 					$object = true;
 			}
-			
+
 			if ( $object ) {
 				$this->_assignee_details[] = $assignee;
 				$this->_assignee_keys[]    = $key;
@@ -1258,18 +1262,17 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @param array $form The Form array which may contain validation details
 	 */
 	public function workflow_detail_status_box( $form ) {
-
 		_deprecated_function( 'workflow_detail_status_box', '1.3.2', 'workflow_detail_box' );
 
 		$default_args = array(
 			'display_empty_fields' => true,
-			'check_permissions' => true,
-			'show_header' => true,
-			'timeline' => true,
+			'check_permissions'    => true,
+			'show_header'          => true,
+			'timeline'             => true,
 			'display_instructions' => true,
-			'sidebar' => true,
-			'step_status' => true,
-			'workflow_info' => true,
+			'sidebar'              => true,
+			'step_status'          => true,
+			'workflow_info'        => true,
 		);
 
 		$this->workflow_detail_box( $form, $default_args );
@@ -1308,10 +1311,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @param $notification
 	 */
 	public function send_notification( $notification ) {
-
 		$entry = $this->get_entry();
-
-		$form = $this->get_form();
+		$form  = $this->get_form();
 
 		$notification = apply_filters( 'gravityflow_notification', $notification, $form, $entry, $this );
 
@@ -1328,19 +1329,17 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$this->log_debug( __METHOD__ . '() - sending notification: ' . print_r( $notification, true ) );
 
 		GFCommon::send_notification( $notification, $form, $entry );
-
 	}
 
 	/**
 	 * If Gravity PDF is enabled we'll generate the appropriate PDF and attach it to the current notification
 	 *
 	 * @param array $notification The notification array currently being sent
-	 * @param string $gpdf_id      The Gravity PDF ID
+	 * @param string $gpdf_id The Gravity PDF ID
 	 *
 	 * @return array
 	 */
 	public function gpdf_add_notification_attachment( $notification, $gpdf_id ) {
-
 		if ( ! class_exists( 'GPDFAPI' ) ) {
 			return $notification;
 		}
@@ -1351,7 +1350,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 		$pdf = GPDFAPI::get_pdf( $form_id, $gpdf_id );
 
-		if( ! is_wp_error( $pdf ) && true === $pdf['active'] ) {
+		if ( ! is_wp_error( $pdf ) && true === $pdf['active'] ) {
 
 			/* Generate and save the PDF */
 			$pdf_path = GPDFAPI::create_pdf( $entry_id, $gpdf_id );
@@ -1373,8 +1372,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	public function end() {
 		$next_step_id = $this->get_next_step_id();
 		$this->set_next_step_id( $next_step_id );
-		$status = $this->evaluate_status();
-		$started = $this->get_step_timestamp();
+		$status   = $this->evaluate_status();
+		$started  = $this->get_step_timestamp();
 		$duration = time() - $started;
 		$this->update_step_status( $status );
 
@@ -1385,12 +1384,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 		}
 
 		$entry_id = $this->get_entry_id();
-		$step_id = $this->get_id();
+		$step_id  = $this->get_id();
 
 		if ( $this->can_set_workflow_status() ) {
-
-			gform_update_meta( $entry_id , 'workflow_current_status', $status );
-			gform_update_meta( $entry_id , 'workflow_current_status_timestamp', time() );
+			gform_update_meta( $entry_id, 'workflow_current_status', $status );
+			gform_update_meta( $entry_id, 'workflow_current_status_timestamp', time() );
 		}
 
 		do_action( 'gravityflow_step_complete', $step_id, $entry_id, $this->get_form_id(), $status, $this );
@@ -1407,6 +1405,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 */
 	public function can_set_workflow_status() {
 		$status_config = $this->get_status_config();
+
 		return ! ( count( $status_config ) === 1 && $status_config[0]['status'] = 'complete' );
 	}
 
@@ -1417,6 +1416,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 */
 	public function is_complete() {
 		$status = $this->evaluate_status();
+
 		return $status == 'complete' || $status == 'expired';
 	}
 
@@ -1437,10 +1437,10 @@ abstract class Gravity_Flow_Step extends stdClass {
 				list( $type, $user_id ) = rgexplode( '|', $assignee_key, 2 );
 			} elseif ( is_user_logged_in() ) {
 				$user_id = $current_user->ID;
-				$type = 'user_id';
+				$type    = 'user_id';
 			}
 			if ( $type == 'user_id' ) {
-				$user = get_user_by( 'id', $user_id );
+				$user      = get_user_by( 'id', $user_id );
 				$user_name = $user ? $user->display_name : '';
 			}
 		}
@@ -1460,16 +1460,12 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return bool Is the routing rule a match?
 	 */
 	public function evaluate_routing_rule( $routing_rule ) {
-
 		gravity_flow()->log_debug( __METHOD__ . '(): rule:' . print_r( $routing_rule, true ) );
 
-		$entry = $this->get_entry();
-
-		$form_id = $this->get_form_id();
-
+		$entry           = $this->get_entry();
+		$form_id         = $this->get_form_id();
 		$entry_meta_keys = array_keys( GFFormsModel::get_entry_meta( $form_id ) );
-
-		$form = GFAPI::get_form( $form_id );
+		$form            = GFAPI::get_form( $form_id );
 
 		if ( in_array( $routing_rule['fieldId'], $entry_meta_keys ) ) {
 			$is_value_match = GFFormsModel::is_value_match( rgar( $entry, $routing_rule['fieldId'] ), $routing_rule['value'], $routing_rule['operator'], null, $routing_rule, $form );
@@ -1504,15 +1500,16 @@ abstract class Gravity_Flow_Step extends stdClass {
 		foreach ( $assignees as $assignee ) {
 			/* @var Gravity_Flow_Assignee $assignee */
 			$assignee_type = $assignee->get_type();
-			$assignee_id = $assignee->get_id();
+			$assignee_id   = $assignee->get_id();
 
 			if ( $assignee_type == 'email' ) {
-				$email = $assignee_id;
+				$email                   = $assignee_id;
 				$notification['to']      = $email;
 				$notification['id']      = 'workflow_step_' . $this->get_id() . '_email_' . $email;
 				$notification['name']    = $notification['id'];
 				$notification['message'] = $this->replace_variables( $notification['message'], $assignee );
 				$this->send_notification( $notification );
+
 				return;
 			}
 
@@ -1542,17 +1539,18 @@ abstract class Gravity_Flow_Step extends stdClass {
 		if ( isset( $this->_entry_count ) ) {
 			return $this->_entry_count;
 		}
-		$form_id = $this->get_form_id();
-		$search_criteria = array(
-			'status' => 'active',
+		$form_id            = $this->get_form_id();
+		$search_criteria    = array(
+			'status'        => 'active',
 			'field_filters' => array(
 				array(
-					'key' => 'workflow_step',
+					'key'   => 'workflow_step',
 					'value' => $this->get_id(),
 				),
 			),
 		);
 		$this->_entry_count = GFAPI::count_entries( $form_id, $search_criteria );
+
 		return $this->_entry_count;
 	}
 
@@ -1608,6 +1606,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		} else {
 			$value = $this->{$setting};
 		}
+
 		return $value;
 	}
 
@@ -1624,11 +1623,12 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$assignee->update_status( $new_status );
 		$note = $this->get_name() . ': ' . esc_html__( 'Processed', 'gravityflow' );
 		$this->add_note( $note, 0, $this->get_type() );
+
 		return $note;
 	}
 
 	public function is_assignee( $assignee_key ) {
-		$assignees = $this->get_assignees();
+		$assignees    = $this->get_assignees();
 		$current_user = wp_get_current_user();
 		foreach ( $assignees as $assignee ) {
 			$key = $assignee->get_key();
@@ -1639,6 +1639,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 				return true;
 			}
 		}
+
+		return false;
 	}
 
 	/**
@@ -1648,20 +1650,19 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @param Gravity_Flow_Assignee[] $previous_assignees The previous assignees.
 	 */
 	public function maybe_adjust_assignment( $previous_assignees ) {
-
 		gravity_flow()->log_debug( __METHOD__ . '(): Starting' );
 
-		$new_assignees = $this->get_assignees();
+		$new_assignees      = $this->get_assignees();
 		$new_assignees_keys = array();
-		foreach ( $new_assignees  as $new_assignee ) {
+		foreach ( $new_assignees as $new_assignee ) {
 			$new_assignees_keys[] = $new_assignee->get_key();
 		}
 		$previous_assignees_keys = array();
-		foreach ( $previous_assignees  as $previous_assignee ) {
+		foreach ( $previous_assignees as $previous_assignee ) {
 			$previous_assignees_keys[] = $previous_assignee->get_key();
 		}
 
-		$assignee_keys_to_add = array_diff( $new_assignees_keys, $previous_assignees_keys );
+		$assignee_keys_to_add    = array_diff( $new_assignees_keys, $previous_assignees_keys );
 		$assignee_keys_to_remove = array_diff( $previous_assignees_keys, $new_assignees_keys );
 
 		foreach ( $assignee_keys_to_add as $assignee_key_to_add ) {

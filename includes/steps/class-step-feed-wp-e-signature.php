@@ -211,10 +211,10 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 		add_action( 'esig_sad_document_invite_send', array( $this, 'sad_document_invite_send' ) );
 		$feed['meta']['esign_gf_logic'] = 'email';
 		parent::process_feed( $feed );
-		
+
 		return false;
 	}
-	
+
 	public function is_supported() {
 		return parent::is_supported() && class_exists( 'esig_sad_document' ) && class_exists( 'WP_E_Document' );
 	}
@@ -313,7 +313,7 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 
 				echo sprintf( '%s: %s', esc_html__( 'Invite Status', 'gravityflow' ), $invite_api->is_invite_sent( $document_id ) ? esc_html__( 'Sent', 'gravityflow' ) : esc_html__( 'Error - Not Sent', 'gravityflow' ) );
 				echo '&nbsp;';
-				$params = array(
+				$params     = array(
 					'page'        => 'esign-resend_invite-document',
 					'document_id' => $document_id,
 				);
@@ -336,7 +336,7 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 					$text = esc_html__( 'Preview', 'gravityflow' );
 				}
 				echo '<br /><div class="gravityflow-action-buttons">';
-				echo sprintf( '<a href="%s" target="_blank" class="button button-large button-primary">%s</a><br><br>',	$url, $text	);
+				echo sprintf( '<a href="%s" target="_blank" class="button button-large button-primary">%s</a><br><br>', $url, $text );
 				echo '</div>';
 
 			}
@@ -377,7 +377,7 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 
 				break;
 		}
-		
+
 		return $this->get_assignee_details();
 	}
 
@@ -386,6 +386,7 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 	}
 
 }
+
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_Esign() );
 
 /**
@@ -409,9 +410,9 @@ function gravity_flow_step_esign_signature_saved( $args ) {
 				$step = $api->get_current_step( $entry );
 
 				if ( $step ) {
-					$feed = gravity_flow()->get_feed( $feed_id );
-					$label    = $step->get_feed_label( $feed );
-					$note = sprintf( esc_html__( 'Document signed: %s', 'gravityflow' ), $label );
+					$feed  = gravity_flow()->get_feed( $feed_id );
+					$label = $step->get_feed_label( $feed );
+					$note  = sprintf( esc_html__( 'Document signed: %s', 'gravityflow' ), $label );
 					$step->log_debug( __METHOD__ . '() - Feed processing complete: ' . $label );
 					$step->add_note( $note, 0, $step->get_type() );
 
@@ -427,4 +428,5 @@ function gravity_flow_step_esign_signature_saved( $args ) {
 		}
 	}
 }
+
 add_action( 'esig_signature_saved', 'gravity_flow_step_esign_signature_saved' );

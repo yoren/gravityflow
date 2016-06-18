@@ -23,6 +23,7 @@ class Gravity_Flow_Step_Feed_HubSpot extends Gravity_Flow_Step_Feed_Add_On {
 	public function get_label() {
 		return esc_html__( 'HubSpot', 'gravityflow' );
 	}
-	
+
 }
+
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_HubSpot() );

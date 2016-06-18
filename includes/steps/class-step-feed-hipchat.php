@@ -25,6 +25,7 @@ class Gravity_Flow_Step_Feed_HipChat extends Gravity_Flow_Step_Feed_Add_On {
 
 	function get_feed_label( $feed ) {
 		$label = $feed['meta']['feed_name'];
+
 		return $label;
 	}
 
@@ -32,4 +33,5 @@ class Gravity_Flow_Step_Feed_HipChat extends Gravity_Flow_Step_Feed_Add_On {
 		return $this->get_base_url() . '/images/hipchat-icon.svg';
 	}
 }
+
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_HipChat() );

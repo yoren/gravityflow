@@ -23,4 +23,5 @@ class Gravity_Flow_Step_Feed_Campaign_Monitor extends Gravity_Flow_Step_Feed_Add
 		return esc_html__( 'Campaign Monitor', 'gravityflow' );
 	}
 }
+
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_Campaign_Monitor() );

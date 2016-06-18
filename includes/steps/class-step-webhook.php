@@ -13,6 +13,7 @@
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
+
 /**
  * Gravity Flow Web Hook
  *
@@ -40,17 +41,17 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			'title'  => esc_html__( 'Outgoing Webhook', 'gravityflow' ),
 			'fields' => array(
 				array(
-					'name' => 'url',
+					'name'  => 'url',
 					'class' => 'large',
 					'label' => esc_html__( 'Outgoing Webhook URL', 'gravityflow' ),
-					'type' => 'text',
+					'type'  => 'text',
 				),
 				array(
-					'name' => 'method',
-					'label' => esc_html__( 'Request Method', 'gravityflow' ),
-					'type' => 'select',
+					'name'          => 'method',
+					'label'         => esc_html__( 'Request Method', 'gravityflow' ),
+					'type'          => 'select',
 					'default_value' => 'post',
-					'choices' => array(
+					'choices'       => array(
 						array(
 							'label' => 'POST',
 							'value' => 'post',
@@ -70,11 +71,11 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					),
 				),
 				array(
-					'name' => 'format',
-					'label' => esc_html__( 'Format', 'gravityflow' ),
-					'type' => 'select',
+					'name'          => 'format',
+					'label'         => esc_html__( 'Format', 'gravityflow' ),
+					'type'          => 'select',
 					'default_value' => 'json',
-					'choices' => array(
+					'choices'       => array(
 						array(
 							'label' => 'JSON',
 							'value' => 'json',
@@ -182,4 +183,5 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		return $step_status;
 	}
 }
+
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Webhook() );

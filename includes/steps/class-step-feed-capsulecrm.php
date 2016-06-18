@@ -25,7 +25,9 @@ class Gravity_Flow_Step_Feed_CapsuleCRM extends Gravity_Flow_Step_Feed_Add_On {
 
 	function get_feed_label( $feed ) {
 		$label = $feed['meta']['feed_name'];
+
 		return $label;
 	}
 }
+
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_CapsuleCRM() );

@@ -20,13 +20,14 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 	public function get_label() {
 		return esc_html__( 'Notification', 'gravityflow' );
 	}
+
 	public function get_icon_url() {
 		return '<i class="fa fa-envelope-o"></i>';
 	}
 
 	public function get_settings() {
 
-		$form = $this->get_form();
+		$form         = $this->get_form();
 		$notfications = $form['notifications'];
 
 		$choices = array();
@@ -34,7 +35,7 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 		foreach ( $notfications as $notfication ) {
 			$choices[] = array(
 				'label' => $notfication['name'],
-				'name' => 'notification_id_' . $notfication['id'],
+				'name'  => 'notification_id_' . $notfication['id'],
 			);
 		}
 
@@ -44,16 +45,16 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 			'title'  => 'Notification',
 			'fields' => array(
 				array(
-					'name' => 'notification',
-					'label' => esc_html__( 'Gravity Forms Notifications', 'gravityflow' ),
-					'type' => 'checkbox',
+					'name'     => 'notification',
+					'label'    => esc_html__( 'Gravity Forms Notifications', 'gravityflow' ),
+					'type'     => 'checkbox',
 					'required' => false,
-					'choices' => $choices,
+					'choices'  => $choices,
 				),
 				array(
 					'name'    => 'workflow_notification_enabled',
 					'label'   => __( 'Workflow notification', 'gravityflow' ),
-					'tooltip'   => __( 'Enable this setting to send an email.', 'gravityflow' ),
+					'tooltip' => __( 'Enable this setting to send an email.', 'gravityflow' ),
 					'type'    => 'checkbox',
 					'choices' => array(
 						array(
@@ -64,20 +65,20 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 					),
 				),
 				array(
-					'name'    => 'workflow_notification_type',
-					'label'   => __( 'Send To', 'gravityflow' ),
-					'type'       => 'radio',
+					'name'          => 'workflow_notification_type',
+					'label'         => __( 'Send To', 'gravityflow' ),
+					'type'          => 'radio',
 					'default_value' => 'select',
-					'horizontal' => true,
-					'choices'    => array(
+					'horizontal'    => true,
+					'choices'       => array(
 						array( 'label' => __( 'Select', 'gravityflow' ), 'value' => 'select' ),
 						array( 'label' => __( 'Configure Routing', 'gravityflow' ), 'value' => 'routing' ),
 					),
 				),
 				array(
 					'id'       => 'workflow_notification_users',
-					'name'    => 'workflow_notification_users[]',
-					'label'   => __( 'Select User', 'gravityflow' ),
+					'name'     => 'workflow_notification_users[]',
+					'label'    => __( 'Select User', 'gravityflow' ),
 					'size'     => '8',
 					'multiple' => 'multiple',
 					'type'     => 'select',
@@ -95,10 +96,10 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 					'type'  => 'text',
 				),
 				array(
-					'name'  => 'workflow_notification_from_email',
-					'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-					'label' => __( 'From Email', 'gravityflow' ),
-					'type'  => 'text',
+					'name'          => 'workflow_notification_from_email',
+					'class'         => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+					'label'         => __( 'From Email', 'gravityflow' ),
+					'type'          => 'text',
 					'default_value' => '{admin_email}',
 				),
 				array(
@@ -159,7 +160,7 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 
 		foreach ( $form['notifications'] as $notification ) {
 			$notification_id = $notification['id'];
-			$setting_key = 'notification_id_' . $notification_id;
+			$setting_key     = 'notification_id_' . $notification_id;
 			if ( $this->{$setting_key} ) {
 				if ( ! GFCommon::evaluate_conditional_logic( rgar( $notification, 'conditionalLogic' ), $form, $entry ) ) {
 					$this->log_debug( __METHOD__ . "(): Notification conditional logic not met, not processing notification (#{$notification_id} - {$notification['name']})." );
@@ -238,11 +239,12 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 	 * @return mixed
 	 */
 	public function replace_variables( $text, $assignee ) {
-		$text = parent::replace_variables( $text, $assignee );
+		$text    = parent::replace_variables( $text, $assignee );
 		$comment = rgpost( 'gravityflow_note' );
-		$text = str_replace( '{workflow_note}', $comment, $text );
+		$text    = str_replace( '{workflow_note}', $comment, $text );
 
 		return $text;
 	}
 }
+
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Notification() );

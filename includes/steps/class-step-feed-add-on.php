@@ -14,6 +14,7 @@
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
+
 /**
  * Abstract class to be used for integration with Gravity Forms Feed Add-Ons.
  * Extend this class to integrate any Gravity Forms Add-On that is built using the Feed-Add-On Framework.
@@ -24,7 +25,7 @@ if ( ! class_exists( 'GFForms' ) ) {
  *
  * Class Gravity_Flow_Step_Feed_Add_On
  *
- * @since		1.0
+ * @since 1.0
  */
 abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 
@@ -64,7 +65,6 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	 * @return bool
 	 */
 	public function is_supported() {
-
 		$is_supported      = true;
 		$feed_add_on_class = $this->get_feed_add_on_class_name();
 		if ( ! class_exists( $feed_add_on_class ) ) {
@@ -80,7 +80,6 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	 * @return array
 	 */
 	public function get_settings() {
-
 		$fields = array();
 
 		if ( ! $this->is_supported() ) {
@@ -112,7 +111,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 		}
 
 		if ( empty( $fields ) ) {
-			$html = esc_html__( "You don't have any feeds set up.", 'gravityflow' );
+			$html     = esc_html__( "You don't have any feeds set up.", 'gravityflow' );
 			$fields[] = array(
 				'name'  => 'no_feeds',
 				'label' => esc_html__( 'Feeds', 'gravityflow' ),
@@ -134,7 +133,6 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	 * @return bool Is the step complete?
 	 */
 	public function process() {
-
 		$form     = $this->get_form();
 		$entry    = $this->get_entry();
 		$complete = true;
@@ -217,7 +215,10 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 			$slug = $this->get_slug();
 			add_filter( "gform_{$slug}_pre_process_feeds_{$form_id}", array( $this, 'pre_process_feeds' ), 10, 2 );
 		} else {
-			add_filter( "gform_is_delayed_pre_process_feed_{$form_id}", array( $this, 'is_delayed_pre_process_feed' ), 10, 4 );
+			add_filter( "gform_is_delayed_pre_process_feed_{$form_id}", array(
+				$this,
+				'is_delayed_pre_process_feed'
+			), 10, 4 );
 		}
 	}
 
@@ -235,8 +236,8 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	}
 
 	/**
-	 * Determines if the supplied feed should be processed. 
-	 * 
+	 * Determines if the supplied feed should be processed.
+	 *
 	 * @param array $feed The current feed.
 	 * @param array $form The current form.
 	 * @param array $entry The current entry.
@@ -288,7 +289,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	 * @param array $form The form object currently being processed.
 	 * @param array $entry The entry object currently being processed.
 	 * @param string $slug The Add-On slug e.g. gravityformsmailchimp
-	 * 
+	 *
 	 * @todo Remove once min GF version reaches 2.0.
 	 *
 	 * @return bool
@@ -328,7 +329,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 
 	/**
 	 * Get the slug for the add-on associated with this step.
-	 * 
+	 *
 	 * @return string
 	 */
 	function get_slug() {
@@ -387,7 +388,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 
 	/**
 	 * Add the ID of the current feed to the processed feeds array for the current add-on.
-	 * 
+	 *
 	 * @param array $add_on_feeds The IDs of the processed feeds.
 	 * @param int $feed_id The ID of the processed feed.
 	 *
@@ -434,7 +435,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 		$processed_feeds                      = $this->get_processed_feeds( $entry_id );
 		$processed_feeds[ $this->get_slug() ] = $add_on_feeds;
 		$this->_processed_feeds               = $processed_feeds;
-		
+
 		gform_update_meta( $entry_id, 'processed_feeds', $processed_feeds );
 	}
 

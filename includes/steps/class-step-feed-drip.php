@@ -45,10 +45,10 @@ class Gravity_Flow_Step_Feed_Drip extends Gravity_Flow_Step_Feed_Add_On {
 			$entry = $this->get_entry();
 			$this->get_add_on_instance()->process_feed( $feed, $entry, $form );
 		}
-		
+
 		return true;
 	}
-	
+
 	public function get_add_on_instance() {
 		if ( ! is_object( $this->_add_on_instance ) && class_exists( $this->_class_name ) ) {
 			$add_on = new GFP_Drip();
@@ -60,4 +60,5 @@ class Gravity_Flow_Step_Feed_Drip extends Gravity_Flow_Step_Feed_Add_On {
 	}
 
 }
+
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_Drip() );

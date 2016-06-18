@@ -36,11 +36,11 @@ class Gravity_Flow_Assignee {
 		$this->step = $step;
 		if ( is_string( $args ) ) {
 			$parts = explode( '|', $args );
-			$type = $parts[0];
-			$id = $parts[1];
+			$type  = $parts[0];
+			$id    = $parts[1];
 		} elseif ( is_array( $args ) ) {
 
-			$id = $args['id'];
+			$id   = $args['id'];
 			$type = $args['type'];
 			if ( isset( $args['editable_fields'] ) ) {
 				$this->editable_fields = $args['editable_fields'];
@@ -51,33 +51,33 @@ class Gravity_Flow_Assignee {
 
 		switch ( $type ) {
 			case  'assignee_field' :
-				$entry = $this->step->get_entry();
+				$entry        = $this->step->get_entry();
 				$assignee_key = rgar( $entry, $id );
 				list( $this->type, $this->id ) = rgexplode( '|', $assignee_key, 2 );
 				break;
 			case  'assignee_user_field' :
-				$entry = $this->step->get_entry();
-				$this->id = absint( rgar( $entry, $id ) );
+				$entry      = $this->step->get_entry();
+				$this->id   = absint( rgar( $entry, $id ) );
 				$this->type = 'user_id';
 				break;
 			case  'assignee_role_field' :
-				$entry = $this->step->get_entry();
-				$this->id = sanitize_text_field( rgar( $entry, $id ) );
+				$entry      = $this->step->get_entry();
+				$this->id   = sanitize_text_field( rgar( $entry, $id ) );
 				$this->type = 'role';
 				break;
 			case  'email_field' :
-				$entry = $this->step->get_entry();
-				$this->id = sanitize_email( rgar( $entry, $id ) );
+				$entry      = $this->step->get_entry();
+				$this->id   = sanitize_email( rgar( $entry, $id ) );
 				$this->type = 'email';
 				break;
 			case 'entry' :
-				$entry = $this->step->get_entry();
-				$this->id = rgar( $entry, $id );
+				$entry      = $this->step->get_entry();
+				$this->id   = rgar( $entry, $id );
 				$this->type = 'user_id';
 				break;
 			default :
 				$this->type = $type;
-				$this->id = $id;
+				$this->id   = $id;
 		}
 
 		$this->key = $this->type . '|' . $this->id;
@@ -107,11 +107,12 @@ class Gravity_Flow_Assignee {
 	 */
 	public function get_status() {
 
-		$entry_id = $this->step->get_entry_id();
-		$key = $this->get_status_key();
+		$entry_id  = $this->step->get_entry_id();
+		$key       = $this->get_status_key();
 		$cache_key = $entry_id . '_' . $key;
 		global $_gform_lead_meta;
 		unset( $_gform_lead_meta[ $cache_key ] );
+
 		return gform_get_meta( $entry_id, $key );
 	}
 
@@ -126,6 +127,7 @@ class Gravity_Flow_Assignee {
 		$assignee_type = $this->get_type();
 
 		$key = 'workflow_' . $assignee_type . '_' . $assignee_id;
+
 		return $key;
 	}
 
@@ -175,7 +177,7 @@ class Gravity_Flow_Assignee {
 	 */
 	public function get_status_timestamp() {
 
-		$status_key = $this->get_status_key();
+		$status_key    = $this->get_status_key();
 		$timestamp_key = $status_key . '_timestamp';
 
 		return gform_get_meta( $this->step->get_entry_id(), $timestamp_key );
@@ -188,7 +190,7 @@ class Gravity_Flow_Assignee {
 	 */
 	public function get_reminder_timestamp() {
 
-		$status_key = $this->get_status_key();
+		$status_key    = $this->get_status_key();
 		$timestamp_key = $status_key . '_reminder_timestamp';
 
 		return gform_get_meta( $this->step->get_entry_id(), $timestamp_key );
@@ -206,7 +208,7 @@ class Gravity_Flow_Assignee {
 			$timestamp = time();
 		}
 
-		$status_key = $this->get_status_key();
+		$status_key    = $this->get_status_key();
 		$timestamp_key = $status_key . '_reminder_timestamp';
 
 		gform_update_meta( $this->step->get_entry_id(), $timestamp_key, $timestamp );

@@ -29,7 +29,7 @@ class Gravity_Flow_Step_Feed_Dropbox extends Gravity_Flow_Step_Feed_Add_On {
 
 	/**
 	 * Process the feed; remove the feed from the processed feeds list;
-	 * 
+	 *
 	 * @param array $feed The feed to be processed.
 	 *
 	 * @return bool Returning false to ensure the next step is not processed until after the files are uploaded.
@@ -70,6 +70,7 @@ class Gravity_Flow_Step_Feed_Dropbox extends Gravity_Flow_Step_Feed_Add_On {
 	}
 
 }
+
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_Dropbox() );
 
 /**
@@ -97,4 +98,5 @@ function gravity_flow_step_dropbox_post_upload( $feed, $entry, $form ) {
 		}
 	}
 }
+
 add_action( 'gform_dropbox_post_upload', 'gravity_flow_step_dropbox_post_upload', 10, 3 );

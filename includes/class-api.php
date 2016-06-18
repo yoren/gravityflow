@@ -14,13 +14,14 @@
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
+
 /**
  * The future-proof way to interact with the high level functions in Gravity Flow.
  *
  * Class Gravity_Flow_API
  *
  *
- * @since		1.0
+ * @since 1.0
  */
 class Gravity_Flow_API {
 
@@ -84,6 +85,7 @@ class Gravity_Flow_API {
 	 */
 	public function get_current_step( $entry ) {
 		$form = GFAPI::get_form( $this->form_id );
+
 		return gravity_flow()->get_current_step( $form, $entry );
 	}
 
@@ -95,19 +97,20 @@ class Gravity_Flow_API {
 	 */
 	public function process_workflow( $entry_id ) {
 		$form = GFAPI::get_form( $this->form_id );
-		gravity_flow()->process_workflow( $form,  $entry_id );
+		gravity_flow()->process_workflow( $form, $entry_id );
 	}
 
 	/**
 	 * Cancels the workflow for the given Entry ID. Removes the assignees, adds a note in the entry's timeline and logs the event.
 	 *
 	 * @param array $entry The entry
+	 *
 	 * @return bool True for success. False if not currently in a workflow.
 	 */
 	public function cancel_workflow( $entry ) {
 		$entry_id = absint( $entry['id'] );
-		$form = GFAPI::get_form( $this->form_id );
-		$step = $this->get_current_step( $entry );
+		$form     = GFAPI::get_form( $this->form_id );
+		$step     = $this->get_current_step( $entry );
 		if ( ! $step ) {
 			return false;
 		}
@@ -117,9 +120,10 @@ class Gravity_Flow_API {
 		}
 		gform_update_meta( $entry_id, 'workflow_final_status', 'cancelled' );
 		gform_delete_meta( $entry_id, 'workflow_step' );
-		$feedback = esc_html__( 'Workflow cancelled.',  'gravityflow' );
+		$feedback = esc_html__( 'Workflow cancelled.', 'gravityflow' );
 		gravity_flow()->add_timeline_note( $entry_id, $feedback );
 		gravity_flow()->log_event( 'workflow', 'cancelled', $form['id'], $entry_id );
+
 		return true;
 	}
 
@@ -127,6 +131,7 @@ class Gravity_Flow_API {
 	 * Restarts the current step for the given entry, adds a note in the entry's timeline and logs the activity.
 	 *
 	 * @param array $entry The entry
+	 *
 	 * @return bool True for success. False if the entry doesn't have a current step.
 	 */
 	public function restart_step( $entry ) {
@@ -138,8 +143,9 @@ class Gravity_Flow_API {
 		$this->log_activity( 'step', 'restarted', $this->form_id, $entry_id );
 		$step->restart_action();
 		$step->start();
-		$feedback = esc_html__( 'Workflow Step restarted.',  'gravityflow' );
+		$feedback = esc_html__( 'Workflow Step restarted.', 'gravityflow' );
 		$this->add_timeline_note( $entry_id, $feedback );
+
 		return true;
 	}
 
@@ -150,8 +156,8 @@ class Gravity_Flow_API {
 	 */
 	public function restart_workflow( $entry ) {
 		$current_step = $this->get_current_step( $entry );
-		$entry_id = absint( $entry['id'] );
-		$form = GFAPI::get_form( $this->form_id );
+		$entry_id     = absint( $entry['id'] );
+		$form         = GFAPI::get_form( $this->form_id );
 		if ( $current_step ) {
 			$assignees = $current_step->get_assignees();
 			foreach ( $assignees as $assignee ) {
@@ -165,7 +171,7 @@ class Gravity_Flow_API {
 			$step_for_entry->update_step_status( 'pending' );
 			$step_for_entry->restart_action();
 		}
-		$feedback = esc_html__( 'Workflow restarted.',  'gravityflow' );
+		$feedback = esc_html__( 'Workflow restarted.', 'gravityflow' );
 		$this->add_timeline_note( $entry_id, $feedback );
 		gform_update_meta( $entry_id, 'workflow_final_status', 'pending' );
 		gform_update_meta( $entry_id, 'workflow_step', false );
@@ -209,7 +215,7 @@ class Gravity_Flow_API {
 		}
 		$entry_id = $entry['id'];
 		$new_step = $this->get_step( $step_id, $entry );
-		$feedback = sprintf( esc_html__( 'Sent to step: %s',  'gravityflow' ), $new_step->get_name() );
+		$feedback = sprintf( esc_html__( 'Sent to step: %s', 'gravityflow' ), $new_step->get_name() );
 		$this->add_timeline_note( $entry_id, $feedback );
 		$this->log_activity( 'workflow', 'sent_to_step', $this->form_id, $entry_id, $step_id );
 		gform_update_meta( $entry_id, 'workflow_final_status', 'pending' );

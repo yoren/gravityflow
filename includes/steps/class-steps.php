@@ -82,7 +82,7 @@ class Gravity_Flow_Steps {
 		}
 		$class      = self::$_steps[ $step_type ];
 		$class_name = get_class( $class );
-		$step      = new $class_name( $feed, $entry );
+		$step       = new $class_name( $feed, $entry );
 
 		return $step;
 

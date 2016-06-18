@@ -15,6 +15,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 GFForms::include_addon_framework();
+
 abstract class Gravity_Flow_Extension extends GFAddOn {
 
 	public $edd_item_name = '';
@@ -33,8 +34,8 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 	public function app_settings_tabs( $settings_tabs ) {
 
 		$settings_tabs[] = array(
-			'name' => $this->_slug,
-			'label' => $this->get_short_title(),
+			'name'     => $this->_slug,
+			'label'    => $this->get_short_title(),
 			'callback' => array( $this, 'app_settings_tab' ),
 		);
 
@@ -51,7 +52,7 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 		}
 		?>
 
-		<h3><span><?php echo $icon ?> <?php echo $this->app_settings_title() ?></span></h3>
+		<h3><span><?php echo $icon ?><?php echo $this->app_settings_title() ?></span></h3>
 
 		<?php
 
@@ -81,6 +82,7 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 
 		}
 	}
+
 	/**
 	 * Override this function to customize the markup for the uninstall section on the plugin settings page
 	 */
@@ -116,17 +118,17 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 	public function app_settings_fields() {
 		return array(
 			array(
-				'title'       => $this->get_short_title(),
-				'fields'      => array(
+				'title'  => $this->get_short_title(),
+				'fields' => array(
 					array(
-						'name'          => 'license_key',
-						'label'         => esc_html__( 'License Key', 'gravityflow' ),
-						'type'          => 'text',
+						'name'                => 'license_key',
+						'label'               => esc_html__( 'License Key', 'gravityflow' ),
+						'type'                => 'text',
 						'validation_callback' => array( $this, 'license_validation' ),
-						'feedback_callback'    => array( $this, 'license_feedback' ),
-						'error_message' => __( 'Invalid license', 'gravityflow' ),
-						'class' => 'large',
-						'default_value' => '',
+						'feedback_callback'   => array( $this, 'license_feedback' ),
+						'error_message'       => __( 'Invalid license', 'gravityflow' ),
+						'class'               => 'large',
+						'default_value'       => '',
 					),
 				),
 			),
@@ -161,10 +163,14 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 			'edd_action' => 'check_license',
 			'license'    => $value,
 			'item_name'  => urlencode( $this->edd_item_name ),
-			'url'       => home_url(),
+			'url'        => home_url(),
 		);
 		// Send the remote request
-		$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params ) );
+		$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout'   => 10,
+		                                                               'sslverify' => false,
+		                                                               'body'      => $api_params
+		) );
+
 		return json_decode( wp_remote_retrieve_body( $response ) );
 
 	}
@@ -172,7 +178,7 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 	public function license_validation( $field, $field_setting ) {
 		$old_license = $this->get_app_setting( 'license_key' );
 
-		if ( $old_license && $field_setting != $old_license  ) {
+		if ( $old_license && $field_setting != $old_license ) {
 			// deactivate the old site
 			$api_params = array(
 				'edd_action' => 'deactivate_license',
@@ -181,7 +187,10 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 				'url'        => home_url(),
 			);
 			// Send the remote request
-			$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params ) );
+			$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout'   => 10,
+			                                                               'sslverify' => false,
+			                                                               'body'      => $api_params
+			) );
 
 			$this->log_debug( __METHOD__ . '(): response: ' . print_r( $response ) );
 		}
@@ -202,7 +211,10 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 			'url'        => home_url(),
 		);
 
-		$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params ) );
+		$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout'   => 10,
+		                                                               'sslverify' => false,
+		                                                               'body'      => $api_params
+		) );
 
 		// Force plugins page to refresh the update info.
 		set_site_transient( 'update_plugins', null );

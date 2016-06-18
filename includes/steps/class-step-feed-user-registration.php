@@ -21,8 +21,9 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 	protected $_class_name = 'GFUser';
 
 	public function get_feed_add_on_class_name() {
-		$class_name = class_exists( 'GF_User_Registration' ) ? 'GF_User_Registration' : 'GFUser';
+		$class_name        = class_exists( 'GF_User_Registration' ) ? 'GF_User_Registration' : 'GFUser';
 		$this->_class_name = $class_name;
+
 		return $class_name;
 	}
 
@@ -35,7 +36,6 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 	}
 
 	function get_feeds() {
-
 		$form_id = $this->get_form_id();
 
 		if ( class_exists( 'GF_User_Registration' ) ) {
@@ -51,6 +51,7 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 	function process_feed( $feed ) {
 		if ( class_exists( 'GF_User_Registration' ) ) {
 			parent::process_feed( $feed );
+
 			return true;
 		}
 		$form  = $this->get_form();
@@ -67,6 +68,7 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 	function intercept_submission() {
 		if ( class_exists( 'GF_User_Registration' ) ) {
 			parent::intercept_submission();
+
 			return;
 		}
 
@@ -79,6 +81,7 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 		}
 
 		$label = $feed['meta']['feed_type'] == 'create' ? __( 'Create', 'gravityflow' ) : __( 'Update', 'gravityflow' );
+
 		return $label;
 	}
 }
