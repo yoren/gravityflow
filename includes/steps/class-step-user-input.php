@@ -19,7 +19,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	public $_step_type = 'user_input';
 
 	protected $_editable_fields = array();
-	protected $_assignee_details = array();
 
 	public function get_label() {
 		return esc_html__( 'User Input', 'gravityflow' );
@@ -349,22 +348,18 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 	 * @return Gravity_Flow_Assignee[]
 	 */
 	public function get_assignees() {
-
-		if ( ! empty( $this->_assignee_details ) ) {
-			return $this->_assignee_details;
+		$assignees = $this->get_assignee_details();
+		if ( ! empty( $assignees ) ) {
+			return $assignees;
 		}
-
-		$assignees  = array(
-			'details' => array(),
-			'keys'    => array()
-		);
+		
 		$input_type = $this->type;
 
 		switch ( $input_type ) {
 			case 'select':
 				foreach ( $this->assignees as $assignee_key ) {
 					list( $assignee_type, $assignee_id ) = explode( '|', $assignee_key );
-					$assignees = $this->maybe_add_assignee( $assignees, array(
+					$this->maybe_add_assignee( array(
 						'id'              => $assignee_id,
 						'type'            => $assignee_type,
 						'editable_fields' => $this->editable_fields,
@@ -377,21 +372,18 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 					$entry = $this->get_entry();
 					foreach ( $routings as $routing ) {
 						$assignee_key = rgar( $routing, 'assignee' );
-						if ( in_array( $assignee_key, $assignees ) ) {
-							continue;
-						}
 						list( $assignee_type, $assignee_id ) = explode( '|', $assignee_key );
 						$editable_fields = rgar( $routing, 'editable_fields' );
 						if ( $entry ) {
 							if ( $this->evaluate_routing_rule( $routing ) ) {
-								$assignees = $this->maybe_add_assignee( $assignees, array(
+								$this->maybe_add_assignee( array(
 									'id'              => $assignee_id,
 									'type'            => $assignee_type,
 									'editable_fields' => $editable_fields,
 								) );
 							}
 						} else {
-							$assignees = $this->maybe_add_assignee( $assignees, array(
+							$this->maybe_add_assignee( array(
 								'id'              => $assignee_id,
 								'type'            => $assignee_type,
 								'editable_fields' => $editable_fields,
@@ -403,22 +395,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step{
 				break;
 		}
 
-		gravity_flow()->log_debug( __METHOD__ . '(): assignees: ' . print_r( $assignees['keys'], true ) );
+		gravity_flow()->log_debug( __METHOD__ . '(): assignees: ' . print_r( $this->get_assignee_keys(), true ) );
 
-		$this->_assignee_details = $assignees['details'];
-
-		return $assignees['details'];
-	}
-
-	public function maybe_add_assignee( $assignees, $args ) {
-		$assignee = new Gravity_Flow_Assignee( $args, $this );
-
-		if ( ! empty( $assignee->get_id() ) ) {
-			$assignees['details'][] = $assignee;
-			$assignees['keys'][]    = $assignee->get_key();
-		}
-
-		return $assignees;
+		return $this->get_assignee_details();
 	}
 
 	public function evaluate_status() {

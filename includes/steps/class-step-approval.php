@@ -535,8 +535,10 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 * @return Gravity_Flow_Assignee[]
 	 */
 	public function get_assignees() {
-
-		$approvers = array();
+		$assignees = $this->get_assignee_details();
+		if ( ! empty( $assignees ) ) {
+			return $assignees;
+		}
 
 		$type = $this->type;
 
@@ -544,7 +546,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			case 'select' :
 				if ( is_array( $this->assignees ) ) {
 					foreach ( $this->assignees as $assignee_key ) {
-						$approvers = $this->maybe_add_assignee( $approvers, $assignee_key );
+						$this->maybe_add_assignee( $assignee_key );
 					}
 				}
 				break;
@@ -554,15 +556,12 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					$entry = $this->get_entry();
 					foreach ( $routings as $routing ) {
 						$assignee_key = rgar( $routing, 'assignee' );
-						if ( in_array( $assignee_key, $approvers ) ) {
-							continue;
-						}
 						if ( $entry ) {
 							if ( $this->evaluate_routing_rule( $routing ) ) {
-								$approvers = $this->maybe_add_assignee( $approvers, $assignee_key );
+								$this->maybe_add_assignee( $assignee_key );
 							}
 						} else {
-							$approvers = $this->maybe_add_assignee( $approvers, $assignee_key );
+							$this->maybe_add_assignee( $assignee_key );
 						}
 					}
 				}
@@ -570,7 +569,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				break;
 		}
 
-		return $approvers;
+		return $this->get_assignee_details();
 	}
 
 	public function is_complete() {

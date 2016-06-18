@@ -60,6 +60,20 @@ abstract class Gravity_Flow_Step extends stdClass {
 	private $_entry;
 
 	/**
+	 * The assignees for this step.
+	 *
+	 * @var Gravity_Flow_Assignee[]
+	 */
+	private $_assignee_details = array();
+
+	/**
+	 * The assignee keys for this step.
+	 *
+	 * @var array
+	 */
+	private $_assignee_keys = array();
+
+	/**
 	 * The assignee emails for which notifications have been processed.
 	 *
 	 * @var array
@@ -1163,21 +1177,53 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
-	 * Adds the assignee to the assignees array if the assignee id is populated.
-	 * 
-	 * @param array $assignees The assignees for this step.
-	 * @param string|array $args An assignee key or array containing the id, type and editable_fields (if applicable).
+	 * Retrieve an array containing this steps assignee details.
+	 *
+	 * @return Gravity_Flow_Assignee[]
+	 */
+	public function get_assignee_details() {
+		return $this->_assignee_details;
+	}
+
+	/**
+	 * Retrieve an array containing the assignee keys for this step.
 	 *
 	 * @return array
 	 */
-	public function maybe_add_assignee( $assignees, $args ) {
+	public function get_assignee_keys() {
+		return $this->_assignee_keys;
+	}
+
+	/**
+	 * Adds the assignee to the step if certain conditions are met.
+	 * 
+	 * @param string|array $args An assignee key or array containing the id, type and editable_fields (if applicable).
+	 */
+	public function maybe_add_assignee( $args ) {
 		$assignee = new Gravity_Flow_Assignee( $args, $this );
+		$id       = $assignee->get_id();
+		$key      = $assignee->get_key();
 
-		if ( ! empty( $assignee->get_id() ) ) {
-			$assignees[] = $assignee;
+		if ( ! empty( $id ) && ! in_array( $key, $this->get_assignee_keys() ) ) {
+			$type = $assignee->get_type();
+			switch ( $type ) {
+				case 'user_id' :
+					$object = get_userdata( $id );
+					break;
+
+				case 'role' :
+					$object = get_role( $id );
+					break;
+				
+				default :
+					$object = true;
+			}
+			
+			if ( $object ) {
+				$this->_assignee_details[] = $assignee;
+				$this->_assignee_keys[]    = $key;
+			}
 		}
-
-		return $assignees;
 	}
 
 	/**
