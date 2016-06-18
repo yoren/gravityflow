@@ -54,14 +54,7 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 
 		$entry = $entries[0];
 
-		// Simulate submission to add our entry meta
-		$form = GFAPI::get_form( $this->form_id );
-		gravity_flow()->maybe_process_feed( $entry, $form );
-
 		$entry_id = $entry['id'];
-
-		// Start workflow
-		$this->api->process_workflow( $entry_id );
 
 		// Refresh entry
 		$entry = GFAPI::get_entry( $entry_id );
@@ -305,7 +298,7 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 
 	}
 
-	function test_user_input_process(){
+	function test_user_input_process() {
 
 		$step1_id = $this->_add_user_input_step();
 
@@ -321,10 +314,6 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 		$entries = GFAPI::get_entries( $this->form_id );
 
 		$entry = $entries[0];
-
-		// Simulate submission to add our entry meta
-		$form = GFAPI::get_form( $this->form_id );
-		gravity_flow()->maybe_process_feed( $entry, $form );
 
 		$entry_id = $entry['id'];
 
@@ -368,7 +357,7 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 		$this->assertEquals( 'complete', $final_status );
 	}
 
-	function test_complex_process(){
+	function test_complex_process() {
 
 		$settings = array( 'destination_rejected' => 'next' );
 
@@ -399,10 +388,6 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 		$entries = GFAPI::get_entries( $this->form_id );
 
 		$entry = $entries[0];
-
-		// Simulate submission to add our entry meta
-		$form = GFAPI::get_form( $this->form_id );
-		gravity_flow()->maybe_process_feed( $entry, $form );
 
 		$entry_id = $entry['id'];
 
@@ -513,7 +498,7 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 	}
 
 
-	function test_assignee_field(){
+	function test_assignee_field() {
 		$form = GFAPI::get_form( $this->form_id );
 		$assignee_field_properties_json = '{"type":"workflow_assignee_select","id":6,"label":"Assignee","adminLabel":"","isRequired":false,"size":"medium","errorMessage":"","inputs":null,"formId":93,"pageNumber":1,"choices":"","conditionalLogic":"","displayOnly":"","labelPlacement":"","descriptionPlacement":"","subLabelPlacement":"","placeholder":"","multipleFiles":false,"maxFiles":"","calculationFormula":"","calculationRounding":"","enableCalculation":"","disableQuantity":false,"displayAllCategories":false,"inputMask":false,"inputMaskValue":"","allowsPrepopulate":false,"gravityflowAssigneeFieldShowUsers":true,"gravityflowAssigneeFieldShowRoles":true,"gravityflowAssigneeFieldShowFields":true,"cssClass":""}';
 		$assignee_field_properties = json_decode( $assignee_field_properties_json, true );
@@ -527,18 +512,11 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 		);
 		$step1_id = $this->_add_user_input_step( $step_settings );
 
-		$this->_create_entries();
-		$entries = GFAPI::get_entries( $this->form_id );
-		$entry = $entries[0];
+		$entry_id = GFAPI::add_entry( array( 'form_id' => $this->form_id, 'date_created' => '2016-06-18 11:00', '1' => 'Second Choice', '2.2' => 'Second Choice', '8' => '1', '13.6' => 'Spain', 999 => 'user_id|1' ) );
+
+		$entry = GFAPI::get_entry( $entry_id );
 
 		$entry_id = $entry['id'];
-		$entry[999] = 'user_id|1';
-		GFAPI::update_entry( $entry );
-
-		// simulate submission
-		gravity_flow()->maybe_process_feed( $entry, $form );
-
-		$this->api->process_workflow( $entry_id );
 
 		$entry = GFAPI::get_entry( $entry_id );
 
@@ -560,7 +538,7 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 	}
 
 
-	function test_the_tests(){
+	function test_the_tests() {
 
 		$t = 1;
 		$this->assertEquals( 1, $t );
