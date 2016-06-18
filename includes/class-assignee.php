@@ -197,6 +197,7 @@ class Gravity_Flow_Assignee {
 	/**
 	 * Sets the timestamp for the reminder.
 	 *
+	 * @oaram int $timestamp Unix GMT timestamp
 	 * @return bool|mixed
 	 */
 	public function set_reminder_timestamp( $timestamp = false ) {
