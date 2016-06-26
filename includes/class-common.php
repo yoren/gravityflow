@@ -1,10 +1,9 @@
 <?php
 /**
- * Gravity Flow Helper Functions
+ * Gravity Flow Common Functions
  *
  *
  * @package     GravityFlow
- * @subpackage  Classes/Helpers
  * @copyright   Copyright (c) 2015-2016, Steven Henty
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.3.3
@@ -15,7 +14,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
-class Gravity_Flow_Helpers {
+class Gravity_Flow_Common {
 
 	/**
 	 * Returns a URl to a workflow page.

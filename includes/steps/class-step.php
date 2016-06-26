@@ -1001,7 +1001,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 			'lid'  => $this->get_entry_id(),
 		);
 
-		return Gravity_Flow_Helpers::get_workflow_url( $query_args, $page_id, $assignee, $access_token );
+		return Gravity_Flow_Common::get_workflow_url( $query_args, $page_id, $assignee, $access_token );
 	}
 
 	/**
@@ -1019,7 +1019,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 			'page' => 'gravityflow-inbox',
 		);
 
-		return Gravity_Flow_Helpers::get_workflow_url( $query_args, $page_id, $assignee, $access_token );
+		return Gravity_Flow_Common::get_workflow_url( $query_args, $page_id, $assignee, $access_token );
 	}
 
 	/**
