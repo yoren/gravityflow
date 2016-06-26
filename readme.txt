@@ -57,6 +57,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.3.3-dev =
 
+- Added the {workflow_inbox_url} and {workflow_inbox_link} merge tags.
 - Added the "Expired" status to the approval and user input steps.
 - Added the "Next step if Expired" sub-setting to the expiration settings.
 - Added support for GravityPDF v4.0 to the User Input step.

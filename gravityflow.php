@@ -67,6 +67,8 @@ class Gravity_Flow_Bootstrap {
 			include( dirname( __FILE__ ) . '/includes/class-assignee.php' );
 		}
 
+		require_once( dirname( __FILE__ ) . '/includes/class-helpers.php' );
+
 		require_once( 'class-gravity-flow.php' );
 		require_once( 'includes/models/class-activity.php' );
 		require_once( 'includes/steps/class-step.php' );

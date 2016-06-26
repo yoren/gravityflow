@@ -823,6 +823,68 @@ abstract class Gravity_Flow_Step extends stdClass {
 			}
 		}
 
+		preg_match_all( '/{workflow_inbox_url(:(.*?))?}/', $text, $inbox_url_matches, PREG_SET_ORDER );
+		if ( is_array( $inbox_url_matches ) ) {
+			foreach ( $inbox_url_matches as $inbox_url_match ) {
+				$full_tag       = $inbox_url_match[0];
+				$options_string = isset( $inbox_url_match[2] ) ? $inbox_url_match[2] : '';
+				$options        = shortcode_parse_atts( $options_string );
+
+				$a = shortcode_atts(
+					array(
+						'page_id' => 'admin',
+						'token'   => false,
+					), $options
+				);
+
+				$force_token = strtolower( $a['token'] ) == 'true' ? true : false;
+
+				$entry_token = '';
+
+				if ( $assignee && $force_token ) {
+					$token_lifetime_days        = apply_filters( 'gravityflow_entry_token_expiration_days', 30, $assignee );
+					$token_expiration_timestamp = strtotime( '+' . (int) $token_lifetime_days . ' days' );
+					$entry_token                = gravity_flow()->generate_access_token( $assignee, null, $token_expiration_timestamp );
+				}
+
+				$entry_url = $this->get_inbox_url( $a['page_id'], $assignee, $entry_token );
+
+				$text = str_replace( $full_tag, $entry_url, $text );
+			}
+		}
+
+		preg_match_all( '/{workflow_inbox_link(:(.*?))?}/', $text, $inbox_link_matches, PREG_SET_ORDER );
+		if ( is_array( $inbox_link_matches ) ) {
+			foreach ( $inbox_link_matches as $inbox_link_match ) {
+				$full_tag       = $inbox_link_match[0];
+				$options_string = isset( $inbox_link_match[2] ) ? $inbox_link_match[2] : '';
+				$options        = shortcode_parse_atts( $options_string );
+
+				$a = shortcode_atts(
+					array(
+						'page_id' => 'admin',
+						'text'    => esc_html__( 'Inbox', 'gravityflow' ),
+						'token'   => false,
+					), $options
+				);
+
+				$force_token = strtolower( $a['token'] ) == 'true' ? true : false;
+
+				$entry_token = '';
+
+				if ( $assignee && $force_token ) {
+					$token_lifetime_days        = apply_filters( 'gravityflow_entry_token_expiration_days', 30, $assignee );
+					$token_expiration_timestamp = strtotime( '+' . (int) $token_lifetime_days . ' days' );
+					$entry_token                = gravity_flow()->generate_access_token( $assignee, null, $token_expiration_timestamp );
+				}
+
+				$entry_url = $this->get_inbox_url( $a['page_id'], $assignee, $entry_token );
+
+				$entry_link = sprintf( '<a href="%s">%s</a>', $entry_url, $a['text'] );
+				$text       = str_replace( $full_tag, $entry_link, $text );
+			}
+		}
+
 		$expiration_days = apply_filters( 'gravityflow_cancel_token_expiration_days', 2 );
 
 		$expiration_str = '+' . (int) $expiration_days . ' days';
@@ -932,29 +994,32 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 */
 	public function get_entry_url( $page_id = null, $assignee = null, $access_token = '' ) {
 
-		if ( $assignee && $assignee->get_type() == 'email' ) {
-			$token_lifetime_days        = apply_filters( 'gravityflow_entry_token_expiration_days', 30, $assignee );
-			$token_expiration_timestamp = strtotime( '+' . (int) $token_lifetime_days . ' days' );
-			$access_token               = $access_token ? $access_token : gravity_flow()->generate_access_token( $assignee, null, $token_expiration_timestamp );
-		}
-
-		if ( empty( $page_id ) || $page_id == 'admin' ) {
-			$base_url = admin_url( 'admin.php' );
-		} else {
-			$base_url = get_permalink( $page_id );
-		}
-		$url = add_query_arg( array(
+		$query_args = array(
 			'page' => 'gravityflow-inbox',
 			'view' => 'entry',
 			'id'   => $this->get_form_id(),
 			'lid'  => $this->get_entry_id(),
-		), $base_url );
+		);
 
-		if ( ! empty( $access_token ) ) {
-			$url = add_query_arg( array( 'gflow_access_token' => $access_token ), $url );
-		}
+		return Gravity_Flow_Helpers::get_workflow_url( $query_args, $page_id, $assignee, $access_token );
+	}
 
-		return $url;
+	/**
+	 * Returns the inbox URl.
+	 *
+	 * @param int|null $page_id
+	 * @param Gravity_Flow_Assignee $assignee
+	 * @param string $access_token
+	 *
+	 * @return string
+	 */
+	public function get_inbox_url( $page_id = null, $assignee = null, $access_token = '' ) {
+
+		$query_args = array(
+			'page' => 'gravityflow-inbox',
+		);
+
+		return Gravity_Flow_Helpers::get_workflow_url( $query_args, $page_id, $assignee, $access_token );
 	}
 
 	/**

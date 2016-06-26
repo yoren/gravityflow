@@ -257,7 +257,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	}
 
 	public function no_items() {
-		esc_html_e( "You haven't submitted any workflow forms yet." );
+		esc_html_e( "You haven't submitted any workflow forms yet.", 'gravityflow' );
 	}
 
 	public function get_views() {

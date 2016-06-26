@@ -500,6 +500,8 @@
         var tags = [];
         tags.push({tag: '{workflow_entry_link}', label: 'Entry Link'});
         tags.push({tag: '{workflow_entry_url}', label: 'Entry URL'});
+		tags.push({tag: '{workflow_inbox_link}', label: 'Inbox Link'});
+		tags.push({tag: '{workflow_inbox_url}', label: 'Inbox URL'});
         tags.push({tag: '{workflow_cancel_link}', label: 'Cancel Link'});
         tags.push({tag: '{workflow_cancel_url}', label: 'Cancel URL'});
         tags.push({tag: '{workflow_note}', label: 'Note'});
