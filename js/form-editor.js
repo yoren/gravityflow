@@ -31,3 +31,18 @@ jQuery(document).bind("gform_load_field_settings", function(event, field, form) 
 
 	}
 });
+
+jQuery(document).ready(function () {
+
+	// Allow admin-only field to be used in conditional logic.
+	gform.addFilter('gform_is_conditional_logic_field', function (isConditionalLogicField, field) {
+		if (field.adminOnly) {
+			var inputType = field.inputType ? field.inputType : field.type,
+				supported_fields = GetConditionalLogicFields(),
+				index = jQuery.inArray(inputType, supported_fields);
+
+			isConditionalLogicField = index >= 0 ? true : false;
+		}
+		return isConditionalLogicField;
+	}, 20 );
+});

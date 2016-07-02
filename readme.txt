@@ -65,6 +65,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Added support for configuring a step to process feeds for the Gravity Forms Breeze and Dropbox add-ons.
 - Added support for configuring a step to process feeds for the following third-party add-ons:
     Drip Email Campaigns + Gravity Forms, Gravity Forms ConvertKit Add-On, Gravity Forms Signature Add-on by ApproveMe (WP E-Signature), HubSpot for Gravity Forms, Sliced Invoices & Gravity Forms
+- Added support for admin-only fields to be used in conditional logic in Gravity Forms 2.0.
 
 - Updated minimum Gravity Forms version to 1.9.14.
 - Updated feed interception to use the gform_is_delayed_pre_process_feed filter with GF1.9.14+ or gform_pre_process_feeds filter with GF2.0+.
