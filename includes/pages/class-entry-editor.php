@@ -58,7 +58,7 @@ class Gravity_Flow_Entry_Editor {
 
 	/**
 	 * An array of field IDs which the user can edit.
-	 * 
+	 *
 	 * @var array
 	 */
 	private $_editable_fields;
@@ -68,7 +68,7 @@ class Gravity_Flow_Entry_Editor {
 	 *
 	 * @var array
 	 */
-	private $_display_field_content = array();
+	private $_non_editable_field_content = array();
 
 	/**
 	 * The Form Object after the non-editable and non-display fields have been removed.
@@ -106,6 +106,7 @@ class Gravity_Flow_Entry_Editor {
 		add_filter( 'gform_field_input', array( $this, 'filter_gform_field_input' ), 10, 5 );
 		add_filter( 'gform_form_tag', array( $this, 'filter_gform_form_tag' ), 10, 2 );
 		add_filter( 'gform_get_form_filter', array( $this, 'filter_gform_get_form_filter' ), 10, 2 );
+		add_filter( 'gform_field_content', array( $this, 'filter_gform_field_content' ), 10, 5 );
 		add_filter( 'gform_field_container', array( $this, 'filter_gform_field_container' ), 10, 6 );
 		add_filter( 'gform_has_conditional_logic', array( $this, 'filter_gform_has_conditional_logic' ), 10, 2 );
 
@@ -124,9 +125,10 @@ class Gravity_Flow_Entry_Editor {
 		remove_filter( 'gform_field_input', array( $this, 'filter_gform_field_input' ), 10 );
 		remove_filter( 'gform_form_tag', array( $this, 'filter_gform_form_tag' ), 10 );
 		remove_filter( 'gform_get_form_filter', array( $this, 'filter_gform_get_form_filter' ), 10 );
+		remove_filter( 'gform_field_content', array( $this, 'filter_gform_field_content' ), 10 );
 		remove_filter( 'gform_field_container', array( $this, 'filter_gform_field_container' ), 10 );
 		remove_filter( 'gform_has_conditional_logic', array( $this, 'filter_gform_has_conditional_logic' ), 10 );
-		
+
 		echo $html;
 	}
 
@@ -146,7 +148,13 @@ class Gravity_Flow_Entry_Editor {
 		foreach ( $existing_fields as $field ) {
 			if ( $field->type !== 'page' ) {
 
-				if ( ! $this->is_editable_field( $field ) && ! $this->is_display_field( $field ) ) {
+				$conditional_logic_fields = GFFormDisplay::get_conditional_logic_fields( $this->form, $field->id );
+
+				// Remove unneeded fields from the form to prevent JS errors resulting from scripts expecting fields to be present and visible.
+				if ( ! ( $this->is_editable_field( $field ) || $this->is_display_field( $field ) )
+				     // Fields involved in conditional logic must always be added to the form.
+				     && empty( $field->conditionalLogic ) && empty( $conditional_logic_fields )
+				) {
 					continue;
 				}
 
@@ -156,13 +164,13 @@ class Gravity_Flow_Entry_Editor {
 
 				if ( ! $this->is_editable_field( $field ) ) {
 					if ( $field->type != 'section' ) {
-						$content = $this->get_display_field( $field );
+						$content = $this->get_non_editable_field( $field );
 
-						if ( empty( $content ) ) {
+						if ( ! $this->is_display_field( $field ) && empty( $content ) ) {
 							continue;
 						}
 
-						$this->_display_field_content[ $field->id ] = $content;
+						$this->_non_editable_field_content[ $field->id ] = $content;
 					}
 
 					if ( $field->type == 'tos' ) {
@@ -224,7 +232,7 @@ class Gravity_Flow_Entry_Editor {
 	public function filter_gform_field_input( $html, $field, $value, $lead_id, $form_id ) {
 
 		if ( ! $this->is_editable_field( $field ) ) {
-			return rgar( $this->_display_field_content, $field->id );
+			return rgar( $this->_non_editable_field_content, $field->id );
 		}
 
 		if ( ! empty( $html ) ) {
@@ -307,16 +315,20 @@ class Gravity_Flow_Entry_Editor {
 	 *
 	 * @return string
 	 */
-	public function get_display_field( $field ) {
+	public function get_non_editable_field( $field ) {
+
 		if ( $field->type == 'html' ) {
 			$html = GFCommon::replace_variables( $field->content, $this->form, $this->entry, false, true, false, 'html' );
 
 			return $html;
 		}
 
-		$html                              = '';
-		$value                             = RGFormsModel::get_lead_field_value( $this->entry, $field );
+		$html  = '';
+
+		$value = RGFormsModel::get_lead_field_value( $this->entry, $field );
+
 		$dynamic_conditional_logic_enabled = $this->_is_dynamic_conditional_logic_enabled;
+
 		if ( $dynamic_conditional_logic_enabled ) {
 			$conditional_logic_fields = GFFormDisplay::get_conditional_logic_fields( $this->form, $field->id );
 			if ( ! empty( $conditional_logic_fields ) ) {
@@ -324,6 +336,13 @@ class Gravity_Flow_Entry_Editor {
 				$field_input                   = $field->get_field_input( $this->form, $value, $this->entry );
 				$html                          = '<div style="display:none;">' . $field_input . '</div>';
 			}
+		}
+
+		if ( ! $this->is_display_field( $field ) ) {
+			if ( empty( $html ) ) {
+				$html = '<!-- gravityflow_hidden -->';
+			}
+			return $html;
 		}
 
 		if ( $field->type == 'product' ) {
@@ -362,13 +381,17 @@ class Gravity_Flow_Entry_Editor {
 			$display_value = sprintf( '<div class="gravityflow-field-value">%s<div>', $display_value );
 		} else {
 			if ( empty( $display_value ) || $display_value === '0' ) {
-				$display_value = '';
+				$display_value = '<!-- gravityflow_hidden -->';
 			} else {
 				$display_value = sprintf( '<div class="gravityflow-field-value">%s<div>', $display_value );
 			}
 		}
 
 		$html .= $display_value;
+
+		if ( empty( $html ) ) {
+			$html = '<!-- gravityflow_hidden -->';
+		}
 
 		return $html;
 	}
@@ -444,6 +467,8 @@ class Gravity_Flow_Entry_Editor {
 	 *
 	 * Removes the markup completely for section fields that are hidden.
 	 *
+	 * Fields with conditional logic remain on the form to avoid JS errors.
+	 *
 	 * @param $field_container
 	 * @param $field
 	 * @param $form
@@ -454,8 +479,15 @@ class Gravity_Flow_Entry_Editor {
 	 * @return string
 	 */
 	public function filter_gform_field_container( $field_container, $field, $form, $css_class, $style, $field_content ) {
-		if ( $field->type == 'section' && $this->is_section_hidden( $field ) ) {
-			$field_container = '';
+		if ( $field->type == 'section'
+		     && $this->is_section_hidden( $field )
+		     && empty( $field->conditionalLogic ) // Section fields with conditional logic must be added to the form so fields inside the section can be hidden or displayed dynamically
+		) {
+			return '';
+		}
+
+		if ( ! $this->is_editable_field( $field ) && ! $this->is_display_field( $field ) && isset( $this->_non_editable_field_content[ $field->id ] ) ) {
+			$field_container = sprintf( '<li style="display:none;">%s</li>', $this->_non_editable_field_content[ $field->id ] );
 		}
 
 		return $field_container;
@@ -494,5 +526,36 @@ class Gravity_Flow_Entry_Editor {
 		$classes .= ' ' . $class;
 
 		return $classes;
+	}
+
+	/**
+	 * Target for the gform_field_content filter.
+	 *
+	 * Checks whether the field should hidden and then ensures that the markup is completely empty for the field.
+	 * Ensures that the label is not displayed.
+	 *
+	 * @param $content
+	 * @param $field
+	 * @param $value
+	 * @param $lead_id
+	 * @param $form_id
+	 *
+	 * @return string
+	 */
+	public function filter_gform_field_content( $content, $field, $value, $lead_id, $form_id ) {
+		$hidden_token = '<!-- gravityflow_hidden -->';
+		$pos          = strpos( $content, $hidden_token );
+		if ( $pos !== false ) {
+			$len_token = strlen( $hidden_token );
+			if ( strlen( $content ) > $len_token ) {
+				$content = substr( $content, $pos + $len_token );
+				if ( $content === false ) {
+					$content = '';
+				}
+			} else {
+				$content = '';
+			}
+		}
+		return $content;
 	}
 }
