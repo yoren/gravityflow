@@ -57,6 +57,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 			'placeholder_textarea_setting',
 			'description_setting',
 			'css_class_setting',
+			'gravityflow_setting_discussion_timestamp_format',
 		);
 	}
 
@@ -90,10 +91,24 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	}
 
 	public function get_field_input( $form, $value = '', $entry = null ) {
-		$input = '';
-		if ( is_array( $entry ) ) {
-			$entry_value = rgar( $entry, $this->id );
-			$input       = $this->format_discussion_value( $entry_value );
+		$input          = '';
+		$is_form_editor = $this->is_form_editor();
+
+		if ( is_array( $entry ) || $is_form_editor ) {
+			if ( $is_form_editor ) {
+				$entry_value = json_encode( array(
+					array(
+						'id'           => 'example',
+						'assignee_key' => 'example|John Doe',
+						'timestamp'    => time(),
+						'value'        => esc_attr__( 'Example comment.' ),
+					)
+				) );
+			} else {
+				$entry_value = rgar( $entry, $this->id );
+			}
+
+			$input = $this->format_discussion_value( $entry_value );
 
 			if ( $value == $entry_value || $this->_clear_input_value ) {
 				$value                    = '';
@@ -116,9 +131,11 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 		$return     = '';
 		$discussion = json_decode( $value, ARRAY_A );
 		if ( is_array( $discussion ) ) {
+			$timestamp_format = empty( $this->gravityflowDiscussionTimestampFormat ) ? 'd M Y g:i a' : $this->gravityflowDiscussionTimestampFormat;
+
 			foreach ( $discussion as $item ) {
 				$item_datetime = date( 'Y-m-d H:i:s', $item['timestamp'] );
-				$date          = esc_html( GFCommon::format_date( $item_datetime, false, 'd M Y g:i a', false ) );
+				$date          = esc_html( GFCommon::format_date( $item_datetime, false, $timestamp_format, false ) );
 				if ( $item['assignee_key'] ) {
 					$assignee     = new Gravity_Flow_Assignee( $item['assignee_key'] );
 					$display_name = $assignee->get_display_name();
@@ -128,7 +145,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 
 				$display_name = apply_filters( 'gravityflowdiscussion_display_name_discussion_field', $display_name, $item, $this );
 				if ( $format == 'html' ) {
-					$content = '<div class="gravityflow-dicussion-item-header"><span class="gravityflow-dicussion-item-name">' . $display_name . '</span><span class="gravityflow-dicussion-item-date">' . $date . '</span></div>';
+					$content = '<div class="gravityflow-dicussion-item-header"><span class="gravityflow-dicussion-item-name">' . $display_name . '</span> <span class="gravityflow-dicussion-item-date">' . $date . '</span></div>';
 					$content .= '<div class="gravityflow-dicussion-item-value">' . esc_html( $item['value'] ) . '</div>';
 					$return .= sprintf( '<div id="gravityflow-discussion-item-%s" class="gravityflow-discussion-item">%s</div>', $item['id'], $content );
 				} elseif ( $format == 'text' ) {
@@ -189,6 +206,13 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	 */
 	public function get_value_export( $entry, $input_id = '', $use_text = false, $is_csv = false ) {
 		return $this->format_discussion_value( rgar( $entry, $input_id ), 'text' );
+	}
+
+	public function sanitize_settings() {
+		parent::sanitize_settings();
+		if ( ! empty( $this->gravityflowDiscussionTimestampFormat ) ) {
+			$this->gravityflowDiscussionTimestampFormat = sanitize_text_field( $this->gravityflowDiscussionTimestampFormat );
+		}
 	}
 }
 

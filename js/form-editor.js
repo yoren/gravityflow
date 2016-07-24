@@ -21,7 +21,16 @@ function SetDefaultValues_workflow_role(field) {
 	return field;
 }
 
-jQuery(document).bind("gform_load_field_settings", function(event, field, form) {
+function SetDefaultValues_workflow_discussion(field) {
+	field.label = gravityflow_form_editor_js_strings.discussion.defaults.label;
+}
+
+function SetDiscussionTimestampFormat(format) {
+	SetFieldProperty('gravityflowDiscussionTimestampFormat', format);
+	RefreshSelectedFieldPreview();
+}
+
+jQuery(document).bind('gform_load_field_settings', function (event, field, form) {
 
 	if (field.type == 'workflow_assignee_select') {
 
@@ -30,6 +39,12 @@ jQuery(document).bind("gform_load_field_settings", function(event, field, form) 
 		jQuery('#gravityflow-assignee-field-show-fields').prop('checked', field.gravityflowAssigneeFieldShowFields ? true : false);
 
 	}
+
+	if (field.type == 'workflow_discussion') {
+		var timestamp_format = field.gravityflowDiscussionTimestampFormat == undefined ? '' : field.gravityflowDiscussionTimestampFormat;
+		jQuery('#gravityflow_discussion_timestamp_format').val(timestamp_format);
+	}
+
 });
 
 jQuery(document).ready(function () {

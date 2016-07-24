@@ -128,7 +128,6 @@ if ( class_exists( 'GFForms' ) ) {
 			add_filter( 'set-screen-option', array( $this, 'set_option' ), 10, 3 );
 			add_action( 'load-workflow_page_gravityflow-status', array( $this, 'load_screen_options' ) );
 			add_filter( 'gform_entries_field_value', array( $this, 'filter_gform_entries_field_value' ), 10, 4 );
-			add_action( 'gform_field_standard_settings', array( $this, 'field_settings' ), 10, 2 );
 
 			add_action( 'admin_enqueue_scripts', array( $this, 'action_admin_enqueue_scripts' ) );
 
@@ -138,6 +137,8 @@ if ( class_exists( 'GFForms' ) ) {
 				add_action( 'gform_post_form_duplicated', array( $this, 'post_form_duplicated' ), 10, 2 );
 			}
 
+			add_action( 'gform_field_standard_settings', array( $this, 'field_settings' ), 10, 2 );
+			add_action( 'gform_field_appearance_settings', array( $this, 'field_appearance_settings' ) );
 			add_filter( 'gform_tooltips', array( $this, 'add_tooltips' ) );
 
 		}
@@ -264,6 +265,11 @@ PRIMARY KEY  (id)
 						'role' => array(
 							'defaults' => array(
 								'label' => esc_html__( 'Role', 'gravityflow' ),
+							),
+						),
+						'discussion' => array(
+							'defaults' => array(
+								'label' => esc_html__( 'Discussion', 'gravityflow' ),
 							),
 						),
 					),
@@ -3858,7 +3864,7 @@ PRIMARY KEY  (id)
 				?>
 
 				<li class="gravityflow_setting_assignees field_setting">
-					<?php esc_html_e( 'Assignees', 'gravityflow' ); ?><br />
+					<span class="section_label"><?php esc_html_e( 'Assignees', 'gravityflow' ); ?></span>
 					<div>
 						<input type="checkbox" id="gravityflow-assignee-field-show-users"
 						       onclick="var value = jQuery(this).is(':checked'); SetFieldProperty('gravityflowAssigneeFieldShowUsers', value);" />
@@ -3887,6 +3893,21 @@ PRIMARY KEY  (id)
 				</li>
 
 			<?php }
+		}
+
+		public function field_appearance_settings( $position ) {
+			if ( $position == 0 ) {
+				?>
+				<li class="gravityflow_setting_discussion_timestamp_format field_setting">
+					<label for="gravityflow_discussion_timestamp_format" class="section_label">
+						<?php esc_html_e( 'Custom Timestamp Format', 'gravityflow' ); ?>
+						<?php gform_tooltip( 'gravityflow_discussion_timestamp_format' ) ?>
+					</label>
+					<input id="gravityflow_discussion_timestamp_format" type="text" class="fieldwidth-4" placeholder="d M Y g:i a"
+					       onkeyup="SetDiscussionTimestampFormat(jQuery(this).val());" onchange="SetDiscussionTimestampFormat(jQuery(this).val());"/>
+				</li>
+				<?php
+			}
 		}
 
 		public function action_admin_enqueue_scripts() {
@@ -4760,7 +4781,9 @@ AND m.meta_value='queued'";
 		}
 
 		public function add_tooltips( $tooltips ) {
-			$tooltips['form_workflow_fields'] = '<h6>' . __( 'Workflow Fields', 'gravityflow' ) . '</h6>' . __( 'Workflow Fields add advanced workflow functionality to your forms.', 'gravityflow' );
+			$tooltips['form_workflow_fields']                          = '<h6>' . __( 'Workflow Fields', 'gravityflow' ) . '</h6>' . __( 'Workflow Fields add advanced workflow functionality to your forms.', 'gravityflow' );
+			$tooltips['gravityflow_discussion_timestamp_format'] = '<h6>' . __( 'Custom Timestamp Format', 'gravityflow' ) . '</h6>' . sprintf( __( 'If you would like to override the default format used when displaying the comment timestamps, enter your %scustom format%s here.', 'gravityflow' ), '<a href="https://codex.wordpress.org/Formatting_Date_and_Time" target="_blank">', '</a>' );
+
 			return $tooltips;
 		}
 
