@@ -4098,7 +4098,7 @@ AND m.meta_value='queued'";
 								if ( time() > $trigger_timestamp && $reminder_timestamp == false ) {
 									$this->log_debug( __METHOD__ . '(): assignee_timestamp: ' . $assignee_timestamp . ' - ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $assignee_timestamp ), 'F j, Y H:i:s' ) );
 									$this->log_debug( __METHOD__ . '(): trigger_timestamp: ' . $trigger_timestamp  . ' - ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $trigger_timestamp ), 'F j, Y H:i:s' ) );
-									$current_step->maybe_send_assignee_notification( $assignee );
+									$current_step->maybe_send_assignee_notification( $assignee, true );
 									$assignee->set_reminder_timestamp();
 									$this->log_debug( __METHOD__ . '(): sent reminder about entry ' . $entry['id'] . ' to ' . $assignee->get_key() );
 								}
