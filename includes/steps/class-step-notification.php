@@ -185,44 +185,14 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 			return;
 		}
 
-		$assignees = array();
-
-		$notification_type = $this->workflow_notification_type;
-
-		switch ( $notification_type ) {
-			case 'select' :
-				if ( is_array( $this->workflow_notification_users ) ) {
-					foreach ( $this->workflow_notification_users as $assignee_key ) {
-						$assignees[] = new Gravity_Flow_Assignee( $assignee_key, $this );
-					}
-				}
-				break;
-			case 'routing' :
-				$routings = $this->workflow_notification_routing;
-				if ( is_array( $routings ) ) {
-					foreach ( $routings as $routing ) {
-						if ( $user_is_assignee = $this->evaluate_routing_rule( $routing ) ) {
-							$assignees[] = new Gravity_Flow_Assignee( rgar( $routing, 'assignee' ), $this );
-						}
-					}
-				}
-
-				break;
-		}
+		$type      = 'workflow';
+		$assignees = $this->get_notification_assignees( $type );
 
 		if ( empty( $assignees ) ) {
 			return;
 		}
 
-		$notification['workflow_notification_type'] = 'workflow';
-		$notification['fromName']                   = $this->workflow_notification_from_name;
-		$notification['from']                       = $this->workflow_notification_from_email;
-		$notification['replyTo']                    = $this->workflow_notification_reply_to;
-		$notification['bcc']                        = $this->workflow_notification_bcc;
-		$notification['subject']                    = $this->workflow_notification_subject;
-		$notification['message']                    = $this->workflow_notification_message;
-		$notification['disableAutoformat']          = $this->workflow_notification_disable_autoformat;
-
+		$notification = $this->get_notification( $type );
 		$this->send_notifications( $assignees, $notification );
 
 		$note = esc_html__( 'Sent Notification: ', 'gravityflow' ) . $this->get_name();

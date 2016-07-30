@@ -681,9 +681,9 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				}
 
 				if ( $token = gravity_flow()->decode_access_token() ) {
-					$assignee = new Gravity_Flow_Assignee( sanitize_text_field( $token['sub'] ), $this );
+					$assignee = $this->get_assignee( sanitize_text_field( $token['sub'] ) );
 				} else {
-					$assignee = new Gravity_Flow_Assignee( 'user_id|' . $current_user->ID, $this );
+					$assignee = $this->get_assignee( 'user_id|' . $current_user->ID );
 				}
 			} else {
 
@@ -714,7 +714,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					return false;
 				}
 
-				$assignee = new Gravity_Flow_Assignee( 'user_id|' . $current_user->ID, $this );
+				$assignee = $this->get_assignee( 'user_id|' . $current_user->ID );
 			}
 
 			$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
@@ -1084,113 +1084,32 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 	}
 
-	public function send_approval_notification() {
-		if ( ! $this->approval_notification_enabled ) {
+	/**
+	 * Send the applicable notification if it is enabled and has assignees.
+	 *
+	 * @param string $type The type of notification currently being processed; approval or rejection.
+	 */
+	public function maybe_send_notification( $type ) {
+		if ( ! $this->{$type . '_notification_enabled'} ) {
 			return;
 		}
 
-		$assignees = array();
-
-		$notification_type = $this->approval_notification_type;
-
-		switch ( $notification_type ) {
-			case 'select' :
-				if ( is_array( $this->approval_notification_users ) ) {
-					foreach ( $this->approval_notification_users as $assignee_key ) {
-						$assignees[] = new Gravity_Flow_Assignee( $assignee_key, $this );
-					}
-				}
-
-				break;
-			case 'routing' :
-				$routings = $this->approval_notification_routing;
-				if ( is_array( $routings ) ) {
-					foreach ( $routings as $routing ) {
-						if ( $user_is_assignee = $this->evaluate_routing_rule( $routing ) ) {
-							$assignees[] = new Gravity_Flow_Assignee( rgar( $routing, 'assignee' ), $this );
-						}
-					}
-				}
-
-				break;
-		}
+		$assignees = $this->get_notification_assignees( $type );
 
 		if ( empty( $assignees ) ) {
 			return;
 		}
 
-		$notification['workflow_notification_type'] = 'approval';
-		$notification['fromName']                   = $this->approval_notification_from_name;
-		$notification['from']                       = $this->approval_notification_from_email;
-		$notification['replyTo']                    = $this->approval_notification_reply_to;
-		$notification['bcc']                        = $this->approval_notification_bcc;
-		$notification['subject']                    = $this->approval_notification_subject;
-		$notification['message']                    = $this->approval_notification_message;
-		$notification['disableAutoformat']          = $this->approval_notification_disable_autoformat;
-
-		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-RC2', '>=' ) ) {
-			if ( $this->approval_notification_gpdfEnable ) {
-				$gpdf_id      = $this->approval_notification_gpdfValue;
-				$notification = $this->gpdf_add_notification_attachment( $notification, $gpdf_id );
-			}
-		}
-
+		$notification = $this->get_notification( $type );
 		$this->send_notifications( $assignees, $notification );
+	}
 
+	public function send_approval_notification() {
+		$this->maybe_send_notification( 'approval' );
 	}
 
 	public function send_rejection_notification() {
-		if ( ! $this->rejection_notification_enabled ) {
-			return;
-		}
-
-		$assignees = array();
-
-		$notification_type = $this->rejection_notification_type;
-
-		switch ( $notification_type ) {
-			case 'select' :
-				if ( is_array( $this->rejection_notification_users ) ) {
-					foreach ( $this->rejection_notification_users as $assignee_key ) {
-						$assignees[] = new Gravity_Flow_Assignee( $assignee_key, $this );
-					}
-				}
-				break;
-			case 'routing' :
-				$routings = $this->rejection_notification_routing;
-				if ( is_array( $routings ) ) {
-					foreach ( $routings as $routing ) {
-						if ( $user_is_assignee = $this->evaluate_routing_rule( $routing ) ) {
-							$assignees[] = new Gravity_Flow_Assignee( rgar( $routing, 'assignee' ), $this );
-						}
-					}
-				}
-
-				break;
-		}
-
-		if ( empty( $assignees ) ) {
-			return;
-		}
-
-		$notification['workflow_notification_type'] = 'rejection';
-		$notification['fromName']                   = $this->rejection_notification_from_name;
-		$notification['from']                       = $this->rejection_notification_from_email;
-		$notification['replyTo']                    = $this->rejection_notification_reply_to;
-		$notification['bcc']                        = $this->rejection_notification_bcc;
-		$notification['subject']                    = $this->rejection_notification_subject;
-		$notification['message']                    = $this->rejection_notification_message;
-		$notification['disableAutoformat']          = $this->rejection_notification_disable_autoformat;
-
-		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-RC2', '>=' ) ) {
-			if ( $this->rejection_notification_gpdfEnable ) {
-				$gpdf_id      = $this->rejection_notification_gpdfValue;
-				$notification = $this->gpdf_add_notification_attachment( $notification, $gpdf_id );
-			}
-		}
-
-		$this->send_notifications( $assignees, $notification );
-
+		$this->maybe_send_notification( 'rejection' );
 	}
 
 	/**
@@ -1351,7 +1270,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		}
 
 		$assignee_key = sanitize_text_field( $token['sub'] );
-		$assignee     = new Gravity_Flow_Assignee( $assignee_key, $this );
+		$assignee     = $this->get_assignee( $assignee_key );
 		$new_status   = false;
 		switch ( $token['scopes']['action'] ) {
 			case 'approve' :

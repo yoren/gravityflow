@@ -694,6 +694,83 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
+	 * Retrieves the properties for the specified notification type; building an array using the keys required by Gravity Forms.
+	 *
+	 * @param string $type The type of notification currently being processed e.g. assignee, approval, or rejection.
+	 *
+	 * @return array
+	 */
+	public function get_notification( $type ) {
+		$notification = array( 'workflow_notification_type' => $type );
+
+		$type .= '_notification_';
+		$from_name  = $type . 'from_name';
+		$from_email = $type . 'from_email';
+		$subject    = $type . 'subject';
+
+		$notification['fromName']          = empty( $this->{$from_name} ) ? get_bloginfo() : $this->{$from_name};
+		$notification['from']              = empty( $this->{$from_email} ) ? get_bloginfo( 'admin_email' ) : $this->{$from_email};
+		$notification['replyTo']           = $this->{$type . 'reply_to'};
+		$notification['bcc']               = $this->{$type . 'bcc'};
+		$notification['message']           = $this->{$type . 'message'};
+		$notification['disableAutoformat'] = $this->{$type . 'disable_autoformat'};
+
+		if ( empty( $this->{$subject} ) ) {
+			$form = $this->get_form();
+			$notification['subject'] = $form['title'] . ': ' . $this->get_name();
+		} else {
+			$notification['subject'] = $this->{$subject};
+		}
+
+		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-RC2', '>=' ) ) {
+			if ( $this->{$type . 'gpdfEnable'} ) {
+				$gpdf_id      = $this->{$type . 'gpdfValue'};
+				$notification = $this->gpdf_add_notification_attachment( $notification, $gpdf_id );
+			}
+		}
+
+		return $notification;
+	}
+
+	/**
+	 * Retrieve the assignees for the current
+	 *
+	 * @param string $type The type of notification currently being processed e.g. assignee, approval, or rejection.
+	 *
+	 * @return array
+	 */
+	public function get_notification_assignees( $type ) {
+		$type .= '_notification_';
+		$notification_type = $this->{$type . 'type'};
+		$assignees         = array();
+
+		switch ( $notification_type ) {
+			case 'select' :
+				$users = $this->{$type . 'users'};
+				if ( is_array( $users ) ) {
+					foreach ( $users as $assignee_key ) {
+						$assignees[] = $this->get_assignee( $assignee_key );
+					}
+				}
+
+				break;
+			case 'routing' :
+				$routings = $this->{$type . 'routing'};
+				if ( is_array( $routings ) ) {
+					foreach ( $routings as $routing ) {
+						if ( $user_is_assignee = $this->evaluate_routing_rule( $routing ) ) {
+							$assignees[] = $this->get_assignee( rgar( $routing, 'assignee' ) );
+						}
+					}
+				}
+
+				break;
+		}
+
+		return $assignees;
+	}
+
+	/**
 	 * Sends the assignee email.
 	 *
 	 * @param Gravity_Flow_Assignee $assignee
@@ -702,27 +779,14 @@ abstract class Gravity_Flow_Step extends stdClass {
 	public function send_assignee_notification( $assignee, $is_reminder = false ) {
 		$this->log_debug( __METHOD__ . '() starting. assignee: ' . $assignee->get_key() );
 
-		$form                                       = $this->get_form();
-		$notification['workflow_notification_type'] = 'assignee';
-		$notification['fromName']                   = empty( $this->assignee_notification_from_name ) ? get_bloginfo() : $this->assignee_notification_from_name;
-		$notification['from']                       = empty( $this->assignee_notification_from_email ) ? get_bloginfo( 'admin_email' ) : $this->assignee_notification_from_email;
-		$notification['replyTo']                    = $this->assignee_notification_reply_to;
-		$notification['bcc']                        = $this->assignee_notification_bcc;
-		$notification['subject']                    = $is_reminder ? esc_html__( 'Reminder', 'gravityflow' ) . ': ' : '';
-		$notification['subject'] .= empty( $this->assignee_notification_subject ) ? $form['title'] . ': ' . $this->get_name() : $this->assignee_notification_subject;
-		$notification['message']           = $this->assignee_notification_message;
-		$notification['disableAutoformat'] = $this->assignee_notification_disable_autoformat;
+		$notification = $this->get_notification( 'assignee' );
 
-		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-RC2', '>=' ) ) {
-			if ( $this->assignee_notification_gpdfEnable ) {
-				$gpdf_id      = $this->assignee_notification_gpdfValue;
-				$notification = $this->gpdf_add_notification_attachment( $notification, $gpdf_id );
-			}
+		if ( $is_reminder ) {
+			$notification['subject'] = esc_html__( 'Reminder', 'gravityflow' ) . ': ' . $notification['subject'];
 		}
 
 		$assignee_type = $assignee->get_type();
-
-		$assignee_id = $assignee->get_id();
+		$assignee_id   = $assignee->get_id();
 
 		if ( $assignee_type == 'email' ) {
 			$email                   = $assignee_id;
@@ -1267,12 +1331,25 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
+	 * Retrieve the assignee object for the given arguments.
+	 *
+	 * @param string|array $args An assignee key or array containing the id, type and editable_fields (if applicable).
+	 *
+	 * @return Gravity_Flow_Assignee
+	 */
+	public function get_assignee( $args ) {
+		$assignee = new Gravity_Flow_Assignee( $args, $this );
+
+		return $assignee;
+	}
+
+	/**
 	 * Adds the assignee to the step if certain conditions are met.
 	 *
 	 * @param string|array $args An assignee key or array containing the id, type and editable_fields (if applicable).
 	 */
 	public function maybe_add_assignee( $args ) {
-		$assignee = new Gravity_Flow_Assignee( $args, $this );
+		$assignee = $this->get_assignee( $args );
 		$id       = $assignee->get_id();
 		$key      = $assignee->get_key();
 
@@ -1306,7 +1383,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	public function remove_assignee( $assignee = false ) {
 		if ( $assignee === false ) {
 			global $current_user;
-			$assignee = new Gravity_Flow_Assignee( 'user_id|' . $current_user->ID, $this );
+			$assignee = $this->get_assignee( 'user_id|' . $current_user->ID );
 		}
 
 		$assignee->remove();
@@ -1734,12 +1811,12 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$assignee_keys_to_remove = array_diff( $previous_assignees_keys, $new_assignees_keys );
 
 		foreach ( $assignee_keys_to_add as $assignee_key_to_add ) {
-			$assignee_to_add = new Gravity_Flow_Assignee( $assignee_key_to_add, $this );
+			$assignee_to_add = $this->get_assignee( $assignee_key_to_add );
 			$assignee_to_add->update_status( 'pending' );
 		}
 
 		foreach ( $assignee_keys_to_remove as $assignee_key_to_remove ) {
-			$assignee_to_remove = new Gravity_Flow_Assignee( $assignee_key_to_remove, $this );
+			$assignee_to_remove = $this->get_assignee( $assignee_key_to_remove );
 			$assignee_to_remove->remove();
 		}
 	}

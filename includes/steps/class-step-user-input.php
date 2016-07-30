@@ -536,7 +536,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				$assignee_key = 'user_id|' . $user->ID;
 			}
 
-			$assignee = new Gravity_Flow_Assignee( $assignee_key, $this );
+			$assignee = $this->get_assignee( $assignee_key );
 
 			$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
 
@@ -831,7 +831,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				} else {
 					$assignee_key = 'user_id|' . $current_user->ID;
 				}
-				$assignee        = new Gravity_Flow_Assignee( $assignee_key, $this );
+				$assignee        = $this->get_assignee( $assignee_key );
 				$assignee_status = $assignee->get_status();
 
 				$role_status = false;
