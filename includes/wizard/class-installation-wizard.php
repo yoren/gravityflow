@@ -177,7 +177,7 @@ class Gravity_Flow_Installation_Wizard {
 	}
 
 	/**
-	 * @param bool $name
+	 * @param bool|string $name
 	 *
 	 * @return Gravity_Flow_Installation_Wizard_Step
 	 */
