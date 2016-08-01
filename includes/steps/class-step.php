@@ -758,7 +758,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 				$routings = $this->{$type . 'routing'};
 				if ( is_array( $routings ) ) {
 					foreach ( $routings as $routing ) {
-						if ( $user_is_assignee = $this->evaluate_routing_rule( $routing ) ) {
+						if ( $this->evaluate_routing_rule( $routing ) ) {
 							$assignees[] = $this->get_assignee( rgar( $routing, 'assignee' ) );
 						}
 					}
