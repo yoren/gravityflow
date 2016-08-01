@@ -716,7 +716,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$notification['disableAutoformat'] = $this->{$type . 'disable_autoformat'};
 
 		if ( empty( $this->{$subject} ) ) {
-			$form = $this->get_form();
+			$form                    = $this->get_form();
 			$notification['subject'] = $form['title'] . ': ' . $this->get_name();
 		} else {
 			$notification['subject'] = $this->{$subject};
@@ -780,6 +780,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$this->log_debug( __METHOD__ . '() starting. assignee: ' . $assignee->get_key() );
 
 		$notification = $this->get_notification( 'assignee' );
+		$message      = $notification['message'];
 
 		if ( $is_reminder ) {
 			$notification['subject'] = esc_html__( 'Reminder', 'gravityflow' ) . ': ' . $notification['subject'];
@@ -793,7 +794,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$notification['id']      = 'workflow_step_' . $this->get_id() . '_user_' . $email;
 			$notification['name']    = $notification['id'];
 			$notification['to']      = $email;
-			$notification['message'] = $this->replace_variables( $this->assignee_notification_message, $assignee );
+			$notification['message'] = $this->replace_variables( $message, $assignee );
 			$this->send_notification( $notification );
 
 			return;
@@ -811,7 +812,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$notification['id']      = 'workflow_step_' . $this->get_id() . '_user_' . $user->ID;
 			$notification['name']    = $notification['id'];
 			$notification['to']      = $user->user_email;
-			$notification['message'] = $this->replace_variables( $this->assignee_notification_message, $assignee );
+			$notification['message'] = $this->replace_variables( $message, $assignee );
 			$this->send_notification( $notification );
 		}
 	}
@@ -828,184 +829,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 */
 	public function replace_variables( $text, $assignee ) {
 
-		preg_match_all( '/{workflow_entry_url(:(.*?))?}/', $text, $entry_url_matches, PREG_SET_ORDER );
-		if ( is_array( $entry_url_matches ) ) {
-			foreach ( $entry_url_matches as $entry_url_match ) {
-				$full_tag       = $entry_url_match[0];
-				$options_string = isset( $entry_url_match[2] ) ? $entry_url_match[2] : '';
-				$options        = shortcode_parse_atts( $options_string );
-
-				$a = shortcode_atts(
-					array(
-						'page_id' => 'admin',
-						'token'   => false,
-					), $options
-				);
-
-				$force_token = strtolower( $a['token'] ) == 'true' ? true : false;
-
-				$entry_token = '';
-
-				if ( $assignee && $force_token ) {
-					$token_lifetime_days        = apply_filters( 'gravityflow_entry_token_expiration_days', 30, $assignee );
-					$token_expiration_timestamp = strtotime( '+' . (int) $token_lifetime_days . ' days' );
-					$entry_token                = gravity_flow()->generate_access_token( $assignee, null, $token_expiration_timestamp );
-				}
-
-				$entry_url = $this->get_entry_url( $a['page_id'], $assignee, $entry_token );
-
-				$text = str_replace( $full_tag, $entry_url, $text );
-			}
-		}
-
-		preg_match_all( '/{workflow_entry_link(:(.*?))?}/', $text, $entry_link_matches, PREG_SET_ORDER );
-		if ( is_array( $entry_link_matches ) ) {
-			foreach ( $entry_link_matches as $entry_link_match ) {
-				$full_tag       = $entry_link_match[0];
-				$options_string = isset( $entry_link_match[2] ) ? $entry_link_match[2] : '';
-				$options        = shortcode_parse_atts( $options_string );
-
-				$a = shortcode_atts(
-					array(
-						'page_id' => 'admin',
-						'text'    => esc_html__( 'Entry', 'gravityflow' ),
-						'token'   => false,
-					), $options
-				);
-
-				$force_token = strtolower( $a['token'] ) == 'true' ? true : false;
-
-				$entry_token = '';
-
-				if ( $assignee && $force_token ) {
-					$token_lifetime_days        = apply_filters( 'gravityflow_entry_token_expiration_days', 30, $assignee );
-					$token_expiration_timestamp = strtotime( '+' . (int) $token_lifetime_days . ' days' );
-					$entry_token                = gravity_flow()->generate_access_token( $assignee, null, $token_expiration_timestamp );
-				}
-
-				$entry_url = $this->get_entry_url( $a['page_id'], $assignee, $entry_token );
-
-				$entry_link = sprintf( '<a href="%s">%s</a>', $entry_url, $a['text'] );
-				$text       = str_replace( $full_tag, $entry_link, $text );
-			}
-		}
-
-		preg_match_all( '/{workflow_inbox_url(:(.*?))?}/', $text, $inbox_url_matches, PREG_SET_ORDER );
-		if ( is_array( $inbox_url_matches ) ) {
-			foreach ( $inbox_url_matches as $inbox_url_match ) {
-				$full_tag       = $inbox_url_match[0];
-				$options_string = isset( $inbox_url_match[2] ) ? $inbox_url_match[2] : '';
-				$options        = shortcode_parse_atts( $options_string );
-
-				$a = shortcode_atts(
-					array(
-						'page_id' => 'admin',
-						'token'   => false,
-					), $options
-				);
-
-				$force_token = strtolower( $a['token'] ) == 'true' ? true : false;
-
-				$entry_token = '';
-
-				if ( $assignee && $force_token ) {
-					$token_lifetime_days        = apply_filters( 'gravityflow_entry_token_expiration_days', 30, $assignee );
-					$token_expiration_timestamp = strtotime( '+' . (int) $token_lifetime_days . ' days' );
-					$entry_token                = gravity_flow()->generate_access_token( $assignee, null, $token_expiration_timestamp );
-				}
-
-				$entry_url = $this->get_inbox_url( $a['page_id'], $assignee, $entry_token );
-
-				$text = str_replace( $full_tag, $entry_url, $text );
-			}
-		}
-
-		preg_match_all( '/{workflow_inbox_link(:(.*?))?}/', $text, $inbox_link_matches, PREG_SET_ORDER );
-		if ( is_array( $inbox_link_matches ) ) {
-			foreach ( $inbox_link_matches as $inbox_link_match ) {
-				$full_tag       = $inbox_link_match[0];
-				$options_string = isset( $inbox_link_match[2] ) ? $inbox_link_match[2] : '';
-				$options        = shortcode_parse_atts( $options_string );
-
-				$a = shortcode_atts(
-					array(
-						'page_id' => 'admin',
-						'text'    => esc_html__( 'Inbox', 'gravityflow' ),
-						'token'   => false,
-					), $options
-				);
-
-				$force_token = strtolower( $a['token'] ) == 'true' ? true : false;
-
-				$entry_token = '';
-
-				if ( $assignee && $force_token ) {
-					$token_lifetime_days        = apply_filters( 'gravityflow_entry_token_expiration_days', 30, $assignee );
-					$token_expiration_timestamp = strtotime( '+' . (int) $token_lifetime_days . ' days' );
-					$entry_token                = gravity_flow()->generate_access_token( $assignee, null, $token_expiration_timestamp );
-				}
-
-				$entry_url = $this->get_inbox_url( $a['page_id'], $assignee, $entry_token );
-
-				$entry_link = sprintf( '<a href="%s">%s</a>', $entry_url, $a['text'] );
-				$text       = str_replace( $full_tag, $entry_link, $text );
-			}
-		}
-
-		$expiration_days = apply_filters( 'gravityflow_cancel_token_expiration_days', 2 );
-
-		$expiration_str = '+' . (int) $expiration_days . ' days';
-
-		$expiration_timestamp = strtotime( $expiration_str );
-
-		$scopes = array(
-			'pages'    => array( 'inbox' ),
-			'entry_id' => $this->get_entry_id(),
-			'action'   => 'cancel_workflow',
-		);
-
-		if ( $assignee ) {
-			$cancel_token = gravity_flow()->generate_access_token( $assignee, $scopes, $expiration_timestamp );
-			preg_match_all( '/{workflow_cancel_url(:(.*?))?}/', $text, $cancel_url_matches, PREG_SET_ORDER );
-			if ( is_array( $cancel_url_matches ) ) {
-				foreach ( $cancel_url_matches as $cancel_url_match ) {
-					$full_tag       = $cancel_url_match[0];
-					$options_string = isset( $cancel_url_match[2] ) ? $cancel_url_match[2] : '';
-					$options        = shortcode_parse_atts( $options_string );
-
-					$a = shortcode_atts(
-						array(
-							'page_id' => 'admin',
-						), $options
-					);
-
-					$entry_url = $this->get_entry_url( $a['page_id'], $assignee, $cancel_token );
-
-					$text = str_replace( $full_tag, $entry_url, $text );
-				}
-			}
-
-			preg_match_all( '/{workflow_cancel_link(:(.*?))?}/', $text, $cancel_link_matches, PREG_SET_ORDER );
-			if ( is_array( $cancel_link_matches ) ) {
-				foreach ( $cancel_link_matches as $cancel_link_match ) {
-					$full_tag       = $cancel_link_match[0];
-					$options_string = isset( $cancel_link_match[2] ) ? $cancel_link_match[2] : '';
-					$options        = shortcode_parse_atts( $options_string );
-
-					$a = shortcode_atts(
-						array(
-							'page_id' => 'admin',
-							'text'    => esc_html__( 'Cancel Workflow', 'gravityflow' ),
-						), $options
-					);
-
-					$entry_url = $this->get_entry_url( $a['page_id'], $assignee, $cancel_token );
-
-					$entry_link = sprintf( '<a href="%s">%s</a>', $entry_url, $a['text'] );
-					$text       = str_replace( $full_tag, $entry_link, $text );
-				}
-			}
-		}
+		$text = $this->replace_workflow_url_variables( $text, $assignee );
+		$text = $this->replace_workflow_cancel_variables( $text, $assignee );
 
 		preg_match_all( '/{assignees(:(.*?))?}/', $text, $assignees_matches, PREG_SET_ORDER );
 		if ( is_array( $assignees_matches ) ) {
@@ -1046,6 +871,105 @@ abstract class Gravity_Flow_Step extends stdClass {
 				}
 				$assignees_text = join( "\n", $assignees_text_arr );
 				$text           = str_replace( $full_tag, $assignees_text, $text );
+			}
+		}
+
+		return $text;
+	}
+
+	/**
+	 * Replace the {workflow_entry_link}, {workflow_entry_url}, {workflow_inbox_link}, and {workflow_inbox_url} merge tags.
+	 *
+	 * @param string $text The text being processed.
+	 * @param Gravity_Flow_Assignee $assignee The assignee properties.
+	 *
+	 * @return string
+	 */
+	public function replace_workflow_url_variables( $text, $assignee ) {
+		preg_match_all( '/{workflow_(entry|inbox)_(url|link)(:(.*?))?}/', $text, $workflow_url_matches, PREG_SET_ORDER );
+		if ( is_array( $workflow_url_matches ) ) {
+			foreach ( $workflow_url_matches as $match ) {
+				$full_tag       = $match[0];
+				$location       = $match[1];
+				$type           = $match[2];
+				$options_string = isset( $match[4] ) ? $match[4] : '';
+				$options        = shortcode_parse_atts( $options_string );
+
+				$a = shortcode_atts(
+					array(
+						'page_id' => 'admin',
+						'text'    => $location == 'inbox' ? esc_html__( 'Inbox', 'gravityflow' ) : esc_html__( 'Entry', 'gravityflow' ),
+						'token'   => false,
+					), $options
+				);
+
+				$force_token = strtolower( $a['token'] ) == 'true' ? true : false;
+				$token       = '';
+
+				if ( $assignee && $force_token ) {
+					$token_lifetime_days        = apply_filters( 'gravityflow_entry_token_expiration_days', 30, $assignee );
+					$token_expiration_timestamp = strtotime( '+' . (int) $token_lifetime_days . ' days' );
+					$token                      = gravity_flow()->generate_access_token( $assignee, null, $token_expiration_timestamp );
+				}
+
+				$url = $this->get_entry_url( $a['page_id'], $assignee, $token );
+
+				if ( $type == 'link' ) {
+					$url = sprintf( '<a href="%s">%s</a>', $url, $a['text'] );
+				}
+
+				$text = str_replace( $full_tag, $url, $text );
+			}
+		}
+
+		return $text;
+	}
+
+	/**
+	 * Replace the {workflow_cancel_link} and {workflow_cancel_url} merge tags.
+	 *
+	 * @param string $text The text being processed.
+	 * @param Gravity_Flow_Assignee $assignee The assignee properties.
+	 *
+	 * @return string
+	 */
+	public function replace_workflow_cancel_variables( $text, $assignee ) {
+		if ( $assignee ) {
+			preg_match_all( '/{workflow_cancel_(url|link)(:(.*?))?}/', $text, $cancel_matches, PREG_SET_ORDER );
+			if ( is_array( $cancel_matches ) ) {
+				$expiration_days      = apply_filters( 'gravityflow_cancel_token_expiration_days', 2 );
+				$expiration_str       = '+' . (int) $expiration_days . ' days';
+				$expiration_timestamp = strtotime( $expiration_str );
+
+				$scopes = array(
+					'pages'    => array( 'inbox' ),
+					'entry_id' => $this->get_entry_id(),
+					'action'   => 'cancel_workflow',
+				);
+
+				$cancel_token = gravity_flow()->generate_access_token( $assignee, $scopes, $expiration_timestamp );
+
+				foreach ( $cancel_matches as $match ) {
+					$full_tag       = $match[0];
+					$type           = $match[1];
+					$options_string = isset( $match[3] ) ? $match[3] : '';
+					$options        = shortcode_parse_atts( $options_string );
+
+					$a = shortcode_atts(
+						array(
+							'page_id' => 'admin',
+							'text'    => esc_html__( 'Cancel Workflow', 'gravityflow' ),
+						), $options
+					);
+
+					$url = $this->get_entry_url( $a['page_id'], $assignee, $cancel_token );
+
+					if ( $type == 'link' ) {
+						$url = sprintf( '<a href="%s">%s</a>', $url, $a['text'] );
+					}
+
+					$text = str_replace( $full_tag, $url, $text );
+				}
 			}
 		}
 
@@ -1569,7 +1493,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * Adds a note to the timeline. The timeline is a filtered subset of the Gravity Forms Entry notes.
 	 *
 	 * @param $note
-	 * @param bool $user_id
+	 * @param bool|int $user_id
 	 * @param bool $user_name
 	 */
 	public function add_note( $note, $user_id = false, $user_name = false ) {
