@@ -343,44 +343,6 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 		}
 	}
 
-	public function get_assignees() {
-		$assignees = $this->get_assignee_details();
-		if ( ! empty( $assignees ) ) {
-			return $assignees;
-		}
-
-		$type = $this->type;
-
-		switch ( $type ) {
-			case 'select' :
-				if ( is_array( $this->assignees ) ) {
-					foreach ( $this->assignees as $assignee_key ) {
-						$this->maybe_add_assignee( $assignee_key );
-					}
-				}
-				break;
-			case 'routing' :
-				$routings = $this->routing;
-				if ( is_array( $routings ) ) {
-					$entry = $this->get_entry();
-					foreach ( $routings as $routing ) {
-						$assignee_key = rgar( $routing, 'assignee' );
-						if ( $entry ) {
-							if ( $this->evaluate_routing_rule( $routing ) ) {
-								$this->maybe_add_assignee( $assignee_key );
-							}
-						} else {
-							$this->maybe_add_assignee( $assignee_key );
-						}
-					}
-				}
-
-				break;
-		}
-
-		return $this->get_assignee_details();
-	}
-
 	public function restart_action() {
 		gform_delete_meta( $this->get_entry_id(), 'workflow_step_' . $this->get_id() . '_document_ids' );
 	}

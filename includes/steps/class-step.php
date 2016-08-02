@@ -1228,11 +1228,24 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
-	 * Override this method to return assignees for this step. If the entry is set then the assignees must be for the current entry.
+	 * Returns an array of assignees for this step.
 	 *
 	 * @return Gravity_Flow_Assignee[]
 	 */
 	public function get_assignees() {
+		$assignees = $this->get_assignee_details();
+		if ( ! empty( $assignees ) ) {
+			return $assignees;
+		}
+
+		if ( ! empty( $this->type ) ) {
+			$this->maybe_add_select_assignees();
+			$this->maybe_add_routing_assignees();
+			$this->log_debug( __METHOD__ . '(): assignees: ' . print_r( $this->get_assignee_keys(), true ) );
+
+			return $this->get_assignee_details();
+		}
+
 		return array();
 	}
 
@@ -1265,6 +1278,66 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$assignee = new Gravity_Flow_Assignee( $args, $this );
 
 		return $assignee;
+	}
+
+	/**
+	 * Adds the assignees when the 'assign to' setting is set to 'select'.
+	 */
+	public function maybe_add_select_assignees() {
+		if ( $this->type != 'select' || ! is_array( $this->assignees ) ) {
+			return;
+		}
+
+		$has_editable_fields = ! empty( $this->editable_fields );
+
+		foreach ( $this->assignees as $assignee_key ) {
+			$args = $this->get_assignee_args( $assignee_key );
+
+			if ( $has_editable_fields ) {
+				$args['editable_fields'] = $this->editable_fields;
+			}
+
+			$this->maybe_add_assignee( $args );
+		}
+	}
+
+	/**
+	 * Adds the assignees when the 'assign to' setting is set to 'routing'.
+	 */
+	public function maybe_add_routing_assignees() {
+		if ( $this->type != 'routing' || ! is_array( $this->routing ) ) {
+			return;
+		}
+
+		$entry = $this->get_entry();
+		foreach ( $this->routing as $routing ) {
+			$args                    = $this->get_assignee_args( rgar( $routing, 'assignee' ) );
+			$args['editable_fields'] = rgar( $routing, 'editable_fields' );
+			if ( $entry ) {
+				if ( $this->evaluate_routing_rule( $routing ) ) {
+					$this->maybe_add_assignee( $args );
+				}
+			} else {
+				$this->maybe_add_assignee( $args );
+			}
+		}
+	}
+
+	/**
+	 * Creates an array containing the assignees id and type from the supplied key.
+	 *
+	 * @param string $assignee_key The assignee key.
+	 *
+	 * @return array
+	 */
+	public function get_assignee_args( $assignee_key ) {
+		list( $assignee_type, $assignee_id ) = explode( '|', $assignee_key );
+		$args = array(
+			'id'   => $assignee_id,
+			'type' => $assignee_type,
+		);
+
+		return $args;
 	}
 
 	/**

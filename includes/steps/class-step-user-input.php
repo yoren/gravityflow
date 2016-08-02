@@ -343,63 +343,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		return $this->assign();
 	}
 
-	/**
-	 *
-	 * @return Gravity_Flow_Assignee[]
-	 */
-	public function get_assignees() {
-		$assignees = $this->get_assignee_details();
-		if ( ! empty( $assignees ) ) {
-			return $assignees;
-		}
-
-		$input_type = $this->type;
-
-		switch ( $input_type ) {
-			case 'select':
-				foreach ( $this->assignees as $assignee_key ) {
-					list( $assignee_type, $assignee_id ) = explode( '|', $assignee_key );
-					$this->maybe_add_assignee( array(
-						'id'              => $assignee_id,
-						'type'            => $assignee_type,
-						'editable_fields' => $this->editable_fields,
-					) );
-				}
-				break;
-			case 'routing' :
-				$routings = $this->routing;
-				if ( is_array( $routings ) ) {
-					$entry = $this->get_entry();
-					foreach ( $routings as $routing ) {
-						$assignee_key = rgar( $routing, 'assignee' );
-						list( $assignee_type, $assignee_id ) = explode( '|', $assignee_key );
-						$editable_fields = rgar( $routing, 'editable_fields' );
-						if ( $entry ) {
-							if ( $this->evaluate_routing_rule( $routing ) ) {
-								$this->maybe_add_assignee( array(
-									'id'              => $assignee_id,
-									'type'            => $assignee_type,
-									'editable_fields' => $editable_fields,
-								) );
-							}
-						} else {
-							$this->maybe_add_assignee( array(
-								'id'              => $assignee_id,
-								'type'            => $assignee_type,
-								'editable_fields' => $editable_fields,
-							) );
-						}
-					}
-				}
-
-				break;
-		}
-
-		gravity_flow()->log_debug( __METHOD__ . '(): assignees: ' . print_r( $this->get_assignee_keys(), true ) );
-
-		return $this->get_assignee_details();
-	}
-
 	public function evaluate_status() {
 
 		if ( $this->is_queued() ) {
