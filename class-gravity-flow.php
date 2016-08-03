@@ -2536,17 +2536,84 @@ PRIMARY KEY  (id)
 			return $admin_icon;
 		}
 
+
+		/**
+		 * Stores an array containing the status and navigation labels in the gravityflow_app_settings_labels option when the settings are saved.
+		 */
+		public function maybe_update_app_settings_labels() {
+			if ( isset( $_POST['gravityflow-labels-update'] ) ) {
+				check_admin_referer( 'gravityflow_app_settings_labels' );
+				$labels = array(
+					'status'     => rgpost( 'status_labels' ),
+					'navigation' => rgpost( 'navigation_labels' ),
+				);
+				update_option( 'gravityflow_app_settings_labels', $labels );
+			}
+		}
+
+		/**
+		 * Prepares a string containing the markup for the navigation label fields.
+		 *
+		 * @param array $labels The navigation and status labels.
+		 *
+		 * @return string
+		 */
+		public function get_navigation_labels_fields( $labels ) {
+			$default_navigation_labels = $this->get_default_navigation_labels();
+			$custom_navigation_labels  = isset( $labels['navigation'] ) ? $labels['navigation'] : array();
+			$navigation_labels         = array_merge( $default_navigation_labels, $custom_navigation_labels );
+			$fields                    = array();
+
+			foreach ( $navigation_labels as $navigation_label_key => $navigation_label ) {
+				if ( isset( $default_navigation_labels[ $navigation_label_key ] ) ) {
+					$default_navigation_label = $default_navigation_labels[ $navigation_label_key ];
+					$fields[]                 = sprintf( '<tr><th><label for="navigation_label_%s">%s</label></th><td><input id="navigation_label_%s" type="text" name="navigation_labels[%s]" value="%s" /></td></tr>', $navigation_label_key, $default_navigation_label, $navigation_label_key, $navigation_label_key, rgar( $custom_navigation_labels, $navigation_label_key ) );
+				}
+			}
+
+			return join( "\n", $fields );
+		}
+
+		/**
+		 * Prepares a string containing the markup for the status label fields.
+		 *
+		 * @param array $labels The navigation and status labels.
+		 *
+		 * @return string
+		 */
+		public function get_status_labels_fields( $labels ) {
+			$default_status_labels = array(
+				'pending'   => esc_html__( 'Pending', 'gravityflow' ),
+				'cancelled' => esc_html__( 'Cancelled', 'gravityflow' )
+			);
+			$custom_status_labels  = isset( $labels['status'] ) ? $labels['status'] : array();
+			$steps                 = Gravity_Flow_Steps::get_all();
+
+			foreach ( $steps as $step ) {
+				$status_configs = $step->get_status_config();
+				foreach ( $status_configs as $status_config ) {
+					$default_status_labels[ $status_config['status'] ] = $status_config['status_label'];
+				}
+			}
+
+			$status_labels = array_merge( $default_status_labels, $custom_status_labels );
+			$fields        = array();
+
+			foreach ( $status_labels as $status_label_key => $status_label ) {
+				$default_status_label = $default_status_labels[ $status_label_key ];
+				$fields[]             = sprintf( '<tr><th><label for="status_label_%s">%s</label></th><td><input id="status_label_%s" type="text" name="status_labels[%s]" value="%s" /></td></tr>', $status_label_key, $default_status_label, $status_label_key, $status_label_key, rgar( $custom_status_labels, $status_label_key ) );
+			}
+
+			return join( "\n", $fields );
+		}
+
+		/**
+		 * Render the content for the app Settings > Labels tab.
+		 */
 		public function app_settings_label_tab() {
 			require_once( GFCommon::get_base_path() . '/tooltips.php' );
 
-			if ( isset( $_POST['gravityflow-labels-update'] ) ) {
-				check_admin_referer( 'gravityflow_app_settings_labels' );
-				$status_labels = rgpost( 'status_labels' );
-				$labels['status'] = $status_labels;
-				$navigation_labels = rgpost( 'navigation_labels' );
-				$labels['navigation'] = $navigation_labels;
-				update_option( 'gravityflow_app_settings_labels', $labels );
-			}
+			$this->maybe_update_app_settings_labels();
 
 			$labels = get_option( 'gravityflow_app_settings_labels', array() );
 
@@ -2560,25 +2627,7 @@ PRIMARY KEY  (id)
 					<h4 class="gaddon-section-title gf_settings_subgroup_title"> <?php echo esc_html__( 'Navigation', 'gravityflow' ); ?> </h4>
 					<?php
 
-
-					$custom_navigation_labels = isset( $labels['navigation'] )? $labels['navigation'] : array();
-
-
-					$default_navigation_labels = $this->get_default_navigation_labels();
-
-					$navigation_labels = array_merge( $default_navigation_labels, $custom_navigation_labels );
-
-					$fields = array();
-
-					foreach ( $navigation_labels as $navigation_label_key => $navigation_label ) {
-						if ( isset( $default_navigation_labels[ $navigation_label_key ] ) ) {
-							$default_navigation_label = $default_navigation_labels[ $navigation_label_key ];
-							$fields[] = sprintf( '<tr><th><label for="navigation_label_%s">%s</label></th><td><input id="navigation_label_%s" type="text" name="navigation_labels[%s]" value="%s" /></td></tr>', $navigation_label_key, $default_navigation_label, $navigation_label_key, $navigation_label_key, rgar( $custom_navigation_labels, $navigation_label_key ) );
-						}
-					}
-
-					$fields_str = join( "\n", $fields );
-					printf( '<table id="gravityflow-settings-labels-navigation" class="gravityflow-settings-labels">%s</table>', $fields_str );
+					printf( '<table id="gravityflow-settings-labels-navigation" class="gravityflow-settings-labels">%s</table>', $this->get_navigation_labels_fields( $labels ) );
 
 					?>
 				</div>
@@ -2586,36 +2635,7 @@ PRIMARY KEY  (id)
 					<h4 class="gaddon-section-title gf_settings_subgroup_title"> <?php echo esc_html__( 'Status Labels', 'gravityflow' ); ?> </h4>
 					<?php
 
-					if ( isset( $_POST['gravityflow-labels-update'] ) ) {
-						check_admin_referer( 'gravityflow_app_settings_labels' );
-						$status_labels = rgpost( 'status_labels' );
-						$labels['status'] = $status_labels;
-						update_option( 'gravityflow_app_settings_labels', $labels );
-					}
-
-					$labels = get_option( 'gravityflow_app_settings_labels', array() );
-					$custom_status_labels = isset( $labels['status'] )? $labels['status'] : array();
-					$steps = Gravity_Flow_Steps::get_all();
-
-					$default_status_labels = array( 'pending' => esc_html__( 'Pending', 'gravityflow' ), 'cancelled' => esc_html__( 'Cancelled', 'gravityflow' ) );
-					foreach ( $steps as $step ) {
-						$status_configs = $step->get_status_config();
-						foreach ( $status_configs as $status_config ) {
-							$default_status_labels[ $status_config['status'] ] = $status_config['status_label'];
-						}
-					}
-
-					$status_labels = array_merge( $default_status_labels, $custom_status_labels );
-
-					$fields = array();
-
-					foreach ( $status_labels as $status_label_key => $status_label ) {
-						$default_status_label = $default_status_labels[ $status_label_key ];
-						$fields[] = sprintf( '<tr><th><label for="status_label_%s">%s</label></th><td><input id="status_label_%s" type="text" name="status_labels[%s]" value="%s" /></td></tr>', $status_label_key, $default_status_label, $status_label_key, $status_label_key, rgar( $custom_status_labels, $status_label_key ) );
-					}
-
-					$fields_str = join( "\n", $fields );
-					printf( '<table id="gravityflow-settings-labels-status" class="gravityflow-settings-labels">%s</table>', $fields_str );
+					printf( '<table id="gravityflow-settings-labels-status" class="gravityflow-settings-labels">%s</table>', $this->get_status_labels_fields( $labels ) );
 
 					?>
 				</div>
