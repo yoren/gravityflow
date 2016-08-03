@@ -97,26 +97,20 @@ if ( class_exists( 'GFForms' ) ) {
 		public function init() {
 			parent::init();
 
+			add_shortcode( 'gravityflow', array( $this, 'shortcode' ) );
+
 			// Make sure Gravity Flow feeds are triggered before other feeds so we get a chance to intercept them.
 			remove_filter( 'gform_entry_post_save', array( $this, 'maybe_process_feed' ), 10 );
 			add_filter( 'gform_entry_post_save', array( $this, 'maybe_process_feed' ), 8, 2 );
-
-			add_action( 'gform_after_submission', array( $this, 'after_submission' ), 9, 2 );
-			add_action( 'gform_after_update_entry', array( $this, 'filter_after_update_entry' ), 10, 2 );
-
-			add_shortcode( 'gravityflow', array( $this, 'shortcode' ) );
+			add_filter( 'auto_update_plugin', array( $this, 'maybe_auto_update' ), 10, 2 );
+			add_filter( 'gform_enqueue_scripts', array( $this, 'filter_gform_enqueue_scripts' ), 10, 2 );
+			add_filter( 'gform_pre_replace_merge_tags', array( $this, 'replace_variables' ), 10, 7 );
 
 			add_action( 'gform_register_init_scripts', array( $this, 'filter_gform_register_init_scripts' ), 10, 3 );
-
-			add_filter( 'auto_update_plugin', array( $this, 'maybe_auto_update' ), 10, 2 );
-
-			add_filter( 'gform_enqueue_scripts', array( $this, 'filter_gform_enqueue_scripts' ), 10, 2 );
-
 			add_action( 'wp_login', array( $this, 'filter_wp_login' ), 10, 2 );
-
 			add_action( 'gform_post_add_entry', array( $this, 'action_gform_post_add_entry' ), 10, 2 );
-
-			add_filter( 'gform_pre_replace_merge_tags', array( $this, 'replace_variables' ), 10, 7 );
+			add_action( 'gform_after_submission', array( $this, 'after_submission' ), 9, 2 );
+			add_action( 'gform_after_update_entry', array( $this, 'filter_after_update_entry' ), 10, 2 );
 
 		}
 
@@ -4800,10 +4794,13 @@ AND m.meta_value='queued'";
 		}
 
 		public function action_gform_post_add_entry( $entry, $form ) {
+			if ( ! empty( $entry['partial_entry_id'] ) ) {
+				return;
+			}
 
 			$this->log_debug( __METHOD__ . '(): starting' );
 
-			$api = new Gravity_Flow_API( $form['id'] );
+			$api   = new Gravity_Flow_API( $form['id'] );
 			$steps = $api->get_steps();
 
 			if ( ! empty( $steps ) ) {
