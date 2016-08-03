@@ -71,6 +71,15 @@ class Gravity_Flow_Bootstrap {
 
 		require_once( 'class-gravity-flow.php' );
 		require_once( 'includes/models/class-activity.php' );
+
+		self::include_steps();
+		self::include_fields();
+
+		GFAddOn::register( 'Gravity_Flow' );
+		do_action( 'gravityflow_loaded' );
+	}
+
+	public static function include_steps() {
 		require_once( 'includes/steps/class-step.php' );
 		require_once( 'includes/steps/class-steps.php' );
 		require_once( 'includes/steps/class-step-feed-add-on.php' );
@@ -78,14 +87,14 @@ class Gravity_Flow_Bootstrap {
 		foreach ( glob( plugin_dir_path( __FILE__ ) . 'includes/steps/class-step-*.php' ) as $gravity_flow_filename ) {
 			require_once( $gravity_flow_filename );
 		}
+	}
 
+	public static function include_fields() {
 		foreach ( glob( plugin_dir_path( __FILE__ ) . 'includes/fields/class-field-*.php' ) as $gravity_flow_filename ) {
 			require_once( $gravity_flow_filename );
 		}
-
-		GFAddOn::register( 'Gravity_Flow' );
-		do_action( 'gravityflow_loaded' );
 	}
+
 }
 
 function gravity_flow() {
