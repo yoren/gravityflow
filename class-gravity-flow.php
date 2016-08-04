@@ -112,6 +112,12 @@ if ( class_exists( 'GFForms' ) ) {
 			add_action( 'gform_after_submission', array( $this, 'after_submission' ), 9, 2 );
 			add_action( 'gform_after_update_entry', array( $this, 'filter_after_update_entry' ), 10, 2 );
 
+			$this->add_delayed_payment_support(
+				array(
+					'option_label' => esc_html__( 'Start the Workflow once payment has been received.', 'gravityflow' )
+				)
+			);
+
 		}
 
 		public function init_admin() {
@@ -3381,6 +3387,71 @@ PRIMARY KEY  (id)
 			return $events;
 		}
 
+		/**
+		 * Checks the workflow steps to see if any feeds belonging to other add-ons need to be delayed.
+		 *
+		 * @param array $entry The entry created from the current form submission.
+		 * @param array $form The form object used to process the current submission.
+		 *
+		 * @return array
+		 */
+		public function maybe_process_feed( $entry, $form ) {
+			$form_id = absint( $form['id'] );
+
+			if ( empty( $form_id ) || ! isset( $entry['id'] ) ) {
+				return $entry;
+			}
+
+			$steps = $this->get_steps( $form_id );
+
+			foreach ( $steps as $step ) {
+				if ( ! $step instanceof Gravity_Flow_Step_Feed_Add_On || ! $step->is_active() ) {
+					continue;
+				}
+
+				$step->intercept_submission();
+			}
+
+			$this->maybe_delay_workflow( $entry, $form );
+
+			return $entry;
+		}
+
+		/**
+		 * Determines if the current submission requires a PayPal payment and if the workflow should be delayed.
+		 *
+		 * @param array $entry The entry created from the current form submission.
+		 * @param array $form The form object used to process the current submission.
+		 */
+		public function maybe_delay_workflow( $entry, $form ) {
+			if ( class_exists( 'GFPayPal' ) ) {
+				$feed = gf_paypal()->get_single_submission_feed( $entry, $form );
+
+				if ( ! empty( $feed ) && $this->is_delayed( $feed ) && $this->has_paypal_payment( $feed, $form, $entry ) ) {
+					$this->log_debug( __METHOD__ . '() - processing delayed pending PayPal payment for entry id ' . $entry['id'] );
+					remove_action( 'gform_after_submission', array( $this, 'after_submission' ), 9 );
+				}
+			}
+		}
+
+		/**
+		 * Starts the workflow if it was delayed pending PayPal payment.
+		 *
+		 * @param array $entry The entry for which the PayPal payment has been completed.
+		 * @param array $paypal_config The PayPal feed used to process the entry.
+		 * @param string $transaction_id The PayPal transaction ID.
+		 * @param float $amount The transaction amount.
+		 *
+		 * @return void
+		 */
+		public function paypal_fulfillment( $entry, $paypal_config, $transaction_id, $amount ) {
+			if ( empty( $entry['workflow_step'] ) && $this->is_delayed( $paypal_config ) && ! $this->is_entry_view() ) {
+				$form     = GFAPI::get_form( $entry['form_id'] );
+				$entry_id = absint( $entry['id'] );
+				$this->process_workflow( $form, $entry_id );
+			}
+		}
+
 		public function after_submission( $entry, $form ) {
 			if ( ! isset( $entry['id'] ) ) {
 				return;
@@ -3844,31 +3915,6 @@ PRIMARY KEY  (id)
 			if ( $gravityflow_feeds_imported ) {
 				GFCommon::add_message( esc_html__( 'Gravity Flow Steps imported. IMPORTANT: Check the assignees for each step. If the form was imported from a different installation with different user IDs then steps may need to be reassigned.', 'gravityflow' ) );
 			}
-		}
-
-		public function maybe_process_feed( $entry, $form ) {
-
-			if ( ! isset( $entry['id'] ) ) {
-				return $entry;
-			}
-
-			$form_id = absint( $form['id'] );
-
-			if ( empty( $form_id ) ) {
-				return $entry;
-			}
-
-			$steps = $this->get_steps( $form_id );
-
-			foreach ( $steps as $step ) {
-				if ( ! $step instanceof Gravity_Flow_Step_Feed_Add_On || ! $step->is_active() ) {
-					continue;
-				}
-
-				$step->intercept_submission();
-			}
-
-			return parent::maybe_process_feed( $entry, $form );
 		}
 
 		public function field_settings( $position, $form_id ) {

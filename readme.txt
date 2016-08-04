@@ -57,6 +57,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.3.3-dev =
 
+- Added support for delaying the workflow until after PayPal payment.
 - Added "Reminder:" to the subject line of reminder notifications.
 - Added the Custom Timestamp Format setting to the Discussion field appearance tab.
 - Added the {workflow_inbox_url} and {workflow_inbox_link} merge tags.
