@@ -3424,13 +3424,20 @@ PRIMARY KEY  (id)
 		 * @param array $form The form object used to process the current submission.
 		 */
 		public function maybe_delay_workflow( $entry, $form ) {
+			$is_delayed = false;
+
 			if ( class_exists( 'GFPayPal' ) ) {
 				$feed = gf_paypal()->get_single_submission_feed( $entry, $form );
 
 				if ( ! empty( $feed ) && $this->is_delayed( $feed ) && $this->has_paypal_payment( $feed, $form, $entry ) ) {
 					$this->log_debug( __METHOD__ . '() - processing delayed pending PayPal payment for entry id ' . $entry['id'] );
 					remove_action( 'gform_after_submission', array( $this, 'after_submission' ), 9 );
+					$is_delayed = true;
 				}
+			}
+
+			if ( ! $is_delayed ) {
+				gform_update_meta( $entry['id'], "{$this->_slug}_is_fulfilled", true );
 			}
 		}
 
