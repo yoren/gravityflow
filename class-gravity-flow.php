@@ -4533,39 +4533,73 @@ AND m.meta_value='queued'";
 
 		public function format_duration( $seconds ) {
 			if ( method_exists( 'DateTime', 'diff' ) ) {
-				$dtF = new DateTime( '@0' );
-				$dtT = new DateTime( "@$seconds" );
+				$dtF           = new DateTime( '@0' );
+				$dtT           = new DateTime( "@$seconds" );
 				$date_interval = $dtF->diff( $dtT );
-				$interval = array();
-				if ( $date_interval->y > 0 ) {
-					$days_format = _n( '%d year', '%d years', $date_interval->y, 'gravityflow' );
-					$interval[] = esc_html( sprintf( $days_format, $date_interval->y ) );
-				}
-				if ( $date_interval->m > 0 ) {
-					$days_format = _n( '%d month', '%d months', $date_interval->m, 'gravityflow' );
-					$interval[] = esc_html( sprintf( $days_format, $date_interval->m ) );
-				}
-				if ( $date_interval->d > 0 ) {
-					$days_format = esc_html__( '%dd', 'gravityflow' );
-					$interval[] = sprintf( $days_format, $date_interval->d );
-				}
-				if ( $date_interval->y == 0 && $date_interval->m == 0 && $date_interval->m == 0 && $date_interval->h > 0 ) {
-					$hours_format = esc_html__( '%dh', 'gravityflow' );
-					$interval[] = sprintf( $hours_format, $date_interval->h );
-				}
-				if ( $date_interval->y == 0 && $date_interval->m == 0 && $date_interval->d == 0 && $date_interval->h == 0 && $date_interval->i > 0 ) {
-					$minutes_format = esc_html__( '%dm', 'gravityflow' );
-					$interval[] = sprintf( $minutes_format, $date_interval->i );
-				}
-				if ( $date_interval->y == 0 && $date_interval->m == 0 && $date_interval->d == 0 && $date_interval->h == 0 && $date_interval->s > 0 ) {
-					$seconds_format = esc_html__( '%ds', 'gravityflow' );
-					$interval[] = sprintf( $seconds_format, $date_interval->s );
+				$interval      = array();
+
+				$interval = $this->maybe_add_date_intervals( $interval, $date_interval );
+
+				if ( $date_interval->y == 0 && $date_interval->m == 0 ) {
+					$interval = $this->maybe_add_time_intervals( $interval, $date_interval );
 				}
 
 				return join( ', ', $interval );
 			} else {
 				return esc_html( $seconds );
 			}
+		}
+
+		/**
+		 * Adds the year, month and day intervals, if appropriate.
+		 *
+		 * @param array $interval
+		 * @param DateInterval $date_interval
+		 *
+		 * @return array
+		 */
+		public function maybe_add_date_intervals( $interval, $date_interval ) {
+			if ( $date_interval->y > 0 ) {
+				$years_format = _n( '%d year', '%d years', $date_interval->y, 'gravityflow' );
+				$interval[]   = esc_html( sprintf( $years_format, $date_interval->y ) );
+			}
+			if ( $date_interval->m > 0 ) {
+				$months_format = _n( '%d month', '%d months', $date_interval->m, 'gravityflow' );
+				$interval[]    = esc_html( sprintf( $months_format, $date_interval->m ) );
+			}
+			if ( $date_interval->d > 0 ) {
+				$days_format = esc_html__( '%dd', 'gravityflow' );
+				$interval[]  = sprintf( $days_format, $date_interval->d );
+			}
+
+			return $interval;
+		}
+
+		/**
+		 * Adds the hours, minutes and seconds intervals, if appropriate.
+		 *
+		 * @param array $interval
+		 * @param DateInterval $date_interval
+		 *
+		 * @return array
+		 */
+		public function maybe_add_time_intervals( $interval, $date_interval ) {
+			if ( $date_interval->h > 0 ) {
+				$hours_format = esc_html__( '%dh', 'gravityflow' );
+				$interval[]   = sprintf( $hours_format, $date_interval->h );
+			}
+			if ( $date_interval->d == 0 && $date_interval->h == 0 ) {
+				if ( $date_interval->i > 0 ) {
+					$minutes_format = esc_html__( '%dm', 'gravityflow' );
+					$interval[]     = sprintf( $minutes_format, $date_interval->i );
+				}
+				if ( $date_interval->s > 0 ) {
+					$seconds_format = esc_html__( '%ds', 'gravityflow' );
+					$interval[]     = sprintf( $seconds_format, $date_interval->s );
+				}
+			}
+
+			return $interval;
 		}
 
 		public function get_admin_icon_b64( $color = false ) {
