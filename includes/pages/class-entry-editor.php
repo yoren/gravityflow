@@ -353,6 +353,7 @@ class Gravity_Flow_Entry_Editor {
 
 		if ( $field->type == 'html' ) {
 			$html = GFCommon::replace_variables( $field->content, $this->form, $this->entry, false, true, false, 'html' );
+			$html = do_shortcode( $html );
 
 			return $html;
 		}

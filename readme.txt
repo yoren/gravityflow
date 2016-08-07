@@ -73,6 +73,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Updated minimum Gravity Forms version to 1.9.14.
 - Updated feed interception to use the gform_is_delayed_pre_process_feed filter with GF1.9.14+ or gform_pre_process_feeds filter with GF2.0+.
 
+- Fixed an issue with shortcodes used in the HTML field content not being processed on the user input step.
 - Fixed an issue with the workflow being started when an incomplete entry is saved by the Gravity Forms Partial Entries Add-On.
 - Fixed an issue when sending to another step when the current step is queued.
 - Fixed an issue with assignees which don't exist being assigned to the step e.g. when an email field doesn't have a value.
