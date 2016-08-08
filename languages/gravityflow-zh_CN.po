@@ -1,19 +1,19 @@
 # Copyright 2015-2016 Steven Henty.
 # Translators:
-# Samuel Aguilera <registros@samuelaguilera.com>, 2016
+# michael edi <michaeledi@163.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
 "POT-Creation-Date: 2016-06-01 13:47:58+00:00\n"
-"PO-Revision-Date: 2016-06-13 18:56+0000\n"
-"Last-Translator: Samuel Aguilera <registros@samuelaguilera.com>\n"
-"Language-Team: Spanish (Spain) (http://www.transifex.com/gravityflow/gravityflow/language/es_ES/)\n"
+"PO-Revision-Date: 2016-06-08 14:36+0000\n"
+"Last-Translator: michael edi <michaeledi@163.com>\n"
+"Language-Team: Chinese (China) (http://www.transifex.com/gravityflow/gravityflow/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: es_ES\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Gravity Flow Build Server\n"
 "X-Poedit-Basepath: ../\n"
 "X-Poedit-Bookmarks: \n"
@@ -28,132 +28,132 @@ msgstr ""
 #: includes/steps/class-step-user-input.php:787
 #: includes/steps/class-step-user-input.php:957
 msgid "User"
-msgstr "Usuario"
+msgstr "用户"
 
 #: class-gravity-flow.php:266 includes/fields/class-field-role.php:55
 #: includes/steps/class-step-approval.php:915
 #: includes/steps/class-step-user-input.php:795
 msgid "Role"
-msgstr "Rol"
+msgstr "角色"
 
 #: class-gravity-flow.php:440
 msgid "No results matched"
-msgstr "No hay resultados coincidentes"
+msgstr "没有匹配的结果"
 
 #: class-gravity-flow.php:461
 msgid "Workflow Steps"
-msgstr "Pasos del flujo de trabajo"
+msgstr "工作流步骤"
 
 #: class-gravity-flow.php:461
 msgid "Add New"
-msgstr "Añadir nuevo"
+msgstr "新建"
 
 #: class-gravity-flow.php:592
 msgid "Workflow Step Settings"
-msgstr "Ajustes de flujo de trabajo"
+msgstr "工作流步骤设置"
 
 #: class-gravity-flow.php:622
 #: includes/fields/class-field-assignee-select.php:103
 msgid "Users"
-msgstr "Usuarios"
+msgstr "用户"
 
 #: class-gravity-flow.php:626
 #: includes/fields/class-field-assignee-select.php:125
 msgid "Roles"
-msgstr "Roles"
+msgstr "角色"
 
 #: class-gravity-flow.php:652
 #: includes/fields/class-field-assignee-select.php:139
 msgid "User (Created by)"
-msgstr "Usuario (Creado por)"
+msgstr "用户（创建者）"
 
 #: class-gravity-flow.php:659
 #: includes/fields/class-field-assignee-select.php:151
 #: includes/pages/class-status.php:312
 msgid "Fields"
-msgstr "Campos"
+msgstr "字段"
 
 #: class-gravity-flow.php:740 class-gravity-flow.php:1822
 msgid "Step Type"
-msgstr "Tipo de paso"
+msgstr "步骤类型"
 
 #: class-gravity-flow.php:754 class-gravity-flow.php:758
 #: includes/pages/class-support.php:96
 msgid "Name"
-msgstr "Nombre"
+msgstr "名称"
 
 #: class-gravity-flow.php:758
 msgid "Enter a name to uniquely identify this step."
-msgstr "Introduce un nombre único para identificar este paso."
+msgstr "输入一个名称来唯一标识这个步骤。"
 
 #: class-gravity-flow.php:762
 msgid "Description"
-msgstr "Descripción"
+msgstr "描述"
 
 #: class-gravity-flow.php:769
 msgid ""
 "Build the conditional logic that should be applied to this step before it's "
 "allowed to be processed. If an entry does not meet the conditions of this "
 "step it will fall on to the next step in the list."
-msgstr ""
+msgstr "建立条件逻辑，它将在步骤执行前被应用。如果条目不符合本步骤的条件，它将会跳转到列表中的下一个步骤。"
 
 #: class-gravity-flow.php:772
 msgid "Enable Condition for this step"
-msgstr "Activar condición para este paso"
+msgstr "启用这个步骤的条件逻辑"
 
 #: class-gravity-flow.php:773
 msgid "Perform this step if"
-msgstr "Realizar este paso si"
+msgstr "执行这个步骤，如果"
 
 #: class-gravity-flow.php:777 class-gravity-flow.php:1301
 #: class-gravity-flow.php:1308 class-gravity-flow.php:1314
 #: class-gravity-flow.php:1379
 msgid "Schedule"
-msgstr "Programar"
+msgstr "计划"
 
 #: class-gravity-flow.php:779
 msgid ""
 "Scheduling a step will queue entries and prevent them from starting this "
 "step until the specified date or until the delay period has elapsed."
-msgstr ""
+msgstr "计划一个步骤会将所有已提交的条目加入队列，直到指定日期或冻结时间截止后才开始执行动作。"
 
 #: class-gravity-flow.php:780
 msgid ""
 "Note: the schedule setting requires the WordPress Cron which is included and"
 " enabled by default unless your host has deactivated it."
-msgstr ""
+msgstr "注意：计划设置需要WordPress Cron服务被启用，该服务是默认启用的，除非您的主机已停用它。"
 
 #: class-gravity-flow.php:806 class-gravity-flow.php:1459
 #: class-gravity-flow.php:1466 class-gravity-flow.php:1472
 msgid "Expiration"
-msgstr "Caducidad"
+msgstr "过期"
 
 #: class-gravity-flow.php:807
 msgid ""
 "Enable the expiration setting to allow this step to expire. Once expired, "
 "the entry will automatically proceed to the step configured in the Next Step"
 " setting(s) below."
-msgstr "Activa el ajuste de caducidad para que este paso pueda caducar. Una vez caducado, la entrada pasará automáticamente al siguiente paso configurado a continuación."
+msgstr "启用过期设置来允许这个步骤过期。一旦过期，条目将自动跳转到“下一步操作”中设置的步骤。"
 
 #: class-gravity-flow.php:814
 msgid "Next step if"
-msgstr "Siguiente paso si"
+msgstr "下一步，如果"
 
 #: class-gravity-flow.php:829
 msgid "Step settings updated. %sBack to the list%s or %sAdd another step%s."
-msgstr "Ajustes del paso guardados.%sVolver a la lista%s o %sañadir otro paso%s. "
+msgstr "步骤设置已更新。 %s回到列表%s 或 %s添加其他步骤%s。"
 
 #: class-gravity-flow.php:839
 msgid "Update Step Settings"
-msgstr "Actualizar ajustes del paso"
+msgstr "更改设置"
 
 #: class-gravity-flow.php:842
 msgid "There was an error while saving the step settings"
-msgstr "Hubo un error al guardar los ajustes del paso"
+msgstr "保存步骤设置时出错"
 
 #: class-gravity-flow.php:859
 msgid "This step type is missing."
-msgstr ""
+msgstr "此步骤缺少类型。"
 
 #: class-gravity-flow.php:867
 msgid ""
@@ -162,536 +162,533 @@ msgid ""
 msgid_plural ""
 "There are %s entries currently on this step. These entries may be affected "
 "if the settings are changed."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "目前此步骤拥有％s个条目。如果更改了设置，这些条目可能会受到影响。"
 
 #: class-gravity-flow.php:1251
 msgid "Schedule this step"
-msgstr "Programar este paso"
+msgstr "计划此步骤"
 
 #: class-gravity-flow.php:1264 class-gravity-flow.php:1444
 msgid "Delay"
-msgstr "Retraso"
+msgstr "延迟"
 
 #: class-gravity-flow.php:1268 class-gravity-flow.php:1448
 #: includes/pages/class-activity.php:42 includes/pages/class-activity.php:67
 #: includes/pages/class-status.php:735
 msgid "Date"
-msgstr "Fecha"
+msgstr "日期"
 
 #: class-gravity-flow.php:1280
 msgid "Date Field"
-msgstr ""
+msgstr "日期字段"
 
 #: class-gravity-flow.php:1292
 msgid "Schedule Date Field"
-msgstr ""
+msgstr "计划日期字段"
 
 #: class-gravity-flow.php:1318 class-gravity-flow.php:1476
 msgid "Minute(s)"
-msgstr "Minuto(s)"
+msgstr "分钟"
 
 #: class-gravity-flow.php:1322 class-gravity-flow.php:1480
 msgid "Hour(s)"
-msgstr "Hora(s)"
+msgstr "小时"
 
 #: class-gravity-flow.php:1326 class-gravity-flow.php:1484
 msgid "Day(s)"
-msgstr "Día(s)"
+msgstr "天"
 
 #: class-gravity-flow.php:1330 class-gravity-flow.php:1488
 msgid "Week(s)"
-msgstr "Semana(s)"
+msgstr "周"
 
 #: class-gravity-flow.php:1351
 msgid "Start this step on"
-msgstr "Iniciar este paso el"
+msgstr "此步骤开始于"
 
 #: class-gravity-flow.php:1359 class-gravity-flow.php:1369
 msgid "Start this step"
-msgstr "Iniciar este paso"
+msgstr "开始此步骤"
 
 #: class-gravity-flow.php:1364
 msgid "after the workflow step is triggered."
-msgstr "después de ejecutar el paso del flujo."
+msgstr "在工作流步骤触发之后。"
 
 #: class-gravity-flow.php:1383
 msgid "after"
-msgstr "después"
+msgstr "之后"
 
 #: class-gravity-flow.php:1387
 msgid "before"
-msgstr "antes"
+msgstr "之前"
 
 #: class-gravity-flow.php:1431
 msgid "Schedule expiration"
-msgstr ""
+msgstr "计划过期时间"
 
 #: class-gravity-flow.php:1508
 msgid "This step expires on"
-msgstr "Este paso caduca el"
+msgstr "此步骤过期时间为"
 
 #: class-gravity-flow.php:1516
 msgid "This step will expire"
-msgstr "Este paso caducará"
+msgstr "此步骤将过期"
 
 #: class-gravity-flow.php:1521
 msgid "after the workflow step has started."
-msgstr ""
+msgstr "在工作流步骤开始之后。"
 
 #: class-gravity-flow.php:1527
 msgid "Status after expiration"
-msgstr ""
+msgstr "过期后的状态"
 
 #: class-gravity-flow.php:1531
 msgid "Expiration Status"
-msgstr ""
+msgstr "过期状态"
 
 #: class-gravity-flow.php:1605 class-gravity-flow.php:1676
 #: includes/steps/class-step-approval.php:464
 #: includes/steps/class-step-user-input.php:130
 msgid "Enable"
-msgstr "Activar"
+msgstr "启用"
 
 #: class-gravity-flow.php:1774
 msgid "Workflow Complete"
-msgstr "Flujo de trabajo completado"
+msgstr "工作流程完成"
 
 #: class-gravity-flow.php:1775
 msgid "Next step in list"
-msgstr "Próximo paso en la lista"
+msgstr "列表中的下一步"
 
 #: class-gravity-flow.php:1821
 msgid "Step name"
-msgstr "Nombre paso"
+msgstr "步骤名称"
 
 #: class-gravity-flow.php:1827
 msgid "Entries"
-msgstr "Entradas"
+msgstr "条目"
 
 #: class-gravity-flow.php:1837
 msgid "(missing)"
-msgstr ""
+msgstr "(缺失)"
 
 #: class-gravity-flow.php:1862
 msgid "You don't have any steps configured. Let's go %screate one%s!"
-msgstr "No tienes ningún paso configurado. ¡Vamos %screar uno%s!"
+msgstr "您没有配置任何步骤。赶紧%s新建一个%s！"
 
 #: class-gravity-flow.php:1918 includes/pages/class-status.php:1191
 #: includes/pages/class-status.php:1196
 msgid "Status:"
-msgstr "Estado:"
+msgstr "状态:"
 
 #: class-gravity-flow.php:2095
 msgid "Entry Id"
-msgstr "Id entrada"
+msgstr "条目ID"
 
 #: class-gravity-flow.php:2096 includes/pages/class-inbox.php:97
 #: includes/pages/class-inbox.php:169
 msgid "Submitted"
-msgstr "Enviado"
+msgstr "已提交"
 
 #: class-gravity-flow.php:2102
 msgid "Last updated"
-msgstr "Última actualización"
+msgstr "最后更新"
 
 #: class-gravity-flow.php:2110
 msgid "Submitted by"
-msgstr "Enviado por"
+msgstr "提交者"
 
 #: class-gravity-flow.php:2119 class-gravity-flow.php:4583
 #: includes/pages/class-status.php:748
 #: includes/steps/class-step-user-input.php:957
 msgid "Status"
-msgstr "Estado"
+msgstr "状态"
 
 #: class-gravity-flow.php:2128
 msgid "Expires"
-msgstr "Caduca"
+msgstr "过期"
 
 #: class-gravity-flow.php:2150 includes/steps/class-step-approval.php:881
 #: includes/steps/class-step-user-input.php:746
 msgid "Queued"
-msgstr "En cola"
+msgstr "已队列"
 
 #: class-gravity-flow.php:2168
 msgid "Scheduled"
-msgstr "Programado"
+msgstr "已计划"
 
 #: class-gravity-flow.php:2172
 msgid "Expired: refresh the page"
-msgstr "Caducado: recarga la página"
+msgstr "过期：刷新页面"
 
 #: class-gravity-flow.php:2199
 msgid "Admin"
-msgstr "Admin."
+msgstr "管理员"
 
 #: class-gravity-flow.php:2207
 msgid "Select an action"
-msgstr "Selecciona una acción"
+msgstr "选择一个操作"
 
 #: class-gravity-flow.php:2210 includes/pages/class-status.php:378
 msgid "Apply"
-msgstr "Aplicar"
+msgstr "应用"
 
 #: class-gravity-flow.php:2236 includes/steps/class-step.php:852
 msgid "Cancel Workflow"
-msgstr "Cancelar flujo"
+msgstr "取消工作流"
 
 #: class-gravity-flow.php:2240
 msgid "Restart this step"
-msgstr "Reiniciar este paso"
+msgstr "重新开始步骤"
 
 #: class-gravity-flow.php:2249 includes/pages/class-status.php:210
 msgid "Restart Workflow"
-msgstr "Reiniciar flujo"
+msgstr "重新开始工作流"
 
 #: class-gravity-flow.php:2269
 msgid "Send to step:"
-msgstr "Enviar a paso:"
+msgstr "发送到步骤："
 
 #: class-gravity-flow.php:2302
 msgid "Workflow complete"
-msgstr "Flujo de trabajo completado"
+msgstr "工作流程完成"
 
 #: class-gravity-flow.php:2312
 msgid "View"
-msgstr "Ver"
+msgstr "查看"
 
 #: class-gravity-flow.php:2483
 msgid "General"
-msgstr "General"
+msgstr "常规"
 
 #: class-gravity-flow.php:2484 class-gravity-flow.php:4078
 msgid "Gravity Flow Settings"
-msgstr "Ajustes de Gravity Flow"
+msgstr "Gravity Flow 设置"
 
 #: class-gravity-flow.php:2489 class-gravity-flow.php:2533
 msgid "Labels"
-msgstr "Etiquetas"
+msgstr "标签"
 
 #: class-gravity-flow.php:2504
 msgid "Uninstall"
-msgstr "Desinstalar"
+msgstr "卸载"
 
 #: class-gravity-flow.php:2538
 msgid "Navigation"
-msgstr "Navegación"
+msgstr "导航"
 
 #: class-gravity-flow.php:2564
 msgid "Status Labels"
-msgstr ""
+msgstr "状态标签"
 
 #: class-gravity-flow.php:2578 class-gravity-flow.php:4607
 #: includes/steps/class-step.php:182
 msgid "Pending"
-msgstr "Pendiente"
+msgstr "待审核"
 
 #: class-gravity-flow.php:2578 class-gravity-flow.php:4619
 msgid "Cancelled"
-msgstr "Cancelado"
+msgstr "已取消"
 
 #: class-gravity-flow.php:2600
 #: includes/steps/class-step-feed-user-registration.php:81
 #: includes/steps/class-step-user-input.php:916
 msgid "Update"
-msgstr "Actualizar"
+msgstr "更新"
 
 #: class-gravity-flow.php:2615
 msgid "Invalid token"
-msgstr "Token no válido"
+msgstr "无效令牌"
 
 #: class-gravity-flow.php:2619
 msgid "Token already expired"
-msgstr "Token caducado"
+msgstr "令牌已过期"
 
 #: class-gravity-flow.php:2627
 msgid "Token revoked"
-msgstr "Token revocado"
+msgstr "令牌已被撤销"
 
 #: class-gravity-flow.php:2631
 msgid "Tools"
-msgstr "Herramientas"
+msgstr "工具"
 
 #: class-gravity-flow.php:2647
 msgid "Revoke a token"
-msgstr "Revocar un token"
+msgstr "撤销一个令牌"
 
 #: class-gravity-flow.php:2653
 msgid "Revoke"
-msgstr "Revocar"
+msgstr "撤消"
 
 #: class-gravity-flow.php:2698
 msgid "Entries per page"
-msgstr "Entradas por página"
+msgstr "每页的条目"
 
 #: class-gravity-flow.php:2730
 msgid "Published"
-msgstr "Publicada"
+msgstr "已发布"
 
 #: class-gravity-flow.php:2741
 msgid "No workflow steps have been added to any forms yet."
-msgstr "Todavía no se ha añadido ningún paso de flujo de trabajo a ningún formulario."
+msgstr "尚未添加工作流步骤添加到任何表单中。"
 
 #: class-gravity-flow.php:2750
 msgid "Settings"
-msgstr "Ajustes"
+msgstr "设置"
 
 #: class-gravity-flow.php:2754 includes/class-extension.php:123
 #: includes/class-feed-extension.php:124
 #: includes/wizard/steps/class-iw-step-license-key.php:49
 msgid "License Key"
-msgstr "Clave de licencia"
+msgstr "许可证密钥"
 
 #: class-gravity-flow.php:2758 includes/class-extension.php:127
 #: includes/class-feed-extension.php:128
 msgid "Invalid license"
-msgstr "Licencia no válida"
+msgstr "无效的许可证"
 
 #: class-gravity-flow.php:2764
 #: includes/wizard/steps/class-iw-step-updates.php:74
 msgid "Background Updates"
-msgstr "Actualizaciones automáticas"
+msgstr "后台更新"
 
 #: class-gravity-flow.php:2765
 msgid ""
 "Set this to ON to allow Gravity Flow to download and install bug fixes and "
 "security updates automatically in the background. Requires a valid license "
 "key."
-msgstr "Activa esto para permitir a Gravity Flow descargar e instalar automáticamente en segundo plano actualizaciones de corrección de fallos y seguridad. Se necesita una licencia válida."
+msgstr "设置为开启，将允许GravityFlow自动在后台去下载和安装漏洞修复以及安全更新。这需要一个有效的许可证密钥。"
 
 #: class-gravity-flow.php:2770
 msgid "On"
-msgstr "Activado"
+msgstr "开"
 
 #: class-gravity-flow.php:2771
 msgid "Off"
-msgstr "Desactivado"
+msgstr "关"
 
 #: class-gravity-flow.php:2779
 msgid "Published Workflow Forms"
-msgstr "Formularios con flujo de trabajo publicados"
+msgstr "已发布的工作流表单"
 
 #: class-gravity-flow.php:2780
 msgid "Select the forms you wish to publish on the Submit page."
-msgstr "Selecciona los formularios que quieres publicar en tu página de envío."
+msgstr "选择要在提交页面上发布的表单。"
 
 #: class-gravity-flow.php:2790
 msgid "Update Settings"
-msgstr "Actualizar ajustes"
+msgstr "更新设置"
 
 #: class-gravity-flow.php:2792
 msgid "Settings updated successfully"
-msgstr "Ajustes actualizados correctamente"
+msgstr "设置更新成功"
 
 #: class-gravity-flow.php:2793
 msgid "There was an error while saving the settings"
-msgstr "Hubo un error al guardar los ajustes"
+msgstr "保存设置时出错"
 
 #: class-gravity-flow.php:2897
 msgid "Submit a Workflow Form"
-msgstr "Enviar un formulario con flujo de trabajo"
+msgstr "提交一个工作流表单"
 
 #: class-gravity-flow.php:2968
 msgid "Oops! We could not locate your entry."
-msgstr "¡Vaya! No hemos podido localizar tu entrada."
+msgstr "天啦噜！无法找到您的条目。"
 
 #: class-gravity-flow.php:2986 includes/steps/class-step-approval.php:1343
 msgid "Error: incorrect entry."
-msgstr "Error: Entrada incorrecta."
+msgstr "错误：错误的条目。"
 
 #: class-gravity-flow.php:2992
 msgid "Workflow Cancelled"
-msgstr "Flujo de trabajo cancelado."
+msgstr "工作流已取消"
 
 #: class-gravity-flow.php:2999
 msgid "Error: This URL is no longer valid."
-msgstr "Error: Esta URL ya no es válida."
+msgstr "错误：此URL已失效。"
 
 #: class-gravity-flow.php:3065
 msgid "Workflow Inbox"
-msgstr "Bandeja de entrada de flujo de trabajo"
+msgstr "工作流收件箱"
 
 #: class-gravity-flow.php:3102
 msgid "Workflow Status"
-msgstr "Estado de flujo de trabajo"
+msgstr "工作流状态"
 
 #: class-gravity-flow.php:3140
 msgid "Workflow Activity"
-msgstr "Actividad de flujo de trabajo"
+msgstr "工作流活动"
 
 #: class-gravity-flow.php:3179
 msgid "Workflow Reports"
-msgstr "Informes de flujo de trabajo"
+msgstr "工作流报告"
 
 #: class-gravity-flow.php:3221
 msgid "Your inbox of pending tasks"
-msgstr "Tu buzón de tareas pendientes"
+msgstr "您的收件箱中的待解决任务"
 
 #: class-gravity-flow.php:3235
 msgid "Submit a Workflow"
-msgstr "Enviar un flujo de trabajo"
+msgstr "提交一个工作流"
 
 #: class-gravity-flow.php:3247
 msgid "Your workflows"
-msgstr "Tus flujos de trabajo"
+msgstr "您的工作流"
 
 #: class-gravity-flow.php:3258 class-gravity-flow.php:4585
 msgid "Reports"
-msgstr "Informes"
+msgstr "报告"
 
 #: class-gravity-flow.php:3269 class-gravity-flow.php:4586
 msgid "Activity"
-msgstr "Actividad"
+msgstr "活动"
 
 #: class-gravity-flow.php:3292 includes/class-api.php:120
 msgid "Workflow cancelled."
-msgstr "Flujo de trabajo cancelado."
+msgstr "工作流已取消。"
 
 #: class-gravity-flow.php:3296 class-gravity-flow.php:3308
 msgid "The entry does not currently have an active step."
-msgstr ""
+msgstr "该条目目前没有一个活动的步骤。"
 
 #: class-gravity-flow.php:3305 includes/class-api.php:140
 msgid "Workflow Step restarted."
-msgstr "Pasos del flujo de trabajo reiniciados."
+msgstr "工作流步骤已重新启动。"
 
 #: class-gravity-flow.php:3316 includes/class-api.php:166
 #: includes/pages/class-status.php:1266
 msgid "Workflow restarted."
-msgstr "Flujo de trabajo reiniciado."
+msgstr "工作流已重新启动。"
 
 #: class-gravity-flow.php:3326 includes/class-api.php:209
 msgid "Sent to step: %s"
-msgstr "Enviado a paso: %s"
+msgstr "已发送到步骤: %s"
 
 #: class-gravity-flow.php:3334
 msgid "Workflow: approved or rejected"
-msgstr ""
+msgstr "工作流程：已批准/已拒绝"
 
 #: class-gravity-flow.php:3335
 msgid "Workflow: user input"
-msgstr ""
+msgstr "工作流程：用户输入"
 
 #: class-gravity-flow.php:3336
 msgid "Workflow: complete"
-msgstr ""
+msgstr "工作流程：完成"
 
 #: class-gravity-flow.php:3803
 msgid ""
 "Gravity Flow Steps imported. IMPORTANT: Check the assignees for each step. "
 "If the form was imported from a different installation with different user "
 "IDs then steps may need to be reassigned."
-msgstr ""
+msgstr "GravityFlow步骤已导入。重要：检查每一步骤的负责人。如果该表单是从一个用不同的用户ID 安装处导入的，那么可能需要重新分配负责人。"
 
 #: class-gravity-flow.php:3839
 msgid "Assignees"
-msgstr "Encargados"
+msgstr "负责人"
 
 #: class-gravity-flow.php:3844
 msgid "Show Users"
-msgstr "Mostrar usuarios"
+msgstr "显示用户"
 
 #: class-gravity-flow.php:3852
 msgid "Show Roles"
-msgstr "Mostrar roles"
+msgstr "显示角色"
 
 #: class-gravity-flow.php:3860
 msgid "Show Fields"
-msgstr "Mostrar campos"
+msgstr "显示字段"
 
 #: class-gravity-flow.php:4035 class-gravity-flow.php:4037
 msgid "Step expired"
-msgstr "Paso caducado"
+msgstr "步骤已过期"
 
 #: class-gravity-flow.php:4082
 msgid ""
 "%sThis operation deletes ALL Gravity Flow settings%s. If you continue, you "
 "will NOT be able to retrieve these settings."
-msgstr "%sEsta operación borra TODOS los ajustes de Gravity Flow%s. Si continúas, NO podrás recuperar estos ajustes."
+msgstr "%s这个操作将删除所有GravityFlow设置%s。如果您继续，您将无法还原这些设置。"
 
 #: class-gravity-flow.php:4086
 msgid ""
 "Warning! ALL Gravity Flow settings will be deleted. This cannot be undone. "
 "'OK' to delete, 'Cancel' to stop"
-msgstr "¡Atención! TODOS se borrarán todos los datos de Gravity Flow. Esto no se puede deshacer. 'Aceptar' parar borrar, 'Cancelar' para parar."
+msgstr "警告！所有的GravityFlow设置将被删除。无法撤消。“确认” 删除，“取消” 停止"
 
 #: class-gravity-flow.php:4433
 msgid "%d year"
 msgid_plural "%d years"
-msgstr[0] "%d year"
-msgstr[1] "%d years"
+msgstr[0] "%d 年"
 
 #: class-gravity-flow.php:4437
 msgid "%d month"
 msgid_plural "%d months"
-msgstr[0] "%d month"
-msgstr[1] "%d months"
+msgstr[0] "％d 月"
 
 #: class-gravity-flow.php:4441
 msgid "%dd"
-msgstr "%dd"
+msgstr "%d 天"
 
 #: class-gravity-flow.php:4445
 msgid "%dh"
-msgstr "%dh"
+msgstr "%d 时"
 
 #: class-gravity-flow.php:4449
 msgid "%dm"
-msgstr "%dm"
+msgstr "%d 分"
 
 #: class-gravity-flow.php:4453
 msgid "%ds"
-msgstr "%ds"
+msgstr "%d 秒"
 
 #: class-gravity-flow.php:4497
 msgid "Every Fifteen Minutes"
-msgstr "Cada 15 minutos"
+msgstr "每15分钟"
 
 #: class-gravity-flow.php:4510 class-gravity-flow.php:4530
 msgid "Not authorized"
-msgstr "No autorizado"
+msgstr "未授权"
 
 #: class-gravity-flow.php:4580
 msgid "Workflow"
-msgstr "Flujo de trabajo"
+msgstr "工作流"
 
 #: class-gravity-flow.php:4581
 msgid "Inbox"
-msgstr "Bandeja de entrada"
+msgstr "收件箱"
 
 #: class-gravity-flow.php:4582
 msgid "Submit"
-msgstr "Enviar"
+msgstr "提交"
 
 #: class-gravity-flow.php:4584 includes/pages/class-support.php:77
 msgid "Support"
-msgstr "Soporte"
+msgstr "技术支持"
 
 #: class-gravity-flow.php:4610 includes/steps/class-step-user-input.php:195
 #: includes/steps/class-step-user-input.php:744
 #: includes/steps/class-step-user-input.php:896
 #: includes/steps/class-step.php:156
 msgid "Complete"
-msgstr "Completado"
+msgstr "完成"
 
 #: class-gravity-flow.php:4613 includes/steps/class-step-approval.php:31
 #: includes/steps/class-step-approval.php:877
 msgid "Approved"
-msgstr "Aprobada"
+msgstr "已批准"
 
 #: class-gravity-flow.php:4616 includes/steps/class-step-approval.php:25
 #: includes/steps/class-step-approval.php:879
 msgid "Rejected"
-msgstr "Rechazada"
+msgstr "拒绝"
 
 #: class-gravity-flow.php:4674
 msgid "Oops! We couldn't find your lead. Please try again"
-msgstr "¡Vaya! No pudimos encontrar tu entrada. Por favor, inténtalo de nuevo."
+msgstr "天啦噜！我们找不到你的输入。请再试一次"
 
 #: class-gravity-flow.php:4716 includes/pages/class-entry-detail.php:67
 msgid "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete"
-msgstr "¿Quieres eliminar este archivo? 'Cancelar' para parar. 'Aceptar' para borrar."
+msgstr "您想删除这个文件吗？“取消” 停止。“确认” 删除"
 
 #: class-gravity-flow.php:4740
 #: includes/fields/class-field-assignee-select.php:31
@@ -699,116 +696,116 @@ msgstr "¿Quieres eliminar este archivo? 'Cancelar' para parar. 'Aceptar' para b
 #: includes/fields/class-field-role.php:23
 #: includes/fields/class-field-user.php:23
 msgid "Workflow Fields"
-msgstr ""
+msgstr "工作流字段"
 
 #: class-gravity-flow.php:4740
 msgid "Workflow Fields add advanced workflow functionality to your forms."
-msgstr ""
+msgstr "工作流字段将添加高级功能到您的表单。"
 
 #: class-gravity-flow.php:4790
 msgid "All fields"
-msgstr "Todos los campos"
+msgstr "所有字段"
 
 #: class-gravity-flow.php:4794
 msgid "Selected fields"
-msgstr "Campos seleccionados"
+msgstr "已经选择的字段"
 
 #: class-gravity-flow.php:4821
 msgid "Except"
-msgstr ""
+msgstr "除了"
 
 #: class-gravity-flow.php:4840
 msgid "Order Summary"
-msgstr ""
+msgstr "订单概览"
 
 #: class-gravity-flow.php:4940
 msgid "Add Custom Key"
-msgstr ""
+msgstr "添加自定义键"
 
 #: class-gravity-flow.php:4988
 msgid "Add Custom Value"
-msgstr ""
+msgstr "添加自定义的值"
 
 #: class-gravity-flow.php:5006
 msgid "Key"
-msgstr "Clave"
+msgstr "键"
 
 #: class-gravity-flow.php:5007
 msgid "Value"
-msgstr "Valor"
+msgstr "数值"
 
 #: includes/EDD_SL_Plugin_Updater.php:186
 msgid ""
 "There is a new version of %1$s available. <a target=\"_blank\" "
 "class=\"thickbox\" href=\"%2$s\">View version %3$s details</a>."
-msgstr "Hay una nueva versión de %1$s disponible. <a target=\"_blank\" class=\"thickbox\" href=\"%2$s\">Ver detalles de la versión %3$s</a>."
+msgstr "有一个新版本的 %1$s 可用。<a target=\"_blank\" class=\"thickbox\" href=\"%2$s\">查看版本 %3$s 的细节</a>。"
 
 #: includes/EDD_SL_Plugin_Updater.php:193
 msgid ""
 "There is a new version of %1$s available. <a target=\"_blank\" "
 "class=\"thickbox\" href=\"%2$s\">View version %3$s details</a> or <a "
 "href=\"%4$s\">update now</a>."
-msgstr "Hay una nueva versión de %1$s disponible. <a target=\"_blank\" class=\"thickbox\" href=\"%2$s\">Ver detalles de la versión %3$s</a> o <a href=\"%4$s\">actualizar ahora</a>."
+msgstr "有一个新版本的 %1$s 可用。<a target=\"_blank\" class=\"thickbox\" href=\"%2$s\">查看版本 %3$s 的细节</a>或者  <a href=\"%4$s\">直接更新</a>。"
 
 #: includes/EDD_SL_Plugin_Updater.php:346
 msgid "You do not have permission to install plugin updates"
-msgstr "No tienes permisos para instalar actualizaciones de la extensión"
+msgstr "您没有权限安装插件更新"
 
 #: includes/EDD_SL_Plugin_Updater.php:346
 msgid "Error"
-msgstr "Error"
+msgstr "错误"
 
 #: includes/class-web-api.php:196
 msgid "Forbidden"
-msgstr "Prohibido"
+msgstr "禁止"
 
 #: includes/fields/class-field-assignee-select.php:64
 #: includes/pages/class-reports.php:299 includes/pages/class-reports.php:357
 #: includes/pages/class-reports.php:498
 msgid "Assignee"
-msgstr "Encargado"
+msgstr "负责人"
 
 #: includes/fields/class-field-discussion.php:64
 msgid "Discussion"
-msgstr ""
+msgstr "讨论"
 
 #: includes/pages/class-activity.php:29 includes/pages/class-reports.php:53
 msgid "You don't have permission to view this page"
-msgstr "No tienes permiso para ver esta página"
+msgstr "您没有权限查看这个页面"
 
 #: includes/pages/class-activity.php:41
 msgid "Event ID"
-msgstr "ID de evento"
+msgstr "事件ID"
 
 #: includes/pages/class-activity.php:43 includes/pages/class-activity.php:72
 #: includes/pages/class-inbox.php:93 includes/pages/class-inbox.php:146
 #: includes/pages/class-reports.php:133 includes/pages/class-status.php:737
 msgid "Form"
-msgstr "Formulario"
+msgstr "表单"
 
 #: includes/pages/class-activity.php:44 includes/pages/class-activity.php:77
 msgid "Entry ID"
-msgstr "ID de entrada"
+msgstr "条目 ID"
 
 #: includes/pages/class-activity.php:45 includes/pages/class-activity.php:82
 msgid "Type"
-msgstr "Tipo"
+msgstr "类型"
 
 #: includes/pages/class-activity.php:46 includes/pages/class-activity.php:87
 #: includes/pages/class-activity.php:117
 msgid "Event"
-msgstr "Evento"
+msgstr "活动"
 
 #: includes/pages/class-activity.php:47 includes/pages/class-activity.php:105
 #: includes/pages/class-inbox.php:96 includes/pages/class-inbox.php:158
 #: includes/pages/class-reports.php:237 includes/pages/class-reports.php:499
 #: includes/pages/class-status.php:744
 msgid "Step"
-msgstr "Paso"
+msgstr "步骤"
 
 #: includes/pages/class-activity.php:48
 msgid "Duration"
-msgstr "Duración"
+msgstr "持续时间"
 
 #: includes/pages/class-activity.php:62 includes/pages/class-inbox.php:91
 #: includes/pages/class-inbox.php:140 includes/pages/class-status.php:733
@@ -817,112 +814,112 @@ msgstr "ID"
 
 #: includes/pages/class-activity.php:141
 msgid "Waiting for workflow activity"
-msgstr "Esperando actividad del flujo de trabajo"
+msgstr "等待工作流活动"
 
 #: includes/pages/class-entry-detail.php:78
 msgid "Ajax error while deleting file."
-msgstr "Error ajax al borrar el archivo."
+msgstr "当删除文件时发生 Ajax 错误。"
 
 #: includes/pages/class-entry-detail.php:199
 #: includes/pages/class-print-entries.php:147
 msgid "You don't have permission to view this entry."
-msgstr "No tienes permiso para ver esta entrada."
+msgstr "您没有权限查看这个条目。"
 
 #: includes/pages/class-entry-detail.php:300
 msgid "Timeline"
-msgstr ""
+msgstr "时间轴"
 
 #: includes/pages/class-entry-detail.php:329
 #: includes/pages/class-status.php:207 includes/pages/class-status.php:447
 msgid "Print"
-msgstr "Imprimir"
+msgstr "打印"
 
 #: includes/pages/class-entry-detail.php:335
 msgid "include timeline"
-msgstr ""
+msgstr "包括时间线"
 
 #: includes/pages/class-entry-detail.php:375
 msgid "Workflow Submitted"
-msgstr "Flujo de trabajo enviado"
+msgstr "工作流已提交"
 
 #: includes/pages/class-entry-detail.php:424
 #: includes/pages/class-print-entries.php:88
 msgid "Entry # "
-msgstr "Entrada # "
+msgstr "条目 #"
 
 #: includes/pages/class-entry-detail.php:433
 msgid "show empty fields"
-msgstr "Mostrar campos vacíos"
+msgstr "显示空白字段"
 
 #: includes/pages/class-entry-detail.php:477
 #: includes/pages/class-entry-detail.php:653
 msgid "Order"
-msgstr "Pedido"
+msgstr "订单"
 
 #: includes/pages/class-entry-detail.php:683
 msgid "Product"
-msgstr "Producto"
+msgstr "产品"
 
 #: includes/pages/class-entry-detail.php:684
 msgid "Qty"
-msgstr "Cant."
+msgstr "数量"
 
 #: includes/pages/class-entry-detail.php:685
 msgid "Unit Price"
-msgstr "Precio unitario"
+msgstr "单价"
 
 #: includes/pages/class-entry-detail.php:686
 msgid "Price"
-msgstr "Precio"
+msgstr "价格"
 
 #: includes/pages/class-entry-detail.php:749
 msgid "Total"
-msgstr "Total"
+msgstr "总计"
 
 #: includes/pages/class-help.php:23
 msgid "Help"
-msgstr "Ayuda"
+msgstr "帮助"
 
 #: includes/pages/class-inbox.php:95 includes/pages/class-inbox.php:152
 #: includes/pages/class-status.php:740
 msgid "Submitter"
-msgstr "Enviado por"
+msgstr "提交者"
 
 #: includes/pages/class-inbox.php:111 includes/pages/class-status.php:777
 msgid "Last Updated"
-msgstr ""
+msgstr "最近更新"
 
 #: includes/pages/class-inbox.php:200
 msgid "Last_Updated"
-msgstr ""
+msgstr "最后_更新"
 
 #: includes/pages/class-inbox.php:234
 msgid "No pending tasks"
-msgstr "No hay tareas pendientes"
+msgstr "无待解决的任务"
 
 #: includes/pages/class-print-entries.php:67
 msgid "Form Id and Lead Id are required parameters."
-msgstr "El id del formulario y el id de la entrada son parámetros obligatorios."
+msgstr "表单 Id 和线索 Id 是必需参数。"
 
 #: includes/pages/class-print-entries.php:88
 msgid "Bulk Print"
-msgstr "Impresión por lotes"
+msgstr "批量打印"
 
 #: includes/pages/class-reports.php:76 includes/pages/class-reports.php:516
 msgid "Filter"
-msgstr "Filtro"
+msgstr "筛选"
 
 #: includes/pages/class-reports.php:127 includes/pages/class-reports.php:179
 #: includes/pages/class-reports.php:231 includes/pages/class-reports.php:293
 #: includes/pages/class-reports.php:351 includes/pages/class-reports.php:410
 msgid "No data to display"
-msgstr "No hay datos para mostrar"
+msgstr "无数据可显示"
 
 #: includes/pages/class-reports.php:133 includes/pages/class-reports.php:154
 #: includes/pages/class-reports.php:185 includes/pages/class-reports.php:206
 #: includes/pages/class-reports.php:416 includes/pages/class-reports.php:442
 msgid "Workflows Completed"
-msgstr "Flujos completados"
+msgstr "工作流已完成"
 
 #: includes/pages/class-reports.php:133 includes/pages/class-reports.php:155
 #: includes/pages/class-reports.php:185 includes/pages/class-reports.php:207
@@ -931,122 +928,122 @@ msgstr "Flujos completados"
 #: includes/pages/class-reports.php:357 includes/pages/class-reports.php:386
 #: includes/pages/class-reports.php:416 includes/pages/class-reports.php:443
 msgid "Average Duration (hours)"
-msgstr "Duración media (horas)"
+msgstr "平均持续时间(小时)"
 
 #: includes/pages/class-reports.php:143
 msgid "Forms"
-msgstr "Formularios"
+msgstr "表单"
 
 #: includes/pages/class-reports.php:144 includes/pages/class-reports.php:196
 msgid "Workflows completed and average duration"
-msgstr "Flujos de trabajo completados y duración media"
+msgstr "已完成工作流和平均持续时间"
 
 #: includes/pages/class-reports.php:185 includes/pages/class-reports.php:416
 #: includes/pages/class-reports.php:497
 msgid "Month"
-msgstr "Mes"
+msgstr "月"
 
 #: includes/pages/class-reports.php:237 includes/pages/class-reports.php:263
 #: includes/pages/class-reports.php:299 includes/pages/class-reports.php:325
 #: includes/pages/class-reports.php:357 includes/pages/class-reports.php:385
 msgid "Completed"
-msgstr "Completado"
+msgstr "已完成"
 
 #: includes/pages/class-reports.php:253
 msgid "Step completed and average duration"
-msgstr "Paso completado y duración media"
+msgstr "已完成的步骤和平均持续时间"
 
 #: includes/pages/class-reports.php:315 includes/pages/class-reports.php:375
 msgid "Step completed and average duration by assignee"
-msgstr "Paso completado y duración media por encargado"
+msgstr "已完成的步骤和平均时间（按负责人）"
 
 #: includes/pages/class-reports.php:432
 msgid "Workflows completed and average duration by month"
-msgstr "Flujos de trabajo completados y duración media por mes"
+msgstr "已完成的工作流和平均持续时间（按月份）"
 
 #: includes/pages/class-reports.php:462
 msgid "Select A Workflow Form"
-msgstr "Selecciona un formulario con flujo de trabajo"
+msgstr "选择一个工作流表单"
 
 #: includes/pages/class-reports.php:480
 msgid "Last 12 months"
-msgstr "Últimos 12 meses"
+msgstr "最近12个月"
 
 #: includes/pages/class-reports.php:481
 msgid "Last 6 months"
-msgstr "Últimos 6 meses"
+msgstr "最近6个月"
 
 #: includes/pages/class-reports.php:482
 msgid "Last 3 months"
-msgstr "Últimos 3 meses"
+msgstr "最近3个月"
 
 #: includes/pages/class-reports.php:525
 msgid "All Steps"
-msgstr "Todos los pasos"
+msgstr "所有步骤"
 
 #: includes/pages/class-status.php:85
 msgid "Export"
-msgstr "Exportar"
+msgstr "导出"
 
 #: includes/pages/class-status.php:91
 msgid "The destination file is not writeable"
-msgstr "No se puede escribir en el archivo de destino"
+msgstr "目标文件不可写"
 
 #: includes/pages/class-status.php:214
 msgid "entry"
-msgstr "entrada"
+msgstr "条目"
 
 #: includes/pages/class-status.php:215
 msgid "entries"
-msgstr "entradas"
+msgstr "条目"
 
 #: includes/pages/class-status.php:260 includes/pages/class-submit.php:21
 msgid "You haven't submitted any workflow forms yet."
-msgstr "Todavía no has enviado ningún formulario con flujo de trabajo."
+msgstr "您还没有提交任何工作流表单。"
 
 #: includes/pages/class-status.php:278
 msgid "All"
-msgstr "Todos"
+msgstr "所有"
 
 #: includes/pages/class-status.php:346
 msgid "Start:"
-msgstr "Inicio:"
+msgstr "开始时间："
 
 #: includes/pages/class-status.php:352
 msgid "End:"
-msgstr "Fin:"
+msgstr "结束时间："
 
 #: includes/pages/class-status.php:363
 msgid "Workflow Form"
-msgstr "Formulario de flujo de trabajo"
+msgstr "工作流表单"
 
 #: includes/pages/class-status.php:385
 msgid "Clear Filter"
-msgstr "Limpiar filtro"
+msgstr "清除筛选条件"
 
 #: includes/pages/class-status.php:388
 msgid "Search"
-msgstr "Buscar"
+msgstr "查询"
 
 #: includes/pages/class-status.php:437
 msgid "Print all of the selected entries at once."
-msgstr ""
+msgstr "一次性打印所有选中条目。"
 
 #: includes/pages/class-status.php:440
 msgid "Include timelines"
-msgstr ""
+msgstr "包括时间轴"
 
 #: includes/pages/class-status.php:444
 msgid "Add page break between entries"
-msgstr ""
+msgstr "添加条目之间的分页符"
 
 #: includes/pages/class-status.php:597
 msgid "(deleted)"
-msgstr "(borrado)"
+msgstr "(已删除)"
 
 #: includes/pages/class-status.php:731
 msgid "Checkbox"
-msgstr "Casilla"
+msgstr "选框"
 
 #: includes/pages/class-status.php:994
 #: includes/steps/class-step-approval.php:55
@@ -1054,73 +1051,73 @@ msgstr "Casilla"
 #: includes/steps/class-step-notification.php:73
 #: includes/steps/class-step-user-input.php:41
 msgid "Select"
-msgstr ""
+msgstr "选择"
 
 #: includes/pages/class-support.php:81
 msgid "Please check the documentation before submitting a support request"
-msgstr "Por favor consulta la documentación antes de enviar una petición de soporte"
+msgstr "请在提交工单前查阅该文档"
 
 #: includes/pages/class-support.php:102
 #: includes/steps/class-step-approval.php:911
 #: includes/steps/class-step-user-input.php:791
 #: includes/steps/class-step-user-input.php:953
 msgid "Email"
-msgstr "Email"
+msgstr "电子邮件"
 
 #: includes/pages/class-support.php:109
 msgid "General comment or suggestion"
-msgstr "Comentario general o sugerencia"
+msgstr "一般性意见或建议"
 
 #: includes/pages/class-support.php:114
 msgid "Feature request"
-msgstr "Petición de nueva funcionalidad"
+msgstr "功能需求"
 
 #: includes/pages/class-support.php:120
 msgid "Bug report"
-msgstr "Informe de fallo"
+msgstr "错误报告"
 
 #: includes/pages/class-support.php:124
 msgid "Suggestion or steps to reproduce the issue."
-msgstr "Sugerencia o pasos para reproducir el fallo."
+msgstr "建议或步骤来重现这个问题。"
 
 #: includes/pages/class-support.php:130
 msgid ""
 "Send debugging information. (This includes some system information and a "
 "list of active plugins. No forms or entry data will be sent.)"
-msgstr "Enviar información de depuración. (Esto incluye alguna información del sistema y la lista de extensiones activas. No se enviarán formularios o datos de las entradas)."
+msgstr "发送调试信息。（这包括一些系统信息和活动插件列表。没有任何表单或条目数据将被发送。）"
 
 #: includes/pages/class-support.php:133
 msgid "Send"
-msgstr "Enviar"
+msgstr "发送"
 
 #: includes/steps/class-step-approval.php:26
 msgid "Next step if Rejected"
-msgstr "Siguiente paso si se rechaza"
+msgstr "下一步，如果已拒绝"
 
 #: includes/steps/class-step-approval.php:32
 msgid "Next Step if Approved"
-msgstr "Siguiente paso si se aprueba"
+msgstr "下一步，如果已批准"
 
 #: includes/steps/class-step-approval.php:43
 #: includes/steps/class-step-approval.php:360
 msgid "Approval"
-msgstr "Aprobación"
+msgstr "批准"
 
 #: includes/steps/class-step-approval.php:56
 #: includes/steps/class-step-user-input.php:42
 msgid "Conditional Routing"
-msgstr ""
+msgstr "条件式发送规则"
 
 #: includes/steps/class-step-approval.php:66
 msgid "Send Email to the assignee(s)."
-msgstr "Enviar email al/los encargado(s)."
+msgstr "发送邮件给负责人。"
 
 #: includes/steps/class-step-approval.php:67
 msgid ""
 "Enable this setting to send email to each of the assignees as soon as the "
 "entry has been assigned. If a role is configured to receive emails then all "
 "the users with that role will receive the email."
-msgstr "Activa este ajuste para enviar un email a cada uno de los encargados tan pronto como la entrada haya sido asignada. Si se ha configurado un rol para recibir los emails, todos los usuarios con ese rol recibirán el email."
+msgstr "启用这个设置，一旦条目被分配，将发送邮件给对应负责人。如果是某个角色被配置为接收电子邮件，那么所有该角色中的用户将收到电子邮件。"
 
 #: includes/steps/class-step-approval.php:76
 #: includes/steps/class-step-approval.php:178
@@ -1128,7 +1125,7 @@ msgstr "Activa este ajuste para enviar un email a cada uno de los encargados tan
 #: includes/steps/class-step-notification.php:94
 #: includes/steps/class-step-user-input.php:232
 msgid "From Name"
-msgstr "Nombre remitente"
+msgstr "发件人名称"
 
 #: includes/steps/class-step-approval.php:82
 #: includes/steps/class-step-approval.php:183
@@ -1136,7 +1133,7 @@ msgstr "Nombre remitente"
 #: includes/steps/class-step-notification.php:100
 #: includes/steps/class-step-user-input.php:238
 msgid "From Email"
-msgstr "Email remitente"
+msgstr "发件人邮箱"
 
 #: includes/steps/class-step-approval.php:89
 #: includes/steps/class-step-approval.php:191
@@ -1144,7 +1141,7 @@ msgstr "Email remitente"
 #: includes/steps/class-step-notification.php:107
 #: includes/steps/class-step-user-input.php:246
 msgid "Reply To"
-msgstr "Responder a"
+msgstr "回复给"
 
 #: includes/steps/class-step-approval.php:95
 #: includes/steps/class-step-approval.php:197
@@ -1152,7 +1149,7 @@ msgstr "Responder a"
 #: includes/steps/class-step-notification.php:113
 #: includes/steps/class-step-user-input.php:252
 msgid "BCC"
-msgstr "BCC"
+msgstr "秘密抄送给"
 
 #: includes/steps/class-step-approval.php:101
 #: includes/steps/class-step-approval.php:203
@@ -1160,16 +1157,16 @@ msgstr "BCC"
 #: includes/steps/class-step-notification.php:119
 #: includes/steps/class-step-user-input.php:258
 msgid "Subject"
-msgstr "Asunto"
+msgstr "邮件主题"
 
 #: includes/steps/class-step-approval.php:106
 msgid "Message to Assignee(s)"
-msgstr "Mensaje al/los encargado(s)"
+msgstr "给负责人的消息"
 
 #: includes/steps/class-step-approval.php:108
 msgid ""
 "A new entry is pending your approval. Please check your Workflow Inbox."
-msgstr "Hay una nueva entrada esperando tu aprobación. Por favor comprueba tu buzón del flujo de trabajo."
+msgstr "一个新的条目正在等待您的批准。请检查您的工作流收件箱。"
 
 #: includes/steps/class-step-approval.php:116
 #: includes/steps/class-step-approval.php:218
@@ -1177,7 +1174,7 @@ msgstr "Hay una nueva entrada esperando tu aprobación. Por favor comprueba tu b
 #: includes/steps/class-step-notification.php:133
 #: includes/steps/class-step-user-input.php:273
 msgid "Disable auto-formatting"
-msgstr "Desactivar auto-formato"
+msgstr "禁用自动格式化"
 
 #: includes/steps/class-step-approval.php:119
 #: includes/steps/class-step-approval.php:221
@@ -1187,82 +1184,82 @@ msgstr "Desactivar auto-formato"
 msgid ""
 "Disable auto-formatting to prevent paragraph breaks being automatically "
 "inserted when using HTML to create the email message."
-msgstr ""
+msgstr "禁用自动格式，以防止使用 HTML 创建的电子邮件时自动插入分段符。"
 
 #: includes/steps/class-step-approval.php:129
 #: includes/steps/class-step-user-input.php:283
 msgid "Send reminder"
-msgstr "Enviar recordatorio"
+msgstr "发送提醒"
 
 #: includes/steps/class-step-approval.php:133
 #: includes/steps/class-step-user-input.php:287
 msgid "Resend the assignee email after"
-msgstr "Reenviar el email al encargado después de"
+msgstr "重新给负责人发送邮件，在此之后："
 
 #: includes/steps/class-step-approval.php:134
 #: includes/steps/class-step-user-input.php:288
 msgid "day(s)"
-msgstr "día(s)"
+msgstr "天"
 
 #: includes/steps/class-step-approval.php:146
 msgid "Send email when the entry is rejected"
-msgstr "Enviar un email cuando la entrada se rechaza"
+msgstr "条目被拒绝时发送电子邮件"
 
 #: includes/steps/class-step-approval.php:147
 msgid "Enable this setting to send an email when the entry is rejected."
-msgstr "Activa este ajuste para enviar un email cuando la entrada se rechaza."
+msgstr "当条目被拒绝时，启用此设置来发送电子邮件。"
 
 #: includes/steps/class-step-approval.php:155
 #: includes/steps/class-step-approval.php:244
 #: includes/steps/class-step-notification.php:68
 msgid "Send To"
-msgstr "Enviar a"
+msgstr "发送至"
 
 #: includes/steps/class-step-approval.php:164
 #: includes/steps/class-step-notification.php:80
 msgid "Select User"
-msgstr "Selecciona usuario"
+msgstr "选择用户"
 
 #: includes/steps/class-step-approval.php:172
 #: includes/steps/class-step-approval.php:261
 #: includes/steps/class-step-approval.php:383
 #: includes/steps/class-step-notification.php:88
 msgid "Routing"
-msgstr "Enrutamiento"
+msgstr "路由"
 
 #: includes/steps/class-step-approval.php:208
 #: includes/steps/class-step-notification.php:124
 msgid "Message"
-msgstr "Mensaje"
+msgstr "消息"
 
 #: includes/steps/class-step-approval.php:210
 msgid "Entry {entry_id} has been rejected"
-msgstr "La entrada {entry_id} ha sido rechazada"
+msgstr "条目 {entry_id} 已被拒绝"
 
 #: includes/steps/class-step-approval.php:235
 msgid "Send email when the entry is approved"
-msgstr "Enviar un email cuando la entrada se aprueba"
+msgstr "条目被批准时发送电子邮件"
 
 #: includes/steps/class-step-approval.php:236
 msgid "Enable this setting to send an email when the entry is approved."
-msgstr "Activa este ajuste para enviar un email cuando la entrada se aprueba."
+msgstr "当条目被批准时，启用这个设置发送一封电子邮件。"
 
 #: includes/steps/class-step-approval.php:299
 msgid "Approval Message"
-msgstr "Mensaje de aprobación"
+msgstr "批准消息"
 
 #: includes/steps/class-step-approval.php:301
 msgid "Entry {entry_id} has been approved"
-msgstr "La entrada {entry_id} ha sido aprobada"
+msgstr "条目 {entry_id} 已批准"
 
 #: includes/steps/class-step-approval.php:339
 msgid "Attach PDF"
-msgstr "Adjuntar PDF"
+msgstr "附上PDF"
 
 #: includes/steps/class-step-approval.php:364
 #: includes/steps/class-step-user-input.php:52
 msgid "Assign To:"
-msgstr "Asignar a:"
+msgstr "分配给："
 
 #: includes/steps/class-step-approval.php:373
 msgid ""
@@ -1270,11 +1267,11 @@ msgid ""
 "assignee fields they will also appear here. Click on an item to select it. "
 "The selected items will appear on the right. If you select a role then "
 "anybody from that role can approve."
-msgstr "Los campos de usuario y rol aparecerán en esta lista. Si el formulario contiene algún campo de encargado también aparecerá aquí. Haz clic en un elemento para seleccionarlo. Los elementos seleccionados aparecerán a la derecha. Si seleccionas un rol, entonces cualquiera con ese rol podrá aprobar."
+msgstr "用户和角色字段将出现在这个列表中。如果表单包含任何负责人字段，那么他们也会出现在这里。点击一个项目来选择它。选定的项目将出现在右边。如果您选择一个角色，那么属于该角色的用户都可以批准。"
 
 #: includes/steps/class-step-approval.php:376
 msgid "Select Assignees"
-msgstr "Selecciona encargados"
+msgstr "选择负责人"
 
 #: includes/steps/class-step-approval.php:382
 msgid ""
@@ -1282,11 +1279,11 @@ msgid ""
 "will appear in the first drop-down field. If the form contains any assignee "
 "fields they will also appear here. Select the assignee and define the "
 "condition for that assignee. Add as many routing rules as you need."
-msgstr ""
+msgstr "通过增加条件建立指定负责人的路由规则。用户和角色字段将出现在第一个下拉选框中。如果表单包含任何指定负责人字段，也将会显示在这里。选择负责人并定义分配条件。您可以按需要无限添加路由规则。"
 
 #: includes/steps/class-step-approval.php:388
 msgid "Approval Policy"
-msgstr "Política de aprobación"
+msgstr "审批规则"
 
 #: includes/steps/class-step-approval.php:389
 msgid ""
@@ -1294,72 +1291,72 @@ msgid ""
 " the entry will require unanimous approval before the step can be completed."
 " If the step is assigned to a role only one user in that role needs to "
 "approve."
-msgstr ""
+msgstr "定义应如何处理审批。如果必须由所有负责人批准，那么在完成步骤前，条目将需要先获得全部批准。如果这一步被分配给一个角色，那么只需要属于该角色的用户去批准。"
 
 #: includes/steps/class-step-approval.php:394
 msgid "At least one assignee must approve"
-msgstr "Debe aprobarlo al menos un encargado"
+msgstr "必须由至少一个负责人批准"
 
 #: includes/steps/class-step-approval.php:398
 msgid "All assignees must approve"
-msgstr "Todos los encargados deben aprobarlo"
+msgstr "必须由所有负责人批准"
 
 #: includes/steps/class-step-approval.php:405
 #: includes/steps/class-step-user-input.php:169
 msgid "Instructions"
-msgstr "Instrucciones"
+msgstr "说明"
 
 #: includes/steps/class-step-approval.php:407
 #: includes/steps/class-step-user-input.php:171
 msgid ""
 "Activate this setting to display instructions to the user for the current "
 "step."
-msgstr ""
+msgstr "激活这个设置，为当前步骤的用户显示指示。"
 
 #: includes/steps/class-step-approval.php:409
 #: includes/steps/class-step-user-input.php:173
 msgid "Display instructions"
-msgstr "Mostrar instrucciones"
+msgstr "显示说明"
 
 #: includes/steps/class-step-approval.php:413
 msgid ""
 "Instructions: please review the values in the fields below and click on the "
 "Approve or Reject button"
-msgstr "Instrucciones: Por favor, revisa los valores en los campos a continuación y haz clic en el botón Aprobar o Rechazar."
+msgstr "提示：请查看以下字段中的数据，然后单击“批准”或“拒绝”按钮"
 
 #: includes/steps/class-step-approval.php:418
 #: includes/steps/class-step-user-input.php:181
 msgid "Display Fields"
-msgstr "Mostrar campos"
+msgstr "显示字段"
 
 #: includes/steps/class-step-approval.php:419
 #: includes/steps/class-step-user-input.php:182
 msgid "Select the fields to hide or display."
-msgstr "Selecciona los campos a ocultar o mostrar."
+msgstr "选择要隐藏或显示的字段。"
 
 #: includes/steps/class-step-approval.php:424
 msgid "Emails"
-msgstr "Emails"
+msgstr "电子邮件"
 
 #: includes/steps/class-step-approval.php:425
 msgid "Configure the emails that should be sent for this step."
-msgstr "Configura los emails que deberían enviarse en este paso."
+msgstr "为这个步骤配置应该发送的电子邮件。"
 
 #: includes/steps/class-step-approval.php:429
 msgid "Assignee Email"
-msgstr "Email del encargado"
+msgstr "负责人电子邮件"
 
 #: includes/steps/class-step-approval.php:434
 msgid "Rejection Email"
-msgstr "Email de rechazo"
+msgstr "拒绝电子邮件"
 
 #: includes/steps/class-step-approval.php:439
 msgid "Approval Email"
-msgstr "Email de aprobación"
+msgstr "批准电子邮件"
 
 #: includes/steps/class-step-approval.php:460
 msgid "Revert to User Input step"
-msgstr ""
+msgstr "恢复到用户输入步骤"
 
 #: includes/steps/class-step-approval.php:462
 msgid ""
@@ -1368,84 +1365,84 @@ msgid ""
 "without changing the status. Enable this setting to show the Revert button "
 "next to the Approve and Reject buttons and specify the User Input step the "
 "entry will be sent to."
-msgstr ""
+msgstr "该恢复设置启用除了批准和拒绝之外的第三个选项，它允许代理人直接向一个用户输入步骤发送条目，而不改变状态。启用这个设置，以显示该按钮旁边的批准和拒绝按钮，并指定用户输入步骤将被发送到。"
 
 #: includes/steps/class-step-approval.php:474
 #: includes/steps/class-step-user-input.php:200
 msgid "Workflow Note"
-msgstr ""
+msgstr "工作流备注"
 
 #: includes/steps/class-step-approval.php:476
 #: includes/steps/class-step-user-input.php:202
 msgid ""
 "The text entered in the Note box will be added to the timeline. Use this "
 "setting to select the options for the Note box."
-msgstr ""
+msgstr "在“备注”框中输入的文本将被添加到时间轴上。使用此设置为“备注”框选择选项。"
 
 #: includes/steps/class-step-approval.php:479
 #: includes/steps/class-step-user-input.php:193
 #: includes/steps/class-step-user-input.php:205
 msgid "Hidden"
-msgstr ""
+msgstr "隐藏"
 
 #: includes/steps/class-step-approval.php:480
 #: includes/steps/class-step-user-input.php:206
 msgid "Not required"
-msgstr ""
+msgstr "非必填"
 
 #: includes/steps/class-step-approval.php:481
 msgid "Always required"
-msgstr ""
+msgstr "总是必填"
 
 #: includes/steps/class-step-approval.php:482
 msgid "Required if approved"
-msgstr ""
+msgstr "必填，如果已批准"
 
 #: includes/steps/class-step-approval.php:483
 msgid "Required if rejected"
-msgstr ""
+msgstr "必填，如果已拒绝"
 
 #: includes/steps/class-step-approval.php:488
 msgid "Required if reverted"
-msgstr ""
+msgstr "必填，如果恢复"
 
 #: includes/steps/class-step-approval.php:489
 msgid "Required if reverted or rejected"
-msgstr ""
+msgstr "需要恢复或者驳回"
 
 #: includes/steps/class-step-approval.php:499
 msgid "Post Action if Rejected:"
-msgstr ""
+msgstr "被拒绝后的文章操作"
 
 #: includes/steps/class-step-approval.php:503
 msgid "Mark Post as Draft"
-msgstr ""
+msgstr "将文章标记为草稿"
 
 #: includes/steps/class-step-approval.php:504
 msgid "Trash Post"
-msgstr ""
+msgstr "回收站中的文章"
 
 #: includes/steps/class-step-approval.php:505
 msgid "Delete Post"
-msgstr ""
+msgstr "﻿删除文章"
 
 #: includes/steps/class-step-approval.php:512
 msgid "Post Action if Approved:"
-msgstr ""
+msgstr "被批准后的文章操作"
 
 #: includes/steps/class-step-approval.php:515
 msgid "Publish Post"
-msgstr ""
+msgstr "发布文章"
 
 #: includes/steps/class-step-approval.php:755
 msgid ""
 "The status could not be changed because this step has already been "
 "processed."
-msgstr "No se pudo cambiar el estado porque este paso ha sido procesado."
+msgstr "此步骤已被处理，所以无法更改该状态。"
 
 #: includes/steps/class-step-approval.php:763
 msgid "Reverted to step"
-msgstr ""
+msgstr "回滚到步骤"
 
 #: includes/steps/class-step-approval.php:766
 #: includes/steps/class-step-approval.php:796
@@ -1453,83 +1450,83 @@ msgstr ""
 #: includes/steps/class-step-user-input.php:576
 #: includes/steps/class-step-user-input.php:865
 msgid "Note"
-msgstr "Nota"
+msgstr "备注"
 
 #: includes/steps/class-step-approval.php:770
 msgid "Reverted to step:"
-msgstr ""
+msgstr "回滚到步骤："
 
 #: includes/steps/class-step-approval.php:788
 msgid "Approved."
-msgstr "Aprobada."
+msgstr "已批准。"
 
 #: includes/steps/class-step-approval.php:790
 msgid "Rejected."
-msgstr "Rechazada."
+msgstr "已拒绝。"
 
 #: includes/steps/class-step-approval.php:808
 msgid "Entry Approved"
-msgstr "Entrada aprobada"
+msgstr "条目已被批准"
 
 #: includes/steps/class-step-approval.php:811
 msgid "Entry Rejected"
-msgstr "Entrada rechazada"
+msgstr "条目已被拒绝"
 
 #: includes/steps/class-step-approval.php:850
 #: includes/steps/class-step-user-input.php:610
 msgid "A note is required"
-msgstr ""
+msgstr "备注为必填项"
 
 #: includes/steps/class-step-approval.php:865
 msgid "There was a problem while updating the form."
-msgstr ""
+msgstr "在更新表单时出现了一个问题。"
 
 #: includes/steps/class-step-approval.php:872
 msgid "Pending Approval"
-msgstr "Pendiente de aprobación"
+msgstr "等待批准"
 
 #: includes/steps/class-step-approval.php:920
 msgid "(Missing)"
-msgstr ""
+msgstr "(缺失)"
 
 #: includes/steps/class-step-approval.php:990
 #: includes/steps/class-step-approval.php:1256
 msgid "Approve"
-msgstr "Aprobar"
+msgstr "允许"
 
 #: includes/steps/class-step-approval.php:1006
 #: includes/steps/class-step-approval.php:1305
 msgid "Reject"
-msgstr "Rechazar"
+msgstr "拒绝"
 
 #: includes/steps/class-step-approval.php:1023
 msgid "Revert"
-msgstr ""
+msgstr "还原"
 
 #: includes/steps/class-step-approval.php:1348
 msgid "Error: step already processed."
-msgstr "Error: Paso ya procesado."
+msgstr "错误 ︰ 该步骤已被处理。"
 
 #: includes/steps/class-step-feed-activecampaign.php:23
 msgid "ActiveCampaign"
-msgstr ""
+msgstr "ActiveCampaign"
 
 #: includes/steps/class-step-feed-add-on.php:108
 #: includes/steps/class-step-feed-add-on.php:118
 msgid "Feeds"
-msgstr "Feeds"
+msgstr "工作流"
 
 #: includes/steps/class-step-feed-add-on.php:115
 msgid "You don't have any feeds set up."
-msgstr "No tienes ningún feed configurado."
+msgstr "您没有任何的工作流设置。"
 
 #: includes/steps/class-step-feed-add-on.php:154
 msgid "Feed processed: %s"
-msgstr "Feed procesado: %s"
+msgstr "已处理的工作：%s 件"
 
 #: includes/steps/class-step-feed-add-on.php:158
 msgid "Feed processing initiated: %s"
-msgstr ""
+msgstr "已处理的工作流：%s 件"
 
 #: includes/steps/class-step-feed-agilecrm.php:23
 msgid "Agile CRM"
@@ -1537,7 +1534,7 @@ msgstr "Agile CRM"
 
 #: includes/steps/class-step-feed-aweber.php:23
 msgid "AWeber"
-msgstr "AWeber"
+msgstr "Aweber"
 
 #: includes/steps/class-step-feed-batchbook.php:23
 msgid "Batchbook"
@@ -1629,15 +1626,15 @@ msgstr "Trello"
 
 #: includes/steps/class-step-feed-twilio.php:23
 msgid "Twilio"
-msgstr "Twilio"
+msgstr "Trello"
 
 #: includes/steps/class-step-feed-user-registration.php:30
 msgid "User Registration"
-msgstr "Registro de Usuarios"
+msgstr "用户注册"
 
 #: includes/steps/class-step-feed-user-registration.php:81
 msgid "Create"
-msgstr "Crear"
+msgstr "创建"
 
 #: includes/steps/class-step-feed-wp-e-signature.php:24
 msgid "WP E-Signature"
@@ -1653,59 +1650,59 @@ msgstr "Zoho CRM"
 
 #: includes/steps/class-step-notification.php:21
 msgid "Notification"
-msgstr "Notificación"
+msgstr "通知"
 
 #: includes/steps/class-step-notification.php:48
 msgid "Gravity Forms Notifications"
-msgstr "Notificaciones de Gravity Forms"
+msgstr "Gravity Forms 通知"
 
 #: includes/steps/class-step-notification.php:55
 msgid "Workflow notification"
-msgstr "Notificación de Workflow"
+msgstr "工作流通知"
 
 #: includes/steps/class-step-notification.php:56
 msgid "Enable this setting to send an email."
-msgstr "Activa este ajuste para enviar un email."
+msgstr "启用这个设置来发送一封电子邮件。"
 
 #: includes/steps/class-step-notification.php:60
 #: includes/steps/class-step-user-input.php:224
 #: includes/wizard/steps/class-iw-step-updates.php:88
 msgid "Enabled"
-msgstr "Activado"
+msgstr "已启用"
 
 #: includes/steps/class-step-notification.php:74
 msgid "Configure Routing"
-msgstr "Configurar enrutamiento"
+msgstr "配置发送规则"
 
 #: includes/steps/class-step-notification.php:171
 msgid "Sent Notification: %s"
-msgstr "Notificación enviada: %s"
+msgstr "已发送通知条数： %s"
 
 #: includes/steps/class-step-notification.php:227
 msgid "Sent Notification: "
-msgstr "Notificación enviada: "
+msgstr "已发送的通知 ︰"
 
 #: includes/steps/class-step-user-input.php:25
 #: includes/steps/class-step-user-input.php:48
 msgid "User Input"
-msgstr ""
+msgstr "用户输入"
 
 #: includes/steps/class-step-user-input.php:69
 msgid "Editable fields"
-msgstr "Campos editables"
+msgstr "可编辑字段"
 
 #: includes/steps/class-step-user-input.php:89
 #: includes/steps/class-step-user-input.php:115
 msgid "Enable field conditional logic"
-msgstr ""
+msgstr "启用字段条件逻辑"
 
 #: includes/steps/class-step-user-input.php:98
 msgid "Dynamic"
-msgstr ""
+msgstr "动态"
 
 #: includes/steps/class-step-user-input.php:102
 msgid "Only when the page loads"
-msgstr ""
+msgstr "仅当页面加载时"
 
 #: includes/steps/class-step-user-input.php:105
 #: includes/steps/class-step-user-input.php:146
@@ -1713,19 +1710,19 @@ msgid ""
 "Fields and Sections support dynamic conditional logic. Pages do not support "
 "dynamic conditional logic so they will only be shown or hidden when the page"
 " loads."
-msgstr ""
+msgstr "字段和部分支持动态条件逻辑。页面不支持动态的条件逻辑，所以它们只能在页面加载时显示或隐藏。"
 
 #: includes/steps/class-step-user-input.php:139
 msgid "Green triangle"
-msgstr "Triángulo verde"
+msgstr "绿色三角形"
 
 #: includes/steps/class-step-user-input.php:143
 msgid "Green Background"
-msgstr "Fondo verde"
+msgstr "绿色背景"
 
 #: includes/steps/class-step-user-input.php:152
 msgid "Assignee Policy"
-msgstr "Política de encargados"
+msgstr "负责人指定规则"
 
 #: includes/steps/class-step-user-input.php:153
 msgid ""
@@ -1733,193 +1730,193 @@ msgid ""
 "this step then the entry will require input from every assignee before the "
 "step can be completed. If the step is assigned to a role only one user in "
 "that role needs to complete the step."
-msgstr "Define como debe procesarse este paso. Si todos los encargados deben completar este paso entonces la entrada necesitará respuesta de cada uno de los encargados para completar el paso. Si este paso está asignado a un rol sólo uno de los usuarios con ese rol necesitará completar el paso."
+msgstr "定义该步骤如何操作。如果所有的负责人都必须完成这一步，那么在步骤完成之前，该条目将先要求每个负责人填写。如果该步骤被分配给一个角色，那么只需要属于该角色的用户来完成该步骤。"
 
 #: includes/steps/class-step-user-input.php:158
 msgid "At least one assignee must complete this step"
-msgstr "Al menos un encargado debe completar este paso"
+msgstr "至少一个负责人必须完成此步骤"
 
 #: includes/steps/class-step-user-input.php:162
 msgid "All assignees must complete this step"
-msgstr "Todos los encargados deben completar este paso"
+msgstr "所有的负责人必须完成这个步骤"
 
 #: includes/steps/class-step-user-input.php:188
 msgid "Default Status Option"
-msgstr ""
+msgstr "默认状态选项"
 
 #: includes/steps/class-step-user-input.php:189
 msgid ""
 "Select the default value for the status on the workflow detail page. Select "
 "Hidden to hide the status options."
-msgstr ""
+msgstr "在工作流程详细信息页面上选择“状态”的默认值。选择“隐藏”将隐藏状态选项。"
 
 #: includes/steps/class-step-user-input.php:194
 #: includes/steps/class-step-user-input.php:886
 msgid "In progress"
-msgstr "En progreso"
+msgstr "进行中"
 
 #: includes/steps/class-step-user-input.php:207
 msgid "Always Required"
-msgstr ""
+msgstr "总是必填"
 
 #: includes/steps/class-step-user-input.php:210
 msgid "Required if in progress"
-msgstr ""
+msgstr "必填，若在进行中"
 
 #: includes/steps/class-step-user-input.php:214
 msgid "Required if complete"
-msgstr ""
+msgstr "必填，如果已完成"
 
 #: includes/steps/class-step-user-input.php:265
 msgid "A new entry requires your input"
-msgstr "Una nueva entrada necesita tu atención"
+msgstr "一个新条目需要您输入"
 
 #: includes/steps/class-step-user-input.php:559
 msgid "Entry updated and marked complete."
-msgstr "Entrada actualizada y marcada como completada."
+msgstr "条目已更新并且已标记完成。"
 
 #: includes/steps/class-step-user-input.php:559
 msgid "Entry updated - in progress."
-msgstr "Entrada actualizada - en progreso."
+msgstr "条目已更新 - 处理中。"
 
 #: includes/steps/class-step-user-input.php:672
 #: includes/steps/class-step-user-input.php:697
 msgid "This field is required."
-msgstr ""
+msgstr "此为必填项"
 
 #: includes/steps/class-step-user-input.php:724
 msgid "There was a problem while updating your form."
-msgstr ""
+msgstr "在更新表单时出现了一个问题。"
 
 #: includes/steps/class-step-user-input.php:740
 msgid "Pending Input"
-msgstr ""
+msgstr "等待输入"
 
 #: includes/steps/class-step-webhook.php:30
 #: includes/steps/class-step-webhook.php:40
 msgid "Outgoing Webhook"
-msgstr ""
+msgstr "外发 Webhook"
 
 #: includes/steps/class-step-webhook.php:45
 msgid "Outgoing Webhook URL"
-msgstr ""
+msgstr "外发 Webhook 地址"
 
 #: includes/steps/class-step-webhook.php:50
 msgid "Request Method"
-msgstr ""
+msgstr "请求方式"
 
 #: includes/steps/class-step-webhook.php:74
 msgid "Format"
-msgstr "Formato"
+msgstr "格式"
 
 #: includes/steps/class-step.php:157
 msgid "Next Step"
-msgstr "Siguiente paso"
+msgstr "下一步"
 
 #: includes/steps/class-step.php:655
 msgid "%s: not required"
-msgstr "%s: no obligatorio"
+msgstr "%s: 不是必填项"
 
 #: includes/steps/class-step.php:787
 msgid "Entry"
-msgstr "Entrada"
+msgstr "条目"
 
 #: includes/steps/class-step.php:1554
 msgid "Processed"
-msgstr ""
+msgstr "已处理"
 
 #: includes/wizard/steps/class-iw-step-complete.php:42
 msgid "Congratulations! Now you can set up your first workflow."
-msgstr "¡Felicidades! Ahora puedes configurar tu primer flujo de trabajo."
+msgstr "恭喜！现在您可以设置您的第一个工作流。"
 
 #: includes/wizard/steps/class-iw-step-complete.php:51
 msgid "Select a Form to use for your Workflow"
-msgstr "Selecciona un formulario para usar tu flujo de trabajo"
+msgstr "选择一个用于工作流的表单"
 
 #: includes/wizard/steps/class-iw-step-complete.php:67
 msgid "Add Workflow Steps in the Form Settings"
-msgstr "Añade pasos del flujo de trabajo en los ajustes del formulario"
+msgstr "在表单设置中添加工作流步骤"
 
 #: includes/wizard/steps/class-iw-step-complete.php:71
 msgid "Add Workflow Steps"
-msgstr "Añadir pasos del flujo de trabajo"
+msgstr "添加工作流步骤"
 
 #: includes/wizard/steps/class-iw-step-complete.php:78
 msgid ""
 "Don't have a form you want to use for the workflow? %sCreate a Form%s and "
 "add your steps in the Form Settings later."
-msgstr "¿No tienes un formulario donde usar el flujo de trabajo? %sCrea un formulario%s y añade pasos en los ajustes del formulario más tarde."
+msgstr "没有适用于工作流的表单？你可以先%s新建表单%s ，稍后在表单设置中添加您的步骤。"
 
 #: includes/wizard/steps/class-iw-step-complete.php:88
 msgid ""
 "%sCreate a Form%s and then add your Workflow steps in the Form Settings."
-msgstr "%sCrea un formulario%s y después añade tus pasos del flujo de trabajo en los ajustes del formulario."
+msgstr "%s创建一个表单%s，然后在表单设置中添加工作流步骤。"
 
 #: includes/wizard/steps/class-iw-step-complete.php:98
 msgid "Installation Complete"
-msgstr "Instalación completada"
+msgstr "安装完成"
 
 #: includes/wizard/steps/class-iw-step-license-key.php:16
 msgid ""
 "Enter your Gravity Flow License Key below.  Your key unlocks access to "
 "automatic updates and support.  You can find your key in your purchase "
 "receipt or by logging into the %sGravity Flow%s site."
-msgstr "Introduce tu clave de licencia de Gravity Flow a continuación. Tu clave da acceso a actualizaciones automáticas y soporte. Puedes encontrar tu clave en tu recibo de compra o iniciando sesión en el sitio web de %sGravity Flow%s."
+msgstr "在下面输入您的GravityFlow许可证密钥。它将激活自动更新和技术支持。您可以在您的购买收据或通过登录到 %sGravity Flow%s 网站找到您的密钥。"
 
 #: includes/wizard/steps/class-iw-step-license-key.php:20
 msgid "Enter Your License Key"
-msgstr "Introduce tu clave de licencia"
+msgstr "输入您的许可证密钥"
 
 #: includes/wizard/steps/class-iw-step-license-key.php:35
 msgid ""
 "If you don't enter a valid license key, you will not be able to update "
 "Gravity Flow when important bug fixes and security enhancements are "
 "released. This can be a serious security risk for your site."
-msgstr "Si no introduces una clave de licencia válida, no podrás actualizar Gravity Flow cuando se publiquen correcciones de fallos y mejoras de seguridad. Esto puede ser un riesgo de seguridad importarte para tu sitio."
+msgstr "如果您没有输入有效的许可证密钥，您将无法在发布重要的错误修复和安全性增强时更新GravityFlow。这可能给您的网站带来严重的安全风险。"
 
 #: includes/wizard/steps/class-iw-step-license-key.php:40
 msgid "I understand the risks"
-msgstr "Entiendo los riesgos"
+msgstr "我了解风险"
 
 #: includes/wizard/steps/class-iw-step-license-key.php:59
 msgid "Please enter a valid license key."
-msgstr "Por favor introduce una clave de licencia válida."
+msgstr "请输入有效的许可证密钥。"
 
 #: includes/wizard/steps/class-iw-step-license-key.php:65
 msgid ""
 "Invalid or Expired Key : Please make sure you have entered the correct value"
 " and that your key is not expired."
-msgstr "Licencia caducada o no válida: Por favor asegúrate de que la has introducido correctamente y de que no está caducada."
+msgstr "无效或过期的密钥：请确保您已输入正确的密钥，并确保您的密钥未过期。"
 
 #: includes/wizard/steps/class-iw-step-license-key.php:73
 msgid "Please accept the terms"
-msgstr "Por favor acepta las condiciones"
+msgstr "请接受这些条款。"
 
 #: includes/wizard/steps/class-iw-step-updates.php:16
 msgid ""
 "Gravity Flow will download important bug fixes, security enhancements and "
 "plugin updates automatically. Updates are extremely important to the "
 "security of your WordPress site."
-msgstr "Gravity Flow descargará correcciones de errores importantes y mejoras de seguridad y actualizaciones de la extensión automáticamente. Las actualizaciones son extremadamente importantes para la seguridad de tu WordPress."
+msgstr "GravityFlow将自动下载重要的错误修复，安全性增强和插件更新。更新对您的 WordPress 站点的安全极为重要。"
 
 #: includes/wizard/steps/class-iw-step-updates.php:22
 msgid ""
 "This feature is activated by default unless you opt to disable it below. We "
 "only recommend disabling background updates if you intend on managing "
 "updates manually. A valid license is required for background updates."
-msgstr "Esta característica está activada de forma predeterminada a menos que optes por desactivarla a continuación. Sólo recomendamos desactivar las actualizaciones en segundo plano si tu intención es gestionar las actualizaciones manualmente. Se necesita una licencia válida para las actualizaciones en segundo plano."
+msgstr "默认情况下，这个功能是被激活的，除非您选择禁用它。只有在您要手动管理更新时，我们才建议禁用后台更新。后台更新需要一个有效许可证。"
 
 #: includes/wizard/steps/class-iw-step-updates.php:29
 msgid "Keep background updates enabled"
-msgstr "Mantener actualizaciones en segundo plano activadas"
+msgstr "保持后台更新已启用"
 
 #: includes/wizard/steps/class-iw-step-updates.php:35
 msgid "Turn off background updates"
-msgstr "Desactivar actualizaciones en segundo plano"
+msgstr "关掉后台更新"
 
 #: includes/wizard/steps/class-iw-step-updates.php:41
 msgid "Are you sure?"
-msgstr "¿Estás seguro?"
+msgstr "你确定？"
 
 #: includes/wizard/steps/class-iw-step-updates.php:44
 msgid ""
@@ -1927,39 +1924,39 @@ msgid ""
 " security enhancements. We only recommend doing this if you are experienced "
 "at managing a WordPress site and accept the risks involved in manually "
 "keeping your WordPress site updated."
-msgstr "Al desactivar las actualizaciones en segundo plano tu sitio no podrá obtener solución a fallos críticos y mejoras de seguridad. Sólo recomendamos hacer esto si tienes experiencia gestionando un sitio de WordPress y aceptas los riesgos implícitos en mantener tu WordPress actualizado de forma manual."
+msgstr "如果禁用后台更新，可能得不到重要的漏洞修复和安全增强。只有当你是在管理一个 WordPress 站点方面很有经验，并且接受手动保持您的WordPress站点更新的风险时，我们才推荐您这么做。"
 
 #: includes/wizard/steps/class-iw-step-updates.php:49
 msgid "I Understand and Accept the Risk"
-msgstr "Lo entiendo y acepto el riesgo"
+msgstr "我理解并接受风险"
 
 #: includes/wizard/steps/class-iw-step-updates.php:80
 msgid "Please accept the terms."
-msgstr "Por favor acepta las condiciones."
+msgstr "请接受这些条款。"
 
 #: includes/wizard/steps/class-iw-step-updates.php:88
 msgid "Disabled"
-msgstr ""
+msgstr "已禁用"
 
 #: includes/wizard/steps/class-iw-step-welcome.php:9
 msgid "Click the 'Get Started' button to complete your installation."
-msgstr "Haz clic en el botón 'Comenzar' para completar tu instalación."
+msgstr "点击 “入门” 按钮来完成您的安装。"
 
 #: includes/wizard/steps/class-iw-step-welcome.php:16
 msgid "Get Started"
-msgstr "Comenzar"
+msgstr "入门"
 
 #: includes/wizard/steps/class-iw-step-welcome.php:20
 msgid "Welcome"
-msgstr "Bienvenido"
+msgstr "欢迎"
 
 #: includes/wizard/steps/class-iw-step.php:113
 msgid "Next"
-msgstr "Siguiente"
+msgstr "下一个"
 
 #: includes/wizard/steps/class-iw-step.php:117
 msgid "Back"
-msgstr "Anterior"
+msgstr "返回"
 
 #. Plugin Name of the plugin/theme
 msgid "Gravity Flow"
@@ -1971,7 +1968,7 @@ msgstr "https://gravityflow.io"
 
 #. Description of the plugin/theme
 msgid "Build Workflow Applications with Gravity Forms."
-msgstr "Crea aplicaciones de flujo de trabajo con Gravity Forms."
+msgstr "利用GravityFlow来搭建工作流程应用程序。"
 
 #. Author of the plugin/theme
 msgid "Steven Henty"
@@ -1987,16 +1984,16 @@ msgctxt ""
 msgid ""
 "%s has been successfully uninstalled. It can be re-activated from the "
 "%splugins page%s."
-msgstr "% ha sido desinstalado correctamente. Puede reactivarse desde la %spágina de extensiones%s."
+msgstr "%s 已成功卸载。你可以在 %s插件页面%s 被重新激活它。"
 
 #: includes/class-extension.php:97 includes/class-feed-extension.php:98
 msgctxt ""
 "Title for the uninstall section on the settings page for a Gravity Flow "
 "extension."
 msgid "Uninstall %s Extension"
-msgstr "Desinstalar extensión de %s"
+msgstr "卸载 %s 个扩展插件"
 
 #: includes/class-extension.php:106 includes/class-feed-extension.php:107
 msgctxt "Button text on the settings page for an extension."
 msgid "Uninstall Extension"
-msgstr "Desinstalar extensión"
+msgstr "卸载扩展插件"

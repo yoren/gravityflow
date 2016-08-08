@@ -1,19 +1,18 @@
 # Copyright 2015-2016 Steven Henty.
 # Translators:
-# Samuel Aguilera <registros@samuelaguilera.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
 "POT-Creation-Date: 2016-06-01 13:47:58+00:00\n"
-"PO-Revision-Date: 2016-06-13 18:56+0000\n"
-"Last-Translator: Samuel Aguilera <registros@samuelaguilera.com>\n"
-"Language-Team: Spanish (Spain) (http://www.transifex.com/gravityflow/gravityflow/language/es_ES/)\n"
+"PO-Revision-Date: 2016-08-07 21:28+0000\n"
+"Last-Translator: Süha Karalar <suhakaralar@gmail.com>\n"
+"Language-Team: Turkish (Turkey) (http://www.transifex.com/gravityflow/gravityflow/language/tr_TR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: es_ES\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: tr_TR\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Gravity Flow Build Server\n"
 "X-Poedit-Basepath: ../\n"
 "X-Poedit-Bookmarks: \n"
@@ -28,7 +27,7 @@ msgstr ""
 #: includes/steps/class-step-user-input.php:787
 #: includes/steps/class-step-user-input.php:957
 msgid "User"
-msgstr "Usuario"
+msgstr "Kullanıcı"
 
 #: class-gravity-flow.php:266 includes/fields/class-field-role.php:55
 #: includes/steps/class-step-approval.php:915
@@ -38,122 +37,122 @@ msgstr "Rol"
 
 #: class-gravity-flow.php:440
 msgid "No results matched"
-msgstr "No hay resultados coincidentes"
+msgstr "Eşleşen sonuç bulunamadı"
 
 #: class-gravity-flow.php:461
 msgid "Workflow Steps"
-msgstr "Pasos del flujo de trabajo"
+msgstr "İş Akışı Adımları"
 
 #: class-gravity-flow.php:461
 msgid "Add New"
-msgstr "Añadir nuevo"
+msgstr "Yeni Ekle"
 
 #: class-gravity-flow.php:592
 msgid "Workflow Step Settings"
-msgstr "Ajustes de flujo de trabajo"
+msgstr "İş Akışı Adım Ayarları"
 
 #: class-gravity-flow.php:622
 #: includes/fields/class-field-assignee-select.php:103
 msgid "Users"
-msgstr "Usuarios"
+msgstr "Kullanıcılar"
 
 #: class-gravity-flow.php:626
 #: includes/fields/class-field-assignee-select.php:125
 msgid "Roles"
-msgstr "Roles"
+msgstr "Roller"
 
 #: class-gravity-flow.php:652
 #: includes/fields/class-field-assignee-select.php:139
 msgid "User (Created by)"
-msgstr "Usuario (Creado por)"
+msgstr "Kullanıcı (oluşturulmuş)"
 
 #: class-gravity-flow.php:659
 #: includes/fields/class-field-assignee-select.php:151
 #: includes/pages/class-status.php:312
 msgid "Fields"
-msgstr "Campos"
+msgstr "Alanlar"
 
 #: class-gravity-flow.php:740 class-gravity-flow.php:1822
 msgid "Step Type"
-msgstr "Tipo de paso"
+msgstr "Adım Türü"
 
 #: class-gravity-flow.php:754 class-gravity-flow.php:758
 #: includes/pages/class-support.php:96
 msgid "Name"
-msgstr "Nombre"
+msgstr "İsim"
 
 #: class-gravity-flow.php:758
 msgid "Enter a name to uniquely identify this step."
-msgstr "Introduce un nombre único para identificar este paso."
+msgstr "Bu adım benzersiz olarak tanımlayacak bir ad girin."
 
 #: class-gravity-flow.php:762
 msgid "Description"
-msgstr "Descripción"
+msgstr "Açıklama"
 
 #: class-gravity-flow.php:769
 msgid ""
 "Build the conditional logic that should be applied to this step before it's "
 "allowed to be processed. If an entry does not meet the conditions of this "
 "step it will fall on to the next step in the list."
-msgstr ""
+msgstr "Çalıştırılmadan önce bu adım için uygulanması gereken koşullu mantığı oluşturun. Eğer bir kayıt bu adımın koşullarını karşılamıyorsa bu listedeki bir sonraki adıma düşecektir."
 
 #: class-gravity-flow.php:772
 msgid "Enable Condition for this step"
-msgstr "Activar condición para este paso"
+msgstr "Bu adım için koşulu etkinleştir"
 
 #: class-gravity-flow.php:773
 msgid "Perform this step if"
-msgstr "Realizar este paso si"
+msgstr "Bu adımı gerçekleştirme koşulları"
 
 #: class-gravity-flow.php:777 class-gravity-flow.php:1301
 #: class-gravity-flow.php:1308 class-gravity-flow.php:1314
 #: class-gravity-flow.php:1379
 msgid "Schedule"
-msgstr "Programar"
+msgstr "Zamanla"
 
 #: class-gravity-flow.php:779
 msgid ""
 "Scheduling a step will queue entries and prevent them from starting this "
 "step until the specified date or until the delay period has elapsed."
-msgstr ""
+msgstr "Bir adımı zamanlamak kayıtları sıraya sokar ve bu adımın belirlenen tarih yada zaman aralığından önce işlenmesine engel olur."
 
 #: class-gravity-flow.php:780
 msgid ""
 "Note: the schedule setting requires the WordPress Cron which is included and"
 " enabled by default unless your host has deactivated it."
-msgstr ""
+msgstr "Not: Zamanlama ayarları WordPress Cron işlevinin etkin olmasıyla çalışır, bu özellik web alanı servis sağlayıcısı tarafından özel olarak kapatılmadıysa zaten etkin olmalıdır."
 
 #: class-gravity-flow.php:806 class-gravity-flow.php:1459
 #: class-gravity-flow.php:1466 class-gravity-flow.php:1472
 msgid "Expiration"
-msgstr "Caducidad"
+msgstr "Bitiş"
 
 #: class-gravity-flow.php:807
 msgid ""
 "Enable the expiration setting to allow this step to expire. Once expired, "
 "the entry will automatically proceed to the step configured in the Next Step"
 " setting(s) below."
-msgstr "Activa el ajuste de caducidad para que este paso pueda caducar. Una vez caducado, la entrada pasará automáticamente al siguiente paso configurado a continuación."
+msgstr "Bu adımın sona erme tarihini belirlemek için bitiş tarihini etkinleştirin. Süresi dolan kayıt otomatik olarak aşağıda yapılandırılmış olan Sonraki Adım’a devam edecektir."
 
 #: class-gravity-flow.php:814
 msgid "Next step if"
-msgstr "Siguiente paso si"
+msgstr "Sonraki adıma geçme koşulları"
 
 #: class-gravity-flow.php:829
 msgid "Step settings updated. %sBack to the list%s or %sAdd another step%s."
-msgstr "Ajustes del paso guardados.%sVolver a la lista%s o %sañadir otro paso%s. "
+msgstr "Adım ayarları güncelleştirildi. %sListeye geri dön %s veya %sBaşka bir adım ekle%s."
 
 #: class-gravity-flow.php:839
 msgid "Update Step Settings"
-msgstr "Actualizar ajustes del paso"
+msgstr "Adım Ayarlarını Güncelle"
 
 #: class-gravity-flow.php:842
 msgid "There was an error while saving the step settings"
-msgstr "Hubo un error al guardar los ajustes del paso"
+msgstr "Adım ayarları kaydedilirken bir hata oluştu"
 
 #: class-gravity-flow.php:859
 msgid "This step type is missing."
-msgstr ""
+msgstr "Bu adım türü eksik."
 
 #: class-gravity-flow.php:867
 msgid ""
@@ -162,483 +161,480 @@ msgid ""
 msgid_plural ""
 "There are %s entries currently on this step. These entries may be affected "
 "if the settings are changed."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Bu adımda %s kayıt bulunmaktadır. Ayarlar değişirse bu bu kayıtlar etkilenebilir."
 
 #: class-gravity-flow.php:1251
 msgid "Schedule this step"
-msgstr "Programar este paso"
+msgstr "Bu adımı zamanlama"
 
 #: class-gravity-flow.php:1264 class-gravity-flow.php:1444
 msgid "Delay"
-msgstr "Retraso"
+msgstr "Gecikme"
 
 #: class-gravity-flow.php:1268 class-gravity-flow.php:1448
 #: includes/pages/class-activity.php:42 includes/pages/class-activity.php:67
 #: includes/pages/class-status.php:735
 msgid "Date"
-msgstr "Fecha"
+msgstr "Tarih"
 
 #: class-gravity-flow.php:1280
 msgid "Date Field"
-msgstr ""
+msgstr "Tarih Alanı"
 
 #: class-gravity-flow.php:1292
 msgid "Schedule Date Field"
-msgstr ""
+msgstr "Tarih Alanını Zamanla"
 
 #: class-gravity-flow.php:1318 class-gravity-flow.php:1476
 msgid "Minute(s)"
-msgstr "Minuto(s)"
+msgstr "Dakika"
 
 #: class-gravity-flow.php:1322 class-gravity-flow.php:1480
 msgid "Hour(s)"
-msgstr "Hora(s)"
+msgstr "Saat"
 
 #: class-gravity-flow.php:1326 class-gravity-flow.php:1484
 msgid "Day(s)"
-msgstr "Día(s)"
+msgstr "Gün"
 
 #: class-gravity-flow.php:1330 class-gravity-flow.php:1488
 msgid "Week(s)"
-msgstr "Semana(s)"
+msgstr "Hafta"
 
 #: class-gravity-flow.php:1351
 msgid "Start this step on"
-msgstr "Iniciar este paso el"
+msgstr "Bu adımın başlama zamanı"
 
 #: class-gravity-flow.php:1359 class-gravity-flow.php:1369
 msgid "Start this step"
-msgstr "Iniciar este paso"
+msgstr "Bu adımı başlat"
 
 #: class-gravity-flow.php:1364
 msgid "after the workflow step is triggered."
-msgstr "después de ejecutar el paso del flujo."
+msgstr "iş akışı adımı tetiklendikten sonra."
 
 #: class-gravity-flow.php:1383
 msgid "after"
-msgstr "después"
+msgstr "sonra"
 
 #: class-gravity-flow.php:1387
 msgid "before"
-msgstr "antes"
+msgstr "önce"
 
 #: class-gravity-flow.php:1431
 msgid "Schedule expiration"
-msgstr ""
+msgstr "Bitiş zamanını ayarla"
 
 #: class-gravity-flow.php:1508
 msgid "This step expires on"
-msgstr "Este paso caduca el"
+msgstr "Bu adımın bitiş zamanı"
 
 #: class-gravity-flow.php:1516
 msgid "This step will expire"
-msgstr "Este paso caducará"
+msgstr "Bu adımın bitiş tarihi:"
 
 #: class-gravity-flow.php:1521
 msgid "after the workflow step has started."
-msgstr ""
+msgstr "İş akışı adımı başladıktan sonra."
 
 #: class-gravity-flow.php:1527
 msgid "Status after expiration"
-msgstr ""
+msgstr "Bitiş zamanından sonraki durum"
 
 #: class-gravity-flow.php:1531
 msgid "Expiration Status"
-msgstr ""
+msgstr "Bitiş Durumu"
 
 #: class-gravity-flow.php:1605 class-gravity-flow.php:1676
 #: includes/steps/class-step-approval.php:464
 #: includes/steps/class-step-user-input.php:130
 msgid "Enable"
-msgstr "Activar"
+msgstr "Etkinleştir"
 
 #: class-gravity-flow.php:1774
 msgid "Workflow Complete"
-msgstr "Flujo de trabajo completado"
+msgstr "İş Akışı Tamamlandı"
 
 #: class-gravity-flow.php:1775
 msgid "Next step in list"
-msgstr "Próximo paso en la lista"
+msgstr "Listedeki bir sonraki adım"
 
 #: class-gravity-flow.php:1821
 msgid "Step name"
-msgstr "Nombre paso"
+msgstr "Adım adı"
 
 #: class-gravity-flow.php:1827
 msgid "Entries"
-msgstr "Entradas"
+msgstr "Kayıtlar"
 
 #: class-gravity-flow.php:1837
 msgid "(missing)"
-msgstr ""
+msgstr "(eksik)"
 
 #: class-gravity-flow.php:1862
 msgid "You don't have any steps configured. Let's go %screate one%s!"
-msgstr "No tienes ningún paso configurado. ¡Vamos %screar uno%s!"
+msgstr "Yapılandırılmış herhangi bir adım yok. Yeni bir adım %soluşturalım%s "
 
 #: class-gravity-flow.php:1918 includes/pages/class-status.php:1191
 #: includes/pages/class-status.php:1196
 msgid "Status:"
-msgstr "Estado:"
+msgstr "Durum:"
 
 #: class-gravity-flow.php:2095
 msgid "Entry Id"
-msgstr "Id entrada"
+msgstr "Kayıt NO"
 
 #: class-gravity-flow.php:2096 includes/pages/class-inbox.php:97
 #: includes/pages/class-inbox.php:169
 msgid "Submitted"
-msgstr "Enviado"
+msgstr "Gönderilme Tarihi:"
 
 #: class-gravity-flow.php:2102
 msgid "Last updated"
-msgstr "Última actualización"
+msgstr "Son Güncelleme Tarihi"
 
 #: class-gravity-flow.php:2110
 msgid "Submitted by"
-msgstr "Enviado por"
+msgstr "Gönderen"
 
 #: class-gravity-flow.php:2119 class-gravity-flow.php:4583
 #: includes/pages/class-status.php:748
 #: includes/steps/class-step-user-input.php:957
 msgid "Status"
-msgstr "Estado"
+msgstr "Durum"
 
 #: class-gravity-flow.php:2128
 msgid "Expires"
-msgstr "Caduca"
+msgstr "Bitiş"
 
 #: class-gravity-flow.php:2150 includes/steps/class-step-approval.php:881
 #: includes/steps/class-step-user-input.php:746
 msgid "Queued"
-msgstr "En cola"
+msgstr "Sıraya alındı"
 
 #: class-gravity-flow.php:2168
 msgid "Scheduled"
-msgstr "Programado"
+msgstr "Zamanlandı"
 
 #: class-gravity-flow.php:2172
 msgid "Expired: refresh the page"
-msgstr "Caducado: recarga la página"
+msgstr "Süresi doldu: sayfayı yenileyin"
 
 #: class-gravity-flow.php:2199
 msgid "Admin"
-msgstr "Admin."
+msgstr "Yönetici"
 
 #: class-gravity-flow.php:2207
 msgid "Select an action"
-msgstr "Selecciona una acción"
+msgstr "Eylem seçin"
 
 #: class-gravity-flow.php:2210 includes/pages/class-status.php:378
 msgid "Apply"
-msgstr "Aplicar"
+msgstr "Uygula"
 
 #: class-gravity-flow.php:2236 includes/steps/class-step.php:852
 msgid "Cancel Workflow"
-msgstr "Cancelar flujo"
+msgstr "İş akışını iptal et"
 
 #: class-gravity-flow.php:2240
 msgid "Restart this step"
-msgstr "Reiniciar este paso"
+msgstr "Bu adım yeniden başlatın"
 
 #: class-gravity-flow.php:2249 includes/pages/class-status.php:210
 msgid "Restart Workflow"
-msgstr "Reiniciar flujo"
+msgstr "İş akışını yeniden başlatın"
 
 #: class-gravity-flow.php:2269
 msgid "Send to step:"
-msgstr "Enviar a paso:"
+msgstr "Şu adıma atla:"
 
 #: class-gravity-flow.php:2302
 msgid "Workflow complete"
-msgstr "Flujo de trabajo completado"
+msgstr "İş Akışı Tamamlandı"
 
 #: class-gravity-flow.php:2312
 msgid "View"
-msgstr "Ver"
+msgstr "Görüntüle"
 
 #: class-gravity-flow.php:2483
 msgid "General"
-msgstr "General"
+msgstr "Genel"
 
 #: class-gravity-flow.php:2484 class-gravity-flow.php:4078
 msgid "Gravity Flow Settings"
-msgstr "Ajustes de Gravity Flow"
+msgstr "Gravity Flow Ayarları"
 
 #: class-gravity-flow.php:2489 class-gravity-flow.php:2533
 msgid "Labels"
-msgstr "Etiquetas"
+msgstr "Etiketler"
 
 #: class-gravity-flow.php:2504
 msgid "Uninstall"
-msgstr "Desinstalar"
+msgstr "Kaldır"
 
 #: class-gravity-flow.php:2538
 msgid "Navigation"
-msgstr "Navegación"
+msgstr "Gezinme"
 
 #: class-gravity-flow.php:2564
 msgid "Status Labels"
-msgstr ""
+msgstr "Durum etiketleri"
 
 #: class-gravity-flow.php:2578 class-gravity-flow.php:4607
 #: includes/steps/class-step.php:182
 msgid "Pending"
-msgstr "Pendiente"
+msgstr "Beklemede"
 
 #: class-gravity-flow.php:2578 class-gravity-flow.php:4619
 msgid "Cancelled"
-msgstr "Cancelado"
+msgstr "İptal Edildi"
 
 #: class-gravity-flow.php:2600
 #: includes/steps/class-step-feed-user-registration.php:81
 #: includes/steps/class-step-user-input.php:916
 msgid "Update"
-msgstr "Actualizar"
+msgstr "Güncelle"
 
 #: class-gravity-flow.php:2615
 msgid "Invalid token"
-msgstr "Token no válido"
+msgstr "Geçersiz jeton"
 
 #: class-gravity-flow.php:2619
 msgid "Token already expired"
-msgstr "Token caducado"
+msgstr "Jeton süresi zaten dolmuş"
 
 #: class-gravity-flow.php:2627
 msgid "Token revoked"
-msgstr "Token revocado"
+msgstr "Jeton geçersiz"
 
 #: class-gravity-flow.php:2631
 msgid "Tools"
-msgstr "Herramientas"
+msgstr "Araçlar"
 
 #: class-gravity-flow.php:2647
 msgid "Revoke a token"
-msgstr "Revocar un token"
+msgstr "Jetonu iptal et"
 
 #: class-gravity-flow.php:2653
 msgid "Revoke"
-msgstr "Revocar"
+msgstr "İptal et"
 
 #: class-gravity-flow.php:2698
 msgid "Entries per page"
-msgstr "Entradas por página"
+msgstr "Sayfa başı kayıt sayısı"
 
 #: class-gravity-flow.php:2730
 msgid "Published"
-msgstr "Publicada"
+msgstr "Yayınlanan"
 
 #: class-gravity-flow.php:2741
 msgid "No workflow steps have been added to any forms yet."
-msgstr "Todavía no se ha añadido ningún paso de flujo de trabajo a ningún formulario."
+msgstr "Herhangi bir forma eklenmiş iş akışı adımı yok."
 
 #: class-gravity-flow.php:2750
 msgid "Settings"
-msgstr "Ajustes"
+msgstr "Ayarlar"
 
 #: class-gravity-flow.php:2754 includes/class-extension.php:123
 #: includes/class-feed-extension.php:124
 #: includes/wizard/steps/class-iw-step-license-key.php:49
 msgid "License Key"
-msgstr "Clave de licencia"
+msgstr "Lisans Anahtarı"
 
 #: class-gravity-flow.php:2758 includes/class-extension.php:127
 #: includes/class-feed-extension.php:128
 msgid "Invalid license"
-msgstr "Licencia no válida"
+msgstr "Geçersiz Lisans"
 
 #: class-gravity-flow.php:2764
 #: includes/wizard/steps/class-iw-step-updates.php:74
 msgid "Background Updates"
-msgstr "Actualizaciones automáticas"
+msgstr "Arkaplan Güncellemeleri"
 
 #: class-gravity-flow.php:2765
 msgid ""
 "Set this to ON to allow Gravity Flow to download and install bug fixes and "
 "security updates automatically in the background. Requires a valid license "
 "key."
-msgstr "Activa esto para permitir a Gravity Flow descargar e instalar automáticamente en segundo plano actualizaciones de corrección de fallos y seguridad. Se necesita una licencia válida."
+msgstr "Gravity Flow’un arkaplanda otomatik olarak hata düzeltmelerini ve güvenlik güncellemelerini indirip kurmasına izin vermek için bunu AÇIK konumuna getirin. Geçerli bir lisans anahtarı gerektirir."
 
 #: class-gravity-flow.php:2770
 msgid "On"
-msgstr "Activado"
+msgstr "Açık"
 
 #: class-gravity-flow.php:2771
 msgid "Off"
-msgstr "Desactivado"
+msgstr "Kapalı"
 
 #: class-gravity-flow.php:2779
 msgid "Published Workflow Forms"
-msgstr "Formularios con flujo de trabajo publicados"
+msgstr "Yayınlanmış İş Akışı Formları"
 
 #: class-gravity-flow.php:2780
 msgid "Select the forms you wish to publish on the Submit page."
-msgstr "Selecciona los formularios que quieres publicar en tu página de envío."
+msgstr "Gönderme sayfasında yayınlamak istediğiniz formları seçin."
 
 #: class-gravity-flow.php:2790
 msgid "Update Settings"
-msgstr "Actualizar ajustes"
+msgstr "Ayarları Güncelle"
 
 #: class-gravity-flow.php:2792
 msgid "Settings updated successfully"
-msgstr "Ajustes actualizados correctamente"
+msgstr "Ayarlar başarıyla güncellendi"
 
 #: class-gravity-flow.php:2793
 msgid "There was an error while saving the settings"
-msgstr "Hubo un error al guardar los ajustes"
+msgstr "Ayarlar kaydedilirken bir hata oluştu"
 
 #: class-gravity-flow.php:2897
 msgid "Submit a Workflow Form"
-msgstr "Enviar un formulario con flujo de trabajo"
+msgstr "Bir iş akışı formu gönderin"
 
 #: class-gravity-flow.php:2968
 msgid "Oops! We could not locate your entry."
-msgstr "¡Vaya! No hemos podido localizar tu entrada."
+msgstr "Tüh! Kaydınız bulunamadı."
 
 #: class-gravity-flow.php:2986 includes/steps/class-step-approval.php:1343
 msgid "Error: incorrect entry."
-msgstr "Error: Entrada incorrecta."
+msgstr "Hata: yanlış girdi."
 
 #: class-gravity-flow.php:2992
 msgid "Workflow Cancelled"
-msgstr "Flujo de trabajo cancelado."
+msgstr "İş akışı iptal edildi"
 
 #: class-gravity-flow.php:2999
 msgid "Error: This URL is no longer valid."
-msgstr "Error: Esta URL ya no es válida."
+msgstr "Hata: Bu URL artık geçerli değil."
 
 #: class-gravity-flow.php:3065
 msgid "Workflow Inbox"
-msgstr "Bandeja de entrada de flujo de trabajo"
+msgstr "İş akışı gelen kutusu"
 
 #: class-gravity-flow.php:3102
 msgid "Workflow Status"
-msgstr "Estado de flujo de trabajo"
+msgstr "İş akışı durumu"
 
 #: class-gravity-flow.php:3140
 msgid "Workflow Activity"
-msgstr "Actividad de flujo de trabajo"
+msgstr "İş akışı etkinliği"
 
 #: class-gravity-flow.php:3179
 msgid "Workflow Reports"
-msgstr "Informes de flujo de trabajo"
+msgstr "İş akışı raporları"
 
 #: class-gravity-flow.php:3221
 msgid "Your inbox of pending tasks"
-msgstr "Tu buzón de tareas pendientes"
+msgstr "Kutunuzda bekleyen görevler"
 
 #: class-gravity-flow.php:3235
 msgid "Submit a Workflow"
-msgstr "Enviar un flujo de trabajo"
+msgstr "Bir iş akışı gönderin"
 
 #: class-gravity-flow.php:3247
 msgid "Your workflows"
-msgstr "Tus flujos de trabajo"
+msgstr "İş akışlarınız"
 
 #: class-gravity-flow.php:3258 class-gravity-flow.php:4585
 msgid "Reports"
-msgstr "Informes"
+msgstr "Raporlar"
 
 #: class-gravity-flow.php:3269 class-gravity-flow.php:4586
 msgid "Activity"
-msgstr "Actividad"
+msgstr "Etkinlik"
 
 #: class-gravity-flow.php:3292 includes/class-api.php:120
 msgid "Workflow cancelled."
-msgstr "Flujo de trabajo cancelado."
+msgstr "İş akışı iptal edildi."
 
 #: class-gravity-flow.php:3296 class-gravity-flow.php:3308
 msgid "The entry does not currently have an active step."
-msgstr ""
+msgstr "Bu kaydın geçerli etkin bir adımı yok."
 
 #: class-gravity-flow.php:3305 includes/class-api.php:140
 msgid "Workflow Step restarted."
-msgstr "Pasos del flujo de trabajo reiniciados."
+msgstr "İş akışı adım yeniden başlatıldı."
 
 #: class-gravity-flow.php:3316 includes/class-api.php:166
 #: includes/pages/class-status.php:1266
 msgid "Workflow restarted."
-msgstr "Flujo de trabajo reiniciado."
+msgstr "İş akışı yeniden başlatıldı."
 
 #: class-gravity-flow.php:3326 includes/class-api.php:209
 msgid "Sent to step: %s"
-msgstr "Enviado a paso: %s"
+msgstr "Şu adıma gönder: %s"
 
 #: class-gravity-flow.php:3334
 msgid "Workflow: approved or rejected"
-msgstr ""
+msgstr "İş akışı: onaylayan veya reddedilen"
 
 #: class-gravity-flow.php:3335
 msgid "Workflow: user input"
-msgstr ""
+msgstr "İş akışı: kullanıcı girişi"
 
 #: class-gravity-flow.php:3336
 msgid "Workflow: complete"
-msgstr ""
+msgstr "İş akışı: tamamlanan"
 
 #: class-gravity-flow.php:3803
 msgid ""
 "Gravity Flow Steps imported. IMPORTANT: Check the assignees for each step. "
 "If the form was imported from a different installation with different user "
 "IDs then steps may need to be reassigned."
-msgstr ""
+msgstr "Gravity Flow adımları içe aktarıldı. ÖNEMLİ: Her adım için görevli kullanıcıları tekrar kontrol edin. Eğer form farklı bir kurulumdan farklı kullanıcı NO içeriği ile aktarıldıysa her adım için atanan görevlileri tekrar gözden geçirmelisiniz."
 
 #: class-gravity-flow.php:3839
 msgid "Assignees"
-msgstr "Encargados"
+msgstr "Atananlar"
 
 #: class-gravity-flow.php:3844
 msgid "Show Users"
-msgstr "Mostrar usuarios"
+msgstr "Kullanıcıları Göster"
 
 #: class-gravity-flow.php:3852
 msgid "Show Roles"
-msgstr "Mostrar roles"
+msgstr "Rolleri Göster"
 
 #: class-gravity-flow.php:3860
 msgid "Show Fields"
-msgstr "Mostrar campos"
+msgstr "Alanları Göster"
 
 #: class-gravity-flow.php:4035 class-gravity-flow.php:4037
 msgid "Step expired"
-msgstr "Paso caducado"
+msgstr "Adım süresi doldu"
 
 #: class-gravity-flow.php:4082
 msgid ""
 "%sThis operation deletes ALL Gravity Flow settings%s. If you continue, you "
 "will NOT be able to retrieve these settings."
-msgstr "%sEsta operación borra TODOS los ajustes de Gravity Flow%s. Si continúas, NO podrás recuperar estos ajustes."
+msgstr "%sBu işlem TÜM Gravity Flow ayarlarını%s siler. Devam ederseniz bu ayarları geri alma şansınız OLMAYACAKTIR."
 
 #: class-gravity-flow.php:4086
 msgid ""
 "Warning! ALL Gravity Flow settings will be deleted. This cannot be undone. "
 "'OK' to delete, 'Cancel' to stop"
-msgstr "¡Atención! TODOS se borrarán todos los datos de Gravity Flow. Esto no se puede deshacer. 'Aceptar' parar borrar, 'Cancelar' para parar."
+msgstr "Dikkat! TÜM Gravity Flow verisi silinecektir. Bu geri alınamaz.  Silmek için ‘Tamam’, durdurmak için ‘Vazgeç’ düğmesine basınız"
 
 #: class-gravity-flow.php:4433
 msgid "%d year"
 msgid_plural "%d years"
-msgstr[0] "%d year"
-msgstr[1] "%d years"
+msgstr[0] "%d yıl"
 
 #: class-gravity-flow.php:4437
 msgid "%d month"
 msgid_plural "%d months"
-msgstr[0] "%d month"
-msgstr[1] "%d months"
+msgstr[0] "%d ay"
 
 #: class-gravity-flow.php:4441
 msgid "%dd"
-msgstr "%dd"
+msgstr "%dg"
 
 #: class-gravity-flow.php:4445
 msgid "%dh"
-msgstr "%dh"
+msgstr "%ds"
 
 #: class-gravity-flow.php:4449
 msgid "%dm"
-msgstr "%dm"
+msgstr "%dd"
 
 #: class-gravity-flow.php:4453
 msgid "%ds"
@@ -646,52 +642,52 @@ msgstr "%ds"
 
 #: class-gravity-flow.php:4497
 msgid "Every Fifteen Minutes"
-msgstr "Cada 15 minutos"
+msgstr "Her on beş dakikada bir"
 
 #: class-gravity-flow.php:4510 class-gravity-flow.php:4530
 msgid "Not authorized"
-msgstr "No autorizado"
+msgstr "Yetkili değil"
 
 #: class-gravity-flow.php:4580
 msgid "Workflow"
-msgstr "Flujo de trabajo"
+msgstr "İş Akışı"
 
 #: class-gravity-flow.php:4581
 msgid "Inbox"
-msgstr "Bandeja de entrada"
+msgstr "Gelen Kutusu"
 
 #: class-gravity-flow.php:4582
 msgid "Submit"
-msgstr "Enviar"
+msgstr "Gönder"
 
 #: class-gravity-flow.php:4584 includes/pages/class-support.php:77
 msgid "Support"
-msgstr "Soporte"
+msgstr "Destek"
 
 #: class-gravity-flow.php:4610 includes/steps/class-step-user-input.php:195
 #: includes/steps/class-step-user-input.php:744
 #: includes/steps/class-step-user-input.php:896
 #: includes/steps/class-step.php:156
 msgid "Complete"
-msgstr "Completado"
+msgstr "Tamamlandı"
 
 #: class-gravity-flow.php:4613 includes/steps/class-step-approval.php:31
 #: includes/steps/class-step-approval.php:877
 msgid "Approved"
-msgstr "Aprobada"
+msgstr "Onaylandı"
 
 #: class-gravity-flow.php:4616 includes/steps/class-step-approval.php:25
 #: includes/steps/class-step-approval.php:879
 msgid "Rejected"
-msgstr "Rechazada"
+msgstr "Reddedildi"
 
 #: class-gravity-flow.php:4674
 msgid "Oops! We couldn't find your lead. Please try again"
-msgstr "¡Vaya! No pudimos encontrar tu entrada. Por favor, inténtalo de nuevo."
+msgstr "Tüh! Başvurunuzu bulamadık. Lütfen tekrar deneyiniz."
 
 #: class-gravity-flow.php:4716 includes/pages/class-entry-detail.php:67
 msgid "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete"
-msgstr "¿Quieres eliminar este archivo? 'Cancelar' para parar. 'Aceptar' para borrar."
+msgstr "Bu dosyayı silmek istiyor musunuz? “İptal” ile durdur. “Tamam” ile sil"
 
 #: class-gravity-flow.php:4740
 #: includes/fields/class-field-assignee-select.php:31
@@ -699,230 +695,230 @@ msgstr "¿Quieres eliminar este archivo? 'Cancelar' para parar. 'Aceptar' para b
 #: includes/fields/class-field-role.php:23
 #: includes/fields/class-field-user.php:23
 msgid "Workflow Fields"
-msgstr ""
+msgstr "İş akışı alanları"
 
 #: class-gravity-flow.php:4740
 msgid "Workflow Fields add advanced workflow functionality to your forms."
-msgstr ""
+msgstr "İş akışı alanları formlarınıza gelişmiş iş akışı işlevselliği ekler."
 
 #: class-gravity-flow.php:4790
 msgid "All fields"
-msgstr "Todos los campos"
+msgstr "Tüm Alanlar"
 
 #: class-gravity-flow.php:4794
 msgid "Selected fields"
-msgstr "Campos seleccionados"
+msgstr "Seçilen alanlar"
 
 #: class-gravity-flow.php:4821
 msgid "Except"
-msgstr ""
+msgstr "Dışında"
 
 #: class-gravity-flow.php:4840
 msgid "Order Summary"
-msgstr ""
+msgstr "Sipariş Özeti"
 
 #: class-gravity-flow.php:4940
 msgid "Add Custom Key"
-msgstr ""
+msgstr "Özel Anahtar Ekle"
 
 #: class-gravity-flow.php:4988
 msgid "Add Custom Value"
-msgstr ""
+msgstr "Özel Değer Ekle"
 
 #: class-gravity-flow.php:5006
 msgid "Key"
-msgstr "Clave"
+msgstr "Anahtar"
 
 #: class-gravity-flow.php:5007
 msgid "Value"
-msgstr "Valor"
+msgstr "Değer"
 
 #: includes/EDD_SL_Plugin_Updater.php:186
 msgid ""
 "There is a new version of %1$s available. <a target=\"_blank\" "
 "class=\"thickbox\" href=\"%2$s\">View version %3$s details</a>."
-msgstr "Hay una nueva versión de %1$s disponible. <a target=\"_blank\" class=\"thickbox\" href=\"%2$s\">Ver detalles de la versión %3$s</a>."
+msgstr "%1$s için yeni sürüm mevcut. <a target=“_blank” class=“thickbox” href=“%2$s”>Sürüm %3$s detaylarını görüntüle </a>."
 
 #: includes/EDD_SL_Plugin_Updater.php:193
 msgid ""
 "There is a new version of %1$s available. <a target=\"_blank\" "
 "class=\"thickbox\" href=\"%2$s\">View version %3$s details</a> or <a "
 "href=\"%4$s\">update now</a>."
-msgstr "Hay una nueva versión de %1$s disponible. <a target=\"_blank\" class=\"thickbox\" href=\"%2$s\">Ver detalles de la versión %3$s</a> o <a href=\"%4$s\">actualizar ahora</a>."
+msgstr "%1$s için yeni sürüm mevcut. <a target=“_blank” class=“thickbox” href=“%2$s”>Sürüm %3$s detaylarını görüntüle </a> yada <a href=“%4$s”>şimdi güncelleyin</a>."
 
 #: includes/EDD_SL_Plugin_Updater.php:346
 msgid "You do not have permission to install plugin updates"
-msgstr "No tienes permisos para instalar actualizaciones de la extensión"
+msgstr "Eklenti güncellemelerini yükleme yetkiniz yok"
 
 #: includes/EDD_SL_Plugin_Updater.php:346
 msgid "Error"
-msgstr "Error"
+msgstr "Hata"
 
 #: includes/class-web-api.php:196
 msgid "Forbidden"
-msgstr "Prohibido"
+msgstr "Yasak"
 
 #: includes/fields/class-field-assignee-select.php:64
 #: includes/pages/class-reports.php:299 includes/pages/class-reports.php:357
 #: includes/pages/class-reports.php:498
 msgid "Assignee"
-msgstr "Encargado"
+msgstr "görevli"
 
 #: includes/fields/class-field-discussion.php:64
 msgid "Discussion"
-msgstr ""
+msgstr "Tartışma"
 
 #: includes/pages/class-activity.php:29 includes/pages/class-reports.php:53
 msgid "You don't have permission to view this page"
-msgstr "No tienes permiso para ver esta página"
+msgstr "Bu sayfaya görüntülemek için yeterli düzeyde yetkiniz yoktur"
 
 #: includes/pages/class-activity.php:41
 msgid "Event ID"
-msgstr "ID de evento"
+msgstr "Etkinlik NO"
 
 #: includes/pages/class-activity.php:43 includes/pages/class-activity.php:72
 #: includes/pages/class-inbox.php:93 includes/pages/class-inbox.php:146
 #: includes/pages/class-reports.php:133 includes/pages/class-status.php:737
 msgid "Form"
-msgstr "Formulario"
+msgstr "Form"
 
 #: includes/pages/class-activity.php:44 includes/pages/class-activity.php:77
 msgid "Entry ID"
-msgstr "ID de entrada"
+msgstr "Kayıt NO:"
 
 #: includes/pages/class-activity.php:45 includes/pages/class-activity.php:82
 msgid "Type"
-msgstr "Tipo"
+msgstr "Tür"
 
 #: includes/pages/class-activity.php:46 includes/pages/class-activity.php:87
 #: includes/pages/class-activity.php:117
 msgid "Event"
-msgstr "Evento"
+msgstr "Etkinlik"
 
 #: includes/pages/class-activity.php:47 includes/pages/class-activity.php:105
 #: includes/pages/class-inbox.php:96 includes/pages/class-inbox.php:158
 #: includes/pages/class-reports.php:237 includes/pages/class-reports.php:499
 #: includes/pages/class-status.php:744
 msgid "Step"
-msgstr "Paso"
+msgstr "Adım"
 
 #: includes/pages/class-activity.php:48
 msgid "Duration"
-msgstr "Duración"
+msgstr "Süre"
 
 #: includes/pages/class-activity.php:62 includes/pages/class-inbox.php:91
 #: includes/pages/class-inbox.php:140 includes/pages/class-status.php:733
 msgid "ID"
-msgstr "ID"
+msgstr "NO"
 
 #: includes/pages/class-activity.php:141
 msgid "Waiting for workflow activity"
-msgstr "Esperando actividad del flujo de trabajo"
+msgstr "İş akışı etkinliği için bekliyor"
 
 #: includes/pages/class-entry-detail.php:78
 msgid "Ajax error while deleting file."
-msgstr "Error ajax al borrar el archivo."
+msgstr "Dosyayı silerken Ajax hatası oluştu."
 
 #: includes/pages/class-entry-detail.php:199
 #: includes/pages/class-print-entries.php:147
 msgid "You don't have permission to view this entry."
-msgstr "No tienes permiso para ver esta entrada."
+msgstr "Bu kaydı görüntülemek için yeterli düzeyde yetkiniz yoktur."
 
 #: includes/pages/class-entry-detail.php:300
 msgid "Timeline"
-msgstr ""
+msgstr "Zaman çizelgesi"
 
 #: includes/pages/class-entry-detail.php:329
 #: includes/pages/class-status.php:207 includes/pages/class-status.php:447
 msgid "Print"
-msgstr "Imprimir"
+msgstr "Yazdır"
 
 #: includes/pages/class-entry-detail.php:335
 msgid "include timeline"
-msgstr ""
+msgstr "zaman çizelgesi içerir"
 
 #: includes/pages/class-entry-detail.php:375
 msgid "Workflow Submitted"
-msgstr "Flujo de trabajo enviado"
+msgstr "Gönderilmiş İş Akışları"
 
 #: includes/pages/class-entry-detail.php:424
 #: includes/pages/class-print-entries.php:88
 msgid "Entry # "
-msgstr "Entrada # "
+msgstr "Kayıt #"
 
 #: includes/pages/class-entry-detail.php:433
 msgid "show empty fields"
-msgstr "Mostrar campos vacíos"
+msgstr "boş alanları göster"
 
 #: includes/pages/class-entry-detail.php:477
 #: includes/pages/class-entry-detail.php:653
 msgid "Order"
-msgstr "Pedido"
+msgstr "Sipariş"
 
 #: includes/pages/class-entry-detail.php:683
 msgid "Product"
-msgstr "Producto"
+msgstr "Ürün"
 
 #: includes/pages/class-entry-detail.php:684
 msgid "Qty"
-msgstr "Cant."
+msgstr "Adet"
 
 #: includes/pages/class-entry-detail.php:685
 msgid "Unit Price"
-msgstr "Precio unitario"
+msgstr "Birim Fiyat"
 
 #: includes/pages/class-entry-detail.php:686
 msgid "Price"
-msgstr "Precio"
+msgstr "Fiyat"
 
 #: includes/pages/class-entry-detail.php:749
 msgid "Total"
-msgstr "Total"
+msgstr "Toplam"
 
 #: includes/pages/class-help.php:23
 msgid "Help"
-msgstr "Ayuda"
+msgstr "Yardım"
 
 #: includes/pages/class-inbox.php:95 includes/pages/class-inbox.php:152
 #: includes/pages/class-status.php:740
 msgid "Submitter"
-msgstr "Enviado por"
+msgstr "Gönderen"
 
 #: includes/pages/class-inbox.php:111 includes/pages/class-status.php:777
 msgid "Last Updated"
-msgstr ""
+msgstr "Son Güncelleme Tarihi"
 
 #: includes/pages/class-inbox.php:200
 msgid "Last_Updated"
-msgstr ""
+msgstr "Son_Güncelleme"
 
 #: includes/pages/class-inbox.php:234
 msgid "No pending tasks"
-msgstr "No hay tareas pendientes"
+msgstr "Bekleyen görev yok"
 
 #: includes/pages/class-print-entries.php:67
 msgid "Form Id and Lead Id are required parameters."
-msgstr "El id del formulario y el id de la entrada son parámetros obligatorios."
+msgstr "Form NO ve Başvuru NO parametreleri gereklidir."
 
 #: includes/pages/class-print-entries.php:88
 msgid "Bulk Print"
-msgstr "Impresión por lotes"
+msgstr "Toplu Çıktı"
 
 #: includes/pages/class-reports.php:76 includes/pages/class-reports.php:516
 msgid "Filter"
-msgstr "Filtro"
+msgstr "Süz"
 
 #: includes/pages/class-reports.php:127 includes/pages/class-reports.php:179
 #: includes/pages/class-reports.php:231 includes/pages/class-reports.php:293
 #: includes/pages/class-reports.php:351 includes/pages/class-reports.php:410
 msgid "No data to display"
-msgstr "No hay datos para mostrar"
+msgstr "Görüntülenecek hiçbir veri yok"
 
 #: includes/pages/class-reports.php:133 includes/pages/class-reports.php:154
 #: includes/pages/class-reports.php:185 includes/pages/class-reports.php:206
 #: includes/pages/class-reports.php:416 includes/pages/class-reports.php:442
 msgid "Workflows Completed"
-msgstr "Flujos completados"
+msgstr "Tamamlanan iş akışları"
 
 #: includes/pages/class-reports.php:133 includes/pages/class-reports.php:155
 #: includes/pages/class-reports.php:185 includes/pages/class-reports.php:207
@@ -931,122 +927,122 @@ msgstr "Flujos completados"
 #: includes/pages/class-reports.php:357 includes/pages/class-reports.php:386
 #: includes/pages/class-reports.php:416 includes/pages/class-reports.php:443
 msgid "Average Duration (hours)"
-msgstr "Duración media (horas)"
+msgstr "Ortalama süre (saat)"
 
 #: includes/pages/class-reports.php:143
 msgid "Forms"
-msgstr "Formularios"
+msgstr "Formlar"
 
 #: includes/pages/class-reports.php:144 includes/pages/class-reports.php:196
 msgid "Workflows completed and average duration"
-msgstr "Flujos de trabajo completados y duración media"
+msgstr "Tamamlanan İş akışları ve Ortalama Süreleri"
 
 #: includes/pages/class-reports.php:185 includes/pages/class-reports.php:416
 #: includes/pages/class-reports.php:497
 msgid "Month"
-msgstr "Mes"
+msgstr "Ay"
 
 #: includes/pages/class-reports.php:237 includes/pages/class-reports.php:263
 #: includes/pages/class-reports.php:299 includes/pages/class-reports.php:325
 #: includes/pages/class-reports.php:357 includes/pages/class-reports.php:385
 msgid "Completed"
-msgstr "Completado"
+msgstr "Tamamlanan"
 
 #: includes/pages/class-reports.php:253
 msgid "Step completed and average duration"
-msgstr "Paso completado y duración media"
+msgstr "Tamamlanan Adımlar ve Ortalama Süreleri"
 
 #: includes/pages/class-reports.php:315 includes/pages/class-reports.php:375
 msgid "Step completed and average duration by assignee"
-msgstr "Paso completado y duración media por encargado"
+msgstr "Tamamlanan Adımlar ve Görevli Başına Ortalama Süreleri"
 
 #: includes/pages/class-reports.php:432
 msgid "Workflows completed and average duration by month"
-msgstr "Flujos de trabajo completados y duración media por mes"
+msgstr "Tamamlanan Adımlar ve Aylara göre Ortalama Süreleri"
 
 #: includes/pages/class-reports.php:462
 msgid "Select A Workflow Form"
-msgstr "Selecciona un formulario con flujo de trabajo"
+msgstr "Bir iş akışı formu seçin"
 
 #: includes/pages/class-reports.php:480
 msgid "Last 12 months"
-msgstr "Últimos 12 meses"
+msgstr "Son 12 ay"
 
 #: includes/pages/class-reports.php:481
 msgid "Last 6 months"
-msgstr "Últimos 6 meses"
+msgstr "Son 6 ay"
 
 #: includes/pages/class-reports.php:482
 msgid "Last 3 months"
-msgstr "Últimos 3 meses"
+msgstr "Son 3 ay"
 
 #: includes/pages/class-reports.php:525
 msgid "All Steps"
-msgstr "Todos los pasos"
+msgstr "Tüm Adımlar"
 
 #: includes/pages/class-status.php:85
 msgid "Export"
-msgstr "Exportar"
+msgstr "Dışa Aktar"
 
 #: includes/pages/class-status.php:91
 msgid "The destination file is not writeable"
-msgstr "No se puede escribir en el archivo de destino"
+msgstr "Hedef dosya yazılabilir değil"
 
 #: includes/pages/class-status.php:214
 msgid "entry"
-msgstr "entrada"
+msgstr "kayıt"
 
 #: includes/pages/class-status.php:215
 msgid "entries"
-msgstr "entradas"
+msgstr "kayıtlar"
 
 #: includes/pages/class-status.php:260 includes/pages/class-submit.php:21
 msgid "You haven't submitted any workflow forms yet."
-msgstr "Todavía no has enviado ningún formulario con flujo de trabajo."
+msgstr "Herhangi bir iş akışı formu göndermediniz."
 
 #: includes/pages/class-status.php:278
 msgid "All"
-msgstr "Todos"
+msgstr "Tümü"
 
 #: includes/pages/class-status.php:346
 msgid "Start:"
-msgstr "Inicio:"
+msgstr "Başlangıç:"
 
 #: includes/pages/class-status.php:352
 msgid "End:"
-msgstr "Fin:"
+msgstr "Bitiş:"
 
 #: includes/pages/class-status.php:363
 msgid "Workflow Form"
-msgstr "Formulario de flujo de trabajo"
+msgstr "İş akışı formu"
 
 #: includes/pages/class-status.php:385
 msgid "Clear Filter"
-msgstr "Limpiar filtro"
+msgstr "Seçimi Temizle"
 
 #: includes/pages/class-status.php:388
 msgid "Search"
-msgstr "Buscar"
+msgstr "Ara"
 
 #: includes/pages/class-status.php:437
 msgid "Print all of the selected entries at once."
-msgstr ""
+msgstr "Tüm seçili kayıtları tek seferde yazdırın."
 
 #: includes/pages/class-status.php:440
 msgid "Include timelines"
-msgstr ""
+msgstr "Zaman çizelgeleri dahil"
 
 #: includes/pages/class-status.php:444
 msgid "Add page break between entries"
-msgstr ""
+msgstr "Kayıtlar arasında sayfa ayrımı ekle"
 
 #: includes/pages/class-status.php:597
 msgid "(deleted)"
-msgstr "(borrado)"
+msgstr "(silinmiş)"
 
 #: includes/pages/class-status.php:731
 msgid "Checkbox"
-msgstr "Casilla"
+msgstr "Onay Kutusu"
 
 #: includes/pages/class-status.php:994
 #: includes/steps/class-step-approval.php:55
@@ -1054,73 +1050,73 @@ msgstr "Casilla"
 #: includes/steps/class-step-notification.php:73
 #: includes/steps/class-step-user-input.php:41
 msgid "Select"
-msgstr ""
+msgstr "Seç"
 
 #: includes/pages/class-support.php:81
 msgid "Please check the documentation before submitting a support request"
-msgstr "Por favor consulta la documentación antes de enviar una petición de soporte"
+msgstr "Lütfen bir destek talebi göndermeden önce yardım belgelerini gözden geçirin"
 
 #: includes/pages/class-support.php:102
 #: includes/steps/class-step-approval.php:911
 #: includes/steps/class-step-user-input.php:791
 #: includes/steps/class-step-user-input.php:953
 msgid "Email"
-msgstr "Email"
+msgstr "E-posta"
 
 #: includes/pages/class-support.php:109
 msgid "General comment or suggestion"
-msgstr "Comentario general o sugerencia"
+msgstr "Genel Yorum veya öneri"
 
 #: includes/pages/class-support.php:114
 msgid "Feature request"
-msgstr "Petición de nueva funcionalidad"
+msgstr "Özellik isteği"
 
 #: includes/pages/class-support.php:120
 msgid "Bug report"
-msgstr "Informe de fallo"
+msgstr "Hata raporu"
 
 #: includes/pages/class-support.php:124
 msgid "Suggestion or steps to reproduce the issue."
-msgstr "Sugerencia o pasos para reproducir el fallo."
+msgstr "Sorunu örneklemek için yapılması gereken adım veya tavsiyeler."
 
 #: includes/pages/class-support.php:130
 msgid ""
 "Send debugging information. (This includes some system information and a "
 "list of active plugins. No forms or entry data will be sent.)"
-msgstr "Enviar información de depuración. (Esto incluye alguna información del sistema y la lista de extensiones activas. No se enviarán formularios o datos de las entradas)."
+msgstr "Hata ayıklama bilgisi gönder. (Bazı sistem bilgileri ve aktif eklentilerin bir listesini içerir. Hiçbir form veya kayıt bilgisi gönderilmez.)"
 
 #: includes/pages/class-support.php:133
 msgid "Send"
-msgstr "Enviar"
+msgstr "Gönder"
 
 #: includes/steps/class-step-approval.php:26
 msgid "Next step if Rejected"
-msgstr "Siguiente paso si se rechaza"
+msgstr "Sonraki adım (Reddedildiyse)"
 
 #: includes/steps/class-step-approval.php:32
 msgid "Next Step if Approved"
-msgstr "Siguiente paso si se aprueba"
+msgstr "Sonraki adım (Onaylandıysa)"
 
 #: includes/steps/class-step-approval.php:43
 #: includes/steps/class-step-approval.php:360
 msgid "Approval"
-msgstr "Aprobación"
+msgstr "Onay"
 
 #: includes/steps/class-step-approval.php:56
 #: includes/steps/class-step-user-input.php:42
 msgid "Conditional Routing"
-msgstr ""
+msgstr "Koşullu Yönlendirme"
 
 #: includes/steps/class-step-approval.php:66
 msgid "Send Email to the assignee(s)."
-msgstr "Enviar email al/los encargado(s)."
+msgstr "Görevlilere Eposta gönder"
 
 #: includes/steps/class-step-approval.php:67
 msgid ""
 "Enable this setting to send email to each of the assignees as soon as the "
 "entry has been assigned. If a role is configured to receive emails then all "
 "the users with that role will receive the email."
-msgstr "Activa este ajuste para enviar un email a cada uno de los encargados tan pronto como la entrada haya sido asignada. Si se ha configurado un rol para recibir los emails, todos los usuarios con ese rol recibirán el email."
+msgstr "Kayıt ataması olur olmaz tüm görevlilere eposta ile bilgilendirme göndermek için bu ayarı etkinleştirin. Eğer bir görev için bir kullanıcı rolü seçilmişse, o roldeki tüm kullanıcılara eposta gönderilir."
 
 #: includes/steps/class-step-approval.php:76
 #: includes/steps/class-step-approval.php:178
@@ -1128,7 +1124,7 @@ msgstr "Activa este ajuste para enviar un email a cada uno de los encargados tan
 #: includes/steps/class-step-notification.php:94
 #: includes/steps/class-step-user-input.php:232
 msgid "From Name"
-msgstr "Nombre remitente"
+msgstr "Gönderen Adı"
 
 #: includes/steps/class-step-approval.php:82
 #: includes/steps/class-step-approval.php:183
@@ -1136,7 +1132,7 @@ msgstr "Nombre remitente"
 #: includes/steps/class-step-notification.php:100
 #: includes/steps/class-step-user-input.php:238
 msgid "From Email"
-msgstr "Email remitente"
+msgstr "Gönderen E-Posta"
 
 #: includes/steps/class-step-approval.php:89
 #: includes/steps/class-step-approval.php:191
@@ -1144,7 +1140,7 @@ msgstr "Email remitente"
 #: includes/steps/class-step-notification.php:107
 #: includes/steps/class-step-user-input.php:246
 msgid "Reply To"
-msgstr "Responder a"
+msgstr "- Yanıtla"
 
 #: includes/steps/class-step-approval.php:95
 #: includes/steps/class-step-approval.php:197
@@ -1160,16 +1156,16 @@ msgstr "BCC"
 #: includes/steps/class-step-notification.php:119
 #: includes/steps/class-step-user-input.php:258
 msgid "Subject"
-msgstr "Asunto"
+msgstr "Konu"
 
 #: includes/steps/class-step-approval.php:106
 msgid "Message to Assignee(s)"
-msgstr "Mensaje al/los encargado(s)"
+msgstr "Görevlilere Mesajınız"
 
 #: includes/steps/class-step-approval.php:108
 msgid ""
 "A new entry is pending your approval. Please check your Workflow Inbox."
-msgstr "Hay una nueva entrada esperando tu aprobación. Por favor comprueba tu buzón del flujo de trabajo."
+msgstr "Onayınızı bekleyen yeni bir kayıt mevcut. Lütfen iş akışı gelen kutunuzu kontrol edin."
 
 #: includes/steps/class-step-approval.php:116
 #: includes/steps/class-step-approval.php:218
@@ -1177,7 +1173,7 @@ msgstr "Hay una nueva entrada esperando tu aprobación. Por favor comprueba tu b
 #: includes/steps/class-step-notification.php:133
 #: includes/steps/class-step-user-input.php:273
 msgid "Disable auto-formatting"
-msgstr "Desactivar auto-formato"
+msgstr "Otomatik biçimlendirmeyi devre dışı bırak"
 
 #: includes/steps/class-step-approval.php:119
 #: includes/steps/class-step-approval.php:221
@@ -1187,82 +1183,82 @@ msgstr "Desactivar auto-formato"
 msgid ""
 "Disable auto-formatting to prevent paragraph breaks being automatically "
 "inserted when using HTML to create the email message."
-msgstr ""
+msgstr "HTML e-posta iletisi oluştururken paragraf sonlarının eklenmesini engellemek için Otomatik Biçimlendirmeyi devre dışı bırakın."
 
 #: includes/steps/class-step-approval.php:129
 #: includes/steps/class-step-user-input.php:283
 msgid "Send reminder"
-msgstr "Enviar recordatorio"
+msgstr "Hatırlatma Gönder"
 
 #: includes/steps/class-step-approval.php:133
 #: includes/steps/class-step-user-input.php:287
 msgid "Resend the assignee email after"
-msgstr "Reenviar el email al encargado después de"
+msgstr "Şu koşuldan sonra görevliye epostayı yeniden gönder"
 
 #: includes/steps/class-step-approval.php:134
 #: includes/steps/class-step-user-input.php:288
 msgid "day(s)"
-msgstr "día(s)"
+msgstr "Gün"
 
 #: includes/steps/class-step-approval.php:146
 msgid "Send email when the entry is rejected"
-msgstr "Enviar un email cuando la entrada se rechaza"
+msgstr "Kayıt reddedildiğinde e-posta gönder"
 
 #: includes/steps/class-step-approval.php:147
 msgid "Enable this setting to send an email when the entry is rejected."
-msgstr "Activa este ajuste para enviar un email cuando la entrada se rechaza."
+msgstr "Kayıt reddedildiğinde bir e-posta göndermek için bu ayarı etkinleştirin."
 
 #: includes/steps/class-step-approval.php:155
 #: includes/steps/class-step-approval.php:244
 #: includes/steps/class-step-notification.php:68
 msgid "Send To"
-msgstr "Enviar a"
+msgstr "Alıcı"
 
 #: includes/steps/class-step-approval.php:164
 #: includes/steps/class-step-notification.php:80
 msgid "Select User"
-msgstr "Selecciona usuario"
+msgstr "Kullanıcı Seç"
 
 #: includes/steps/class-step-approval.php:172
 #: includes/steps/class-step-approval.php:261
 #: includes/steps/class-step-approval.php:383
 #: includes/steps/class-step-notification.php:88
 msgid "Routing"
-msgstr "Enrutamiento"
+msgstr "Yönlendirme"
 
 #: includes/steps/class-step-approval.php:208
 #: includes/steps/class-step-notification.php:124
 msgid "Message"
-msgstr "Mensaje"
+msgstr "Mesaj"
 
 #: includes/steps/class-step-approval.php:210
 msgid "Entry {entry_id} has been rejected"
-msgstr "La entrada {entry_id} ha sido rechazada"
+msgstr "Kayıt {entry_id} reddedildi"
 
 #: includes/steps/class-step-approval.php:235
 msgid "Send email when the entry is approved"
-msgstr "Enviar un email cuando la entrada se aprueba"
+msgstr "Kayıt onaylandığı zaman e-posta gönder"
 
 #: includes/steps/class-step-approval.php:236
 msgid "Enable this setting to send an email when the entry is approved."
-msgstr "Activa este ajuste para enviar un email cuando la entrada se aprueba."
+msgstr "Kayıt onaylandığında bir e-posta göndermek için bu ayarı etkinleştirin."
 
 #: includes/steps/class-step-approval.php:299
 msgid "Approval Message"
-msgstr "Mensaje de aprobación"
+msgstr "Onay iletisi"
 
 #: includes/steps/class-step-approval.php:301
 msgid "Entry {entry_id} has been approved"
-msgstr "La entrada {entry_id} ha sido aprobada"
+msgstr "Kayıt {entry_id} onaylandı"
 
 #: includes/steps/class-step-approval.php:339
 msgid "Attach PDF"
-msgstr "Adjuntar PDF"
+msgstr "PDF Ekle"
 
 #: includes/steps/class-step-approval.php:364
 #: includes/steps/class-step-user-input.php:52
 msgid "Assign To:"
-msgstr "Asignar a:"
+msgstr "Bunu Görevlendir:"
 
 #: includes/steps/class-step-approval.php:373
 msgid ""
@@ -1270,11 +1266,11 @@ msgid ""
 "assignee fields they will also appear here. Click on an item to select it. "
 "The selected items will appear on the right. If you select a role then "
 "anybody from that role can approve."
-msgstr "Los campos de usuario y rol aparecerán en esta lista. Si el formulario contiene algún campo de encargado también aparecerá aquí. Haz clic en un elemento para seleccionarlo. Los elementos seleccionados aparecerán a la derecha. Si seleccionas un rol, entonces cualquiera con ese rol podrá aprobar."
+msgstr "Kullanıcılar ve roller alanları bu listede görünür. Formunuz herhangi bir görevli alanı içeriyorsa, onlar da burada görünür. Bir öğeyi seçmek için üzerine tıklayın. Seçili öğeler sağ tarafta görünür. Eğer bir rol seçerseniz bu roldeki tüm kullanıcılar onaylayabilir."
 
 #: includes/steps/class-step-approval.php:376
 msgid "Select Assignees"
-msgstr "Selecciona encargados"
+msgstr "Görevlileri Seçin"
 
 #: includes/steps/class-step-approval.php:382
 msgid ""
@@ -1282,11 +1278,11 @@ msgid ""
 "will appear in the first drop-down field. If the form contains any assignee "
 "fields they will also appear here. Select the assignee and define the "
 "condition for that assignee. Add as many routing rules as you need."
-msgstr ""
+msgstr "Görevli yönlendirmelerini ayarlamak için kurallar oluşturun. Kullanıcılar ve roller alanları ilk açılır kutu alanında görünür. Formunuz herhangi bir görevli alanı içeriyorsa, onlar da burada görünür. Görevlileri seçin ve koşullarını tanımlayın. İstediğiniz kadar dolaşım kuralı ekleyebilirsiniz."
 
 #: includes/steps/class-step-approval.php:388
 msgid "Approval Policy"
-msgstr "Política de aprobación"
+msgstr "Onay Politikası"
 
 #: includes/steps/class-step-approval.php:389
 msgid ""
@@ -1294,72 +1290,72 @@ msgid ""
 " the entry will require unanimous approval before the step can be completed."
 " If the step is assigned to a role only one user in that role needs to "
 "approve."
-msgstr ""
+msgstr "Onayların nasıl işleneceğini tanımlayın. Eğer tüm görevlilerin kaydı onaylaması gerekiyorsa bu adımın tamamlanması için oybirliği gerekir. Eğer bu adım bir role atanırsa o roldeki tek bir kullanıcının onayı yeterli olur."
 
 #: includes/steps/class-step-approval.php:394
 msgid "At least one assignee must approve"
-msgstr "Debe aprobarlo al menos un encargado"
+msgstr "En az bir görevlinin onaylaması gerekir"
 
 #: includes/steps/class-step-approval.php:398
 msgid "All assignees must approve"
-msgstr "Todos los encargados deben aprobarlo"
+msgstr "Tüm görevlilerin onaylaması gerekir"
 
 #: includes/steps/class-step-approval.php:405
 #: includes/steps/class-step-user-input.php:169
 msgid "Instructions"
-msgstr "Instrucciones"
+msgstr "Yönergeler"
 
 #: includes/steps/class-step-approval.php:407
 #: includes/steps/class-step-user-input.php:171
 msgid ""
 "Activate this setting to display instructions to the user for the current "
 "step."
-msgstr ""
+msgstr "Mevcut adımda kullanıcıya yönergeleri göstermek için bu ayarı etkinleştirin."
 
 #: includes/steps/class-step-approval.php:409
 #: includes/steps/class-step-user-input.php:173
 msgid "Display instructions"
-msgstr "Mostrar instrucciones"
+msgstr "Görüntüleme yönergeleri"
 
 #: includes/steps/class-step-approval.php:413
 msgid ""
 "Instructions: please review the values in the fields below and click on the "
 "Approve or Reject button"
-msgstr "Instrucciones: Por favor, revisa los valores en los campos a continuación y haz clic en el botón Aprobar o Rechazar."
+msgstr "Yönergeler: lütfen aşağıdaki alanlardaki değerler gözden geçirin ve Onayla veya Reddet düğmesine basın"
 
 #: includes/steps/class-step-approval.php:418
 #: includes/steps/class-step-user-input.php:181
 msgid "Display Fields"
-msgstr "Mostrar campos"
+msgstr "Alanları Göster"
 
 #: includes/steps/class-step-approval.php:419
 #: includes/steps/class-step-user-input.php:182
 msgid "Select the fields to hide or display."
-msgstr "Selecciona los campos a ocultar o mostrar."
+msgstr "Gösterilecek yada gizlenecek alanları seçin."
 
 #: includes/steps/class-step-approval.php:424
 msgid "Emails"
-msgstr "Emails"
+msgstr "E-Postalar"
 
 #: includes/steps/class-step-approval.php:425
 msgid "Configure the emails that should be sent for this step."
-msgstr "Configura los emails que deberían enviarse en este paso."
+msgstr "Bu adım için gönderilmesi gereken e-postaları yapılandırın."
 
 #: includes/steps/class-step-approval.php:429
 msgid "Assignee Email"
-msgstr "Email del encargado"
+msgstr "Görevli Epostası"
 
 #: includes/steps/class-step-approval.php:434
 msgid "Rejection Email"
-msgstr "Email de rechazo"
+msgstr "Ret Epostası"
 
 #: includes/steps/class-step-approval.php:439
 msgid "Approval Email"
-msgstr "Email de aprobación"
+msgstr "Onay Epostası"
 
 #: includes/steps/class-step-approval.php:460
 msgid "Revert to User Input step"
-msgstr ""
+msgstr "Kullanıcı girişi adımına döndür"
 
 #: includes/steps/class-step-approval.php:462
 msgid ""
@@ -1368,84 +1364,84 @@ msgid ""
 "without changing the status. Enable this setting to show the Revert button "
 "next to the Approve and Reject buttons and specify the User Input step the "
 "entry will be sent to."
-msgstr ""
+msgstr "Geri çevirme ayarı Onay veya Ret seçeneklerine ek üçüncü bir seçenek daha ekler. Bu durumda görevli kaydın durumunu değiştirmeden doğrudan Kullanıcı Girişi adımına gönderir. Geri Döndür düğmesini göstermek için bu ayarı etkinleştirin."
 
 #: includes/steps/class-step-approval.php:474
 #: includes/steps/class-step-user-input.php:200
 msgid "Workflow Note"
-msgstr ""
+msgstr "İş Akışı Notu"
 
 #: includes/steps/class-step-approval.php:476
 #: includes/steps/class-step-user-input.php:202
 msgid ""
 "The text entered in the Note box will be added to the timeline. Use this "
 "setting to select the options for the Note box."
-msgstr ""
+msgstr "Not kutusuna girilen metin zaman çizelgesine eklenir. Not kutusu seçeneklerini belirlemek için bu ayarı kullanın."
 
 #: includes/steps/class-step-approval.php:479
 #: includes/steps/class-step-user-input.php:193
 #: includes/steps/class-step-user-input.php:205
 msgid "Hidden"
-msgstr ""
+msgstr "Gizli"
 
 #: includes/steps/class-step-approval.php:480
 #: includes/steps/class-step-user-input.php:206
 msgid "Not required"
-msgstr ""
+msgstr "Gerekli değil"
 
 #: includes/steps/class-step-approval.php:481
 msgid "Always required"
-msgstr ""
+msgstr "Her zaman gerekli"
 
 #: includes/steps/class-step-approval.php:482
 msgid "Required if approved"
-msgstr ""
+msgstr "Onaylandığı takdirde gerekli"
 
 #: includes/steps/class-step-approval.php:483
 msgid "Required if rejected"
-msgstr ""
+msgstr "Reddedildiği takdirde gerekli"
 
 #: includes/steps/class-step-approval.php:488
 msgid "Required if reverted"
-msgstr ""
+msgstr "Geri döndürüldüğü takdirde gerekli"
 
 #: includes/steps/class-step-approval.php:489
 msgid "Required if reverted or rejected"
-msgstr ""
+msgstr "Döndürüldüğünde veya reddedildiğinde gereklidir"
 
 #: includes/steps/class-step-approval.php:499
 msgid "Post Action if Rejected:"
-msgstr ""
+msgstr "Eylem reddettiğinizde sonrası:"
 
 #: includes/steps/class-step-approval.php:503
 msgid "Mark Post as Draft"
-msgstr ""
+msgstr "Gönderiyi Taslak Olarak Kaydet"
 
 #: includes/steps/class-step-approval.php:504
 msgid "Trash Post"
-msgstr ""
+msgstr "Gönderiyi Çöpe Taşı"
 
 #: includes/steps/class-step-approval.php:505
 msgid "Delete Post"
-msgstr ""
+msgstr "Gönderiyi Sil"
 
 #: includes/steps/class-step-approval.php:512
 msgid "Post Action if Approved:"
-msgstr ""
+msgstr "Onaylandığı takdirde sonrası:"
 
 #: includes/steps/class-step-approval.php:515
 msgid "Publish Post"
-msgstr ""
+msgstr "Gönderiyi Yayınla"
 
 #: includes/steps/class-step-approval.php:755
 msgid ""
 "The status could not be changed because this step has already been "
 "processed."
-msgstr "No se pudo cambiar el estado porque este paso ha sido procesado."
+msgstr "Mevcut durum değiştirilemedi çünkü bu adım zaten işlenmiş."
 
 #: includes/steps/class-step-approval.php:763
 msgid "Reverted to step"
-msgstr ""
+msgstr "Adıma döndürüldü"
 
 #: includes/steps/class-step-approval.php:766
 #: includes/steps/class-step-approval.php:796
@@ -1453,83 +1449,83 @@ msgstr ""
 #: includes/steps/class-step-user-input.php:576
 #: includes/steps/class-step-user-input.php:865
 msgid "Note"
-msgstr "Nota"
+msgstr "Not"
 
 #: includes/steps/class-step-approval.php:770
 msgid "Reverted to step:"
-msgstr ""
+msgstr "Şu adıma döndürüldü:"
 
 #: includes/steps/class-step-approval.php:788
 msgid "Approved."
-msgstr "Aprobada."
+msgstr "Onaylandı."
 
 #: includes/steps/class-step-approval.php:790
 msgid "Rejected."
-msgstr "Rechazada."
+msgstr "Reddedildi."
 
 #: includes/steps/class-step-approval.php:808
 msgid "Entry Approved"
-msgstr "Entrada aprobada"
+msgstr "Kayıt onaylandı"
 
 #: includes/steps/class-step-approval.php:811
 msgid "Entry Rejected"
-msgstr "Entrada rechazada"
+msgstr "Kayıt reddedildi"
 
 #: includes/steps/class-step-approval.php:850
 #: includes/steps/class-step-user-input.php:610
 msgid "A note is required"
-msgstr ""
+msgstr "Bir not gereklidir"
 
 #: includes/steps/class-step-approval.php:865
 msgid "There was a problem while updating the form."
-msgstr ""
+msgstr "Form güncelleştirilirken bir sorun oluştu."
 
 #: includes/steps/class-step-approval.php:872
 msgid "Pending Approval"
-msgstr "Pendiente de aprobación"
+msgstr "Onay bekleyen"
 
 #: includes/steps/class-step-approval.php:920
 msgid "(Missing)"
-msgstr ""
+msgstr "(eksik)"
 
 #: includes/steps/class-step-approval.php:990
 #: includes/steps/class-step-approval.php:1256
 msgid "Approve"
-msgstr "Aprobar"
+msgstr "Onayla"
 
 #: includes/steps/class-step-approval.php:1006
 #: includes/steps/class-step-approval.php:1305
 msgid "Reject"
-msgstr "Rechazar"
+msgstr "Reddet"
 
 #: includes/steps/class-step-approval.php:1023
 msgid "Revert"
-msgstr ""
+msgstr "Geri Al"
 
 #: includes/steps/class-step-approval.php:1348
 msgid "Error: step already processed."
-msgstr "Error: Paso ya procesado."
+msgstr "Hata: adım önceden işlenmiş."
 
 #: includes/steps/class-step-feed-activecampaign.php:23
 msgid "ActiveCampaign"
-msgstr ""
+msgstr "ActiveCampaign"
 
 #: includes/steps/class-step-feed-add-on.php:108
 #: includes/steps/class-step-feed-add-on.php:118
 msgid "Feeds"
-msgstr "Feeds"
+msgstr "Beslemeler"
 
 #: includes/steps/class-step-feed-add-on.php:115
 msgid "You don't have any feeds set up."
-msgstr "No tienes ningún feed configurado."
+msgstr "Herhangi bir besleme kurgunuz yok."
 
 #: includes/steps/class-step-feed-add-on.php:154
 msgid "Feed processed: %s"
-msgstr "Feed procesado: %s"
+msgstr "İşlenen besleme: %s"
 
 #: includes/steps/class-step-feed-add-on.php:158
 msgid "Feed processing initiated: %s"
-msgstr ""
+msgstr "Kabul edilmiş beslemeler: %s"
 
 #: includes/steps/class-step-feed-agilecrm.php:23
 msgid "Agile CRM"
@@ -1537,11 +1533,11 @@ msgstr "Agile CRM"
 
 #: includes/steps/class-step-feed-aweber.php:23
 msgid "AWeber"
-msgstr "AWeber"
+msgstr "Aweber"
 
 #: includes/steps/class-step-feed-batchbook.php:23
 msgid "Batchbook"
-msgstr "Batchbook"
+msgstr "BatchBook"
 
 #: includes/steps/class-step-feed-breeze.php:23
 msgid "Breeze"
@@ -1621,7 +1617,7 @@ msgstr "Slack"
 
 #: includes/steps/class-step-feed-slicedinvoices.php:24
 msgid "Sliced Invoices"
-msgstr "Sliced Invoices"
+msgstr "Bölünmüş Faturalar"
 
 #: includes/steps/class-step-feed-trello.php:23
 msgid "Trello"
@@ -1633,15 +1629,15 @@ msgstr "Twilio"
 
 #: includes/steps/class-step-feed-user-registration.php:30
 msgid "User Registration"
-msgstr "Registro de Usuarios"
+msgstr "Kullanıcı Kaydı"
 
 #: includes/steps/class-step-feed-user-registration.php:81
 msgid "Create"
-msgstr "Crear"
+msgstr "Oluştur"
 
 #: includes/steps/class-step-feed-wp-e-signature.php:24
 msgid "WP E-Signature"
-msgstr "WP E-Signature"
+msgstr "WP E-imza"
 
 #: includes/steps/class-step-feed-zapier.php:24
 msgid "Zapier"
@@ -1653,59 +1649,59 @@ msgstr "Zoho CRM"
 
 #: includes/steps/class-step-notification.php:21
 msgid "Notification"
-msgstr "Notificación"
+msgstr "Bildirim"
 
 #: includes/steps/class-step-notification.php:48
 msgid "Gravity Forms Notifications"
-msgstr "Notificaciones de Gravity Forms"
+msgstr "Gravity Forms Bildirimleri"
 
 #: includes/steps/class-step-notification.php:55
 msgid "Workflow notification"
-msgstr "Notificación de Workflow"
+msgstr "İş akışı bildirimi"
 
 #: includes/steps/class-step-notification.php:56
 msgid "Enable this setting to send an email."
-msgstr "Activa este ajuste para enviar un email."
+msgstr "Bir e-posta göndermek bu ayarı etkinleştirin."
 
 #: includes/steps/class-step-notification.php:60
 #: includes/steps/class-step-user-input.php:224
 #: includes/wizard/steps/class-iw-step-updates.php:88
 msgid "Enabled"
-msgstr "Activado"
+msgstr "Etkin"
 
 #: includes/steps/class-step-notification.php:74
 msgid "Configure Routing"
-msgstr "Configurar enrutamiento"
+msgstr "Yönlendirmeyi Yapılandır"
 
 #: includes/steps/class-step-notification.php:171
 msgid "Sent Notification: %s"
-msgstr "Notificación enviada: %s"
+msgstr "Gönderilen bildirim: %s"
 
 #: includes/steps/class-step-notification.php:227
 msgid "Sent Notification: "
-msgstr "Notificación enviada: "
+msgstr "Gönderilen bildirim:"
 
 #: includes/steps/class-step-user-input.php:25
 #: includes/steps/class-step-user-input.php:48
 msgid "User Input"
-msgstr ""
+msgstr "Kullanıcı Girişi"
 
 #: includes/steps/class-step-user-input.php:69
 msgid "Editable fields"
-msgstr "Campos editables"
+msgstr "Düzenlenebilir alanlar"
 
 #: includes/steps/class-step-user-input.php:89
 #: includes/steps/class-step-user-input.php:115
 msgid "Enable field conditional logic"
-msgstr ""
+msgstr "Alan koşullu mantığı etkinleştir"
 
 #: includes/steps/class-step-user-input.php:98
 msgid "Dynamic"
-msgstr ""
+msgstr "Dinamik"
 
 #: includes/steps/class-step-user-input.php:102
 msgid "Only when the page loads"
-msgstr ""
+msgstr "Sadece sayfa yüklendiğinde"
 
 #: includes/steps/class-step-user-input.php:105
 #: includes/steps/class-step-user-input.php:146
@@ -1713,19 +1709,19 @@ msgid ""
 "Fields and Sections support dynamic conditional logic. Pages do not support "
 "dynamic conditional logic so they will only be shown or hidden when the page"
 " loads."
-msgstr ""
+msgstr "Alanlar ve bölümler dinamik koşullu mantığı destekler. Sayfalar dinamik koşullu mantığı desteklemez ve sadece sayfa yüklendiğinde gösterilir yada gizlenir."
 
 #: includes/steps/class-step-user-input.php:139
 msgid "Green triangle"
-msgstr "Triángulo verde"
+msgstr "Yeşil üçgen"
 
 #: includes/steps/class-step-user-input.php:143
 msgid "Green Background"
-msgstr "Fondo verde"
+msgstr "Yeşil Arkaplan"
 
 #: includes/steps/class-step-user-input.php:152
 msgid "Assignee Policy"
-msgstr "Política de encargados"
+msgstr "Görevlendirme Politikası"
 
 #: includes/steps/class-step-user-input.php:153
 msgid ""
@@ -1733,193 +1729,193 @@ msgid ""
 "this step then the entry will require input from every assignee before the "
 "step can be completed. If the step is assigned to a role only one user in "
 "that role needs to complete the step."
-msgstr "Define como debe procesarse este paso. Si todos los encargados deben completar este paso entonces la entrada necesitará respuesta de cada uno de los encargados para completar el paso. Si este paso está asignado a un rol sólo uno de los usuarios con ese rol necesitará completar el paso."
+msgstr "Bu adımın nasıl işleneceğini tanımlayın. Eğer tüm görevliler bu adımı tamamlamak zorundaysa herbiri giriş yapana kadar bir sonraki adıma geçilmez. Eğer bu adım bir role atandıysa, o roldeki bir görevlinin bu adımı tamamlaması yeterli olur."
 
 #: includes/steps/class-step-user-input.php:158
 msgid "At least one assignee must complete this step"
-msgstr "Al menos un encargado debe completar este paso"
+msgstr "En az bir görevlinin bu adımı tamamlaması gerekir"
 
 #: includes/steps/class-step-user-input.php:162
 msgid "All assignees must complete this step"
-msgstr "Todos los encargados deben completar este paso"
+msgstr "Tüm görevlilerin bu adımı tamamlaması gerekir"
 
 #: includes/steps/class-step-user-input.php:188
 msgid "Default Status Option"
-msgstr ""
+msgstr "Varsayılan Durum Seçenekleri"
 
 #: includes/steps/class-step-user-input.php:189
 msgid ""
 "Select the default value for the status on the workflow detail page. Select "
 "Hidden to hide the status options."
-msgstr ""
+msgstr "İş akışını detay sayfasında durum için varsayılan değeri seçin. Durum seçeneklerini gizlemek için Gizli’yi seçin."
 
 #: includes/steps/class-step-user-input.php:194
 #: includes/steps/class-step-user-input.php:886
 msgid "In progress"
-msgstr "En progreso"
+msgstr "İşlem sürüyor"
 
 #: includes/steps/class-step-user-input.php:207
 msgid "Always Required"
-msgstr ""
+msgstr "Her zaman gerekli"
 
 #: includes/steps/class-step-user-input.php:210
 msgid "Required if in progress"
-msgstr ""
+msgstr "İşlem sürüyorsa gerekli"
 
 #: includes/steps/class-step-user-input.php:214
 msgid "Required if complete"
-msgstr ""
+msgstr "İşlem tamamlanmışsa gerekli"
 
 #: includes/steps/class-step-user-input.php:265
 msgid "A new entry requires your input"
-msgstr "Una nueva entrada necesita tu atención"
+msgstr "Yeni bir kayıt sizden cevap bekliyor"
 
 #: includes/steps/class-step-user-input.php:559
 msgid "Entry updated and marked complete."
-msgstr "Entrada actualizada y marcada como completada."
+msgstr "Kayıt güncellendi ve bitmiş olarak işaretlendi."
 
 #: includes/steps/class-step-user-input.php:559
 msgid "Entry updated - in progress."
-msgstr "Entrada actualizada - en progreso."
+msgstr "Kayıt güncellendi - işleniyor."
 
 #: includes/steps/class-step-user-input.php:672
 #: includes/steps/class-step-user-input.php:697
 msgid "This field is required."
-msgstr ""
+msgstr "Bu alan zorunludur."
 
 #: includes/steps/class-step-user-input.php:724
 msgid "There was a problem while updating your form."
-msgstr ""
+msgstr "Formunuzu güncelleştirilirken bir sorun oluştu."
 
 #: includes/steps/class-step-user-input.php:740
 msgid "Pending Input"
-msgstr ""
+msgstr "Bekleyen Giriş"
 
 #: includes/steps/class-step-webhook.php:30
 #: includes/steps/class-step-webhook.php:40
 msgid "Outgoing Webhook"
-msgstr ""
+msgstr "Giden Web Kancası"
 
 #: includes/steps/class-step-webhook.php:45
 msgid "Outgoing Webhook URL"
-msgstr ""
+msgstr "Giden Web Kancası URL"
 
 #: includes/steps/class-step-webhook.php:50
 msgid "Request Method"
-msgstr ""
+msgstr "Talep yöntemi:"
 
 #: includes/steps/class-step-webhook.php:74
 msgid "Format"
-msgstr "Formato"
+msgstr "Biçim"
 
 #: includes/steps/class-step.php:157
 msgid "Next Step"
-msgstr "Siguiente paso"
+msgstr "Sonraki Adım"
 
 #: includes/steps/class-step.php:655
 msgid "%s: not required"
-msgstr "%s: no obligatorio"
+msgstr "%s: gerekli değil"
 
 #: includes/steps/class-step.php:787
 msgid "Entry"
-msgstr "Entrada"
+msgstr "Kayıt"
 
 #: includes/steps/class-step.php:1554
 msgid "Processed"
-msgstr ""
+msgstr "İşlenmiş"
 
 #: includes/wizard/steps/class-iw-step-complete.php:42
 msgid "Congratulations! Now you can set up your first workflow."
-msgstr "¡Felicidades! Ahora puedes configurar tu primer flujo de trabajo."
+msgstr "Tebrikler! Şimdi ilk iş akışınızı ayarlayabilirsiniz."
 
 #: includes/wizard/steps/class-iw-step-complete.php:51
 msgid "Select a Form to use for your Workflow"
-msgstr "Selecciona un formulario para usar tu flujo de trabajo"
+msgstr "İş akışınız için kullanılacak bir Form seçin"
 
 #: includes/wizard/steps/class-iw-step-complete.php:67
 msgid "Add Workflow Steps in the Form Settings"
-msgstr "Añade pasos del flujo de trabajo en los ajustes del formulario"
+msgstr "Form ayarlarından İş akışı adımları ekle"
 
 #: includes/wizard/steps/class-iw-step-complete.php:71
 msgid "Add Workflow Steps"
-msgstr "Añadir pasos del flujo de trabajo"
+msgstr "İş akışı adımları ekle"
 
 #: includes/wizard/steps/class-iw-step-complete.php:78
 msgid ""
 "Don't have a form you want to use for the workflow? %sCreate a Form%s and "
 "add your steps in the Form Settings later."
-msgstr "¿No tienes un formulario donde usar el flujo de trabajo? %sCrea un formulario%s y añade pasos en los ajustes del formulario más tarde."
+msgstr "İş akışı için kullanmayı istediğiniz bir form yok mu? %sBir Form Oluşturun%s ve İş Akışı adımlarını Form Ayarlarından ekleyin."
 
 #: includes/wizard/steps/class-iw-step-complete.php:88
 msgid ""
 "%sCreate a Form%s and then add your Workflow steps in the Form Settings."
-msgstr "%sCrea un formulario%s y después añade tus pasos del flujo de trabajo en los ajustes del formulario."
+msgstr "%sBir Form Oluşturun%s ve İş Akışı adımlarını Form Ayarlarından ekleyin."
 
 #: includes/wizard/steps/class-iw-step-complete.php:98
 msgid "Installation Complete"
-msgstr "Instalación completada"
+msgstr "Yükleme Tamamlandı"
 
 #: includes/wizard/steps/class-iw-step-license-key.php:16
 msgid ""
 "Enter your Gravity Flow License Key below.  Your key unlocks access to "
 "automatic updates and support.  You can find your key in your purchase "
 "receipt or by logging into the %sGravity Flow%s site."
-msgstr "Introduce tu clave de licencia de Gravity Flow a continuación. Tu clave da acceso a actualizaciones automáticas y soporte. Puedes encontrar tu clave en tu recibo de compra o iniciando sesión en el sitio web de %sGravity Flow%s."
+msgstr "Gravity Flow Lisans Anahtarınızı aşağıya girin. Anahtarınız otomatik güncellemeleri, eklenti yükleyicisini ve desteğin kilidini açar. Anahtarınızı %sGravity Flow%s sitesinde giriş yaptıktan sonra bulabilirsiniz."
 
 #: includes/wizard/steps/class-iw-step-license-key.php:20
 msgid "Enter Your License Key"
-msgstr "Introduce tu clave de licencia"
+msgstr "Lisans Anahtarınızı Girin"
 
 #: includes/wizard/steps/class-iw-step-license-key.php:35
 msgid ""
 "If you don't enter a valid license key, you will not be able to update "
 "Gravity Flow when important bug fixes and security enhancements are "
 "released. This can be a serious security risk for your site."
-msgstr "Si no introduces una clave de licencia válida, no podrás actualizar Gravity Flow cuando se publiquen correcciones de fallos y mejoras de seguridad. Esto puede ser un riesgo de seguridad importarte para tu sitio."
+msgstr "Geçerli bir lisans anahtarı girmezseniz, önemli hata düzeltmeleri ve güvenlik geliştirmeleri yayınlandığında Gravity Flowu güncelleyemezsiniz. Bu  siteniz için ciddi bir güvenlik riski olabilir."
 
 #: includes/wizard/steps/class-iw-step-license-key.php:40
 msgid "I understand the risks"
-msgstr "Entiendo los riesgos"
+msgstr "Riskleri anlıyorum"
 
 #: includes/wizard/steps/class-iw-step-license-key.php:59
 msgid "Please enter a valid license key."
-msgstr "Por favor introduce una clave de licencia válida."
+msgstr "Lütfen geçerli bir lisans anahtarı girin."
 
 #: includes/wizard/steps/class-iw-step-license-key.php:65
 msgid ""
 "Invalid or Expired Key : Please make sure you have entered the correct value"
 " and that your key is not expired."
-msgstr "Licencia caducada o no válida: Por favor asegúrate de que la has introducido correctamente y de que no está caducada."
+msgstr "Geçersiz veya süresi dolmuş anahtar: doğru değer girdiğinize ve anahtarınızın süresinin olmadığına emin olun."
 
 #: includes/wizard/steps/class-iw-step-license-key.php:73
 msgid "Please accept the terms"
-msgstr "Por favor acepta las condiciones"
+msgstr "Lütfen kullanım koşullarını kabul edin."
 
 #: includes/wizard/steps/class-iw-step-updates.php:16
 msgid ""
 "Gravity Flow will download important bug fixes, security enhancements and "
 "plugin updates automatically. Updates are extremely important to the "
 "security of your WordPress site."
-msgstr "Gravity Flow descargará correcciones de errores importantes y mejoras de seguridad y actualizaciones de la extensión automáticamente. Las actualizaciones son extremadamente importantes para la seguridad de tu WordPress."
+msgstr "Gravity Flow arka planda otomatik olarak hata düzeltmelerini, güvenlik geliştirmelerini ve eklenti güncellemelerini indirecektir. Güncellemeler WordPress sitenizin güvenliği için çok önemlidir."
 
 #: includes/wizard/steps/class-iw-step-updates.php:22
 msgid ""
 "This feature is activated by default unless you opt to disable it below. We "
 "only recommend disabling background updates if you intend on managing "
 "updates manually. A valid license is required for background updates."
-msgstr "Esta característica está activada de forma predeterminada a menos que optes por desactivarla a continuación. Sólo recomendamos desactivar las actualizaciones en segundo plano si tu intención es gestionar las actualizaciones manualmente. Se necesita una licencia válida para las actualizaciones en segundo plano."
+msgstr "Bu özellik aşağıdan kapatmayı seçmediğiniz takdirde otomatik olarak etkinleştirilir. Arkaplan güncellemelerini yalnızca güncellemeleri elle yönetmeyi düşünüyorsanız kapatmanızı öneririz. Arkaplan güncellemeleri için etkin bir lisans anahtarı gereklidir."
 
 #: includes/wizard/steps/class-iw-step-updates.php:29
 msgid "Keep background updates enabled"
-msgstr "Mantener actualizaciones en segundo plano activadas"
+msgstr "Arkaplan güncellemeleri etkin olsun"
 
 #: includes/wizard/steps/class-iw-step-updates.php:35
 msgid "Turn off background updates"
-msgstr "Desactivar actualizaciones en segundo plano"
+msgstr "Arkaplan güncellemelerini kapat"
 
 #: includes/wizard/steps/class-iw-step-updates.php:41
 msgid "Are you sure?"
-msgstr "¿Estás seguro?"
+msgstr "Eminmisiniz?"
 
 #: includes/wizard/steps/class-iw-step-updates.php:44
 msgid ""
@@ -1927,39 +1923,39 @@ msgid ""
 " security enhancements. We only recommend doing this if you are experienced "
 "at managing a WordPress site and accept the risks involved in manually "
 "keeping your WordPress site updated."
-msgstr "Al desactivar las actualizaciones en segundo plano tu sitio no podrá obtener solución a fallos críticos y mejoras de seguridad. Sólo recomendamos hacer esto si tienes experiencia gestionando un sitio de WordPress y aceptas los riesgos implícitos en mantener tu WordPress actualizado de forma manual."
+msgstr "Arka plan güncellemelerini devre dışı bırakırsanız siteniz kritik hata düzeltmeleri ve güvenlik geliştirmelerini almayabilir. Bunu yalnızca bir WordPress sitesini yönetme konusunda tecrübeliyseniz ve WordPress sitenizi elle güncellemenin risklerini kabul ediyorsanız yapmanızı öneririz."
 
 #: includes/wizard/steps/class-iw-step-updates.php:49
 msgid "I Understand and Accept the Risk"
-msgstr "Lo entiendo y acepto el riesgo"
+msgstr "Okudum ve riski kabul ediyorum"
 
 #: includes/wizard/steps/class-iw-step-updates.php:80
 msgid "Please accept the terms."
-msgstr "Por favor acepta las condiciones."
+msgstr "Lütfen kullanım koşullarını kabul edin."
 
 #: includes/wizard/steps/class-iw-step-updates.php:88
 msgid "Disabled"
-msgstr ""
+msgstr "Devre Dışı"
 
 #: includes/wizard/steps/class-iw-step-welcome.php:9
 msgid "Click the 'Get Started' button to complete your installation."
-msgstr "Haz clic en el botón 'Comenzar' para completar tu instalación."
+msgstr "Yüklemenizi tamamlamak için ‘Şimdi Başlayın’ düğmesini tıklayın."
 
 #: includes/wizard/steps/class-iw-step-welcome.php:16
 msgid "Get Started"
-msgstr "Comenzar"
+msgstr "Şimdi Başlayın"
 
 #: includes/wizard/steps/class-iw-step-welcome.php:20
 msgid "Welcome"
-msgstr "Bienvenido"
+msgstr "Hoşgeldiniz"
 
 #: includes/wizard/steps/class-iw-step.php:113
 msgid "Next"
-msgstr "Siguiente"
+msgstr "Sonraki"
 
 #: includes/wizard/steps/class-iw-step.php:117
 msgid "Back"
-msgstr "Anterior"
+msgstr "Geri"
 
 #. Plugin Name of the plugin/theme
 msgid "Gravity Flow"
@@ -1971,7 +1967,7 @@ msgstr "https://gravityflow.io"
 
 #. Description of the plugin/theme
 msgid "Build Workflow Applications with Gravity Forms."
-msgstr "Crea aplicaciones de flujo de trabajo con Gravity Forms."
+msgstr "Gravity Forms ile İş Akışı uygulamaları geliştirin."
 
 #. Author of the plugin/theme
 msgid "Steven Henty"
@@ -1987,16 +1983,16 @@ msgctxt ""
 msgid ""
 "%s has been successfully uninstalled. It can be re-activated from the "
 "%splugins page%s."
-msgstr "% ha sido desinstalado correctamente. Puede reactivarse desde la %spágina de extensiones%s."
+msgstr "%s başarıyla kaldırıldı. %sEklentiler%s sayfasından tekrar etkinleştirilebilir."
 
 #: includes/class-extension.php:97 includes/class-feed-extension.php:98
 msgctxt ""
 "Title for the uninstall section on the settings page for a Gravity Flow "
 "extension."
 msgid "Uninstall %s Extension"
-msgstr "Desinstalar extensión de %s"
+msgstr "%s Eklentisini Kaldır"
 
 #: includes/class-extension.php:106 includes/class-feed-extension.php:107
 msgctxt "Button text on the settings page for an extension."
 msgid "Uninstall Extension"
-msgstr "Desinstalar extensión"
+msgstr "Eklenti Kaldır"
