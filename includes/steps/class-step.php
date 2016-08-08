@@ -977,6 +977,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
+	 * Returns the entry URL.
+	 *
 	 * @param int|null $page_id
 	 * @param Gravity_Flow_Assignee $assignee
 	 * @param string $access_token
@@ -996,7 +998,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
-	 * Returns the inbox URl.
+	 * Returns the inbox URL.
 	 *
 	 * @param int|null $page_id
 	 * @param Gravity_Flow_Assignee $assignee
