@@ -69,10 +69,12 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Added support for configuring a step to process feeds for the following third-party add-ons:
     Drip Email Campaigns + Gravity Forms, Gravity Forms ConvertKit Add-On, Gravity Forms Signature Add-on by ApproveMe (WP E-Signature), HubSpot for Gravity Forms, Sliced Invoices & Gravity Forms
 - Added support for admin-only fields to be used in conditional logic in Gravity Forms 2.0.
+- Added the gravityflow_inbox_entry_detail_pre_process filter to allow the entry detail processing to be aborted.
 
 - Updated minimum Gravity Forms version to 1.9.14.
 - Updated feed interception to use the gform_is_delayed_pre_process_feed filter with GF1.9.14+ or gform_pre_process_feeds filter with GF2.0+.
 
+- Fixed a fatal error in the admin actions when sending to a step which completes the workflow immediately.
 - Fixed an issue with shortcodes used in the HTML field content not being processed on the user input step.
 - Fixed an issue with the workflow being started when an incomplete entry is saved by the Gravity Forms Partial Entries Add-On.
 - Fixed an issue when sending to another step when the current step is queued.

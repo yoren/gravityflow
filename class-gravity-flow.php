@@ -3020,6 +3020,12 @@ PRIMARY KEY  (id)
 				$form_id = $entry['form_id'];
 				$form = GFAPI::get_form( $form_id );
 
+				$process_entry_detail = apply_filters( 'gravityflow_inbox_entry_detail_pre_process', true, $form, $entry );
+
+				if ( ! $process_entry_detail || is_wp_error( $process_entry_detail ) ) {
+					return;
+				}
+
 				require_once( $this->get_base_path() . '/includes/pages/class-entry-detail.php' );
 
 				$step = $this->get_current_step( $form, $entry );
@@ -3371,7 +3377,7 @@ PRIMARY KEY  (id)
 					$api->send_to_step( $entry, $step_id );
 					$entry = GFAPI::get_entry( $entry['id'] );
 					$new_step = $api->get_current_step( $entry );
-					$feedback = sprintf( esc_html__( 'Sent to step: %s',  'gravityflow' ), $new_step->get_name() );
+					$feedback = $new_step ? sprintf( esc_html__( 'Sent to step: %s',  'gravityflow' ), $new_step->get_name() ) : esc_html__( 'Workflow Complete',  'gravityflow' );
 				}
 			}
 			return $feedback;
