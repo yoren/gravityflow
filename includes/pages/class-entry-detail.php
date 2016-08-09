@@ -35,12 +35,9 @@ class Gravity_Flow_Entry_Detail {
 
 		$display_empty_fields         = (bool) $args['display_empty_fields'];
 		$check_view_entry_permissions = (bool) $args['check_permissions'];
-		$show_header                  = (bool) $args['show_header'];
 		$show_timeline                = (bool) $args['timeline'];
 		$display_instructions         = (bool) $args['display_instructions'];
 		$sidebar                      = (bool) $args['sidebar'];
-		$display_workflow_info        = (bool) $args['workflow_info'];
-		$display_step_info            = (bool) $args['step_status'];
 
 		self::include_scripts();
 
@@ -49,82 +46,22 @@ class Gravity_Flow_Entry_Detail {
 		<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_detail">
 
 			<?php
-			self::maybe_show_header( $form, $show_header );
+			self::maybe_show_header( $form, $args );
 
 			if ( $check_view_entry_permissions ) {
-				// Check view permissions
-				global $current_user;
-
-				$permission_granted = false;
-
-				$assignee_key = '';
-				$user_id      = $current_user->ID;
-
-				if ( empty( $user_id ) ) {
-					if ( $token = gravity_flow()->decode_access_token() ) {
-						$assignee_key = sanitize_text_field( $token['sub'] );
-						list( $type, $user_id ) = rgexplode( '|', $assignee_key, 2 );
-					}
-				} else {
-					$assignee_key = 'user_id|' . $user_id;
-				}
-
-				gravity_flow()->log_debug( __METHOD__ . '() checking permissions.  $current_user->ID: ' . $current_user->ID . ' created_by: ' . $entry['created_by'] . ' assignee key: ' . $assignee_key );
-
-				if ( ! empty( $user_id ) && $entry['created_by'] == $user_id  ) {
-					$permission_granted = true;
-				} else {
-
-					$is_assignee = $current_step ? $current_step->is_assignee( $assignee_key ) : false;
-
-					$full_access = GFAPI::current_user_can_any( array(
-						'gform_full_access',
-						'gravityflow_status_view_all',
-					) );
-
-					gravity_flow()->log_debug( __METHOD__ . '() $full_access: ' . ( $full_access ? 'yes' : 'no' ) );
-
-					if ( $is_assignee || $full_access ) {
-						$permission_granted = true;
-					}
-				}
-
-				/**
-				 * Allows the the permission check to be overridden for the workflow entry detail page.
-				 *
-				 * @param bool $permission_granted Whether permission is granted to open the entry.
-				 * @param array $entry
-				 * @param array $form
-				 * @param Gravity_Flow_Step $current_step
-				 */
-				$permission_granted = apply_filters( 'gravityflow_permission_granted_entry_detail', $permission_granted, $entry, $form, $current_step );
+				$permission_granted = self::is_permission_granted( $entry, $form, $current_step );
 
 				if ( ! $permission_granted ) {
 					$permission_denied_message = esc_attr__( "You don't have permission to view this entry.", 'gravityflow' );
 					$permission_denied_message = apply_filters( 'gravityflow_permission_denied_message_entry_detail', $permission_denied_message, $current_step );
 					echo $permission_denied_message;
+
 					return;
 				}
 			}
-			$url = remove_query_arg( array( 'gworkflow_token', 'new_status' ) );
-			$classes = $sidebar ? 'columns-2' : 'columns-1';
-			if ( $sidebar ) {
-				$classes .= ' gravityflow-has-sidebar';
-			} else {
-				$classes .= ' gravityflow-no-sidebar';
-			}
 
-			if ( $display_workflow_info ) {
-				$classes .= ' gravityflow-has-workflow-info';
-			} else {
-				$classes .= ' gravityflow-no-workflow-info';
-			}
-
-			if ( $display_step_info ) {
-				$classes .= ' gravityflow-has-step-info';
-			} else {
-				$classes .= ' gravityflow-no-step-info';
-			}
+			$url     = remove_query_arg( array( 'gworkflow_token', 'new_status' ) );
+			$classes = self::get_classes( $args );
 
 			?>
 				<form id="gform_<?php echo $form_id; ?>" method="post" enctype='multipart/form-data' action="<?php echo esc_url( $url ); ?>">
@@ -323,9 +260,10 @@ class Gravity_Flow_Entry_Detail {
 	 * Output the header, if enabled.
 	 *
 	 * @param array $form The current form.
-	 * @param bool $show_header Indicates if the header should be displayed.
+	 * @param array $args The arguments to be used when rendering the page.
 	 */
-	public static function maybe_show_header( $form, $show_header ) {
+	public static function maybe_show_header( $form, $args ) {
+		$show_header = (bool) $args['show_header'];
 		if ( ! $show_header ) {
 			return;
 		}
@@ -352,6 +290,98 @@ class Gravity_Flow_Entry_Detail {
 			</ul>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Checks if the current user has permission to view the entry details.
+	 *
+	 * @param array $entry The current entry.
+	 * @param array $form The current form.
+	 * @param Gravity_Flow_Step|null $current_step The step currently being displayed.
+	 *
+	 * @return bool
+	 */
+	public static function is_permission_granted( $entry, $form, $current_step ) {
+		global $current_user;
+
+		$permission_granted = false;
+		$assignee_key       = '';
+		$user_id            = $current_user->ID;
+
+		if ( empty( $user_id ) ) {
+			if ( $token = gravity_flow()->decode_access_token() ) {
+				$assignee_key = sanitize_text_field( $token['sub'] );
+				list( $type, $user_id ) = rgexplode( '|', $assignee_key, 2 );
+			}
+		} else {
+			$assignee_key = 'user_id|' . $user_id;
+		}
+
+		gravity_flow()->log_debug( __METHOD__ . '() checking permissions.  $current_user->ID: ' . $current_user->ID . ' created_by: ' . $entry['created_by'] . ' assignee key: ' . $assignee_key );
+
+		if ( ! empty( $user_id ) && $entry['created_by'] == $user_id ) {
+			$permission_granted = true;
+		} else {
+
+			$is_assignee = $current_step ? $current_step->is_assignee( $assignee_key ) : false;
+
+			$full_access = GFAPI::current_user_can_any( array(
+				'gform_full_access',
+				'gravityflow_status_view_all',
+			) );
+
+			gravity_flow()->log_debug( __METHOD__ . '() $full_access: ' . ( $full_access ? 'yes' : 'no' ) );
+
+			if ( $is_assignee || $full_access ) {
+				$permission_granted = true;
+			}
+		}
+
+		/**
+		 * Allows the the permission check to be overridden for the workflow entry detail page.
+		 *
+		 * @param bool $permission_granted Whether permission is granted to open the entry.
+		 * @param array $entry
+		 * @param array $form
+		 * @param Gravity_Flow_Step $current_step
+		 */
+		$permission_granted = apply_filters( 'gravityflow_permission_granted_entry_detail', $permission_granted, $entry, $form, $current_step );
+
+		return $permission_granted;
+	}
+
+	/**
+	 * Retrieve the css classes to be added to the div#post-body.
+	 *
+	 * @param array $args The arguments to be used when rendering the page.
+	 *
+	 * @return string
+	 */
+	public static function get_classes( $args ) {
+		$sidebar               = (bool) $args['sidebar'];
+		$display_workflow_info = (bool) $args['workflow_info'];
+		$display_step_info     = (bool) $args['step_status'];
+
+		$classes = $sidebar ? 'columns-2' : 'columns-1';
+		if ( $sidebar ) {
+			$classes .= ' gravityflow-has-sidebar';
+		} else {
+			$classes .= ' gravityflow-no-sidebar';
+		}
+
+		if ( $display_workflow_info ) {
+			$classes .= ' gravityflow-has-workflow-info';
+		} else {
+			$classes .= ' gravityflow-no-workflow-info';
+		}
+
+		if ( $display_step_info ) {
+			$classes .= ' gravityflow-has-step-info';
+		} else {
+			$classes .= ' gravityflow-no-step-info';
+		}
+
+		return $classes;
 	}
 
 	public static function print_button( $entry, $show_timeline, $check_view_entry_permissions ) {
