@@ -80,17 +80,17 @@ class Gravity_Flow_Bootstrap {
 	}
 
 	public static function include_steps() {
-		require_once( 'includes/steps/class-step.php' );
-		require_once( 'includes/steps/class-steps.php' );
-		require_once( 'includes/steps/class-step-feed-add-on.php' );
+		require_once( dirname( __FILE__ ) . '/includes/steps/class-step.php' );
+		require_once( dirname( __FILE__ ) . '/includes/steps/class-steps.php' );
+		require_once( dirname( __FILE__ ) . '/includes/steps/class-step-feed-add-on.php' );
 
-		foreach ( glob( plugin_dir_path( __FILE__ ) . 'includes/steps/class-step-*.php' ) as $gravity_flow_filename ) {
+		foreach ( glob( dirname( __FILE__ ) . '/includes/steps/class-step-*.php' ) as $gravity_flow_filename ) {
 			require_once( $gravity_flow_filename );
 		}
 	}
 
 	public static function include_fields() {
-		foreach ( glob( plugin_dir_path( __FILE__ ) . 'includes/fields/class-field-*.php' ) as $gravity_flow_filename ) {
+		foreach ( glob( dirname( __FILE__ ) . '/includes/fields/class-field-*.php' ) as $gravity_flow_filename ) {
 			require_once( $gravity_flow_filename );
 		}
 	}

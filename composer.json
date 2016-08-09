@@ -1,6 +1,6 @@
 {
 	"name": "gravityflow",
-	"description": "Build Gravity Flow.",
+	"description": "Gravity Flow.",
 	"keywords": ["wordpress", "gravity forms"],
 	"type": "wordpress-plugin",
 	"homepage": "https://www.gravityflow.io",
@@ -14,11 +14,12 @@
 	],
 	"support": {
 		"issues": "https://gravityflow.io"
-	},
+    },
+    "require-dev": {
+      "apigen/apigen": "*",
+      "lucatume/wp-browser": "~1.11"
+    },
 	"require": {
-	  	"phpunit/phpunit": "4.2.4"
-	},
-	"require-dev": {
-		"apigen/apigen": "~4.0"
+		"codeception/codeception": "^2.2"
 	}
 }
