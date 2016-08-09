@@ -31,121 +31,25 @@ class Gravity_Flow_Entry_Detail {
 		$field_values = null;
 		$form         = apply_filters( 'gform_pre_render', $form, $ajax, $field_values );
 		$form         = apply_filters( 'gform_pre_render_' . $form_id, $form, $ajax, $field_values );
+		$args         = self::get_args( $args );
 
-		$defaults = array(
-			'display_empty_fields' => true,
-			'check_permissions' => true,
-			'show_header' => true,
-			'timeline' => true,
-			'display_instructions' => true,
-			'sidebar' => true,
-			'step_status' => true,
-			'workflow_info' => true,
-		);
-
-		$args = array_merge( $defaults, $args );
-
-		$display_empty_fields = (bool) $args['display_empty_fields'];
+		$display_empty_fields         = (bool) $args['display_empty_fields'];
 		$check_view_entry_permissions = (bool) $args['check_permissions'];
-		$show_header = (bool) $args['show_header'];
-		$show_timeline = (bool) $args['timeline'];
-		$display_instructions = (bool) $args['display_instructions'];
-		$sidebar = (bool) $args['sidebar'];
-		$display_workflow_info = (bool) $args['workflow_info'];
-		$display_step_info = (bool) $args['step_status'];
+		$show_header                  = (bool) $args['show_header'];
+		$show_timeline                = (bool) $args['timeline'];
+		$display_instructions         = (bool) $args['display_instructions'];
+		$sidebar                      = (bool) $args['sidebar'];
+		$display_workflow_info        = (bool) $args['workflow_info'];
+		$display_step_info            = (bool) $args['step_status'];
 
-		gravity_flow()->log_debug( __METHOD__ . '() args: ' . print_r( $args, true ) );
+		self::include_scripts();
+
 		?>
-
-		<script type="text/javascript">
-
-			if ( typeof ajaxurl == 'undefined' ) {
-				ajaxurl = <?php echo json_encode( admin_url( 'admin-ajax.php' ) ); ?>;
-			}
-
-			function DeleteFile(leadId, fieldId, deleteButton) {
-				if (confirm(<?php echo json_encode( __( "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete", 'gravityflow' ) ); ?>)) {
-					var fileIndex = jQuery(deleteButton).parent().index();
-					var mysack = new sack("<?php echo admin_url( 'admin-ajax.php' )?>");
-					mysack.execute = 1;
-					mysack.method = 'POST';
-					mysack.setVar("action", "rg_delete_file");
-					mysack.setVar("rg_delete_file", "<?php echo wp_create_nonce( 'rg_delete_file' ) ?>");
-					mysack.setVar("lead_id", leadId);
-					mysack.setVar("field_id", fieldId);
-					mysack.setVar("file_index", fileIndex);
-					mysack.onError = function () {
-						alert(<?php echo json_encode( __( 'Ajax error while deleting file.', 'gravityflow' ) ) ?>)
-					};
-					mysack.runAJAX();
-
-					return true;
-				}
-			}
-
-			function EndDeleteFile(fieldId, fileIndex) {
-				var previewFileSelector = "#preview_existing_files_" + fieldId + " .ginput_preview";
-				var $previewFiles = jQuery(previewFileSelector);
-				var rr = $previewFiles.eq(fileIndex);
-				$previewFiles.eq(fileIndex).remove();
-				var $visiblePreviewFields = jQuery(previewFileSelector);
-				if ($visiblePreviewFields.length == 0) {
-					jQuery('#preview_' + fieldId).hide();
-					jQuery('#upload_' + fieldId).show('slow');
-				}
-			}
-
-			function ToggleShowEmptyFields() {
-				if (jQuery("#gentry_display_empty_fields").is(":checked")) {
-					createCookie("gf_display_empty_fields", true, 10000);
-					document.location = document.location.href;
-				}
-				else {
-					eraseCookie("gf_display_empty_fields");
-					document.location = document.location.href;
-				}
-			}
-
-			function createCookie(name, value, days) {
-				if (days) {
-					var date = new Date();
-					date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-					var expires = "; expires=" + date.toGMTString();
-				}
-				else var expires = "";
-				document.cookie = name + "=" + value + expires + "; path=/";
-			}
-
-			function eraseCookie(name) {
-				createCookie(name, "", -1);
-			}
-
-
-		</script>
 
 		<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_detail">
 
-			<?php if ( $show_header ) :	?>
-			<h2 class="gf_admin_page_title">
-				<img width="45" height="22" src="<?php echo gravity_flow()->get_base_url(); ?>/images/gravityflow-icon-blue-grad.svg" style="margin-right:5px;"/>
-				<?php esc_html_e( $form['title'] ); ?><span class="gf_admin_page_formid">ID: <?php echo absint( $form['id'] ); ?></span>
-			</h2>
-
-			<div id="gf_form_toolbar">
-				<ul id="gf_form_toolbar_links">
-
-					<?php
-
-					$menu_items = gravity_flow()->get_toolbar_menu_items();
-
-					echo GFForms::format_toolbar_menu_items( $menu_items );
-
-					?>
-				</ul>
-			</div>
-
 			<?php
-			endif;
+			self::maybe_show_header( $form, $show_header );
 
 			if ( $check_view_entry_permissions ) {
 				// Check view permissions
@@ -154,7 +58,7 @@ class Gravity_Flow_Entry_Detail {
 				$permission_granted = false;
 
 				$assignee_key = '';
-				$user_id = $current_user->ID;
+				$user_id      = $current_user->ID;
 
 				if ( empty( $user_id ) ) {
 					if ( $token = gravity_flow()->decode_access_token() ) {
@@ -317,6 +221,139 @@ class Gravity_Flow_Entry_Detail {
 		<?php
 	}
 
+	/**
+	 * Merges the specified arguments with the defaults.
+	 *
+	 * @param array $args The arguments specified when calling the detail page.
+	 *
+	 * @return array
+	 */
+	public static function get_args( $args ) {
+		$defaults = array(
+			'display_empty_fields' => true,
+			'check_permissions'    => true,
+			'show_header'          => true,
+			'timeline'             => true,
+			'display_instructions' => true,
+			'sidebar'              => true,
+			'step_status'          => true,
+			'workflow_info'        => true,
+		);
+
+		$args = array_merge( $defaults, $args );
+		gravity_flow()->log_debug( __METHOD__ . '() args: ' . print_r( $args, true ) );
+
+		return $args;
+	}
+
+	/**
+	 * Outputs the inline scripts.
+	 */
+	public static function include_scripts() {
+		?>
+
+		<script type="text/javascript">
+
+			if (typeof ajaxurl == 'undefined') {
+				ajaxurl = <?php echo json_encode( admin_url( 'admin-ajax.php' ) ); ?>;
+			}
+
+			function DeleteFile(leadId, fieldId, deleteButton) {
+				if (confirm(<?php echo json_encode( __( "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete", 'gravityflow' ) ); ?>)) {
+					var fileIndex = jQuery(deleteButton).parent().index();
+					var mysack = new sack("<?php echo admin_url( 'admin-ajax.php' )?>");
+					mysack.execute = 1;
+					mysack.method = 'POST';
+					mysack.setVar("action", "rg_delete_file");
+					mysack.setVar("rg_delete_file", "<?php echo wp_create_nonce( 'rg_delete_file' ) ?>");
+					mysack.setVar("lead_id", leadId);
+					mysack.setVar("field_id", fieldId);
+					mysack.setVar("file_index", fileIndex);
+					mysack.onError = function () {
+						alert(<?php echo json_encode( __( 'Ajax error while deleting file.', 'gravityflow' ) ) ?>)
+					};
+					mysack.runAJAX();
+
+					return true;
+				}
+			}
+
+			function EndDeleteFile(fieldId, fileIndex) {
+				var previewFileSelector = "#preview_existing_files_" + fieldId + " .ginput_preview";
+				var $previewFiles = jQuery(previewFileSelector);
+				var rr = $previewFiles.eq(fileIndex);
+				$previewFiles.eq(fileIndex).remove();
+				var $visiblePreviewFields = jQuery(previewFileSelector);
+				if ($visiblePreviewFields.length == 0) {
+					jQuery('#preview_' + fieldId).hide();
+					jQuery('#upload_' + fieldId).show('slow');
+				}
+			}
+
+			function ToggleShowEmptyFields() {
+				if (jQuery("#gentry_display_empty_fields").is(":checked")) {
+					createCookie("gf_display_empty_fields", true, 10000);
+					document.location = document.location.href;
+				}
+				else {
+					eraseCookie("gf_display_empty_fields");
+					document.location = document.location.href;
+				}
+			}
+
+			function createCookie(name, value, days) {
+				if (days) {
+					var date = new Date();
+					date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+					var expires = "; expires=" + date.toGMTString();
+				}
+				else var expires = "";
+				document.cookie = name + "=" + value + expires + "; path=/";
+			}
+
+			function eraseCookie(name) {
+				createCookie(name, "", -1);
+			}
+
+		</script>
+		<?php
+	}
+
+	/**
+	 * Output the header, if enabled.
+	 *
+	 * @param array $form The current form.
+	 * @param bool $show_header Indicates if the header should be displayed.
+	 */
+	public static function maybe_show_header( $form, $show_header ) {
+		if ( ! $show_header ) {
+			return;
+		}
+
+		?>
+		<h2 class="gf_admin_page_title">
+			<img width="45" height="22"
+			     src="<?php echo gravity_flow()->get_base_url(); ?>/images/gravityflow-icon-blue-grad.svg"
+			     style="margin-right:5px;"/>
+			<?php esc_html_e( $form['title'] ); ?><span
+				class="gf_admin_page_formid">ID: <?php echo absint( $form['id'] ); ?></span>
+		</h2>
+
+		<div id="gf_form_toolbar">
+			<ul id="gf_form_toolbar_links">
+
+				<?php
+
+				$menu_items = gravity_flow()->get_toolbar_menu_items();
+
+				echo GFForms::format_toolbar_menu_items( $menu_items );
+
+				?>
+			</ul>
+		</div>
+		<?php
+	}
+
 	public static function print_button( $entry, $show_timeline, $check_view_entry_permissions ) {
 
 		if ( is_user_logged_in() || $check_view_entry_permissions ) :
@@ -346,7 +383,7 @@ class Gravity_Flow_Entry_Detail {
 
 		//getting email values
 		$email_fields = GFCommon::get_email_fields( $form );
-		$emails = array();
+		$emails       = array();
 
 		foreach ( $email_fields as $email_field ) {
 			if ( ! empty( $entry[ $email_field->id ] ) ) {
@@ -369,17 +406,18 @@ class Gravity_Flow_Entry_Detail {
 
 		reset( $notes );
 
-		$initial_note = new stdClass();
-		$initial_note->id = 0;
+		$initial_note               = new stdClass();
+		$initial_note->id           = 0;
 		$initial_note->date_created = $entry['date_created'];
-		$initial_note->value = esc_html__( 'Workflow Submitted', 'gravityflow' );
-		$initial_note->user_id = $entry['created_by'];
-		$user = get_user_by( 'id', $entry['created_by'] );
-		$initial_note->user_name = $user ? $user->display_name : $entry['ip'];
+		$initial_note->value        = esc_html__( 'Workflow Submitted', 'gravityflow' );
+		$initial_note->user_id      = $entry['created_by'];
+		$user                       = get_user_by( 'id', $entry['created_by'] );
+		$initial_note->user_name    = $user ? $user->display_name : $entry['ip'];
 
 		array_unshift( $notes, $initial_note );
 
 		$notes = array_reverse( $notes );
+
 		return $notes;
 	}
 
@@ -508,118 +546,118 @@ class Gravity_Flow_Entry_Detail {
 	 * @param $format
 	 */
 	public static function fields( $form, $entry, $display_empty_fields, $current_step, $format ) {
-		$form_id = absint( $form['id'] );
-		?>
+		$form_id                 = absint( $form['id'] );
+		$count                   = 0;
+		$field_count             = sizeof( $form['fields'] );
+		$has_product_fields      = false;
+		$display_fields_mode     = $current_step ? $current_step->display_fields_mode : 'all_fields';
+		$display_fields_selected = $current_step && is_array( $current_step->display_fields_selected ) ? $current_step->display_fields_selected : array();
 
-			<?php
-			$count = 0;
-			$field_count = sizeof( $form['fields'] );
-			$has_product_fields = false;
-			$display_fields_mode = $current_step ? $current_step->display_fields_mode : 'all_fields';
-			$display_fields_selected = $current_step && is_array( $current_step->display_fields_selected ) ? $current_step->display_fields_selected : array();
+		foreach ( $form['fields'] as &$field ) {
+			/* @var GF_Field $field */
 
-			foreach ( $form['fields'] as &$field ) {
-				/* @var GF_Field $field */
+			// Not needed as we're always adminOnly
+			$field->adminOnly = false;
 
-				// Not needed as we're always adminOnly
-				$field->adminOnly = false;
+			$is_product_field = GFCommon::is_product_field( $field->type );
 
-				$is_product_field = GFCommon::is_product_field( $field->type );
+			$display_field = true;
 
-				$display_field = true;
-
-				if ( $display_fields_mode == 'selected_fields' ) {
-					if ( ! in_array( $field->id, $display_fields_selected ) ) {
-						$display_field = false;
-					}
-				} else {
-					if ( GFFormsModel::is_field_hidden( $form, $field, array(), $entry ) || $is_product_field ) {
-						$display_field = false;
-					}
+			if ( $display_fields_mode == 'selected_fields' ) {
+				if ( ! in_array( $field->id, $display_fields_selected ) ) {
+					$display_field = false;
 				}
+			} else {
+				if ( GFFormsModel::is_field_hidden( $form, $field, array(), $entry ) || $is_product_field ) {
+					$display_field = false;
+				}
+			}
 
-				$display_field = (bool) apply_filters( 'gravityflow_workflow_detail_display_field', $display_field, $field, $form, $entry, $current_step );
+			$display_field = (bool) apply_filters( 'gravityflow_workflow_detail_display_field', $display_field, $field, $form, $entry, $current_step );
 
-				switch ( RGFormsModel::get_input_type( $field ) ) {
-					case 'section' :
+			switch ( RGFormsModel::get_input_type( $field ) ) {
+				case 'section' :
 
-						if ( ! GFCommon::is_section_empty( $field, $form, $entry ) || $display_empty_fields ) {
-							$count ++;
-							$is_last = $count >= $field_count ? true : false;
-							?>
-							<tr>
-								<td colspan="2" class="entry-view-section-break<?php echo $is_last ? ' lastrow' : '' ?>"><?php echo esc_html( rgar( $field, 'label' ) ) ?></td>
-							</tr>
-							<?php
-						}
+					if ( ! GFCommon::is_section_empty( $field, $form, $entry ) || $display_empty_fields ) {
+						$count ++;
+						$is_last = $count >= $field_count ? true : false;
+						?>
+						<tr>
+							<td colspan="2"
+							    class="entry-view-section-break<?php echo $is_last ? ' lastrow' : '' ?>"><?php echo esc_html( rgar( $field, 'label' ) ) ?></td>
+						</tr>
+						<?php
+					}
 
-						break;
+					break;
 
-					case 'captcha':
-					case 'password':
-					case 'page':
-						//ignore captcha, password, page field
-						break;
+				case 'captcha':
+				case 'password':
+				case 'page':
+					//ignore captcha, password, page field
+					break;
 
-					case 'html':
-						if ( $display_field ) {
-							?>
-							<tr>
-								<td colspan="2" class="entry-view-field-value"><?php echo GFCommon::replace_variables( $field->content, $form, $entry, false, true, false, 'html' ); ?></td>
-							</tr>
-							<?php
-						}
+				case 'html':
+					if ( $display_field ) {
+						$content = GFCommon::replace_variables( $field->content, $form, $entry, false, true, false, 'html' );
+						$content = do_shortcode( $content );
+						?>
+						<tr>
+							<td colspan="2" class="entry-view-field-value"><?php echo $content ?></td>
+						</tr>
+						<?php
+					}
 
-						break;
-					default :
+					break;
+				default :
 
-						if ( $is_product_field ) {
-							$has_product_fields = true;
-						}
+					if ( $is_product_field ) {
+						$has_product_fields = true;
+					}
 
-						if ( ! $display_field ) {
-							continue;
-						}
+					if ( ! $display_field ) {
+						continue;
+					}
 
-						$value = RGFormsModel::get_lead_field_value( $entry, $field );
+					$value = RGFormsModel::get_lead_field_value( $entry, $field );
 
-						if ( $field->type == 'product' ) {
-							if ( $field->has_calculation() ) {
-								$product_name = trim( $value[ $field->id . '.1' ] );
-								$price        = trim( $value[ $field->id . '.2' ] );
-								$quantity     = trim( $value[ $field->id . '.3' ] );
+					if ( $field->type == 'product' ) {
+						if ( $field->has_calculation() ) {
+							$product_name = trim( $value[ $field->id . '.1' ] );
+							$price        = trim( $value[ $field->id . '.2' ] );
+							$quantity     = trim( $value[ $field->id . '.3' ] );
 
-								if ( empty( $product_name ) ) {
-									$value[ $field->id . '.1' ] = $field->get_field_label( false, $value );
-								}
+							if ( empty( $product_name ) ) {
+								$value[ $field->id . '.1' ] = $field->get_field_label( false, $value );
+							}
 
-								if ( empty( $price ) ) {
-									$value[ $field->id . '.2' ] = '0';
-								}
+							if ( empty( $price ) ) {
+								$value[ $field->id . '.2' ] = '0';
+							}
 
-								if ( empty( $quantity ) ) {
-									$value[ $field->id . '.3' ] = '0';
-								}
+							if ( empty( $quantity ) ) {
+								$value[ $field->id . '.3' ] = '0';
 							}
 						}
+					}
 
-						$input_type = $field->get_input_type();
-						if ( $input_type == 'hiddenproduct' ) {
-							$display_value = $value[ $field->id . '.2' ];
-						} else {
-							$display_value = GFCommon::get_lead_field_display( $field, $value, $entry['currency'] );
-						}
+					$input_type = $field->get_input_type();
+					if ( $input_type == 'hiddenproduct' ) {
+						$display_value = $value[ $field->id . '.2' ];
+					} else {
+						$display_value = GFCommon::get_lead_field_display( $field, $value, $entry['currency'] );
+					}
 
-						$display_value = apply_filters( 'gform_entry_field_value', $display_value, $field, $entry, $form );
+					$display_value = apply_filters( 'gform_entry_field_value', $display_value, $field, $entry, $form );
 
-						if ( $display_empty_fields || ! empty( $display_value ) || $display_value === '0' ) {
-							$count ++;
-							$is_last  = $count >= $field_count && ! $has_product_fields ? true : false;
-							$last_row = $is_last ? ' lastrow' : '';
+					if ( $display_empty_fields || ! empty( $display_value ) || $display_value === '0' ) {
+						$count ++;
+						$is_last  = $count >= $field_count && ! $has_product_fields ? true : false;
+						$last_row = $is_last ? ' lastrow' : '';
 
-							$display_value = empty( $display_value ) && $display_value !== '0' ? '&nbsp;' : $display_value;
+						$display_value = empty( $display_value ) && $display_value !== '0' ? '&nbsp;' : $display_value;
 
-							$content = '
+						$content = '
                                 <tr>
                                     <td colspan="2" class="entry-view-field-name">' . esc_html( GFCommon::get_label( $field, 0, false, false ) ) . '</td>
                                 </tr>
@@ -627,15 +665,13 @@ class Gravity_Flow_Entry_Detail {
                                     <td colspan="2" class="entry-view-field-value' . $last_row . '">' . $display_value . '</td>
                                 </tr>';
 
-							$content = apply_filters( 'gform_field_content', $content, $field, $value, $entry['id'], $form['id'] );
-							echo $content;
-						}
+						$content = apply_filters( 'gform_field_content', $content, $field, $value, $entry['id'], $form['id'] );
+						echo $content;
+					}
 
-						break;
-				}
+					break;
 			}
-
-		$products = array();
+		}
 
 		$summary_enabled = true;
 		if ( $current_step ) {
@@ -645,7 +681,7 @@ class Gravity_Flow_Entry_Detail {
 			}
 		}
 
-		if ( $has_product_fields  && $summary_enabled ) {
+		if ( $has_product_fields && $summary_enabled ) {
 
 			$products = GFCommon::get_product_fields( $form, $entry );
 

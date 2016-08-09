@@ -55,6 +55,10 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.4.1-dev =
+
+- Fixed an issue with shortcodes used in the HTML field content not being processed on the entry detail view.
+
 = 1.4 =
 
 - Added support for delaying the workflow until after PayPal payment.
