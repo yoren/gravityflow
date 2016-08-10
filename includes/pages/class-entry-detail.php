@@ -77,37 +77,10 @@ class Gravity_Flow_Entry_Detail {
 								$editable_fields = array();
 
 								if ( $current_step ) {
-									$current_user_status = $current_step->get_user_status();
-									$current_role_status = false;
-									if ( $current_step ) {
-										foreach ( gravity_flow()->get_user_roles() as $role ) {
-											$current_role_status = $current_step->get_role_status( $role );
-											if ( $current_role_status == 'pending' ) {
-												break;
-											}
-										}
-									}
-
-									$can_update = $current_step && ( $current_user_status == 'pending' || $current_role_status == 'pending' );
+									$can_update      = self::can_update( $current_step );
 									$editable_fields = $can_update ? $current_step->get_editable_fields() : array();
 
-									if ( $can_update && $display_instructions && $current_step->instructionsEnable ) {
-										$nl2br = apply_filters( 'gravityflow_auto_format_instructions', true );
-										$nl2br = apply_filters( "gravityflow_auto_format_instructions_{$form_id}", $nl2br );
-
-										$instructions = $current_step->instructionsValue;
-										$instructions = GFCommon::replace_variables( $instructions, $form, $entry, false, true, $nl2br );
-										$instructions = $current_step->replace_variables( $instructions, null );
-										$instructions = wp_kses_post( $instructions );
-										?>
-										<div class="postbox gravityflow-instructions">
-											<div class="inside">
-												<?php echo $instructions; ?>
-											</div>
-										</div>
-
-										<?php
-									}
+									self::maybe_show_instructions( $can_update, $display_instructions, $current_step, $form, $entry );
 								}
 
 								self::entry_detail_grid( $form, $entry, $display_empty_fields, $editable_fields, $current_step );
@@ -132,22 +105,8 @@ class Gravity_Flow_Entry_Detail {
 							?>
 							</div>
 							<?php
-
-							if ( $show_timeline ) {
-								?>
-							<div id="postbox-container-2" class="postbox-container">
-								<div class="postbox gravityflow-timeline">
-									<h3>
-										<label for="name"><?php esc_html_e( 'Timeline', 'gravityflow' ); ?></label>
-									</h3>
-
-									<div class="inside">
-										<?php self::timeline( $entry, $form ); ?>
-									</div>
-
-								</div>
-							</div>
-							<?php }	?>
+							self::maybe_show_timeline( $entry, $form, $show_timeline );
+							?>
 						</div>
 
 					</div>
@@ -351,6 +310,58 @@ class Gravity_Flow_Entry_Detail {
 	}
 
 	/**
+	 * Determines if the role or status permits the user to update field values on this step.
+	 *
+	 * @param Gravity_Flow_Step $current_step The step this entry is currently on.
+	 *
+	 * @return bool
+	 */
+	public static function can_update( $current_step ) {
+		$current_user_status = $current_step->get_user_status();
+		$current_role_status = false;
+		if ( $current_step ) {
+			foreach ( gravity_flow()->get_user_roles() as $role ) {
+				$current_role_status = $current_step->get_role_status( $role );
+				if ( $current_role_status == 'pending' ) {
+					break;
+				}
+			}
+		}
+
+		return $current_user_status == 'pending' || $current_role_status == 'pending';
+	}
+
+	/**
+	 * Displays the step instructions, if appropriate.
+	 *
+	 * @param bool $can_update Indicates if the user can edit field values on this step.
+	 * @param bool $display_instructions Indicates if the step instructions should be displayed
+	 * @param Gravity_Flow_Step $current_step The step this entry is currently on.
+	 * @param array $form The current form.
+	 * @param array $entry The current entry.
+	 */
+	public static function maybe_show_instructions( $can_update, $display_instructions, $current_step, $form, $entry ) {
+		if ( $can_update && $display_instructions && $current_step->instructionsEnable ) {
+			$nl2br = apply_filters( 'gravityflow_auto_format_instructions', true );
+			$nl2br = apply_filters( 'gravityflow_auto_format_instructions_' . $form['id'], $nl2br );
+
+			$instructions = $current_step->instructionsValue;
+			$instructions = GFCommon::replace_variables( $instructions, $form, $entry, false, true, $nl2br );
+			$instructions = $current_step->replace_variables( $instructions, null );
+			$instructions = wp_kses_post( $instructions );
+
+			?>
+			<div class="postbox gravityflow-instructions">
+				<div class="inside">
+					<?php echo $instructions; ?>
+				</div>
+			</div>
+
+			<?php
+		}
+	}
+
+	/**
 	 * Retrieve the css classes to be added to the div#post-body.
 	 *
 	 * @param array $args The arguments to be used when rendering the page.
@@ -406,6 +417,34 @@ class Gravity_Flow_Entry_Detail {
 			<!-- end print button -->
 
 		<?php endif;
+	}
+
+	/**
+	 * Displays the timeline notes, if enabled.
+	 *
+	 * @param array $entry The current entry.
+	 * @param array $form The current form.
+	 * @param bool $show_timeline Indicates if the timeline should be displayed.
+	 */
+	public static function maybe_show_timeline( $entry, $form, $show_timeline ) {
+		if ( ! $show_timeline ) {
+			return;
+		}
+
+		?>
+		<div id="postbox-container-2" class="postbox-container">
+			<div class="postbox gravityflow-timeline">
+				<h3>
+					<label for="name"><?php esc_html_e( 'Timeline', 'gravityflow' ); ?></label>
+				</h3>
+
+				<div class="inside">
+					<?php self::timeline( $entry, $form ); ?>
+				</div>
+
+			</div>
+		</div>
+		<?php
 	}
 
 	public static function timeline( $entry, $form ) {
