@@ -508,19 +508,10 @@ class Gravity_Flow_Entry_Detail {
 
 		$display_empty_fields = (bool) apply_filters( 'gravityflow_entry_detail_grid_display_empty_fields', $display_empty_fields, $form, $entry );
 
-		$dynamic_conditional_logic_enabled = $current_step && gravity_flow()->fields_have_conditional_logic( $form ) && $current_step->conditional_logic_editable_fields_enabled && $current_step->conditional_logic_editable_fields_mode != 'page_load';
-
-		foreach ( $form['fields'] as $field ) {
-			if ( $field->type == 'textarea' && ! in_array( $field->id, $editable_fields ) ) {
-				// Make sure the character counter doesn't try to bind itself to an element that doesn't exist.
-				$field->maxLength = '';
-			}
-		}
-
 		?>
 
 		<input type="hidden" name="action" id="action" value="" />
-			<input type="hidden" name="save" id="action" value="Update" />
+		<input type="hidden" name="save" id="action" value="Update" />
 		<input type="hidden" name="screen_mode" id="screen_mode" value="<?php echo esc_attr( rgpost( 'screen_mode' ) ) ?>" />
 
 		<table cellspacing="0" class="widefat fixed entry-detail-view">
@@ -555,56 +546,80 @@ class Gravity_Flow_Entry_Detail {
 				</tbody>
 				<?php
 			} else {
-				?>
-				<tbody>
-				<tr>
-					<td colspan="2">
-							<?php
-							require_once( 'class-entry-editor.php' );
-							$entry_editor = new Gravity_Flow_Entry_Editor( $form, $entry, $current_step, $display_empty_fields );
-							$entry_editor->render_edit_form();
-							?>
-					</td>
-				</tr>
-				<?php
-				if ( $entry_editor->has_product_fields ) {
-					$summary_enabled = true;
-					if ( $current_step ) {
-						$meta = $current_step->get_feed_meta();
-						if ( isset( $meta['display_order_summary'] ) && ! $current_step->display_order_summary ) {
-							$summary_enabled = false;
-						}
-					}
-
-					if ( $summary_enabled ) {
-
-						$products = GFCommon::get_product_fields( $form, $entry );
-
-						if ( ! empty( $products['products'] ) ) {
-							$product_summary_label = apply_filters( "gform_order_label_{$form_id}", apply_filters( 'gform_order_label', __( 'Order', 'gravityflow' ), $form_id ), $form_id );
-							?>
-							<tr>
-								<td colspan="2" class="gravityflow-order-summary"><?php echo $product_summary_label; ?></td>
-							</tr>
-							<tr>
-								<td colspan="2" class="entry-view-field-value lastrow">
-									<?php self::products_summary( $form, $entry, $products ) ?>
-								</td>
-							</tr>
-
-							<?php
-						}
-					}
-				}
-				?>
-				</tbody>
-				<?php
+				self::entry_editor( $form, $entry, $current_step, $display_empty_fields );
 			}
 
 			?>
 			</table>
 
 	<?php
+	}
+
+	/**
+	 * Handles displaying the relevant non-editable and editable fields for the current step.
+	 *
+	 * @param array $form The current form.
+	 * @param array $entry The current entry.
+	 * @param Gravity_Flow_Step $current_step The step this entry is currently on.
+	 * @param bool $display_empty_fields Indicates if fields without a value should be displayed.
+	 */
+	public static function entry_editor( $form, $entry, $current_step, $display_empty_fields ) {
+		?>
+		<tbody>
+			<tr>
+				<td colspan="2">
+					<?php
+					require_once( 'class-entry-editor.php' );
+					$entry_editor = new Gravity_Flow_Entry_Editor( $form, $entry, $current_step, $display_empty_fields );
+					$entry_editor->render_edit_form();
+					?>
+				</td>
+			</tr>
+			<?php
+			if ( $entry_editor->has_product_fields ) {
+				self::maybe_show_products_summary( $form, $entry, $current_step );
+			}
+			?>
+		</tbody>
+		<?php
+	}
+
+	/**
+	 * Displays the products summary table if enabled for the current step.
+	 *
+	 * @param array $form The current form.
+	 * @param array $entry The current entry.
+	 * @param Gravity_Flow_Step $current_step The step this entry is currently on.
+	 */
+	public function maybe_show_products_summary( $form, $entry, $current_step ) {
+		$summary_enabled = true;
+		if ( $current_step ) {
+			$meta = $current_step->get_feed_meta();
+			if ( isset( $meta['display_order_summary'] ) && ! $current_step->display_order_summary ) {
+				$summary_enabled = false;
+			}
+		}
+
+		if ( $summary_enabled ) {
+			$products = GFCommon::get_product_fields( $form, $entry );
+
+			if ( ! empty( $products['products'] ) ) {
+				$form_id               = $form['id'];
+				$product_summary_label = apply_filters( 'gform_order_label', __( 'Order', 'gravityflow' ), $form_id );
+				$product_summary_label = apply_filters( "gform_order_label_{$form_id}", $product_summary_label, $form_id );
+				?>
+				<tr>
+					<td colspan="2" class="gravityflow-order-summary"><?php echo $product_summary_label; ?></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="entry-view-field-value lastrow">
+						<?php self::products_summary( $form, $entry, $products ) ?>
+					</td>
+				</tr>
+
+				<?php
+			}
+		}
 	}
 
 	/**
