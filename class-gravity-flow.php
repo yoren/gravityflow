@@ -3699,7 +3699,22 @@ PRIMARY KEY  (id)
 						ob_start();
 
 						$args = array(
-							'base_url' => remove_query_arg( array( 'entry-id', 'form-id', 'start-date', 'end-date', '_wpnonce', '_wp_http_referer', 'action', 'action2' ) ),
+							'base_url'        => remove_query_arg( array(
+								'entry-id',
+								'form-id',
+								'start-date',
+								'end-date',
+								'_wpnonce',
+								'_wp_http_referer',
+								'action',
+								'action2',
+								'o',
+								'f',
+								't',
+								'v',
+								'gravityflow-print-page-break',
+								'gravityflow-print-timelines',
+							) ),
 							'detail_base_url' => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
 							'display_header' => false,
 							'action_url' => 'http' . ( isset( $_SERVER['HTTPS'] ) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}?",

@@ -57,6 +57,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.4.1-dev =
 
+- Added support for field filters on the status page when a form constraint is active via the shortcode.
 - Fixed an issue with shortcodes used in the HTML field content not being processed on the entry detail view.
 
 = 1.4 =
