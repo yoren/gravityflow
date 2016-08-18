@@ -13,7 +13,7 @@ update_option( 'gravityflow_pending_installation', false );
 
 
 function setup_gravity_forms_pages() {
-	$form_filenames = array( 'conditional-logic.json' );
+	$form_filenames = array( 'conditional-logic.json', 'two-pages.json', 'vacation-request.json' );
 	foreach ( $form_filenames as $filename ) {
 		$form_json = file_get_contents( dirname( __FILE__ ) . '/../_data/forms/' . $filename );
 		$forms     = json_decode( $form_json, true );
