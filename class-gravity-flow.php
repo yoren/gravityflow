@@ -3936,6 +3936,7 @@ PRIMARY KEY  (id)
 					if ( empty( $form['feeds'] ) ) {
 						unset( $form['feeds'] );
 					}
+					GFAPI::update_form( $form );
 					$gravityflow_feeds_imported = true;
 				}
 			}
