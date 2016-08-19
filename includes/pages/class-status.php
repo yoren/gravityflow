@@ -15,7 +15,7 @@ if ( ! class_exists( 'GFForms' ) ) {
  */
 class Gravity_Flow_Status {
 
-	public static function render( $args ) {
+	public static function render( $args = array() ) {
 
 		wp_enqueue_script( 'gform_field_filter' );
 		$defaults = array(
@@ -29,6 +29,7 @@ class Gravity_Flow_Status {
 			'step_column'        => true,
 			'status_column'      => true,
 			'last_updated'       => false,
+			'filter_hidden_fields' => array( 'page' => 'gravityflow-status' ),
 		);
 		$args     = array_merge( $defaults, $args );
 
@@ -54,18 +55,21 @@ class Gravity_Flow_Status {
 		$table = new Gravity_Flow_Status_Table( $args );
 
 		if ( $args['format'] == 'table' ) {
-
-			$action_url = $args['action_url'];
 			?>
 			<form id="gravityflow-status-filter" method="GET" action="">
-				<input type="hidden" name="page" value="gravityflow-status"/>
+				<?php
+				foreach ( $args['filter_hidden_fields'] as $hidden_field => $hidden_field_value ) {
+					printf( '<input type="hidden" name="%s" value="%s"/>', $hidden_field, $hidden_field_value );
+				}
+				?>
+
 				<?php
 				$table->views();
 				$table->filters();
 				$table->prepare_items();
 				?>
 			</form>
-			<form id="gravityflow-status-filter" method="POST" action="">
+			<form id="gravityflow-status-list" method="POST" action="">
 				<?php
 				$table->display();
 				?>
@@ -354,7 +358,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 					       value="<?php echo $end_date; ?>" placeholder="yyyy/mm/dd"/>
 				<?php endif; ?>
 				<?php if ( ! empty( $this->constraint_filters['form_id'] ) ) { ?>
-					<input type="hidden" name="form-id"
+					<input type="hidden" name="form-id" id="gravityflow-form-select"
 					       value="<?php echo esc_attr( $this->constraint_filters['form_id'] ); ?>">
 				<?php } else { ?>
 					<select id="gravityflow-form-select" name="form-id">
@@ -372,9 +376,10 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 						}
 						?>
 					</select>
-					<div id="entry_filters" style="display:inline-block;"></div>
+
 				<?php } ?>
 
+				<div id="entry_filters" style="display:inline-block;"></div>
 				<input type="submit" class="button-secondary" value="<?php esc_html_e( 'Apply', 'gravityflow' ); ?>"/>
 
 				<?php if ( ! empty( $status ) ) : ?>
@@ -833,6 +838,14 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$end_date         = sanitize_text_field( $end_date );
 			$end_date_gmt     = $this->prepare_end_date_gmt( $end_date );
 			$args['end-date'] = $end_date_gmt;
+		}
+
+		if ( ! empty( $this->constraint_filters['field_filters'] ) ) {
+			$constraint_field_filters = $this->constraint_filters['field_filters'];
+			if ( ! empty( $constraint_field_filters ) ) {
+				$filters                                  = ! empty( $args['field_filters'] ) ? $args['field_filters'] : array();
+				$args['field_filters']         = array_merge( $filters, $constraint_field_filters );
+			}
 		}
 
 		$this->_filter_args = $args;

@@ -1367,7 +1367,7 @@
           "form_id": "24",
           "is_active": "1",
           "meta": {
-            "step_name": "USer Input 2",
+            "step_name": "User Input 2",
             "description": "",
             "step_type": "user_input",
             "feed_condition_conditional_logic": "0",
@@ -1419,48 +1419,6 @@
             "expiration_date": "",
             "expiration_delay_offset": "",
             "expiration_delay_unit": "hours",
-            "destination_complete": "next"
-          },
-          "addon_slug": "gravityflow",
-          "order": "0",
-          "feed_order": "0"
-        },
-        {
-          "id": "85",
-          "form_id": "24",
-          "is_active": "1",
-          "meta": {
-            "step_name": "PDF",
-            "description": "",
-            "step_type": "pdf",
-            "feed_condition_conditional_logic": "0",
-            "feed_condition_conditional_logic_object": [],
-            "scheduled": "0",
-            "schedule_type": "delay",
-            "schedule_date": "",
-            "schedule_delay_offset": "",
-            "schedule_delay_unit": "hours",
-            "template": "{all_fields}",
-            "workflow_notification_enabled": "1",
-            "workflow_notification_type": "select",
-            "workflow_notification_users": [
-              "user_id|1"
-            ],
-            "workflow_notification_routing": [
-              {
-                "assignee": "user_id|1",
-                "fieldId": "0",
-                "operator": "is",
-                "value": "",
-                "type": ""
-              }
-            ],
-            "workflow_notification_from_name": "",
-            "workflow_notification_from_email": "{admin_email}",
-            "workflow_notification_reply_to": "",
-            "workflow_notification_bcc": "",
-            "workflow_notification_subject": "",
-            "workflow_notification_message": "The PDF for entry {entry_id} is attached.",
             "destination_complete": "next"
           },
           "addon_slug": "gravityflow",
