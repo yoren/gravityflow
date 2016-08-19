@@ -1,5 +1,21 @@
 <?php
 
+/*
+ * Test summary: approvals
+ *
+ * Test details:
+ * - Enter number
+ * - Select department
+ * - Fill Number input with wrong value
+ * - If validation error appears, entry numeric only
+ * - Submit
+ * - Login to back-end, go to Inbox
+ * - Click on the 'Request salary raise' Workflow
+ * - Aprove request
+ * - Send request to CEO
+ * - Aprove request by CEO
+ */
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test the approval steps' );
