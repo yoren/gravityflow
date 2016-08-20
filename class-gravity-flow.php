@@ -5079,7 +5079,7 @@ AND m.meta_value='queued'";
 				$html .= $this->get_error_icon( $field );
 			}
 
-			$html .= $this->get_generic_map_table( $key_field, $custom_key_field, $value_field, $custom_value_field );
+			$html .= $this->get_generic_map_table( $field, $key_field, $custom_key_field, $value_field, $custom_value_field );
 			$html .= $this->settings_hidden( $field, false );
 			$html .= $this->get_generic_map_script( $field, $key_field['name'], $value_field['name'] );
 
@@ -5094,6 +5094,7 @@ AND m.meta_value='queued'";
 		/**
 		 * Return the markup for the table containing the generic_map settings.
 		 *
+		 * @param array $field The generic_map field properties.
 		 * @param array $key_field The properties for the key field drop down.
 		 * @param array $custom_key_field The properties for the key field text input.
 		 * @param array $value_field The properties for the value field drop down.
@@ -5101,7 +5102,7 @@ AND m.meta_value='queued'";
 		 *
 		 * @return string
 		 */
-		public function get_generic_map_table( $key_field, $custom_key_field, $value_field, $custom_value_field ) {
+		public function get_generic_map_table( $field, $key_field, $custom_key_field, $value_field, $custom_value_field ) {
 			$key_field_title   = isset( $field['key_field_title'] ) ? $field['key_field_title'] : esc_html__( 'Key', 'gravityflow' );
 			$value_field_title = isset( $field['value_field_title'] ) ? $field['value_field_title'] : esc_html__( 'Value', 'gravityflow' );
 
@@ -5187,12 +5188,12 @@ AND m.meta_value='queued'";
 				/* Ensure field map array has a custom key option. */
 				$has_gf_custom = false;
 				foreach ( $select_field['choices'] as $choice ) {
-					if ( 'gf_custom' === rgar( $choice, 'name' ) || rgar( $choice, 'value' ) == 'gf_custom' ) {
+					if ( $this->is_gf_custom_choice( $choice ) ) {
 						$has_gf_custom = true;
 					}
 					if ( rgar( $choice, 'choices' ) ) {
 						foreach ( $choice['choices'] as $sub_choice ) {
-							if ( rgar( $sub_choice, 'name' ) == 'gf_custom' || rgar( $sub_choice, 'value' ) == 'gf_custom' ) {
+							if ( $this->is_gf_custom_choice( $sub_choice ) ) {
 								$has_gf_custom = true;
 							}
 						}
@@ -5216,6 +5217,21 @@ AND m.meta_value='queued'";
 			}
 
 			return $html;
+		}
+
+		/**
+		 * Determines if the current choice is the gf_custom choice.
+		 *
+		 * @param array $choice The choice properties.
+		 *
+		 * @return bool
+		 */
+		public function is_gf_custom_choice( $choice ) {
+			if ( 'gf_custom' === rgar( $choice, 'name' ) || rgar( $choice, 'value' ) == 'gf_custom' ) {
+				return true;
+			}
+
+			return false;
 		}
 
 		/**
