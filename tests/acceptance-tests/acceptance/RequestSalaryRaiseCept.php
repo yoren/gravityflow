@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Test summary: approvals
+ * Test summary: Test chained (multiple) approvals through a salary rise document
  *
  * Test details:
  * - Enter number
