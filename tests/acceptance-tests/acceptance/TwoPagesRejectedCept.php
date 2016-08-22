@@ -1,6 +1,6 @@
 <?php
 /*
- * Test summary: two pages rejected
+ * Test summary: two pages form, with rejected approval
  *
  * Test details:
  * - Select Third Choise radio button
@@ -20,6 +20,8 @@ $I->wantTo( 'Test the two pages on the user input step' );
 // Submit the form
 $I->amOnPage( '/two-pages-rejected' );
 
+$I->makeScreenshot( 'Form loaded.' );
+
 $I->see( 'Two pages rejected' );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
 $I->selectOption( 'input[name=input_7]', 'Third Choice' );
@@ -27,8 +29,14 @@ $I->scrollTo( [ 'css' => '.gform_page_footer .gform_next_button' ], 20, 50 ); //
 // Next page
 $I->click( '.gform_page_footer .gform_next_button' );
 $I->selectOption( 'select[name=input_20]', 'Third Choice' );
+
+$I->makeScreenshot( 'Before form submit.' );
+
 $I->click( 'input[type=submit]' );
-$I->see( 'Thanks for contacting us! We will get in touch with you shortly.' );
+
+$I->makeScreenshot( 'Form submitted.' );
+
+$I->see( 'Thanks for contacting us!' );
 
 // Login to wp-admin
 $I->loginAsAdmin();

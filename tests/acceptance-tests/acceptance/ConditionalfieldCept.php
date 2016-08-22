@@ -3,9 +3,9 @@
  * Test summary: conditional field & numeric validation
  *
  * Test details:
- * - Select Second Choise radio button
+ * - Select Second Choice radio button
  * - Check for Select box
- * - Select Second Choise select box
+ * - Select Second Choice select box
  * - Check for Number field
  * - Number field appears
  * - Fill Number input with wrong value
