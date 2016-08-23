@@ -24,7 +24,7 @@ $I->see( 'Test Revert User' );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
 
 $I->fillField( 'input[name="input_1"]', 'Some text' );
-$I->selectOption( 'select[name="input_2"]', 'Second Choise' );
+$I->selectOption( 'select[name="input_2"]', 'Second Choice' );
 // Next page
 $I->click( '.gform_page_footer .gform_next_button' );
 $I->fillField( 'input[name="input_4"]', '42' );
