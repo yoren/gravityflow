@@ -284,6 +284,8 @@ class Gravity_Flow_Entry_Detail {
 
 			$is_assignee = $current_step ? $current_step->is_assignee( $assignee_key ) : false;
 
+			gravity_flow()->log_debug( __METHOD__ . '() $is_assignee: ' . ( $is_assignee ? 'yes' : 'no' ) );
+
 			$full_access = GFAPI::current_user_can_any( array(
 				'gform_full_access',
 				'gravityflow_status_view_all',
@@ -305,6 +307,8 @@ class Gravity_Flow_Entry_Detail {
 		 * @param Gravity_Flow_Step $current_step
 		 */
 		$permission_granted = apply_filters( 'gravityflow_permission_granted_entry_detail', $permission_granted, $entry, $form, $current_step );
+
+		gravity_flow()->log_debug( __METHOD__ . '() $permission_granted: ' . ( $permission_granted ? 'yes' : 'no' ) );
 
 		return $permission_granted;
 	}

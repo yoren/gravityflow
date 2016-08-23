@@ -4399,30 +4399,40 @@ AND m.meta_value='queued'";
 			}
 
 			if ( empty( $token ) ) {
+				$this->log_debug( __METHOD__ . '(): empty token; returning false.' );
+
 				return false;
 			}
 
 			$parts = explode( '.', $token );
 			if ( count( $parts ) < 2 ) {
+				$this->log_debug( __METHOD__ . '(): token parts < 2; returning false.' );
+
 				return false;
 			}
 
 			$body_64_probably_url_decoded = $parts[0];
-			$sig = $parts[1];
+			$sig                          = $parts[1];
 
-			if ( empty( $sig) ) {
+			if ( empty( $sig ) ) {
+				$this->log_debug( __METHOD__ . '(): empty sig; returning false.' );
+
 				return false;
 			}
 
 			$secret = get_option( 'gravityflow_token_secret' );
 			if ( empty( $secret ) ) {
+				$this->log_debug( __METHOD__ . '(): empty secret; returning false.' );
+
 				return false;
 			}
 
-			$verification_sig = hash_hmac( 'sha256', $body_64_probably_url_decoded, $secret );
+			$verification_sig  = hash_hmac( 'sha256', $body_64_probably_url_decoded, $secret );
 			$verification_sig2 = hash_hmac( 'sha256', rawurlencode( $body_64_probably_url_decoded ), $secret );
 
 			if ( ! hash_equals( $sig, $verification_sig ) && ! hash_equals( $sig, $verification_sig2 ) ) {
+				$this->log_debug( __METHOD__ . '(): failed hash validation; returning false.' );
+
 				return false;
 			}
 
@@ -4430,6 +4440,8 @@ AND m.meta_value='queued'";
 			if ( empty( $body_json ) ) {
 				$body_json = base64_decode( urldecode( $body_64_probably_url_decoded ) );
 				if ( empty( $body_json ) ) {
+					$this->log_debug( __METHOD__ . '(): empty body_json; returning false.' );
+
 					return false;
 				}
 			}
@@ -4437,21 +4449,31 @@ AND m.meta_value='queued'";
 			$token = json_decode( $body_json, true );
 
 			if ( ! isset( $token['jti'] ) ) {
+				$this->log_debug( __METHOD__ . '(): jti not set; returning false.' );
+
 				return false;
 			}
 
 			if ( ! isset( $token['exp'] ) ) {
+				$this->log_debug( __METHOD__ . '(): exp not set; returning false.' );
+
 				return false;
 			}
 
 			if ( $token['exp'] < time() ) {
+				$this->log_debug( __METHOD__ . '(): exp < time; returning false.' );
+
 				return false;
 			}
 
 			$revoked_tokens = get_option( 'gravityflow_revoked_tokens', array() );
 			if ( isset( $revoked_tokens[ $token['jti'] ] ) ) {
+				$this->log_debug( __METHOD__ . '(): token revoked; returning false.' );
+
 				return false;
 			}
+
+			$this->log_debug( __METHOD__ . '(): token valid.' );
 
 			return true;
 		}
@@ -4475,15 +4497,21 @@ AND m.meta_value='queued'";
 			}
 
 			if ( empty( $token ) ) {
+				$this->log_debug( __METHOD__ . '(): empty token; returning false.' );
+
 				return false;
 			}
 
 			if ( $validate && ! $this->validate_access_token( $token ) ) {
+				$this->log_debug( __METHOD__ . '(): token failed validation; returning false.' );
+
 				return false;
 			}
 
 			$parts = explode( '.', $token );
 			if ( count( $parts ) < 2 ) {
+				$this->log_debug( __METHOD__ . '(): token parts < 2; returning false.' );
+
 				return false;
 			}
 
@@ -4491,6 +4519,8 @@ AND m.meta_value='queued'";
 
 			$body_json = base64_decode( $body_64 );
 			if ( empty( $body_json ) ) {
+				$this->log_debug( __METHOD__ . '(): base64_decode result empty; returning false.' );
+
 				return false;
 			}
 
