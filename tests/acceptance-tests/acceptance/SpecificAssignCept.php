@@ -26,8 +26,8 @@ $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
 $I->fillField( 'input[name="input_1"]', 'Some text' );
 $I->fillField( 'textarea[name="input_2"]', 'Some paragraph text' );
 $I->fillField( 'input[name="input_3"]', 'Tag 1, Tag 2, Tag 3' );
-$I->selectOption( 'Post Custom Category', 'Second Choice' );
-$I->selectOption( 'Post Custom Category', 'Third Choice' );
+$I->selectOption( 'input[name="input_4.2"]', 'Second Choice' );
+$I->selectOption( 'input[name="input_4.3"]', 'Third Choice' );
 $I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 ); // needed for chromedriver
 $I->click( 'Submit' );
 $I->see( 'Thanks for contacting us! We will get in touch with you shortly.' );
@@ -47,7 +47,8 @@ $I->seeElement( 'button[value=approved]' );
 $I->click( 'button[value=approved]' );
 
 // Log out
-$I->click( 'Log Out' );
+$I->amOnPage( '/specific-assign' );
+$I->click( 'Log out' );
 
 // Login as admin2
 $I->loginAs( 'admin2', 'admin2' );
@@ -63,7 +64,8 @@ $I->seeElement( 'button[value=approved]' );
 $I->click( 'button[value=approved]' );
 
 // Log out
-$I->click( 'Log Out' );
+$I->amOnPage( '/specific-assign' );
+$I->click( 'Log out' );
 
 // Login as admin3
 $I->loginAs( 'admin3', 'admin3' );
@@ -77,3 +79,5 @@ $I->click( 'Specific assign' );
 // Approve
 $I->seeElement( 'button[value=approved]' );
 $I->click( 'button[value=approved]' );
+
+$I->see( 'Status: Approved' );
