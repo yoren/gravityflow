@@ -903,16 +903,13 @@ abstract class Gravity_Flow_Step extends stdClass {
 					), $options
 				);
 
-				$force_token = strtolower( $a['token'] ) == 'true' ? true : false;
-				$token       = '';
+				$token = $this->get_workflow_url_access_token( $a, $assignee );
 
-				if ( $assignee && $force_token ) {
-					$token_lifetime_days        = apply_filters( 'gravityflow_entry_token_expiration_days', 30, $assignee );
-					$token_expiration_timestamp = strtotime( '+' . (int) $token_lifetime_days . ' days' );
-					$token                      = gravity_flow()->generate_access_token( $assignee, null, $token_expiration_timestamp );
+				if ( $location == 'inbox' ) {
+					$url = $this->get_inbox_url( $a['page_id'], $assignee, $token );
+				} else {
+					$url = $this->get_entry_url( $a['page_id'], $assignee, $token );
 				}
-
-				$url = $this->get_entry_url( $a['page_id'], $assignee, $token );
 
 				if ( $type == 'link' ) {
 					$url = sprintf( '<a href="%s">%s</a>', $url, $a['text'] );
@@ -923,6 +920,27 @@ abstract class Gravity_Flow_Step extends stdClass {
 		}
 
 		return $text;
+	}
+
+	/**
+	 * Get the access token for the workflow_entry_ and workflow_inbox_ merge tags.
+	 *
+	 * @param array $a The merge tag attributes.
+	 * @param Gravity_Flow_Assignee $assignee The assignee properties.
+	 *
+	 * @return string
+	 */
+	public function get_workflow_url_access_token( $a, $assignee ) {
+		$force_token = strtolower( $a['token'] ) == 'true' ? true : false;
+		$token       = '';
+
+		if ( $assignee && $force_token ) {
+			$token_lifetime_days        = apply_filters( 'gravityflow_entry_token_expiration_days', 30, $assignee );
+			$token_expiration_timestamp = strtotime( '+' . (int) $token_lifetime_days . ' days' );
+			$token                      = gravity_flow()->generate_access_token( $assignee, null, $token_expiration_timestamp );
+		}
+
+		return $token;
 	}
 
 	/**
