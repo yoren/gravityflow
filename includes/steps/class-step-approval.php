@@ -1080,7 +1080,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$comment = rgpost( 'gravityflow_note' );
 		$text    = str_replace( '{workflow_note}', $comment, $text );
 
-		$expiration_days = apply_filters( 'gravityflow_approval_token_expiration_days', 2 );
+		$expiration_days = apply_filters( 'gravityflow_approval_token_expiration_days', 2, $assignee );
 
 		$expiration_str = '+' . (int) $expiration_days . ' days';
 

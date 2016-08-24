@@ -955,7 +955,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		if ( $assignee ) {
 			preg_match_all( '/{workflow_cancel_(url|link)(:(.*?))?}/', $text, $cancel_matches, PREG_SET_ORDER );
 			if ( is_array( $cancel_matches ) ) {
-				$expiration_days      = apply_filters( 'gravityflow_cancel_token_expiration_days', 2 );
+				$expiration_days      = apply_filters( 'gravityflow_cancel_token_expiration_days', 2, $assignee );
 				$expiration_str       = '+' . (int) $expiration_days . ' days';
 				$expiration_timestamp = strtotime( $expiration_str );
 
