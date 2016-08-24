@@ -5,10 +5,11 @@
  * Test details:
  * - Dynamically Fill up the fields
  * - Submit form
- * - First approval depending User selection
- * - Modify quantity
- * - Send further for approval
+ * - log in as admin2 and update the quantity
+ * - 'Validate inserted values' step: first approval depending on the User Condition (should not be admin)
+ * - log in as admin and Approve
  * - Workflow complete
+ * - Check if status is Approved
  */
 
 $I = new AcceptanceTester( $scenario );

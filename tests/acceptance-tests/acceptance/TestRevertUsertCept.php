@@ -1,16 +1,15 @@
 <?php
 /*
- * Test summary: Test Revert to User
+ * Test summary: Test Revert to User with 2 page form and 2 level approval
  *
  * Test details:
- * - Fill up the fields
+ * - Fill up the fields (2 pages)
  * - Submit form
- * - First approval and send to verify the field number
- * - Modify field number value and click Update
- * - Send back for approval
- * - Revert to verify the field number
- * - Update the field number
- * - Accept field value
+ * - 'First approval' step: Approve the form content (including 'Number' field)
+ * - 'Send for number check' step: Modify 'Number' field and click Update
+ * - 'Final approval' step: Revert
+ * - 'Send for number check' step: update the field number
+ * - 'Final approval' step: Accept field value
  */
 
 $I = new AcceptanceTester( $scenario );
