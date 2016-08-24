@@ -1,16 +1,21 @@
 <?php
 /*
- * Test summary: Job Apply Agency
+ * Test summary: Job Apply Agency - test conditional routing, conditional field editing, revert
  *
  * Test details:
  * - Fill up the fields
  * - Submit form
- * - First approval depending on filled up fields (Conditional Routing)
- * - Modify field number and/or email (Condition for this step)
- * - Send further for approval
- * - Revert to verify the field number and/or email
- * - Update the field number and/or email
- * - Final approval
+ * - Log in as admin2
+ * - 'Get approval' step - conditional routing to specific user based on filled fields
+ * - 'Data validation' step - conditional execution of step if phone/email is empty
+ * - Modify phone number (Condition editing of fields)
+ * - Log in as admin1
+ * - Modify email (Condition editing of fields)
+ * - Log in as admin
+ * - 'Admin approval' step
+ * - Press Revert
+ * - 'Data validation' step: Edit phone again and add note
+ * - 'Admin approval' step: Final approval
  * - Send notification
  */
 
