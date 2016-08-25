@@ -58,6 +58,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 = 1.4.1-dev =
 
 - Added support for field filters on the status page when a form constraint is active via the shortcode.
+- Fixed a fatal error which could occur if the gform_post_add_entry hook passes a WP_Error object for the $entry.
 - Fixed a PHP warning which could occur when using the gravityflow_[type]_token_expiration_days filter.
 - Fixed an issue with duplicate merge tags being added to the merge tag drop down.
 - Fixed an issue with shortcodes used in the HTML field content not being processed on the entry detail view.
