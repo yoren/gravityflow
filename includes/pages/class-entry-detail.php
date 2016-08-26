@@ -595,7 +595,7 @@ class Gravity_Flow_Entry_Detail {
 	 * @param array $entry The current entry.
 	 * @param Gravity_Flow_Step $current_step The step this entry is currently on.
 	 */
-	public function maybe_show_products_summary( $form, $entry, $current_step ) {
+	public static function maybe_show_products_summary( $form, $entry, $current_step ) {
 		$summary_enabled = true;
 		if ( $current_step ) {
 			$meta = $current_step->get_feed_meta();
