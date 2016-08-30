@@ -1,5 +1,5 @@
 <?php
-
+//$scenario->skip();
 /*
  * Test summary: Display Total depending on Quantity
  *

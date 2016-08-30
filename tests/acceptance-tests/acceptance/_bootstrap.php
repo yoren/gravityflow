@@ -20,11 +20,15 @@ function setup_gravity_forms_pages() {
 	$form_filenames = glob( dirname( __FILE__ ) . '/../_data/forms/*.json' );
 
 	foreach ( $form_filenames as $filename ) {
-
 		GFExport::import_file( $filename );
 	}
 
-	$forms = GFAPI::get_forms( false );
+	$active_forms = GFAPI::get_forms( true );
+	echo "Active Form count: " . count( $active_forms );
+	$inactive_forms = GFAPI::get_forms( false );
+	echo "Inactive Form count: " . count( $inactive_forms );
+	$forms = array_merge( $active_forms, $inactive_forms );
+	echo "Form count: " . count( $forms );
 	foreach ( $forms as $form ) {
 		GFFormsModel::update_form_active( $form['id'], true );
 		$page = array(
@@ -43,20 +47,20 @@ function setup_gravity_forms_pages() {
 setup_gravity_forms_pages();
 
 // add admins
-function wpr_create_testing_users( $userInfo ) {
-	$userData = array(
-		'user_login' => $userInfo,
-		'first_name' => 'First',
-		'last_name'  => $userInfo,
-		'user_pass'  => $userInfo,
-		'user_email' => $userInfo . '@mail.com',
-		'user_url'   => '',
-		'role'       => 'administrator'
-	);
-	wp_insert_user( $userData );
+function tests_create_testing_users() {
+	$users = array( 'admin1', 'admin2', 'admin3' );
+	foreach ( $users as $user ) {
+		$userData = array(
+			'user_login' => $user,
+			'first_name' => 'First',
+			'last_name'  => $user,
+			'user_pass'  => $user,
+			'user_email' => $user . '@mail.com',
+			'user_url'   => '',
+			'role'       => 'administrator'
+		);
+		wp_insert_user( $userData );
+	}
 }
 
-$users = array( 'admin1', 'admin2', 'admin3' );
-foreach ( $users as $user ) {
-	wpr_create_testing_users( $user );
-}
+tests_create_testing_users();

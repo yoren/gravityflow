@@ -1,5 +1,5 @@
 <?php
-
+//$scenario->skip();
 /*
  * Test summary: Test chained (multiple) approvals through a salary rise document
  *
@@ -53,7 +53,7 @@ $I->seeElement( 'button[value=approved]' );
 $I->click( 'button[value=approved]' );
 
 // Send to CEO
-$I->selectOption( 'select[name=gravityflow_admin_action]', 'send_to_step|7' );
+$I->selectOption( 'select[name=gravityflow_admin_action]', 'CEO approval' );
 $I->click( 'Apply' );
 
 // Approve

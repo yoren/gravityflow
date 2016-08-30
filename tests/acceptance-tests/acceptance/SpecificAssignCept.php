@@ -1,4 +1,5 @@
 <?php
+//$scenario->skip();
 /*
  * Test summary: Specific assign
  *

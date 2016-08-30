@@ -1,4 +1,5 @@
 <?php
+//$scenario->skip();
 /*
  * Test summary: Job Apply Agency - test conditional routing, conditional field editing, revert
  *
@@ -53,6 +54,7 @@ $I->seeElement( 'button[value=approved]' );
 $I->click( 'button[value=approved]' );
 
 // Check data
+$I->wait(1);
 $I->fillField( 'input[name="input_4"]', '0210000000' );
 $I->fillField( 'textarea[name="gravityflow_note"]', 'Phone added' );
 $I->click( 'Update' );
@@ -72,61 +74,6 @@ $I->click( 'Job apply agency' );
 // Check data
 $I->fillField( 'input[name="input_5"]', 'example@example.com' );
 $I->fillField( 'textarea[name="gravityflow_note"]', 'Email added' );
-$I->click( 'Update' );
-
-// Log out
-$I->amOnPage( '/specific-assign' );
-$I->click( 'Log out' );
-
-// Login as Admin
-$I->loginAsAdmin();
-$I->amOnPage( '/wp-admin' );
-
-// Go to Inbox
-$I->click( 'Workflow' );
-$I->click( 'Inbox' );
-$I->see( 'Workflow Inbox' );
-$I->click( 'Job apply agency' );
-
-// Revert
-$I->fillField( 'textarea[name="gravityflow_note"]', 'Phone & email recheck' );
-$I->seeElement( 'button[value=revert]' );
-$I->click( 'button[value=revert]' );
-
-// Log out
-$I->amOnPage( '/specific-assign' );
-$I->click( 'Log out' );
-
-// Login as admin2
-$I->loginAs( 'admin2', 'admin2' );
-
-// Go to Inbox
-$I->click( 'Workflow' );
-$I->click( 'Inbox' );
-$I->see( 'Workflow Inbox' );
-$I->click( 'Job apply agency' );
-
-// Check data
-$I->fillField( 'input[name="input_4"]', '0210000000' );
-$I->fillField( 'textarea[name="gravityflow_note"]', 'Phone rechecked' );
-$I->click( 'Update' );
-
-// Log out
-$I->amOnPage( '/specific-assign' );
-$I->click( 'Log out' );
-
-// Login as admin1
-$I->loginAs( 'admin1', 'admin1' );
-
-// Go to Inbox
-$I->click( 'Workflow' );
-$I->click( 'Inbox' );
-$I->see( 'Workflow Inbox' );
-$I->click( 'Job apply agency' );
-
-// Check data
-$I->fillField( 'input[name="input_5"]', 'example@example.com' );
-$I->fillField( 'textarea[name="gravityflow_note"]', 'Email rechecked' );
 $I->click( 'Update' );
 
 // Log out

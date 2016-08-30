@@ -1,4 +1,5 @@
 <?php
+//$scenario->skip();
 /*
  * Test summary: submit vacation request then approve or reject it
  *

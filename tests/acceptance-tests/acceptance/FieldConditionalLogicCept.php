@@ -1,5 +1,5 @@
 <?php
-$scenario->skip();
+//$scenario->skip();
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test the field conditional logic on the user input step' );

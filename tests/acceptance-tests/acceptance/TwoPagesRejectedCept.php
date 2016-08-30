@@ -1,11 +1,12 @@
 <?php
+//$scenario->skip();
 /*
  * Test summary: two pages form, with rejected approval
  *
  * Test details:
- * - Select Third Choise radio button
+ * - Select Third Choice radio button
  * - Go to step 2
- * - Select Third Choise from select box
+ * - Select Third Choice from select box
  * - Login to back-end, go to Inbox
  * - Click on the 'Two pages rejected' Workflow
  * - Check if Reject button is shown
@@ -52,4 +53,8 @@ $I->click( 'Two pages rejected' );
 $I->click( 'Reject' );
 
 // Complete
+$I->see( 'Rejected request (Pending Input)' );
+
+$I->click( 'Update' );
+
 $I->see( 'Status: Rejected' );
