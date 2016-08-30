@@ -3575,50 +3575,7 @@ PRIMARY KEY  (id)
 
 		public function shortcode( $atts, $content = null ) {
 
-			$a = shortcode_atts( array(
-				'page' => 'inbox',
-				'form' => null,
-				'form_id' => null,
-				'fields' => '',
-				'display_all' => null,
-				'allow_anonymous' => false,
-				'title' => '',
-				'id_column' => true,
-				'submitter_column' => true,
-				'step_column' => true,
-				'status_column' => true,
-				'timeline' => true,
-				'last_updated' => false,
-				'step_status' => true,
-				'workflow_info' => true,
-				'sidebar' => true,
-			), $atts );
-
-			if ( $a['form_id'] > 0 ) {
-				$a['form'] = $a['form_id'];
-			}
-
-			$a['title'] = sanitize_text_field( $a['title'] );
-
-			$a['id_column'] = strtolower( $a['id_column'] ) == 'false' ? false : true;
-			$a['submitter_column'] = strtolower( $a['submitter_column'] ) == 'false' ? false : true;
-			$a['step_column'] = strtolower( $a['step_column'] ) == 'false' ? false : true;
-			$a['status_column'] = strtolower( $a['status_column'] ) == 'false' ? false : true;
-			$a['timeline'] = strtolower( $a['timeline'] ) == 'false' ? false : true;
-			$a['step_status'] = strtolower( $a['step_status'] ) == 'false' ? false : true;
-			$a['workflow_info'] = strtolower( $a['workflow_info'] ) == 'false' ? false : true;
-			$a['sidebar'] = strtolower( $a['sidebar'] ) == 'false' ? false : true;
-
-			if ( is_null( $a['display_all'] ) ) {
-				$a['display_all'] = GFAPI::current_user_can_any( 'gravityflow_status_view_all' );
-				$this->log_debug( __METHOD__ . '() - display_all set by capabilities: ' . $a['display_all'] );
-			} else {
-				$a['display_all'] = strtolower( $a['display_all'] ) == 'true' ? true : false;
-				$this->log_debug( __METHOD__ . '() - display_all overridden: ' . $a['display_all'] );
-			}
-
-			$a['allow_anonymous'] = strtolower( $a['allow_anonymous'] ) == 'true' ? true : false;
-			$a['last_updated'] = strtolower( $a['last_updated'] ) == 'true' ? true : false;
+			$a = $this->get_shortcode_atts( $atts );
 
 			if ( ! $a['allow_anonymous'] && ! is_user_logged_in() ) {
 				if ( ! $this->validate_access_token() ) {
@@ -3644,26 +3601,7 @@ PRIMARY KEY  (id)
 
 			switch ( $a['page'] ) {
 				case 'inbox' :
-					wp_enqueue_script( 'gravityflow_entry_detail' );
-					wp_enqueue_script( 'gravityflow_status_list' );
-					$args = array(
-						'form_id' => $a['form'],
-						'id_column' => $a['id_column'],
-						'submitter_column' => $a['submitter_column'],
-						'step_column' => $a['step_column'],
-						'show_header' => false,
-						'field_ids' => explode( ',', $a['fields'] ),
-						'detail_base_url' => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
-						'timeline' => $a['timeline'],
-						'last_updated' => $a['last_updated'],
-						'step_status' => $a['step_status'],
-						'workflow_info' => $a['workflow_info'],
-						'sidebar' => $a['sidebar'],
-					);
-
-					ob_start();
-					$this->inbox_page( $args );
-					$html .= ob_get_clean();
+					$html .= $this->get_shortcode_inbox_page( $a );
 					break;
 				case 'submit' :
 					ob_start();
@@ -3675,70 +3613,9 @@ PRIMARY KEY  (id)
 					wp_enqueue_script( 'gravityflow_status_list' );
 
 					if ( rgget( 'view' ) ) {
-						ob_start();
-						$check_permissions = true;
-
-						if ( $a['allow_anonymous'] || $a['display_all'] ) {
-							$check_permissions = false;
-						}
-
-						$args = array(
-							'show_header' => false,
-							'detail_base_url' => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
-							'check_permissions' => $check_permissions,
-							'timeline' => $a['timeline'],
-						);
-
-						$this->inbox_page( $args );
-						$html .= ob_get_clean();
+						$html .= $this->get_shortcode_status_page_detail( $a );
 					} else {
-						if ( ! class_exists( 'WP_Screen' ) ) {
-							require_once( ABSPATH . 'wp-admin/includes/screen.php' );
-						}
-						require_once( ABSPATH .'wp-admin/includes/template.php' );
-						ob_start();
-
-						$args = array(
-							'base_url'        => remove_query_arg( array(
-								'entry-id',
-								'form-id',
-								'start-date',
-								'end-date',
-								'_wpnonce',
-								'_wp_http_referer',
-								'action',
-								'action2',
-								'o',
-								'f',
-								't',
-								'v',
-								'gravityflow-print-page-break',
-								'gravityflow-print-timelines',
-							) ),
-							'detail_base_url' => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
-							'display_header' => false,
-							'action_url' => 'http' . ( isset( $_SERVER['HTTPS'] ) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}?",
-							'constraint_filters' => array(
-								'form_id' => $a['form'],
-							),
-							'field_ids' => explode( ',', $a['fields'] ),
-							'display_all' => $a['display_all'],
-							'id_column' => $a['id_column'],
-							'submitter_column' => $a['submitter_column'],
-							'step_column' => $a['step_column'],
-							'status_column' => $a['status_column'],
-							'last_updated' => $a['last_updated'],
-							'step_status' => $a['step_status'],
-							'workflow_info' => $a['workflow_info'],
-							'sidebar' => $a['sidebar'],
-						);
-
-						if ( ! is_user_logged_in() && $a['allow_anonymous'] ) {
-							$args['bulk_actions'] = array();
-						}
-
-						$this->status_page( $args );
-						$html .= ob_get_clean();
+						$html .= $this->get_shortcode_status_page( $a );
 					}
 
 					break;
@@ -3748,6 +3625,181 @@ PRIMARY KEY  (id)
 
 		}
 
+		/**
+		 * Get the shortcode attributes, after merging with the defaults.
+		 *
+		 * @param array $atts The attributes from the shortcode.
+		 *
+		 * @return array
+		 */
+		public function get_shortcode_atts( $atts ) {
+			$a = shortcode_atts( array(
+				'page'             => 'inbox',
+				'form'             => null,
+				'form_id'          => null,
+				'fields'           => '',
+				'display_all'      => null,
+				'allow_anonymous'  => false,
+				'title'            => '',
+				'id_column'        => true,
+				'submitter_column' => true,
+				'step_column'      => true,
+				'status_column'    => true,
+				'timeline'         => true,
+				'last_updated'     => false,
+				'step_status'      => true,
+				'workflow_info'    => true,
+				'sidebar'          => true,
+			), $atts );
+
+			if ( $a['form_id'] > 0 ) {
+				$a['form'] = $a['form_id'];
+			}
+
+			$a['title'] = sanitize_text_field( $a['title'] );
+
+			$a['id_column']        = strtolower( $a['id_column'] ) == 'false' ? false : true;
+			$a['submitter_column'] = strtolower( $a['submitter_column'] ) == 'false' ? false : true;
+			$a['step_column']      = strtolower( $a['step_column'] ) == 'false' ? false : true;
+			$a['status_column']    = strtolower( $a['status_column'] ) == 'false' ? false : true;
+			$a['timeline']         = strtolower( $a['timeline'] ) == 'false' ? false : true;
+			$a['step_status']      = strtolower( $a['step_status'] ) == 'false' ? false : true;
+			$a['workflow_info']    = strtolower( $a['workflow_info'] ) == 'false' ? false : true;
+			$a['sidebar']          = strtolower( $a['sidebar'] ) == 'false' ? false : true;
+
+			if ( is_null( $a['display_all'] ) ) {
+				$a['display_all'] = GFAPI::current_user_can_any( 'gravityflow_status_view_all' );
+				$this->log_debug( __METHOD__ . '() - display_all set by capabilities: ' . $a['display_all'] );
+			} else {
+				$a['display_all'] = strtolower( $a['display_all'] ) == 'true' ? true : false;
+				$this->log_debug( __METHOD__ . '() - display_all overridden: ' . $a['display_all'] );
+			}
+
+			$a['allow_anonymous'] = strtolower( $a['allow_anonymous'] ) == 'true' ? true : false;
+			$a['last_updated']    = strtolower( $a['last_updated'] ) == 'true' ? true : false;
+
+			return $a;
+		}
+
+		/**
+		 * Get the HTML for the inbox page shortcode.
+		 *
+		 * @param array $a The shortcode attributes.
+		 *
+		 * @return string
+		 */
+		public function get_shortcode_inbox_page( $a ) {
+			wp_enqueue_script( 'gravityflow_entry_detail' );
+			wp_enqueue_script( 'gravityflow_status_list' );
+
+			$args = array(
+				'form_id'          => $a['form'],
+				'id_column'        => $a['id_column'],
+				'submitter_column' => $a['submitter_column'],
+				'step_column'      => $a['step_column'],
+				'show_header'      => false,
+				'field_ids'        => explode( ',', $a['fields'] ),
+				'detail_base_url'  => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
+				'timeline'         => $a['timeline'],
+				'last_updated'     => $a['last_updated'],
+				'step_status'      => $a['step_status'],
+				'workflow_info'    => $a['workflow_info'],
+				'sidebar'          => $a['sidebar'],
+			);
+
+			ob_start();
+			$this->inbox_page( $args );
+			$html = ob_get_clean();
+
+			return $html;
+		}
+
+		/**
+		 * Get the HTML for the status page shortcode, detail view.
+		 *
+		 * @param array $a The shortcode attributes.
+		 *
+		 * @return string
+		 */
+		public function get_shortcode_status_page_detail( $a ) {
+			ob_start();
+			$check_permissions = true;
+
+			if ( $a['allow_anonymous'] || $a['display_all'] ) {
+				$check_permissions = false;
+			}
+
+			$args = array(
+				'show_header'       => false,
+				'detail_base_url'   => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
+				'check_permissions' => $check_permissions,
+				'timeline'          => $a['timeline'],
+			);
+
+			$this->inbox_page( $args );
+			$html = ob_get_clean();
+
+			return $html;
+		}
+
+		/**
+		 * Get the HTML for the status page shortcode, list view.
+		 *
+		 * @param array $a The shortcode attributes.
+		 *
+		 * @return string
+		 */
+		public function get_shortcode_status_page( $a ) {
+			if ( ! class_exists( 'WP_Screen' ) ) {
+				require_once( ABSPATH . 'wp-admin/includes/screen.php' );
+			}
+			require_once( ABSPATH . 'wp-admin/includes/template.php' );
+			ob_start();
+
+			$args = array(
+				'base_url'           => remove_query_arg( array(
+					'entry-id',
+					'form-id',
+					'start-date',
+					'end-date',
+					'_wpnonce',
+					'_wp_http_referer',
+					'action',
+					'action2',
+					'o',
+					'f',
+					't',
+					'v',
+					'gravityflow-print-page-break',
+					'gravityflow-print-timelines',
+				) ),
+				'detail_base_url'    => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
+				'display_header'     => false,
+				'action_url'         => 'http' . ( isset( $_SERVER['HTTPS'] ) ? 's' : '' ) . '://' . "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}?",
+				'constraint_filters' => array(
+					'form_id' => $a['form'],
+				),
+				'field_ids'          => explode( ',', $a['fields'] ),
+				'display_all'        => $a['display_all'],
+				'id_column'          => $a['id_column'],
+				'submitter_column'   => $a['submitter_column'],
+				'step_column'        => $a['step_column'],
+				'status_column'      => $a['status_column'],
+				'last_updated'       => $a['last_updated'],
+				'step_status'        => $a['step_status'],
+				'workflow_info'      => $a['workflow_info'],
+				'sidebar'            => $a['sidebar'],
+			);
+
+			if ( ! is_user_logged_in() && $a['allow_anonymous'] ) {
+				$args['bulk_actions'] = array();
+			}
+
+			$this->status_page( $args );
+			$html = ob_get_clean();
+
+			return $html;
+		}
 
 		/**
 		 * Checks if a particular user has a role.
