@@ -4261,8 +4261,9 @@ AND m.meta_value='queued'";
 					}
 				}
 				if ( $new_step->get_type() == 'approval' ) {
-					if ( ! empty( $new_step->revert_buttonValue ) ) {
-						$new_step_meta['revert_buttonValue'] = $feed_id_mappings[ $new_step->revert_buttonValue ];
+					if ( ! empty( $new_step->revertValue ) ) {
+						$new_step_meta['revertValue'] = $feed_id_mappings[ $new_step->revertValue ];
+						$step_ids_updated = true;
 					}
 				}
 				if ( $step_ids_updated ) {

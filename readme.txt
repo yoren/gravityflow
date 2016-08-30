@@ -63,6 +63,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Fixed an issue with duplicate merge tags being added to the merge tag drop down.
 - Fixed an issue with shortcodes used in the HTML field content not being processed on the entry detail view.
 - Fixed an issue with the import process where the feeds remain inside the form meta.
+- Fixed an issue with the import process where the revert step setting is not imported correctly.
 
 = 1.4 =
 
