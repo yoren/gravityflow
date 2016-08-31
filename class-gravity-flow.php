@@ -3633,7 +3633,33 @@ PRIMARY KEY  (id)
 		 * @return array
 		 */
 		public function get_shortcode_atts( $atts ) {
-			$a = shortcode_atts( array(
+			$a = shortcode_atts( $this->get_shortcode_defaults(), $atts );
+
+			if ( $a['form_id'] > 0 ) {
+				$a['form'] = $a['form_id'];
+			}
+
+			$a['title'] = sanitize_text_field( $a['title'] );
+			$a          = $this->booleanize_shortcode_attributes( $a );
+
+			if ( is_null( $a['display_all'] ) ) {
+				$a['display_all'] = GFAPI::current_user_can_any( 'gravityflow_status_view_all' );
+				$this->log_debug( __METHOD__ . '() - display_all set by capabilities: ' . $a['display_all'] );
+			} else {
+				$a['display_all'] = strtolower( $a['display_all'] ) == 'true' ? true : false;
+				$this->log_debug( __METHOD__ . '() - display_all overridden: ' . $a['display_all'] );
+			}
+
+			return $a;
+		}
+
+		/**
+		 * The default attributes for the gravityflow shortcode.
+		 *
+		 * @return array
+		 */
+		public function get_shortcode_defaults() {
+			$defaults = array(
 				'page'             => 'inbox',
 				'form'             => null,
 				'form_id'          => null,
@@ -3650,33 +3676,28 @@ PRIMARY KEY  (id)
 				'step_status'      => true,
 				'workflow_info'    => true,
 				'sidebar'          => true,
-			), $atts );
+			);
 
-			if ( $a['form_id'] > 0 ) {
-				$a['form'] = $a['form_id'];
+			return $defaults;
+		}
+
+		/**
+		 * Converts the string attribute values to booleans.
+		 *
+		 * @param array $a The shortcode attributes.
+		 *
+		 * @return array
+		 */
+		public function booleanize_shortcode_attributes( $a ) {
+			$attributes = $this->get_shortcode_defaults();
+
+			foreach ( $attributes as $attribute => $default ) {
+				if ( $default === true ) {
+					$a[ $attribute ] = strtolower( $a[ $attribute ] ) == 'false' ? false : true;
+				} elseif ( $default === false ) {
+					$a[ $attribute ] = strtolower( $a[ $attribute ] ) == 'true' ? true : false;
+				}
 			}
-
-			$a['title'] = sanitize_text_field( $a['title'] );
-
-			$a['id_column']        = strtolower( $a['id_column'] ) == 'false' ? false : true;
-			$a['submitter_column'] = strtolower( $a['submitter_column'] ) == 'false' ? false : true;
-			$a['step_column']      = strtolower( $a['step_column'] ) == 'false' ? false : true;
-			$a['status_column']    = strtolower( $a['status_column'] ) == 'false' ? false : true;
-			$a['timeline']         = strtolower( $a['timeline'] ) == 'false' ? false : true;
-			$a['step_status']      = strtolower( $a['step_status'] ) == 'false' ? false : true;
-			$a['workflow_info']    = strtolower( $a['workflow_info'] ) == 'false' ? false : true;
-			$a['sidebar']          = strtolower( $a['sidebar'] ) == 'false' ? false : true;
-
-			if ( is_null( $a['display_all'] ) ) {
-				$a['display_all'] = GFAPI::current_user_can_any( 'gravityflow_status_view_all' );
-				$this->log_debug( __METHOD__ . '() - display_all set by capabilities: ' . $a['display_all'] );
-			} else {
-				$a['display_all'] = strtolower( $a['display_all'] ) == 'true' ? true : false;
-				$this->log_debug( __METHOD__ . '() - display_all overridden: ' . $a['display_all'] );
-			}
-
-			$a['allow_anonymous'] = strtolower( $a['allow_anonymous'] ) == 'true' ? true : false;
-			$a['last_updated']    = strtolower( $a['last_updated'] ) == 'true' ? true : false;
 
 			return $a;
 		}
