@@ -31,7 +31,7 @@ class Gravity_Flow_Status {
 		if ( $args['format'] == 'table' ) {
 			self::status_page( $args );
 		} else {
-			self::process_export( $args );
+			return self::process_export( $args );
 		}
 	}
 
