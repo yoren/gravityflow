@@ -21,6 +21,10 @@ class Gravity_Flow_Status {
 		$args = array_merge( self::get_defaults(), $args );
 		$args = self::maybe_add_constraint_filters( $args );
 
+		if ( empty( $args['filter_hidden_fields'] ) ) {
+			$args['filter_hidden_fields'] = array( 'page' => 'gravityflow-status' );
+		}
+
 		/**
 		 * Allow the status page/export arguments to be overridden.
 		 *
@@ -52,7 +56,7 @@ class Gravity_Flow_Status {
 			'step_column'          => true,
 			'status_column'        => true,
 			'last_updated'         => false,
-			'filter_hidden_fields' => array( 'page' => 'gravityflow-status' ),
+			'filter_hidden_fields' => array(),
 		);
 	}
 
