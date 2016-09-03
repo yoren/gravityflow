@@ -3662,6 +3662,15 @@ PRIMARY KEY  (id)
 					}
 
 					break;
+				default :
+
+					/**
+					 * Allows custom gravityflow page shortcodes.
+					 *
+					 * @param string $html The HTML.
+					 * @param array $a The shortcode attributes.
+					 */
+					$html .= apply_filters( 'gravityflow_shortcode_' . $a['page'], $html, $a );
 			}
 
 			return $html;
