@@ -16,23 +16,54 @@ if ( ! class_exists( 'GFForms' ) ) {
 class Gravity_Flow_Status {
 
 	public static function render( $args = array() ) {
-
 		wp_enqueue_script( 'gform_field_filter' );
-		$defaults = array(
-			'action_url'         => admin_url( 'admin.php?page=gravityflow-status' ),
-			'constraint_filters' => array(),
-			'field_ids'          => apply_filters( 'gravityflow_status_fields', array() ),
-			'format'             => 'table', // csv
-			'file_name'          => 'export.csv',
-			'id_column'          => true,
-			'submitter_column'   => true,
-			'step_column'        => true,
-			'status_column'      => true,
-			'last_updated'       => false,
+
+		$args = array_merge( self::get_defaults(), $args );
+		$args = self::maybe_add_constraint_filters( $args );
+
+		/**
+		 * Allow the status page/export arguments to be overridden.
+		 *
+		 * @param array $args The status page and export arguments.
+		 */
+		$args = apply_filters( 'gravityflow_status_args', $args );
+
+		if ( $args['format'] == 'table' ) {
+			self::status_page( $args );
+		} else {
+			self::process_export( $args );
+		}
+	}
+
+	/**
+	 * The default arguments to use when rendering the status page or processing the export.
+	 *
+	 * @return array
+	 */
+	public static function get_defaults() {
+		return array(
+			'action_url'           => admin_url( 'admin.php?page=gravityflow-status' ),
+			'constraint_filters'   => array(),
+			'field_ids'            => apply_filters( 'gravityflow_status_fields', array() ),
+			'format'               => 'table', // csv
+			'file_name'            => 'export.csv',
+			'id_column'            => true,
+			'submitter_column'     => true,
+			'step_column'          => true,
+			'status_column'        => true,
+			'last_updated'         => false,
 			'filter_hidden_fields' => array( 'page' => 'gravityflow-status' ),
 		);
-		$args     = array_merge( $defaults, $args );
+	}
 
+	/**
+	 * If not already configured define the default constraint filters.
+	 *
+	 * @param array $args The status page and export arguments.
+	 *
+	 * @return array
+	 */
+	public static function maybe_add_constraint_filters( $args ) {
 		if ( empty( $args['constraint_filters'] ) ) {
 			$args['constraint_filters'] = apply_filters( 'gravityflow_status_filter', array(
 				'form_id'    => 0,
@@ -50,88 +81,100 @@ class Gravity_Flow_Status {
 			$args['constraint_filters']['end_date'] = '';
 		}
 
-		$args = apply_filters( 'gravityflow_status_args', $args );
+		return $args;
+	}
 
+	/**
+	 * Display the status page.
+	 *
+	 * @param array $args The status page arguments.
+	 */
+	public static function status_page( $args ) {
 		$table = new Gravity_Flow_Status_Table( $args );
 
-		if ( $args['format'] == 'table' ) {
-			?>
-			<form id="gravityflow-status-filter" method="GET" action="">
-				<?php
-				foreach ( $args['filter_hidden_fields'] as $hidden_field => $hidden_field_value ) {
-					printf( '<input type="hidden" name="%s" value="%s"/>', $hidden_field, $hidden_field_value );
-				}
-				?>
-
-				<?php
-				$table->views();
-				$table->filters();
-				$table->prepare_items();
-				?>
-			</form>
-			<form id="gravityflow-status-list" method="POST" action="">
-				<?php
-				$table->display();
-				?>
-			</form>
-
+		?>
+		<form id="gravityflow-status-filter" method="GET" action="">
 			<?php
-			if ( is_admin() ) {
-				$str = $_SERVER['QUERY_STRING'];
-				parse_str( $str, $query_args );
-
-				$remove_args = array( 'paged', '_wpnonce', '_wp_http_referer', 'action', 'action2' );
-				foreach ( $remove_args as $remove_arg_key ) {
-					unset( $query_args[ $remove_arg_key ] );
-				}
-				$query_args['gravityflow_export_nonce'] = wp_create_nonce( 'gravityflow_export_nonce' );
-				$filter_args_str                        = '&' . http_build_query( $query_args );
-				echo sprintf( '<br /><a class="gravityflow-export-status-button button" data-filter_args="%s">%s</a>', $filter_args_str, esc_html__( 'Export', 'gravityflow' ) );
-				echo sprintf( '<img class="gravityflow-spinner" src="%s" style="display:none;margin:5px"/>', GFCommon::get_base_url() . '/images/spinner.gif' );
-			}
-		} else {
-			$upload_dir = wp_upload_dir();
-			if ( ! is_writeable( $upload_dir['basedir'] ) ) {
-				return new WP_Error( 'export_destination_not_writeable', esc_html__( 'The destination file is not writeable', 'gravityflow' ) );
+			foreach ( $args['filter_hidden_fields'] as $hidden_field => $hidden_field_value ) {
+				printf( '<input type="hidden" name="%s" value="%s"/>', $hidden_field, $hidden_field_value );
 			}
 
-			$file_path = trailingslashit( $upload_dir['basedir'] ) . $args['file_name'] . '.csv';
-			$export    = '';
+			$table->views();
+			$table->filters();
 			$table->prepare_items();
-			$page = (int) $table->get_pagination_arg( 'page' );
-			if ( $page < 2 ) {
-				@unlink( $file_path );
-				$export .= $table->export_column_names();
+			?>
+		</form>
+		<form id="gravityflow-status-list" method="POST" action="">
+			<?php
+			$table->display();
+			?>
+		</form>
+
+		<?php
+		if ( is_admin() ) {
+			$str = $_SERVER['QUERY_STRING'];
+			parse_str( $str, $query_args );
+
+			$remove_args = array( 'paged', '_wpnonce', '_wp_http_referer', 'action', 'action2' );
+			foreach ( $remove_args as $remove_arg_key ) {
+				unset( $query_args[ $remove_arg_key ] );
 			}
-			$export .= $table->export();
-
-			@file_put_contents( $file_path, $export, FILE_APPEND );
-
-			$per_page = (int) $table->get_pagination_arg( 'per_page' );
-
-			$total_items = (int) $table->get_pagination_arg( 'total_items' );
-
-			$percent = $page * $per_page / $total_items * 100;
-
-			$total_pages = (int) $table->get_pagination_arg( 'total_pages' );
-
-			$status = $page == $total_pages ? 'complete' : 'incomplete';
-
-			$response = array( 'status' => $status, 'percent' => (int) $percent );
-
-			if ( $status == 'complete' ) {
-				$download_args   = array(
-					'nonce'     => wp_create_nonce( 'gravityflow_download_export' ),
-					'action'    => 'gravityflow_download_export',
-					'file_name' => $args['file_name'],
-				);
-				$download_url    = add_query_arg( $download_args, admin_url( 'admin-ajax.php' ) );
-				$response['url'] = esc_url_raw( $download_url );
-			}
-
-			return $response;
+			$query_args['gravityflow_export_nonce'] = wp_create_nonce( 'gravityflow_export_nonce' );
+			$filter_args_str                        = '&' . http_build_query( $query_args );
+			echo sprintf( '<br /><a class="gravityflow-export-status-button button" data-filter_args="%s">%s</a>', $filter_args_str, esc_html__( 'Export', 'gravityflow' ) );
+			echo sprintf( '<img class="gravityflow-spinner" src="%s" style="display:none;margin:5px"/>', GFCommon::get_base_url() . '/images/spinner.gif' );
 		}
 	}
+
+	/**
+	 * Process the status export.
+	 *
+	 * @param array $args The status export arguments.
+	 *
+	 * @return array|WP_Error
+	 */
+	public static function process_export( $args ) {
+		$upload_dir = wp_upload_dir();
+		if ( ! is_writeable( $upload_dir['basedir'] ) ) {
+			return new WP_Error( 'export_destination_not_writeable', esc_html__( 'The destination file is not writeable', 'gravityflow' ) );
+		}
+
+		$file_path = trailingslashit( $upload_dir['basedir'] ) . $args['file_name'] . '.csv';
+		$export    = '';
+
+		$table = new Gravity_Flow_Status_Table( $args );
+		$table->prepare_items();
+		$page = (int) $table->get_pagination_arg( 'page' );
+
+		if ( $page < 2 ) {
+			@unlink( $file_path );
+			$export .= $table->export_column_names();
+		}
+		$export .= $table->export();
+
+		@file_put_contents( $file_path, $export, FILE_APPEND );
+
+		$per_page    = (int) $table->get_pagination_arg( 'per_page' );
+		$total_items = (int) $table->get_pagination_arg( 'total_items' );
+		$total_pages = (int) $table->get_pagination_arg( 'total_pages' );
+
+		$status   = $page == $total_pages ? 'complete' : 'incomplete';
+		$percent  = $page * $per_page / $total_items * 100;
+		$response = array( 'status' => $status, 'percent' => (int) $percent );
+
+		if ( $status == 'complete' ) {
+			$download_args   = array(
+				'nonce'     => wp_create_nonce( 'gravityflow_download_export' ),
+				'action'    => 'gravityflow_download_export',
+				'file_name' => $args['file_name'],
+			);
+			$download_url    = add_query_arg( $download_args, admin_url( 'admin-ajax.php' ) );
+			$response['url'] = esc_url_raw( $download_url );
+		}
+
+		return $response;
+	}
+
 }
 
 
