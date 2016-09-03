@@ -2094,15 +2094,6 @@ PRIMARY KEY  (id)
 
 			$display_workflow_info = (bool) $args['workflow_info'];
 
-			$lead = $entry;
-
-			$entry_id = absint( $lead['id'] );
-
-			$entry_id_link = $entry_id;
-
-			if ( GFAPI::current_user_can_any( 'gravityforms_view_entries' ) ) {
-				$entry_id_link = '<a href="' . admin_url( 'admin.php?page=gf_entries&view=entry&id=' . absint( $form['id'] ) . '&lid=' . absint( $entry['id'] ) ) . '">' . $entry_id . '</a>';
-			}
 			?>
 			<div class="postbox">
 
@@ -2113,99 +2104,14 @@ PRIMARY KEY  (id)
 				<div id="submitcomment" class="submitbox">
 					<div id="minor-publishing" style="padding:10px;">
 						<?php
-						if ( $display_workflow_info ) : ?>
-							<?php esc_html_e( 'Entry Id', 'gravityflow' ); ?>: <?php echo $entry_id_link ?><br /><br />
-							<?php esc_html_e( 'Submitted', 'gravityflow' ); ?>: <?php echo esc_html( GFCommon::format_date( $lead['date_created'], true, 'Y/m/d' ) ) ?>
-							<?php
-							if ( isset( $lead['workflow_timestamp'] ) ) {
-								$last_updated = date( 'Y-m-d H:i:s', $lead['workflow_timestamp'] );
-								if ( $lead['date_created'] != $last_updated ) {
-									echo '<br /><br />';
-									esc_html_e( 'Last updated', 'gravityflow' ); ?>: <?php echo esc_html( GFCommon::format_date( $last_updated, true, 'Y/m/d' ) );
-								}
-							}
-							?>
-							<br /><br />
-							<?php
-							if ( ! empty( $lead['created_by'] ) && $usermeta = get_userdata( $lead['created_by'] ) ) {
-								?>
-								<?php _e( 'Submitted by', 'gravityflow' ); ?>:
-								<?php echo esc_html( $usermeta->display_name ) ?>
-								<br /><br />
-							<?php
-							}
 
-							$workflow_status = gform_get_meta( $entry['id'], 'workflow_final_status' );
-
-							$workflow_status_label = $this->translate_status_label( $workflow_status );
-							printf( '%s: %s', esc_html__( 'Status', 'gravityflow' ), $workflow_status_label );
-
-							if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step ) {
-
-								if ( $current_step->supports_expiration() && $current_step->expiration ) {
-									$expiration_timestamp = $current_step->get_expiration_timestamp();
-									$expiration_date_str  = date( 'Y-m-d H:i:s', $expiration_timestamp );
-									$expiration_date      = get_date_from_gmt( $expiration_date_str );
-									echo '<br /><br />';
-									printf( '%s: %s', esc_html__( 'Expires', 'gravityflow' ), $expiration_date );
-								}
-							}
-
-							/**
-							 * Allows content to be added in the workflow box below the workflow status info.
-							 *
-							 * @param array $form
-							 * @param array $entry
-							 * @param Gravity_Flow_Step $current_step
-							 */
-							do_action( 'gravityflow_below_workflow_info_entry_detail', $form, $entry, $current_step );
-
-						endif; // end if $display_workflow_info
-
-						if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step ) {
-							if ( $display_workflow_info ) {
-								?>
-								<hr style="margin-top:10px;"/>
-								<?php
-							}
-							if ( $current_step->is_queued() ) {
-								printf( '<h4>%s (%s)</h4>', $current_step->get_name(), esc_html__( 'Queued', 'gravityflow' ) );
-
-								$scheduled_timestamp = $current_step->get_schedule_timestamp();
-
-								switch ( $current_step->schedule_type ) {
-									case 'date' :
-										$scheduled_date = $current_step->schedule_date;
-										break;
-									case 'date_field' :
-										$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
-										$scheduled_date = get_date_from_gmt( $scheduled_date_str );
-										break;
-									case 'delay' :
-									default:
-										$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
-										$scheduled_date = get_date_from_gmt( $scheduled_date_str );
-								}
-
-								printf( '<h4>%s: %s</h4>', esc_html__( 'Scheduled', 'gravityflow' ), $scheduled_date );
-							} elseif ( $current_step->is_expired() ) {
-								$current_step->log_event( esc_html__( 'Step expired', 'gravityflow' ) );
-								$note = esc_html__( 'Step expired', 'gravityflow' ) .': ' . $current_step->get_name();
-								$current_step->add_note( $note, 0, $current_step->get_type() );
-								$this->process_workflow( $form, $entry_id );
-								$current_step = null;
-								printf( '<h4>%s</h4>', esc_html__( 'Expired: refresh the page', 'gravityflow' ) );
-							} else {
-								$current_step->workflow_detail_box( $form, $args );
-							}
-						}
+						$this->maybe_display_entry_detail_workflow_info( $current_step, $form, $entry, $args );
+						$this->maybe_display_entry_detail_step_status( $current_step, $form, $entry, $args );
 
 						?>
-
 					</div>
 
 				</div>
-
 
 			</div>
 
@@ -2213,12 +2119,152 @@ PRIMARY KEY  (id)
 
 			do_action( 'gravityflow_workflow_detail_sidebar', $form, $entry );
 
+			$this->maybe_display_entry_detail_admin_actions( $current_step, $form, $entry );
+		}
+
+		/**
+		 * Displays the workflow info on the entry detail page, if enabled.
+		 *
+		 * @param Gravity_Flow_Step $current_step The current step for this entry.
+		 * @param array $form The form which created this entry.
+		 * @param array $entry The entry currently being displayed.
+		 * @param array $args The properties for the page currently being displayed.
+		 */
+		public function maybe_display_entry_detail_workflow_info( $current_step, $form, $entry, $args ) {
+			$display_workflow_info = (bool) $args['workflow_info'];
+
+			if ( ! $display_workflow_info ) {
+				return;
+			}
+
+			$entry_id      = absint( $entry['id'] );
+			$entry_id_link = $entry_id;
+
+			if ( GFAPI::current_user_can_any( 'gravityforms_view_entries' ) ) {
+				$entry_id_link = '<a href="' . admin_url( 'admin.php?page=gf_entries&view=entry&id=' . absint( $form['id'] ) . '&lid=' . absint( $entry['id'] ) ) . '">' . $entry_id . '</a>';
+			}
+
+			printf( '%s: %s<br/><br/>%s: %s', esc_html__( 'Entry Id', 'gravityflow' ), $entry_id_link, esc_html__( 'Submitted', 'gravityflow' ), esc_html( GFCommon::format_date( $entry['date_created'], true, 'Y/m/d' ) ) );
+
+			if ( isset( $entry['workflow_timestamp'] ) ) {
+				$last_updated = date( 'Y-m-d H:i:s', $entry['workflow_timestamp'] );
+				if ( $entry['date_created'] != $last_updated ) {
+					echo '<br /><br />';
+					esc_html_e( 'Last updated', 'gravityflow' ); ?>: <?php echo esc_html( GFCommon::format_date( $last_updated, true, 'Y/m/d' ) );
+				}
+			}
+
+			echo '<br/><br/>';
+
+			if ( ! empty( $entry['created_by'] ) && $usermeta = get_userdata( $entry['created_by'] ) ) {
+				printf( '%s: %s<br/><br/>', esc_html__( 'Submitted by', 'gravityflow' ), esc_html( $usermeta->display_name ) );
+			}
+
+			$workflow_status       = gform_get_meta( $entry['id'], 'workflow_final_status' );
+			$workflow_status_label = $this->translate_status_label( $workflow_status );
+			printf( '%s: %s', esc_html__( 'Status', 'gravityflow' ), $workflow_status_label );
+
+			if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step
+			     && $current_step->supports_expiration() && $current_step->expiration
+			) {
+				$expiration_timestamp = $current_step->get_expiration_timestamp();
+				$expiration_date_str  = date( 'Y-m-d H:i:s', $expiration_timestamp );
+				$expiration_date      = get_date_from_gmt( $expiration_date_str );
+				printf( '<br /><br />%s: %s', esc_html__( 'Expires', 'gravityflow' ), $expiration_date );
+			}
+
+			/**
+			 * Allows content to be added in the workflow box below the workflow status info.
+			 *
+			 * @param array $form The form which created this entry.
+			 * @param array $entry The entry currently being displayed.
+			 * @param Gravity_Flow_Step $current_step The current step for this entry.
+			 */
+			do_action( 'gravityflow_below_workflow_info_entry_detail', $form, $entry, $current_step );
+		}
+
+		/**
+		 * Displays the step status on the entry detail page.
+		 *
+		 * @param Gravity_Flow_Step $current_step The current step for this entry.
+		 * @param array $form The form which created this entry.
+		 * @param array $entry The entry currently being displayed.
+		 * @param array $args The properties for the page currently being displayed.
+		 */
+		public function maybe_display_entry_detail_step_status( $current_step, $form, $entry, $args ) {
+			if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step ) {
+				$display_workflow_info = (bool) $args['workflow_info'];
+
+				if ( $display_workflow_info ) {
+					echo '<hr style="margin-top:10px;"/>';
+				}
+
+				if ( $current_step->is_queued() ) {
+					$this->display_queued_step_details( $current_step );
+				} elseif ( $current_step->is_expired() ) {
+					$entry_id = absint( $entry['id'] );
+					$this->display_expired_step_details( $current_step, $form, $entry_id );
+				} else {
+					$current_step->workflow_detail_box( $form, $args );
+				}
+			}
+		}
+
+		/**
+		 * Display the details for the queued step.
+		 *
+		 * @param Gravity_Flow_Step $current_step The current step for this entry.
+		 */
+		public function display_queued_step_details( $current_step ) {
+			printf( '<h4>%s (%s)</h4>', $current_step->get_name(), esc_html__( 'Queued', 'gravityflow' ) );
+
+			$scheduled_timestamp = $current_step->get_schedule_timestamp();
+
+			switch ( $current_step->schedule_type ) {
+				case 'date' :
+					$scheduled_date = $current_step->schedule_date;
+					break;
+				case 'date_field' :
+					$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
+					$scheduled_date     = get_date_from_gmt( $scheduled_date_str );
+					break;
+				case 'delay' :
+				default:
+					$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
+					$scheduled_date     = get_date_from_gmt( $scheduled_date_str );
+			}
+
+			printf( '<h4>%s: %s</h4>', esc_html__( 'Scheduled', 'gravityflow' ), $scheduled_date );
+		}
+
+		/**
+		 * Display the details for the expired step.
+		 *
+		 * @param Gravity_Flow_Step $current_step The current step for this entry.
+		 * @param array $form The form which created this entry.
+		 * @param integer $entry_id The ID of the current entry.
+		 */
+		public function display_expired_step_details( $current_step, $form, $entry_id ) {
+			$current_step->log_event( esc_html__( 'Step expired', 'gravityflow' ) );
+			$note = esc_html__( 'Step expired', 'gravityflow' ) . ': ' . $current_step->get_name();
+			$current_step->add_note( $note, 0, $current_step->get_type() );
+			$this->process_workflow( $form, $entry_id );
+			$current_step = null;
+			printf( '<h4>%s</h4>', esc_html__( 'Expired: refresh the page', 'gravityflow' ) );
+		}
+
+		/**
+		 * Displays the admin actions drop down on the entry detail page, if applicable.
+		 *
+		 * @param Gravity_Flow_Step $current_step The current step for this entry.
+		 * @param array $form The form which created this entry.
+		 * @param array $entry The entry currently being displayed.
+		 */
+		public function maybe_display_entry_detail_admin_actions( $current_step, $form, $entry ) {
 			$steps = $this->get_steps( $form['id'] );
 
-			if ( GFAPI::current_user_can_any( 'gravityflow_workflow_detail_admin_actions' )  && ! empty( $steps ) ) :
-
-			?>
-
+			if ( GFAPI::current_user_can_any( 'gravityflow_workflow_detail_admin_actions' ) && ! empty( $steps ) ) {
+				?>
 				<div class="postbox">
 					<h3 class="hndle" style="cursor:default;">
 						<span><?php esc_html_e( 'Admin', 'gravityflow' ); ?></span>
@@ -2228,19 +2274,16 @@ PRIMARY KEY  (id)
 						<div id="minor-publishing" style="padding:10px;">
 							<?php wp_nonce_field( 'gravityflow_admin_action', '_gravityflow_admin_action_nonce' ); ?>
 							<select id="gravityflow-admin-action" name="gravityflow_admin_action">
-
 								<option value=""><?php esc_html_e( 'Select an action', 'gravityflow' ) ?></option>
 								<?php echo $this->get_admin_action_select_options( $current_step, $steps, $form, $entry ); ?>
 							</select>
-							<input type="submit" class="button " name="_gravityflow_admin_action" value="<?php esc_html_e( 'Apply', 'gravityflow' ) ?>" />
+							<input type="submit" class="button " name="_gravityflow_admin_action" value="<?php esc_html_e( 'Apply', 'gravityflow' ) ?>"/>
 
 						</div>
 					</div>
 				</div>
-
-			<?php endif; ?>
-
-		<?php
+				<?php
+			}
 		}
 
 		/**
