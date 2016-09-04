@@ -395,6 +395,11 @@ PRIMARY KEY  (id)
 					wp_enqueue_style( 'gravityflow_frontend_css', $this->get_base_url() . "/css/frontend{$min}.css", null, $this->_version );
 					wp_enqueue_style( 'gravityflow_status', $this->get_base_url() . "/css/status{$min}.css", null, $this->_version );
 					wp_localize_script( 'gravityflow_status_list', 'gravityflow_status_list_strings', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
+
+					/**
+					 * Allows additional scripts to be enqueued when the gravityflow shortcode is present on the page.
+					 */
+					do_action( 'gravityflow_enqueue_frontend_scripts' );
 					GFCommon::maybe_output_gf_vars();
 				}
 			}
@@ -3660,18 +3665,15 @@ PRIMARY KEY  (id)
 					} else {
 						$html .= $this->get_shortcode_status_page( $a );
 					}
-
-					break;
-				default :
-
-					/**
-					 * Allows custom gravityflow page shortcodes.
-					 *
-					 * @param string $html The HTML.
-					 * @param array $a The shortcode attributes.
-					 */
-					$html .= apply_filters( 'gravityflow_shortcode_' . $a['page'], $html, $a );
 			}
+
+			/**
+			 * Allows the gravityflow shortcode to be modified and supports custom pages.
+			 *
+			 * @param string $html The HTML.
+			 * @param array $a The shortcode attributes.
+			 */
+			$html .= apply_filters( 'gravityflow_shortcode_' . $a['page'], $html, $atts, $content );
 
 			return $html;
 
@@ -4805,6 +4807,7 @@ AND m.meta_value='queued'";
 			global $wp_query;
 			if ( isset( $wp_query->query_vars['paged'] ) && $wp_query->query_vars['paged'] > 0 ) {
 				if ( $this->look_for_shortcode() ) {
+					// Hack to fix paging on the status shortcode.
 					remove_filter( 'template_redirect', 'redirect_canonical' );
 				}
 			}
