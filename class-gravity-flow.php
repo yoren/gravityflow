@@ -2165,9 +2165,12 @@ PRIMARY KEY  (id)
 				printf( '%s: %s<br/><br/>', esc_html__( 'Submitted by', 'gravityflow' ), esc_html( $usermeta->display_name ) );
 			}
 
-			$workflow_status       = gform_get_meta( $entry['id'], 'workflow_final_status' );
-			$workflow_status_label = $this->translate_status_label( $workflow_status );
-			printf( '%s: %s', esc_html__( 'Status', 'gravityflow' ), $workflow_status_label );
+			$workflow_status = gform_get_meta( $entry['id'], 'workflow_final_status' );
+
+			if ( ! empty( $workflow_status ) ) {
+				$workflow_status_label = $this->translate_status_label( $workflow_status );
+				printf( '%s: %s', esc_html__( 'Status', 'gravityflow' ), $workflow_status_label );
+			}
 
 			if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step
 			     && $current_step->supports_expiration() && $current_step->expiration
@@ -5537,6 +5540,3 @@ AND m.meta_value='queued'";
 		}
 	}
 }
-
-
-
