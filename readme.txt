@@ -61,9 +61,15 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Added the gravityflow_shortcode_[page] filter.
     Example:
         // Adds support for [gravityflow page="custom_page"]
-        add_filter('gravityflow_shortcode_custom_page', 'sh_filter_gravityflow_shortcode_custom_page', 10, 2 );
-        function sh_filter_gravityflow_shortcode_custom_page( $html, $shortcode_attributes ) {
+        add_filter('gravityflow_shortcode_custom_page', 'sh_filter_gravityflow_shortcode_custom_page', 10, 3 );
+        function sh_filter_gravityflow_shortcode_custom_page( $html, $shortcode_attributes, $content ) {
             echo "My custom Gravity Flow shortcode";
+        }
+- Added the gravityflow_enqueue_frontend_scripts action to allow additional scripts to be enqueued when the gravityflow shortcode is present on the page.
+    Example:
+        add_filter('gravityflow_enqueue_frontend_scripts', 'sh_action_gravityflow_enqueue_frontend_scripts', 10);
+        function sh_action_gravityflow_enqueue_frontend_scripts() {
+            // enqueue custom scripts
         }
 - Fixed a fatal error which could occur if the gform_post_add_entry hook passes a WP_Error object for the $entry.
 - Fixed a PHP warning which could occur when using the gravityflow_{type}_token_expiration_days filter.
@@ -71,6 +77,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Fixed an issue with shortcodes used in the HTML field content not being processed on the entry detail view.
 - Fixed an issue with the import process where the feeds remain inside the form meta.
 - Fixed an issue with the import process where the revert step setting is not imported correctly.
+- Fixed an issue with the permissions for printing where email assignees can't print.
 
 = 1.4 =
 
