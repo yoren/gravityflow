@@ -3676,7 +3676,7 @@ PRIMARY KEY  (id)
 			 * @param string $html The HTML.
 			 * @param array $a The shortcode attributes.
 			 */
-			$html .= apply_filters( 'gravityflow_shortcode_' . $a['page'], $html, $atts, $content );
+			$html = apply_filters( 'gravityflow_shortcode_' . $a['page'], $html, $atts, $content );
 
 			return $html;
 
