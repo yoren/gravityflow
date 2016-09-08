@@ -672,7 +672,7 @@ class Gravity_Flow_Entry_Detail {
 						?>
 						<tr>
 							<td colspan="2"
-							    class="entry-view-section-break<?php echo $is_last ? ' lastrow' : '' ?>"><?php echo esc_html( rgar( $field, 'label' ) ) ?></td>
+							    class="entry-view-section-break<?php echo $is_last ? ' lastrow' : '' ?>"><?php echo esc_html( $field->label ) ?></td>
 						</tr>
 						<?php
 					}
@@ -747,7 +747,7 @@ class Gravity_Flow_Entry_Detail {
 
 						$content = '
                                 <tr>
-                                    <td colspan="2" class="entry-view-field-name">' . esc_html( GFCommon::get_label( $field, 0, false, false ) ) . '</td>
+                                    <td colspan="2" class="entry-view-field-name">' . esc_html( self::get_label( $field ) ) . '</td>
                                 </tr>
                                 <tr>
                                     <td colspan="2" class="entry-view-field-value' . $last_row . '">' . $display_value . '</td>
@@ -791,6 +791,18 @@ class Gravity_Flow_Entry_Detail {
 			}
 		}
 
+	}
+
+	/**
+	 * Get the label to display for this field. Uses the admin label if the main label is not configured.
+	 *
+	 * @param GF_Field $field The field properties.
+	 *
+	 * @return string
+	 */
+	public static function get_label( $field ) {
+
+		return empty( $field->label ) ? $field->adminLabel : $field->label;
 	}
 
 	public static function products_summary( $form, $entry, $products ) {

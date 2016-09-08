@@ -222,6 +222,10 @@ class Gravity_Flow_Entry_Editor {
 				$field->maxLength   = null;
 			}
 
+			if ( empty( $field->label ) ) {
+				$field->label = $field->adminLabel;
+			}
+
 			$field->adminOnly  = false;
 			$field->adminLabel = '';
 

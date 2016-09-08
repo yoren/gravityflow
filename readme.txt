@@ -71,6 +71,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
         function sh_action_gravityflow_enqueue_frontend_scripts() {
             // enqueue custom scripts
         }
+- Fixed an issue where the label would not be displayed on the entry detail view or user input step when the field label was empty and the admin label was configured.
 - Fixed a fatal error which could occur if the gform_post_add_entry hook passes a WP_Error object for the $entry.
 - Fixed a PHP warning which could occur when using the gravityflow_{type}_token_expiration_days filter.
 - Fixed an issue with duplicate merge tags being added to the merge tag drop down.
