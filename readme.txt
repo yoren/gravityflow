@@ -71,6 +71,14 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
         function sh_action_gravityflow_enqueue_frontend_scripts() {
             // enqueue custom scripts
         }
+- Added the gravityflow_bulk_action_status_table filter to allow custom bulk actions to be processed on the status page.
+    Example:
+        add_filter
+        public function filter_gravityflow_bulk_action_status_table( $feedback, $bulk_action, $entry_ids, $args ) {
+            // process entries
+
+            return 'Done!';
+        }
 - Fixed an issue where the label would not be displayed on the entry detail view or user input step when the field label was empty and the admin label was configured.
 - Fixed a fatal error which could occur if the gform_post_add_entry hook passes a WP_Error object for the $entry.
 - Fixed a PHP warning which could occur when using the gravityflow_{type}_token_expiration_days filter.

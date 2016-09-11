@@ -178,7 +178,6 @@ class Gravity_Flow_Status {
 
 		return $response;
 	}
-
 }
 
 
@@ -253,13 +252,15 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 	public $last_updated;
 
+	/**
+	 * All the args for the table.
+	 *
+	 * @var array $args
+	 */
+	public $args;
+
 	public function __construct( $args = array() ) {
 
-		$default_bulk_actions = array( 'print' => esc_html__( 'Print', 'gravityflow' ) );
-
-		if ( GFAPI::current_user_can_any( 'gravityflow_admin_actions' ) ) {
-			$default_bulk_actions['restart_workflow'] = esc_html__( 'Restart Workflow', 'gravityflow' );
-		}
 
 		$default_args = array(
 			'singular'           => __( 'entry', 'gravityflow' ),
@@ -271,7 +272,6 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			'field_ids'          => array(),
 			'screen'             => 'gravityflow-status',
 			'display_all'        => GFAPI::current_user_can_any( 'gravityflow_status_view_all' ),
-			'bulk_actions'       => $default_bulk_actions,
 			'per_page'           => 20,
 			'id_column'          => true,
 			'submitter_column'   => true,
@@ -281,6 +281,14 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		);
 
 		$args = wp_parse_args( $args, $default_args );
+
+		$default_bulk_actions = array( 'print' => esc_html__( 'Print', 'gravityflow' ) );
+
+		if ( GFAPI::current_user_can_any( 'gravityflow_admin_actions' ) ) {
+			$default_bulk_actions['restart_workflow'] = esc_html__( 'Restart Workflow', 'gravityflow' );
+		}
+
+		$args['bulk_actions'] = array_merge( $default_bulk_actions, $args['bulk_actions'] );
 
 		require_once( ABSPATH .'wp-admin/includes/template.php' );
 		if ( ! class_exists( 'WP_Screen' ) ) {
@@ -345,7 +353,6 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	}
 
 	public function filters() {
-
 		$start_date      = isset( $_REQUEST['start-date'] ) ? sanitize_text_field( $_REQUEST['start-date'] ) : null;
 		$end_date        = isset( $_REQUEST['end-date'] ) ? sanitize_text_field( $_REQUEST['end-date'] ) : null;
 		$status          = isset( $_REQUEST['status'] ) ? $_REQUEST['status'] : '';
@@ -505,6 +512,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		</div>
 
 		<?php
+		$this->process_bulk_action();
+		GFCommon::display_admin_message();
 	}
 
 	public function column_cb( $item ) {
@@ -1068,8 +1077,6 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 	public function prepare_items() {
 
-		$this->process_bulk_action();
-
 		$filter_args = $this->get_filter_args();
 
 		if ( isset( $filter_args['form-id'] ) ) {
@@ -1299,12 +1306,37 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			}
 		}
 
-		if ( $bulk_action !== 'restart_workflow' ) {
+		$entry_ids = rgpost( 'entry_ids' );
+		if ( empty( $entry_ids ) || ! is_array( $entry_ids ) ) {
 			return;
 		}
 
-		$entry_ids = rgpost( 'entry_ids' );
-		if ( empty( $entry_ids ) || ! is_array( $entry_ids ) ) {
+		$entry_ids = wp_parse_id_list( $entry_ids );
+
+		$feedback = '';
+
+		/**
+		 * Allows custom bulk actions to be processed in the status table.
+		 *
+		 * Return a string for a standard admin message. Return an instance of WP_Error to display an error.
+		 *
+		 * @param string|WP_Error $feedback The admin message.
+		 * @param string $bulk_action The action.
+		 * @param array $entry_ids The entry IDs to be processed.
+		 * @param array $this ->args The args for this table.
+		 */
+		$feedback = apply_filters( 'gravityflow_bulk_action_status_table', $feedback, $bulk_action, $entry_ids, $this->args );
+
+		if ( ! empty( $feedback ) ) {
+			if ( is_wp_error( $feedback ) ) {
+				GFCommon::add_message( $feedback->get_error_message(), true );
+			} else {
+				GFCommon::add_message( $feedback );
+			}
+			return;
+		}
+
+		if ( $bulk_action !== 'restart_workflow' ) {
 			return;
 		}
 
@@ -1331,6 +1363,9 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			gravity_flow()->process_workflow( $form, $entry_id );
 
 		}
+
+		$message = esc_html__( 'Workflows restarted.',  'gravityflow' );
+		GFCommon::add_message( $message );
 
 		return;
 	}
