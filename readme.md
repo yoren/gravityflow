@@ -32,12 +32,12 @@ If you're using VVV you can use this command:
 
 	bash tests/bin/install.sh wordpress_unit_tests root root localhost
 
-The acceptance tests require a bit more configuration:
+The acceptance tests are completely separate from the unit tests and do not require the unit tests to be configured. Steps to install and configure the acceptance tests:
  
-1. composer install
+1. Install the dependencies: `composer install`
 2. Download and start either PhantomJS or Selenium.
-3. Copy codeception-sample.yml to codeception.yml and adjust it to point to your test site. Warning: the database will cleaned before each run.
-4. ./vendor/bin/codecept run
+3. Copy codeception-sample-vvv.yml or codeception-sample-pressmatic.yml to codeception.yml and adjust it to point to your test site. Warning: the database will cleaned before each run.
+4. Run the tests: `./vendor/bin/codecept run`
 
 
 ## Documentation

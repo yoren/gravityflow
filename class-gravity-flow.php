@@ -395,6 +395,11 @@ PRIMARY KEY  (id)
 					wp_enqueue_style( 'gravityflow_frontend_css', $this->get_base_url() . "/css/frontend{$min}.css", null, $this->_version );
 					wp_enqueue_style( 'gravityflow_status', $this->get_base_url() . "/css/status{$min}.css", null, $this->_version );
 					wp_localize_script( 'gravityflow_status_list', 'gravityflow_status_list_strings', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
+
+					/**
+					 * Allows additional scripts to be enqueued when the gravityflow shortcode is present on the page.
+					 */
+					do_action( 'gravityflow_enqueue_frontend_scripts' );
 					GFCommon::maybe_output_gf_vars();
 				}
 			}
@@ -2094,15 +2099,6 @@ PRIMARY KEY  (id)
 
 			$display_workflow_info = (bool) $args['workflow_info'];
 
-			$lead = $entry;
-
-			$entry_id = absint( $lead['id'] );
-
-			$entry_id_link = $entry_id;
-
-			if ( GFAPI::current_user_can_any( 'gravityforms_view_entries' ) ) {
-				$entry_id_link = '<a href="' . admin_url( 'admin.php?page=gf_entries&view=entry&id=' . absint( $form['id'] ) . '&lid=' . absint( $entry['id'] ) ) . '">' . $entry_id . '</a>';
-			}
 			?>
 			<div class="postbox">
 
@@ -2113,99 +2109,14 @@ PRIMARY KEY  (id)
 				<div id="submitcomment" class="submitbox">
 					<div id="minor-publishing" style="padding:10px;">
 						<?php
-						if ( $display_workflow_info ) : ?>
-							<?php esc_html_e( 'Entry Id', 'gravityflow' ); ?>: <?php echo $entry_id_link ?><br /><br />
-							<?php esc_html_e( 'Submitted', 'gravityflow' ); ?>: <?php echo esc_html( GFCommon::format_date( $lead['date_created'], true, 'Y/m/d' ) ) ?>
-							<?php
-							if ( isset( $lead['workflow_timestamp'] ) ) {
-								$last_updated = date( 'Y-m-d H:i:s', $lead['workflow_timestamp'] );
-								if ( $lead['date_created'] != $last_updated ) {
-									echo '<br /><br />';
-									esc_html_e( 'Last updated', 'gravityflow' ); ?>: <?php echo esc_html( GFCommon::format_date( $last_updated, true, 'Y/m/d' ) );
-								}
-							}
-							?>
-							<br /><br />
-							<?php
-							if ( ! empty( $lead['created_by'] ) && $usermeta = get_userdata( $lead['created_by'] ) ) {
-								?>
-								<?php _e( 'Submitted by', 'gravityflow' ); ?>:
-								<?php echo esc_html( $usermeta->display_name ) ?>
-								<br /><br />
-							<?php
-							}
 
-							$workflow_status = gform_get_meta( $entry['id'], 'workflow_final_status' );
-
-							$workflow_status_label = $this->translate_status_label( $workflow_status );
-							printf( '%s: %s', esc_html__( 'Status', 'gravityflow' ), $workflow_status_label );
-
-							if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step ) {
-
-								if ( $current_step->supports_expiration() && $current_step->expiration ) {
-									$expiration_timestamp = $current_step->get_expiration_timestamp();
-									$expiration_date_str  = date( 'Y-m-d H:i:s', $expiration_timestamp );
-									$expiration_date      = get_date_from_gmt( $expiration_date_str );
-									echo '<br /><br />';
-									printf( '%s: %s', esc_html__( 'Expires', 'gravityflow' ), $expiration_date );
-								}
-							}
-
-							/**
-							 * Allows content to be added in the workflow box below the workflow status info.
-							 *
-							 * @param array $form
-							 * @param array $entry
-							 * @param Gravity_Flow_Step $current_step
-							 */
-							do_action( 'gravityflow_below_workflow_info_entry_detail', $form, $entry, $current_step );
-
-						endif; // end if $display_workflow_info
-
-						if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step ) {
-							if ( $display_workflow_info ) {
-								?>
-								<hr style="margin-top:10px;"/>
-								<?php
-							}
-							if ( $current_step->is_queued() ) {
-								printf( '<h4>%s (%s)</h4>', $current_step->get_name(), esc_html__( 'Queued', 'gravityflow' ) );
-
-								$scheduled_timestamp = $current_step->get_schedule_timestamp();
-
-								switch ( $current_step->schedule_type ) {
-									case 'date' :
-										$scheduled_date = $current_step->schedule_date;
-										break;
-									case 'date_field' :
-										$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
-										$scheduled_date = get_date_from_gmt( $scheduled_date_str );
-										break;
-									case 'delay' :
-									default:
-										$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
-										$scheduled_date = get_date_from_gmt( $scheduled_date_str );
-								}
-
-								printf( '<h4>%s: %s</h4>', esc_html__( 'Scheduled', 'gravityflow' ), $scheduled_date );
-							} elseif ( $current_step->is_expired() ) {
-								$current_step->log_event( esc_html__( 'Step expired', 'gravityflow' ) );
-								$note = esc_html__( 'Step expired', 'gravityflow' ) .': ' . $current_step->get_name();
-								$current_step->add_note( $note, 0, $current_step->get_type() );
-								$this->process_workflow( $form, $entry_id );
-								$current_step = null;
-								printf( '<h4>%s</h4>', esc_html__( 'Expired: refresh the page', 'gravityflow' ) );
-							} else {
-								$current_step->workflow_detail_box( $form, $args );
-							}
-						}
+						$this->maybe_display_entry_detail_workflow_info( $current_step, $form, $entry, $args );
+						$this->maybe_display_entry_detail_step_status( $current_step, $form, $entry, $args );
 
 						?>
-
 					</div>
 
 				</div>
-
 
 			</div>
 
@@ -2213,12 +2124,155 @@ PRIMARY KEY  (id)
 
 			do_action( 'gravityflow_workflow_detail_sidebar', $form, $entry );
 
+			$this->maybe_display_entry_detail_admin_actions( $current_step, $form, $entry );
+		}
+
+		/**
+		 * Displays the workflow info on the entry detail page, if enabled.
+		 *
+		 * @param Gravity_Flow_Step $current_step The current step for this entry.
+		 * @param array $form The form which created this entry.
+		 * @param array $entry The entry currently being displayed.
+		 * @param array $args The properties for the page currently being displayed.
+		 */
+		public function maybe_display_entry_detail_workflow_info( $current_step, $form, $entry, $args ) {
+			$display_workflow_info = (bool) $args['workflow_info'];
+
+			if ( ! $display_workflow_info ) {
+				return;
+			}
+
+			$entry_id      = absint( $entry['id'] );
+			$entry_id_link = $entry_id;
+
+			if ( GFAPI::current_user_can_any( 'gravityforms_view_entries' ) ) {
+				$entry_id_link = '<a href="' . admin_url( 'admin.php?page=gf_entries&view=entry&id=' . absint( $form['id'] ) . '&lid=' . absint( $entry['id'] ) ) . '">' . $entry_id . '</a>';
+			}
+
+			printf( '%s: %s<br/><br/>%s: %s', esc_html__( 'Entry Id', 'gravityflow' ), $entry_id_link, esc_html__( 'Submitted', 'gravityflow' ), esc_html( GFCommon::format_date( $entry['date_created'], true, 'Y/m/d' ) ) );
+
+			if ( isset( $entry['workflow_timestamp'] ) ) {
+				$last_updated = date( 'Y-m-d H:i:s', $entry['workflow_timestamp'] );
+				if ( $entry['date_created'] != $last_updated ) {
+					echo '<br /><br />';
+					esc_html_e( 'Last updated', 'gravityflow' ); ?>: <?php echo esc_html( GFCommon::format_date( $last_updated, true, 'Y/m/d' ) );
+				}
+			}
+
+			echo '<br/><br/>';
+
+			if ( ! empty( $entry['created_by'] ) && $usermeta = get_userdata( $entry['created_by'] ) ) {
+				printf( '%s: %s<br/><br/>', esc_html__( 'Submitted by', 'gravityflow' ), esc_html( $usermeta->display_name ) );
+			}
+
+			$workflow_status = gform_get_meta( $entry['id'], 'workflow_final_status' );
+
+			if ( ! empty( $workflow_status ) ) {
+				$workflow_status_label = $this->translate_status_label( $workflow_status );
+				printf( '%s: %s', esc_html__( 'Status', 'gravityflow' ), $workflow_status_label );
+			}
+
+			if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step
+			     && $current_step->supports_expiration() && $current_step->expiration
+			) {
+				$expiration_timestamp = $current_step->get_expiration_timestamp();
+				$expiration_date_str  = date( 'Y-m-d H:i:s', $expiration_timestamp );
+				$expiration_date      = get_date_from_gmt( $expiration_date_str );
+				printf( '<br /><br />%s: %s', esc_html__( 'Expires', 'gravityflow' ), $expiration_date );
+			}
+
+			/**
+			 * Allows content to be added in the workflow box below the workflow status info.
+			 *
+			 * @param array $form The form which created this entry.
+			 * @param array $entry The entry currently being displayed.
+			 * @param Gravity_Flow_Step $current_step The current step for this entry.
+			 */
+			do_action( 'gravityflow_below_workflow_info_entry_detail', $form, $entry, $current_step );
+		}
+
+		/**
+		 * Displays the step status on the entry detail page.
+		 *
+		 * @param Gravity_Flow_Step $current_step The current step for this entry.
+		 * @param array $form The form which created this entry.
+		 * @param array $entry The entry currently being displayed.
+		 * @param array $args The properties for the page currently being displayed.
+		 */
+		public function maybe_display_entry_detail_step_status( $current_step, $form, $entry, $args ) {
+			if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step ) {
+				$display_workflow_info = (bool) $args['workflow_info'];
+
+				if ( $display_workflow_info ) {
+					echo '<hr style="margin-top:10px;"/>';
+				}
+
+				if ( $current_step->is_queued() ) {
+					$this->display_queued_step_details( $current_step );
+				} elseif ( $current_step->is_expired() ) {
+					$entry_id = absint( $entry['id'] );
+					$this->display_expired_step_details( $current_step, $form, $entry_id );
+				} else {
+					$current_step->workflow_detail_box( $form, $args );
+				}
+			}
+		}
+
+		/**
+		 * Display the details for the queued step.
+		 *
+		 * @param Gravity_Flow_Step $current_step The current step for this entry.
+		 */
+		public function display_queued_step_details( $current_step ) {
+			printf( '<h4>%s (%s)</h4>', $current_step->get_name(), esc_html__( 'Queued', 'gravityflow' ) );
+
+			$scheduled_timestamp = $current_step->get_schedule_timestamp();
+
+			switch ( $current_step->schedule_type ) {
+				case 'date' :
+					$scheduled_date = $current_step->schedule_date;
+					break;
+				case 'date_field' :
+					$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
+					$scheduled_date     = get_date_from_gmt( $scheduled_date_str );
+					break;
+				case 'delay' :
+				default:
+					$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
+					$scheduled_date     = get_date_from_gmt( $scheduled_date_str );
+			}
+
+			printf( '<h4>%s: %s</h4>', esc_html__( 'Scheduled', 'gravityflow' ), $scheduled_date );
+		}
+
+		/**
+		 * Display the details for the expired step.
+		 *
+		 * @param Gravity_Flow_Step $current_step The current step for this entry.
+		 * @param array $form The form which created this entry.
+		 * @param integer $entry_id The ID of the current entry.
+		 */
+		public function display_expired_step_details( $current_step, $form, $entry_id ) {
+			$current_step->log_event( esc_html__( 'Step expired', 'gravityflow' ) );
+			$note = esc_html__( 'Step expired', 'gravityflow' ) . ': ' . $current_step->get_name();
+			$current_step->add_note( $note, 0, $current_step->get_type() );
+			$this->process_workflow( $form, $entry_id );
+			$current_step = null;
+			printf( '<h4>%s</h4>', esc_html__( 'Expired: refresh the page', 'gravityflow' ) );
+		}
+
+		/**
+		 * Displays the admin actions drop down on the entry detail page, if applicable.
+		 *
+		 * @param Gravity_Flow_Step $current_step The current step for this entry.
+		 * @param array $form The form which created this entry.
+		 * @param array $entry The entry currently being displayed.
+		 */
+		public function maybe_display_entry_detail_admin_actions( $current_step, $form, $entry ) {
 			$steps = $this->get_steps( $form['id'] );
 
-			if ( GFAPI::current_user_can_any( 'gravityflow_workflow_detail_admin_actions' )  && ! empty( $steps ) ) :
-
-			?>
-
+			if ( GFAPI::current_user_can_any( 'gravityflow_workflow_detail_admin_actions' ) && ! empty( $steps ) ) {
+				?>
 				<div class="postbox">
 					<h3 class="hndle" style="cursor:default;">
 						<span><?php esc_html_e( 'Admin', 'gravityflow' ); ?></span>
@@ -2228,19 +2282,16 @@ PRIMARY KEY  (id)
 						<div id="minor-publishing" style="padding:10px;">
 							<?php wp_nonce_field( 'gravityflow_admin_action', '_gravityflow_admin_action_nonce' ); ?>
 							<select id="gravityflow-admin-action" name="gravityflow_admin_action">
-
 								<option value=""><?php esc_html_e( 'Select an action', 'gravityflow' ) ?></option>
 								<?php echo $this->get_admin_action_select_options( $current_step, $steps, $form, $entry ); ?>
 							</select>
-							<input type="submit" class="button " name="_gravityflow_admin_action" value="<?php esc_html_e( 'Apply', 'gravityflow' ) ?>" />
+							<input type="submit" class="button " name="_gravityflow_admin_action" value="<?php esc_html_e( 'Apply', 'gravityflow' ) ?>"/>
 
 						</div>
 					</div>
 				</div>
-
-			<?php endif; ?>
-
-		<?php
+				<?php
+			}
 		}
 
 		/**
@@ -3575,50 +3626,7 @@ PRIMARY KEY  (id)
 
 		public function shortcode( $atts, $content = null ) {
 
-			$a = shortcode_atts( array(
-				'page' => 'inbox',
-				'form' => null,
-				'form_id' => null,
-				'fields' => '',
-				'display_all' => null,
-				'allow_anonymous' => false,
-				'title' => '',
-				'id_column' => true,
-				'submitter_column' => true,
-				'step_column' => true,
-				'status_column' => true,
-				'timeline' => true,
-				'last_updated' => false,
-				'step_status' => true,
-				'workflow_info' => true,
-				'sidebar' => true,
-			), $atts );
-
-			if ( $a['form_id'] > 0 ) {
-				$a['form'] = $a['form_id'];
-			}
-
-			$a['title'] = sanitize_text_field( $a['title'] );
-
-			$a['id_column'] = strtolower( $a['id_column'] ) == 'false' ? false : true;
-			$a['submitter_column'] = strtolower( $a['submitter_column'] ) == 'false' ? false : true;
-			$a['step_column'] = strtolower( $a['step_column'] ) == 'false' ? false : true;
-			$a['status_column'] = strtolower( $a['status_column'] ) == 'false' ? false : true;
-			$a['timeline'] = strtolower( $a['timeline'] ) == 'false' ? false : true;
-			$a['step_status'] = strtolower( $a['step_status'] ) == 'false' ? false : true;
-			$a['workflow_info'] = strtolower( $a['workflow_info'] ) == 'false' ? false : true;
-			$a['sidebar'] = strtolower( $a['sidebar'] ) == 'false' ? false : true;
-
-			if ( is_null( $a['display_all'] ) ) {
-				$a['display_all'] = GFAPI::current_user_can_any( 'gravityflow_status_view_all' );
-				$this->log_debug( __METHOD__ . '() - display_all set by capabilities: ' . $a['display_all'] );
-			} else {
-				$a['display_all'] = strtolower( $a['display_all'] ) == 'true' ? true : false;
-				$this->log_debug( __METHOD__ . '() - display_all overridden: ' . $a['display_all'] );
-			}
-
-			$a['allow_anonymous'] = strtolower( $a['allow_anonymous'] ) == 'true' ? true : false;
-			$a['last_updated'] = strtolower( $a['last_updated'] ) == 'true' ? true : false;
+			$a = $this->get_shortcode_atts( $atts );
 
 			if ( ! $a['allow_anonymous'] && ! is_user_logged_in() ) {
 				if ( ! $this->validate_access_token() ) {
@@ -3644,26 +3652,7 @@ PRIMARY KEY  (id)
 
 			switch ( $a['page'] ) {
 				case 'inbox' :
-					wp_enqueue_script( 'gravityflow_entry_detail' );
-					wp_enqueue_script( 'gravityflow_status_list' );
-					$args = array(
-						'form_id' => $a['form'],
-						'id_column' => $a['id_column'],
-						'submitter_column' => $a['submitter_column'],
-						'step_column' => $a['step_column'],
-						'show_header' => false,
-						'field_ids' => explode( ',', $a['fields'] ),
-						'detail_base_url' => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
-						'timeline' => $a['timeline'],
-						'last_updated' => $a['last_updated'],
-						'step_status' => $a['step_status'],
-						'workflow_info' => $a['workflow_info'],
-						'sidebar' => $a['sidebar'],
-					);
-
-					ob_start();
-					$this->inbox_page( $args );
-					$html .= ob_get_clean();
+					$html .= $this->get_shortcode_inbox_page( $a );
 					break;
 				case 'submit' :
 					ob_start();
@@ -3675,79 +3664,220 @@ PRIMARY KEY  (id)
 					wp_enqueue_script( 'gravityflow_status_list' );
 
 					if ( rgget( 'view' ) ) {
-						ob_start();
-						$check_permissions = true;
-
-						if ( $a['allow_anonymous'] || $a['display_all'] ) {
-							$check_permissions = false;
-						}
-
-						$args = array(
-							'show_header' => false,
-							'detail_base_url' => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
-							'check_permissions' => $check_permissions,
-							'timeline' => $a['timeline'],
-						);
-
-						$this->inbox_page( $args );
-						$html .= ob_get_clean();
+						$html .= $this->get_shortcode_status_page_detail( $a );
 					} else {
-						if ( ! class_exists( 'WP_Screen' ) ) {
-							require_once( ABSPATH . 'wp-admin/includes/screen.php' );
-						}
-						require_once( ABSPATH .'wp-admin/includes/template.php' );
-						ob_start();
-
-						$args = array(
-							'base_url'        => remove_query_arg( array(
-								'entry-id',
-								'form-id',
-								'start-date',
-								'end-date',
-								'_wpnonce',
-								'_wp_http_referer',
-								'action',
-								'action2',
-								'o',
-								'f',
-								't',
-								'v',
-								'gravityflow-print-page-break',
-								'gravityflow-print-timelines',
-							) ),
-							'detail_base_url' => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
-							'display_header' => false,
-							'action_url' => 'http' . ( isset( $_SERVER['HTTPS'] ) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}?",
-							'constraint_filters' => array(
-								'form_id' => $a['form'],
-							),
-							'field_ids' => explode( ',', $a['fields'] ),
-							'display_all' => $a['display_all'],
-							'id_column' => $a['id_column'],
-							'submitter_column' => $a['submitter_column'],
-							'step_column' => $a['step_column'],
-							'status_column' => $a['status_column'],
-							'last_updated' => $a['last_updated'],
-							'step_status' => $a['step_status'],
-							'workflow_info' => $a['workflow_info'],
-							'sidebar' => $a['sidebar'],
-						);
-
-						if ( ! is_user_logged_in() && $a['allow_anonymous'] ) {
-							$args['bulk_actions'] = array();
-						}
-
-						$this->status_page( $args );
-						$html .= ob_get_clean();
+						$html .= $this->get_shortcode_status_page( $a );
 					}
-
-					break;
 			}
+
+			/**
+			 * Allows the gravityflow shortcode to be modified and supports custom pages.
+			 *
+			 * @param string $html The HTML.
+			 * @param array $a The shortcode attributes.
+			 */
+			$html = apply_filters( 'gravityflow_shortcode_' . $a['page'], $html, $atts, $content );
 
 			return $html;
 
 		}
 
+		/**
+		 * Get the shortcode attributes, after merging with the defaults.
+		 *
+		 * @param array $atts The attributes from the shortcode.
+		 *
+		 * @return array
+		 */
+		public function get_shortcode_atts( $atts ) {
+			$a = shortcode_atts( $this->get_shortcode_defaults(), $atts );
+
+			if ( $a['form_id'] > 0 ) {
+				$a['form'] = $a['form_id'];
+			}
+
+			$a['title'] = sanitize_text_field( $a['title'] );
+			$a          = $this->booleanize_shortcode_attributes( $a );
+
+			if ( is_null( $a['display_all'] ) ) {
+				$a['display_all'] = GFAPI::current_user_can_any( 'gravityflow_status_view_all' );
+				$this->log_debug( __METHOD__ . '() - display_all set by capabilities: ' . $a['display_all'] );
+			} else {
+				$a['display_all'] = strtolower( $a['display_all'] ) == 'true' ? true : false;
+				$this->log_debug( __METHOD__ . '() - display_all overridden: ' . $a['display_all'] );
+			}
+
+			return $a;
+		}
+
+		/**
+		 * The default attributes for the gravityflow shortcode.
+		 *
+		 * @return array
+		 */
+		public function get_shortcode_defaults() {
+			$defaults = array(
+				'page'             => 'inbox',
+				'form'             => null,
+				'form_id'          => null,
+				'fields'           => '',
+				'display_all'      => null,
+				'allow_anonymous'  => false,
+				'title'            => '',
+				'id_column'        => true,
+				'submitter_column' => true,
+				'step_column'      => true,
+				'status_column'    => true,
+				'timeline'         => true,
+				'last_updated'     => false,
+				'step_status'      => true,
+				'workflow_info'    => true,
+				'sidebar'          => true,
+			);
+
+			return $defaults;
+		}
+
+		/**
+		 * Converts the string attribute values to booleans.
+		 *
+		 * @param array $a The shortcode attributes.
+		 *
+		 * @return array
+		 */
+		public function booleanize_shortcode_attributes( $a ) {
+			$attributes = $this->get_shortcode_defaults();
+
+			foreach ( $attributes as $attribute => $default ) {
+				if ( $default === true ) {
+					$a[ $attribute ] = strtolower( $a[ $attribute ] ) == 'false' ? false : true;
+				} elseif ( $default === false ) {
+					$a[ $attribute ] = strtolower( $a[ $attribute ] ) == 'true' ? true : false;
+				}
+			}
+
+			return $a;
+		}
+
+		/**
+		 * Get the HTML for the inbox page shortcode.
+		 *
+		 * @param array $a The shortcode attributes.
+		 *
+		 * @return string
+		 */
+		public function get_shortcode_inbox_page( $a ) {
+			wp_enqueue_script( 'gravityflow_entry_detail' );
+			wp_enqueue_script( 'gravityflow_status_list' );
+
+			$args = array(
+				'form_id'          => $a['form'],
+				'id_column'        => $a['id_column'],
+				'submitter_column' => $a['submitter_column'],
+				'step_column'      => $a['step_column'],
+				'show_header'      => false,
+				'field_ids'        => explode( ',', $a['fields'] ),
+				'detail_base_url'  => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
+				'timeline'         => $a['timeline'],
+				'last_updated'     => $a['last_updated'],
+				'step_status'      => $a['step_status'],
+				'workflow_info'    => $a['workflow_info'],
+				'sidebar'          => $a['sidebar'],
+			);
+
+			ob_start();
+			$this->inbox_page( $args );
+			$html = ob_get_clean();
+
+			return $html;
+		}
+
+		/**
+		 * Get the HTML for the status page shortcode, detail view.
+		 *
+		 * @param array $a The shortcode attributes.
+		 *
+		 * @return string
+		 */
+		public function get_shortcode_status_page_detail( $a ) {
+			ob_start();
+			$check_permissions = true;
+
+			if ( $a['allow_anonymous'] || $a['display_all'] ) {
+				$check_permissions = false;
+			}
+
+			$args = array(
+				'show_header'       => false,
+				'detail_base_url'   => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
+				'check_permissions' => $check_permissions,
+				'timeline'          => $a['timeline'],
+			);
+
+			$this->inbox_page( $args );
+			$html = ob_get_clean();
+
+			return $html;
+		}
+
+		/**
+		 * Get the HTML for the status page shortcode, list view.
+		 *
+		 * @param array $a The shortcode attributes.
+		 *
+		 * @return string
+		 */
+		public function get_shortcode_status_page( $a ) {
+			if ( ! class_exists( 'WP_Screen' ) ) {
+				require_once( ABSPATH . 'wp-admin/includes/screen.php' );
+			}
+			require_once( ABSPATH . 'wp-admin/includes/template.php' );
+			ob_start();
+
+			$args = array(
+				'base_url'           => remove_query_arg( array(
+					'entry-id',
+					'form-id',
+					'start-date',
+					'end-date',
+					'_wpnonce',
+					'_wp_http_referer',
+					'action',
+					'action2',
+					'o',
+					'f',
+					't',
+					'v',
+					'gravityflow-print-page-break',
+					'gravityflow-print-timelines',
+				) ),
+				'detail_base_url'    => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
+				'display_header'     => false,
+				'action_url'         => 'http' . ( isset( $_SERVER['HTTPS'] ) ? 's' : '' ) . '://' . "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}?",
+				'constraint_filters' => array(
+					'form_id' => $a['form'],
+				),
+				'field_ids'          => explode( ',', $a['fields'] ),
+				'display_all'        => $a['display_all'],
+				'id_column'          => $a['id_column'],
+				'submitter_column'   => $a['submitter_column'],
+				'step_column'        => $a['step_column'],
+				'status_column'      => $a['status_column'],
+				'last_updated'       => $a['last_updated'],
+				'step_status'        => $a['step_status'],
+				'workflow_info'      => $a['workflow_info'],
+				'sidebar'            => $a['sidebar'],
+			);
+
+			if ( ! is_user_logged_in() && $a['allow_anonymous'] ) {
+				$args['bulk_actions'] = array();
+			}
+
+			$this->status_page( $args );
+			$html = ob_get_clean();
+
+			return $html;
+		}
 
 		/**
 		 * Checks if a particular user has a role.
@@ -4680,6 +4810,7 @@ AND m.meta_value='queued'";
 			global $wp_query;
 			if ( isset( $wp_query->query_vars['paged'] ) && $wp_query->query_vars['paged'] > 0 ) {
 				if ( $this->look_for_shortcode() ) {
+					// Hack to fix paging on the status shortcode.
 					remove_filter( 'template_redirect', 'redirect_canonical' );
 				}
 			}
@@ -5409,6 +5540,3 @@ AND m.meta_value='queued'";
 		}
 	}
 }
-
-
-

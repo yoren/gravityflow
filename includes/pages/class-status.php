@@ -16,23 +16,58 @@ if ( ! class_exists( 'GFForms' ) ) {
 class Gravity_Flow_Status {
 
 	public static function render( $args = array() ) {
-
 		wp_enqueue_script( 'gform_field_filter' );
-		$defaults = array(
-			'action_url'         => admin_url( 'admin.php?page=gravityflow-status' ),
-			'constraint_filters' => array(),
-			'field_ids'          => apply_filters( 'gravityflow_status_fields', array() ),
-			'format'             => 'table', // csv
-			'file_name'          => 'export.csv',
-			'id_column'          => true,
-			'submitter_column'   => true,
-			'step_column'        => true,
-			'status_column'      => true,
-			'last_updated'       => false,
-			'filter_hidden_fields' => array( 'page' => 'gravityflow-status' ),
-		);
-		$args     = array_merge( $defaults, $args );
 
+		$args = array_merge( self::get_defaults(), $args );
+		$args = self::maybe_add_constraint_filters( $args );
+
+		if ( empty( $args['filter_hidden_fields'] ) ) {
+			$args['filter_hidden_fields'] = array( 'page' => 'gravityflow-status' );
+		}
+
+		/**
+		 * Allow the status page/export arguments to be overridden.
+		 *
+		 * @param array $args The status page and export arguments.
+		 */
+		$args = apply_filters( 'gravityflow_status_args', $args );
+
+		if ( $args['format'] == 'table' ) {
+			self::status_page( $args );
+		} else {
+			return self::process_export( $args );
+		}
+	}
+
+	/**
+	 * The default arguments to use when rendering the status page or processing the export.
+	 *
+	 * @return array
+	 */
+	public static function get_defaults() {
+		return array(
+			'action_url'           => admin_url( 'admin.php?page=gravityflow-status' ),
+			'constraint_filters'   => array(),
+			'field_ids'            => apply_filters( 'gravityflow_status_fields', array() ),
+			'format'               => 'table', // csv
+			'file_name'            => 'export.csv',
+			'id_column'            => true,
+			'submitter_column'     => true,
+			'step_column'          => true,
+			'status_column'        => true,
+			'last_updated'         => false,
+			'filter_hidden_fields' => array(),
+		);
+	}
+
+	/**
+	 * If not already configured define the default constraint filters.
+	 *
+	 * @param array $args The status page and export arguments.
+	 *
+	 * @return array
+	 */
+	public static function maybe_add_constraint_filters( $args ) {
 		if ( empty( $args['constraint_filters'] ) ) {
 			$args['constraint_filters'] = apply_filters( 'gravityflow_status_filter', array(
 				'form_id'    => 0,
@@ -50,87 +85,98 @@ class Gravity_Flow_Status {
 			$args['constraint_filters']['end_date'] = '';
 		}
 
-		$args = apply_filters( 'gravityflow_status_args', $args );
+		return $args;
+	}
 
+	/**
+	 * Display the status page.
+	 *
+	 * @param array $args The status page arguments.
+	 */
+	public static function status_page( $args ) {
 		$table = new Gravity_Flow_Status_Table( $args );
 
-		if ( $args['format'] == 'table' ) {
-			?>
-			<form id="gravityflow-status-filter" method="GET" action="">
-				<?php
-				foreach ( $args['filter_hidden_fields'] as $hidden_field => $hidden_field_value ) {
-					printf( '<input type="hidden" name="%s" value="%s"/>', $hidden_field, $hidden_field_value );
-				}
-				?>
-
-				<?php
-				$table->views();
-				$table->filters();
-				$table->prepare_items();
-				?>
-			</form>
-			<form id="gravityflow-status-list" method="POST" action="">
-				<?php
-				$table->display();
-				?>
-			</form>
-
+		?>
+		<form id="gravityflow-status-filter" method="GET" action="">
 			<?php
-			if ( is_admin() ) {
-				$str = $_SERVER['QUERY_STRING'];
-				parse_str( $str, $query_args );
-
-				$remove_args = array( 'paged', '_wpnonce', '_wp_http_referer', 'action', 'action2' );
-				foreach ( $remove_args as $remove_arg_key ) {
-					unset( $query_args[ $remove_arg_key ] );
-				}
-				$query_args['gravityflow_export_nonce'] = wp_create_nonce( 'gravityflow_export_nonce' );
-				$filter_args_str                        = '&' . http_build_query( $query_args );
-				echo sprintf( '<br /><a class="gravityflow-export-status-button button" data-filter_args="%s">%s</a>', $filter_args_str, esc_html__( 'Export', 'gravityflow' ) );
-				echo sprintf( '<img class="gravityflow-spinner" src="%s" style="display:none;margin:5px"/>', GFCommon::get_base_url() . '/images/spinner.gif' );
-			}
-		} else {
-			$upload_dir = wp_upload_dir();
-			if ( ! is_writeable( $upload_dir['basedir'] ) ) {
-				return new WP_Error( 'export_destination_not_writeable', esc_html__( 'The destination file is not writeable', 'gravityflow' ) );
+			foreach ( $args['filter_hidden_fields'] as $hidden_field => $hidden_field_value ) {
+				printf( '<input type="hidden" name="%s" value="%s"/>', $hidden_field, $hidden_field_value );
 			}
 
-			$file_path = trailingslashit( $upload_dir['basedir'] ) . $args['file_name'] . '.csv';
-			$export    = '';
+			$table->views();
+			$table->filters();
 			$table->prepare_items();
-			$page = (int) $table->get_pagination_arg( 'page' );
-			if ( $page < 2 ) {
-				@unlink( $file_path );
-				$export .= $table->export_column_names();
+			?>
+		</form>
+		<form id="gravityflow-status-list" method="POST" action="">
+			<?php
+			$table->display();
+			?>
+		</form>
+
+		<?php
+		if ( is_admin() ) {
+			$str = $_SERVER['QUERY_STRING'];
+			parse_str( $str, $query_args );
+
+			$remove_args = array( 'paged', '_wpnonce', '_wp_http_referer', 'action', 'action2' );
+			foreach ( $remove_args as $remove_arg_key ) {
+				unset( $query_args[ $remove_arg_key ] );
 			}
-			$export .= $table->export();
-
-			@file_put_contents( $file_path, $export, FILE_APPEND );
-
-			$per_page = (int) $table->get_pagination_arg( 'per_page' );
-
-			$total_items = (int) $table->get_pagination_arg( 'total_items' );
-
-			$percent = $page * $per_page / $total_items * 100;
-
-			$total_pages = (int) $table->get_pagination_arg( 'total_pages' );
-
-			$status = $page == $total_pages ? 'complete' : 'incomplete';
-
-			$response = array( 'status' => $status, 'percent' => (int) $percent );
-
-			if ( $status == 'complete' ) {
-				$download_args   = array(
-					'nonce'     => wp_create_nonce( 'gravityflow_download_export' ),
-					'action'    => 'gravityflow_download_export',
-					'file_name' => $args['file_name'],
-				);
-				$download_url    = add_query_arg( $download_args, admin_url( 'admin-ajax.php' ) );
-				$response['url'] = esc_url_raw( $download_url );
-			}
-
-			return $response;
+			$query_args['gravityflow_export_nonce'] = wp_create_nonce( 'gravityflow_export_nonce' );
+			$filter_args_str                        = '&' . http_build_query( $query_args );
+			echo sprintf( '<br /><a class="gravityflow-export-status-button button" data-filter_args="%s">%s</a>', $filter_args_str, esc_html__( 'Export', 'gravityflow' ) );
+			echo sprintf( '<img class="gravityflow-spinner" src="%s" style="display:none;margin:5px"/>', GFCommon::get_base_url() . '/images/spinner.gif' );
 		}
+	}
+
+	/**
+	 * Process the status export.
+	 *
+	 * @param array $args The status export arguments.
+	 *
+	 * @return array|WP_Error
+	 */
+	public static function process_export( $args ) {
+		$upload_dir = wp_upload_dir();
+		if ( ! is_writeable( $upload_dir['basedir'] ) ) {
+			return new WP_Error( 'export_destination_not_writeable', esc_html__( 'The destination file is not writeable', 'gravityflow' ) );
+		}
+
+		$file_path = trailingslashit( $upload_dir['basedir'] ) . $args['file_name'] . '.csv';
+		$export    = '';
+
+		$table = new Gravity_Flow_Status_Table( $args );
+		$table->prepare_items();
+		$page = (int) $table->get_pagination_arg( 'page' );
+
+		if ( $page < 2 ) {
+			@unlink( $file_path );
+			$export .= $table->export_column_names();
+		}
+		$export .= $table->export();
+
+		@file_put_contents( $file_path, $export, FILE_APPEND );
+
+		$per_page    = (int) $table->get_pagination_arg( 'per_page' );
+		$total_items = (int) $table->get_pagination_arg( 'total_items' );
+		$total_pages = (int) $table->get_pagination_arg( 'total_pages' );
+
+		$status   = $page == $total_pages ? 'complete' : 'incomplete';
+		$percent  = $page * $per_page / $total_items * 100;
+		$response = array( 'status' => $status, 'percent' => (int) $percent );
+
+		if ( $status == 'complete' ) {
+			$download_args   = array(
+				'nonce'     => wp_create_nonce( 'gravityflow_download_export' ),
+				'action'    => 'gravityflow_download_export',
+				'file_name' => $args['file_name'],
+			);
+			$download_url    = add_query_arg( $download_args, admin_url( 'admin-ajax.php' ) );
+			$response['url'] = esc_url_raw( $download_url );
+		}
+
+		return $response;
 	}
 }
 
@@ -206,13 +252,15 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 	public $last_updated;
 
+	/**
+	 * All the args for the table.
+	 *
+	 * @var array $args
+	 */
+	public $args;
+
 	public function __construct( $args = array() ) {
 
-		$default_bulk_actions = array( 'print' => esc_html__( 'Print', 'gravityflow' ) );
-
-		if ( GFAPI::current_user_can_any( 'gravityflow_admin_actions' ) ) {
-			$default_bulk_actions['restart_workflow'] = esc_html__( 'Restart Workflow', 'gravityflow' );
-		}
 
 		$default_args = array(
 			'singular'           => __( 'entry', 'gravityflow' ),
@@ -224,7 +272,6 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			'field_ids'          => array(),
 			'screen'             => 'gravityflow-status',
 			'display_all'        => GFAPI::current_user_can_any( 'gravityflow_status_view_all' ),
-			'bulk_actions'       => $default_bulk_actions,
 			'per_page'           => 20,
 			'id_column'          => true,
 			'submitter_column'   => true,
@@ -234,6 +281,14 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		);
 
 		$args = wp_parse_args( $args, $default_args );
+
+		$default_bulk_actions = array( 'print' => esc_html__( 'Print', 'gravityflow' ) );
+
+		if ( GFAPI::current_user_can_any( 'gravityflow_admin_actions' ) ) {
+			$default_bulk_actions['restart_workflow'] = esc_html__( 'Restart Workflow', 'gravityflow' );
+		}
+
+		$args['bulk_actions'] = array_merge( $default_bulk_actions, $args['bulk_actions'] );
 
 		require_once( ABSPATH .'wp-admin/includes/template.php' );
 		if ( ! class_exists( 'WP_Screen' ) ) {
@@ -298,7 +353,6 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	}
 
 	public function filters() {
-
 		$start_date      = isset( $_REQUEST['start-date'] ) ? sanitize_text_field( $_REQUEST['start-date'] ) : null;
 		$end_date        = isset( $_REQUEST['end-date'] ) ? sanitize_text_field( $_REQUEST['end-date'] ) : null;
 		$status          = isset( $_REQUEST['status'] ) ? $_REQUEST['status'] : '';
@@ -458,6 +512,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		</div>
 
 		<?php
+		$this->process_bulk_action();
+		GFCommon::display_admin_message();
 	}
 
 	public function column_cb( $item ) {
@@ -1021,8 +1077,6 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 	public function prepare_items() {
 
-		$this->process_bulk_action();
-
 		$filter_args = $this->get_filter_args();
 
 		if ( isset( $filter_args['form-id'] ) ) {
@@ -1252,12 +1306,37 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			}
 		}
 
-		if ( $bulk_action !== 'restart_workflow' ) {
+		$entry_ids = rgpost( 'entry_ids' );
+		if ( empty( $entry_ids ) || ! is_array( $entry_ids ) ) {
 			return;
 		}
 
-		$entry_ids = rgpost( 'entry_ids' );
-		if ( empty( $entry_ids ) || ! is_array( $entry_ids ) ) {
+		$entry_ids = wp_parse_id_list( $entry_ids );
+
+		$feedback = '';
+
+		/**
+		 * Allows custom bulk actions to be processed in the status table.
+		 *
+		 * Return a string for a standard admin message. Return an instance of WP_Error to display an error.
+		 *
+		 * @param string|WP_Error $feedback The admin message.
+		 * @param string $bulk_action The action.
+		 * @param array $entry_ids The entry IDs to be processed.
+		 * @param array $this ->args The args for this table.
+		 */
+		$feedback = apply_filters( 'gravityflow_bulk_action_status_table', $feedback, $bulk_action, $entry_ids, $this->args );
+
+		if ( ! empty( $feedback ) ) {
+			if ( is_wp_error( $feedback ) ) {
+				GFCommon::add_message( $feedback->get_error_message(), true );
+			} else {
+				GFCommon::add_message( $feedback );
+			}
+			return;
+		}
+
+		if ( $bulk_action !== 'restart_workflow' ) {
 			return;
 		}
 
@@ -1284,6 +1363,9 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			gravity_flow()->process_workflow( $form, $entry_id );
 
 		}
+
+		$message = esc_html__( 'Workflows restarted.',  'gravityflow' );
+		GFCommon::add_message( $message );
 
 		return;
 	}

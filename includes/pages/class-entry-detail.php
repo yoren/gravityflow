@@ -638,8 +638,6 @@ class Gravity_Flow_Entry_Detail {
 		$count                   = 0;
 		$field_count             = sizeof( $form['fields'] );
 		$has_product_fields      = false;
-		$display_fields_mode     = $current_step ? $current_step->display_fields_mode : 'all_fields';
-		$display_fields_selected = $current_step && is_array( $current_step->display_fields_selected ) ? $current_step->display_fields_selected : array();
 
 		foreach ( $form['fields'] as &$field ) {
 			/* @var GF_Field $field */
@@ -649,19 +647,7 @@ class Gravity_Flow_Entry_Detail {
 
 			$is_product_field = GFCommon::is_product_field( $field->type );
 
-			$display_field = true;
-
-			if ( $display_fields_mode == 'selected_fields' ) {
-				if ( ! in_array( $field->id, $display_fields_selected ) ) {
-					$display_field = false;
-				}
-			} else {
-				if ( GFFormsModel::is_field_hidden( $form, $field, array(), $entry ) || $is_product_field ) {
-					$display_field = false;
-				}
-			}
-
-			$display_field = (bool) apply_filters( 'gravityflow_workflow_detail_display_field', $display_field, $field, $form, $entry, $current_step );
+			$display_field = self::is_display_field( $field, $current_step, $form, $entry, $is_product_field );
 
 			switch ( RGFormsModel::get_input_type( $field ) ) {
 				case 'section' :
@@ -672,7 +658,7 @@ class Gravity_Flow_Entry_Detail {
 						?>
 						<tr>
 							<td colspan="2"
-							    class="entry-view-section-break<?php echo $is_last ? ' lastrow' : '' ?>"><?php echo esc_html( rgar( $field, 'label' ) ) ?></td>
+							    class="entry-view-section-break<?php echo $is_last ? ' lastrow' : '' ?>"><?php echo esc_html( $field->label ) ?></td>
 						</tr>
 						<?php
 					}
@@ -707,36 +693,8 @@ class Gravity_Flow_Entry_Detail {
 						continue;
 					}
 
-					$value = RGFormsModel::get_lead_field_value( $entry, $field );
-
-					if ( $field->type == 'product' ) {
-						if ( $field->has_calculation() ) {
-							$product_name = trim( $value[ $field->id . '.1' ] );
-							$price        = trim( $value[ $field->id . '.2' ] );
-							$quantity     = trim( $value[ $field->id . '.3' ] );
-
-							if ( empty( $product_name ) ) {
-								$value[ $field->id . '.1' ] = $field->get_field_label( false, $value );
-							}
-
-							if ( empty( $price ) ) {
-								$value[ $field->id . '.2' ] = '0';
-							}
-
-							if ( empty( $quantity ) ) {
-								$value[ $field->id . '.3' ] = '0';
-							}
-						}
-					}
-
-					$input_type = $field->get_input_type();
-					if ( $input_type == 'hiddenproduct' ) {
-						$display_value = $value[ $field->id . '.2' ];
-					} else {
-						$display_value = GFCommon::get_lead_field_display( $field, $value, $entry['currency'] );
-					}
-
-					$display_value = apply_filters( 'gform_entry_field_value', $display_value, $field, $entry, $form );
+					$value         = RGFormsModel::get_lead_field_value( $entry, $field );
+					$display_value = self::get_display_value( $value, $field, $entry, $form );
 
 					if ( $display_empty_fields || ! empty( $display_value ) || $display_value === '0' ) {
 						$count ++;
@@ -747,7 +705,7 @@ class Gravity_Flow_Entry_Detail {
 
 						$content = '
                                 <tr>
-                                    <td colspan="2" class="entry-view-field-name">' . esc_html( GFCommon::get_label( $field, 0, false, false ) ) . '</td>
+                                    <td colspan="2" class="entry-view-field-name">' . esc_html( self::get_label( $field ) ) . '</td>
                                 </tr>
                                 <tr>
                                     <td colspan="2" class="entry-view-field-value' . $last_row . '">' . $display_value . '</td>
@@ -761,36 +719,94 @@ class Gravity_Flow_Entry_Detail {
 			}
 		}
 
-		$summary_enabled = true;
-		if ( $current_step ) {
-			$meta = $current_step->get_feed_meta();
-			if ( isset( $meta['display_order_summary'] ) && ! $current_step->display_order_summary ) {
-				$summary_enabled = false;
+		if ( $has_product_fields && $format == 'table' ) {
+			self::maybe_show_products_summary( $form, $entry, $current_step );
+		}
+
+	}
+
+	/**
+	 * Determine if the field should be displayed.
+	 *
+	 * @param GF_Field $field The field properties.
+	 * @param Gravity_Flow_Step|null $current_step The current step for this entry.
+	 * @param array $form The form for the current entry.
+	 * @param array $entry The entry being processed for display.
+	 * @param bool $is_product_field Is the current field one of the product field types.
+	 *
+	 * @return bool
+	 */
+	public static function is_display_field( $field, $current_step, $form, $entry, $is_product_field ) {
+		$display_field           = true;
+		$display_fields_mode     = $current_step ? $current_step->display_fields_mode : 'all_fields';
+		$display_fields_selected = $current_step && is_array( $current_step->display_fields_selected ) ? $current_step->display_fields_selected : array();
+
+		if ( $display_fields_mode == 'selected_fields' ) {
+			if ( ! in_array( $field->id, $display_fields_selected ) ) {
+				$display_field = false;
+			}
+		} else {
+			if ( GFFormsModel::is_field_hidden( $form, $field, array(), $entry ) || $is_product_field ) {
+				$display_field = false;
 			}
 		}
 
-		if ( $has_product_fields && $summary_enabled ) {
+		$display_field = (bool) apply_filters( 'gravityflow_workflow_detail_display_field', $display_field, $field, $form, $entry, $current_step );
 
-			$products = GFCommon::get_product_fields( $form, $entry );
+		return $display_field;
+	}
 
-			if ( ! empty( $products['products'] ) ) {
-				$product_summary_label = apply_filters( "gform_order_label_{$form_id}", apply_filters( 'gform_order_label', __( 'Order', 'gravityflow' ), $form_id ), $form_id );
-				if ( $format == 'table' ) {
-					?>
-					<tr>
-						<td colspan="2" class="entry-view-field-name"><?php echo $product_summary_label; ?></td>
-					</tr>
-					<tr>
-						<td colspan="2" class="entry-view-field-value lastrow">
-							<?php self::products_summary( $form, $entry, $products ) ?>
-						</td>
-					</tr>
+	/**
+	 * Get the field value to be displayed.
+	 *
+	 * @param mixed $value The field value from the entry.
+	 * @param GF_Field $field The field properties.
+	 * @param array $form The form for the current entry.
+	 * @param array $entry The entry being processed for display.
+	 *
+	 * @return string
+	 */
+	public static function get_display_value( $value, $field, $entry, $form ) {
+		if ( $field->type == 'product' && $field->has_calculation() ) {
+			$product_name = trim( $value[ $field->id . '.1' ] );
+			$price        = trim( $value[ $field->id . '.2' ] );
+			$quantity     = trim( $value[ $field->id . '.3' ] );
 
-					<?php
-				}
+			if ( empty( $product_name ) ) {
+				$value[ $field->id . '.1' ] = $field->get_field_label( false, $value );
+			}
+
+			if ( empty( $price ) ) {
+				$value[ $field->id . '.2' ] = '0';
+			}
+
+			if ( empty( $quantity ) ) {
+				$value[ $field->id . '.3' ] = '0';
 			}
 		}
 
+		$input_type = $field->get_input_type();
+		if ( $input_type == 'hiddenproduct' ) {
+			$display_value = $value[ $field->id . '.2' ];
+		} else {
+			$display_value = GFCommon::get_lead_field_display( $field, $value, $entry['currency'] );
+		}
+
+		$display_value = apply_filters( 'gform_entry_field_value', $display_value, $field, $entry, $form );
+
+		return $display_value;
+	}
+
+	/**
+	 * Get the label to display for this field. Uses the admin label if the main label is not configured.
+	 *
+	 * @param GF_Field $field The field properties.
+	 *
+	 * @return string
+	 */
+	public static function get_label( $field ) {
+
+		return empty( $field->label ) ? $field->adminLabel : $field->label;
 	}
 
 	public static function products_summary( $form, $entry, $products ) {

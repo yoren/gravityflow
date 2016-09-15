@@ -15,6 +15,6 @@ codeception.yml
 tests/phpunit/build/
 tests/acceptance-tests/_output
 tmp/
-
+.DS_Store
 tests/_output/*
 .DS_Store

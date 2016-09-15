@@ -48,19 +48,16 @@ class Gravity_Flow_Print_Entries {
 				$current_step = $gravity_flow->get_current_step( $form, $entry );
 
 				// Check view permissions
-				global $current_user;
 
-				if ( $entry['created_by'] != $current_user->ID ) {
-					$user_status = self::get_user_status( $current_step );
-					$full_access = GFAPI::current_user_can_any( array( 'gform_full_access', 'gravityflow_status_view_all' ) );
-
-					if ( ! ( $user_status || $full_access ) ) {
-						esc_attr_e( "You don't have permission to view this entry.", 'gravityflow' );
-						continue;
-					}
-				}
+				$entry = GFAPI::get_entry( $entry_id );
 
 				require_once( $gravity_flow->get_base_path() . '/includes/pages/class-entry-detail.php' );
+
+				if ( ! Gravity_Flow_Entry_Detail::is_permission_granted( $entry, $form, $current_step ) ) {
+					esc_attr_e( "You don't have permission to view this entry.", 'gravityflow' );
+					continue;
+				}
+
 				Gravity_Flow_Entry_Detail::entry_detail_grid( $form, $entry, false, array(), $current_step );
 
 				echo '</form>';
