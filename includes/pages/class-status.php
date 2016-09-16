@@ -288,7 +288,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$default_bulk_actions['restart_workflow'] = esc_html__( 'Restart Workflow', 'gravityflow' );
 		}
 
-		$args['bulk_actions'] = array_merge( $default_bulk_actions, $args['bulk_actions'] );
+		$args['bulk_actions'] = isset ( $args['bulk_actions'] ) ? array_merge( $default_bulk_actions, $args['bulk_actions'] ) : $default_bulk_actions;
 
 		require_once( ABSPATH .'wp-admin/includes/template.php' );
 		if ( ! class_exists( 'WP_Screen' ) ) {
