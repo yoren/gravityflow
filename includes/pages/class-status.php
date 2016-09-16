@@ -359,38 +359,6 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$filter_form_id  = empty( $_REQUEST['form-id'] ) ? '' : absint( $_REQUEST['form-id'] );
 		$filter_entry_id = empty( $_REQUEST['entry-id'] ) ? '' : absint( $_REQUEST['entry-id'] );
 
-		$field_filters = null;
-
-		$forms = GFAPI::get_forms();
-		foreach ( $forms as $form ) {
-			$form_filters = GFCommon::get_field_filter_settings( $form );
-
-			$empty_filter = array(
-				'key'       => '',
-				'text'      => esc_html__( 'Fields', 'gravityforms' ),
-				'operators' => array(),
-			);
-			array_unshift( $form_filters, $empty_filter );
-			$field_filters[ $form['id'] ] = $form_filters;
-		}
-		$search_field_ids    = isset( $_REQUEST['f'] ) ? $_REQUEST['f'] : '';
-		$search_field_id     = ( $search_field_ids && is_array( $search_field_ids ) ) ? $search_field_ids[0] : '';
-		$init_field_id       = $search_field_id;
-		$search_operators    = isset( $_REQUEST['o'] ) ? $_REQUEST['o'] : '';
-		$search_operator     = ( $search_operators && is_array( $search_operators ) ) ? $search_operators[0] : false;
-		$init_field_operator = empty( $search_operator ) ? 'contains' : $search_operator;
-		$values              = isset( $_REQUEST['v'] ) ? $_REQUEST['v'] : '';
-		$value               = ( $values && is_array( $values ) ) ? $values[0] : 0;
-		$init_filter_vars    = array(
-			'mode'    => 'off',
-			'filters' => array(
-				array(
-					'field'    => $init_field_id,
-					'operator' => $init_field_operator,
-					'value'    => $value,
-				),
-			),
-		);
 		wp_print_styles( array( 'thickbox' ) );
 		add_thickbox();
 		?>
@@ -406,32 +374,12 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 					       value="<?php echo $start_date; ?>" placeholder="yyyy/mm/dd"/>
 				<?php endif; ?>
 
-				<?php if ( empty( $this->constraint_filters['start_date'] ) ) : ?>
+				<?php if ( empty( $this->constraint_filters['end_date'] ) ) : ?>
 					<label for="end-date"><?php esc_html_e( 'End:', 'gravityflow' ); ?></label>
 					<input type="text" id="end-date" name="end-date" class="datepicker medium-text ymd_dash"
 					       value="<?php echo $end_date; ?>" placeholder="yyyy/mm/dd"/>
 				<?php endif; ?>
-				<?php if ( ! empty( $this->constraint_filters['form_id'] ) ) { ?>
-					<input type="hidden" name="form-id" id="gravityflow-form-select"
-					       value="<?php echo esc_attr( $this->constraint_filters['form_id'] ); ?>">
-				<?php } else { ?>
-					<select id="gravityflow-form-select" name="form-id">
-						<?php
-						$selected = selected( '', $filter_form_id, false );
-						printf( '<option value="" %s >%s</option>', $selected, esc_html__( 'Workflow Form', 'gravityflow' ) );
-						$forms = GFAPI::get_forms();
-						foreach ( $forms as $form ) {
-							$form_id = absint( $form['id'] );
-							$steps   = gravity_flow()->get_steps( $form_id );
-							if ( ! empty( $steps ) ) {
-								$selected = selected( $filter_form_id, $form_id, false );
-								printf( '<option value="%d" %s>%s</option>', $form_id, $selected, esc_html( $form['title'] ) );
-							}
-						}
-						?>
-					</select>
-
-				<?php } ?>
+				<?php $this->output_form_select( $filter_form_id ) ?>
 
 				<div id="entry_filters" style="display:inline-block;"></div>
 				<input type="submit" class="button-secondary" value="<?php esc_html_e( 'Apply', 'gravityflow' ); ?>"/>
@@ -447,11 +395,106 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			<?php $this->search_box( esc_html__( 'Search', 'gravityflow' ), 'gravityflow-search' ); ?>
 		</div>
 
+		<?php
+		$this->output_filter_scripts();
+		$this->output_print_modal();
+		$this->process_bulk_action();
+		GFCommon::display_admin_message();
+	}
+
+	/**
+	 * Output the forms drop down or a hidden input if a form was specified in the constraint filters.
+	 *
+	 * @param string|int $filter_form_id The form ID to filter the entries by.
+	 */
+	public function output_form_select( $filter_form_id ) {
+		if ( ! empty( $this->constraint_filters['form_id'] ) ) {
+
+			printf( '<input type="hidden" name="form-id" id="gravityflow-form-select" value="%s">', esc_attr( $this->constraint_filters['form_id'] ) );
+
+		} else {
+
+			$selected = selected( '', $filter_form_id, false );
+			$options  = sprintf( '<option value="" %s >%s</option>', $selected, esc_html__( 'Workflow Form', 'gravityflow' ) );
+			$forms    = GFAPI::get_forms();
+
+			foreach ( $forms as $form ) {
+				$form_id = absint( $form['id'] );
+				$steps   = gravity_flow()->get_steps( $form_id );
+				if ( ! empty( $steps ) ) {
+					$selected = selected( $filter_form_id, $form_id, false );
+					$options .= sprintf( '<option value="%d" %s>%s</option>', $form_id, $selected, esc_html( $form['title'] ) );
+				}
+			}
+
+			printf( '<select id="gravityflow-form-select" name="form-id">%s</select>', $options );
+
+		}
+	}
+
+	/**
+	 * Get the field filters to be output with the filter scripts.
+	 *
+	 * @return null|array
+	 */
+	public function get_field_filters() {
+		$field_filters = null;
+
+		$forms = GFAPI::get_forms();
+		foreach ( $forms as $form ) {
+			$form_filters = GFCommon::get_field_filter_settings( $form );
+
+			$empty_filter = array(
+				'key'       => '',
+				'text'      => esc_html__( 'Fields', 'gravityforms' ),
+				'operators' => array(),
+			);
+			array_unshift( $form_filters, $empty_filter );
+			$field_filters[ $form['id'] ] = $form_filters;
+		}
+
+		return $field_filters;
+	}
+
+	/**
+	 * Get the init filters to be output with the filter scripts.
+	 *
+	 * @return array
+	 */
+	public function get_init_filter_vars() {
+		$search_field_ids    = isset( $_REQUEST['f'] ) ? $_REQUEST['f'] : '';
+		$search_field_id     = ( $search_field_ids && is_array( $search_field_ids ) ) ? $search_field_ids[0] : '';
+		$init_field_id       = $search_field_id;
+		$search_operators    = isset( $_REQUEST['o'] ) ? $_REQUEST['o'] : '';
+		$search_operator     = ( $search_operators && is_array( $search_operators ) ) ? $search_operators[0] : false;
+		$init_field_operator = empty( $search_operator ) ? 'contains' : $search_operator;
+		$values              = isset( $_REQUEST['v'] ) ? $_REQUEST['v'] : '';
+		$value               = ( $values && is_array( $values ) ) ? $values[0] : 0;
+
+		$init_filter_vars = array(
+			'mode'    => 'off',
+			'filters' => array(
+				array(
+					'field'    => $init_field_id,
+					'operator' => $init_field_operator,
+					'value'    => $value,
+				),
+			),
+		);
+
+		return $init_filter_vars;
+	}
+
+	/**
+	 * Output the filter scripts to the page.
+	 */
+	public function output_filter_scripts() {
+		?>
 		<script>
 			(function ($) {
 				$(document).ready(function () {
-					var gformFieldFilters = <?php echo json_encode( $field_filters ) ?>,
-						gformInitFilter = <?php echo json_encode( $init_filter_vars ) ?>;
+					var gformFieldFilters = <?php echo json_encode( $this->get_field_filters() ) ?>,
+						gformInitFilter = <?php echo json_encode( $this->get_init_filter_vars() ) ?>;
 					var $form_select = $('#gravityflow-form-select');
 					var filterFormId = $form_select.val();
 					var $entry_filters = $('#entry_filters');
@@ -483,10 +526,15 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 				});
 
 			})(jQuery);
-
-
 		</script>
+		<?php
+	}
 
+	/**
+	 * Output the markup for the print modal.
+	 */
+	public function output_print_modal() {
+		?>
 		<div id="print_modal_container" style="display:none;">
 			<div id="print_container">
 
@@ -495,25 +543,22 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 						<p class="description"><?php esc_html_e( 'Print all of the selected entries at once.', 'gravityflow' ); ?></p>
 
-						<input type="checkbox" name="gravityflow-print-timelines" value="print_timelines" checked="checked" id="gravityflow-print-timelines" />
+						<input type="checkbox" name="gravityflow-print-timelines" value="print_timelines" checked="checked" id="gravityflow-print-timelines"/>
 						<label for="gravityflow-print-timelines"><?php esc_html_e( 'Include timelines', 'gravityforms' ); ?></label>
-						<br /><br />
+						<br/><br/>
 
-						<input type="checkbox" name="gravityflow-print-page-break" value="print_page_break" checked="checked" id="gravityflow-print-page-break" />
+						<input type="checkbox" name="gravityflow-print-page-break" value="print_page_break" checked="checked" id="gravityflow-print-page-break"/>
 						<label for="gravityflow-print-page-break"><?php esc_html_e( 'Add page break between entries', 'gravityflow' ); ?></label>
-						<br /><br />
+						<br/><br/>
 
-						<input id="gravityflow-bulk-print-button" type="button" value="<?php esc_attr_e( 'Print', 'gravityflow' ); ?>" class="button" />
+						<input id="gravityflow-bulk-print-button" type="button" value="<?php esc_attr_e( 'Print', 'gravityflow' ); ?>" class="button"/>
 
 					</div>
 				</div>
 
 			</div>
 		</div>
-
 		<?php
-		$this->process_bulk_action();
-		GFCommon::display_admin_message();
 	}
 
 	public function column_cb( $item ) {
