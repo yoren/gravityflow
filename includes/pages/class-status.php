@@ -353,8 +353,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	}
 
 	public function filters() {
-		$start_date      = isset( $_REQUEST['start-date'] ) ? sanitize_text_field( $_REQUEST['start-date'] ) : null;
-		$end_date        = isset( $_REQUEST['end-date'] ) ? sanitize_text_field( $_REQUEST['end-date'] ) : null;
+		$start_date      = isset( $_REQUEST['start-date'] ) ? $this->sanitize_date( $_REQUEST['start-date'] ) : null;
+		$end_date        = isset( $_REQUEST['end-date'] ) ? $this->sanitize_date( $_REQUEST['end-date'] ) : null;
 		$status          = isset( $_REQUEST['status'] ) ? $_REQUEST['status'] : '';
 		$filter_form_id  = empty( $_REQUEST['form-id'] ) ? '' : absint( $_REQUEST['form-id'] );
 		$filter_entry_id = empty( $_REQUEST['entry-id'] ) ? '' : absint( $_REQUEST['entry-id'] );
@@ -569,7 +569,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 	public function column_id( $item ) {
 		$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
-		$url_entry = esc_url_raw( $url_entry );
+		$url_entry = esc_url( $url_entry );
 		$label = absint( $item['id'] );
 
 		$link = "<a href='{$url_entry}'>$label</a>";
@@ -578,7 +578,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 	public function column_default( $item, $column_name ) {
 		$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
-		$url_entry = esc_url_raw( $url_entry );
+		$url_entry = esc_url( $url_entry );
 		$form_id = rgar( $item, 'form_id' );
 		$form = GFAPI::get_form( $form_id );
 
@@ -601,6 +601,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$final_status = rgar( $item, 'workflow_final_status' );
 		$label = empty( $final_status ) ? '' : gravity_flow()->translate_status_label( $final_status );
 		$label = esc_html( $label );
+		$url_entry = esc_url( $url_entry );
 		$link = "<a href='{$url_entry}'>$label</a>";
 
 		echo $link;
@@ -708,6 +709,9 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$display_name = $item['ip'];
 		}
 		$label = esc_html( $display_name );
+
+		$url_entry = esc_url( $url_entry );
+
 		$link  = "<a href='{$url_entry}'>$label</a>";
 		echo $link;
 	}
@@ -719,6 +723,9 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$form    = GFAPI::get_form( $form_id );
 
 		$label = esc_html( $form['title'] );
+
+		$url_entry = esc_url( $url_entry );
+
 		$link  = "<a href='{$url_entry}'>$label</a>";
 		echo $link;
 	}
@@ -728,6 +735,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		if ( $step_id > 0 ) {
 			$step      = gravity_flow()->get_step( $step_id );
 			$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
+
+			$url_entry = esc_url( $url_entry );
 
 			$label = $step ? esc_html( $step->get_name() ) : '';
 			$link  = "<a href='{$url_entry}'>$label</a>";
@@ -748,7 +757,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 	public function column_date_created( $item ) {
 		$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
-
+		$url_entry = esc_url( $url_entry );
 		$label = GFCommon::format_date( $item['date_created'] );
 		$link  = "<a href='{$url_entry}'>$label</a>";
 		echo $link;
@@ -762,6 +771,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			if ( $item['date_created'] != $last_updated ) {
 				$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
 				$last_updated = esc_html( GFCommon::format_date( $last_updated, true, 'Y/m/d' ) );
+				$url_entry = esc_url( $url_entry );
 				$label  = "<a href='{$url_entry}'>$last_updated</a>";
 			}
 		}
@@ -925,7 +935,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$args['start-date'] = $start_date_gmt;
 		} elseif ( ! empty( $_REQUEST['start-date'] ) ) {
 			$start_date         = urldecode( $_REQUEST['start-date'] );
-			$start_date         = sanitize_text_field( $start_date );
+			$start_date         = $this->sanitize_date( $start_date );
 			$start_date_gmt     = $this->prepare_start_date_gmt( $start_date );
 			$args['start-date'] = $start_date_gmt;
 		}
@@ -936,7 +946,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$args['end-date'] = $end_date_gmt;
 		} elseif ( ! empty( $_REQUEST['end-date'] ) ) {
 			$end_date         = urldecode( $_REQUEST['end-date'] );
-			$end_date         = sanitize_text_field( $end_date );
+			$end_date         = $this->sanitize_date( $end_date );
 			$end_date_gmt     = $this->prepare_end_date_gmt( $end_date );
 			$args['end-date'] = $end_date_gmt;
 		}
@@ -1061,7 +1071,13 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	}
 
 	public function prepare_start_date_gmt( $start_date ) {
-		$start_date     = new DateTime( $start_date );
+
+		try {
+			$start_date = new DateTime( $start_date );
+		} catch (Exception $e) {
+			return '';
+		}
+
 		$start_date_str = $start_date->format( 'Y-m-d H:i:s' );
 		$start_date_gmt = get_gmt_from_date( $start_date_str );
 
@@ -1069,7 +1085,12 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	}
 
 	public function prepare_end_date_gmt( $end_date ) {
-		$end_date = new DateTime( $end_date );
+
+		try {
+			$end_date = new DateTime( $end_date );
+		} catch (Exception $e) {
+			return '';
+		}
 
 		$end_datetime_str = $end_date->format( 'Y-m-d H:i:s' );
 		$end_date_str     = $end_date->format( 'Y-m-d' );
@@ -1458,5 +1479,17 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$export .= join( "\r\n", $rows );
 
 		return $export . "\r\n";
+	}
+
+	/**
+	 * Removes all characters except numbers and hyphens.
+	 *
+	 * @param $unsafe_date
+	 *
+	 * @return string
+	 */
+	public function sanitize_date( $unsafe_date ) {
+		$safe_date = preg_replace( '([^0-9-])', '', $unsafe_date );
+		return (string) $safe_date;
 	}
 } //class
