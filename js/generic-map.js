@@ -141,27 +141,7 @@ var GravityFlowGenericMap = function( options ) {
 					
 				},
 				save: function( obj, data ) {
-					
-					data = jQuery.extend( {}, data );
-					
-					for ( var i = 0; i < data.length; i++ ) {
-						
-						if ( data[i].custom_key != '' ) {
-							data[i].custom = 1;
-							data[i].key = data[i].custom_key;
-						}
-						
-						delete data[i].custom_key;
 
-						if ( data[i].custom_value != '' ) {
-							data[i].custom = 1;
-							data[i].key = data[i].custom_value;
-						}
-
-						delete data[i].custom_value;
-						
-					}
-										
 					jQuery( '#'+ self.options.fieldId ).val( jQuery.toJSON( data ) );
 					
 				}
