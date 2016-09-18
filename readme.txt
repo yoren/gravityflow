@@ -80,6 +80,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
             return 'Done!';
         }
+- Fixed an issue on the user input step where the file upload field value could be lost when another field failed validation or when restarting the step and editing another field.
 - Fixed an issue where the label would not be displayed on the entry detail view or user input step when the field label was empty and the admin label was configured.
 - Fixed a fatal error which could occur if the gform_post_add_entry hook passes a WP_Error object for the $entry.
 - Fixed a PHP warning which could occur when using the gravityflow_{type}_token_expiration_days filter.

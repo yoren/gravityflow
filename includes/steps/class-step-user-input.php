@@ -440,7 +440,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			}
 
 			// Loading files that have been uploaded to temp folder
-			$files = GFCommon::json_decode( stripslashes( RGForms::post( 'gform_uploaded_files' ) ) );
+			$files = GFCommon::json_decode( rgpost( 'gform_uploaded_files' ) );
 			if ( ! is_array( $files ) ) {
 				$files = array();
 			}
@@ -448,7 +448,13 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			GFFormsModel::$uploaded_files[ $form_id ] = $files;
 
 			$validation = $this->validate_status_update( $new_status, $form );
+
+			// Upload valid temp single files.
+			$this->maybe_upload_files( $form, $files );
+
 			if ( is_wp_error( $validation ) ) {
+				$this->log_debug( __METHOD__ . '(): Failed validation.' );
+
 				return $validation;
 			}
 
@@ -486,6 +492,85 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		}
 
 		return $feedback;
+	}
+
+	/**
+	 * Get the temporary file path and create the folder if it does not already exist.
+	 *
+	 * @param int $form_id The ID of the form currently being processed.
+	 *
+	 * @return string
+	 */
+	public function get_temp_files_path( $form_id ) {
+		$form_upload_path = GFFormsModel::get_upload_path( $form_id );
+		$target_path      = $form_upload_path . '/tmp/';
+
+		wp_mkdir_p( $target_path );
+		GFCommon::recursive_add_index_file( $form_upload_path );
+
+		return $target_path;
+	}
+
+	/**
+	 * Determines if there are any fields which need files uploading to the temporary folder.
+	 *
+	 * @param array $form The form currently being processed.
+	 * @param array $files An array of files which have already been uploaded.
+	 */
+	public function maybe_upload_files( $form, $files ) {
+		if ( empty( $_FILES ) ) {
+			return;
+		}
+
+		$this->log_debug( __METHOD__ . '(): Checking for fields to process.' );
+
+		$target_path     = $this->get_temp_files_path( $form['id'] );
+		$editable_fields = $this->get_editable_fields();
+
+		foreach ( $form['fields'] as $field ) {
+			if ( ! in_array( $field->id, $editable_fields )
+			     || ! in_array( $field->get_input_type(), array( 'fileupload', 'post_image' ) )
+			     || $field->multipleFiles
+			     || $field->failed_validation
+			) {
+				// Skip fields which are not editable, are the wrong type, or have failed validation.
+				continue;
+			}
+
+			$files = $this->maybe_upload_temp_file( $field, $files, $target_path );
+		}
+
+		GFFormsModel::$uploaded_files[ $form['id'] ] = $files;
+	}
+
+	/**
+	 * Upload the file to the temporary folder for the current field.
+	 *
+	 * @param GF_Field $field The field properties.
+	 * @param array $files An array of files which have already been uploaded.
+	 * @param string $target_path The path to the tmp folder the file should be moved to.
+	 *
+	 * @return array
+	 */
+	public function maybe_upload_temp_file( $field, $files, $target_path ) {
+		$input_name = "input_{$field->id}";
+
+		if ( empty( $_FILES[ $input_name ]['name'] ) ) {
+			return $files;
+		}
+
+		$file_info = GFFormsModel::get_temp_filename( $field->formId, $input_name );
+		$this->log_debug( __METHOD__ . "(): Uploading temporary file for field: {$field->label}({$field->id} - {$field->type}). File info => " . print_r( $file_info, true ) );
+
+		if ( $file_info && move_uploaded_file( $_FILES[ $input_name ]['tmp_name'], $target_path . $file_info['temp_filename'] ) ) {
+			GFFormsModel::set_permissions( $target_path . $file_info['temp_filename'] );
+			$files[ $input_name ] = $file_info['uploaded_filename'];
+			$this->log_debug( __METHOD__ . '(): File uploaded successfully.' );
+		} else {
+			$this->log_debug( __METHOD__ . "(): File could not be uploaded: tmp_name: {$_FILES[ $input_name ]['tmp_name']} - target location: " . $target_path . $file_info['temp_filename'] );
+		}
+
+		return $files;
 	}
 
 	/**
@@ -593,59 +678,26 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				if ( ( $dynamic_conditional_logic_enabled && GFFormsModel::is_field_hidden( $form, $field, array() ) ) ) {
 					continue;
 				}
-				$value = GFFormsModel::get_field_value( $field );
+
+				$submission_is_empty = $field->is_value_submission_empty( $form['id'] );
 
 				if ( $field->get_input_type() == 'fileupload' ) {
-					$input_name = 'input_' . $field->id;
-					$form_id    = $form['id'];
 
-					$value = null;
-
-					if ( isset( $saved_entry[ $field->id ] ) ) {
-						$value = $saved_entry[ $field->id ];
-					}
-
-					if ( ! empty( $_FILES[ $input_name ] ) && ! empty( $_FILES[ $input_name ]['name'] ) ) {
-						$file_path = GFFormsModel::get_file_upload_path( $form['id'], $_FILES[ $input_name ]['name'] );
-						$value     = $file_path['url'];
-
-					} else {
-						$_FILES[ $input_name ] = array( 'name' => '', 'size' => '' );
-					}
-
-					if ( $field->multipleFiles ) {
-						if ( isset( GFFormsModel::$uploaded_files[ $form_id ][ $input_name ] ) ) {
-							$value = empty( $value ) ? '[]' : $value;
-							$value = stripslashes_deep( $value );
-							$value = GFFormsModel::prepare_value( $form, $field, $value, $input_name, $saved_entry['id'], array() );
-						}
-					} else {
-						GFFormsModel::$uploaded_files[ $form_id ][ $input_name ] = $value;
-					}
-
-					$original_value = GFFormsModel::get_lead_field_value( $saved_entry, $field );
-					if ( empty( $value ) && ! empty( $original_value ) ) {
-						continue;
-					}
-
-					$_POST[ $input_name ] = $value;
-
-					if ( $field->isRequired && empty( $value ) ) {
+					if ( $field->isRequired && $submission_is_empty && rgempty( $field->id, $saved_entry ) ) {
 						$field->failed_validation  = true;
 						$field->validation_message = empty( $field->errorMessage ) ? esc_html__( 'This field is required.', 'gravityflow' ) : $field->errorMessage;
 						$valid                     = false;
+
+						continue;
 					}
 
-
-					$field->validate( $value, $form );
+					$field->validate( '', $form );
 					if ( $field->failed_validation ) {
 						$valid = false;
 					}
 
 					continue;
 				}
-
-				$submission_is_empty = $field->is_value_submission_empty( $form['id'] );
 
 				if ( $page_load_conditional_logic_enabled ) {
 					$field_is_hidden = GFFormsModel::is_field_hidden( $form, $field, array(), $entry );
@@ -660,6 +712,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					$field->validation_message = empty( $field->errorMessage ) ? esc_html__( 'This field is required.', 'gravityflow' ) : $field->errorMessage;
 					$valid                     = false;
 				} elseif ( ! $field_is_hidden && ! $submission_is_empty ) {
+					$value = GFFormsModel::get_field_value( $field );
+
 					$field->validate( $value, $form );
 					if ( $field->failed_validation ) {
 						$valid = false;
@@ -945,7 +999,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	public function save_entry( $form, &$lead, $editable_fields ) {
 		global $wpdb;
 
-		gravity_flow()->log_debug( __METHOD__ . '(): Saving entry.' );
+		$this->log_debug( __METHOD__ . '(): Saving entry.' );
 
 		$lead_detail_table = GFFormsModel::get_lead_details_table_name();
 		$is_new_lead       = $lead == null;
@@ -992,7 +1046,18 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				$field->conditionalLogic = null;
 			}
 
-			gravity_flow()->log_debug( __METHOD__ . "(): Saving field {$field->label}(#{$field->id} - {$field->type})." );
+			$this->log_debug( __METHOD__ . "(): Saving field {$field->label}(#{$field->id} - {$field->type})." );
+
+			if ( $field->get_input_type() == 'fileupload' ) {
+				$input_name = 'input_' . $field->id;
+
+				if ( $field->multipleFiles ) {
+					$this->save_multi_file_value( $field, $form, $lead, $input_name );
+				} else {
+					$this->save_single_file_value( $field, $form, $lead, $input_name );
+				}
+				continue;
+			}
 
 			if ( $field->type == 'post_category' ) {
 				$field = GFCommon::add_categories_as_choices( $field, '' );
@@ -1012,7 +1077,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		if ( ! empty( $calculation_fields ) ) {
 			foreach ( $calculation_fields as $calculation_field ) {
 
-				gravity_flow()->log_debug( __METHOD__ . "(): Saving calculated field {$calculation_field->label}(#{$calculation_field->id} - {$calculation_field->type})." );
+				$this->log_debug( __METHOD__ . "(): Saving calculated field {$calculation_field->label}(#{$calculation_field->id} - {$calculation_field->type})." );
 
 				// Make sure that the value gets recalculated
 				$calculation_field->conditionalLogic = null;
@@ -1048,10 +1113,51 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		//saving total field as the last field of the form.
 		if ( ! empty( $total_fields ) ) {
 			foreach ( $total_fields as $total_field ) {
-				gravity_flow()->log_debug( __METHOD__ . '(): Saving total field.' );
+				$this->log_debug( __METHOD__ . '(): Saving total field.' );
 				GFFormsModel::save_input( $form, $total_field, $lead, $current_fields, $total_field->id );
 				GFFormsModel::refresh_lead_field_value( $lead['id'], $total_field->id );
 			}
+		}
+	}
+
+	/**
+	 * Save the single file field value.
+	 *
+	 * @param GF_Field $field The current fields properties.
+	 * @param array $form The form currently being processed.
+	 * @param array $entry The entry currently being processed.
+	 * @param string $input_name The name to use when accessing the input value.
+	 */
+	public function save_single_file_value( $field, $form, $entry, $input_name ) {
+		$existing_value    = rgar( $entry, $field->id );
+		$existing_basename = $existing_value ? basename( $existing_value ) : '';
+		$temp_basename     = rgar( GFFormsModel::$uploaded_files[ $form['id'] ], $input_name );
+
+		if ( ! empty( $temp_basename ) && $existing_basename != $temp_basename ) {
+			$value = $field->get_value_save_entry( '', $form, $input_name, $entry['id'], $entry );
+			GFAPI::update_entry_field( $entry['id'], $field->id, $value );
+		}
+	}
+
+	/**
+	 * Save the value for the multipleFiles enabled field.
+	 *
+	 * @param GF_Field $field The current fields properties.
+	 * @param array $form The form currently being processed.
+	 * @param array $entry The entry currently being processed.
+	 * @param string $input_name The name to use when accessing the input value.
+	 */
+	public function save_multi_file_value( $field, $form, $entry, $input_name ) {
+		if ( ! isset( GFFormsModel::$uploaded_files[ $form['id'] ][ $input_name ] ) ) {
+			// If no new files have been uploaded set an empty array so the existing value will be maintained by $field->get_multifile_value()
+			GFFormsModel::$uploaded_files[ $form['id'] ][ $input_name ] = array();
+		}
+
+		$existing_value = rgar( $entry, $field->id );
+		$value          = $field->get_value_save_entry( $existing_value, $form, $input_name, $entry['id'], $entry );
+
+		if ( $existing_value != $value ) {
+			GFAPI::update_entry_field( $entry['id'], $field->id, $value );
 		}
 	}
 
