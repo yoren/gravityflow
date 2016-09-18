@@ -27,14 +27,10 @@ $I->click( 'File Upload User Input' );
 $I->attachFile( 'input[name=input_2]', 'gravityflow-logo.png' );
 $I->click( 'Update' );
 $I->seeElement( 'div.gravityflow_validation_error' );
-/*
-$I->click( 'Update' );
-
-$I->seeLink( 'gravityflow-logo.png' );
 
 $I->selectOption( 'input[name=input_3]', 'Second Choice' );
 $I->click( 'Update' );
 $I->seeLink( 'gravityflow-logo.png' );
 
 
-*/
+
