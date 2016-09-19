@@ -1029,6 +1029,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 			if ( empty( $form_ids ) ) {
 				$results            = new stdClass();
+				$results->total     = 0;
 				$results->pending   = 0;
 				$results->complete  = 0;
 				$results->cancelled = 0;
