@@ -448,12 +448,11 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			GFFormsModel::$uploaded_files[ $form_id ] = $files;
 
 			$validation = $this->validate_status_update( $new_status, $form );
-
-			// Upload valid temp single files.
-			$this->maybe_upload_files( $form, $files );
-
 			if ( is_wp_error( $validation ) ) {
 				$this->log_debug( __METHOD__ . '(): Failed validation.' );
+
+				// Upload valid temp single files.
+				$this->maybe_upload_files( $form, $files );
 
 				return $validation;
 			}
@@ -1049,13 +1048,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			$this->log_debug( __METHOD__ . "(): Saving field {$field->label}(#{$field->id} - {$field->type})." );
 
 			if ( $field->get_input_type() == 'fileupload' ) {
-				$input_name = 'input_' . $field->id;
-
-				if ( $field->multipleFiles ) {
-					$this->save_multi_file_value( $field, $form, $lead, $input_name );
-				} else {
-					$this->save_single_file_value( $field, $form, $lead, $input_name );
-				}
+				$this->maybe_save_field_files( $field, $form, $lead );
 				continue;
 			}
 
@@ -1121,42 +1114,23 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	}
 
 	/**
-	 * Save the single file field value.
+	 * If any new files where uploaded save them to the entry.
 	 *
 	 * @param GF_Field $field The current fields properties.
 	 * @param array $form The form currently being processed.
 	 * @param array $entry The entry currently being processed.
-	 * @param string $input_name The name to use when accessing the input value.
 	 */
-	public function save_single_file_value( $field, $form, $entry, $input_name ) {
-		$existing_value    = rgar( $entry, $field->id );
-		$existing_basename = $existing_value ? basename( $existing_value ) : '';
-		$temp_basename     = rgar( GFFormsModel::$uploaded_files[ $form['id'] ], $input_name );
-
-		if ( ! empty( $temp_basename ) && $existing_basename != $temp_basename ) {
-			$value = $field->get_value_save_entry( '', $form, $input_name, $entry['id'], $entry );
-			GFAPI::update_entry_field( $entry['id'], $field->id, $value );
-		}
-	}
-
-	/**
-	 * Save the value for the multipleFiles enabled field.
-	 *
-	 * @param GF_Field $field The current fields properties.
-	 * @param array $form The form currently being processed.
-	 * @param array $entry The entry currently being processed.
-	 * @param string $input_name The name to use when accessing the input value.
-	 */
-	public function save_multi_file_value( $field, $form, $entry, $input_name ) {
-		if ( ! isset( GFFormsModel::$uploaded_files[ $form['id'] ][ $input_name ] ) ) {
-			// If no new files have been uploaded set an empty array so the existing value will be maintained by $field->get_multifile_value()
-			GFFormsModel::$uploaded_files[ $form['id'] ][ $input_name ] = array();
+	public function maybe_save_field_files( $field, $form, $entry ) {
+		$input_name = 'input_' . $field->id;
+		if ( $field->multipleFiles && ! isset( GFFormsModel::$uploaded_files[ $form['id'] ][ $input_name ] ) ) {
+			// No new files uploaded, abort.
+			return;
 		}
 
 		$existing_value = rgar( $entry, $field->id );
 		$value          = $field->get_value_save_entry( $existing_value, $form, $input_name, $entry['id'], $entry );
 
-		if ( $existing_value != $value ) {
+		if ( ! empty( $value ) && $existing_value != $value ) {
 			GFAPI::update_entry_field( $entry['id'], $field->id, $value );
 		}
 	}
