@@ -371,13 +371,13 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 				<?php if ( empty( $this->constraint_filters['start_date'] ) ) : ?>
 					<label for="start-date"><?php esc_html_e( 'Start:', 'gravityflow' ); ?></label>
 					<input type="text" id="start-date" name="start-date" class="datepicker medium-text ymd_dash"
-					       value="<?php echo $start_date; ?>" placeholder="yyyy/mm/dd"/>
+					       value="<?php echo $start_date; ?>" placeholder="<?php esc_attr__( 'yyyy-mm-dd', 'gravityflow' ); ?>"/>
 				<?php endif; ?>
 
 				<?php if ( empty( $this->constraint_filters['end_date'] ) ) : ?>
 					<label for="end-date"><?php esc_html_e( 'End:', 'gravityflow' ); ?></label>
 					<input type="text" id="end-date" name="end-date" class="datepicker medium-text ymd_dash"
-					       value="<?php echo $end_date; ?>" placeholder="yyyy/mm/dd"/>
+					       value="<?php echo $end_date; ?>" placeholder="<?php esc_attr__( 'yyyy-mm-dd', 'gravityflow' ); ?>"/>
 				<?php endif; ?>
 				<?php $this->output_form_select( $filter_form_id ) ?>
 
@@ -452,6 +452,13 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			array_unshift( $form_filters, $empty_filter );
 			$field_filters[ $form['id'] ] = $form_filters;
 		}
+
+		/**
+		 * Allows modification of the field filters in the status table.
+		 *
+		 * @param array $field_filters An associative array of filters by Form ID.
+		 */
+		$field_filters = apply_filters( 'gravityflow_field_filters_status_table', $field_filters );
 
 		return $field_filters;
 	}

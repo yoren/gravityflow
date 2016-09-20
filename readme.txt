@@ -74,12 +74,20 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
         }
 - Added the gravityflow_bulk_action_status_table filter to allow custom bulk actions to be processed on the status page.
     Example:
-        add_filter
+        add_filter( 'gravityflow_bulk_action_status_table', 'filter_gravityflow_bulk_action_status_table', 10, 4);
         public function filter_gravityflow_bulk_action_status_table( $feedback, $bulk_action, $entry_ids, $args ) {
             // process entries
 
             return 'Done!';
         }
+- Added the gravityflow_field_filters_status_table filter to allow the field filters to be modified.
+    Example:
+        add_filter( 'gravityflow_field_filters_status_table', 'filter_gravityflow_field_filters_status_table' );
+        public function filter_gravityflow_bulk_action_status_table( $field_filters ) {
+            // Modify the filters
+            return $field_filters;
+        }
+
 - Fixed an issue on the user input step where the file upload field value could be lost when another field failed validation or when restarting the step and editing another field.
 - Fixed an issue where the label would not be displayed on the entry detail view or user input step when the field label was empty and the admin label was configured.
 - Fixed a fatal error which could occur if the gform_post_add_entry hook passes a WP_Error object for the $entry.
