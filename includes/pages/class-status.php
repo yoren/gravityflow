@@ -353,40 +353,23 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	}
 
 	public function filters() {
-		$start_date      = isset( $_REQUEST['start-date'] ) ? $this->sanitize_date( $_REQUEST['start-date'] ) : null;
-		$end_date        = isset( $_REQUEST['end-date'] ) ? $this->sanitize_date( $_REQUEST['end-date'] ) : null;
-		$status          = isset( $_REQUEST['status'] ) ? $_REQUEST['status'] : '';
-		$filter_form_id  = empty( $_REQUEST['form-id'] ) ? '' : absint( $_REQUEST['form-id'] );
-		$filter_entry_id = empty( $_REQUEST['entry-id'] ) ? '' : absint( $_REQUEST['entry-id'] );
-
 		wp_print_styles( array( 'thickbox' ) );
 		add_thickbox();
 		?>
 		<div id="gravityflow-status-filters">
 
 			<div id="gravityflow-status-date-filters">
-
-				<input placeholder="ID" type="text" name="entry-id" id="entry-id" class="small-text"
-				       value="<?php echo $filter_entry_id; ?>"/>
-				<?php if ( empty( $this->constraint_filters['start_date'] ) ) : ?>
-					<label for="start-date"><?php esc_html_e( 'Start:', 'gravityflow' ); ?></label>
-					<input type="text" id="start-date" name="start-date" class="datepicker medium-text ymd_dash"
-					       value="<?php echo $start_date; ?>" placeholder="<?php esc_attr__( 'yyyy-mm-dd', 'gravityflow' ); ?>"/>
-				<?php endif; ?>
-
-				<?php if ( empty( $this->constraint_filters['end_date'] ) ) : ?>
-					<label for="end-date"><?php esc_html_e( 'End:', 'gravityflow' ); ?></label>
-					<input type="text" id="end-date" name="end-date" class="datepicker medium-text ymd_dash"
-					       value="<?php echo $end_date; ?>" placeholder="<?php esc_attr__( 'yyyy-mm-dd', 'gravityflow' ); ?>"/>
-				<?php endif; ?>
-				<?php $this->output_form_select( $filter_form_id ) ?>
+				<?php
+				$filter_entry_id = $this->entry_id_input();
+				$start_date      = $this->date_input( esc_html__( 'Start:', 'gravityflow' ), 'start_date' );
+				$end_date        = $this->date_input( esc_html__( 'End:', 'gravityflow' ), 'end_date' );
+				$filter_form_id  = $this->form_select();
+				$this->status_input();
+				?>
 
 				<div id="entry_filters" style="display:inline-block;"></div>
 				<input type="submit" class="button-secondary" value="<?php esc_html_e( 'Apply', 'gravityflow' ); ?>"/>
 
-				<?php if ( ! empty( $status ) ) : ?>
-					<input type="hidden" name="status" value="<?php echo esc_attr( $status ); ?>"/>
-				<?php endif; ?>
 				<?php if ( ! empty( $start_date ) || ! empty( $end_date ) || ! empty( $filter_form_id ) | ! empty( $filter_entry_id ) ) : ?>
 					<a href="<?php echo esc_url( $this->base_url ); ?>"
 					   class="button-secondary"><?php esc_html_e( 'Clear Filter', 'gravityflow' ); ?></a>
@@ -403,20 +386,57 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	}
 
 	/**
+	 * Output an input for the entry id filter.
+	 *
+	 * @return int|string The entry ID to filter the entries by.
+	 */
+	public function entry_id_input() {
+		$filter_entry_id = empty( $_REQUEST['entry-id'] ) ? '' : absint( $_REQUEST['entry-id'] );
+
+		printf( '<input placeholder="ID" type="text" name="entry-id" id="entry-id" class="small-text" value="%s"/> ', $filter_entry_id );
+
+		return $filter_entry_id;
+	}
+
+	/**
+	 * Output a datepicker input for the specified filter if it is not defined in the constraint filters.
+	 *
+	 * @param string $label The label to be displayed for this input.
+	 * @param string $filter The filter key as used in the constraint filters (start_date or end_date).
+	 *
+	 * @return null|string The date to filter the entries by.
+	 */
+	public function date_input( $label, $filter ) {
+		if ( ! empty( $this->constraint_filters[ $filter ] ) ) {
+			return null;
+		}
+
+		$id   = str_replace( '_', '-', $filter );
+		$date = isset( $_REQUEST[ $id ] ) ? $this->sanitize_date( $_REQUEST[ $id ] ) : null;
+
+		printf( '<label for="%s">%s</label> <input type="text" id="%s" name="%s" class="datepicker medium-text ymd_dash" value="%s" placeholder="%s"/> ', $id, $label, $id, $id, $date, esc_attr__( 'yyyy-mm-dd', 'gravityflow' ) );
+
+		return $date;
+	}
+
+	/**
 	 * Output the forms drop down or a hidden input if a form was specified in the constraint filters.
 	 *
-	 * @param string|int $filter_form_id The form ID to filter the entries by.
+	 * @return string|int $filter_form_id The form ID to filter the entries by.
 	 */
-	public function output_form_select( $filter_form_id ) {
+	public function form_select() {
 		if ( ! empty( $this->constraint_filters['form_id'] ) ) {
 
 			printf( '<input type="hidden" name="form-id" id="gravityflow-form-select" value="%s">', esc_attr( $this->constraint_filters['form_id'] ) );
 
+			return '';
+
 		} else {
 
-			$selected = selected( '', $filter_form_id, false );
-			$options  = sprintf( '<option value="" %s >%s</option>', $selected, esc_html__( 'Workflow Form', 'gravityflow' ) );
-			$forms    = GFAPI::get_forms();
+			$filter_form_id = empty( $_REQUEST['form-id'] ) ? '' : absint( $_REQUEST['form-id'] );
+			$selected       = selected( '', $filter_form_id, false );
+			$options        = sprintf( '<option value="" %s >%s</option>', $selected, esc_html__( 'Workflow Form', 'gravityflow' ) );
+			$forms          = GFAPI::get_forms();
 
 			foreach ( $forms as $form ) {
 				$form_id = absint( $form['id'] );
@@ -429,6 +449,19 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 			printf( '<select id="gravityflow-form-select" name="form-id">%s</select>', $options );
 
+			return $filter_form_id;
+
+		}
+	}
+
+	/**
+	 * Output the hidden input for the status filter.
+	 */
+	public function status_input() {
+		$status = isset( $_REQUEST['status'] ) ? $_REQUEST['status'] : '';
+
+		if ( ! empty( $status ) ) {
+			printf( '<input type="hidden" name="status" value="%s"/>', esc_attr( $status ) );
 		}
 	}
 
