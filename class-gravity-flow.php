@@ -4419,8 +4419,6 @@ AND m.meta_value='queued'";
 
 					$redirect_url = $protocol . $_SERVER['HTTP_HOST'] . $request_uri;
 
-					header( 'Location: ' . $redirect_url );
-
 					$this->log_debug( __METHOD__ . '(): redirect url: ' . $redirect_url );
 
 					wp_safe_redirect( $redirect_url );
