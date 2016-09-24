@@ -464,32 +464,55 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	}
 
 	/**
+	 * Get the field id for use with the filter scripts.
+	 *
+	 * @return string
+	 */
+	public function get_init_filter_field_id() {
+		$search_field_ids = isset( $_REQUEST['f'] ) ? $_REQUEST['f'] : '';
+
+		return ( $search_field_ids && is_array( $search_field_ids ) ) ? $search_field_ids[0] : '';
+	}
+
+	/**
+	 * Get the operator for use with the filter scripts.
+	 *
+	 * @return bool|string
+	 */
+	public function get_init_filter_operator() {
+		$search_operators = isset( $_REQUEST['o'] ) ? $_REQUEST['o'] : '';
+		$search_operator  = ( $search_operators && is_array( $search_operators ) ) ? $search_operators[0] : false;
+
+		return empty( $search_operator ) ? 'contains' : $search_operator;
+	}
+
+	/**
+	 * Get the value for use with the filter scripts.
+	 *
+	 * @return int|string
+	 */
+	public function get_init_filter_value() {
+		$values = isset( $_REQUEST['v'] ) ? $_REQUEST['v'] : '';
+
+		return ( $values && is_array( $values ) ) ? $values[0] : 0;
+	}
+
+	/**
 	 * Get the init filters to be output with the filter scripts.
 	 *
 	 * @return array
 	 */
 	public function get_init_filter_vars() {
-		$search_field_ids    = isset( $_REQUEST['f'] ) ? $_REQUEST['f'] : '';
-		$search_field_id     = ( $search_field_ids && is_array( $search_field_ids ) ) ? $search_field_ids[0] : '';
-		$init_field_id       = $search_field_id;
-		$search_operators    = isset( $_REQUEST['o'] ) ? $_REQUEST['o'] : '';
-		$search_operator     = ( $search_operators && is_array( $search_operators ) ) ? $search_operators[0] : false;
-		$init_field_operator = empty( $search_operator ) ? 'contains' : $search_operator;
-		$values              = isset( $_REQUEST['v'] ) ? $_REQUEST['v'] : '';
-		$value               = ( $values && is_array( $values ) ) ? $values[0] : 0;
-
-		$init_filter_vars = array(
+		return array(
 			'mode'    => 'off',
 			'filters' => array(
 				array(
-					'field'    => $init_field_id,
-					'operator' => $init_field_operator,
-					'value'    => $value,
+					'field'    => $this->get_init_filter_field_id(),
+					'operator' => $this->get_init_filter_operator(),
+					'value'    => $this->get_init_filter_value(),
 				),
 			),
 		);
-
-		return $init_filter_vars;
 	}
 
 	/**
