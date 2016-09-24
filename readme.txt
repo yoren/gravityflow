@@ -75,7 +75,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Added the gravityflow_bulk_action_status_table filter to allow custom bulk actions to be processed on the status page.
     Example:
         add_filter( 'gravityflow_bulk_action_status_table', 'filter_gravityflow_bulk_action_status_table', 10, 4);
-        public function filter_gravityflow_bulk_action_status_table( $feedback, $bulk_action, $entry_ids, $args ) {
+        function filter_gravityflow_bulk_action_status_table( $feedback, $bulk_action, $entry_ids, $args ) {
             // process entries
 
             return 'Done!';
@@ -83,7 +83,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Added the gravityflow_field_filters_status_table filter to allow the field filters to be modified.
     Example:
         add_filter( 'gravityflow_field_filters_status_table', 'filter_gravityflow_field_filters_status_table' );
-        public function filter_gravityflow_bulk_action_status_table( $field_filters ) {
+        function filter_gravityflow_field_filters_status_table( $field_filters ) {
             // Modify the filters
             return $field_filters;
         }
