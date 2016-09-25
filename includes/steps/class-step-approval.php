@@ -695,44 +695,19 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 * @return bool|string If processed return a message to be displayed to the user.
 	 */
 	public function process_assignee_status( $assignee, $new_status, $form ) {
-		$feedback = false;
-
 		if ( ! in_array( $new_status, array( 'pending', 'approved', 'rejected', 'revert' ) ) ) {
-			return $feedback;
+			return false;
 		}
 
 		$current_user_status = $assignee->get_status();
-
-		$current_role_status = false;
-		$role                = false;
-		foreach ( gravity_flow()->get_user_roles() as $role ) {
-			$current_role_status = $this->get_role_status( $role );
-			if ( $current_role_status == 'pending' ) {
-				break;
-			}
-		}
+		list( $role, $current_role_status ) = $this->get_current_role_status();
 
 		if ( $current_user_status != 'pending' && $current_role_status != 'pending' ) {
 			return esc_html__( 'The status could not be changed because this step has already been processed.', 'gravityflow' );
 		}
 
 		if ( $new_status == 'revert' ) {
-			if ( $this->revertEnable ) {
-				$step = gravity_flow()->get_step( $this->revertValue, $this->get_entry() );
-				if ( $step ) {
-					$this->end();
-					$note      = $this->get_name() . ': ' . esc_html__( 'Reverted to step', 'gravityflow' ) . ' - ' . $step->get_label();
-					$user_note = rgpost( 'gravityflow_note' );
-					if ( ! empty( $user_note ) ) {
-						$note .= sprintf( "\n%s: %s", __( 'Note', 'gravityflow' ), $user_note );
-					}
-					$this->add_note( $note );
-					$step->start();
-					$feedback = esc_html__( 'Reverted to step:', 'gravityflow' ) . ' ' . $step->get_label();
-				}
-			}
-
-			return $feedback;
+			return $this->process_revert_status();
 		}
 
 		if ( $current_user_status == 'pending' ) {
@@ -743,6 +718,69 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			$this->update_role_status( $role, $new_status );
 		}
 
+		$this->add_status_update_note( $new_status, $assignee );
+		$status = $this->evaluate_status();
+		$this->update_step_status( $status );
+		$this->refresh_entry();
+
+		return $this->get_status_update_feedback( $new_status );
+	}
+
+	/**
+	 * Get the current role and status.
+	 *
+	 * @return array
+	 */
+	public function get_current_role_status() {
+		$current_role_status = false;
+		$role                = false;
+
+		foreach ( gravity_flow()->get_user_roles() as $role ) {
+			$current_role_status = $this->get_role_status( $role );
+			if ( $current_role_status == 'pending' ) {
+				break;
+			}
+		}
+
+		return array( $role, $current_role_status );
+	}
+
+	/**
+	 * If the revert settings are configured end the current step and start the specified step.
+	 *
+	 * @return bool|string
+	 */
+	public function process_revert_status() {
+		$feedback = false;
+
+		if ( $this->revertEnable ) {
+			$step = gravity_flow()->get_step( $this->revertValue, $this->get_entry() );
+
+			if ( $step ) {
+				$this->end();
+				$note      = $this->get_name() . ': ' . esc_html__( 'Reverted to step', 'gravityflow' ) . ' - ' . $step->get_label();
+				$user_note = rgpost( 'gravityflow_note' );
+
+				if ( ! empty( $user_note ) ) {
+					$note .= sprintf( "\n%s: %s", __( 'Note', 'gravityflow' ), $user_note );
+				}
+
+				$this->add_note( $note );
+				$step->start();
+				$feedback = esc_html__( 'Reverted to step:', 'gravityflow' ) . ' ' . $step->get_label();
+			}
+		}
+
+		return $feedback;
+	}
+
+	/**
+	 * If applicable add a note to the current entry.
+	 *
+	 * @param string $new_status The new status for the step.
+	 * @param Gravity_Flow_Assignee $assignee The step assignee.
+	 */
+	public function add_status_update_note( $new_status, $assignee ) {
 		$note = '';
 
 		if ( $new_status == 'approved' ) {
@@ -759,23 +797,25 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			$user_id = ( $assignee->get_type() == 'user_id' ) ? $assignee->get_id() : 0;
 			$this->add_note( $note, $user_id, $assignee->get_display_name() );
 		}
-
-		$status = $this->evaluate_status();
-		$this->update_step_status( $status );
-		$entry = $this->refresh_entry();
-
-		switch ( $new_status ) {
-			case 'approved':
-				$feedback = __( 'Entry Approved', 'gravityflow' );
-				break;
-			case 'rejected':
-				$feedback = __( 'Entry Rejected', 'gravityflow' );
-				break;
-		}
-
-		return $feedback;
 	}
 
+	/**
+	 * Get the feedback for this status update.
+	 *
+	 * @param string $new_status The new status for the step.
+	 *
+	 * @return bool|string
+	 */
+	public function get_status_update_feedback( $new_status ) {
+		switch ( $new_status ) {
+			case 'approved':
+				return __( 'Entry Approved', 'gravityflow' );
+			case 'rejected':
+				return __( 'Entry Rejected', 'gravityflow' );
+		}
+
+		return false;
+	}
 
 	public function validate_status_update( $new_status, $form ) {
 		$valid = true;
