@@ -28,9 +28,7 @@ $I->see( 'Thanks for contacting us! We will get in touch with you shortly.' );
 $I->loginAsAdmin();
 $I->seeInCurrentUrl( '/wp-admin/' );
 
-// Go to Inbox
-$I->click( 'Workflow' );
-$I->click( 'Status' );
-$I->see( 'Workflow Status' );
+// Go to Status
+$I->amOnWorkflowPage( 'Status' );
 $I->click( 'Schedule step' );
 $I->see( 'Send schedule notification (Queued)' );

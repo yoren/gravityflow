@@ -20,9 +20,8 @@ $I->see( 'Thanks for contacting us! We will get in touch with you shortly.' );
 $I->loginAsAdmin();
 $I->seeInCurrentUrl( '/wp-admin/' );
 
-// Go to Status
-$I->click( 'Workflow' );
-$I->click( 'Inbox' );
+// Go to Inbox
+$I->amOnWorkflowPage( 'Inbox' );
 $I->click( 'File Upload User Input' );
 $I->attachFile( 'input[name=input_2]', 'gravityflow-logo.png' );
 $I->click( 'Update' );

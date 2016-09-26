@@ -27,6 +27,8 @@ $I->fillField( 'textarea[name="input_2"]', 'Some paragraph text' );
 $I->selectOption( 'input[name=input_4]', 'Second Choice' );
 $I->selectOption( 'select[name="input_5"]', 'Medium' );
 $I->fillField( 'input[name="input_6"]', '1' );
+
+$I->wait( 1 );
 $I->selectOption( 'input[name="input_7"]', 'Third Choice' );
 $I->see( '$24.00' );
 $I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 ); // needed for chromedriver
@@ -38,9 +40,7 @@ $I->loginAsAdmin();
 $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
-$I->click( 'Workflow' );
-$I->click( 'Inbox' );
-$I->see( 'Workflow Inbox' );
+$I->amOnWorkflowPage( 'Inbox' );
 $I->click( 'Total depending on Quantity' );
 
 // Approve

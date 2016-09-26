@@ -33,10 +33,7 @@ $I->loginAsAdmin();
 $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
-$I->click( 'Workflow' );
-$I->click( 'Inbox' );
-$I->makeScreenshot('inbox');
-$I->see( 'Workflow Inbox' );
+$I->amOnWorkflowPage( 'Inbox' );
 $I->click( 'Vacation Request' );
 
 // Approve

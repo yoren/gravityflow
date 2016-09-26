@@ -29,4 +29,16 @@ class AcceptanceTester extends \Codeception\Actor {
 		$I->click( 'log out' );
 		$I->wait( 1 );
 	}
+
+	/**
+	 * Navigate to the specified Workflow page in the admin.
+	 *
+	 * @param string $page The page to visit e.g. Inbox or Status
+	 */
+	public function amOnWorkflowPage( $page ) {
+		$I = $this;
+		$I->click( 'Workflow' );
+		$I->click( $page );
+		$I->see( "Workflow $page" );
+	}
 }

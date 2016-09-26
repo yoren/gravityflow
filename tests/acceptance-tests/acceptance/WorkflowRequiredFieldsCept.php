@@ -34,9 +34,7 @@ $I->loginAsAdmin();
 $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
-$I->click( 'Workflow' );
-$I->click( 'Inbox' );
-$I->see( 'Workflow Inbox' );
+$I->amOnWorkflowPage( 'Inbox' );
 $I->click( 'Workflow required fields' );
 $I->see( 'Instructions: please review the values in the fields below and click on the Approve or Reject button' );
 

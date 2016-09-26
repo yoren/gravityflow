@@ -47,8 +47,6 @@ $I->loginAsAdmin();
 $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Status
-$I->click( 'Workflow' );
-$I->click( 'Status' );
-$I->see( 'Workflow Status' );
+$I->amOnWorkflowPage( 'Status' );
 $I->click( 'Conditional field' );
 $I->see( 'Status: Complete' );

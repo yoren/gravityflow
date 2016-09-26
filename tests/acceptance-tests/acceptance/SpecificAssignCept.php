@@ -55,9 +55,7 @@ $I->loginAs( 'admin2', 'admin2' );
 $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
-$I->click( 'Workflow' );
-$I->click( 'Inbox' );
-$I->see( 'Workflow Inbox' );
+$I->amOnWorkflowPage( 'Inbox' );
 $I->click( 'Specific assign' );
 
 // Approve
@@ -72,9 +70,7 @@ $I->loginAs( 'admin3', 'admin3' );
 $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
-$I->click( 'Workflow' );
-$I->click( 'Inbox' );
-$I->see( 'Workflow Inbox' );
+$I->amOnWorkflowPage( 'Inbox' );
 $I->click( 'Specific assign' );
 
 // Approve
