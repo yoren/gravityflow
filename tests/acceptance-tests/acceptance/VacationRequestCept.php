@@ -30,7 +30,7 @@ $I->click( 'input[type=submit]' );
 
 // Login to wp-admin
 $I->loginAsAdmin();
-$I->amOnPage( '/wp-admin' );
+$I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->click( 'Workflow' );

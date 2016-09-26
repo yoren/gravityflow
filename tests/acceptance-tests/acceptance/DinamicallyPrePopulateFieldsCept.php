@@ -37,6 +37,7 @@ $I->see( 'Thanks for contacting us! We will get in touch with you shortly.' );
 
 // Login as admin2
 $I->loginAs( 'admin2', 'admin2' );
+$I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->click( 'Workflow' );
@@ -48,12 +49,11 @@ $I->fillField( 'textarea[name="gravityflow_note"]', 'Quantity updated!' );
 $I->click( 'Update' );
 
 // Log out
-$I->amOnPage( '/dynamically-pre-populate-fields' );
-$I->click( 'Log out' );
+$I->logOut();
 
 // Login as Admin
 $I->loginAsAdmin();
-$I->amOnPage( '/wp-admin' );
+$I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->click( 'Workflow' );

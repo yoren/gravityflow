@@ -42,6 +42,8 @@ $I->see( 'Thanks for contacting us! We will get in touch with you shortly.' );
 
 // Login as admin2
 $I->loginAs( 'admin2', 'admin2' );
+$I->seeInCurrentUrl( '/wp-admin/' );
+
 // Go to Inbox
 $I->click( 'Workflow' );
 $I->click( 'Inbox' );
@@ -60,11 +62,12 @@ $I->fillField( 'textarea[name="gravityflow_note"]', 'Phone added' );
 $I->click( 'Update' );
 
 // Log out
-$I->amOnPage( '/specific-assign' );
-$I->click( 'Log out' );
+$I->logOut();
 
 // Login as admin1
 $I->loginAs( 'admin1', 'admin1' );
+$I->seeInCurrentUrl( '/wp-admin/' );
+
 // Go to Inbox
 $I->click( 'Workflow' );
 $I->click( 'Inbox' );
@@ -77,12 +80,11 @@ $I->fillField( 'textarea[name="gravityflow_note"]', 'Email added' );
 $I->click( 'Update' );
 
 // Log out
-$I->amOnPage( '/specific-assign' );
-$I->click( 'Log out' );
+$I->logOut();
 
 // Login as Admin
 $I->loginAsAdmin();
-$I->amOnPage( '/wp-admin' );
+$I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->click( 'Workflow' );

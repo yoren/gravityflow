@@ -35,12 +35,13 @@ $I->seeElement( 'div.validation_error' );
 
 // fill number field with correct values
 $I->fillField( 'input[name=input_1]', '1234' );
+$I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 ); // needed for chromedriver
 $I->click( 'Submit' );
 $I->see( 'Thanks for contacting us! We will get in touch with you shortly.' );
 
 // Login to wp-admin
 $I->loginAsAdmin();
-$I->amOnPage( '/wp-admin' );
+$I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->click( 'Workflow' );

@@ -31,7 +31,7 @@ $I->see( 'Thanks for contacting us! We will get in touch with you shortly.' );
 
 // Login as Admin
 $I->loginAsAdmin();
-$I->amOnPage( '/wp-admin' );
+$I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->click( 'Workflow' );

@@ -35,7 +35,7 @@ $I->see( 'Thanks for contacting us! We will get in touch with you shortly.' );
 
 // Login to wp-admin
 $I->loginAsAdmin();
-$I->amOnPage( '/wp-admin' );
+$I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->click( 'Workflow' );
@@ -48,11 +48,11 @@ $I->seeElement( 'button[value=approved]' );
 $I->click( 'button[value=approved]' );
 
 // Log out
-$I->amOnPage( '/specific-assign' );
-$I->click( 'Log out' );
+$I->logOut();
 
 // Login as admin2
 $I->loginAs( 'admin2', 'admin2' );
+$I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->click( 'Workflow' );
@@ -65,11 +65,11 @@ $I->seeElement( 'button[value=approved]' );
 $I->click( 'button[value=approved]' );
 
 // Log out
-$I->amOnPage( '/specific-assign' );
-$I->click( 'Log out' );
+$I->logOut();
 
 // Login as admin3
 $I->loginAs( 'admin3', 'admin3' );
+$I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->click( 'Workflow' );
