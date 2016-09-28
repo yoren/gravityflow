@@ -1844,5 +1844,84 @@ abstract class Gravity_Flow_Step extends stdClass {
 	public function restart_action() {
 
 	}
+
+	/**
+	 * Determine if the note is valid and update the form with the result.
+	 *
+	 * @param string $new_status The new status for the current step.
+	 * @param array $form The form currently being processed.
+	 *
+	 * @return bool
+	 */
+	public function validate_note( $new_status, &$form ) {
+		$note  = rgpost( 'gravityflow_note' );
+		$valid = $this->validate_note_mode( $new_status, $note );
+
+		if ( ! $valid ) {
+			$form['workflow_note'] = array(
+				'failed_validation'  => true,
+				'validation_message' => esc_html__( 'A note is required' )
+			);
+		}
+
+		return $valid;
+	}
+
+	/**
+	 * Override this with the validation logic to determine if the submitted note for this step is valid.
+	 *
+	 * @param string $new_status The new status for the current step.
+	 * @param string $note The submitted note.
+	 *
+	 * @return bool
+	 */
+	public function validate_note_mode( $new_status, $note ) {
+		return true;
+	}
+
+	/**
+	 * Get the validation result for this step.
+	 *
+	 * @param bool $valid The steps current validation state.
+	 * @param array $form The form currently being processed.
+	 * @param string $new_status The new status for the current step.
+	 *
+	 * @return array|bool|WP_Error
+	 */
+	public function get_validation_result( $valid, $form, $new_status ) {
+		if ( ! $valid ) {
+			$form['failed_validation'] = true;
+		}
+
+		$validation_result = array(
+			'is_valid' => $valid,
+			'form'     => $form,
+		);
+
+		$validation_result = $this->maybe_filter_validation_result( $validation_result, $new_status );
+
+		if ( is_wp_error( $validation_result ) ) {
+			return $validation_result;
+		}
+
+		if ( ! $validation_result['is_valid'] ) {
+			return new WP_Error( 'validation_result', esc_html__( 'There was a problem while updating your form.', 'gravityflow' ), $validation_result );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Override this to implement a custom filter for this steps validation result.
+	 *
+	 * @param array $validation_result The validation result and form currently being processed.
+	 * @param string $new_status The new status for the current step.
+	 *
+	 * @return array
+	 */
+	public function maybe_filter_validation_result( $validation_result, $new_status ) {
+		return $validation_result;
+	}
+
 }
 

@@ -632,36 +632,63 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		return $feedback;
 	}
 
+	/**
+	 * Determine if this step is valid.
+	 *
+	 * @param string $new_status The new status for the current step.
+	 * @param array $form The form currently being processed.
+	 *
+	 * @return bool
+	 */
 	public function validate_status_update( $new_status, $form ) {
+		$valid = $this->validate_note( $new_status, $form );
+		$valid = $this->validate_editable_fields( $valid, $form );
 
-		$note  = rgpost( 'gravityflow_note' );
-		$valid = true;
+		return $this->get_validation_result( $valid, $form, $new_status );
+	}
+
+	/**
+	 * Determine if the note is valid.
+	 *
+	 * @param string $new_status The new status for the current step.
+	 * @param string $note The submitted note.
+	 *
+	 * @return bool
+	 */
+	public function validate_note_mode( $new_status, $note ) {
 		switch ( $this->note_mode ) {
 			case 'required' :
-				$valid = ! empty( $note );
-				break;
+				return ! empty( $note );
+
 			case 'required_if_in_progress' :
 				if ( $new_status == 'in_progress' && empty( $note ) ) {
-					$valid = false;
+					return false;
 				};
 				break;
+
 			case 'required_if_complete' :
 				if ( $new_status == 'complete' && empty( $note ) ) {
-					$valid = false;
+					return false;
 				};
 		}
 
-		if ( ! $valid ) {
-			$form['workflow_note'] = array( 'failed_validation'  => true,
-			                                'validation_message' => esc_html__( 'A note is required' )
-			);
-		}
+		return true;
+	}
 
+	/**
+	 * Determine if the editable fields for this step are valid.
+	 *
+	 * @param bool $valid The steps current validation state.
+	 * @param array $form The form currently being processed.
+	 *
+	 * @return bool
+	 */
+	public function validate_editable_fields( $valid, &$form ) {
 		$editable_fields = $this->get_editable_fields();
 
 		$conditional_logic_enabled           = gravity_flow()->fields_have_conditional_logic( $form ) && $this->conditional_logic_editable_fields_enabled;
-		$page_load_conditional_logic_enabled = gravity_flow()->fields_have_conditional_logic( $form ) && $this->conditional_logic_editable_fields_enabled && $this->conditional_logic_editable_fields_mode == 'page_load';
-		$dynamic_conditional_logic_enabled   = gravity_flow()->fields_have_conditional_logic( $form ) && $this->conditional_logic_editable_fields_enabled && $this->conditional_logic_editable_fields_mode != 'page_load';
+		$page_load_conditional_logic_enabled = $conditional_logic_enabled && $this->conditional_logic_editable_fields_mode == 'page_load';
+		$dynamic_conditional_logic_enabled   = $conditional_logic_enabled && $this->conditional_logic_editable_fields_mode != 'page_load';
 
 		$saved_entry = $this->get_entry();
 
@@ -721,32 +748,22 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			}
 		}
 
-		if ( ! $valid ) {
-			$form['failed_validation'] = true;
-		}
-
-		$validation_result = array(
-			'is_valid' => $valid,
-			'form'     => $form,
-		);
-
-		$validation_result = apply_filters( 'gravityflow_validation_user_input', $validation_result, $this, $new_status );
-
-		if ( is_wp_error( $validation_result ) ) {
-			return $validation_result;
-		}
-
-		if ( ! $validation_result['is_valid'] ) {
-			$valid = new WP_Error( 'validation_result', esc_html__( 'There was a problem while updating your form.', 'gravityflow' ), $validation_result );
-		}
-
-		if ( $validation_result['is_valid'] ) {
-			return true;
-		}
-
 		return $valid;
 	}
 
+	/**
+	 * Allow the validation result to be overridden using the gravityflow_validation_user_input filter.
+	 *
+	 * @param array $validation_result The validation result and form currently being processed.
+	 * @param string $new_status The new status for the current step.
+	 *
+	 * @return array
+	 */
+	public function maybe_filter_validation_result( $validation_result, $new_status ) {
+
+		return apply_filters( 'gravityflow_validation_user_input', $validation_result, $this, $new_status );
+
+	}
 
 	public function workflow_detail_box( $form, $args ) {
 		global $current_user;

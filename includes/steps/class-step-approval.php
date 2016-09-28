@@ -817,59 +817,72 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return false;
 	}
 
+	/**
+	 * Determine if this step is valid.
+	 *
+	 * @param string $new_status The new status for the current step.
+	 * @param array $form The form currently being processed.
+	 *
+	 * @return bool
+	 */
 	public function validate_status_update( $new_status, $form ) {
-		$valid = true;
-		$note  = rgpost( 'gravityflow_note' );
+		$valid = $this->validate_note( $new_status, $form );
+
+		return $this->get_validation_result( $valid, $form, $new_status );
+	}
+
+	/**
+	 * Determine if the note is valid.
+	 *
+	 * @param string $new_status The new status for the current step.
+	 * @param string $note The submitted note.
+	 *
+	 * @return bool
+	 */
+	public function validate_note_mode( $new_status, $note ) {
 		switch ( $this->note_mode ) {
 			case 'required' :
-				$valid = ! empty( $note );
-				break;
+				return ! empty( $note );
+
 			case 'required_if_approved' :
 				if ( $new_status == 'approved' && empty( $note ) ) {
-					$valid = false;
+					return false;
 				}
 				break;
+
 			case 'required_if_rejected' :
 				if ( $new_status == 'rejected' && empty( $note ) ) {
-					$valid = false;
+					return false;
 				}
 				break;
+
 			case 'required_if_reverted' :
 				if ( $new_status == 'revert' && empty( $note ) ) {
-					$valid = false;
+					return false;
 				}
 				break;
+
 			case 'required_if_reverted_or_rejected' :
 				if ( ( $new_status == 'revert' || $new_status == 'rejected' ) && empty( $note ) ) {
-					$valid = false;
+					return false;
 				}
 		}
 
+		return true;
+	}
 
-		if ( ! $valid ) {
-			$form['failed_validation'] = true;
-			$form['workflow_note']     = array(
-				'failed_validation'  => true,
-				'validation_message' => esc_html__( 'A note is required' )
-			);
-		}
+	/**
+	 * Allow the validation result to be overridden using the gravityflow_validation_approval filter.
+	 *
+	 * @param array $validation_result The validation result and form currently being processed.
+	 * @param string $new_status The new status for the current step.
+	 *
+	 * @return array
+	 */
+	public function maybe_filter_validation_result( $validation_result, $new_status ) {
 
-		$validation_result = array(
-			'is_valid' => $valid,
-			'form'     => $form,
-		);
+		return apply_filters( 'gravityflow_validation_approval', $validation_result, $this );
 
-		$validation_result = apply_filters( 'gravityflow_validation_approval', $validation_result, $this );
-
-		if ( is_wp_error( $validation_result ) ) {
-			return $validation_result;
-		}
-
-		if ( ! $validation_result['is_valid'] ) {
-			$valid = new WP_Error( 'validation_result', esc_html__( 'There was a problem while updating the form.', 'gravityflow' ), $validation_result );
-		}
-
-		return $valid;
 	}
 
 	public function workflow_detail_box( $form, $args ) {
