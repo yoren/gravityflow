@@ -65,6 +65,8 @@ Thank you also to all the translators for doing such a great job of keeping up w
 * Alexander (Anticisco) Gladkov - Russian
 * Edi Weigh (makeii.com) - Chinese
 
-Thank you to all my colleagues at Rocketgenius, Zack Katz (GravityView), Naomi C Bush (Gravity Plus) and Jake Jackson (Gravity PDF) for all their collaboration, support and encouragement.
+Thanks to [BrowserStack](https://www.browserstack.com) for automated browser testing
+
+Thank you to all my colleagues at Rocketgenius, Zack Katz (GravityView), Naomi C Bush (Gravity Plus) and Jake Jackson (Gravity PDF) for all their collaboration, advice, support and encouragement.
 
 Copyright 2015-2016 Steven Henty
