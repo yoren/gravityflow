@@ -1040,51 +1040,93 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	public function get_counts( $args ) {
 
 		if ( ! empty( $args['field_filters'] ) ) {
-			if ( isset( $args['form-id'] ) ) {
-				$form_ids = absint( $args['form-id'] );
-			} else {
-				$form_ids = $this->get_workflow_form_ids();
-			}
-			$results            = new stdClass();
-			$results->total   = 0;
-			$results->pending   = 0;
-			$results->complete  = 0;
-			$results->cancelled = 0;
-			if ( empty( $form_ids ) ) {
-				$this->items = array();
+			return $this->get_field_filter_counts( $args );
+		}
 
-				return $results;
-			}
-			$base_search_criteria                        = $this->get_search_criteria();
-			$pending_search_criteria                     = $base_search_criteria;
-			$pending_search_criteria['field_filters'][]  = array(
-				'key'   => 'workflow_final_status',
-				'value' => 'pending',
-			);
-			$complete_search_criteria                    = $base_search_criteria;
-			$complete_search_criteria['field_filters'][] = array(
-				'key'      => 'workflow_final_status',
-				'operator' => 'not in',
-				'value'    => array( 'pending', 'cancelled' ),
-			);
+		$form_clause = $this->get_form_clause( $args );
 
-			$cancelled_search_criteria                    = $base_search_criteria;
-			$cancelled_search_criteria['field_filters'][] = array(
-				'key'   => 'workflow_final_status',
-				'value' => 'cancelled',
-			);
+		if ( is_object( $form_clause ) ) {
+			return $form_clause;
+		}
 
-			$results->total   = GFAPI::count_entries( $form_ids, $base_search_criteria );
-			$results->pending   = GFAPI::count_entries( $form_ids, $pending_search_criteria );
-			$results->complete  = GFAPI::count_entries( $form_ids, $complete_search_criteria );
-			$results->cancelled = GFAPI::count_entries( $form_ids, $cancelled_search_criteria );
+		global $wpdb;
+
+		$start_clause   = $this->get_start_clause( $args );
+		$end_clause     = $this->get_end_clause( $args );
+		$user_id_clause = $this->get_user_id_clause();
+
+		$lead_table = GFFormsModel::get_lead_table_name();
+		$meta_table = GFFormsModel::get_lead_meta_table_name();
+
+		$sql     = "SELECT
+		(SELECT count(distinct(l.id)) FROM $lead_table l WHERE l.status='active' $form_clause $start_clause $end_clause $user_id_clause) as total,
+		(SELECT count(distinct(l.id)) FROM $lead_table l INNER JOIN  $meta_table m ON l.id = m.lead_id WHERE l.status='active' AND meta_key='workflow_final_status' AND meta_value='pending' $form_clause $start_clause $end_clause $user_id_clause) as pending,
+		(SELECT count(distinct(l.id)) FROM $lead_table l INNER JOIN  $meta_table m ON l.id = m.lead_id WHERE l.status='active' AND meta_key='workflow_final_status' AND meta_value NOT IN('pending', 'cancelled') $form_clause $start_clause $end_clause $user_id_clause) as complete,
+		(SELECT count(distinct(l.id)) FROM $lead_table l INNER JOIN  $meta_table m ON l.id = m.lead_id WHERE l.status='active' AND meta_key='workflow_final_status' AND meta_value='cancelled' $form_clause $start_clause $end_clause $user_id_clause) as cancelled
+		";
+		$results = $wpdb->get_results( $sql );
+
+		return $results[0];
+	}
+
+	/**
+	 * Get the status counts based on the field filters.
+	 *
+	 * @param array $args The status page arguments.
+	 *
+	 * @return stdClass
+	 */
+	public function get_field_filter_counts( $args ) {
+		if ( isset( $args['form-id'] ) ) {
+			$form_ids = absint( $args['form-id'] );
+		} else {
+			$form_ids = $this->get_workflow_form_ids();
+		}
+
+		$results            = new stdClass();
+		$results->total     = 0;
+		$results->pending   = 0;
+		$results->complete  = 0;
+		$results->cancelled = 0;
+
+		if ( empty( $form_ids ) ) {
+			$this->items = array();
 
 			return $results;
 		}
 
+		$base_search_criteria = $pending_search_criteria = $complete_search_criteria = $cancelled_search_criteria = $this->get_search_criteria();
 
-		global $wpdb;
+		$pending_search_criteria['field_filters'][]  = array(
+			'key'   => 'workflow_final_status',
+			'value' => 'pending',
+		);
+		$complete_search_criteria['field_filters'][] = array(
+			'key'      => 'workflow_final_status',
+			'operator' => 'not in',
+			'value'    => array( 'pending', 'cancelled' ),
+		);
+		$cancelled_search_criteria['field_filters'][] = array(
+			'key'   => 'workflow_final_status',
+			'value' => 'cancelled',
+		);
 
+		$results->total     = GFAPI::count_entries( $form_ids, $base_search_criteria );
+		$results->pending   = GFAPI::count_entries( $form_ids, $pending_search_criteria );
+		$results->complete  = GFAPI::count_entries( $form_ids, $complete_search_criteria );
+		$results->cancelled = GFAPI::count_entries( $form_ids, $cancelled_search_criteria );
+
+		return $results;
+	}
+
+	/**
+	 * Prepare the form part of the where clause or a basic results object if there are no forms to query.
+	 *
+	 * @param array $args The status page arguments.
+	 *
+	 * @return stdClass|string
+	 */
+	public function get_form_clause( $args ) {
 		if ( ! empty( $args['form-id'] ) ) {
 			$form_clause = ' AND l.form_id=' . absint( $args['form-id'] );
 		} else {
@@ -1102,36 +1144,59 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$form_clause = ' AND l.form_id IN(' . join( ',', $form_ids ) . ')';
 		}
 
+		return $form_clause;
+	}
+
+	/**
+	 * If a start-date was specified in the page arguments prepare that part of the where clause.
+	 *
+	 * @param array $args The status page arguments.
+	 *
+	 * @return string
+	 */
+	public function get_start_clause( $args ) {
 		$start_clause = '';
 
 		if ( ! empty( $args['start-date'] ) ) {
+			global $wpdb;
 			$start_clause = $wpdb->prepare( ' AND l.date_created >= %s', $args['start-date'] );
 		}
 
+		return $start_clause;
+	}
+
+	/**
+	 * If an end-date was specified in the page arguments prepare that part of the where clause.
+	 *
+	 * @param array $args The status page arguments.
+	 *
+	 * @return string
+	 */
+	public function get_end_clause( $args ) {
 		$end_clause = '';
 
 		if ( ! empty( $args['end-date'] ) ) {
+			global $wpdb;
 			$end_clause = $wpdb->prepare( ' AND l.date_created <= %s', $args['end-date'] );
 		}
 
+		return $end_clause;
+	}
+
+	/**
+	 * If the page is not configured to display entries for all users prepare the created_by part of the where clause.
+	 *
+	 * @return string
+	 */
+	public function get_user_id_clause() {
 		$user_id_clause = '';
+
 		if ( ! $this->display_all ) {
-			$user           = wp_get_current_user();
-			$user_id_clause = $wpdb->prepare( ' AND created_by=%d', $user->ID );
+			global $wpdb;
+			$user_id_clause = $wpdb->prepare( ' AND created_by=%d', get_current_user_id() );
 		}
 
-		$lead_table = GFFormsModel::get_lead_table_name();
-		$meta_table = GFFormsModel::get_lead_meta_table_name();
-
-		$sql     = "SELECT
-		(SELECT count(distinct(l.id)) FROM $lead_table l WHERE l.status='active' $form_clause $start_clause $end_clause $user_id_clause) as total,
-		(SELECT count(distinct(l.id)) FROM $lead_table l INNER JOIN  $meta_table m ON l.id = m.lead_id WHERE l.status='active' AND meta_key='workflow_final_status' AND meta_value='pending' $form_clause $start_clause $end_clause $user_id_clause) as pending,
-		(SELECT count(distinct(l.id)) FROM $lead_table l INNER JOIN  $meta_table m ON l.id = m.lead_id WHERE l.status='active' AND meta_key='workflow_final_status' AND meta_value NOT IN('pending', 'cancelled') $form_clause $start_clause $end_clause $user_id_clause) as complete,
-		(SELECT count(distinct(l.id)) FROM $lead_table l INNER JOIN  $meta_table m ON l.id = m.lead_id WHERE l.status='active' AND meta_key='workflow_final_status' AND meta_value='cancelled' $form_clause $start_clause $end_clause $user_id_clause) as cancelled
-		";
-		$results = $wpdb->get_results( $sql );
-
-		return $results[0];
+		return $user_id_clause;
 	}
 
 	public function prepare_start_date_gmt( $start_date ) {
