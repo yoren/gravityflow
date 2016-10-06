@@ -3455,7 +3455,7 @@ PRIMARY KEY  (id)
 		public function maybe_process_feed( $entry, $form ) {
 			$form_id = absint( $form['id'] );
 
-			if ( empty( $form_id ) || ! isset( $entry['id'] ) ) {
+			if ( empty( $form_id ) || ! isset( $entry['id'] ) || $entry['status'] === 'spam' ) {
 				return $entry;
 			}
 
@@ -3517,7 +3517,7 @@ PRIMARY KEY  (id)
 		}
 
 		public function after_submission( $entry, $form ) {
-			if ( ! isset( $entry['id'] ) ) {
+			if ( ! isset( $entry['id'] ) || $entry['status'] === 'spam' ) {
 				return;
 			}
 			if ( isset( $entry['workflow_step'] ) ) {
