@@ -18,7 +18,7 @@ $I->wantTo( 'Test the vacation request form' );
 // Submit the form
 $I->amOnPage( '/vacation-request' );
 $I->see( 'Vacation Request' );
-$I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
+$I->scrollTo( [ 'css' => '.gform_title' ] );
 $I->fillField('First', 'Some');
 $I->fillField('Last', 'Text');
 $I->selectOption( 'Dep', 'Third Choice' );
@@ -26,6 +26,7 @@ $I->fillField( 'Third choice text', 'Third choice text' );
 $I->fillField( 'Date from', '08/17/2016' );
 $I->fillField( 'Date to', '08/18/2016' );
 $I->fillField( 'Comments', 'Comments text' );
+$I->scrollTo( [ 'css' => 'input[type=submit]' ] );
 $I->click( 'input[type=submit]' );
 
 // Login to wp-admin

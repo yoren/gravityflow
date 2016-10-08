@@ -25,13 +25,13 @@ $I->wantTo( 'Test the field conditional logic and the numeric input validation' 
 $I->amOnPage( '/conditional-field' );
 
 $I->see( 'Conditional field' );
-$I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
+$I->scrollTo( [ 'css' => '.gform_title' ] ); // needed for chromedriver
 $I->selectOption( 'input[name=input_1]', 'Second Choice' );
 $I->seeElement('select[name="input_3"]');
 $I->selectOption( 'select[name=input_3]', 'Second Choice' );
 $I->seeElement('input[name="input_4"]');
 $I->fillField( 'input[name=input_4]', '123NAN' );
-$I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 ); // needed for chromedriver
+$I->scrollTo( [ 'css' => 'input[type=submit]' ] ); // needed for chromedriver
 $I->click( 'Submit' );
 
 // trow number field error
