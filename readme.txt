@@ -1,8 +1,8 @@
 === Gravity Flow ===
 Contributors: stevehenty
 Tags: workflow, approvals, gravity forms
-Requires at least: 4.0
-Tested up to: 4.5.3
+Requires at least: 4.2
+Tested up to: 4.6.1
 License: GPL-3.0+
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -55,7 +55,12 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
-= 1.4.1-dev =
+
+= 1.4.2-dev =
+
+
+
+= 1.4.1 =
 
 - Added security enhancements.
 - Added support for field filters on the status page when a form constraint is active via the shortcode.
