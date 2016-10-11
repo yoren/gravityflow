@@ -58,7 +58,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.4.2-dev =
 
-
+- Fixed issue with empty sections being displayed on the entry detail view.
 
 = 1.4.1 =
 

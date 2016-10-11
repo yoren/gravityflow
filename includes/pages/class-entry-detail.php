@@ -652,7 +652,7 @@ class Gravity_Flow_Entry_Detail {
 			switch ( RGFormsModel::get_input_type( $field ) ) {
 				case 'section' :
 
-					if ( ! GFCommon::is_section_empty( $field, $form, $entry ) || $display_empty_fields ) {
+					if ( ! self::is_section_empty( $field, $current_step, $form, $entry, $display_empty_fields ) ) {
 						$count ++;
 						$is_last = $count >= $field_count ? true : false;
 						?>
@@ -723,6 +723,56 @@ class Gravity_Flow_Entry_Detail {
 			self::maybe_show_products_summary( $form, $entry, $current_step );
 		}
 
+	}
+
+	/**
+	 * Determine if the current section is empty.
+	 *
+	 * @param GF_Field $section_field The section field properties.
+	 * @param Gravity_Flow_Step|null $current_step The current step for this entry.
+	 * @param array $form The form for the current entry.
+	 * @param array $entry The entry being processed for display.
+	 * @param bool $display_empty_fields Indicates if empty fields should be displayed.
+	 *
+	 * @return bool
+	 */
+	public static function is_section_empty( $section_field, $current_step, $form, $entry, $display_empty_fields ) {
+		$cache_key = "Gravity_Flow_Entry_Detail::is_section_empty_{$form['id']}_{$section_field->id}_{$display_empty_fields}";
+		$value     = GFCache::get( $cache_key );
+
+		if ( $value !== false ) {
+			return $value == true;
+		}
+
+		$section_fields = GFCommon::get_section_fields( $form, $section_field->id );
+
+		foreach ( $section_fields as $field ) {
+			if ( $field->type == 'section' ) {
+				continue;
+			}
+
+			$is_product_field = GFCommon::is_product_field( $field->type );
+			$display_field    = self::is_display_field( $field, $current_step, $form, $entry, $is_product_field );
+
+			if ( ! $display_field ) {
+				continue;
+			}
+
+			$value         = RGFormsModel::get_lead_field_value( $entry, $field );
+			$display_value = self::get_display_value( $value, $field, $entry, $form );
+
+			if ( rgblank( $display_value ) && ! $display_empty_fields ) {
+				continue;
+			}
+
+			GFCache::set( $cache_key, 0 );
+
+			return false;
+		}
+
+		GFCache::set( $cache_key, 1 );
+
+		return true;
 	}
 
 	/**
