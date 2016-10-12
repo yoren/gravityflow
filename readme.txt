@@ -58,6 +58,8 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.4.2-dev =
 
+- Fixed an issue where a feed add-ons delay_feed() method was not being called when the feed was intercepted.
+- Fixed an issue with the status for feed add-on based steps.
 - Fixed issue with empty sections being displayed on the entry detail view.
 
 = 1.4.1 =

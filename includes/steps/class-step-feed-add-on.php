@@ -274,6 +274,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 				$setting_key = 'feed_' . $feed['id'];
 				if ( $this->{$setting_key} ) {
 					$this->get_add_on_instance()->log_debug( __METHOD__ . "(): Delaying feed (#{$feed['id']} - {$this->get_feed_label( $feed )}) for entry #{$entry['id']}." );
+					$this->get_add_on_instance()->delay_feed( $feed, $entry, $this->get_form() );
 					unset( $feeds[ $key ] );
 				}
 			}
@@ -437,6 +438,34 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 		$this->_processed_feeds               = $processed_feeds;
 
 		gform_update_meta( $entry_id, 'processed_feeds', $processed_feeds );
+	}
+
+	/**
+	 * Evaluates the status for the step.
+	 *
+	 * The step is only complete when all the feeds for this step have been added to the entry meta processed_feeds array.
+	 *
+	 * @return string 'pending' or 'complete'
+	 */
+	public function evaluate_status() {
+		$status = $this->get_status();
+
+		if ( empty( $status ) ) {
+			return 'pending';
+		}
+
+		if ( $status == 'pending' ) {
+			$add_on_feeds = $this->get_processed_add_on_feeds();
+			$feeds        = $this->get_feeds();
+			foreach ( $feeds as $feed ) {
+				$setting_key = 'feed_' . $feed['id'];
+				if ( $this->{$setting_key} && ! in_array( $feed['id'], $add_on_feeds ) ) {
+					return 'pending';
+				}
+			}
+		}
+
+		return 'complete';
 	}
 
 }

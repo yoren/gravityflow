@@ -41,34 +41,6 @@ class Gravity_Flow_Step_Feed_Dropbox extends Gravity_Flow_Step_Feed_Add_On {
 		return false;
 	}
 
-	/**
-	 * Evaluates the status for the step.
-	 *
-	 * The step is only complete after gravity_flow_step_dropbox_post_upload() has added all the feeds for this step back into the entry meta processed_feeds array.
-	 *
-	 * @return string 'pending' or 'complete'
-	 */
-	public function evaluate_status() {
-		$status = $this->get_status();
-
-		if ( empty( $status ) ) {
-			return 'pending';
-		}
-
-		if ( $status == 'pending' ) {
-			$add_on_feeds = $this->get_processed_add_on_feeds();
-			$feeds        = $this->get_feeds();
-			foreach ( $feeds as $feed ) {
-				$setting_key = 'feed_' . $feed['id'];
-				if ( $this->{$setting_key} && ! in_array( $feed['id'], $add_on_feeds ) ) {
-					return 'pending';
-				}
-			}
-		}
-
-		return 'complete';
-	}
-
 }
 
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_Dropbox() );
