@@ -1126,7 +1126,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 	/**
 	 * Evaluates the status for the step.
-	 * Override this method for interactive or long running steps.
 	 *
 	 * @return string 'queued' or 'complete'
 	 */
@@ -1139,6 +1138,21 @@ abstract class Gravity_Flow_Step extends stdClass {
 			return $this->get_expiration_status_key();
 		}
 
+		$status = $this->get_status();
+
+		if ( empty( $status ) ) {
+			return 'pending';
+		}
+
+		return $this->status_evaluation();
+	}
+
+	/**
+	 * Override this to perform custom evaluation of the step status.
+	 *
+	 * @return string
+	 */
+	public function status_evaluation() {
 		return 'complete';
 	}
 

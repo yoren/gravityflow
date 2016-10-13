@@ -547,15 +547,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return ! in_array( $status, array( 'pending', 'queued' ) );
 	}
 
-	public function evaluate_status() {
-		if ( $this->is_queued() ) {
-			return 'queued';
-		}
-
-		if ( $this->is_expired() ) {
-			return $this->get_expiration_status_key();
-		}
-
+	public function status_evaluation() {
 		$approvers   = $this->get_assignees();
 		$step_status = 'approved';
 

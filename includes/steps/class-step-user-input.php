@@ -343,19 +343,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		return $this->assign();
 	}
 
-	public function evaluate_status() {
-
-		if ( $this->is_queued() ) {
-			return 'queued';
-		}
-
-		if ( $this->is_expired() ) {
-			return $this->get_expiration_status_key();
-		}
-
+	public function status_evaluation() {
 		$assignee_details = $this->get_assignees();
-
-		$step_status = 'complete';
+		$step_status      = 'complete';
 
 		foreach ( $assignee_details as $assignee ) {
 			$user_status = $assignee->get_status();

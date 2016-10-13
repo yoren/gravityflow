@@ -447,21 +447,14 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	 *
 	 * @return string 'pending' or 'complete'
 	 */
-	public function evaluate_status() {
-		$status = $this->get_status();
+	public function status_evaluation() {
+		$add_on_feeds = $this->get_processed_add_on_feeds();
+		$feeds        = $this->get_feeds();
 
-		if ( empty( $status ) ) {
-			return 'pending';
-		}
-
-		if ( $status == 'pending' ) {
-			$add_on_feeds = $this->get_processed_add_on_feeds();
-			$feeds        = $this->get_feeds();
-			foreach ( $feeds as $feed ) {
-				$setting_key = 'feed_' . $feed['id'];
-				if ( $this->{$setting_key} && ! in_array( $feed['id'], $add_on_feeds ) ) {
-					return 'pending';
-				}
+		foreach ( $feeds as $feed ) {
+			$setting_key = 'feed_' . $feed['id'];
+			if ( $this->{$setting_key} && ! in_array( $feed['id'], $add_on_feeds ) ) {
+				return 'pending';
 			}
 		}
 
