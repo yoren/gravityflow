@@ -3812,6 +3812,7 @@ PRIMARY KEY  (id)
 				'detail_base_url'   => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
 				'check_permissions' => $check_permissions,
 				'timeline'          => $a['timeline'],
+				'sidebar'           => $a['sidebar'],
 			);
 
 			$this->inbox_page( $args );
