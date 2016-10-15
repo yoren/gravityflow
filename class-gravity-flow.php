@@ -3890,19 +3890,16 @@ PRIMARY KEY  (id)
 		 */
 		public function check_user_role( $role, $user_id = null ) {
 
-			if ( is_numeric( $user_id ) ) {
-				$user = get_userdata( $user_id );
-			} else {
-				$user = wp_get_current_user();
-			}
-
-			if ( empty( $user ) ) {
-				return false;
-			}
-
-			return in_array( $role, (array) $user->roles );
+			return in_array( $role, $this->get_user_roles( $user_id ) );
 		}
 
+		/**
+		 * Get the roles for the current or specified user.
+		 *
+		 * @param null|int $user_id (Optional) The ID of a user. Defaults to the current user.
+		 *
+		 * @return array
+		 */
 		public function get_user_roles( $user_id = null ) {
 
 			if ( is_numeric( $user_id ) ) {
@@ -3912,7 +3909,7 @@ PRIMARY KEY  (id)
 			}
 
 			if ( empty( $user ) ) {
-				return false;
+				return array();
 			}
 
 			return (array) $user->roles;
