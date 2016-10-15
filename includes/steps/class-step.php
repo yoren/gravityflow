@@ -1209,6 +1209,25 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
+	 * Get the current role and status.
+	 *
+	 * @return array
+	 */
+	public function get_current_role_status() {
+		$current_role_status = false;
+		$role                = false;
+
+		foreach ( gravity_flow()->get_user_roles() as $role ) {
+			$current_role_status = $this->get_role_status( $role );
+			if ( $current_role_status == 'pending' ) {
+				break;
+			}
+		}
+
+		return array( $role, $current_role_status );
+	}
+
+	/**
 	 * Returns the status for the given role.
 	 *
 	 * @param string $role
@@ -1312,6 +1331,33 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$assignee = new Gravity_Flow_Assignee( $args, $this );
 
 		return $assignee;
+	}
+
+	/**
+	 * Get the assignee key for the current access token or user.
+	 *
+	 * @return string
+	 */
+	public function get_current_assignee_key() {
+		if ( $token = gravity_flow()->decode_access_token() ) {
+			$assignee_key = sanitize_text_field( $token['sub'] );
+		} else {
+			$assignee_key = 'user_id|' . get_current_user_id();
+		}
+
+		return $assignee_key;
+	}
+
+	/**
+	 * Get the status for the current assignee.
+	 *
+	 * @return bool|mixed
+	 */
+	public function get_current_assignee_status() {
+		$assignee_key = $this->get_current_assignee_key();
+		$assignee     = $this->get_assignee( $assignee_key );
+
+		return $assignee->get_status();
 	}
 
 	/**

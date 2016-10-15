@@ -621,7 +621,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$step_status_key = 'gravityflow_approval_new_status_step_' . $this->get_id();
 
 		if ( isset( $_REQUEST[ $step_status_key ] ) || isset( $_GET['gflow_token'] ) || $token = gravity_flow()->decode_access_token() ) {
-			global $current_user;
 			if ( isset( $_POST['_wpnonce'] ) && check_admin_referer( 'gravityflow_approvals_' . $this->get_id() ) ) {
 				$new_status = rgpost( $step_status_key );
 				$validation = $this->validate_status_update( $new_status, $form );
@@ -629,11 +628,8 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					return $validation;
 				}
 
-				if ( $token = gravity_flow()->decode_access_token() ) {
-					$assignee = $this->get_assignee( sanitize_text_field( $token['sub'] ) );
-				} else {
-					$assignee = $this->get_assignee( 'user_id|' . $current_user->ID );
-				}
+				$assignee_key = $this->get_current_assignee_key();
+				$assignee     = $this->get_assignee( $assignee_key );
 			} else {
 
 				$gflow_token = rgget( 'gflow_token' );
@@ -663,7 +659,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					return false;
 				}
 
-				$assignee = $this->get_assignee( 'user_id|' . $current_user->ID );
+				$assignee = $this->get_assignee( 'user_id|' . get_current_user_id() );
 			}
 
 			$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
@@ -716,25 +712,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$this->refresh_entry();
 
 		return $this->get_status_update_feedback( $new_status );
-	}
-
-	/**
-	 * Get the current role and status.
-	 *
-	 * @return array
-	 */
-	public function get_current_role_status() {
-		$current_role_status = false;
-		$role                = false;
-
-		foreach ( gravity_flow()->get_user_roles() as $role ) {
-			$current_role_status = $this->get_role_status( $role );
-			if ( $current_role_status == 'pending' ) {
-				break;
-			}
-		}
-
-		return array( $role, $current_role_status );
 	}
 
 	/**
