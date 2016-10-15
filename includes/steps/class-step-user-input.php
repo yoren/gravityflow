@@ -381,13 +381,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			return $this->_editable_fields;
 		}
 
-		if ( $token = gravity_flow()->decode_access_token() ) {
-			$current_user_key = sanitize_text_field( $token['sub'] );
-		} else {
-			global $current_user;
-			$current_user_key = 'user_id|' . $current_user->ID;
-		}
-
+		$current_user_key = $this->get_current_assignee_key();
 		$editable_fields  = array();
 		$assignee_details = $this->get_assignees();
 
@@ -467,14 +461,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 			$this->maybe_adjust_assignment( $previous_assignees );
 
-			if ( $token = gravity_flow()->decode_access_token() ) {
-				$assignee_key = sanitize_text_field( $token['sub'] );
-			} else {
-				$user         = wp_get_current_user();
-				$assignee_key = 'user_id|' . $user->ID;
-			}
-
-			$assignee = $this->get_assignee( $assignee_key );
+			$assignee_key = $this->get_current_assignee_key();
+			$assignee     = $this->get_assignee( $assignee_key );
 
 			$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
 
@@ -573,14 +561,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		if ( $new_status == 'complete' ) {
 			$current_user_status = $assignee->get_status();
 
-			$current_role_status = false;
-			$role                = false;
-			foreach ( gravity_flow()->get_user_roles() as $role ) {
-				$current_role_status = $this->get_role_status( $role );
-				if ( $current_role_status == 'pending' ) {
-					break;
-				}
-			}
+			list( $role, $current_role_status ) = $this->get_current_role_status();
+
 			if ( $current_user_status == 'pending' ) {
 				$assignee->update_status( 'complete' );
 			}
@@ -755,110 +737,24 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 	}
 
+	/**
+	 * Display the workflow detail box for this step.
+	 *
+	 * @param array $form The current form.
+	 * @param array $args The page arguments.
+	 */
 	public function workflow_detail_box( $form, $args ) {
-		global $current_user;
-
-		$form_id = absint( $form['id'] );
-
-		$status_str        = __( 'Pending Input', 'gravityflow' );
-		$approve_icon      = '<i class="fa fa-check" style="color:green"></i>';
-		$input_step_status = $this->get_status();
-		if ( $input_step_status == 'complete' ) {
-			$status_str = $approve_icon . __( 'Complete', 'gravityflow' );
-		} elseif ( $input_step_status == 'queued' ) {
-			$status_str = __( 'Queued', 'gravityflow' );
-		}
-
-		$display_step_status = (bool) $args['step_status'];
-
 		?>
 		<div>
 			<?php
-			/**
-			 * Allows the assignee status list to be hidden.
-			 *
-			 * @param array $form
-			 * @param array $entry
-			 * @param Gravity_Flow_Step $current_step
-			 */
-			$display_assignee_status_list = apply_filters( 'gravityflow_assignee_status_list_user_input', $display_step_status, $form, $this );
-			if ( $display_assignee_status_list ) {
-				?>
-				<h4 style="margin-bottom:10px;"><?php echo $this->get_name() . ' (' . $status_str . ')' ?></h4>
-				<ul>
-					<?php
-					$assignees = $this->get_assignees();
 
-					gravity_flow()->log_debug( __METHOD__ . '(): assignee details: ' . print_r( $assignees, true ) );
+			$this->maybe_display_assignee_status_list( $args, $form );
 
-					foreach ( $assignees as $assignee ) {
+			$assignee_status = $this->get_current_assignee_status();
+			list( $role, $role_status ) = $this->get_current_role_status();
+			$can_update = $assignee_status == 'pending' || $role_status == 'pending';
 
-						gravity_flow()->log_debug( __METHOD__ . '(): showing status for: ' . $assignee->get_key() );
-
-						$assignee_status = $assignee->get_status();
-
-						gravity_flow()->log_debug( __METHOD__ . '(): assignee status: ' . $assignee_status );
-
-						if ( ! empty( $assignee_status ) ) {
-
-							$assignee_type = $assignee->get_type();
-							$assignee_id   = $assignee->get_id();
-
-							if ( $assignee_type == 'user_id' ) {
-								$user_info    = get_user_by( 'id', $assignee_id );
-								$status_label = $this->get_status_label( $assignee_status );
-								echo sprintf( '<li>%s: %s (%s)</li>', esc_html__( 'User', 'gravityflow' ), $user_info->display_name, $status_label );
-							} elseif ( $assignee_type == 'email' ) {
-								$email        = $assignee_id;
-								$status_label = $this->get_status_label( $assignee_status );
-								echo sprintf( '<li>%s: %s (%s)</li>', esc_html__( 'Email', 'gravityflow' ), $email, $status_label );
-							} elseif ( $assignee_type == 'role' ) {
-								$status_label = $this->get_status_label( $assignee_status );
-								$role_name    = translate_user_role( $assignee_id );
-								echo sprintf( '<li>%s: (%s)</li>', esc_html__( 'Role', 'gravityflow' ), $role_name, $status_label );
-								echo '<li>' . $role_name . ': ' . $assignee_status . '</li>';
-							}
-						}
-					}
-
-					?>
-				</ul>
-				<?php
-			}
-			?>
-			<div>
-				<?php
-
-				if ( $token = gravity_flow()->decode_access_token() ) {
-					$assignee_key = sanitize_text_field( $token['sub'] );
-				} else {
-					$assignee_key = 'user_id|' . $current_user->ID;
-				}
-				$assignee        = $this->get_assignee( $assignee_key );
-				$assignee_status = $assignee->get_status();
-
-				$role_status = false;
-				foreach ( gravity_flow()->get_user_roles() as $role ) {
-					$role_status = $this->get_role_status( $role );
-					if ( $role_status == 'pending' ) {
-						break;
-					}
-				}
-
-				if ( $assignee_status == 'pending' || $role_status == 'pending' ) {
-					?>
-					<script>
-						(function (GFFlowInput, $) {
-							$(document).ready(function () {
-								$('#gravityflow_update_button').prop('disabled', false);
-							});
-						}(window.GFFlowInput = window.GFFlowInput || {}, jQuery));
-					</script>
-					<?php
-				}
-				?>
-			</div>
-			<?php
+			$this->maybe_enable_update_button( $can_update );
 
 			/**
 			 * Allows content to be added in the workflow box below the status list.
@@ -868,96 +764,219 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			 */
 			do_action( 'gravityflow_below_status_list_user_input', $this, $form );
 
-			$can_update = $assignee_status == 'pending' || $role_status == 'pending';
-
 			if ( $can_update ) {
-				$default_status = $this->default_status ? $this->default_status : 'complete';
-
-				if ( $this->note_mode !== 'hidden' ) {
-					$invalid_note = ( isset( $form['workflow_note'] ) && is_array( $form['workflow_note'] ) && $form['workflow_note']['failed_validation'] );
-					$posted_note  = '';
-					if ( rgar( $form, 'failed_validation' ) ) {
-						$posted_note = rgpost( 'gravityflow_note' );
-					}
-					?>
-
-					<div>
-						<label id="gravityflow-notes-label"
-						       for="gravityflow-note">
-							<?php
-							esc_html_e( 'Note', 'gravityflow' );
-							$required_indicator = ( $this->note_mode == 'required' ) ? '*' : '';
-							printf( "<span class='gfield_required'>%s</span>", $required_indicator );
-							?>
-						</label>
-					</div>
-
-					<textarea id="gravityflow-note" style="width:100%;" rows="4" class="wide"
-					          name="gravityflow_note"><?php echo esc_textarea( $posted_note ) ?></textarea>
-					<?php
-
-					if ( $invalid_note ) {
-						printf( "<div class='gfield_description validation_message'>%s</div>", $form['workflow_note']['validation_message'] );
-					}
-				}
-				if ( $default_status == 'hidden' ) {
-					?>
-					<input type="hidden" id="gravityflow_status_hidden" name="gravityflow_status" value="complete"/>
-					<?php
-				} else {
-
-					$in_progress_label = esc_html__( 'In progress', 'gravityflow' );
-
-					/**
-					 * Allows the 'in progress' label to be modified on the User Input step.
-					 *
-					 * @params string $in_progress_label
-					 * @params Gravity_Flow_Step $this The current step.
-					 */
-					$in_progress_label = apply_filters( 'gravityflow_in_progress_label_user_input', $in_progress_label, $this );
-
-
-					$complete_label = esc_html__( 'Complete', 'gravityflow' );
-
-					/**
-					 * Allows the 'complete' label to be modified on the User Input step.
-					 *
-					 * @params string $complete_label
-					 * @params Gravity_Flow_Step $this The current step.
-					 */
-					$complete_label = apply_filters( 'gravityflow_complete_label_user_input', $complete_label, $this )
-					?>
-					<br/><br/>
-					<div>
-						<label for="gravityflow_in_progress"><input type="radio" id="gravityflow_in_progress"
-						                                            name="gravityflow_status" <?php checked( $default_status, 'in_progress' ); ?>
-						                                            value="in_progress"/><?php echo $in_progress_label; ?>
-						</label>&nbsp;&nbsp;
-						<label for="gravityflow_complete"><input type="radio" id="gravityflow_complete"
-						                                         name="gravityflow_status"
-						                                         value="complete" <?php checked( $default_status, 'complete' ); ?>/><?php echo $complete_label; ?>
-						</label>
-					</div>
-					<?php
-				}
-				?>
-				<br/>
-				<div class="gravityflow-action-buttons">
-					<?php
-					$button_text      = esc_html__( 'Update', 'gravityflow' );
-					$button_text      = apply_filters( 'gravityflow_update_button_text_user_input', $button_text, $form, $this );
-					$update_button_id = 'gravityflow_update_button';
-					$button_click     = "jQuery('#action').val('update'); jQuery('#gform_{$form_id}')[0].submit(); return false;";
-					$update_button    = '<input id="' . $update_button_id . '" disabled="disabled" class="button button-large button-primary" type="submit" tabindex="4" value="' . $button_text . '" name="save" onclick="' . $button_click . '"/>';
-					echo apply_filters( 'gravityflow_update_button_user_input', $update_button );
-					?>
-				</div>
-				<?php
+				$this->maybe_display_note_box( $form );
+				$this->display_status_inputs();
+				$this->display_update_button( $form );
 			}
 
 			?>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Get the status string, including icon (if complete).
+	 *
+	 * @return string
+	 */
+	public function get_status_string() {
+		$input_step_status = $this->get_status();
+		$status_str        = __( 'Pending Input', 'gravityflow' );
+
+		if ( $input_step_status == 'complete' ) {
+			$approve_icon = '<i class="fa fa-check" style="color:green"></i>';
+			$status_str   = $approve_icon . __( 'Complete', 'gravityflow' );
+		} elseif ( $input_step_status == 'queued' ) {
+			$status_str = __( 'Queued', 'gravityflow' );
+		}
+
+		return $status_str;
+	}
+
+	/**
+	 * If applicable display the assignee status list.
+	 *
+	 * @param array $args The page arguments.
+	 * @param array $form The current form.
+	 */
+	public function maybe_display_assignee_status_list( $args, $form ) {
+		$display_step_status = (bool) $args['step_status'];
+
+		/**
+		 * Allows the assignee status list to be hidden.
+		 *
+		 * @param array $form
+		 * @param array $entry
+		 * @param Gravity_Flow_Step $current_step
+		 */
+		$display_assignee_status_list = apply_filters( 'gravityflow_assignee_status_list_user_input', $display_step_status, $form, $this );
+		if ( ! $display_assignee_status_list ) {
+			return;
+		}
+
+		echo sprintf( '<h4 style="margin-bottom:10px;">%s (%s)</h4>', $this->get_name(), $this->get_status_string() );
+
+		echo '<ul>';
+
+		$assignees = $this->get_assignees();
+
+		$this->log_debug( __METHOD__ . '(): assignee details: ' . print_r( $assignees, true ) );
+
+		foreach ( $assignees as $assignee ) {
+			$assignee_status = $assignee->get_status();
+
+			$this->log_debug( __METHOD__ . '(): showing status for: ' . $assignee->get_key() );
+			$this->log_debug( __METHOD__ . '(): assignee status: ' . $assignee_status );
+
+			if ( ! empty( $assignee_status ) ) {
+
+				$assignee_type = $assignee->get_type();
+				$assignee_id   = $assignee->get_id();
+
+				if ( $assignee_type == 'user_id' ) {
+					$user_info    = get_user_by( 'id', $assignee_id );
+					$status_label = $this->get_status_label( $assignee_status );
+					echo sprintf( '<li>%s: %s (%s)</li>', esc_html__( 'User', 'gravityflow' ), $user_info->display_name, $status_label );
+				} elseif ( $assignee_type == 'email' ) {
+					$email        = $assignee_id;
+					$status_label = $this->get_status_label( $assignee_status );
+					echo sprintf( '<li>%s: %s (%s)</li>', esc_html__( 'Email', 'gravityflow' ), $email, $status_label );
+				} elseif ( $assignee_type == 'role' ) {
+					$status_label = $this->get_status_label( $assignee_status );
+					$role_name    = translate_user_role( $assignee_id );
+					echo sprintf( '<li>%s: (%s)</li>', esc_html__( 'Role', 'gravityflow' ), $role_name, $status_label );
+					echo '<li>' . $role_name . ': ' . $assignee_status . '</li>';
+				}
+			}
+		}
+
+		echo '</ul>';
+
+	}
+
+	/**
+	 * If the user can update the step enable the update button.
+	 *
+	 * @param bool $can_update Indicates if the assignee or role status is pending.
+	 */
+	public function maybe_enable_update_button( $can_update ) {
+		if ( ! $can_update ) {
+			return;
+		}
+
+		?>
+		<script>
+			(function (GFFlowInput, $) {
+				$(document).ready(function () {
+					$('#gravityflow_update_button').prop('disabled', false);
+				});
+			}(window.GFFlowInput = window.GFFlowInput || {}, jQuery));
+		</script>
+		<?php
+	}
+
+	/**
+	 * Output the status inputs and associated labels.
+	 */
+	public function display_status_inputs() {
+		$default_status = $this->default_status ? $this->default_status : 'complete';
+
+		if ( $default_status == 'hidden' ) {
+			?>
+			<input type="hidden" id="gravityflow_status_hidden" name="gravityflow_status" value="complete"/>
+			<?php
+		} else {
+
+			$in_progress_label = esc_html__( 'In progress', 'gravityflow' );
+
+			/**
+			 * Allows the 'in progress' label to be modified on the User Input step.
+			 *
+			 * @params string $in_progress_label
+			 * @params Gravity_Flow_Step $this The current step.
+			 */
+			$in_progress_label = apply_filters( 'gravityflow_in_progress_label_user_input', $in_progress_label, $this );
+
+			$complete_label = esc_html__( 'Complete', 'gravityflow' );
+
+			/**
+			 * Allows the 'complete' label to be modified on the User Input step.
+			 *
+			 * @params string $complete_label
+			 * @params Gravity_Flow_Step $this The current step.
+			 */
+			$complete_label = apply_filters( 'gravityflow_complete_label_user_input', $complete_label, $this )
+			?>
+			<br/><br/>
+			<div>
+				<label for="gravityflow_in_progress">
+					<input type="radio" id="gravityflow_in_progress" name="gravityflow_status" <?php checked( $default_status, 'in_progress' ); ?> value="in_progress"/><?php echo $in_progress_label; ?>
+				</label>&nbsp;&nbsp;
+				<label for="gravityflow_complete">
+					<input type="radio" id="gravityflow_complete" name="gravityflow_status" value="complete" <?php checked( $default_status, 'complete' ); ?>/><?php echo $complete_label; ?>
+				</label>
+			</div>
+			<?php
+		}
+	}
+
+	/**
+	 * Display the update button for this step.
+	 *
+	 * @param array $form The form for the current entry.
+	 */
+	public function display_update_button( $form ) {
+		?>
+		<br/>
+		<div class="gravityflow-action-buttons">
+			<?php
+			$button_text = esc_html__( 'Update', 'gravityflow' );
+			$button_text = apply_filters( 'gravityflow_update_button_text_user_input', $button_text, $form, $this );
+
+			$form_id          = absint( $form['id'] );
+			$button_click     = "jQuery('#action').val('update'); jQuery('#gform_{$form_id}')[0].submit(); return false;";
+			$update_button_id = 'gravityflow_update_button';
+
+			$update_button    = '<input id="' . $update_button_id . '" disabled="disabled" class="button button-large button-primary" type="submit" tabindex="4" value="' . $button_text . '" name="save" onclick="' . $button_click . '"/>';
+			echo apply_filters( 'gravityflow_update_button_user_input', $update_button );
+			?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * If applicable display the note section of the workflow detail box.
+	 *
+	 * @param array $form The form for the current entry.
+	 */
+	public function maybe_display_note_box( $form ) {
+		if ( $this->note_mode === 'hidden' ) {
+			return;
+		}
+		$invalid_note = ( isset( $form['workflow_note'] ) && is_array( $form['workflow_note'] ) && $form['workflow_note']['failed_validation'] );
+		$posted_note  = '';
+		if ( rgar( $form, 'failed_validation' ) ) {
+			$posted_note = rgpost( 'gravityflow_note' );
+		}
+		?>
+
+		<div>
+			<label id="gravityflow-notes-label" for="gravityflow-note">
+				<?php
+				esc_html_e( 'Note', 'gravityflow' );
+				$required_indicator = ( $this->note_mode == 'required' ) ? '*' : '';
+				printf( "<span class='gfield_required'>%s</span>", $required_indicator );
+				?>
+			</label>
+		</div>
+
+		<textarea id="gravityflow-note" style="width:100%;" rows="4" class="wide" name="gravityflow_note"><?php echo esc_textarea( $posted_note ) ?></textarea>
+		<?php
+
+		if ( $invalid_note ) {
+			printf( "<div class='gfield_description validation_message'>%s</div>", $form['workflow_note']['validation_message'] );
+		}
 	}
 
 	public function entry_detail_status_box( $form ) {
