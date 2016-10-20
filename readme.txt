@@ -60,6 +60,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 - Updated the last updated column on the status list to display the date created when the entry has not been updated.
 
+- Fixed an issue with the coupon field on the user input step when there are no editable product fields (GF Coupons v2.3.2 required).
 - Fixed an issue where a feed add-ons delay_feed() method was not being called when the feed was intercepted.
 - Fixed an issue with the step status showing as complete before the step processing has started.
 - Fixed an issue with empty sections being displayed on the entry detail view.

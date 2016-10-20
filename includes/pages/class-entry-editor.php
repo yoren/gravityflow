@@ -92,6 +92,13 @@ class Gravity_Flow_Entry_Editor {
 	private $_modified_form;
 
 	/**
+	 * Used to help determine whether the gform_product_total script should be output for the coupon field.
+	 *
+	 * @var bool
+	 */
+	private $_has_editable_product_field = false;
+
+	/**
 	 * Gravity_Flow_Entry_Editor constructor.
 	 *
 	 * @param array $form
@@ -200,7 +207,9 @@ class Gravity_Flow_Entry_Editor {
 				continue;
 			}
 
-			if ( ! $this->has_product_fields && GFCommon::is_product_field( $field->type ) ) {
+			$is_product_field = GFCommon::is_product_field( $field->type );
+
+			if ( ! $this->has_product_fields && $is_product_field ) {
 				$this->has_product_fields = true;
 			}
 
@@ -220,6 +229,8 @@ class Gravity_Flow_Entry_Editor {
 
 				$field->description = null;
 				$field->maxLength   = null;
+			} elseif ( ! $this->_has_editable_product_field && $is_product_field && $field->type != 'total' ) {
+				$this->_has_editable_product_field = true;
 			}
 
 			if ( empty( $field->label ) ) {
@@ -322,8 +333,26 @@ class Gravity_Flow_Entry_Editor {
 		$value = apply_filters( 'gravityflow_field_value_entry_editor', $value, $field, $this->form, $this->entry, $this->step );
 
 		$html = $field->get_field_input( $this->form, $value, $this->entry );
+		$html .= $this->maybe_get_coupon_script( $field );
 
 		return $html;
+	}
+
+	/**
+	 * Get the gform_product_total script for the coupon field when there aren't any editable product fields.
+	 *
+	 * @param GF_Field $field The field currently being processed.
+	 *
+	 * @return string
+	 */
+	public function maybe_get_coupon_script( $field ) {
+		if ( $field->type != 'coupon' || $this->_has_editable_product_field ) {
+			return '';
+		}
+
+		$total = GFCommon::get_order_total( $this->form, $this->entry );
+
+		return "<script type='text/javascript'>gform.addFilter('gform_product_total', function (total, formId) {return {$total};}, 49);</script>";
 	}
 
 	/**
