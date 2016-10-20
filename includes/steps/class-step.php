@@ -1312,6 +1312,14 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
+	 * Flush assignee details.
+	 */
+	public function flush_assignees() {
+		$this->_assignee_details = array();
+		$this->_assignee_keys = array();
+	}
+
+	/**
 	 * Retrieve an array containing the assignee keys for this step.
 	 *
 	 * @return array
@@ -1873,7 +1881,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 */
 	public function maybe_adjust_assignment( $previous_assignees ) {
 		gravity_flow()->log_debug( __METHOD__ . '(): Starting' );
-
+		$this->flush_assignees();
 		$new_assignees      = $this->get_assignees();
 		$new_assignees_keys = array();
 		foreach ( $new_assignees as $new_assignee ) {

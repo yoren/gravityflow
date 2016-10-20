@@ -24,11 +24,11 @@ function setup_gravity_forms_pages() {
 	}
 
 	$active_forms = GFAPI::get_forms( true );
-	echo "Active Form count: " . count( $active_forms );
+	echo "\nActive Form count: " . count( $active_forms );
 	$inactive_forms = GFAPI::get_forms( false );
-	echo "Inactive Form count: " . count( $inactive_forms );
+	echo "\nInactive Form count: " . count( $inactive_forms );
 	$forms = array_merge( $active_forms, $inactive_forms );
-	echo "Form count: " . count( $forms );
+	echo "\nForm count: " . count( $forms );
 	foreach ( $forms as $form ) {
 		GFFormsModel::update_form_active( $form['id'], true );
 		$page = array(
@@ -48,16 +48,16 @@ setup_gravity_forms_pages();
 
 // add admins
 function tests_create_testing_users() {
-	$users = array( 'admin1', 'admin2', 'admin3' );
+	$users = array( 'admin1', 'admin2', 'admin3', 'admin4', 'admin5' );
 	foreach ( $users as $user ) {
 		$userData = array(
 			'user_login' => $user,
-			'first_name' => 'First',
+			'first_name' => $user,
 			'last_name'  => $user,
 			'user_pass'  => $user,
 			'user_email' => $user . '@mail.com',
 			'user_url'   => '',
-			'role'       => 'administrator'
+			'role'       => 'administrator',
 		);
 		wp_insert_user( $userData );
 	}

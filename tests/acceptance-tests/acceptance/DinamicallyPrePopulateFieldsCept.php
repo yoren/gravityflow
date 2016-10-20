@@ -30,7 +30,7 @@ $I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 ); // needed for chromed
 // Next page
 $I->click( '.gform_page_footer .gform_next_button' );
 $I->fillField( 'textarea[name="input_6"]', 'Discussion text field.' );
-$I->selectOption( 'select[name=input_8]', 'First admin2' );
+$I->selectOption( 'select[name=input_8]', 'admin2 admin2' );
 
 $I->click( 'Submit' );
 $I->see( 'Thanks for contacting us! We will get in touch with you shortly.' );
