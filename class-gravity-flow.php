@@ -1995,7 +1995,7 @@ PRIMARY KEY  (id)
 
 				$entry_meta['workflow_timestamp'] = array(
 					'label'                      => 'Timestamp',
-					'is_numeric'                 => false,
+					'is_numeric'                 => true,
 					'update_entry_meta_callback' => array( $this, 'callback_update_entry_meta_timestamp' ),
 					'is_default_column'          => false, // this column will be displayed by default on the entry list
 				);
@@ -2151,7 +2151,7 @@ PRIMARY KEY  (id)
 
 			printf( '%s: %s<br/><br/>%s: %s', esc_html__( 'Entry Id', 'gravityflow' ), $entry_id_link, esc_html__( 'Submitted', 'gravityflow' ), esc_html( GFCommon::format_date( $entry['date_created'], true, 'Y/m/d' ) ) );
 
-			if ( isset( $entry['workflow_timestamp'] ) ) {
+			if ( ! empty( $entry['workflow_timestamp'] ) ) {
 				$last_updated = date( 'Y-m-d H:i:s', $entry['workflow_timestamp'] );
 				if ( $entry['date_created'] != $last_updated ) {
 					echo '<br /><br />';
@@ -2435,7 +2435,10 @@ PRIMARY KEY  (id)
 					$keep_looking = false;
 				} else {
 					$step = $this->get_step( $next_step_id, $entry );
-					if ( ! $step->is_active() || ! $step->is_condition_met( $form ) ) {
+
+					if ( empty( $step ) ) {
+						$keep_looking = false;
+					} elseif ( ! $step->is_active() || ! $step->is_condition_met( $form ) ) {
 						$step = $this->get_next_step_in_list( $form, $step, $entry, $steps );
 						if ( ! empty( $step ) ) {
 							$keep_looking = false;
