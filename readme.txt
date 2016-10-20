@@ -58,11 +58,14 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.4.2-dev =
 
+- Updated the last updated column on the status list to display the date created when the entry has not been updated.
+
 - Fixed an issue where a feed add-ons delay_feed() method was not being called when the feed was intercepted.
 - Fixed an issue with the step status showing as complete before the step processing has started.
 - Fixed an issue with empty sections being displayed on the entry detail view.
 - Fixed an issue with the sidebar shortcode attribute for the status page.
 - Fixed an issue with dynamic assignee routing where the assignees don't update correctly after changing the value of a dependent field.
+- Fixed a fatal error when the next step doesn't exist.
 
 = 1.4.1 =
 
