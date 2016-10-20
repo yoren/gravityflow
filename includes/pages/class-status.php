@@ -829,14 +829,12 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	public function column_workflow_timestamp( $item ) {
 		$label = '-';
 
-		if ( isset( $item['workflow_timestamp'] ) ) {
+		if ( ! empty( $item['workflow_timestamp'] ) ) {
 			$last_updated = date( 'Y-m-d H:i:s', $item['workflow_timestamp'] );
-			if ( $item['date_created'] != $last_updated ) {
-				$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
-				$last_updated = esc_html( GFCommon::format_date( $last_updated, true, 'Y/m/d' ) );
-				$url_entry = esc_url( $url_entry );
-				$label  = "<a href='{$url_entry}'>$last_updated</a>";
-			}
+			$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
+			$last_updated = esc_html( GFCommon::format_date( $last_updated, true, 'Y/m/d' ) );
+			$url_entry = esc_url( $url_entry );
+			$label  = "<a href='{$url_entry}'>$last_updated</a>";
 		}
 
 		echo $label;
