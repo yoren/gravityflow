@@ -3465,7 +3465,7 @@ PRIMARY KEY  (id)
 			$steps = $this->get_steps( $form_id );
 
 			foreach ( $steps as $step ) {
-				if ( ! $step instanceof Gravity_Flow_Step_Feed_Add_On || ! $step->is_active() ) {
+				if ( ! $step->is_active() || ! is_callable( array( $step, 'intercept_submission' ) ) ) {
 					continue;
 				}
 

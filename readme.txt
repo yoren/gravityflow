@@ -58,6 +58,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.4.2-dev =
 
+- Updated the notification step to prevent the selected notifications being sent during form submission.
 - Updated the last updated column on the status list to display the date created when the entry has not been updated.
 
 - Fixed an issue with the coupon field on the user input step when there are no editable product fields (GF Coupons v2.3.2 required).

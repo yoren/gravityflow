@@ -215,6 +215,28 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 
 		return $text;
 	}
+
+	/**
+	 * Prevent the notifications assigned to the current step from being sent during form submission.
+	 */
+	public function intercept_submission() {
+		$form_id = $this->get_form_id();
+		add_filter( "gform_disable_notification_{$form_id}", array( $this, 'maybe_disable_notification' ), 10, 2 );
+	}
+
+	/**
+	 * Prevents the current notification from being sent during form submission if it is selected for this step.
+	 *
+	 * @param bool $is_disabled Indicates if the current notification has already been disabled.
+	 * @param array $notification The current notifications properties.
+	 *
+	 * @return bool
+	 */
+	public function maybe_disable_notification( $is_disabled, $notification ) {
+		$setting_key = 'notification_id_' . $notification['id'];
+
+		return $this->{$setting_key} ? true : $is_disabled;
+	}
 }
 
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Notification() );
