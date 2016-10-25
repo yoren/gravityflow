@@ -935,7 +935,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			$button_text = apply_filters( 'gravityflow_update_button_text_user_input', $button_text, $form, $this );
 
 			$form_id          = absint( $form['id'] );
-			$button_click     = "jQuery('#action').val('update'); jQuery('#gform_{$form_id}')[0].submit(); return false;";
+			$button_click     = "jQuery('#action').val('update'); jQuery('#gform_{$form_id}').submit(); return false;";
 			$update_button_id = 'gravityflow_update_button';
 
 			$update_button    = '<input id="' . $update_button_id . '" disabled="disabled" class="button button-large button-primary" type="submit" tabindex="4" value="' . $button_text . '" name="save" onclick="' . $button_click . '"/>';
