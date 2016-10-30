@@ -47,4 +47,58 @@ class Gravity_Flow_Common {
 
 		return add_query_arg( $query_args, $base_url );
 	}
+
+	/**
+	 * If form and field ids have bee specified for display on the inbox/status page add the columns.
+	 *
+	 * @param array $columns The inbox/status page columns.
+	 * @param int $form_id The form ID of the entries to be displayed or 0 to display entries from all forms.
+	 * @param array $field_ids The field IDs or entry properties/meta to be displayed.
+	 *
+	 * @return array
+	 */
+	public static function get_field_columns( $columns, $form_id, $field_ids ) {
+		if ( empty( $form_id ) || ! is_array( $field_ids ) || empty( $field_ids ) ) {
+			return $columns;
+		}
+
+		$form       = GFAPI::get_form( $form_id );
+		$entry_meta = GFFormsModel::get_entry_meta( $form_id );
+
+		foreach ( $field_ids as $id ) {
+			switch ( strtolower( $id ) ) {
+				case 'ip' :
+					$columns[ $id ] = __( 'User IP', 'gravityflow' );
+					break;
+				case 'source_url' :
+					$columns[ $id ] = __( 'Source Url', 'gravityflow' );
+					break;
+				case 'payment_status' :
+					$columns[ $id ] = __( 'Payment Status', 'gravityflow' );
+					break;
+				case 'transaction_id' :
+					$columns[ $id ] = __( 'Transaction Id', 'gravityflow' );
+					break;
+				case 'payment_date' :
+					$columns[ $id ] = __( 'Payment Date', 'gravityflow' );
+					break;
+				case 'payment_amount' :
+					$columns[ $id ] = __( 'Payment Amount', 'gravityflow' );
+					break;
+				case ( ( is_string( $id ) || is_int( $id ) ) && array_key_exists( $id, $entry_meta ) ) :
+					$columns[ $id ] = $entry_meta[ $id ]['label'];
+					break;
+
+				default:
+					$field = GFFormsModel::get_field( $form, $id );
+
+					if ( is_object( $field ) ) {
+						$input_label_only = apply_filters( 'gform_entry_list_column_input_label_only', true, $form, $field );
+						$columns[ $id ]   = GFFormsModel::get_label( $field, $id, $input_label_only );
+					}
+			}
+		}
+
+		return $columns;
+	}
 }

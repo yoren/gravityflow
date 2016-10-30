@@ -58,6 +58,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.4.2-dev =
 
+- Updated the inbox and status pages to remove the dependency on the entry list columns when form and field ids are specified.
 - Updated the notification step to prevent the selected notifications being sent during form submission.
 - Updated the last updated column on the status list to display the date created when the entry has not been updated.
 
