@@ -131,6 +131,11 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 		$return     = '';
 		$discussion = json_decode( $value, ARRAY_A );
 		if ( is_array( $discussion ) ) {
+			$reverse_comment_order = apply_filters( 'gravityflowdiscussion_reverse_comment_order', false, $this, $format );
+			if ( $reverse_comment_order ) {
+				$discussion = array_reverse( $discussion );
+			}
+
 			$timestamp_format = empty( $this->gravityflowDiscussionTimestampFormat ) ? 'd M Y g:i a' : $this->gravityflowDiscussionTimestampFormat;
 
 			foreach ( $discussion as $item ) {
