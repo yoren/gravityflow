@@ -29,7 +29,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 				return $field_groups;
 			}
 		}
-		$field_groups[] = array( 'name' => 'workflow_fields', 'label' => __( 'Workflow Fields', 'gravityflowdiscussion' ), 'fields' => array() );
+		$field_groups[] = array( 'name' => 'workflow_fields', 'label' => __( 'Workflow Fields', 'gravityflow' ), 'fields' => array() );
 		return $field_groups;
 	}
 
@@ -62,7 +62,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	}
 
 	public function get_form_editor_field_title() {
-		return __( 'Discussion', 'gravityflowdiscussion' );
+		return __( 'Discussion', 'gravityflow' );
 	}
 
 	public function get_value_entry_list( $value, $entry, $field_id, $columns, $form ) {
@@ -101,7 +101,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 						'id'           => 'example',
 						'assignee_key' => 'example|John Doe',
 						'timestamp'    => time(),
-						'value'        => esc_attr__( 'Example comment.' ),
+						'value'        => esc_attr__( 'Example comment.', 'gravityflow' ),
 					)
 				) );
 			} else {
@@ -131,7 +131,16 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 		$return     = '';
 		$discussion = json_decode( $value, ARRAY_A );
 		if ( is_array( $discussion ) ) {
-			$reverse_comment_order = apply_filters( 'gravityflowdiscussion_reverse_comment_order', false, $this, $format );
+			$reverse_comment_order = false;
+
+			/**
+			 * Allow the order of the discussion field comments to be reversed.
+			 *
+			 * @param bool $reverse_comment_order Should the comment order be reversed? Default is false.
+			 * @param Gravity_Flow_Field_Discussion $this The field currently being processed.
+			 * @param string $format The requested format for the value; html or text.
+			 */
+			$reverse_comment_order = apply_filters( 'gravityflow_reverse_comment_order_discussion_field', false, $this, $format );
 			if ( $reverse_comment_order ) {
 				$discussion = array_reverse( $discussion );
 			}

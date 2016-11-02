@@ -58,8 +58,8 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.4.2-dev =
 
-- Added the gravityflowdiscussion_reverse_comment_order filter allowing the comments to be reversed before being displayed.
-    Example: add_filter( 'gravityflowdiscussion_reverse_comment_order', '__return_true' );
+- Added the gravityflow_reverse_comment_order_discussion_field filter allowing the comments to be reversed before being displayed.
+    Example: add_filter( 'gravityflow_reverse_comment_order_discussion_field', '__return_true' );
 
 - Updated the inbox and status pages to remove the dependency on the entry list columns when form and field ids are specified.
 - Updated the notification step to prevent the selected notifications being sent during form submission.
