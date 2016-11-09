@@ -51,7 +51,7 @@ jQuery(document).ready(function () {
 
 	// Allow admin-only field to be used in conditional logic.
 	gform.addFilter('gform_is_conditional_logic_field', function (isConditionalLogicField, field) {
-		if (field.adminOnly) {
+		if (field.adminOnly || field.visibility == 'administrative') {
 			var inputType = field.inputType ? field.inputType : field.type,
 				supported_fields = GetConditionalLogicFields(),
 				index = jQuery.inArray(inputType, supported_fields);
