@@ -58,6 +58,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.4.2-dev =
 
+- Added the gravityflow_inbox_sorting filter to allow the sorting criteria to be modified before search for entries in the inbox. See http://docs.gravityflow.io/article/132-gravityflowinboxsorting
 - Added the gravityflow_reverse_comment_order_discussion_field filter allowing the comments to be reversed before being displayed.
     Example: add_filter( 'gravityflow_reverse_comment_order_discussion_field', '__return_true' );
 

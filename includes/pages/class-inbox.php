@@ -154,7 +154,17 @@ class Gravity_Flow_Inbox {
 				$paging  = array(
 					'page_size' => 150,
 				);
-				$entries = GFAPI::get_entries( $form_ids, $search_criteria, null, $paging, $total_count );
+
+				$sorting = array();
+
+				/**
+				 * Allows the sorting criteria to be modified before entries are searched for the inbox.
+				 *
+				 * @param array $entries
+				 */
+				$sorting = apply_filters( 'gravityflow_inbox_sorting', $sorting );
+
+				$entries = GFAPI::get_entries( $form_ids, $search_criteria, $sorting, $paging, $total_count );
 			}
 		}
 
