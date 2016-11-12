@@ -3677,7 +3677,8 @@ PRIMARY KEY  (id)
 			 * Allows the gravityflow shortcode to be modified and supports custom pages.
 			 *
 			 * @param string $html The HTML.
-			 * @param array $a The shortcode attributes.
+			 * @param array $atts The original shortcode attributes.
+			 * @param string $content The content inside the shortcode block.
 			 */
 			$html = apply_filters( 'gravityflow_shortcode_' . $a['page'], $html, $atts, $content );
 
@@ -3779,7 +3780,7 @@ PRIMARY KEY  (id)
 				'submitter_column' => $a['submitter_column'],
 				'step_column'      => $a['step_column'],
 				'show_header'      => false,
-				'field_ids'        => explode( ',', $a['fields'] ),
+				'field_ids'        => $a['fields'] ? explode( ',', $a['fields'] ) : '',
 				'detail_base_url'  => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
 				'timeline'         => $a['timeline'],
 				'last_updated'     => $a['last_updated'],
@@ -3861,7 +3862,7 @@ PRIMARY KEY  (id)
 				'constraint_filters' => array(
 					'form_id' => $a['form'],
 				),
-				'field_ids'          => explode( ',', $a['fields'] ),
+				'field_ids'          => $a['fields'] ? explode( ',', $a['fields'] ) : '',
 				'display_all'        => $a['display_all'],
 				'id_column'          => $a['id_column'],
 				'submitter_column'   => $a['submitter_column'],
