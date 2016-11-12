@@ -102,6 +102,7 @@ table.gform-routings tr.gform-routing-row td .repeater-buttons{
 	display:inline-block;
     margin-bottom: 5px;
     color:black;
+    height:85px;
 }
 
 .gravityflow-schedule-type-container{
