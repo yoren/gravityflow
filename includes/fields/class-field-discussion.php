@@ -18,19 +18,9 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	private $_clear_input_value = false;
 
 	public function add_button( $field_groups ) {
-		$field_groups = $this->maybe_add_workflow_field_group( $field_groups );
+		$field_groups = Gravity_Flow_Common::maybe_add_workflow_field_group( $field_groups );
 
 		return parent::add_button( $field_groups );
-	}
-
-	public function maybe_add_workflow_field_group( $field_groups ) {
-		foreach ( $field_groups as $field_group ) {
-			if ( $field_group['name'] == 'workflow_fields' ) {
-				return $field_groups;
-			}
-		}
-		$field_groups[] = array( 'name' => 'workflow_fields', 'label' => __( 'Workflow Fields', 'gravityflow' ), 'fields' => array() );
-		return $field_groups;
 	}
 
 	public function get_form_editor_button() {
@@ -58,6 +48,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 			'description_setting',
 			'css_class_setting',
 			'gravityflow_setting_discussion_timestamp_format',
+			'rich_text_editor_setting',
 		);
 	}
 
@@ -160,13 +151,36 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 				$display_name = apply_filters( 'gravityflowdiscussion_display_name_discussion_field', $display_name, $item, $this );
 				if ( $format == 'html' ) {
 					$content = '<div class="gravityflow-dicussion-item-header"><span class="gravityflow-dicussion-item-name">' . $display_name . '</span> <span class="gravityflow-dicussion-item-date">' . $date . '</span></div>';
-					$content .= '<div class="gravityflow-dicussion-item-value">' . esc_html( $item['value'] ) . '</div>';
+					$content .= '<div class="gravityflow-dicussion-item-value">' . $this->format_comment_value( $item['value'] ) . '</div>';
 					$return .= sprintf( '<div id="gravityflow-discussion-item-%s" class="gravityflow-discussion-item">%s</div>', $item['id'], $content );
 				} elseif ( $format == 'text' ) {
 					$return = $date . ': ' . $display_name . "\n";
 					$return .= $item['value'];
 				}
 			}
+		}
+
+		return $return;
+	}
+
+	/**
+	 * Formats an individual comment value for output in a location using the HTML format.
+	 *
+	 * @param string $value The comment value.
+	 *
+	 * @return string
+	 */
+	public function format_comment_value( $value ) {
+		$allowable_tags = $this->get_allowable_tags();
+
+		if ( $allowable_tags === false ) {
+			// The value is unsafe so encode the value.
+			$value  = esc_html( $value );
+			$return = nl2br( $value );
+
+		} else {
+			// The value contains HTML but the value was sanitized before saving.
+			$return = wpautop( $value );
 		}
 
 		return $return;
