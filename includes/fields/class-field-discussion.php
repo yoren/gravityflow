@@ -99,7 +99,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 				$entry_value = rgar( $entry, $this->id );
 			}
 
-			$input = $this->format_discussion_value( $entry_value );
+			$input = $this->format_discussion_value( $entry_value, 'html', rgar( $entry, 'id' ) );
 
 			if ( $value == $entry_value || $this->_clear_input_value ) {
 				$value                    = '';
@@ -113,12 +113,18 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	}
 
 	/**
-	 * @param string $value
-	 * @param string $format
+	 * Prepares the field entry value for output.
+	 *
+	 * @param string $value The entry value for the current field.
+	 * @param string $format The requested format for the value; html or text.
+	 * @param int|null $entry_id The ID of the entry currently being edited or null in other locations.
+	 *
+	 * @since 1.4.2-dev Added the $entry_id param.
+	 * @since 1.3.2
 	 *
 	 * @return string
 	 */
-	public function format_discussion_value( $value, $format = 'html' ) {
+	public function format_discussion_value( $value, $format = 'html', $entry_id = null ) {
 		$return     = '';
 		$discussion = json_decode( $value, ARRAY_A );
 		if ( is_array( $discussion ) ) {
@@ -130,8 +136,10 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 			 * @param bool $reverse_comment_order Should the comment order be reversed? Default is false.
 			 * @param Gravity_Flow_Field_Discussion $this The field currently being processed.
 			 * @param string $format The requested format for the value; html or text.
+			 *
+			 * @since 1.4.2-dev
 			 */
-			$reverse_comment_order = apply_filters( 'gravityflow_reverse_comment_order_discussion_field', false, $this, $format );
+			$reverse_comment_order = apply_filters( 'gravityflow_reverse_comment_order_discussion_field', $reverse_comment_order, $this, $format );
 			if ( $reverse_comment_order ) {
 				$discussion = array_reverse( $discussion );
 			}
@@ -150,9 +158,9 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 
 				$display_name = apply_filters( 'gravityflowdiscussion_display_name_discussion_field', $display_name, $item, $this );
 				if ( $format == 'html' ) {
-					$content = '<div class="gravityflow-dicussion-item-header"><span class="gravityflow-dicussion-item-name">' . $display_name . '</span> <span class="gravityflow-dicussion-item-date">' . $date . '</span></div>';
-					$content .= '<div class="gravityflow-dicussion-item-value">' . $this->format_comment_value( $item['value'] ) . '</div>';
-					$return .= sprintf( '<div id="gravityflow-discussion-item-%s" class="gravityflow-discussion-item">%s</div>', $item['id'], $content );
+					$content = sprintf( '<div class="gravityflow-dicussion-item-header"><span class="gravityflow-dicussion-item-name">%s</span> <span class="gravityflow-dicussion-item-date">%s</span>%s</div><div class="gravityflow-dicussion-item-value">%s</div>', $display_name, $date, $this->get_delete_button( $item['id'], $entry_id ), $this->format_comment_value( $item['value'] ) );
+
+					$return .= sprintf( '<div id="gravityflow-discussion-item-%s" class="gravityflow-discussion-item">%s</div>', sanitize_key( $item['id'] ), $content );
 				} elseif ( $format == 'text' ) {
 					$return = $date . ': ' . $display_name . "\n";
 					$return .= $item['value'];
@@ -164,9 +172,32 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	}
 
 	/**
+	 * Prepares the markup for the delete comment button when on the entry detail edit page.
+	 *
+	 * @param string $item_id The ID of the comment currently being processed.
+	 * @param int $entry_id The ID of the entry currently being processed.
+	 *
+	 * @since 1.4.2-dev
+	 *
+	 * @return string
+	 */
+	public function get_delete_button( $item_id, $entry_id ) {
+		if ( ! $this->is_entry_detail_edit() ) {
+			return '';
+		}
+
+		$label = esc_attr__( 'Delete Comment', 'gravityflow' );
+		$file  = GFCommon::get_base_url() . '/images/delete.png';
+
+		return sprintf( "<a href='javascript:void(0);' title='%s' onclick='deleteDiscussionItem(%d, %d, %s);'><img src='%s' alt='%s' style='margin-left:8px;'/></a>", $label, $entry_id, $this->id, json_encode( $item_id ), $file, $label );
+	}
+
+	/**
 	 * Formats an individual comment value for output in a location using the HTML format.
 	 *
 	 * @param string $value The comment value.
+	 *
+	 * @since 1.4.2-dev
 	 *
 	 * @return string
 	 */
@@ -240,6 +271,105 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 		parent::sanitize_settings();
 		if ( ! empty( $this->gravityflowDiscussionTimestampFormat ) ) {
 			$this->gravityflowDiscussionTimestampFormat = sanitize_text_field( $this->gravityflowDiscussionTimestampFormat );
+		}
+	}
+
+	/**
+	 * Deletes the specified comment and updates the entry in the database.
+	 *
+	 * @param array $entry The entry containing the comment to be deleted.
+	 * @param string $item_id The ID of the comment to be deleted.
+	 *
+	 * @since 1.4.2-dev
+	 *
+	 * @return array|bool
+	 */
+	public function delete_discussion_item( $entry, $item_id ) {
+		$discussion = json_decode( rgar( $entry, $this->id ), ARRAY_A );
+		if ( ! is_array( $discussion ) ) {
+			return false;
+		}
+
+		$item_found = false;
+
+		foreach ( $discussion as $key => $item ) {
+			if ( $item['id'] == $item_id ) {
+				$item_found = true;
+				unset( $discussion[ $key ] );
+				break;
+			}
+		}
+
+		if ( ! $item_found ) {
+			return false;
+		}
+
+		$discussion = ! empty( $discussion ) ? json_encode( array_values( $discussion ) ) : '';
+
+		return GFAPI::update_entry_field( $entry['id'], $this->id, $discussion );
+	}
+
+	/**
+	 * Target of the wp_ajax_gravityflow_delete_discussion_item hook; handles the ajax request to delete a comment.
+	 *
+	 * @since 1.4.2-dev
+	 */
+	public static function ajax_delete_discussion_item() {
+		check_ajax_referer( 'gravityflow_delete_discussion_item', 'gravityflow_delete_discussion_item' );
+
+		$entry_id = absint( $_POST['entry_id'] );
+		$entry    = GFAPI::get_entry( $entry_id );
+
+		if ( is_wp_error( $entry ) ) {
+			die();
+		}
+
+		$form     = GFAPI::get_form( $entry['form_id'] );
+		$field_id = absint( $_POST['field_id'] );
+		$field    = GFFormsModel::get_field( $form, $field_id );
+
+		if ( ! $field instanceof Gravity_Flow_Field_Discussion ) {
+			die();
+		}
+
+		$item_id = $_POST['item_id'];
+		$result  = $field->delete_discussion_item( $entry, $item_id );
+
+		die( $result === true ? sanitize_key( $item_id ) : false );
+	}
+
+	/**
+	 * Target of the gform_entry_detail hook; includes the script for the delete comment link.
+	 *
+	 * @since 1.4.2-dev
+	 */
+	public static function delete_discussion_item_script() {
+		if ( GFCommon::is_entry_detail_edit() ) {
+			?>
+
+			<script type="text/javascript">
+				function deleteDiscussionItem(entryId, fieldId, itemId) {
+
+					if (!confirm(<?php echo json_encode( __( "Would you like to delete this comment? 'Cancel' to stop. 'OK' to delete", 'gravityflow' ) ); ?>))
+						return;
+
+					jQuery.post(ajaxurl, {
+						entry_id: entryId,
+						field_id: fieldId,
+						item_id: itemId,
+						action: 'gravityflow_delete_discussion_item',
+						gravityflow_delete_discussion_item: '<?php echo wp_create_nonce( 'gravityflow_delete_discussion_item' ) ?>'
+					}, function (response) {
+						if (response) {
+							jQuery('#gravityflow-discussion-item-' + response).remove();
+						} else {
+							alert(<?php echo json_encode( __( 'There was an issue deleting this comment.', 'gravityflow' ) ); ?>)
+						}
+					});
+				}
+			</script>
+
+			<?php
 		}
 	}
 }

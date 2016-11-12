@@ -122,6 +122,7 @@ if ( class_exists( 'GFForms' ) ) {
 
 		public function init_admin() {
 			parent::init_admin();
+			add_action( 'gform_entry_detail', array( 'Gravity_Flow_Field_Discussion', 'delete_discussion_item_script' ) );
 			add_action( 'gform_entry_detail_sidebar_middle', array( $this, 'entry_detail_status_box' ), 10, 2 );
 			add_filter( 'gform_notification_events', array( $this, 'add_notification_event' ), 10, 2 );
 
@@ -157,6 +158,8 @@ if ( class_exists( 'GFForms' ) ) {
 
 			add_action( 'wp_ajax_rg_delete_file', array( 'RGForms', 'delete_file' ) );
 			add_action( 'wp_ajax_nopriv_rg_delete_file', array( 'RGForms', 'delete_file' ) );
+
+			add_action( 'wp_ajax_gravityflow_delete_discussion_item', array( 'Gravity_Flow_Field_Discussion', 'ajax_delete_discussion_item' ) );
 		}
 
 		public function init_frontend() {
