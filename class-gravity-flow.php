@@ -2313,11 +2313,11 @@ PRIMARY KEY  (id)
 				$admin_actions = array(
 					array(
 						'label' => esc_html__( 'Cancel Workflow', 'gravityflow' ),
-						'value' => 'cancel_workflow'
+						'value' => 'cancel_workflow',
 					),
 					array(
 						'label' => esc_html__( 'Restart this step', 'gravityflow' ),
-						'value' => 'restart_step'
+						'value' => 'restart_step',
 					),
 				);
 			} else {
@@ -2326,7 +2326,7 @@ PRIMARY KEY  (id)
 
 			$admin_actions[] = array(
 				'label' => esc_html__( 'Restart Workflow', 'gravityflow' ),
-				'value' => 'restart_workflow'
+				'value' => 'restart_workflow',
 			);
 
 			if ( $current_step && count( $steps ) > 1 ) {
@@ -2346,7 +2346,7 @@ PRIMARY KEY  (id)
 
 				$admin_actions[] = array(
 					'label'   => esc_html__( 'Send to step:', 'gravityflow' ),
-					'choices' => $choices
+					'choices' => $choices,
 				);
 			}
 
@@ -3390,6 +3390,14 @@ PRIMARY KEY  (id)
 			return $menu_items;
 		}
 
+		/**
+		 * Processes the admin action from the entry detail page.
+		 *
+		 * @param $form
+		 * @param $entry
+		 *
+		 * @return bool|string|WP_Error
+		 */
 		public function maybe_process_admin_action( $form, $entry ) {
 			$feedback = false;
 			if ( isset( $_POST['_gravityflow_admin_action'] ) && check_admin_referer( 'gravityflow_admin_action', '_gravityflow_admin_action_nonce' ) && GFAPI::current_user_can_any( 'gravityflow_workflow_detail_admin_actions' ) ) {
@@ -3419,7 +3427,7 @@ PRIMARY KEY  (id)
 							$feedback = esc_html__( 'The entry does not currently have an active step.', 'gravityflow' );
 						}
 
-					break;
+						break;
 					case 'restart_workflow':
 						$api = new Gravity_Flow_API( $form['id'] );
 						$api->restart_workflow( $entry );
@@ -3427,8 +3435,8 @@ PRIMARY KEY  (id)
 						$feedback = esc_html__( 'Workflow restarted.',  'gravityflow' );
 						break;
 				}
-				list( $admin_action, $action_id ) = rgexplode( '|', $admin_action, 2 );
-				if ( $admin_action == 'send_to_step' ) {
+				list( $base_admin_action, $action_id ) = rgexplode( '|', $admin_action, 2 );
+				if ( $base_admin_action == 'send_to_step' ) {
 					$step_id = $action_id;
 					$api = new Gravity_Flow_API( $form['id'] );
 					$api->send_to_step( $entry, $step_id );
@@ -3436,6 +3444,16 @@ PRIMARY KEY  (id)
 					$new_step = $api->get_current_step( $entry );
 					$feedback = $new_step ? sprintf( esc_html__( 'Sent to step: %s',  'gravityflow' ), $new_step->get_name() ) : esc_html__( 'Workflow Complete',  'gravityflow' );
 				}
+
+				/**
+				 * Allows the feedback for the admin action to be modified. Also allows custom admin actions to be processed.
+				 *
+				 * @param string $feedback A string with the feedback to be displayed to the user or an instance of WP_Error.
+				 * @param string $admin_action The admin action.
+				 * @param array $form The form array.
+				 * @param array $entry The entry array.
+				 */
+				$feedback = apply_filters( 'gravityflow_admin_action_feedback', $feedback, $admin_action, $form, $entry );
 			}
 			return $feedback;
 		}
