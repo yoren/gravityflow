@@ -101,4 +101,27 @@ class Gravity_Flow_Common {
 
 		return $columns;
 	}
+
+	/**
+	 * Adds the Workflow Fields group to the form editor.
+	 *
+	 * @param array $field_groups The properties for the field groups.
+	 *
+	 * @return array
+	 */
+	public static function maybe_add_workflow_field_group( $field_groups ) {
+		foreach ( $field_groups as $field_group ) {
+			if ( $field_group['name'] == 'workflow_fields' ) {
+				return $field_groups;
+			}
+		}
+
+		$field_groups[] = array(
+			'name'   => 'workflow_fields',
+			'label'  => __( 'Workflow Fields', 'gravityflow' ),
+			'fields' => array()
+		);
+
+		return $field_groups;
+	}
 }

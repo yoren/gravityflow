@@ -9,19 +9,9 @@ class Gravity_Flow_Field_Role extends GF_Field_Select {
 	public $type = 'workflow_role';
 
 	public function add_button( $field_groups ) {
-		$field_groups = $this->maybe_add_workflow_field_group( $field_groups );
+		$field_groups = Gravity_Flow_Common::maybe_add_workflow_field_group( $field_groups );
 
 		return parent::add_button( $field_groups );
-	}
-
-	public function maybe_add_workflow_field_group( $field_groups ) {
-		foreach ( $field_groups as $field_group ) {
-			if ( $field_group['name'] == 'workflow_fields' ) {
-				return $field_groups;
-			}
-		}
-		$field_groups[] = array( 'name' => 'workflow_fields', 'label' => __( 'Workflow Fields', 'gravityforms' ), 'fields' => array() );
-		return $field_groups;
 	}
 
 	public function get_form_editor_button() {
