@@ -102,7 +102,7 @@ class Gravity_Flow_Support {
 						<?php esc_html_e( 'Email', 'gravityflow' ); ?>
 					</label>
 
-					<input id="gravityflow_email" type="email" class="regular-text" name="gravityflow_email" value="<?php echo get_option( 'admin_email' ); ?>"/>
+					<input id="gravityflow_email" type="email" class="regular-text" name="gravityflow_email" value="<?php echo self::get_email(); ?>"/>
 
 					<label for="gravityflow_subject_suggestion">
 						<input id="gravityflow_subject_suggestion" type="radio" name="gravityflow_subject" value="suggestion" checked="checked"/>
@@ -195,5 +195,21 @@ class Gravity_Flow_Support {
 		);
 
 		return join( PHP_EOL, $info );
+	}
+
+	/**
+	 * Get the default value for the email field.
+	 *
+	 * @return string
+	 */
+	public static function get_email() {
+		$license_data = gravity_flow()->check_license();
+		$email        = rgobj( $license_data, 'customer_email' );
+
+		if ( empty( $email ) ) {
+			$email = get_option( 'admin_email' );
+		}
+
+		return $email;
 	}
 }
