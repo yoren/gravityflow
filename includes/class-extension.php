@@ -159,17 +159,7 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 	}
 
 	public function check_license( $value ) {
-		$api_params = array(
-			'edd_action' => 'check_license',
-			'license'    => $value,
-			'item_name'  => urlencode( $this->edd_item_name ),
-			'url'        => home_url(),
-		);
-		// Send the remote request
-		$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout'   => 10,
-		                                                               'sslverify' => false,
-		                                                               'body'      => $api_params
-		) );
+		$response = gravity_flow()->perform_edd_license_request( 'check_license', $value, $this->edd_item_name );
 
 		return json_decode( wp_remote_retrieve_body( $response ) );
 
@@ -179,20 +169,8 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 		$old_license = $this->get_app_setting( 'license_key' );
 
 		if ( $old_license && $field_setting != $old_license ) {
-			// deactivate the old site
-			$api_params = array(
-				'edd_action' => 'deactivate_license',
-				'license'    => $old_license,
-				'item_name'  => urlencode( $this->edd_item_name ),
-				'url'        => home_url(),
-			);
-			// Send the remote request
-			$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout'   => 10,
-			                                                               'sslverify' => false,
-			                                                               'body'      => $api_params
-			) );
-
-			$this->log_debug( __METHOD__ . '(): response: ' . print_r( $response ) );
+			$response = gravity_flow()->perform_edd_license_request( 'deactivate_license', $old_license, $this->edd_item_name );
+			$this->log_debug( __METHOD__ . '(): response: ' . print_r( $response, 1 ) );
 		}
 
 		if ( empty( $field_setting ) ) {
@@ -204,17 +182,7 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 	}
 
 	public function activate_license( $license_key ) {
-		$api_params = array(
-			'edd_action' => 'activate_license',
-			'license'    => $license_key,
-			'item_name'  => urlencode( $this->edd_item_name ),
-			'url'        => home_url(),
-		);
-
-		$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout'   => 10,
-		                                                               'sslverify' => false,
-		                                                               'body'      => $api_params
-		) );
+		$response = gravity_flow()->perform_edd_license_request( 'activate_license', $license_key, $this->edd_item_name );
 
 		// Force plugins page to refresh the update info.
 		set_site_transient( 'update_plugins', null );

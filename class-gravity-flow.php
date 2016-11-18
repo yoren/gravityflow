@@ -2924,15 +2924,13 @@ PRIMARY KEY  (id)
 
 		}
 
-		public function check_license( $value ) {
-			$api_params = array(
-				'edd_action' => 'check_license',
-				'license'    => $value,
-				'item_name'  => urlencode( GRAVITY_FLOW_EDD_ITEM_NAME ),
-				'url'       => home_url(),
-			);
-			// Send the remote request
-			$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params ) );
+		public function check_license( $value = '' ) {
+			if ( empty( $value ) ) {
+				$value = $this->get_app_setting( 'license_key' );
+			}
+
+			$response = $this->perform_edd_license_request( 'check_license', $value );
+
 			return json_decode( wp_remote_retrieve_body( $response ) );
 
 		}
@@ -2940,16 +2938,9 @@ PRIMARY KEY  (id)
 		public function license_validation( $field, $field_setting ) {
 			$old_license = $this->get_app_setting( 'license_key' );
 
-			if ( $old_license && $field_setting != $old_license  ) {
+			if ( $old_license && $field_setting != $old_license ) {
 				// deactivate the old site
-				$api_params = array(
-					'edd_action' => 'deactivate_license',
-					'license'    => $old_license,
-					'item_name'  => urlencode( GRAVITY_FLOW_EDD_ITEM_NAME ),
-					'url'        => home_url(),
-				);
-				// Send the remote request
-				$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params ) );
+				$response = $this->perform_edd_license_request( 'deactivate_license', $old_license );
 				$this->log_debug( __METHOD__ . '() - response: ' . print_r( $response, 1 ) );
 			}
 
@@ -2963,20 +2954,41 @@ PRIMARY KEY  (id)
 		}
 
 		public function activate_license( $license_key ) {
-			$api_params = array(
-				'edd_action' => 'activate_license',
-				'license'    => $license_key,
-				'item_name'  => urlencode( GRAVITY_FLOW_EDD_ITEM_NAME ),
-				'url'        => home_url(),
-			);
-
-			$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, array( 'timeout' => 10, 'sslverify' => false, 'body' => $api_params ) );
+			$response = $this->perform_edd_license_request( 'activate_license', $license_key );
 
 			set_site_transient( 'update_plugins', null );
 			$cache_key = md5( 'edd_plugin_' . sanitize_key( $this->_path ) . '_version_info' );
 			delete_transient( $cache_key );
 
 			return json_decode( wp_remote_retrieve_body( $response ) );
+		}
+
+		/**
+		 * Send a request to the EDD store url.
+		 *
+		 * @param string $edd_action The action to perform (check_license, activate_license or deactivate_license).
+		 * @param string $license The license key.
+		 * @param string $item_name The EDD item name. Defaults to the value of the GRAVITY_FLOW_EDD_ITEM_NAME constant.
+		 *
+		 * @return array|WP_Error The response.
+		 */
+		public function perform_edd_license_request( $edd_action, $license, $item_name = GRAVITY_FLOW_EDD_ITEM_NAME ) {
+			// Prepare the request arguments
+			$args = array(
+				'timeout'   => 10,
+				'sslverify' => false,
+				'body'      => array(
+					'edd_action' => $edd_action,
+					'license'    => trim( $license ),
+					'item_name'  => urlencode( $item_name ),
+					'url'        => home_url(),
+				),
+			);
+
+			// Send the remote request
+			$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, $args );
+
+			return $response;
 		}
 
 		public function settings_html( $field ) {
