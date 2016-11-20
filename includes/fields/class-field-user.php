@@ -9,7 +9,7 @@ class Gravity_Flow_Field_User extends GF_Field_Select {
 	public $type = 'workflow_user';
 
 	public function add_button( $field_groups ) {
-		$field_groups = Gravity_Flow_Common::maybe_add_workflow_field_group( $field_groups );
+		$field_groups = Gravity_Flow_Fields::maybe_add_workflow_field_group( $field_groups );
 
 		return parent::add_button( $field_groups );
 	}
@@ -38,6 +38,7 @@ class Gravity_Flow_Field_User extends GF_Field_Select {
 			'duplicate_setting',
 			'description_setting',
 			'css_class_setting',
+			'gravityflow_setting_users_role_filter',
 		);
 	}
 
@@ -46,15 +47,20 @@ class Gravity_Flow_Field_User extends GF_Field_Select {
 	}
 
 	public function get_choices( $value ) {
-
 		$choices = $this->get_users_as_choices( $value );
+
 		return $choices;
 	}
 
 	public function get_users_as_choices( $value ) {
 		$form_id = $this->formId;
 
-		$args            = apply_filters( 'gravityflow_get_users_args_user_field', array( 'orderby' => 'display_name' ), $form_id, $this );
+		$args = array(
+			'orderby' => 'display_name',
+			'role'    => $this->gravityflowUsersRoleFilter,
+		);
+
+		$args            = apply_filters( 'gravityflow_get_users_args_user_field', $args, $form_id, $this );
 		$accounts        = get_users( $args );
 		$account_choices = array();
 		foreach ( $accounts as $account ) {
@@ -64,14 +70,14 @@ class Gravity_Flow_Field_User extends GF_Field_Select {
 		$account_choices = apply_filters( 'gravityflow_user_field', $account_choices, $form_id, $this );
 
 		$this->choices = $account_choices;
-		$choices = GFCommon::get_select_choices( $this, $value );
+		$choices       = GFCommon::get_select_choices( $this, $value );
 
 		return $choices;
 	}
 
 	public function get_value_entry_list( $value, $entry, $field_id, $columns, $form ) {
 		$assignee = parent::get_value_entry_list( $value, $entry, $field_id, $columns, $form );
-		$value = $this->get_display_name( $assignee );
+		$value    = $this->get_display_name( $assignee );
 
 		return $value;
 	}
@@ -95,9 +101,8 @@ class Gravity_Flow_Field_User extends GF_Field_Select {
 	}
 
 	public function get_value_entry_detail( $value, $currency = '', $use_text = false, $format = 'html', $media = 'screen' ) {
-
 		$assignee = parent::get_value_entry_detail( $value, $currency, $use_text, $format, $media );
-		$value = $this->get_display_name( $assignee );
+		$value    = $this->get_display_name( $assignee );
 
 		return $value;
 	}
@@ -128,6 +133,13 @@ class Gravity_Flow_Field_User extends GF_Field_Select {
 		}
 
 		return $this->get_display_name( rgar( $entry, $input_id ) );
+	}
+
+	public function sanitize_settings() {
+		parent::sanitize_settings();
+		if ( ! empty( $this->gravityflowUsersRoleFilter ) ) {
+			$this->gravityflowUsersRoleFilter = wp_strip_all_tags( $this->gravityflowUsersRoleFilter );
+		}
 	}
 }
 

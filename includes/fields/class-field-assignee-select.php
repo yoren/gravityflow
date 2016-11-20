@@ -17,7 +17,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 	}
 
 	public function add_button( $field_groups ) {
-		$field_groups = Gravity_Flow_Common::maybe_add_workflow_field_group( $field_groups );
+		$field_groups = Gravity_Flow_Fields::maybe_add_workflow_field_group( $field_groups );
 
 		return parent::add_button( $field_groups );
 	}
@@ -56,37 +56,36 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
 	public function get_choices( $value ) {
 
-		$include_users = (bool) $this->gravityflowAssigneeFieldShowUsers;
-		$include_roles = (bool) $this->gravityflowAssigneeFieldShowRoles;
+		$include_users  = (bool) $this->gravityflowAssigneeFieldShowUsers;
+		$include_roles  = (bool) $this->gravityflowAssigneeFieldShowRoles;
 		$include_fields = (bool) $this->gravityflowAssigneeFieldShowFields;
 
 		$choices = $this->get_assignees_as_choices( $value, $include_users, $include_roles, $include_fields );
+
 		return $choices;
 	}
 
 	public function get_assignees_as_choices( $value, $include_users = true, $include_roles = true, $include_fields = true ) {
-		global $wp_roles;
-
-		$form_id = $this->formId;
-
-		$account_choices = $role_choices = $fields_choices = array();
-
-		$optgroups = array();
+		$form_id         = $this->formId;
+		$account_choices = $role_choices = $fields_choices = $optgroups = array();
 
 		if ( $include_users ) {
-			$args            = apply_filters( 'gravityflow_get_users_args_assignee_field', array( 'number' => 1000, 'orderby' => 'display_name' ), $form_id, $this );
-			$accounts        = get_users( $args );
-			$account_choices = array();
+			$args = array(
+				'number'  => 1000,
+				'orderby' => 'display_name',
+				'role'    => $this->gravityflowUsersRoleFilter,
+			);
+
+			$args     = apply_filters( 'gravityflow_get_users_args_assignee_field', $args, $form_id, $this );
+			$accounts = get_users( $args );
 			foreach ( $accounts as $account ) {
 				$account_choices[] = array( 'value' => 'user_id|' . $account->ID, 'text' => $account->display_name );
 			}
 
 			$account_choices = apply_filters( 'gravityflow_assignee_field_users', $account_choices, $form_id, $this );
 
-			$optgroups = array();
-
 			if ( ! empty( $account_choices ) ) {
-				$users_opt_group = new GF_Field();
+				$users_opt_group          = new GF_Field();
 				$users_opt_group->choices = $account_choices;
 
 				$optgroups[] = array(
@@ -98,22 +97,16 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
 
 		if ( $include_roles ) {
-			$editable_roles = array_reverse( $wp_roles->roles );
-			$role_choices = array();
-			foreach ( $editable_roles as $role => $details ) {
-				$name           = translate_user_role( $details['name'] );
-				$role_choices[] = array( 'value' => 'role|' . $role, 'text' => $name );
-			}
-
+			$role_choices = Gravity_Flow_Common::get_roles_as_choices( true, true, true );
 			$role_choices = apply_filters( 'gravityflow_assignee_field_roles', $role_choices, $form_id, $this );
 
 			if ( ! empty( $role_choices ) ) {
-				$roles_opt_group = new GF_Field();
+				$roles_opt_group          = new GF_Field();
 				$roles_opt_group->choices = $role_choices;
 
 				$optgroups[] = array(
 					'label'   => __( 'Roles', 'gravityflow' ),
-					'key' => 'roles',
+					'key'     => 'roles',
 					'choices' => GFCommon::get_select_choices( $roles_opt_group, $value ),
 				);
 			}
@@ -121,12 +114,12 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
 		if ( $include_fields ) {
 			$form_id = $this->formId;
-			$form = GFAPI::get_form( $form_id );
+			$form    = GFAPI::get_form( $form_id );
 			if ( rgar( $form, 'requireLogin' ) ) {
 
 				$fields_choices = array(
 					array(
-						'text' => __( 'User (Created by)', 'gravityflow' ),
+						'text'  => __( 'User (Created by)', 'gravityflow' ),
 						'value' => 'entry|created_by',
 					),
 				);
@@ -134,7 +127,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 				$fields_choices = apply_filters( 'gravityflow_assignee_field_fields', $fields_choices, $form_id, $this );
 
 				if ( ! empty( $fields_choices ) ) {
-					$fields_opt_group = new GF_Field();
+					$fields_opt_group          = new GF_Field();
 					$fields_opt_group->choices = $fields_choices;
 
 					$optgroups[] = array(
@@ -149,7 +142,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
 		if ( ! empty( $this->placeholder ) ) {
 			$selected = empty( $value ) ? "selected='selected'" : '';
-			$html = sprintf( "<option value='' %s class='gf_placeholder'>%s</option>", $selected, esc_html( $this->placeholder ) );
+			$html     = sprintf( "<option value='' %s class='gf_placeholder'>%s</option>", $selected, esc_html( $this->placeholder ) );
 		}
 
 		foreach ( $optgroups as $optgroup ) {
@@ -161,7 +154,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
 	public function get_value_entry_list( $value, $entry, $field_id, $columns, $form ) {
 		$assignee = parent::get_value_entry_list( $value, $entry, $field_id, $columns, $form );
-		$value = $this->get_display_name( $assignee );
+		$value    = $this->get_display_name( $assignee );
 
 		return $value;
 	}
@@ -174,9 +167,8 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 	}
 
 	public function get_value_entry_detail( $value, $currency = '', $use_text = false, $format = 'html', $media = 'screen' ) {
-
 		$assignee = parent::get_value_entry_detail( $value, $currency, $use_text, $format, $media );
-		$value = $this->get_display_name( $assignee );
+		$value    = $this->get_display_name( $assignee );
 
 		return $value;
 	}
@@ -214,6 +206,17 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 		}
 
 		return $this->get_display_name( rgar( $entry, $input_id ) );
+	}
+
+	public function sanitize_settings() {
+		parent::sanitize_settings();
+		if ( ! empty( $this->gravityflowUsersRoleFilter ) ) {
+			$this->gravityflowUsersRoleFilter = wp_strip_all_tags( $this->gravityflowUsersRoleFilter );
+		}
+
+		$this->gravityflowAssigneeFieldShowUsers  = (bool) $this->gravityflowAssigneeFieldShowUsers;
+		$this->gravityflowAssigneeFieldShowRoles  = (bool) $this->gravityflowAssigneeFieldShowRoles;
+		$this->gravityflowAssigneeFieldShowFields = (bool) $this->gravityflowAssigneeFieldShowFields;
 	}
 }
 

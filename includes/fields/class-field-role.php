@@ -9,7 +9,7 @@ class Gravity_Flow_Field_Role extends GF_Field_Select {
 	public $type = 'workflow_role';
 
 	public function add_button( $field_groups ) {
-		$field_groups = Gravity_Flow_Common::maybe_add_workflow_field_group( $field_groups );
+		$field_groups = Gravity_Flow_Fields::maybe_add_workflow_field_group( $field_groups );
 
 		return parent::add_button( $field_groups );
 	}
@@ -46,26 +46,19 @@ class Gravity_Flow_Field_Role extends GF_Field_Select {
 	}
 
 	public function get_choices( $value ) {
-
 		$choices = $this->get_roles_as_choices( $value );
+
 		return $choices;
 	}
 
 	public function get_roles_as_choices( $value ) {
-		global $wp_roles;
 		$form_id = $this->formId;
 
-		$editable_roles = $wp_roles->roles;
-		$role_choices = array();
-		foreach ( $editable_roles as $role => $details ) {
-			$name           = translate_user_role( $details['name'] );
-			$role_choices[] = array( 'value' => $role, 'text' => $name );
-		}
-
+		$role_choices = Gravity_Flow_Common::get_roles_as_choices( false );
 		$role_choices = apply_filters( 'gravityflow_role_field', $role_choices, $form_id, $this );
 
 		$this->choices = $role_choices;
-		$choices = GFCommon::get_select_choices( $this, $value );
+		$choices       = GFCommon::get_select_choices( $this, $value );
 
 		return $choices;
 	}
@@ -85,9 +78,8 @@ class Gravity_Flow_Field_Role extends GF_Field_Select {
 	}
 
 	public function get_value_entry_detail( $value, $currency = '', $use_text = false, $format = 'html', $media = 'screen' ) {
-
 		$assignee = parent::get_value_entry_detail( $value, $currency, $use_text, $format, $media );
-		$value = $this->get_display_name( $assignee );
+		$value    = $this->get_display_name( $assignee );
 
 		return $value;
 	}

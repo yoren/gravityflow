@@ -30,14 +30,39 @@ function SetDiscussionTimestampFormat(format) {
 	RefreshSelectedFieldPreview();
 }
 
+function SetAssigneeFieldShowUsers() {
+	var value = jQuery('#gravityflow-assignee-field-show-users').is(':checked');
+	SetFieldProperty('gravityflowAssigneeFieldShowUsers', value);
+
+	var roleFilter = jQuery('li.gravityflow_setting_users_role_filter');
+
+	if (!value) {
+		roleFilter.hide('slow', function () {
+			jQuery('#gravityflow_users_role_filter').val('');
+			SetFieldProperty('gravityflowUsersRoleFilter', '');
+		});
+	} else {
+		roleFilter.show('slow');
+	}
+}
+
 jQuery(document).bind('gform_load_field_settings', function (event, field, form) {
+	var isAssigneeField = field.type == 'workflow_assignee_select';
 
-	if (field.type == 'workflow_assignee_select') {
+	if (isAssigneeField) {
+		var showUsers = field.gravityflowAssigneeFieldShowUsers;
 
-		jQuery('#gravityflow-assignee-field-show-users').prop('checked', field.gravityflowAssigneeFieldShowUsers ? true : false);
-		jQuery('#gravityflow-assignee-field-show-roles').prop('checked', field.gravityflowAssigneeFieldShowRoles ? true : false);
-		jQuery('#gravityflow-assignee-field-show-fields').prop('checked', field.gravityflowAssigneeFieldShowFields ? true : false);
+		jQuery('#gravityflow-assignee-field-show-users').prop('checked', !!showUsers);
+		jQuery('#gravityflow-assignee-field-show-roles').prop('checked', !!field.gravityflowAssigneeFieldShowRoles);
+		jQuery('#gravityflow-assignee-field-show-fields').prop('checked', !!field.gravityflowAssigneeFieldShowFields);
 
+		if (showUsers) {
+			jQuery('li.gravityflow_setting_users_role_filter').toggle();
+		}
+	}
+
+	if (isAssigneeField || field.type == 'workflow_user') {
+		jQuery('#gravityflow_users_role_filter').val(field.gravityflowUsersRoleFilter);
 	}
 
 	if (field.type == 'workflow_discussion') {

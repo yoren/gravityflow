@@ -122,7 +122,6 @@ if ( class_exists( 'GFForms' ) ) {
 
 		public function init_admin() {
 			parent::init_admin();
-			add_action( 'gform_entry_detail', array( 'Gravity_Flow_Field_Discussion', 'delete_discussion_item_script' ) );
 			add_action( 'gform_entry_detail_sidebar_middle', array( $this, 'entry_detail_status_box' ), 10, 2 );
 			add_filter( 'gform_notification_events', array( $this, 'add_notification_event' ), 10, 2 );
 
@@ -138,10 +137,6 @@ if ( class_exists( 'GFForms' ) ) {
 				add_action( 'gform_post_form_duplicated', array( $this, 'post_form_duplicated' ), 10, 2 );
 			}
 
-			add_action( 'gform_field_standard_settings', array( $this, 'field_settings' ), 10, 2 );
-			add_action( 'gform_field_appearance_settings', array( $this, 'field_appearance_settings' ) );
-			add_filter( 'gform_tooltips', array( $this, 'add_tooltips' ) );
-
 		}
 
 		public function init_ajax() {
@@ -155,11 +150,6 @@ if ( class_exists( 'GFForms' ) ) {
 			add_action( 'wp_ajax_gravityflow_export_status', array( $this, 'ajax_export_status' ) );
 			add_action( 'wp_ajax_nopriv_gravityflow_export_status', array( $this, 'ajax_export_status' ) );
 			add_action( 'wp_ajax_gravityflow_download_export', array( $this, 'ajax_download_export' ) );
-
-			add_action( 'wp_ajax_rg_delete_file', array( 'RGForms', 'delete_file' ) );
-			add_action( 'wp_ajax_nopriv_rg_delete_file', array( 'RGForms', 'delete_file' ) );
-
-			add_action( 'wp_ajax_gravityflow_delete_discussion_item', array( 'Gravity_Flow_Field_Discussion', 'ajax_delete_discussion_item' ) );
 		}
 
 		public function init_frontend() {
@@ -616,13 +606,7 @@ PRIMARY KEY  (id)
 
 		public function get_users_as_choices() {
 
-			$editable_roles = array_reverse( get_editable_roles() );
-
-			$role_choices = array();
-			foreach ( $editable_roles as $role => $details ) {
-				$name           = translate_user_role( $details['name'] );
-				$role_choices[] = array( 'value' => 'role|' . $role, 'label' => $name );
-			}
+			$role_choices = Gravity_Flow_Common::get_roles_as_choices( true, true );
 
 			$args            = apply_filters( 'gravityflow_get_users_args', array( 'number' => 1000, 'orderby' => 'display_name' ) );
 			$accounts        = get_users( $args );
@@ -4111,59 +4095,6 @@ PRIMARY KEY  (id)
 			}
 		}
 
-		public function field_settings( $position, $form_id ) {
-
-			if ( $position == 20 ) {
-				// After Description setting
-				?>
-
-				<li class="gravityflow_setting_assignees field_setting">
-					<span class="section_label"><?php esc_html_e( 'Assignees', 'gravityflow' ); ?></span>
-					<div>
-						<input type="checkbox" id="gravityflow-assignee-field-show-users"
-						       onclick="var value = jQuery(this).is(':checked'); SetFieldProperty('gravityflowAssigneeFieldShowUsers', value);" />
-						<label for="gravityflow-assignee-field-show-users" class="inline">
-							<?php esc_html_e( 'Show Users', 'gravityflow' ); ?>
-							<?php gform_tooltip( 'gravityflow_assignee_field_show_users' ) ?>
-						</label>
-					</div>
-					<div>
-						<input type="checkbox" id="gravityflow-assignee-field-show-roles"
-						       onclick="var value = jQuery(this).is(':checked'); SetFieldProperty('gravityflowAssigneeFieldShowRoles', value);" />
-						<label for="gravityflow-assignee-field-show-roles" class="inline">
-							<?php esc_html_e( 'Show Roles', 'gravityflow' ); ?>
-							<?php gform_tooltip( 'gravityflow_assignee_field_show_roles' ) ?>
-						</label>
-					</div>
-					<div>
-						<input type="checkbox" id="gravityflow-assignee-field-show-fields"
-						       onclick="var value = jQuery(this).is(':checked'); SetFieldProperty('gravityflowAssigneeFieldShowFields', value);" />
-						<label for="gravityflow-assignee-field-show-fields" class="inline">
-							<?php esc_html_e( 'Show Fields', 'gravityflow' ); ?>
-							<?php gform_tooltip( 'gravityflow_assignee_field_show_fields' ) ?>
-						</label>
-					</div>
-
-				</li>
-
-			<?php }
-		}
-
-		public function field_appearance_settings( $position ) {
-			if ( $position == 0 ) {
-				?>
-				<li class="gravityflow_setting_discussion_timestamp_format field_setting">
-					<label for="gravityflow_discussion_timestamp_format" class="section_label">
-						<?php esc_html_e( 'Custom Timestamp Format', 'gravityflow' ); ?>
-						<?php gform_tooltip( 'gravityflow_discussion_timestamp_format' ) ?>
-					</label>
-					<input id="gravityflow_discussion_timestamp_format" type="text" class="fieldwidth-4" placeholder="d M Y g:i a"
-					       onkeyup="SetDiscussionTimestampFormat(jQuery(this).val());" onchange="SetDiscussionTimestampFormat(jQuery(this).val());"/>
-				</li>
-				<?php
-			}
-		}
-
 		public function action_admin_enqueue_scripts() {
 			$this->maybe_enqueue_form_scripts();
 		}
@@ -5102,13 +5033,6 @@ AND m.meta_value='queued'";
 
 			<?php
 			return $form;
-		}
-
-		public function add_tooltips( $tooltips ) {
-			$tooltips['form_workflow_fields']                          = '<h6>' . __( 'Workflow Fields', 'gravityflow' ) . '</h6>' . __( 'Workflow Fields add advanced workflow functionality to your forms.', 'gravityflow' );
-			$tooltips['gravityflow_discussion_timestamp_format'] = '<h6>' . __( 'Custom Timestamp Format', 'gravityflow' ) . '</h6>' . sprintf( __( 'If you would like to override the default format used when displaying the comment timestamps, enter your %scustom format%s here.', 'gravityflow' ), '<a href="https://codex.wordpress.org/Formatting_Date_and_Time" target="_blank">', '</a>' );
-
-			return $tooltips;
 		}
 
 		public function can_duplicate_feed( $id ) {

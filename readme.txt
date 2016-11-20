@@ -58,6 +58,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.4.2-dev =
 
+- Added the users role filter setting to the Workflow User and Assignee type fields.
 - Added support for deleting Discussion field comments on the entry detail edit page.
 - Added the Rich Text Editor setting to the Discussion field.
 - Added the gravityflow_inbox_sorting filter to allow the sorting criteria to be modified before search for entries in the inbox. See http://docs.gravityflow.io/article/132-gravityflowinboxsorting

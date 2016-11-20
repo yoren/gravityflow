@@ -90,6 +90,8 @@ class Gravity_Flow_Bootstrap {
 	}
 
 	public static function include_fields() {
+		require_once( dirname( __FILE__ ) . '/includes/fields/class-fields.php' );
+
 		foreach ( glob( dirname( __FILE__ ) . '/includes/fields/class-field-*.php' ) as $gravity_flow_filename ) {
 			require_once( $gravity_flow_filename );
 		}

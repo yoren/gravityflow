@@ -103,25 +103,36 @@ class Gravity_Flow_Common {
 	}
 
 	/**
-	 * Adds the Workflow Fields group to the form editor.
+	 * Get an array of choices containing the user roles.
 	 *
-	 * @param array $field_groups The properties for the field groups.
+	 * @param bool $prefix_values Indicates if the choice value should be prefixed 'role|'. Default is true.
+	 * @param bool $reverse       Indicates if the choices should be reversed. Default is false.
+	 * @param bool $frontend      Indicates if the choices are being used by a front-end field. Default is false.
+	 *
+	 * @since 1.4.2-dev
 	 *
 	 * @return array
 	 */
-	public static function maybe_add_workflow_field_group( $field_groups ) {
-		foreach ( $field_groups as $field_group ) {
-			if ( $field_group['name'] == 'workflow_fields' ) {
-				return $field_groups;
-			}
+	public static function get_roles_as_choices( $prefix_values = true, $reverse = false, $frontend = false ) {
+		if ( ! function_exists( 'get_editable_roles' ) ) {
+			require_once( ABSPATH . '/wp-admin/includes/user.php' );
 		}
 
-		$field_groups[] = array(
-			'name'   => 'workflow_fields',
-			'label'  => __( 'Workflow Fields', 'gravityflow' ),
-			'fields' => array()
-		);
+		$roles = get_editable_roles();
 
-		return $field_groups;
+		if ( $reverse ) {
+			$roles = array_reverse( $roles );
+		}
+
+		$choices = array();
+		$prefix  = $prefix_values ? 'role|' : '';
+		$key     = $frontend ? 'text' : 'label';
+
+		foreach ( $roles as $role => $details ) {
+			$name      = translate_user_role( $details['name'] );
+			$choices[] = array( 'value' => $prefix . $role, $key => $name );
+		}
+
+		return $choices;
 	}
 }

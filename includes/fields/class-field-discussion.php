@@ -18,7 +18,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	private $_clear_input_value = false;
 
 	public function add_button( $field_groups ) {
-		$field_groups = Gravity_Flow_Common::maybe_add_workflow_field_group( $field_groups );
+		$field_groups = Gravity_Flow_Fields::maybe_add_workflow_field_group( $field_groups );
 
 		return parent::add_button( $field_groups );
 	}
