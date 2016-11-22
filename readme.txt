@@ -70,6 +70,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Updated the notification step to prevent the selected notifications being sent during form submission.
 - Updated the last updated column on the status list to display the date created when the entry has not been updated.
 
+- Fixed an issue with duplicate Final Status choices, such as Complete, being added to the entry meta filters.
 - Fixed an issue with the user input step update button which caused the signature field to fail validation.
 - Fixed an issue with the workflow link/url merge tags when the specified page does not exist.
 - Fixed an issue with the coupon field on the user input step when there are no editable product fields (GF Coupons v2.3.2 required).

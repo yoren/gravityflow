@@ -1902,37 +1902,34 @@ PRIMARY KEY  (id)
 		 * @return array The filtered entry meta array.
 		 */
 		public function get_entry_meta( $entry_meta, $form_id ) {
-			$steps = $this->get_steps( $form_id );
-
-			$step_choices = array();
-
-			$workflow_final_status_options = array();
+			$steps        = $this->get_steps( $form_id );
+			$step_choices = $workflow_final_status_options = array();
 
 			foreach ( $steps as $step ) {
-
 				if (  empty( $step ) || ! $step->is_active() ) {
 					continue;
 				}
+
 				$status_choices = array();
-				$step_id = $step->get_id();
-				$step_name = $step->get_name();
+				$step_id        = $step->get_id();
+				$step_name      = $step->get_name();
 				$step_choices[] = array( 'value' => $step_id, 'text' => $step_name );
 
 				$step_status_options = $step->get_status_config();
 				foreach ( $step_status_options as $status_option ) {
 					$status_choices[] = array(
 						'value' => $status_option['status'],
-						'text' => $this->translate_status_label( $status_option['status'] ),
+						'text'  => $this->translate_status_label( $status_option['status'] ),
 					);
 				}
 
 				$entry_meta = array_merge( $entry_meta, $step->get_entry_meta( $entry_meta, $form_id ) );
 
 				$entry_meta[ 'workflow_step_status_' . $step_id ] = array(
-					'label'                      => __( 'Status:', 'gravityflow' ) . ' ' . $step_name,
-					'is_numeric'                 => false,
-					'is_default_column'          => false, // this column will not be displayed by default on the entry list
-					'filter'                     => array(
+					'label'             => __( 'Status:', 'gravityflow' ) . ' ' . $step_name,
+					'is_numeric'        => false,
+					'is_default_column' => false, // this column will not be displayed by default on the entry list
+					'filter'            => array(
 						'operators' => array( 'is', 'isnot' ),
 						'choices'   => $status_choices,
 					),
@@ -1942,12 +1939,6 @@ PRIMARY KEY  (id)
 			}
 
 			if ( ! empty( $steps ) ) {
-
-				// Remove duplicates
-				$workflow_final_status_options = array_map( 'unserialize', array_unique( array_map( 'serialize', $workflow_final_status_options ) ) );
-
-				$workflow_final_status_options = array_values( $workflow_final_status_options );
-
 				$workflow_final_status_options[] = array(
 					'value' => 'pending',
 					'text'  => $this->translate_status_label( 'pending' ),
@@ -1957,6 +1948,11 @@ PRIMARY KEY  (id)
 					'value' => 'complete',
 					'text'  => $this->translate_status_label( 'complete' ),
 				);
+
+				// Remove duplicates
+				$workflow_final_status_options = array_map( 'unserialize', array_unique( array_map( 'serialize', $workflow_final_status_options ) ) );
+
+				$workflow_final_status_options = array_values( $workflow_final_status_options );
 
 				$entry_meta['workflow_final_status'] = array(
 					'label'                      => 'Final Status',
