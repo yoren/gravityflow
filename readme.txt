@@ -80,7 +80,8 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Fixed an issue with the sidebar shortcode attribute for the status page.
 - Fixed an issue with dynamic assignee routing where the assignees don't update correctly after changing the value of a dependent field.
 - Fixed a fatal error when the next step doesn't exist.
-- Fixed an issue with the inbox and status shortcodes where the form is specified without fields
+- Fixed an issue with the inbox and status shortcodes where the form is specified without fields.
+- Fixed an issue with the conditional routing where conditions specifying the User are ignored.
 
 = 1.4.1 =
 

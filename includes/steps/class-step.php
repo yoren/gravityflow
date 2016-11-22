@@ -1697,7 +1697,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$entry_meta_keys = array_keys( GFFormsModel::get_entry_meta( $form_id ) );
 		$form            = GFAPI::get_form( $form_id );
 
-		if ( in_array( $routing_rule['fieldId'], $entry_meta_keys ) ) {
+		$entry_properties = array( 'created_by', 'date_created', 'currency', 'id', 'status' );
+
+		if ( in_array( $routing_rule['fieldId'], $entry_meta_keys ) || in_array( $routing_rule['fieldId'], $entry_properties ) ) {
 			$is_value_match = GFFormsModel::is_value_match( rgar( $entry, $routing_rule['fieldId'] ), $routing_rule['value'], $routing_rule['operator'], null, $routing_rule, $form );
 		} else {
 			$source_field   = GFFormsModel::get_field( $form, $routing_rule['fieldId'] );
