@@ -4074,7 +4074,11 @@ PRIMARY KEY  (id)
 
 		public function action_gform_forms_post_import( $forms ) {
 			$gravityflow_feeds_imported = false;
-			foreach ( $forms as $form ) {
+			foreach ( $forms as $import_form ) {
+
+				// Ensure the imported form is the latest. Compensates for a bug in Gravity Forms < 2.1.1.13
+				$form = GFAPI::get_form( $import_form['id'] );
+
 				if ( isset( $form['feeds']['gravityflow'] ) ) {
 					$this->import_gravityflow_feeds( $form['feeds']['gravityflow'], $form['id'] );
 					unset( $form['feeds']['gravityflow'] );

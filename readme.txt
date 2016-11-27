@@ -83,6 +83,8 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Fixed a fatal error when the next step doesn't exist.
 - Fixed an issue with the inbox and status shortcodes where the form is specified without fields.
 - Fixed an issue with the conditional routing where conditions specifying the User are ignored.
+- Fixed an issue with imported forms. Fixed in Gravity Forms 2.1.1.13.
+
 
 = 1.4.1 =
 
