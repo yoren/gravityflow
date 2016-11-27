@@ -1690,24 +1690,26 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return bool Is the routing rule a match?
 	 */
 	public function evaluate_routing_rule( $routing_rule ) {
-		gravity_flow()->log_debug( __METHOD__ . '(): rule:' . print_r( $routing_rule, true ) );
+		$this->log_debug( __METHOD__ . '(): rule: ' . print_r( $routing_rule, true ) );
 
-		$entry           = $this->get_entry();
-		$form_id         = $this->get_form_id();
-		$entry_meta_keys = array_keys( GFFormsModel::get_entry_meta( $form_id ) );
-		$form            = GFAPI::get_form( $form_id );
+		$entry   = $this->get_entry();
+		$form_id = $this->get_form_id();
+		$form    = GFAPI::get_form( $form_id );
 
+		$entry_meta_keys  = array_keys( GFFormsModel::get_entry_meta( $form_id ) );
 		$entry_properties = array( 'created_by', 'date_created', 'currency', 'id', 'status' );
 
-		if ( in_array( $routing_rule['fieldId'], $entry_meta_keys ) || in_array( $routing_rule['fieldId'], $entry_properties ) ) {
-			$is_value_match = GFFormsModel::is_value_match( rgar( $entry, $routing_rule['fieldId'] ), $routing_rule['value'], $routing_rule['operator'], null, $routing_rule, $form );
+		$field_id = $routing_rule['fieldId'] == 'entry_id' ? 'id' : $routing_rule['fieldId'];
+
+		if ( in_array( $field_id, $entry_meta_keys ) || in_array( $field_id, $entry_properties ) ) {
+			$is_value_match = GFFormsModel::is_value_match( rgar( $entry, $field_id ), $routing_rule['value'], $routing_rule['operator'], null, $routing_rule, $form );
 		} else {
-			$source_field   = GFFormsModel::get_field( $form, $routing_rule['fieldId'] );
+			$source_field   = GFFormsModel::get_field( $form, $field_id );
 			$field_value    = empty( $entry ) ? GFFormsModel::get_field_value( $source_field, array() ) : GFFormsModel::get_lead_field_value( $entry, $source_field );
 			$is_value_match = GFFormsModel::is_value_match( $field_value, $routing_rule['value'], $routing_rule['operator'], $source_field, $routing_rule, $form );
 		}
 
-		gravity_flow()->log_debug( __METHOD__ . '(): is_match:' . print_r( $is_value_match, true ) );
+		$this->log_debug( __METHOD__ . '(): is_match: ' . var_export( $is_value_match, true ) );
 
 		return $is_value_match;
 	}
