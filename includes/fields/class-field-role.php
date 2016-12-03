@@ -52,13 +52,16 @@ class Gravity_Flow_Field_Role extends GF_Field_Select {
 	}
 
 	public function get_roles_as_choices( $value ) {
+
 		$form_id = $this->formId;
 
-		$role_choices = Gravity_Flow_Common::get_roles_as_choices( false );
+		$role_choices = Gravity_Flow_Common::get_roles_as_choices( false, false, true );
+
 		$role_choices = apply_filters( 'gravityflow_role_field', $role_choices, $form_id, $this );
 
 		$this->choices = $role_choices;
-		$choices       = GFCommon::get_select_choices( $this, $value );
+
+		$choices = GFCommon::get_select_choices( $this, $value );
 
 		return $choices;
 	}
