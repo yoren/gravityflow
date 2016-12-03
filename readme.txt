@@ -55,8 +55,10 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.4.3-dev =
 
-= 1.4.2-dev =
+
+= 1.4.2 =
 
 - Added the users role filter setting to the Workflow User and Assignee type fields.
 - Added support for deleting Discussion field comments on the entry detail edit page.
@@ -64,6 +66,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Added the gravityflow_inbox_sorting filter to allow the sorting criteria to be modified before search for entries in the inbox. See http://docs.gravityflow.io/article/132-gravityflowinboxsorting
 - Added the gravityflow_reverse_comment_order_discussion_field filter allowing the comments to be reversed before being displayed.
     Example: add_filter( 'gravityflow_reverse_comment_order_discussion_field', '__return_true' );
+- Added Italian translation - thanks to Giacomo Papasidero.
 
 - Updated to support the Gravity Forms 2.1 field visibility setting changes.
 - Updated the inbox and status pages to remove the dependency on the entry list columns when form and field ids are specified.
