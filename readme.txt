@@ -57,6 +57,8 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.4.3-dev =
 
+- Added support for shortcodes in the step instructions.
+
 = 1.4.2.1 =
 
 - Fixed an issue preventing the settings for the Workflow Role Field from opening in the Form Editor.
