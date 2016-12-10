@@ -123,7 +123,6 @@ class Gravity_Flow_API {
 		$feedback = esc_html__( 'Workflow cancelled.', 'gravityflow' );
 		gravity_flow()->add_timeline_note( $entry_id, $feedback );
 		gravity_flow()->log_event( 'workflow', 'cancelled', $form['id'], $entry_id );
-
 		return true;
 	}
 
@@ -155,9 +154,21 @@ class Gravity_Flow_API {
 	 * @param $entry
 	 */
 	public function restart_workflow( $entry ) {
+
 		$current_step = $this->get_current_step( $entry );
 		$entry_id     = absint( $entry['id'] );
 		$form         = GFAPI::get_form( $this->form_id );
+
+		/**
+		 * Fires just before the workflow restarts for an entry.
+		 *
+		 * @since 1.4.3
+		 *
+		 * @param $entry
+		 * @param $form
+		 */
+		do_action( 'gravityflow_pre_restart_workflow', $entry, $form );
+
 		if ( $current_step ) {
 			$assignees = $current_step->get_assignees();
 			foreach ( $assignees as $assignee ) {
