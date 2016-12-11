@@ -497,20 +497,21 @@
             return mergeTags;
         }
 
-        var tags = [];
-        tags.push({tag: '{workflow_entry_link}', label: 'Entry Link'});
-        tags.push({tag: '{workflow_entry_url}', label: 'Entry URL'});
-		tags.push({tag: '{workflow_inbox_link}', label: 'Inbox Link'});
-		tags.push({tag: '{workflow_inbox_url}', label: 'Inbox URL'});
-        tags.push({tag: '{workflow_cancel_link}', label: 'Cancel Link'});
-        tags.push({tag: '{workflow_cancel_url}', label: 'Cancel URL'});
-        tags.push({tag: '{workflow_note}', label: 'Note'});
-        tags.push({tag: '{workflow_timeline}', label: 'Timeline'});
+        var labels = gravityflow_form_settings_js_strings.mergeTagLabels,
+            tags = [];
 
-
+        tags.push({tag: '{workflow_entry_link}', label: labels.workflow_entry_link});
+        tags.push({tag: '{workflow_entry_url}', label: labels.workflow_entry_url});
+		tags.push({tag: '{workflow_inbox_link}', label: labels.workflow_inbox_link});
+		tags.push({tag: '{workflow_inbox_url}', label: labels.workflow_inbox_url});
+        tags.push({tag: '{workflow_cancel_link}', label: labels.workflow_cancel_link});
+        tags.push({tag: '{workflow_cancel_url}', label: labels.workflow_cancel_url});
+        tags.push({tag: '{workflow_note}', label: labels.workflow_note});
+        tags.push({tag: '{workflow_timeline}', label: labels.workflow_timeline});
+        tags.push({tag: '{assignees}', label: labels.assignees});
 
         mergeTags['gravityflow'] = {
-            label: 'Workflow',
+            label: labels.group,
             tags: tags
         };
 
@@ -527,15 +528,21 @@
             return mergeTags;
         }
 
-        var tags = [];
-        tags.push({tag: '{workflow_approve_link}', label: 'Approve Link'});
-        tags.push({tag: '{workflow_reject_link}', label: 'Reject Link'});
+        var labels = gravityflow_form_settings_js_strings.mergeTagLabels,
+            tags = [];
+
+        tags.push({tag: '{workflow_approve_link}', label: labels.workflow_approve_link});
+        tags.push({tag: '{workflow_approve_url}', label: labels.workflow_approve_url});
+        tags.push({tag: '{workflow_approve_token}', label: labels.workflow_approve_token});
+        tags.push({tag: '{workflow_reject_link}', label: labels.workflow_reject_link});
+        tags.push({tag: '{workflow_reject_url}', label: labels.workflow_reject_url});
+        tags.push({tag: '{workflow_reject_token}', label: labels.workflow_reject_token});
 
         if ( typeof mergeTags['gravityflow'] != 'undefined' ) {
             mergeTags['gravityflow']['tags'] = $.merge (mergeTags['gravityflow']['tags'], tags);
         } else {
             mergeTags['gravityflow'] = {
-                label: 'Workflow',
+                label: labels.group,
                 tags: tags
             };
         }

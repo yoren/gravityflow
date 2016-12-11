@@ -58,7 +58,8 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 = 1.4.3-dev =
 
 - Added support for shortcodes in the step instructions.
-- Added the gravityflow_pre_restart_workflow action
+- Added the gravityflow_pre_restart_workflow action.
+- Fixed merge tag labels not being translatable.
 
 = 1.4.2.1 =
 

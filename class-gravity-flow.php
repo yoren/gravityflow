@@ -302,8 +302,9 @@ PRIMARY KEY  (id)
 						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=0' ),
 					),
 					'strings' => array(
-						'feedId' => absint( rgget( 'fid' ) ),
-						'formId' => absint( rgget( 'id' ) ),
+						'feedId'         => absint( rgget( 'fid' ) ),
+						'formId'         => absint( rgget( 'id' ) ),
+						'mergeTagLabels' => $this->get_form_settings_js_merge_tag_labels(),
 					),
 				),
 				array(
@@ -5500,6 +5501,37 @@ AND m.meta_value='queued'";
 		public function get_current_form() {
 
 			return rgempty( 'id', $_GET ) ? false : GFFormsModel::get_form_meta( rgget( 'id' ) );
+		}
+
+		/**
+		 * Returns the mergeTagLabels property of the strings for form-settings.js.
+         *
+         * @since 1.4.3-dev
+         *
+         * @used-by Gravity_Flow::scripts()
+         * @uses    esc_html__()
+         *
+         * @return array
+		 */
+		public function get_form_settings_js_merge_tag_labels() {
+			return array(
+				'group'                  => esc_html__( 'Workflow', 'gravityflow' ),
+				'workflow_entry_link'    => esc_html__( 'Entry Link', 'gravityflow' ),
+				'workflow_entry_url'     => esc_html__( 'Entry URL', 'gravityflow' ),
+				'workflow_inbox_link'    => esc_html__( 'Inbox Link', 'gravityflow' ),
+				'workflow_inbox_url'     => esc_html__( 'Inbox URL', 'gravityflow' ),
+				'workflow_cancel_link'   => esc_html__( 'Cancel Link', 'gravityflow' ),
+				'workflow_cancel_url'    => esc_html__( 'Cancel URL', 'gravityflow' ),
+				'workflow_note'          => esc_html__( 'Note', 'gravityflow' ),
+				'workflow_timeline'      => esc_html__( 'Timeline', 'gravityflow' ),
+				'assignees'              => esc_html__( 'Assignees', 'gravityflow' ),
+				'workflow_approve_link'  => esc_html__( 'Approve Link', 'gravityflow' ),
+				'workflow_approve_url'   => esc_html__( 'Approve URL', 'gravityflow' ),
+				'workflow_approve_token' => esc_html__( 'Approve Token', 'gravityflow' ),
+				'workflow_reject_link'   => esc_html__( 'Reject Link', 'gravityflow' ),
+				'workflow_reject_url'    => esc_html__( 'Reject URL', 'gravityflow' ),
+				'workflow_reject_token'  => esc_html__( 'Reject Token', 'gravityflow' ),
+			);
 		}
 	}
 }
