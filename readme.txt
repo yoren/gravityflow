@@ -57,6 +57,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.4.3-dev =
 
+- Added settings to the Workflow > Settings page for selecting which pages contain the gravityflow inbox, status and submit shortcodes. The selected inbox page will be used when preparing merge tags such as {workflow_inbox_link} when the page_id attribute is not specified.
 - Added support for shortcodes in the step instructions.
 - Added the gravityflow_pre_restart_workflow action.
 - Fixed merge tag labels not being translatable.

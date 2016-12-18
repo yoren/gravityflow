@@ -897,7 +897,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 				$a = shortcode_atts(
 					array(
-						'page_id' => 'admin',
+						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
 						'text'    => $location == 'inbox' ? esc_html__( 'Inbox', 'gravityflow' ) : esc_html__( 'Entry', 'gravityflow' ),
 						'token'   => false,
 					), $options
@@ -975,7 +975,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 					$a = shortcode_atts(
 						array(
-							'page_id' => 'admin',
+							'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
 							'text'    => esc_html__( 'Cancel Workflow', 'gravityflow' ),
 						), $options
 					);

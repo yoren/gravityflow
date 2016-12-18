@@ -2866,6 +2866,29 @@ PRIMARY KEY  (id)
 				'description' => esc_html__( 'Select the forms you wish to publish on the Submit page.', 'gravityflow' ),
 				'fields'      => $published_forms_fields,
 			);
+
+			$settings[] = array(
+				'title'       => esc_html__( 'Default Pages', 'gravityflow' ),
+				'description' => esc_html__( 'Select the pages which contain the following gravityflow shortcodes. For example, the inbox page selected below will be used when preparing merge tags such as {workflow_inbox_link} when the page_id attribute is not specified.', 'gravityflow' ),
+				'fields'      => array(
+					array(
+						'name'  => 'inbox_page',
+						'label' => esc_html__( 'Inbox', 'gravityflow' ),
+						'type'  => 'wp_dropdown_pages',
+					),
+					array(
+						'name'  => 'status_page',
+						'label' => esc_html__( 'Status', 'gravityflow' ),
+						'type'  => 'wp_dropdown_pages',
+					),
+					array(
+						'name'  => 'submit_page',
+						'label' => esc_html__( 'Submit', 'gravityflow' ),
+						'type'  => 'wp_dropdown_pages',
+					),
+				),
+			);
+
 			$settings[] = array(
 				'id'     => 'save_button',
 				'fields' => array(
@@ -2883,6 +2906,32 @@ PRIMARY KEY  (id)
 			);
 
 			return $settings;
+
+		}
+
+		/**
+		 * Display or return the markup for the wp_dropdown_pages field type.
+         *
+         * @since 1.4.3-dev
+		 *
+		 * @param array     $field The field properties.
+		 * @param bool|true $echo  Should the setting markup be echoed.
+		 *
+		 * @return string
+		 */
+		public function settings_wp_dropdown_pages( $field, $echo = true ) {
+
+			$args = array(
+				'selected'         => $this->get_setting( $field['name'] ),
+				'echo'             => $echo,
+				'name'             => '_gaddon_setting_' . esc_attr( $field['name'] ),
+				'class'            => 'gaddon-setting gaddon-select',
+				'show_option_none' => esc_html__( 'Select page', 'gravityflow' ),
+			);
+
+			$html = wp_dropdown_pages( $args );
+
+			return $html;
 
 		}
 
@@ -3943,6 +3992,26 @@ PRIMARY KEY  (id)
 				return;
 			}
 			parent::app_tab_page();
+		}
+
+		/**
+		 * Returns the specified app setting.
+         *
+         * @since 1.4.3-dev
+         *
+         * @param string $setting_name The app setting to be returned.
+		 *
+		 * @return mixed|string
+		 */
+		public function get_app_setting( $setting_name ) {
+			$setting = parent::get_app_setting( $setting_name );
+
+			// If a default page hasn't been configured use the admin page.
+			if ( ! $setting && in_array( $setting_name, array( 'inbox_page', 'status_page', 'submit_page' ) ) ) {
+				return 'admin';
+			}
+
+			return $setting;
 		}
 
 		public function get_app_settings() {

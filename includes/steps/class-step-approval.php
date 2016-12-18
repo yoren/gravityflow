@@ -1133,7 +1133,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 				$a = shortcode_atts(
 					array(
-						'page_id' => 'admin',
+						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
 					), $options
 				);
 
@@ -1153,7 +1153,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 				$a = shortcode_atts(
 					array(
-						'page_id' => 'admin',
+						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
 						'text'    => esc_html__( 'Approve', 'gravityflow' ),
 					), $options
 				);
@@ -1183,7 +1183,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 				$a = shortcode_atts(
 					array(
-						'page_id' => 'admin',
+						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
 					), $options
 				);
 
@@ -1202,7 +1202,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 				$a = shortcode_atts(
 					array(
-						'page_id' => 'admin',
+						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
 						'text'    => esc_html__( 'Reject', 'gravityflow' ),
 					), $options
 				);
