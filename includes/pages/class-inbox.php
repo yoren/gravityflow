@@ -255,10 +255,11 @@ class Gravity_Flow_Inbox {
 	 * @return string
 	 */
 	public static function get_column_value( $id, $form, $entry, $columns ) {
+		$value = '';
 		switch ( strtolower( $id ) ) {
 			case 'form_title':
-				return rgar( $form, 'title' );
-
+				$value = rgar( $form, 'title' );
+				break;
 			case 'created_by':
 				$user           = get_user_by( 'id', (int) $entry['created_by'] );
 				$submitter_name = $user ? $user->display_name : $entry['ip'];
@@ -270,16 +271,16 @@ class Gravity_Flow_Inbox {
 				 * @param array $entry The entry object for the row currently being processed.
 				 * @param array $form The form object for the current entry.
 				 */
-				return apply_filters( 'gravityflow_inbox_submitter_name', $submitter_name, $entry, $form );
-
+				$value = apply_filters( 'gravityflow_inbox_submitter_name', $submitter_name, $entry, $form );
+				break;
 			case 'date_created':
-				return GFCommon::format_date( $entry['date_created'] );
-
+				$value = GFCommon::format_date( $entry['date_created'] );
+				break;
 			case 'last_updated':
 				$last_updated = date( 'Y-m-d H:i:s', $entry['workflow_timestamp'] );
 
-				return $entry['date_created'] != $last_updated ? GFCommon::format_date( $last_updated, true, 'Y/m/d' ) : '-';
-
+				$value = $entry['date_created'] != $last_updated ? GFCommon::format_date( $last_updated, true, 'Y/m/d' ) : '-';
+				break;
 			case 'workflow_step':
 				if ( isset( $entry['workflow_step'] ) ) {
 					$step = gravity_flow()->get_step( $entry['workflow_step'] );
@@ -288,16 +289,20 @@ class Gravity_Flow_Inbox {
 					}
 				}
 
-				return '';
-
+				$value = '';
+				break;
 			default:
 				$field = GFFormsModel::get_field( $form, $id );
 
 				if ( is_object( $field ) ) {
-					return $field->get_value_entry_list( rgar( $entry, $id ), $entry, $id, $columns, $form );
+					$value = $field->get_value_entry_list( rgar( $entry, $id ), $entry, $id, $columns, $form );
 				} else {
-					return rgar( $entry, $id );
+					$value = rgar( $entry, $id );
 				}
+
+				$value = apply_filters( 'gform_entries_field_value', $value, $form['id'], $id, $entry );
 		}
+
+		return $value;
 	}
 }

@@ -61,6 +61,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Added support for shortcodes in the step instructions.
 - Added the gravityflow_pre_restart_workflow action.
 - Fixed merge tag labels not being translatable.
+- Fixed an issue with the inbox where field values are not displayed correctly when custom code uses the gform_entries_field_value filter.
 
 = 1.4.2.1 =
 
