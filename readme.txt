@@ -63,6 +63,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Added field mapping to the Outgoing Webhook step.
 - Fixed merge tag labels not being translatable.
 - Fixed an issue with the inbox where field values are not displayed correctly when custom code uses the gform_entries_field_value filter.
+- Fixed an issue with poor admin performance on some sites where W3TC is installed and object caching is enabled.
 
 = 1.4.2.1 =
 
