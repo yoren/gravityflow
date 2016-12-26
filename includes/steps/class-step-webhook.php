@@ -346,13 +346,13 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			return $entry;
 		}
 
-		return $this->do_response_body_mapping();
+		return $this->do_request_body_mapping();
 	}
 
 	/**
 	 * Performs the body's response mappings.
 	 */
-	public function do_response_body_mapping() {
+	public function do_request_body_mapping() {
 		$body = array();
 
 		if ( ! is_array( $this->mappings ) ) {
