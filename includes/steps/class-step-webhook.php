@@ -51,6 +51,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					'label'         => esc_html__( 'Request Method', 'gravityflow' ),
 					'type'          => 'select',
 					'default_value' => 'post',
+					'onchange'    => "jQuery(this).closest('form').submit();",
 					'choices'       => array(
 						array(
 							'label' => 'POST',
@@ -87,7 +88,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					),
 				),
 				array(
-					'name' => 'select_fields',
+					'name' => 'body_type',
 					'label' => esc_html__( 'Request Body', 'gravityflow' ),
 					'type' => 'radio',
 					'default_value' => 'all_fields',
@@ -96,12 +97,16 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					'choices' => array(
 						array(
 							'label' => __( 'All Fields', 'gravityflow' ),
-							'value' => '',
+							'value' => 'all_fields',
 						),
 						array(
 							'label' => __( 'Select Fields', 'gravityflow' ),
-							'value' => 1,
+							'value' => 'select_fields',
 						),
+					),
+					'dependency' => array(
+						'field'  => 'method',
+						'values' => array( 'post', 'put' ),
 					),
 				),
 				array(
@@ -115,8 +120,8 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					'value_choices' => $this->value_mappings(),
 					'tooltip'   => '<h6>' . esc_html__( 'Mapping', 'gravityflow' ) . '</h6>' . esc_html__( 'Map the fields of this form to the selected form. Values from this form will be saved in the entry in the selected form' , 'gravityflow' ),
 					'dependency' => array(
-						'field'  => 'select_fields',
-						'values' => array( '_notempty_' ),
+						'field'  => 'body_type',
+						'values' => array( 'select_fields' ),
 					),
 				),
 			),
@@ -154,11 +159,12 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 		$method = strtoupper( $this->method );
 
-		$body = $this->get_request_body();
+		$body = null;
 
 		$headers = array();
 
 		if ( in_array( $method, array( 'POST', 'PUT' ) ) ) {
+			$body = $this->get_request_body();
 			if ( $this->format == 'json' ) {
 				$headers = array( 'Content-type' => 'application/json' );
 				$body    = json_encode( $body );
@@ -336,7 +342,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	 */
 	public function get_request_body() {
 		$entry = $this->get_entry();
-		if ( ! $this->select_fields ) {
+		if ( empty( $this->body_type ) || $this->body_type == 'all_fields' ) {
 			return $entry;
 		}
 
