@@ -4019,7 +4019,47 @@ PRIMARY KEY  (id)
 		}
 
 		public function update_app_settings( $settings ) {
+			if ( $this->is_save_postback() ) {
+				$previous_settings = $this->get_previous_settings();
+				$pages             = array( 'inbox_page', 'status_page', 'submit_page' );
+
+				foreach ( $pages as $page ) {
+					$this->maybe_update_page_content( $page, $settings, $previous_settings );
+				}
+			}
+
 			parent::update_app_settings( $settings );
+		}
+
+		/**
+		 * If a new page has been selected ensure it contains the gravityflow shortcode.
+		 *
+		 * @since 1.4.3-beta
+		 *
+		 * @param string $page The setting currently being processed; inbox_page, status_page, or submit_page.
+		 * @param array $settings The valid settings to be saved.
+		 * @param array $previous_settings The previous settings.
+		 */
+		public function maybe_update_page_content( $page, $settings, $previous_settings ) {
+			$new_setting = rgar( $settings, $page );
+
+			if ( ! $new_setting || $new_setting == rgar( $previous_settings, $page ) ) {
+				return;
+			}
+
+			$post = get_post( $new_setting );
+
+			if ( ! $post || stripos( $post->post_content, '[gravityflow' ) !== false ) {
+				return;
+			}
+
+			if ( ! empty( $post->post_content ) ) {
+				$post->post_content .= "\n";
+			}
+
+			$post->post_content .= sprintf( '[gravityflow page="%s"]', str_replace( '_page', '', $page ) );
+
+			wp_update_post( $post );
 		}
 
 		public function maybe_auto_update( $update, $item ) {

@@ -32,6 +32,7 @@ class Gravity_Flow_Installation_Wizard {
 			'welcome',
 			'license_key',
 			'updates',
+            'pages',
 			'complete',
 		);
 	}
@@ -78,7 +79,7 @@ class Gravity_Flow_Installation_Wizard {
 				</div>
 				<?php
 				$next_button = '';
-				if ( $current_step->is( 'updates' ) ) {
+				if ( $current_step->is( 'pages' ) ) {
 					$next_button = sprintf( '<input class="button button-primary" type="submit" value="%s" name="_install"/>', esc_attr( $current_step->get_next_button_text() ) );
 				} elseif ( ! $current_step->is( 'complete' ) ) {
 					$next_button = sprintf( '<input class="button button-primary" type="submit" value="%s" name="_next"/>', esc_attr( $current_step->get_next_button_text() ) );
