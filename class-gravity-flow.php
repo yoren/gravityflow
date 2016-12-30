@@ -99,13 +99,13 @@ if ( class_exists( 'GFForms' ) ) {
 
 			add_shortcode( 'gravityflow', array( $this, 'shortcode' ) );
 
-			// Make sure Gravity Flow feeds are triggered before other feeds so we get a chance to intercept them.
+			// Prevent default feed processing behaviour; step processing starts after submission.
 			remove_filter( 'gform_entry_post_save', array( $this, 'maybe_process_feed' ), 10 );
-			add_filter( 'gform_entry_post_save', array( $this, 'maybe_process_feed' ), 8, 2 );
 			add_filter( 'auto_update_plugin', array( $this, 'maybe_auto_update' ), 10, 2 );
 			add_filter( 'gform_enqueue_scripts', array( $this, 'filter_gform_enqueue_scripts' ), 10, 2 );
 			add_filter( 'gform_pre_replace_merge_tags', array( $this, 'replace_variables' ), 10, 7 );
 
+			add_action( 'gform_entry_created', array( $this, 'action_entry_created' ), 8, 2 );
 			add_action( 'gform_register_init_scripts', array( $this, 'filter_gform_register_init_scripts' ), 10, 3 );
 			add_action( 'wp_login', array( $this, 'filter_wp_login' ), 10, 2 );
 			add_action( 'gform_post_add_entry', array( $this, 'action_gform_post_add_entry' ), 10, 2 );
@@ -3516,13 +3516,13 @@ PRIMARY KEY  (id)
 		 * @param array $entry The entry created from the current form submission.
 		 * @param array $form The form object used to process the current submission.
 		 *
-		 * @return array
+		 * @return null
 		 */
-		public function maybe_process_feed( $entry, $form ) {
+		public function action_entry_created( $entry, $form ) {
 			$form_id = absint( $form['id'] );
 
 			if ( empty( $form_id ) || ! isset( $entry['id'] ) || $entry['status'] === 'spam' ) {
-				return $entry;
+				return;
 			}
 
 			$steps = $this->get_steps( $form_id );
@@ -3536,8 +3536,6 @@ PRIMARY KEY  (id)
 			}
 
 			$this->maybe_delay_workflow( $entry, $form );
-
-			return $entry;
 		}
 
 		/**
