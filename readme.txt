@@ -63,6 +63,9 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Added support for shortcodes in the step instructions.
 - Added the gravityflow_pre_restart_workflow action.
 - Added field mapping to the Outgoing Webhook step.
+
+- Updated the step type column of the workflow steps list and the step configuration page to indicate when a plugin required by a feed based step type is missing.
+
 - Fixed merge tag labels not being translatable.
 - Fixed an issue with the inbox where field values are not displayed correctly when custom code uses the gform_entries_field_value filter.
 - Fixed an issue with poor admin performance on some sites where W3TC is installed and object caching is enabled.
