@@ -176,6 +176,34 @@ table#gravityflow-inbox td a {
     border-bottom:none;
 }
 
+.gravityflow-actions-locked{
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    -webkit-filter: brightness(1.8) grayscale(1) opacity(.5);
+    -moz-filter: brightness(1.8) grayscale(1) opacity(.5);
+    filter: brightness(1.8) grayscale(1) opacity(.5);
+}
+
+.gravityflow-action{
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.gravityflow-actions{
+    text-align: center;
+    white-space: nowrap;
+}
+
+.gravityflow-actions-spinner{
+    display: none;
+}
+
+.gravityflow-action-processed{
+    cursor: default;
+}
+
 #gravityflow-no-pending-tasks-container{
 
     -webkit-transform-style: preserve-3d;

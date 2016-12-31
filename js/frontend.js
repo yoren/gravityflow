@@ -72,6 +72,57 @@
 					return false;
 				});
 		});
+
+		$('.gravityflow-action').click( function() {
+			var $this = $(this);
+
+			if ( $this.hasClass( 'gravityflow-action-processed' ) ) {
+				return;
+			}
+
+			if ( $this.parent('.gravityflow-actions').hasClass( 'gravityflow-actions-locked' ) ) {
+				$this.parent('.gravityflow-actions').removeClass( 'gravityflow-actions-locked' );
+				setTimeout(function () {
+					if ( ! $this.hasClass( 'gravityflow-action-processing' ) ) {
+						$this.parent('.gravityflow-actions').addClass( 'gravityflow-actions-locked' );
+					}
+				}, 2000);
+				return;
+			}
+
+			var entryId = parseInt($this.data('entry_id')),
+				restBase = $this.data('rest_base'),
+				action = $this.data('action'),
+				url = gravityflow_frontend_strings.restUrl,
+				nonce = gravityflow_frontend_strings.nonce,
+				$spinner = $this.siblings('.gravityflow-actions-spinner');
+
+			$.ajax({
+				method: "POST",
+				url: url + 'gf/v2/entries/' + entryId + '/workflow/' + restBase,
+				data: { 'action' : action },
+				beforeSend: function ( xhr ) {
+					xhr.setRequestHeader( 'X-WP-Nonce', nonce );
+					$this.siblings().andSelf().hide();
+					$this.addClass('gravityflow-action-processing');
+					$spinner.show();
+				},
+				success : function( response ) {
+					$spinner.hide();
+					$this.show();
+					$this.removeClass('gravityflow-action-processing');
+					$this.addClass('gravityflow-action-processed');
+					$this.parent('.gravityflow-actions').removeClass( 'gravityflow-actions-locked' );
+				},
+				fail : function( response ) {
+					$spinner.hide();
+					$this.removeClass('gravityflow-action-processing');
+					$this.siblings('.gravityflow-actions').andSelf().show();
+					alert( response );
+				}
+
+			});
+		});
 	});
 
 }(window.GravityFlowFrontEnd = window.GravityFlowFrontEnd || {}, jQuery));

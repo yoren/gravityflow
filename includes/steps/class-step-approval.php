@@ -16,7 +16,16 @@ if ( ! class_exists( 'GFForms' ) ) {
 }
 
 class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
+
 	public $_step_type = 'approval';
+
+
+	/**
+	 * The resource slug for the REST API.
+	 *
+	 * @var string
+	 */
+	protected $_rest_base = 'approvals';
 
 	public function get_status_config() {
 		return array(
@@ -33,6 +42,91 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				'default_destination'       => 'next',
 			),
 		);
+	}
+
+	/**
+	 * Returns an array of quick actions to be displayed on the inbox.
+	 *
+	 * @return array
+	 */
+	public function get_actions() {
+		return array(
+			array(
+				'key' => 'approve',
+				'icon' => $this->get_approve_icon(),
+				'label' => __( 'Approve', 'gravityflow' ),
+			),
+			array(
+				'key' => 'reject',
+				'icon' => $this->get_reject_icon(),
+				'label' => __( 'Reject', 'gravityflow' ),
+			),
+		);
+	}
+
+	/**
+	 * Process the REST request for an entry.
+	 *
+	 * @param WP_REST_Request $request
+	 *
+	 * @return WP_REST_Response|mixed If response generated an error, WP_Error, if response
+	 *                                is already an instance, WP_HTTP_Response, otherwise
+	 *                                returns a new WP_REST_Response instance.
+	 */
+	public function handle_rest_request( $request ) {
+		if ( $request->get_method() !== 'POST' ) {
+			return new WP_Error( 'invalid_request_method', __( 'Invalid request method' ) );
+		}
+		$action = $request['action'];
+		$new_status = '';
+		switch ( $action ) {
+			case 'approve' :
+				$new_status = 'approved';
+				break;
+			case 'reject' :
+				$new_status = 'rejected';
+		}
+
+		if ( empty( $new_status ) ) {
+			return new WP_Error( 'invalid_action', __( 'Action not supported', 'gravityflow' ) );
+		}
+
+		$assignee_key = isset( $request['assignee'] ) ? $request['assignee'] : gravity_flow()->get_current_user_assignee_key();
+
+		$assignee = new Gravity_Flow_Assignee( $assignee_key, $this );
+
+		$response = $this->process_assignee_status( $assignee, $new_status, $this->get_form() );
+
+
+		if ( empty( $assignee ) ) {
+			return new WP_Error( 'not_supported', __( 'Action not supported.', 'gravityflow' ) );
+		}
+
+		$response = rest_ensure_response( $response );
+
+		return $response;
+	}
+
+	/**
+	 * Check if a given request has permission.
+	 *
+	 * @since  1.4.3
+	 * @access public
+	 *
+	 * @param WP_REST_Request $request Full data about the request.
+	 *
+	 * @return WP_Error|boolean
+	 */
+	public function rest_request_permissions_check( $request ) {
+		if ( isset( $request['assignee'] ) && ! gravity_flow()->current_user_can_any( 'gravityflow_create_steps' ) ) {
+			return new WP_Error( 'not_allowed', __( "You're not authorized to perform this action.", 'gravityflow' ), array( 'status' => 403 ) );
+		}
+
+		$assignee = isset( $request['assignee'] ) ? $request['assignee'] : gravity_flow()->get_current_user_assignee_key();
+
+		if ( empty( $assignee ) ) {
+			return new WP_Error( 'not_allowed', __( 'Missing assignee.', 'gravityflow' ), array( 'status' => 403 ) );
+		}
 	}
 
 	public function supports_expiration() {
@@ -926,9 +1020,9 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	}
 
 	public function workflow_detail_status_box_actions( $form ) {
-		$approve_icon = '<i class="fa fa-check" style="color:green"></i>';
-		$reject_icon  = '<i class="fa fa-times" style="color:red"></i>';
-		$revert_icon  = '<i class="fa fa-undo" style="color:blue"></i>';
+		$approve_icon = $this->get_approve_icon();
+		$reject_icon  = $this->get_reject_icon();
+		$revert_icon = $this->get_revert_icon();
 
 		$user_approval_status = $this->get_user_status();
 
@@ -1313,6 +1407,20 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		}
 	}
 
+	public function get_approve_icon() {
+		$approve_icon = '<i class="fa fa-check" style="color:green"></i>';
+		return $approve_icon;
+	}
+
+	public function get_reject_icon() {
+		$reject_icon  = '<i class="fa fa-times" style="color:red"></i>';
+		return $reject_icon;
+	}
+
+	public function get_revert_icon() {
+		$revert_icon  = '<i class="fa fa-undo" style="color:blue"></i>';
+		return $revert_icon;
+	}
 }
 
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Approval() );

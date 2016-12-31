@@ -55,6 +55,10 @@ class Gravity_Flow_Bootstrap {
 			include( dirname( __FILE__ ) . '/includes/class-web-api.php' );
 		}
 
+		if ( ! class_exists( 'Gravity_Flow_REST_API' ) ) {
+			include( dirname( __FILE__ ) . '/includes/class-rest-api.php' );
+		}
+
 		if ( ! class_exists( 'Gravity_Flow_Extension' ) ) {
 			include( dirname( __FILE__ ) . '/includes/class-extension.php' );
 		}

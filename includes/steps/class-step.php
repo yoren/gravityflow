@@ -97,6 +97,18 @@ abstract class Gravity_Flow_Step extends stdClass {
 	protected $_next_step_id;
 
 	/**
+	 * The resource slug for the REST API.
+	 *
+	 * This should be a plural noun.
+	 *
+	 * e.g. approvals
+	 *
+	 * @var string
+	 */
+	protected $_rest_base = null;
+
+
+	/**
 	 * The constructor for the Step. Provide an entry object to perform and entry-specific tasks.
 	 *
 	 * @param array $feed Required. The Feed on which this step is based.
@@ -180,6 +192,66 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return $this->get_status_config();
 	}
 
+	/**
+	 * Returns an array of quick actions to be displayed on the inbox.
+	 *
+	 * Example:
+	 *
+	 * array(
+	 *  array(
+	 *      'key' => 'approve',
+	 *      'icon' => $this->get_approve_icon(),
+	 *      'label' => __( 'Approve', 'gravityflow' ),
+	 *   ),
+	 * array(
+	 *      'key' => 'reject',
+	 *      'icon' => $this->get_reject_icon(),
+	 *      'label' => __( 'Reject', 'gravityflow' ),
+	 *   ),
+	 * );
+	 *
+	 *
+	 * @return array
+	 */
+	public function get_actions() {
+		return array();
+	}
+
+	/**
+	 * Returns the resource slug for the REST API.
+	 *
+	 * @return string
+	 */
+	public function get_rest_base() {
+		return $this->_rest_base;
+	}
+
+	/**
+	 * Process the REST request for an entry.
+	 *
+	 * @param WP_REST_Request $request
+	 *
+	 * @return WP_REST_Response|mixed If response generated an error, WP_Error, if response
+	 *                                is already an instance, WP_HTTP_Response, otherwise
+	 *                                returns a new WP_REST_Response instance.
+	 */
+	public function handle_rest_request( $request ) {
+		return new WP_Error( 'not_implemented', __( ' Not implemented', 'gravityflow' ) );
+	}
+
+	/**
+	 * Check if a given request has permission.
+	 *
+	 * @since  1.4.3
+	 * @access public
+	 *
+	 * @param WP_REST_Request $request Full data about the request.
+	 *
+	 * @return WP_Error|boolean
+	 */
+	public function rest_request_permissions_check( $request ) {
+		return new WP_Error( 'invalid-method', sprintf( __( "Method '%s' not implemented. Must be overridden in subclass." ), __METHOD__ ), array( 'status' => 405 ) );
+	}
 
 	/**
 	 * Returns the translated label for a status key.

@@ -389,6 +389,8 @@ PRIMARY KEY  (id)
 					wp_enqueue_style( 'gravityflow_frontend_css', $this->get_base_url() . "/css/frontend{$min}.css", null, $this->_version );
 					wp_enqueue_style( 'gravityflow_status', $this->get_base_url() . "/css/status{$min}.css", null, $this->_version );
 					wp_localize_script( 'gravityflow_status_list', 'gravityflow_status_list_strings', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
+					wp_localize_script( 'gravityflow_frontend', 'gravityflow_frontend_strings', array( 'restUrl' => esc_url_raw( rest_url() ), 'nonce' => wp_create_nonce( 'wp_rest' ) ) );
+
 
 					/**
 					 * Allows additional scripts to be enqueued when the gravityflow shortcode is present on the page.
@@ -3098,9 +3100,9 @@ PRIMARY KEY  (id)
 
 			$defaults = array(
 				'display_empty_fields' => true,
-				'check_permissions' => true,
-				'show_header' => true,
-				'timeline' => true,
+				'check_permissions'    => true,
+				'show_header'          => true,
+				'timeline'             => true,
 			);
 
 			$args = array_merge( $defaults, $args );
@@ -3787,6 +3789,7 @@ PRIMARY KEY  (id)
 				'form_id'          => null,
 				'fields'           => '',
 				'display_all'      => null,
+				'actions_column'   => false,
 				'allow_anonymous'  => false,
 				'title'            => '',
 				'id_column'        => true,
@@ -3836,18 +3839,19 @@ PRIMARY KEY  (id)
 			wp_enqueue_script( 'gravityflow_status_list' );
 
 			$args = array(
-				'form_id'          => $a['form'],
-				'id_column'        => $a['id_column'],
-				'submitter_column' => $a['submitter_column'],
-				'step_column'      => $a['step_column'],
-				'show_header'      => false,
-				'field_ids'        => $a['fields'] ? explode( ',', $a['fields'] ) : '',
-				'detail_base_url'  => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
-				'timeline'         => $a['timeline'],
-				'last_updated'     => $a['last_updated'],
-				'step_status'      => $a['step_status'],
-				'workflow_info'    => $a['workflow_info'],
-				'sidebar'          => $a['sidebar'],
+				'form_id'              => $a['form'],
+				'id_column'            => $a['id_column'],
+				'submitter_column'     => $a['submitter_column'],
+				'step_column'          => $a['step_column'],
+				'actions_column'       => $a['actions_column'],
+				'show_header'          => false,
+				'field_ids'            => $a['fields'] ? explode( ',', $a['fields'] ) : '',
+				'detail_base_url'      => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
+				'timeline'             => $a['timeline'],
+				'last_updated'         => $a['last_updated'],
+				'step_status'          => $a['step_status'],
+				'workflow_info'        => $a['workflow_info'],
+				'sidebar'              => $a['sidebar'],
 			);
 
 			ob_start();

@@ -80,13 +80,14 @@ class Gravity_Flow_Inbox {
 		$filter    = apply_filters( 'gravityflow_inbox_filter', array(
 			'form_id'    => 0,
 			'start_date' => '',
-			'end_date'   => ''
+			'end_date'   => '',
 		) );
 
 		return array(
 			'display_empty_fields' => true,
 			'id_column'            => true,
 			'submitter_column'     => true,
+			'actions_column' => false,
 			'step_column'          => true,
 			'check_permissions'    => true,
 			'form_id'              => absint( rgar( $filter, 'form_id' ) ),
@@ -185,6 +186,10 @@ class Gravity_Flow_Inbox {
 			$columns['id'] = __( 'ID', 'gravityflow' );
 		}
 
+		if ( $args['actions_column'] ) {
+			$columns['actions'] = '';
+		}
+
 		if ( empty( $args['form_id'] ) ) {
 			$columns['form_title'] = __( 'Form', 'gravityflow' );
 		}
@@ -237,8 +242,9 @@ class Gravity_Flow_Inbox {
 		echo '<tr>';
 
 		foreach ( $columns as $id => $label ) {
-			$value = sprintf( $link, $url_entry, self::get_column_value( $id, $form, $entry, $columns ) );
-			echo sprintf( '<td data-label="%s">%s</td>', esc_attr( $label ), $value );
+			$value = self::get_column_value( $id, $form, $entry, $columns );
+			$html = $id == 'actions' ? $value : sprintf( $link, $url_entry, $value );
+			echo sprintf( '<td data-label="%s">%s</td>', esc_attr( $label ), $html );
 		}
 
 		echo '</tr>';
@@ -291,6 +297,13 @@ class Gravity_Flow_Inbox {
 
 				$value = '';
 				break;
+			case 'actions':
+				$api = new Gravity_Flow_API( $form['id'] );
+				$step = $api->get_current_step( $entry );
+				if ( $step ) {
+					$value = self::format_actions( $step );
+				}
+				break;
 			default:
 				$field = GFFormsModel::get_field( $form, $id );
 
@@ -304,5 +317,26 @@ class Gravity_Flow_Inbox {
 		}
 
 		return $value;
+	}
+
+	/**
+	 * Formats the actions for the action column.
+	 *
+	 * @param Gravity_Flow_Step $step
+	 *
+	 * @return string
+	 */
+	public static function format_actions( $step ) {
+		$html          = '';
+		$actions = $step->get_actions();
+		$entry_id      = $step->get_entry_id();
+		foreach ( $actions as $action ) {
+			$html .= sprintf( '<span id="gravityflow-action-%s-%d" data-entry_id="%d" data-action="%s" data-rest_base="%s" class="gravityflow-action" role="link">%s</span>', $action['key'], $entry_id, $entry_id, $action['key'], $step->get_rest_base(), $action['icon'] );
+		}
+		if ( ! empty( $html ) ) {
+			$html = sprintf( '<div id="gravityflow-actions-%d" class="gravityflow-actions gravityflow-actions-locked">%s<span class="gravityflow-actions-spinner"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span></div>', $entry_id, $html );
+		}
+
+		return $html;
 	}
 }
