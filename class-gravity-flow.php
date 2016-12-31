@@ -365,6 +365,20 @@ PRIMARY KEY  (id)
 						array( 'query' => 'page=gravityflow-reports' ),
 					),
 				),
+				array(
+					'handle' => 'gravityflow_inbox',
+					'src' => $this->get_base_url() . "/js/inbox{$min}.js",
+					'version' => $this->_version,
+					'enqueue' => array(
+						array(
+							'query' => 'page=gravityflow-inbox',
+						),
+					),
+					'strings' => array(
+						'restUrl' => esc_url_raw( rest_url() ),
+						'nonce'   => wp_create_nonce( 'wp_rest' )
+					),
+				),
 			);
 
 			return array_merge( parent::scripts(), $scripts );
@@ -390,7 +404,6 @@ PRIMARY KEY  (id)
 					wp_enqueue_style( 'gravityflow_status', $this->get_base_url() . "/css/status{$min}.css", null, $this->_version );
 					wp_localize_script( 'gravityflow_status_list', 'gravityflow_status_list_strings', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
 					wp_localize_script( 'gravityflow_frontend', 'gravityflow_frontend_strings', array( 'restUrl' => esc_url_raw( rest_url() ), 'nonce' => wp_create_nonce( 'wp_rest' ) ) );
-
 
 					/**
 					 * Allows additional scripts to be enqueued when the gravityflow shortcode is present on the page.

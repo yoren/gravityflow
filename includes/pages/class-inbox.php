@@ -334,7 +334,14 @@ class Gravity_Flow_Inbox {
 			$html .= sprintf( '<span id="gravityflow-action-%s-%d" data-entry_id="%d" data-action="%s" data-rest_base="%s" class="gravityflow-action" role="link">%s</span>', $action['key'], $entry_id, $entry_id, $action['key'], $step->get_rest_base(), $action['icon'] );
 		}
 		if ( ! empty( $html ) ) {
-			$html = sprintf( '<div id="gravityflow-actions-%d" class="gravityflow-actions gravityflow-actions-locked">%s<span class="gravityflow-actions-spinner"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span></div>', $entry_id, $html );
+			$html = sprintf( '<div id="gravityflow-actions-%d" class="gravityflow-actions gravityflow-actions-locked">
+									<i class="gravityflow-actions-lock fa fa-lock" aria-hidden="true"></i>
+									<i class="gravityflow-actions-unlock fa fa-unlock-alt" aria-hidden="true"></i>
+									%s
+									<span class="gravityflow-actions-spinner">
+										<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+									</span>
+								</div>', $entry_id, $html );
 		}
 
 		return $html;

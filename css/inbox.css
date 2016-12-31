@@ -56,6 +56,34 @@ i.gravityflow-inbox-check {
 
 table#gravityflow-inbox th[data-label="ID"],
 table#gravityflow-inbox td[data-label="ID"] {
-    width: 70px !important;
+    width: 30px !important;
 }
 
+.gravityflow-actions-locked{
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    -webkit-filter: brightness(1.8) grayscale(1) opacity(.5);
+    -moz-filter: brightness(1.8) grayscale(1) opacity(.5);
+    filter: brightness(1.8) grayscale(1) opacity(.5);
+}
+
+.gravityflow-action{
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.gravityflow-actions{
+    text-align: center;
+    white-space: nowrap;
+    padding: 10px;
+}
+.gravityflow-actions-unlock,
+.gravityflow-actions-spinner{
+    display: none;
+}
+
+.gravityflow-action-processed{
+    cursor: default;
+}
