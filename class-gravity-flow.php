@@ -852,25 +852,28 @@ PRIMARY KEY  (id)
 		}
 
 		public function ajax_feed_message() {
-
+			$html            = '';
+			$warning         = false;
+			$entry_count     = 0;
 			$current_step_id = absint( rgget( 'fid' ) );
 
-			$entry_count = 0;
 			if ( $current_step_id ) {
 				$current_step = $this->get_step( $current_step_id );
 				if ( empty( $current_step ) ) {
-					$html = '<div class="delete-alert alert_red"><i class="fa fa-exclamation-triangle gf_invalid"></i> ' . esc_html__( 'This step type is missing.', 'gravityflow' ) . '</div>';
-					echo $html;
-					die();
+					$warning = esc_html__( 'This step type is missing.', 'gravityflow' );
+				} elseif ( ! $current_step->is_supported() ) {
+					$warning = esc_html__( 'The plugin required by this step type is missing.', 'gravityflow' );
 				} else {
 					$entry_count = $current_step->entry_count();
 				}
 			}
-			if ( $entry_count > 0 ) {
-				$html = '<div class="delete-alert alert_red"><i class="fa fa-exclamation-triangle gf_invalid"></i> ' . sprintf( _n( 'There is %s entry currently on this step. This entry may be affected if the settings are changed.', 'There are %s entries currently on this step. These entries may be affected if the settings are changed.', $entry_count, 'gravityflow' ), $entry_count ) . '</div>';
 
-			} else {
-				$html = '';
+			if ( $entry_count > 0 ) {
+				$warning = sprintf( _n( 'There is %s entry currently on this step. This entry may be affected if the settings are changed.', 'There are %s entries currently on this step. These entries may be affected if the settings are changed.', $entry_count, 'gravityflow' ), $entry_count );
+			}
+
+			if ( $warning ) {
+				$html = '<div class="delete-alert alert_red"><i class="fa fa-exclamation-triangle gf_invalid"></i> ' . $warning . '</div>';
 			}
 
 			echo $html;
@@ -1847,15 +1850,18 @@ PRIMARY KEY  (id)
 		}
 
 		public function get_column_value_step_type( $item ) {
-			$step = $this->get_step( $item['id'] );
-			if ( empty( $step ) ) {
-				$type_key = $item['meta']['step_type'];
+			$step       = $this->get_step( $item['id'] );
+			$step_label = empty( $step ) ? $item['meta']['step_type'] : $step->get_label();
 
-				return '<span class="validation_error"><i class="fa fa-exclamation-triangle gf_invalid"></i> ' . $type_key . '  ' . esc_html__( '(missing)', 'gravityflow' ) . '</span>';
+			if ( empty( $step ) ) {
+
+				return '<span class="validation_error"><i class="fa fa-exclamation-triangle gf_invalid"></i> ' . $step_label . '  ' . esc_html__( '(missing)', 'gravityflow' ) . '</span>';
 			}
-			$icon_url = $step->get_icon_url();
+
+			$icon_url  = $step->get_icon_url();
 			$icon_html = ( strpos( $icon_url, 'http' ) === 0 ) ? sprintf( '<img src="%s" style="width:20px;height:20px;margin-right:5px;vertical-align:middle;"/>', $icon_url ) : sprintf( '<span style="width:20px;height:20px;margin-right:5px;vertical-align:middle;">%s</span>', $icon_url );
-			return $icon_html . $step->get_label();
+
+			return $icon_html . $step_label;
 		}
 
 
