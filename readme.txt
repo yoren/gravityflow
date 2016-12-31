@@ -27,7 +27,7 @@ Gravity Flow requires [Gravity Forms](https://gravityflow.io/out/gravityforms)
 
 Facebook: [Gravity Flow](https://facebook.com/gravityflow.io)
 
-Twitter: [Gravity Flow](https://twitter.com/gravityflowapp)
+Twitter: [Gravity Flow](https://twitter.com/GravityFlow_io)
 
 = Requirements =
 
