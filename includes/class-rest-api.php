@@ -15,12 +15,14 @@
 class Gravity_Flow_REST_API {
 
 	public function __construct() {
-		add_action( 'rest_api_init', function () {
-			register_rest_route( 'gf/v2', '/entries/(?P<id>\d+)/workflow/(?P<base>[\S]+)', array(
-				'methods' => 'POST',
-				'callback' => array( $this, 'handle_rest_request' ),
-			) );
-		} );
+		add_action( 'rest_api_init', array( $this, 'action_rest_api_init' ) );
+	}
+
+	public function action_rest_api_init() {
+		register_rest_route( 'gf/v2', '/entries/(?P<id>\d+)/workflow/(?P<base>[\S]+)', array(
+			'methods' => 'POST',
+			'callback' => array( $this, 'handle_rest_request' ),
+		) );
 	}
 
 	public function handle_rest_request( $request ) {
