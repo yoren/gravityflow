@@ -2,7 +2,7 @@
 Contributors: stevehenty
 Tags: workflow, approvals, gravity forms
 Requires at least: 4.2
-Tested up to: 4.6.1
+Tested up to: 4.7
 License: GPL-3.0+
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -65,19 +65,6 @@ https://gravityflow.io/contact/
 
 = Which license of Gravity Forms do I need? =
 Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.io/out/gravityforms).
-
-== ChangeLog ==
-
-= 1.4.3-dev =
-
-- Added settings to the Workflow > Settings page for selecting which pages contain the gravityflow inbox, status and submit shortcodes. The selected inbox page will be used when preparing merge tags such as {workflow_inbox_link} when the page_id attribute is not specified.
-- Added support for shortcodes in the step instructions.
-- Added the gravityflow_pre_restart_workflow action.
-- Added field mapping to the Outgoing Webhook step.
-- Fixed merge tag labels not being translatable.
-- Fixed an issue with the inbox where field values are not displayed correctly when custom code uses the gform_entries_field_value filter.
-- Fixed an issue with poor admin performance on some sites where W3TC is installed and object caching is enabled.
-
 
 = Who is it for? =
 
