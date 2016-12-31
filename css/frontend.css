@@ -194,8 +194,9 @@ table#gravityflow-inbox td a {
 .gravityflow-actions{
     text-align: center;
     white-space: nowrap;
+    padding: 10px;
 }
-
+.gravityflow-actions-unlock,
 .gravityflow-actions-spinner{
     display: none;
 }
@@ -305,7 +306,7 @@ div.gf_entry_wrap {
 
 table#gravityflow-inbox th[data-label="ID"],
 table#gravityflow-inbox td[data-label="ID"] {
-    width:70px;
+    width:60px;
 }
 
 table#gravityflow-inbox th{

@@ -74,7 +74,9 @@
 		});
 
 		$('.gravityflow-action').click( function() {
-			var $this = $(this);
+			var $this = $(this),
+				$unlock = $this.siblings('.gravityflow-actions-unlock'),
+				$lock = $this.siblings('.gravityflow-actions-lock');
 
 			if ( $this.hasClass( 'gravityflow-action-processed' ) ) {
 				return;
@@ -82,9 +84,13 @@
 
 			if ( $this.parent('.gravityflow-actions').hasClass( 'gravityflow-actions-locked' ) ) {
 				$this.parent('.gravityflow-actions').removeClass( 'gravityflow-actions-locked' );
+				$lock.hide();
+				$unlock.show();
 				setTimeout(function () {
 					if ( ! $this.hasClass( 'gravityflow-action-processing' ) ) {
 						$this.parent('.gravityflow-actions').addClass( 'gravityflow-actions-locked' );
+						$lock.show();
+						$unlock.hide();
 					}
 				}, 2000);
 				return;
@@ -116,6 +122,8 @@
 				},
 				fail : function( response ) {
 					$spinner.hide();
+					$unlock.hide();
+					$lock.show();
 					$this.removeClass('gravityflow-action-processing');
 					$this.siblings('.gravityflow-actions').andSelf().show();
 					alert( response );
