@@ -1853,7 +1853,7 @@ PRIMARY KEY  (id)
 			$step       = $this->get_step( $item['id'] );
 			$step_label = empty( $step ) ? $item['meta']['step_type'] : $step->get_label();
 
-			if ( empty( $step ) ) {
+			if ( empty( $step ) || ! $step->is_supported() ) {
 
 				return '<span class="validation_error"><i class="fa fa-exclamation-triangle gf_invalid"></i> ' . $step_label . '  ' . esc_html__( '(missing)', 'gravityflow' ) . '</span>';
 			}
