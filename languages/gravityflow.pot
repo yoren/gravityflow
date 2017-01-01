@@ -1,9 +1,9 @@
 # Copyright 2015-2017 Steven Henty.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Flow 1.5.0\n"
+"Project-Id-Version: Gravity Flow 1.5.0.1\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2017-01-01 10:05:49+00:00\n"
+"POT-Creation-Date: 2017-01-01 11:15:16+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -2230,11 +2230,19 @@ msgstr ""
 msgid "Please accept the terms"
 msgstr ""
 
+#: includes/wizard/steps/class-iw-step-pages.php:12
+msgid ""
+"Gravity Flow can be accessed from both the front end of your site and from "
+"the built-in WordPress admin pages (Workflow menu). If you want to use your "
+"site styles, or if you want to use the one-click approval links, then "
+"you'll need to add some pages to your site."
+msgstr ""
+
 #: includes/wizard/steps/class-iw-step-pages.php:13
 msgid ""
-"Do you want to create custom inbox, status, and submit pages? The pages "
-"will use the %s[gravityflow] shortcode%s enabling assignees to interact "
-"with the workflow from the front end of your site."
+"Would you like to create custom inbox, status, and submit pages now? The "
+"pages will contain the %s[gravityflow] shortcode%s enabling assignees to "
+"interact with the workflow from the front end of the site."
 msgstr ""
 
 #: includes/wizard/steps/class-iw-step-pages.php:20
@@ -2242,7 +2250,7 @@ msgid "No, use the WordPress Admin (Workflow menu)."
 msgstr ""
 
 #: includes/wizard/steps/class-iw-step-pages.php:26
-msgid "Yes, create inbox, status, and submit pages."
+msgid "Yes, create inbox, status, and submit pages now."
 msgstr ""
 
 #: includes/wizard/steps/class-iw-step-pages.php:35

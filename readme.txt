@@ -57,7 +57,9 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.5.1-dev =
 
+= 1.5.0.1 =
 
+- Fixed an issue with the approval actions.
 
 = 1.5.0 =
 
