@@ -16,7 +16,7 @@
 				$lock.hide();
 				$unlock.show();
 				setTimeout(function () {
-					if ( ! $this.hasClass( 'gravityflow-action-processing' ) ) {
+					if ( ! $this.hasClass( 'gravityflow-action-processing' ) && ! $this.hasClass( 'gravityflow-action-processed' ) ) {
 						$this.parent('.gravityflow-actions').addClass( 'gravityflow-actions-locked' );
 						$lock.show();
 						$unlock.hide();

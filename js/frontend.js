@@ -87,7 +87,7 @@
 				$lock.hide();
 				$unlock.show();
 				setTimeout(function () {
-					if ( ! $this.hasClass( 'gravityflow-action-processing' ) ) {
+					if ( ! $this.hasClass( 'gravityflow-action-processing' )  && ! $this.hasClass( 'gravityflow-action-processed' ) ) {
 						$this.parent('.gravityflow-actions').addClass( 'gravityflow-actions-locked' );
 						$lock.show();
 						$unlock.hide();
@@ -114,17 +114,17 @@
 					$spinner.show();
 				},
 				success : function( response ) {
-					$spinner.hide();
-					$this.show();
 					$this.removeClass('gravityflow-action-processing');
 					$this.addClass('gravityflow-action-processed');
+					$spinner.hide();
+					$this.show();
 					$this.parent('.gravityflow-actions').removeClass( 'gravityflow-actions-locked' );
 				},
 				fail : function( response ) {
+					$this.removeClass('gravityflow-action-processing');
 					$spinner.hide();
 					$unlock.hide();
 					$lock.show();
-					$this.removeClass('gravityflow-action-processing');
 					$this.siblings('.gravityflow-actions').andSelf().show();
 					alert( response );
 				}
