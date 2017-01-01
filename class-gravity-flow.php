@@ -376,7 +376,7 @@ PRIMARY KEY  (id)
 					),
 					'strings' => array(
 						'restUrl' => esc_url_raw( rest_url() ),
-						'nonce'   => wp_create_nonce( 'wp_rest' )
+						'nonce'   => wp_create_nonce( 'wp_rest' ),
 					),
 				),
 			);
