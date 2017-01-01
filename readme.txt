@@ -55,6 +55,10 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.5.1-dev =
+
+
+
 = 1.5.0 =
 
 - Added support for configuring a step to process feeds for the upcoming Gravity Forms Post Creation Add-On.
