@@ -55,7 +55,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
-= 1.4.3-dev =
+= 1.5.0 =
 
 - Added support for configuring a step to process feeds for the upcoming Gravity Forms Post Creation Add-On.
 - Added support for configuring a step for Sprout Invoices. Requires the Sprout Invoices Form Integrations add-on (creates estimates) and/or Invoice Submissions add-on (creates invoices).
