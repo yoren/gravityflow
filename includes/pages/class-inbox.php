@@ -114,9 +114,9 @@ class Gravity_Flow_Inbox {
 		$filter_key = '';
 
 		if ( $current_user->ID > 0 ) {
-			$filter_key = 'user_id_' . $current_user->ID;
+			$filter_key = 'workflow_user_id_' . $current_user->ID;
 		} elseif ( $token = gravity_flow()->decode_access_token() ) {
-			$filter_key = 'email_' . gravity_flow()->parse_token_assignee( $token )->get_id();
+			$filter_key = gravity_flow()->parse_token_assignee( $token )->get_status_key();
 		}
 
 		return $filter_key;
@@ -139,7 +139,7 @@ class Gravity_Flow_Inbox {
 		if ( ! empty( $filter_key ) ) {
 			$field_filters   = array();
 			$field_filters[] = array(
-				'key'   => 'workflow_' . $filter_key,
+				'key'   => $filter_key,
 				'value' => 'pending',
 			);
 
