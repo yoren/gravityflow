@@ -57,6 +57,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 = 1.5.1-dev =
 
+- Added support for configuring a step to process feeds for the Gravity Forms to Pipe Drive CRM Add-On.
 - Added updater support for beta extensions.
 - Fixed an issue with the inbox page which would result in the no pending tasks message when an access token is used by an assignee who is a registered user but not logged in.
 
