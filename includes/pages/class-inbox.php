@@ -27,8 +27,14 @@ class Gravity_Flow_Inbox {
 		 */
 		$args = apply_filters( 'gravityflow_inbox_args', $args );
 
+		if ( has_filter( 'gravityflow_inbox_args' ) ) {
+			gravity_flow()->log_debug( __METHOD__ . '(): Executing functions hooked to gravityflow_inbox_args.' );
+		}
+
 		$total_count = 0;
 		$entries     = self::get_entries( $args, $total_count );
+
+		gravity_flow()->log_debug( __METHOD__ . "(): {$total_count} pending tasks." );
 
 		if ( sizeof( $entries ) > 0 ) {
 			$columns = self::get_columns( $args );
@@ -108,9 +114,9 @@ class Gravity_Flow_Inbox {
 		$filter_key = '';
 
 		if ( $current_user->ID > 0 ) {
-			$filter_key = 'user_id_' . $current_user->ID;
+			$filter_key = 'workflow_user_id_' . $current_user->ID;
 		} elseif ( $token = gravity_flow()->decode_access_token() ) {
-			$filter_key = 'email_' . gravity_flow()->parse_token_assignee( $token )->get_id();
+			$filter_key = gravity_flow()->parse_token_assignee( $token )->get_status_key();
 		}
 
 		return $filter_key;
@@ -128,10 +134,12 @@ class Gravity_Flow_Inbox {
 		$entries    = array();
 		$filter_key = self::get_filter_key();
 
+		gravity_flow()->log_debug( __METHOD__ . '(): $filter_key => ' . $filter_key );
+
 		if ( ! empty( $filter_key ) ) {
 			$field_filters   = array();
 			$field_filters[] = array(
-				'key'   => 'workflow_' . $filter_key,
+				'key'   => $filter_key,
 				'value' => 'pending',
 			);
 
@@ -150,6 +158,9 @@ class Gravity_Flow_Inbox {
 			$search_criteria['status']        = 'active';
 
 			$form_ids = $args['form_id'] ? $args['form_id'] : gravity_flow()->get_workflow_form_ids();
+
+			gravity_flow()->log_debug( __METHOD__ . '(): $form_ids => ' . print_r( $form_ids, 1 ) );
+			gravity_flow()->log_debug( __METHOD__ . '(): $search_criteria => ' . print_r( $search_criteria, 1 ) );
 
 			if ( ! empty( $form_ids ) ) {
 				$paging  = array(
