@@ -1,0 +1,3 @@
+
+- Added support for GravityView to be used to create inbox views. Requires the GravityView Advanced Filter Extension.
+- Added updater support for beta extensions.

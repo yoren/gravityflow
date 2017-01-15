@@ -114,10 +114,14 @@ if ( class_exists( 'GFForms' ) ) {
 
 			$this->add_delayed_payment_support(
 				array(
-					'option_label' => esc_html__( 'Start the Workflow once payment has been received.', 'gravityflow' )
+					'option_label' => esc_html__( 'Start the Workflow once payment has been received.', 'gravityflow' ),
 				)
 			);
 
+			// GravityView Integration
+			add_filter( 'gravityview/adv_filter/field_filters', array( $this, 'filter_gravityview_adv_filter_field_filters' ), 10, 2 );
+			add_filter( 'gravityview_search_criteria', array( $this, 'filter_gravityview_search_criteria' ), 999, 3 );
+			add_filter( 'gravityview/common/get_entry/check_entry_display', array( $this, 'filter_gravityview_common_get_entry_check_entry_display' ), 999, 2 );
 		}
 
 		public function init_admin() {
@@ -1958,6 +1962,7 @@ PRIMARY KEY  (id)
 				);
 
 				$workflow_final_status_options = array_merge( $workflow_final_status_options, $status_choices );
+
 			}
 
 			if ( ! empty( $steps ) ) {
@@ -2002,7 +2007,7 @@ PRIMARY KEY  (id)
 					'label'                      => 'Timestamp',
 					'is_numeric'                 => true,
 					'update_entry_meta_callback' => array( $this, 'callback_update_entry_meta_timestamp' ),
-					'is_default_column'          => false, // this column will be displayed by default on the entry list
+					'is_default_column'          => false, // this column will not be displayed by default on the entry list
 				);
 			}
 
@@ -5635,13 +5640,13 @@ AND m.meta_value='queued'";
 
 		/**
 		 * Returns the mergeTagLabels property of the strings for form-settings.js.
-         *
-         * @since 1.4.3-dev
-         *
-         * @used-by Gravity_Flow::scripts()
-         * @uses    esc_html__()
-         *
-         * @return array
+		 *
+		 * @since 1.4.3-dev
+		 *
+		 * @used-by Gravity_Flow::scripts()
+		 * @uses    esc_html__()
+		 *
+		 * @return array
 		 */
 		public function get_form_settings_js_merge_tag_labels() {
 			return array(
@@ -5662,6 +5667,137 @@ AND m.meta_value='queued'";
 				'workflow_reject_url'    => esc_html__( 'Reject URL', 'gravityflow' ),
 				'workflow_reject_token'  => esc_html__( 'Reject Token', 'gravityflow' ),
 			);
+		}
+
+		/**
+		 * Target for the gravityview_adv_filter_field_filters filter.
+		 *
+		 * Adds the Gravity Flow assignees as field filters.
+		 *
+		 * @since 1.5.1-dev
+		 *
+		 * @param $field_filters
+		 * @param $post_id
+		 *
+		 * @return array
+		 */
+		public function filter_gravityview_adv_filter_field_filters( $field_filters, $post_id ) {
+			$form_id = gravityview_get_form_id( $post_id );
+
+			$steps = $this->get_steps( $form_id );
+
+			$workflow_assignees = array();
+
+			foreach ( $steps as $step ) {
+				if (  empty( $step ) || ! $step->is_active() ) {
+					continue;
+				}
+
+				$step_assignees = $step->get_assignees();
+
+				$step_assignee_choices = array();
+
+				foreach ( $step_assignees as $assignee ) {
+					$step_assignee_choices[] = array(
+						'value' => $assignee->get_key(),
+						'text'	=> $assignee->get_display_name(),
+					);
+				}
+
+				$workflow_assignees = array_merge( $workflow_assignees, $step_assignee_choices );
+			}
+			// Remove duplicate assignees
+			$workflow_assignees = array_map( 'unserialize', array_unique( array_map( 'serialize', $workflow_assignees ) ) );
+
+			$workflow_assignees[] = array(
+				'value' => 'current_user',
+				'text'	=> esc_html__( 'Current User', 'gravityflow' ),
+			);
+
+			$filter                    = array();
+			$filter['key']             = 'workflow_assignee';
+			$filter['preventMultiple'] = false;
+			$filter['text']            = esc_html__( 'Workflow Assignee', 'gravityflow' );
+			$filter['operators']       = array( 'is' );
+			$filter['values'] = $workflow_assignees;
+			$field_filters[] = $filter;
+
+			return $field_filters;
+		}
+
+		/**
+		 * Target for the gravityview_search_criteria filter.
+		 *
+		 * @since 1.5.1-dev
+		 *
+		 * @param $search_criteria
+		 * @param $form_ids
+		 * @param $view_id
+		 *
+		 * @return mixed
+		 */
+		public function filter_gravityview_search_criteria( $search_criteria, $form_ids, $view_id ) {
+			$field_filters = $search_criteria['search_criteria']['field_filters'];
+			foreach ( $field_filters as &$field_filter ) {
+				if ( is_array( $field_filter ) && $field_filter['key'] == 'workflow_assignee' ) {
+					$assignee_key = $field_filter['value'] == 'current_user' ? gravity_flow()->get_current_user_assignee_key() :$field_filter['value'];
+					$field_filter['key'] = 'workflow_' . str_replace( '|', '_', $assignee_key );
+					$field_filter['value'] = 'pending';
+				}
+			}
+			$search_criteria['search_criteria']['field_filters'] = $field_filters;
+			return $search_criteria;
+		}
+
+		/**
+		 * Target for the gravityview/common/get_entry/check_entry_display filter.
+		 *
+		 * Performs the permission check if a Gravity Flow assignee key is specified in the criteria.
+		 *
+		 * @since 1.5.1-dev
+		 *
+		 * @param $check_entry_display
+		 * @param $entry
+		 *
+		 * @return bool
+		 */
+		public function filter_gravityview_common_get_entry_check_entry_display( $check_entry_display, $entry ) {
+
+			global $_fields;
+
+			$criteria = GVCommon::calculate_get_entries_criteria();
+
+			$keys = array();
+
+			foreach ( $criteria['search_criteria']['field_filters'] as $filter ) {
+				if ( is_array( $filter ) && strpos( $filter['key'], 'workflow_' ) !== false && ! isset( $entry[ $filter['key'] ] ) ) {
+					$meta_value = gform_get_meta( $entry['id'], $filter['key'] );
+					$entry[ $filter['key'] ] = $meta_value;
+					$keys[] = $filter['key'];
+				}
+			}
+
+			if ( empty( $keys ) ) {
+				return $check_entry_display;
+			}
+
+			// Hack to ensure that the meta values for assignees are returned when rule matching in GVCommon::check_entry_display().
+			foreach ( $keys as $key ) {
+				$_fields[ $entry['form_id'] . '_' . $key ] = array( 'id' => $key );
+			}
+
+			$entry = GVCommon::check_entry_display( $entry );
+
+			// Clean up the hack
+			foreach ( $keys as $key ) {
+				unset( $_fields[ $entry['form_id'] . '_' . $key ] );
+			}
+
+			// GVCommon::check_entry_display() returns the entry if permission is granted otherwise false or maybe a WP_Error instance.
+			// If permission is granted then we can tell GravityView not to check permissions again.
+			$check_entry_display = ! $entry || is_wp_error( $entry );
+
+			return $check_entry_display;
 		}
 	}
 }

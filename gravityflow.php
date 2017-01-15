@@ -3,7 +3,7 @@
 Plugin Name: Gravity Flow
 Plugin URI: https://gravityflow.io
 Description: Build Workflow Applications with Gravity Forms.
-Version: 1.5.0.1
+Version: 1.5.0.2
 Author: Steven Henty
 Author URI: http://www.stevenhenty.com
 License: GPL-3.0+
@@ -27,7 +27,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses.
 */
 
-define( 'GRAVITY_FLOW_VERSION', '1.5.0.1' );
+define( 'GRAVITY_FLOW_VERSION', '1.5.0.2' );
 
 define( 'GRAVITY_FLOW_EDD_STORE_URL', 'https://gravityflow.io' );
 
@@ -69,6 +69,10 @@ class Gravity_Flow_Bootstrap {
 
 		if ( ! class_exists( 'Gravity_Flow_Assignee' ) ) {
 			include( dirname( __FILE__ ) . '/includes/class-assignee.php' );
+		}
+
+		if ( class_exists( 'GravityView_Field' ) ) {
+			include( dirname( __FILE__ ) . '/includes/class-gravityview-detail-link.php' );
 		}
 
 		require_once( dirname( __FILE__ ) . '/includes/class-common.php' );
