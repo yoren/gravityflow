@@ -762,7 +762,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 			do_action( 'gravityflow_post_status_update_approval', $entry, $assignee, $new_status, $form );
 
-			apply_filters( 'gravityflow_feedback_approval', $feedback, $entry, $assignee, $new_status, $form );
+			$feedback = apply_filters( 'gravityflow_feedback_approval', $feedback, $entry, $assignee, $new_status, $form );
 
 		}
 
