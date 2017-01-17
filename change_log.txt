@@ -1,6 +1,7 @@
 
 - Added support for GravityView to be used to create inbox views. Requires the GravityView Advanced Filter Extension.
 - Added updater support for beta extensions.
-- Added support for configuring a step to process feeds for the Gravity Forms to Pipe Drive CRM Add-On.
+- Added support for configuring a step to process feeds for the following third-party add-ons:
+    Gravity Forms to Pipe Drive CRM Add-On and Gravity Forms SendinBlue Add-On.
 - Fixed an issue with the inbox page which would result in the no pending tasks message when an access token is used by an assignee who is a registered user but not logged in.
 - Fixed an issue which prevented the value returned by the gravityflow_feedback_approval filter from being used.
