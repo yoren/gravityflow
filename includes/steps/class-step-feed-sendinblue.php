@@ -7,7 +7,7 @@
  * @subpackage  Classes/Gravity_Flow_Step_Feed_Sendinblue
  * @copyright   Copyright (c) 2017, Steven Henty
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.0
+ * @since       1.5.1-dev
  */
 
 if ( ! class_exists( 'GFForms' ) ) {
@@ -28,7 +28,7 @@ class Gravity_Flow_Step_Feed_Sendinblue extends Gravity_Flow_Step_Feed_Add_On {
 		return $this->get_base_url() . '/images/sendinblue-icon.png';
 	}
 
-	function get_feeds() {
+	public function get_feeds() {
 		if ( class_exists( 'GFSendinBlueData' ) ) {
 			$form_id = $this->get_form_id();
 			$feeds   = GFSendinBlueData::get_feed_by_form( $form_id, true );
@@ -39,7 +39,7 @@ class Gravity_Flow_Step_Feed_Sendinblue extends Gravity_Flow_Step_Feed_Add_On {
 		return $feeds;
 	}
 
-	function process_feed( $feed ) {
+	public function process_feed( $feed ) {
 		$form  = $this->get_form();
 		$entry = $this->get_entry();
 
@@ -48,11 +48,11 @@ class Gravity_Flow_Step_Feed_Sendinblue extends Gravity_Flow_Step_Feed_Add_On {
 		return true;
 	}
 
-	function intercept_submission() {
+	public function intercept_submission() {
 		remove_action( 'gform_post_submission', array( 'GFSIB_Manager', 'export' ) );
 	}
 
-	function get_feed_label( $feed ) {
+	public function get_feed_label( $feed ) {
 		return $feed['meta']['contact_list_name'];
 	}
 

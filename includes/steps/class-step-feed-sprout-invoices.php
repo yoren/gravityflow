@@ -93,7 +93,7 @@ class Gravity_Flow_Step_Feed_Sprout_Invoices extends Gravity_Flow_Step_Feed_Add_
 	 *
 	 * @return array
 	 */
-	function get_feeds() {
+	public function get_feeds() {
 		$form_id = $this->get_form_id();
 
 		return array(
@@ -118,7 +118,7 @@ class Gravity_Flow_Step_Feed_Sprout_Invoices extends Gravity_Flow_Step_Feed_Add_
 		);
 	}
 
-	function process_feed( $feed ) {
+	public function process_feed( $feed ) {
 		$form  = $this->get_form();
 		$entry = $this->get_entry();
 
@@ -133,7 +133,7 @@ class Gravity_Flow_Step_Feed_Sprout_Invoices extends Gravity_Flow_Step_Feed_Add_
 		return true;
 	}
 
-	function intercept_submission() {
+	public function intercept_submission() {
 		$form_id = $this->get_form_id();
 
 		if ( $this->feed_estimate && $this->is_estimates_supported( $form_id ) ) {

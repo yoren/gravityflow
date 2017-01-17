@@ -209,7 +209,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	/**
 	 * Prevent the feeds assigned to the current step from being processed by the associated add-on.
 	 */
-	function intercept_submission() {
+	public function intercept_submission() {
 		$form_id = $this->get_form_id();
 		if ( gravity_flow()->is_gravityforms_supported( '2.0-beta-2' ) ) {
 			$slug = $this->get_slug();
@@ -229,7 +229,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	 *
 	 * @return mixed
 	 */
-	function get_feed_label( $feed ) {
+	public function get_feed_label( $feed ) {
 		$label = $feed['meta']['feedName'];
 
 		return $label;
@@ -333,7 +333,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	 *
 	 * @return string
 	 */
-	function get_slug() {
+	public function get_slug() {
 		$slug = $this->_slug;
 		if ( ! $slug ) {
 			$slug        = 'gravityforms' . str_replace( '_', '', $this->get_type() );

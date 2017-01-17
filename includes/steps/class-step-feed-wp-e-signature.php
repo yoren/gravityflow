@@ -26,7 +26,7 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 		return esc_html__( 'WP E-Signature', 'gravityflow' );
 	}
 
-	function get_feed_label( $feed ) {
+	public function get_feed_label( $feed ) {
 		$sad_page_id    = rgars( $feed, 'meta/esig_gf_sad' );
 		$sad            = new esig_sad_document();
 		$document_id    = $sad->get_sad_id( $sad_page_id );
@@ -193,7 +193,7 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 	}
 
 
-	function intercept_submission() {
+	public function intercept_submission() {
 		parent::intercept_submission();
 
 		remove_filter( 'gform_confirmation', array( ESIG_GRAVITY_Admin::get_instance(), 'reroute_confirmation' ) );

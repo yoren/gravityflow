@@ -35,7 +35,7 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 		return '<i class="fa fa-user" style="color:darkgreen"></i>';
 	}
 
-	function get_feeds() {
+	public function get_feeds() {
 		$form_id = $this->get_form_id();
 
 		if ( class_exists( 'GF_User_Registration' ) ) {
@@ -48,7 +48,7 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 		return $feeds;
 	}
 
-	function process_feed( $feed ) {
+	public function process_feed( $feed ) {
 		if ( class_exists( 'GF_User_Registration' ) ) {
 			parent::process_feed( $feed );
 
@@ -65,7 +65,7 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 		return true;
 	}
 
-	function intercept_submission() {
+	public function intercept_submission() {
 		if ( class_exists( 'GF_User_Registration' ) ) {
 			parent::intercept_submission();
 
@@ -75,7 +75,7 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 		add_filter( 'gform_disable_registration', '__return_true' );
 	}
 
-	function get_feed_label( $feed ) {
+	public function get_feed_label( $feed ) {
 		if ( class_exists( 'GF_User_Registration' ) ) {
 			return parent::get_feed_label( $feed );
 		}

@@ -23,7 +23,7 @@ class Gravity_Flow_Step_Feed_Highrise extends Gravity_Flow_Step_Feed_Add_On {
 		return esc_html__( 'Highrise', 'gravityflow' );
 	}
 
-	function get_feed_label( $feed ) {
+	public function get_feed_label( $feed ) {
 		$label = $feed['meta']['feed_name'];
 
 		return $label;
