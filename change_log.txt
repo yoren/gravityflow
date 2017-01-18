@@ -5,3 +5,4 @@
     Gravity Forms to Pipe Drive CRM Add-On and Gravity Forms SendinBlue Add-On.
 - Fixed an issue with the inbox page which would result in the no pending tasks message when an access token is used by an assignee who is a registered user but not logged in.
 - Fixed an issue which prevented the value returned by the gravityflow_feedback_approval filter from being used.
+- Fixed a fatal error loading the status shortcode on some sites.

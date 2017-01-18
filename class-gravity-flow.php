@@ -3922,9 +3922,7 @@ PRIMARY KEY  (id)
 		 * @return string
 		 */
 		public function get_shortcode_status_page( $a ) {
-			if ( ! class_exists( 'WP_Screen' ) ) {
-				require_once( ABSPATH . 'wp-admin/includes/screen.php' );
-			}
+			require_once( ABSPATH . 'wp-admin/includes/screen.php' );
 			require_once( ABSPATH . 'wp-admin/includes/template.php' );
 			ob_start();
 
