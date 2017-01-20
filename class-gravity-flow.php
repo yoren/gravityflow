@@ -2132,7 +2132,7 @@ PRIMARY KEY  (id)
 
 			<?php
 
-			do_action( 'gravityflow_workflow_detail_sidebar', $form, $entry );
+			do_action( 'gravityflow_workflow_detail_sidebar', $form, $entry, $current_step, $args );
 
 			$this->maybe_display_entry_detail_admin_actions( $current_step, $form, $entry );
 		}
