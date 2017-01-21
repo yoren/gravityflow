@@ -197,6 +197,7 @@ class Gravity_Flow_Entry_Editor {
 
 			if ( ! $dynamic_conditional_logic_enabled ) {
 				$field->conditionalLogicFields = null;
+				$field->conditionalLogic = null;
 			} else {
 				$conditional_logic_fields      = GFFormDisplay::get_conditional_logic_fields( $form, $field->id );
 				$field->conditionalLogicFields = $conditional_logic_fields;
