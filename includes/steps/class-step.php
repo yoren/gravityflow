@@ -403,6 +403,19 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
+	 * Get the API for preparing common settings such as those which appear on notification tabs.
+	 *
+	 * @since 1.5.1-dev
+	 *
+	 * @return Gravity_Flow_Common_Step_Settings
+	 */
+	public function get_common_settings_api() {
+		require_once( 'class-common-step-settings.php' );
+
+		return new Gravity_Flow_Common_Step_Settings();
+	}
+
+	/**
 	 * Override this method to add settings to the step. Use the Gravity Forms Add-On Framework Settings API.
 	 *
 	 * @return array
