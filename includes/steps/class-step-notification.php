@@ -26,120 +26,40 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 	}
 
 	public function get_settings() {
-
-		$form         = $this->get_form();
-		$notfications = $form['notifications'];
-
+		$form    = $this->get_form();
 		$choices = array();
 
-		foreach ( $notfications as $notfication ) {
+		foreach ( $form['notifications'] as $notification ) {
 			$choices[] = array(
-				'label' => $notfication['name'],
-				'name'  => 'notification_id_' . $notfication['id'],
+				'label' => $notification['name'],
+				'name'  => 'notification_id_' . $notification['id'],
 			);
 		}
 
-		$account_choices = gravity_flow()->get_users_as_choices();
+		$fields = array(
+			array(
+				'name'     => 'notification',
+				'label'    => esc_html__( 'Gravity Forms Notifications', 'gravityflow' ),
+				'type'     => 'checkbox',
+				'required' => false,
+				'choices'  => $choices,
+			),
+		);
+
+		$settings_api                 = $this->get_common_settings_api();
+		$workflow_notification_fields = $settings_api->get_setting_notification( array(
+			'name_prefix'      => 'workflow',
+			'label'            => __( 'Workflow notification', 'gravityflow' ),
+			'tooltip'          => __( 'Enable this setting to send an email.', 'gravityflow' ),
+			'checkbox_label'   => __( 'Enabled', 'gravityflow' ),
+			'checkbox_tooltip' => '',
+			'send_to_fields'   => true,
+			'resend_field'     => false,
+		) );
 
 		return array(
 			'title'  => 'Notification',
-			'fields' => array(
-				array(
-					'name'     => 'notification',
-					'label'    => esc_html__( 'Gravity Forms Notifications', 'gravityflow' ),
-					'type'     => 'checkbox',
-					'required' => false,
-					'choices'  => $choices,
-				),
-				array(
-					'name'    => 'workflow_notification_enabled',
-					'label'   => __( 'Workflow notification', 'gravityflow' ),
-					'tooltip' => __( 'Enable this setting to send an email.', 'gravityflow' ),
-					'type'    => 'checkbox',
-					'choices' => array(
-						array(
-							'label'         => __( 'Enabled', 'gravityflow' ),
-							'name'          => 'workflow_notification_enabled',
-							'default_value' => false,
-						),
-					),
-				),
-				array(
-					'name'          => 'workflow_notification_type',
-					'label'         => __( 'Send To', 'gravityflow' ),
-					'type'          => 'radio',
-					'default_value' => 'select',
-					'horizontal'    => true,
-					'choices'       => array(
-						array( 'label' => __( 'Select', 'gravityflow' ), 'value' => 'select' ),
-						array( 'label' => __( 'Configure Routing', 'gravityflow' ), 'value' => 'routing' ),
-					),
-				),
-				array(
-					'id'       => 'workflow_notification_users',
-					'name'     => 'workflow_notification_users[]',
-					'label'    => __( 'Select User', 'gravityflow' ),
-					'size'     => '8',
-					'multiple' => 'multiple',
-					'type'     => 'select',
-					'choices'  => $account_choices,
-				),
-				array(
-					'name'  => 'workflow_notification_routing',
-					'label' => __( 'Routing', 'gravityflow' ),
-					'type'  => 'user_routing',
-				),
-				array(
-					'name'  => 'workflow_notification_from_name',
-					'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-					'label' => __( 'From Name', 'gravityflow' ),
-					'type'  => 'text',
-				),
-				array(
-					'name'          => 'workflow_notification_from_email',
-					'class'         => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-					'label'         => __( 'From Email', 'gravityflow' ),
-					'type'          => 'text',
-					'default_value' => '{admin_email}',
-				),
-				array(
-					'name'  => 'workflow_notification_reply_to',
-					'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-					'label' => __( 'Reply To', 'gravityflow' ),
-					'type'  => 'text',
-				),
-				array(
-					'name'  => 'workflow_notification_bcc',
-					'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-					'label' => __( 'BCC', 'gravityflow' ),
-					'type'  => 'text',
-				),
-				array(
-					'name'  => 'workflow_notification_subject',
-					'class' => 'fieldwidth-1 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-					'label' => __( 'Subject', 'gravityflow' ),
-					'type'  => 'text',
-				),
-				array(
-					'name'  => 'workflow_notification_message',
-					'label' => __( 'Message', 'gravityflow' ),
-					'type'  => 'visual_editor',
-				),
-				array(
-					'name'    => 'workflow_notification_autoformat',
-					'label'   => '',
-					'type'    => 'checkbox',
-					'choices' => array(
-						array(
-							'label'         => __( 'Disable auto-formatting', 'gravityflow' ),
-							'name'          => 'workflow_notification_disable_autoformat',
-							'default_value' => false,
-							'tooltip'       => __( 'Disable auto-formatting to prevent paragraph breaks being automatically inserted when using HTML to create the email message.', 'gravityflow' ),
-
-						),
-					),
-				),
-			),
+			'fields' => array_merge( $fields, $workflow_notification_fields ),
 		);
 	}
 

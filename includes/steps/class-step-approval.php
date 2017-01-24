@@ -142,344 +142,14 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	}
 
 	public function get_settings() {
-		$account_choices = gravity_flow()->get_users_as_choices();
-
-		$type_field_choices = array(
-			array( 'label' => __( 'Select', 'gravityflow' ), 'value' => 'select' ),
-			array( 'label' => __( 'Conditional Routing', 'gravityflow' ), 'value' => 'routing' ),
-		);
-
-		$assignee_notification_fields = array(
-			array(
-				'name'    => 'assignee_notification_enabled',
-				'label'   => '',
-				'type'    => 'checkbox',
-				'choices' => array(
-					array(
-						'label'         => __( 'Send Email to the assignee(s).', 'gravityflow' ),
-						'tooltip'       => __( 'Enable this setting to send email to each of the assignees as soon as the entry has been assigned. If a role is configured to receive emails then all the users with that role will receive the email.', 'gravityflow' ),
-						'name'          => 'assignee_notification_enabled',
-						'default_value' => false,
-					),
-				),
-			),
-			array(
-				'name'  => 'assignee_notification_from_name',
-				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-				'label' => __( 'From Name', 'gravityflow' ),
-				'type'  => 'text',
-			),
-			array(
-				'name'          => 'assignee_notification_from_email',
-				'class'         => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-				'label'         => __( 'From Email', 'gravityflow' ),
-				'type'          => 'text',
-				'default_value' => '{admin_email}',
-			),
-			array(
-				'name'  => 'assignee_notification_reply_to',
-				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-				'label' => __( 'Reply To', 'gravityflow' ),
-				'type'  => 'text',
-			),
-			array(
-				'name'  => 'assignee_notification_bcc',
-				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-				'label' => __( 'BCC', 'gravityflow' ),
-				'type'  => 'text',
-			),
-			array(
-				'name'  => 'assignee_notification_subject',
-				'class' => 'large fieldwidth-1 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-				'label' => __( 'Subject', 'gravityflow' ),
-				'type'  => 'text',
-			),
-			array(
-				'name'          => 'assignee_notification_message',
-				'label'         => __( 'Message to Assignee(s)', 'gravityflow' ),
-				'type'          => 'visual_editor',
-				'default_value' => __( 'A new entry is pending your approval. Please check your Workflow Inbox.', 'gravityflow' ),
-			),
-			array(
-				'name'    => 'assignee_notification_autoformat',
-				'label'   => '',
-				'type'    => 'checkbox',
-				'choices' => array(
-					array(
-						'label'         => __( 'Disable auto-formatting', 'gravityflow' ),
-						'name'          => 'assignee_notification_disable_autoformat',
-						'default_value' => false,
-						'tooltip'       => __( 'Disable auto-formatting to prevent paragraph breaks being automatically inserted when using HTML to create the email message.', 'gravityflow' ),
-
-					),
-				),
-			),
-			array(
-				'name'     => 'resend_assignee_email',
-				'label'    => '',
-				'type'     => 'checkbox_and_text',
-				'checkbox' => array(
-					'label' => __( 'Send reminder', 'gravityflow' ),
-				),
-				'text'     => array(
-					'default_value' => 7,
-					'before_input'  => __( 'Resend the assignee email after', 'gravityflow' ),
-					'after_input'   => ' ' . __( 'day(s)', 'gravityflow' ),
-				),
-			),
-		);
-
-		$rejection_notification_fields = array(
-			array(
-				'name'    => 'rejection_notification_enabled',
-				'label'   => '',
-				'type'    => 'checkbox',
-				'choices' => array(
-					array(
-						'label'         => __( 'Send email when the entry is rejected', 'gravityflow' ),
-						'tooltip'       => __( 'Enable this setting to send an email when the entry is rejected.', 'gravityflow' ),
-						'name'          => 'rejection_notification_enabled',
-						'default_value' => false,
-					),
-				),
-			),
-			array(
-				'name'          => 'rejection_notification_type',
-				'label'         => __( 'Send To', 'gravityflow' ),
-				'type'          => 'radio',
-				'default_value' => 'select',
-				'horizontal'    => true,
-				'choices'       => $type_field_choices,
-			),
-			array(
-				'id'       => 'rejection_notification_users',
-				'name'     => 'rejection_notification_users[]',
-				'label'    => __( 'Select User', 'gravityflow' ),
-				'size'     => '8',
-				'multiple' => 'multiple',
-				'type'     => 'select',
-				'choices'  => $account_choices,
-			),
-			array(
-				'name'  => 'rejection_notification_routing',
-				'label' => __( 'Routing', 'gravityflow' ),
-				'type'  => 'user_routing',
-			),
-			array(
-				'name'  => 'rejection_notification_from_name',
-				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-				'label' => __( 'From Name', 'gravityflow' ),
-				'type'  => 'text',
-			),
-			array(
-				'name'          => 'rejection_notification_from_email',
-				'label'         => __( 'From Email', 'gravityflow' ),
-				'class'         => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-				'type'          => 'text',
-				'default_value' => '{admin_email}',
-			),
-			array(
-				'name'  => 'rejection_notification_reply_to',
-				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-				'label' => __( 'Reply To', 'gravityflow' ),
-				'type'  => 'text',
-			),
-			array(
-				'name'  => 'rejection_notification_bcc',
-				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-				'label' => __( 'BCC', 'gravityflow' ),
-				'type'  => 'text',
-			),
-			array(
-				'name'  => 'rejection_notification_subject',
-				'class' => 'fieldwidth-1 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-				'label' => __( 'Subject', 'gravityflow' ),
-				'type'  => 'text',
-			),
-			array(
-				'name'          => 'rejection_notification_message',
-				'label'         => __( 'Message', 'gravityflow' ),
-				'type'          => 'visual_editor',
-				'default_value' => __( 'Entry {entry_id} has been rejected', 'gravityflow' ),
-			),
-			array(
-				'name'    => 'rejection_notification_autoformat',
-				'label'   => '',
-				'type'    => 'checkbox',
-				'choices' => array(
-					array(
-						'label'         => __( 'Disable auto-formatting', 'gravityflow' ),
-						'name'          => 'rejection_notification_disable_autoformat',
-						'default_value' => false,
-						'tooltip'       => __( 'Disable auto-formatting to prevent paragraph breaks being automatically inserted when using HTML to create the email message.', 'gravityflow' ),
-
-					),
-				),
-			),
-		);
-
-		$approval_notification_fields = array(
-			array(
-				'name'    => 'approval_notification_enabled',
-				'label'   => '',
-				'type'    => 'checkbox',
-				'choices' => array(
-					array(
-						'label'         => __( 'Send email when the entry is approved', 'gravityflow' ),
-						'tooltip'       => __( 'Enable this setting to send an email when the entry is approved.', 'gravityflow' ),
-						'name'          => 'approval_notification_enabled',
-						'default_value' => false,
-					),
-				),
-			),
-			array(
-				'name'          => 'approval_notification_type',
-				'label'         => __( 'Send To', 'gravityflow' ),
-				'type'          => 'radio',
-				'default_value' => 'select',
-				'horizontal'    => true,
-				'choices'       => $type_field_choices,
-			),
-			array(
-				'id'       => 'approval_notification_users',
-				'name'     => 'approval_notification_users[]',
-				'label'    => __( 'Select', 'gravityflow' ),
-				'size'     => '8',
-				'multiple' => 'multiple',
-				'type'     => 'select',
-				'choices'  => $account_choices,
-			),
-			array(
-				'name'  => 'approval_notification_routing',
-				'label' => __( 'Routing', 'gravityflow' ),
-				'class' => 'large',
-				'type'  => 'user_routing',
-			),
-			array(
-				'name'  => 'approval_notification_from_name',
-				'label' => __( 'From Name', 'gravityflow' ),
-				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-				'type'  => 'text',
-			),
-			array(
-				'name'          => 'approval_notification_from_email',
-				'label'         => __( 'From Email', 'gravityflow' ),
-				'class'         => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-				'type'          => 'text',
-				'default_value' => '{admin_email}',
-			),
-			array(
-				'name'  => 'approval_notification_reply_to',
-				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-				'label' => __( 'Reply To', 'gravityflow' ),
-				'type'  => 'text',
-			),
-			array(
-				'name'  => 'approval_notification_bcc',
-				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-				'label' => __( 'BCC', 'gravityflow' ),
-				'type'  => 'text',
-			),
-			array(
-				'name'  => 'approval_notification_subject',
-				'class' => 'fieldwidth-1 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-				'label' => __( 'Subject', 'gravityflow' ),
-				'type'  => 'text',
-
-			),
-			array(
-				'name'          => 'approval_notification_message',
-				'label'         => __( 'Approval Message', 'gravityflow' ),
-				'type'          => 'visual_editor',
-				'default_value' => __( 'Entry {entry_id} has been approved', 'gravityflow' ),
-			),
-			array(
-				'name'    => 'approval_notification_autoformat',
-				'label'   => '',
-				'type'    => 'checkbox',
-				'choices' => array(
-					array(
-						'label'         => __( 'Disable auto-formatting', 'gravityflow' ),
-						'name'          => 'approval_notification_disable_autoformat',
-						'default_value' => false,
-						'tooltip'       => __( 'Disable auto-formatting to prevent paragraph breaks being automatically inserted when using HTML to create the email message.', 'gravityflow' ),
-					),
-				),
-			),
-		);
-
-
-		// Support for Gravity PDF 4
-		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-RC2', '>=' ) ) {
-
-			$form_id    = $this->get_form_id();
-			$gpdf_feeds = GPDFAPI::get_form_pdfs( $form_id );
-
-			if ( ! is_wp_error( $gpdf_feeds ) ) {
-
-				/* Format the PDFs in the appropriate format for use in a select field */
-				$gpdf_choices = array();
-				foreach ( $gpdf_feeds as $gpdf_feed ) {
-					if ( true === $gpdf_feed['active'] ) {
-						$gpdf_choices[] = array( 'label' => $gpdf_feed['name'], 'value' => $gpdf_feed['id'] );
-					}
-				}
-
-				/* Create a select box for the Gravity PDFs if there are active PDFs */
-				if ( 0 < sizeof( $gpdf_choices ) ) {
-					$pdf_setting = array(
-						'name'     => 'assignee_notification_gpdf',
-						'label'    => '',
-						'type'     => 'checkbox_and_select',
-						'checkbox' => array(
-							'label' => esc_html__( 'Attach PDF', 'gravityflow' ),
-						),
-						'select'   => array(
-							'choices' => $gpdf_choices,
-						),
-					);
-
-					/* Include PDF select box in assignee notification settings */
-					$assignee_notification_fields[] = $pdf_setting;
-
-					/* Include PDF select box in rejection notification settings */
-					$pdf_setting['name']             = 'rejection_notification_gpdf';
-					$rejection_notification_fields[] = $pdf_setting;
-
-					/* Include PDF select box in aproval notification settings */
-					$pdf_setting['name']            = 'approval_notification_gpdf';
-					$approval_notification_fields[] = $pdf_setting;
-				}
-			}
-		}
+        $settings_api = $this->get_common_settings_api();
 
 		$settings = array(
 			'title'  => esc_html__( 'Approval', 'gravityflow' ),
 			'fields' => array(
-				array(
-					'name'          => 'type',
-					'label'         => __( 'Assign To:', 'gravityflow' ),
-					'type'          => 'radio',
-					'default_value' => 'select',
-					'horizontal'    => true,
-					'choices'       => $type_field_choices,
-				),
-				array(
-					'id'       => 'assignees',
-					'name'     => 'assignees[]',
-					'tooltip'  => __( 'Users and roles fields will appear in this list. If the form contains any assignee fields they will also appear here. Click on an item to select it. The selected items will appear on the right. If you select a role then anybody from that role can approve.', 'gravityflow' ),
-					'size'     => '8',
-					'multiple' => 'multiple',
-					'label'    => esc_html__( 'Select Assignees', 'gravityflow' ),
-					'type'     => 'select',
-					'choices'  => $account_choices,
-				),
-				array(
-					'name'    => 'routing',
-					'tooltip' => __( 'Build assignee routing rules by adding conditions. Users and roles fields will appear in the first drop-down field. If the form contains any assignee fields they will also appear here. Select the assignee and define the condition for that assignee. Add as many routing rules as you need.', 'gravityflow' ),
-					'label'   => __( 'Routing', 'gravityflow' ),
-					'type'    => 'routing',
-				),
+				$settings_api->get_setting_assignee_type(),
+				$settings_api->get_setting_assignees(),
+				$settings_api->get_setting_assignee_routing(),
 				array(
 					'name'          => 'unanimous_approval',
 					'label'         => __( 'Approval Policy', 'gravityflow' ),
@@ -497,48 +167,41 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 						),
 					),
 				),
-				array(
-					'name'     => 'instructions',
-					'label'    => __( 'Instructions', 'gravityflow' ),
-					'type'     => 'checkbox_and_textarea',
-					'tooltip'  => esc_html__( 'Activate this setting to display instructions to the user for the current step.', 'gravityflow' ),
-					'checkbox' => array(
-						'label' => esc_html__( 'Display instructions', 'gravityflow' ),
+				$settings_api->get_setting_instructions( esc_html__( 'Instructions: please review the values in the fields below and click on the Approve or Reject button', 'gravityflow' ) ),
+				$settings_api->get_setting_display_fields(),
+				$settings_api->get_setting_notification_tabs( array(
+					array(
+						'label'  => __( 'Assignee Email', 'gravityflow' ),
+						'id'     => 'tab_assignee_notification',
+						'fields' => $settings_api->get_setting_notification( array(
+							'default_message' => __( 'A new entry is pending your approval. Please check your Workflow Inbox.', 'gravityflow' ),
+						) ),
 					),
-					'textarea' => array(
-						'use_editor'    => true,
-						'default_value' => esc_html__( 'Instructions: please review the values in the fields below and click on the Approve or Reject button', 'gravityflow' ),
+					array(
+						'label'  => __( 'Rejection Email', 'gravityflow' ),
+						'id'     => 'tab_rejection_notification',
+						'fields' => $settings_api->get_setting_notification( array(
+							'name_prefix'      => 'rejection',
+							'checkbox_label'   => __( 'Send email when the entry is rejected', 'gravityflow' ),
+							'checkbox_tooltip' => __( 'Enable this setting to send an email when the entry is rejected.', 'gravityflow' ),
+							'default_message'  => __( 'Entry {entry_id} has been rejected', 'gravityflow' ),
+							'send_to_fields'   => true,
+							'resend_field'     => false,
+						) ),
 					),
-				),
-				array(
-					'name'    => 'display_fields',
-					'label'   => __( 'Display Fields', 'gravityflow' ),
-					'tooltip' => __( 'Select the fields to hide or display.', 'gravityflow' ),
-					'type'    => 'display_fields',
-				),
-				array(
-					'name'    => 'notification_tabs',
-					'label'   => __( 'Emails', 'gravityflow' ),
-					'tooltip' => __( 'Configure the emails that should be sent for this step.', 'gravityflow' ),
-					'type'    => 'tabs',
-					'tabs'    => array(
-						array(
-							'label'  => __( 'Assignee Email', 'gravityflow' ),
-							'id'     => 'tab_assignee_notification',
-							'fields' => $assignee_notification_fields,
-						),
-						array(
-							'label'  => __( 'Rejection Email', 'gravityflow' ),
-							'id'     => 'tab_rejection_notification',
-							'fields' => $rejection_notification_fields,
-						),
-						array(
-							'label'  => __( 'Approval Email', 'gravityflow' ),
-							'id'     => 'tab_approval_notification',
-							'fields' => $approval_notification_fields,
-						),
+					array(
+						'label'  => __( 'Approval Email', 'gravityflow' ),
+						'id'     => 'tab_approval_notification',
+						'fields' => $settings_api->get_setting_notification( array(
+							'name_prefix'      => 'approval',
+							'checkbox_label'   => __( 'Send email when the entry is approved', 'gravityflow' ),
+							'checkbox_tooltip' => __( 'Enable this setting to send an email when the entry is approved.', 'gravityflow' ),
+							'default_message'  => __( 'Entry {entry_id} has been approved', 'gravityflow' ),
+							'send_to_fields'   => true,
+							'resend_field'     => false,
+						) ),
 					),
-				),
+				) ),
 			),
 		);
 

@@ -60,6 +60,34 @@ class Gravity_Flow_Common_Step_Settings {
 	}
 
 	/**
+	 * Get the enable notification field.
+	 *
+	 * @since 1.5.1-dev
+	 *
+	 * @param array $config The notification settings properties.
+	 *
+	 * @return array
+	 */
+	public function get_notification_enabled_field( $config ) {
+		return array(
+			array(
+				'name'    => $config['name_prefix'] . '_notification_enabled',
+				'label'   => $config['label'],
+				'tooltip' => $config['tooltip'],
+				'type'    => 'checkbox',
+				'choices' => array(
+					array(
+						'label'         => $config['checkbox_label'],
+						'tooltip'       => $config['checkbox_tooltip'],
+						'name'          => $config['name_prefix'] . '_notification_enabled',
+						'default_value' => $config['checkbox_default_value'],
+					),
+				),
+			),
+		);
+	}
+
+	/**
 	 * Get the notification "Send To" settings.
 	 *
 	 * @since 1.5.1-dev
@@ -69,15 +97,15 @@ class Gravity_Flow_Common_Step_Settings {
 	 * @return array
 	 */
 	public function get_notification_send_to_fields( $config ) {
-		if ( ! rgar( $config, 'send_to_enabled' ) ) {
+		if ( ! rgar( $config, 'send_to_fields' ) ) {
 			return array();
 		}
 
-		$type = rgar( $config, 'type' );
+		$prefix = rgar( $config, 'name_prefix' );
 
 		return array(
 			array(
-				'name'          => $type . '_notification_type',
+				'name'          => $prefix . '_notification_type',
 				'label'         => __( 'Send To', 'gravityflow' ),
 				'type'          => 'radio',
 				'default_value' => 'select',
@@ -85,8 +113,8 @@ class Gravity_Flow_Common_Step_Settings {
 				'choices'       => $this->get_type_choices(),
 			),
 			array(
-				'id'       => $type . '_notification_users',
-				'name'     => $type . '_notification_users[]',
+				'id'       => $prefix . '_notification_users',
+				'name'     => $prefix . '_notification_users[]',
 				'label'    => __( 'Select', 'gravityflow' ),
 				'size'     => '8',
 				'multiple' => 'multiple',
@@ -94,7 +122,7 @@ class Gravity_Flow_Common_Step_Settings {
 				'choices'  => $this->_account_choices,
 			),
 			array(
-				'name'  => $type . '_notification_routing',
+				'name'  => $prefix . '_notification_routing',
 				'label' => __( 'Routing', 'gravityflow' ),
 				'class' => 'large',
 				'type'  => 'user_routing',
@@ -112,55 +140,55 @@ class Gravity_Flow_Common_Step_Settings {
 	 * @return array
 	 */
 	public function get_notification_common_fields( $config ) {
-		$type = rgar( $config, 'type' );
+		$prefix = rgar( $config, 'name_prefix' );
 
 		return array(
 			array(
-				'name'  => $type . '_notification_from_name',
+				'name'  => $prefix . '_notification_from_name',
 				'label' => __( 'From Name', 'gravityflow' ),
 				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
 				'type'  => 'text',
 			),
 			array(
-				'name'          => $type . '_notification_from_email',
+				'name'          => $prefix . '_notification_from_email',
 				'label'         => __( 'From Email', 'gravityflow' ),
 				'class'         => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
 				'type'          => 'text',
 				'default_value' => '{admin_email}',
 			),
 			array(
-				'name'  => $type . '_notification_reply_to',
+				'name'  => $prefix . '_notification_reply_to',
 				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
 				'label' => __( 'Reply To', 'gravityflow' ),
 				'type'  => 'text',
 			),
 			array(
-				'name'  => $type . '_notification_bcc',
+				'name'  => $prefix . '_notification_bcc',
 				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
 				'label' => __( 'BCC', 'gravityflow' ),
 				'type'  => 'text',
 			),
 			array(
-				'name'  => $type . '_notification_subject',
+				'name'  => $prefix . '_notification_subject',
 				'class' => 'fieldwidth-1 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
 				'label' => __( 'Subject', 'gravityflow' ),
 				'type'  => 'text',
 
 			),
 			array(
-				'name'          => $type . '_notification_message',
+				'name'          => $prefix . '_notification_message',
 				'label'         => __( 'Message', 'gravityflow' ),
 				'type'          => 'visual_editor',
 				'default_value' => rgar( $config, 'default_message' ),
 			),
 			array(
-				'name'    => $type . '_notification_autoformat',
+				'name'    => $prefix . '_notification_autoformat',
 				'label'   => '',
 				'type'    => 'checkbox',
 				'choices' => array(
 					array(
 						'label'         => __( 'Disable auto-formatting', 'gravityflow' ),
-						'name'          => $type . '_notification_disable_autoformat',
+						'name'          => $prefix . '_notification_disable_autoformat',
 						'default_value' => false,
 						'tooltip'       => __( 'Disable auto-formatting to prevent paragraph breaks being automatically inserted when using HTML to create the email message.', 'gravityflow' ),
 					),
@@ -179,7 +207,7 @@ class Gravity_Flow_Common_Step_Settings {
 	 * @return array
 	 */
 	public function get_notification_resend_field( $config ) {
-		if ( ! rgar( $config, 'resend_enabled' ) ) {
+		if ( ! rgar( $config, 'resend_field' ) ) {
 			return array();
 		}
 
@@ -216,7 +244,7 @@ class Gravity_Flow_Common_Step_Settings {
 
 		return array(
 			array(
-				'name'     => rgar( $config, 'type' ) . '_notification_gpdf',
+				'name'     => rgar( $config, 'name_prefix' ) . '_notification_gpdf',
 				'label'    => '',
 				'type'     => 'checkbox_and_select',
 				'checkbox' => array(
@@ -238,25 +266,21 @@ class Gravity_Flow_Common_Step_Settings {
 	 *
 	 * @return array
 	 */
-	public function get_setting_notification( $config ) {
-		$type = rgar( $config, 'type' );
+	public function get_setting_notification( $config = array() ) {
+		$config = array_merge( array(
+			'name_prefix'            => 'assignee',
+			'label'                  => '',
+			'tooltip'                => '',
+			'checkbox_label'         => __( 'Assignee Email', 'gravityflow' ),
+			'checkbox_tooltip'       => __( 'Enable this setting to send email to each of the assignees as soon as the entry has been assigned. If a role is configured to receive emails then all the users with that role will receive the email.', 'gravityflow' ),
+			'checkbox_default_value' => false,
+			'default_message'        => '',
+			'send_to_fields'         => false,
+			'resend_field'           => true,
+		), $config );
 
 		$fields = array_merge(
-			array(
-				array(
-					'name'    => $type . '_notification_enabled',
-					'label'   => '',
-					'type'    => 'checkbox',
-					'choices' => array(
-						array(
-							'label'         => rgar( $config, 'label' ),
-							'tooltip'       => rgar( $config, 'tooltip' ),
-							'name'          => $type . '_notification_enabled',
-							'default_value' => false,
-						),
-					),
-				),
-			),
+			$this->get_notification_enabled_field( $config ),
 			$this->get_notification_send_to_fields( $config ),
 			$this->get_notification_common_fields( $config ),
 			$this->get_notification_resend_field( $config ),
@@ -348,7 +372,7 @@ class Gravity_Flow_Common_Step_Settings {
 	 *
 	 * @return array
 	 */
-	public function get_setting_instructions( $default_value ) {
+	public function get_setting_instructions( $default_value = '' ) {
 		return array(
 			'name'     => 'instructions',
 			'label'    => __( 'Instructions', 'gravityflow' ),

@@ -33,35 +33,14 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	}
 
 	public function get_settings() {
-
-		$account_choices = gravity_flow()->get_users_as_choices();
-
-		$type_field_choices = array(
-			array( 'label' => __( 'Select', 'gravityflow' ), 'value' => 'select' ),
-			array( 'label' => __( 'Conditional Routing', 'gravityflow' ), 'value' => 'routing' ),
-		);
-
-		$form = $this->get_form();
+		$form         = $this->get_form();
+		$settings_api = $this->get_common_settings_api();
 
 		$settings = array(
 			'title'  => esc_html__( 'User Input', 'gravityflow' ),
 			'fields' => array(
-				array(
-					'name'          => 'type',
-					'label'         => __( 'Assign To:', 'gravityflow' ),
-					'type'          => 'radio',
-					'default_value' => 'select',
-					'horizontal'    => true,
-					'choices'       => $type_field_choices,
-				),
-				array(
-					'id'       => 'assignees',
-					'name'     => 'assignees[]',
-					'multiple' => 'multiple',
-					'label'    => esc_html__( 'Select Assignees', 'gravityflow' ),
-					'type'     => 'select',
-					'choices'  => $account_choices,
-				),
+				$settings_api->get_setting_assignee_type(),
+				$settings_api->get_setting_assignees(),
 				array(
 					'id'       => 'editable_fields',
 					'name'     => 'editable_fields[]',
@@ -69,11 +48,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					'multiple' => 'multiple',
 					'type'     => 'editable_fields',
 				),
-				array(
-					'name'  => 'routing',
-					'label' => 'Assignee Routing',
-					'type'  => 'routing',
-				),
+				$settings_api->get_setting_assignee_routing(),
 			),
 		);
 
@@ -163,24 +138,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					),
 				),
 			),
-			array(
-				'name'     => 'instructions',
-				'label'    => __( 'Instructions', 'gravityflow' ),
-				'type'     => 'checkbox_and_textarea',
-				'tooltip'  => esc_html__( 'Activate this setting to display instructions to the user for the current step.', 'gravityflow' ),
-				'checkbox' => array(
-					'label' => esc_html__( 'Display instructions', 'gravityflow' ),
-				),
-				'textarea' => array(
-					'use_editor' => true,
-				),
-			),
-			array(
-				'name'    => 'display_fields',
-				'label'   => __( 'Display Fields', 'gravityflow' ),
-				'tooltip' => __( 'Select the fields to hide or display.', 'gravityflow' ),
-				'type'    => 'display_fields',
-			),
+			$settings_api->get_setting_instructions(),
+			$settings_api->get_setting_display_fields(),
 			array(
 				'name'          => 'default_status',
 				'type'          => 'radio',
@@ -214,117 +173,17 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					),
 				),
 			),
-			array(
-				'name'    => 'assignee_notification_enabled',
-				'label'   => 'Email',
-				'type'    => 'checkbox',
-				'choices' => array(
-					array(
-						'label'         => __( 'Enabled' ),
-						'name'          => 'assignee_notification_enabled',
-						'default_value' => 1,
-					),
-				),
-			),
-			array(
-				'name'  => 'assignee_notification_from_name',
-				'label' => __( 'From Name', 'gravityflow' ),
-				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-				'type'  => 'text',
-			),
-			array(
-				'name'          => 'assignee_notification_from_email',
-				'label'         => __( 'From Email', 'gravityflow' ),
-				'type'          => 'text',
-				'class'         => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-				'default_value' => '{admin_email}',
-			),
-			array(
-				'name'  => 'assignee_notification_reply_to',
-				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-				'label' => __( 'Reply To', 'gravityflow' ),
-				'type'  => 'text',
-			),
-			array(
-				'name'  => 'assignee_notification_bcc',
-				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-				'label' => __( 'BCC', 'gravityflow' ),
-				'type'  => 'text',
-			),
-			array(
-				'name'  => 'assignee_notification_subject',
-				'class' => 'fieldwidth-1 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
-				'label' => __( 'Subject', 'gravityflow' ),
-				'type'  => 'text',
-			),
-			array(
-				'name'          => 'assignee_notification_message',
-				'label'         => 'Message',
-				'type'          => 'visual_editor',
-				'default_value' => esc_html__( 'A new entry requires your input', 'gravityflow' ),
-			),
-			array(
-				'name'    => 'assignee_notification_autoformat',
-				'label'   => '',
-				'type'    => 'checkbox',
-				'choices' => array(
-					array(
-						'label'         => __( 'Disable auto-formatting', 'gravityflow' ),
-						'name'          => 'assignee_notification_disable_autoformat',
-						'default_value' => false,
-						'tooltip'       => __( 'Disable auto-formatting to prevent paragraph breaks being automatically inserted when using HTML to create the email message.', 'gravityflow' ),
-
-					),
-				),
-			),
-			array(
-				'name'  => 'resend_assignee_email',
-				'label' => __( 'Send reminder', 'gravityflow' ),
-				'type'  => 'checkbox_and_text',
-				'text'  => array(
-					'default_value' => 7,
-					'before_input'  => __( 'Resend the assignee email after', 'gravityflow' ),
-					'after_input'   => ' ' . __( 'day(s)', 'gravityflow' ),
-				),
-			),
-
+			$settings_api->get_setting_notification_tabs( array(
+				array(
+					'label'  => __( 'Assignee Email', 'gravityflow' ),
+					'id'     => 'tab_assignee_notification',
+					'fields' => $settings_api->get_setting_notification( array(
+						'checkbox_default_value' => true,
+						'default_message'        => __( 'A new entry requires your input', 'gravityflow' ),
+					) ),
+				)
+			) ),
 		);
-
-		// Support for Gravity PDF 4
-		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-RC2', '>=' ) ) {
-
-			$form_id    = $this->get_form_id();
-			$gpdf_feeds = GPDFAPI::get_form_pdfs( $form_id );
-
-			if ( ! is_wp_error( $gpdf_feeds ) ) {
-
-				/* Format the PDFs in the appropriate format for use in a select field */
-				$gpdf_choices = array();
-				foreach ( $gpdf_feeds as $gpdf_feed ) {
-					if ( true === $gpdf_feed['active'] ) {
-						$gpdf_choices[] = array( 'label' => $gpdf_feed['name'], 'value' => $gpdf_feed['id'] );
-					}
-				}
-
-				/* Create a select box for the Gravity PDFs */
-				if ( 0 < sizeof( $gpdf_choices ) ) {
-					$pdf_setting = array(
-						'name'     => 'assignee_notification_gpdf',
-						'label'    => '',
-						'type'     => 'checkbox_and_select',
-						'checkbox' => array(
-							'label' => esc_html__( 'Attach PDF', 'gravityflow' ),
-						),
-						'select'   => array(
-							'choices' => $gpdf_choices,
-						),
-					);
-
-					/* Include PDF select box in assignee notification settings */
-					$settings2[] = $pdf_setting;
-				}
-			}
-		}
 
 		$settings['fields'] = array_merge( $settings['fields'], $settings2 );
 
