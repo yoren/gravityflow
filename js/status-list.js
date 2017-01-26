@@ -2,9 +2,9 @@
 (function (GravityFlowStatusList, $) {
     var page = 1, filters;
     $(document).ready(function () {
-        $("#doaction").click(function(){
+        $('#doaction, #doaction2').click(function(){
 
-            var action = $('#bulk-action-selector-top').val();
+            var action = $(this).prev('select').val();
 
             if ( action == 'print' ) {
 				tb_show('Print Entries', '#TB_inline?width=350&amp;height=250&amp;inlineId=print_modal_container', '');
