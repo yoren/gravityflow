@@ -632,6 +632,11 @@ table.wp-list-table.entries td[data-label="ID"] {
     width: 150px;
 }
 
+.gravityflow-no-sidebar #minor-publishing{
+    padding:10px;
+}
+
+
 #minor-publishing ul{
     margin: 0;
 }

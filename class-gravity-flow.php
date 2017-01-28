@@ -2117,7 +2117,7 @@ PRIMARY KEY  (id)
 				</h3>
 
 				<div id="submitcomment" class="submitbox">
-					<div id="minor-publishing" style="padding:10px;">
+					<div id="minor-publishing">
 						<?php
 
 						$this->maybe_display_entry_detail_workflow_info( $current_step, $form, $entry, $args );
