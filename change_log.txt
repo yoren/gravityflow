@@ -7,6 +7,7 @@
 - Updated the gravityflow_workflow_detail_sidebar hook to include $current_step and $args as the third and fourth parameters.
 - Updated the user Input button text to "Submit" instead of "Update" when the default status is hidden.
 - Updated the styles of the workflow box when the sidebar is not active to remove the padding.
+- Updated the activity log and reports to exclude deleted and trashed entries.
 - Fixed an issue with the inbox page which would result in the no pending tasks message when an access token is used by an assignee who is a registered user but not logged in.
 - Fixed an issue which prevented the value returned by the gravityflow_feedback_approval filter from being used.
 - Fixed a fatal error loading the status shortcode on some sites.
