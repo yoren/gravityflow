@@ -3,8 +3,8 @@
  * Gravity Flow Common Step Settings Functions
  *
  * @package   GravityFlow
- * @copyright Copyright (c) 2015-2017, Steven Henty
- * @license   http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @copyright   Copyright (c) 2017, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since     1.5.1-dev
  */
 

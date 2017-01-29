@@ -5,7 +5,7 @@
  *
  * @package     GravityFlow
  * @subpackage  Classes/Gravity_Flow_Step_Feed_Pipedrive
- * @copyright   Copyright (c) 2016, Steven Henty
+ * @copyright   Copyright (c) 2016-2017, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.5.1-dev
  */

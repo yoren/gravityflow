@@ -5,8 +5,10 @@ if ( ! class_exists( 'GFForms' ) ) {
 }
 
 /**
- *
  * Class Gravity_Flow_Field_Assignee_Select
+ *
+ * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
 class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
