@@ -3218,7 +3218,7 @@ PRIMARY KEY  (id)
 
 					?>
 					<div class="updated notice notice-success is-dismissible" style="padding:6px;">
-						<?php esc_html_e( $feedback ); ?>
+						<?php echo esc_html( $feedback ); ?>
 					</div>
 					<?php
 
