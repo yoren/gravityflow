@@ -434,12 +434,13 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		}
 
 		if ( $new_status == 'complete' ) {
-			$feedback = $this->confirmation_messageEnable ? $this->confirmation_messageValue : __( 'Entry updated and marked complete.', 'gravityflow' );
+			$note_message = __( 'Entry updated and marked complete.', 'gravityflow' );
+			$feedback = $this->confirmation_messageEnable ? $this->confirmation_messageValue : $note_message;
 
 		} else {
 			$feedback = __( 'Entry updated - in progress.', 'gravityflow' );
+			$note_message = $feedback;
 		}
-
 
 		/**
 		 * Allow the feedback message to be modified on the user input step.
@@ -452,7 +453,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		 */
 		$feedback = apply_filters( 'gravityflow_feedback_message_user_input', $feedback, $new_status, $assignee, $form, $this );
 
-		$note = sprintf( '%s: %s', $this->get_name(), $feedback );
+		$note = sprintf( '%s: %s', $this->get_name(), $note_message );
 
 		$user_note = rgpost( 'gravityflow_note' );
 		if ( ! empty( $user_note ) ) {
