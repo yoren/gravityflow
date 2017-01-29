@@ -420,7 +420,7 @@ class Gravity_Flow_Common_Step_Settings {
 			'type'     => 'checkbox_and_textarea',
 			'tooltip'  => esc_html__( 'Activate this setting to display a custom confirmation message to the assignee for the current step.', 'gravityflow' ),
 			'checkbox' => array(
-				'label' => esc_html__( 'Display custom confirmation message', 'gravityflow' ),
+				'label' => esc_html__( 'Display a custom confirmation message', 'gravityflow' ),
 			),
 			'textarea' => array(
 				'use_editor'    => true,
