@@ -403,4 +403,29 @@ class Gravity_Flow_Common_Step_Settings {
 			'type'    => 'display_fields',
 		);
 	}
+
+	/**
+	 * Get the properties for the confirmation message setting.
+	 *
+	 * @since 1.5.1-dev
+	 *
+	 * @param string $default_value The default value to appear in the editor.
+	 *
+	 * @return array
+	 */
+	public function get_setting_confirmation_messasge( $default_value = '' ) {
+		return array(
+			'name'     => 'confirmation_message',
+			'label'    => __( 'Confirmation Message', 'gravityflow' ),
+			'type'     => 'checkbox_and_textarea',
+			'tooltip'  => esc_html__( 'Activate this setting to display a custom confirmation message to the assignee for the current step.', 'gravityflow' ),
+			'checkbox' => array(
+				'label' => esc_html__( 'Display custom confirmation message', 'gravityflow' ),
+			),
+			'textarea' => array(
+				'use_editor'    => true,
+				'default_value' => $default_value,
+			),
+		);
+	}
 }

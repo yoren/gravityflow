@@ -181,8 +181,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 						'checkbox_default_value' => true,
 						'default_message'        => __( 'A new entry requires your input', 'gravityflow' ),
 					) ),
-				)
+				),
 			) ),
+			$settings_api->get_setting_confirmation_messasge( esc_html__( 'Thank you.', 'gravityflow' ) ),
 		);
 
 		$settings['fields'] = array_merge( $settings['fields'], $settings2 );
@@ -432,7 +433,13 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			$this->refresh_entry();
 		}
 
-		$feedback = $new_status == 'complete' ? __( 'Entry updated and marked complete.', 'gravityflow' ) : __( 'Entry updated - in progress.', 'gravityflow' );
+		if ( $new_status == 'complete' ) {
+			$feedback = $this->confirmation_messageEnable ? $this->confirmation_messageValue : __( 'Entry updated and marked complete.', 'gravityflow' );
+
+		} else {
+			$feedback = __( 'Entry updated - in progress.', 'gravityflow' );
+		}
+
 
 		/**
 		 * Allow the feedback message to be modified on the user input step.
@@ -790,7 +797,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		<br/>
 		<div class="gravityflow-action-buttons">
 			<?php
-			$button_text = esc_html__( 'Update', 'gravityflow' );
+			$button_text = $this->default_status == 'hidden' ? esc_html__( 'Submit', 'gravityflow' ) : esc_html__( 'Update', 'gravityflow' );
 			$button_text = apply_filters( 'gravityflow_update_button_text_user_input', $button_text, $form, $this );
 
 			$form_id          = absint( $form['id'] );
