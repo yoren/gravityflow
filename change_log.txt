@@ -4,6 +4,7 @@
 - Added support for configuring a step to process feeds for the following third-party add-ons:
     Gravity Forms to Pipe Drive CRM Add-On and Gravity Forms SendinBlue Add-On.
 - Added the custom confirmation message to the user input step.
+- Updated merge tag processing for the Assignee and User type fields to support additional user property/meta modifiers.
 - Updated the gravityflow_workflow_detail_sidebar hook to include $current_step and $args as the third and fourth parameters.
 - Updated the user Input button text to "Submit" instead of "Update" when the default status is hidden.
 - Updated the styles of the workflow box when the sidebar is not active to remove the padding.

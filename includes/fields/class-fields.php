@@ -185,6 +185,67 @@ class Gravity_Flow_Fields {
 			<?php
 		}
 	}
+
+	/**
+	 * Retrieves the value of the specified user property/meta key for the specified user ID.
+     *
+     * @since 1.5.1-dev
+     *
+     * @param string|int $user_id The user ID.
+	 * @param string $property The user property to return.
+	 * @param bool $url_encode Indicates if the urlencode function should be applied.
+	 * @param bool $esc_html Indicates if the esc_html function should be applied.
+	 *
+	 * @return string
+	 */
+	public static function get_user_variable( $user_id, $property, $url_encode = false, $esc_html = true ) {
+		$value = $user_id;
+
+		if ( $property != 'id' ) {
+			$user = get_user_by( 'id', $user_id );
+
+			if ( is_object( $user ) ) {
+				switch ( $property ) {
+					case 'email' :
+						$property = 'user_email';
+						break;
+					case '' :
+						$property = 'display_name';
+				}
+
+				if ( $property == 'roles' ) {
+					$value = implode( ', ', $user->roles );
+				} else {
+					$value = $user->get( $property );
+				}
+			}
+		}
+
+		return self::maybe_format_user_variable( $value, $url_encode, $esc_html );
+	}
+
+	/**
+	 * Filters the value of invalid or special characters before output.
+     *
+     * @since 1.5.1-dev
+     *
+     * @param string|int $value The user ID or property to be filtered.
+	 * @param bool $url_encode Indicates if the urlencode function should be applied.
+	 * @param bool $esc_html Indicates if the esc_html function should be applied.
+	 *
+	 * @return string
+	 */
+	public static function maybe_format_user_variable( $value, $url_encode, $esc_html ) {
+		if ( $url_encode ) {
+			$value = urlencode( $value );
+		}
+
+		if ( $esc_html ) {
+			$value = esc_html( $value );
+		}
+
+		return $value;
+	}
 }
 
 new Gravity_Flow_Fields();

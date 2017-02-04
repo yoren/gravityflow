@@ -163,7 +163,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
 
 	public function get_value_merge_tag( $value, $input_id, $entry, $form, $modifier, $raw_value, $url_encode, $esc_html, $format, $nl2br ) {
-		$value = $this->get_display_name( $value );
+		$value = $this->get_display_name( $value, $modifier, $url_encode, $esc_html );
 
 		return $value;
 	}
@@ -175,7 +175,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 		return $value;
 	}
 
-	public function get_display_name( $assignee ) {
+	public function get_display_name( $assignee, $modifier = '', $url_encode = false, $esc_html = true ) {
 		if ( empty( $assignee ) ) {
 			return '';
 		}
@@ -185,8 +185,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 				$value = translate_user_role( $value );
 				break;
 			case 'user_id' :
-				$user  = get_user_by( 'id', $value );
-				$value = is_object( $user ) ? $user->display_name : $assignee;
+				$value = Gravity_Flow_Fields::get_user_variable( $value, $modifier );
 		}
 
 		return $value;
