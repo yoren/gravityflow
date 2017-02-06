@@ -5687,7 +5687,7 @@ AND m.meta_value='queued'";
 			$workflow_assignees = array();
 
 			foreach ( $steps as $step ) {
-				if (  empty( $step ) || ! $step->is_active() ) {
+				if ( empty( $step ) || ! $step->is_active() ) {
 					continue;
 				}
 
@@ -5698,7 +5698,7 @@ AND m.meta_value='queued'";
 				foreach ( $step_assignees as $assignee ) {
 					$step_assignee_choices[] = array(
 						'value' => $assignee->get_key(),
-						'text'	=> $assignee->get_display_name(),
+						'text'  => $assignee->get_display_name(),
 					);
 				}
 
@@ -5706,10 +5706,11 @@ AND m.meta_value='queued'";
 			}
 			// Remove duplicate assignees
 			$workflow_assignees = array_map( 'unserialize', array_unique( array_map( 'serialize', $workflow_assignees ) ) );
+			$workflow_assignees = array_values( $workflow_assignees );
 
 			$workflow_assignees[] = array(
 				'value' => 'current_user',
-				'text'	=> esc_html__( 'Current User', 'gravityflow' ),
+				'text'  => esc_html__( 'Current User', 'gravityflow' ),
 			);
 
 			$filter                    = array();
@@ -5717,8 +5718,8 @@ AND m.meta_value='queued'";
 			$filter['preventMultiple'] = false;
 			$filter['text']            = esc_html__( 'Workflow Assignee', 'gravityflow' );
 			$filter['operators']       = array( 'is' );
-			$filter['values'] = $workflow_assignees;
-			$field_filters[] = $filter;
+			$filter['values']          = $workflow_assignees;
+			$field_filters[]           = $filter;
 
 			return $field_filters;
 		}
@@ -5738,12 +5739,13 @@ AND m.meta_value='queued'";
 			$field_filters = $search_criteria['search_criteria']['field_filters'];
 			foreach ( $field_filters as &$field_filter ) {
 				if ( is_array( $field_filter ) && $field_filter['key'] == 'workflow_assignee' ) {
-					$assignee_key = $field_filter['value'] == 'current_user' ? gravity_flow()->get_current_user_assignee_key() :$field_filter['value'];
-					$field_filter['key'] = 'workflow_' . str_replace( '|', '_', $assignee_key );
+					$assignee_key          = $field_filter['value'] == 'current_user' ? gravity_flow()->get_current_user_assignee_key() : $field_filter['value'];
+					$field_filter['key']   = 'workflow_' . str_replace( '|', '_', $assignee_key );
 					$field_filter['value'] = 'pending';
 				}
 			}
 			$search_criteria['search_criteria']['field_filters'] = $field_filters;
+
 			return $search_criteria;
 		}
 
@@ -5769,9 +5771,9 @@ AND m.meta_value='queued'";
 
 			foreach ( $criteria['search_criteria']['field_filters'] as $filter ) {
 				if ( is_array( $filter ) && strpos( $filter['key'], 'workflow_' ) !== false && ! isset( $entry[ $filter['key'] ] ) ) {
-					$meta_value = gform_get_meta( $entry['id'], $filter['key'] );
+					$meta_value              = gform_get_meta( $entry['id'], $filter['key'] );
 					$entry[ $filter['key'] ] = $meta_value;
-					$keys[] = $filter['key'];
+					$keys[]                  = $filter['key'];
 				}
 			}
 

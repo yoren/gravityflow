@@ -14,3 +14,4 @@
 - Fixed a fatal error loading the status shortcode on some sites.
 - Fixed a JavaScript error on User Input steps with field conditional logic disabled.
 - Fixed the bottom bulk action drop down on the status page not displaying the print modal.
+- Fixed an issue which could prevent the value drop down for the Gravity View Advanced Filter Extension being populated with the Workflow Assignee choices.
