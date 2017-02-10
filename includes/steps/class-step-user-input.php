@@ -580,6 +580,14 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					$value = GFFormsModel::get_field_value( $field );
 
 					$field->validate( $value, $form );
+					$custom_validation_result = gf_apply_filters( array( 'gform_field_validation', $form['id'], $field->id ), array(
+						'is_valid' => $field->failed_validation ? false : true,
+						'message'  => $field->validation_message,
+					), $value, $form, $field );
+
+					$field->failed_validation  = rgar( $custom_validation_result, 'is_valid' ) ? false : true;
+					$field->validation_message = rgar( $custom_validation_result, 'message' );
+
 					if ( $field->failed_validation ) {
 						$valid = false;
 					}
