@@ -1782,7 +1782,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$form    = GFAPI::get_form( $form_id );
 
 		$entry_meta_keys  = array_keys( GFFormsModel::get_entry_meta( $form_id ) );
-		$entry_properties = array( 'created_by', 'date_created', 'currency', 'id', 'status' );
+		$entry_properties = array( 'created_by', 'date_created', 'currency', 'id', 'status', 'source_url', 'ip', 'is_starred' );
 
 		$field_id = $routing_rule['fieldId'] == 'entry_id' ? 'id' : $routing_rule['fieldId'];
 
