@@ -350,9 +350,9 @@ class Gravity_Flow_Entry_Detail {
 			$nl2br = apply_filters( 'gravityflow_auto_format_instructions_' . $form['id'], $nl2br );
 
 			$instructions = $current_step->instructionsValue;
+			$instructions = do_shortcode( $instructions );
 			$instructions = GFCommon::replace_variables( $instructions, $form, $entry, false, true, $nl2br );
 			$instructions = $current_step->replace_variables( $instructions, null );
-			$instructions = do_shortcode( $instructions );
 			$instructions = wp_kses_post( $instructions );
 
 			?>
