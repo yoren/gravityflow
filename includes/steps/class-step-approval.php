@@ -371,7 +371,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 * @param $form
 	 * @param $entry
 	 *
-	 * @return string|bool|WP_Error Return a success feedback message or a WP_Error instance with an error.
+	 * @return string|bool|WP_Error Return a success feedback message safe for page output or a WP_Error instance with an error.
 	 */
 	public function maybe_process_status_update( $form, $entry ) {
 		$feedback        = false;
@@ -437,7 +437,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 * @param $new_status
 	 * @param $form
 	 *
-	 * @return bool|string If processed return a message to be displayed to the user.
+	 * @return bool|string Return a success feedback message safe for page output or false.
 	 */
 	public function process_assignee_status( $assignee, $new_status, $form ) {
 		if ( ! in_array( $new_status, array( 'pending', 'approved', 'rejected', 'revert' ) ) ) {
