@@ -1565,7 +1565,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @param $form
 	 * @param $entry
 	 *
-	 * @return string|bool|WP_Error Return a success feedback message or a WP_Error instance with an error.
+	 * @return string|bool|WP_Error Return a success feedback message safe for page output or a WP_Error instance with an error.
 	 */
 	public function maybe_process_status_update( $form, $entry ) {
 		return false;
@@ -1894,7 +1894,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @param $form
 	 * @param $entry
 	 *
-	 * @return bool|WP_Error
+	 * @return bool|WP_Error Return a success feedback message safe for page output or false.
 	 */
 	public function maybe_process_token_action( $action, $token, $form, $entry ) {
 		return false;
@@ -1936,7 +1936,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @param string $new_status
 	 * @param array $form
 	 *
-	 * @return string|bool If processed return a message to be displayed to the user.
+	 * @return string|bool Return a success feedback message safe for page output or false.
 	 */
 	public function process_assignee_status( $assignee, $new_status, $form ) {
 		$assignee->update_status( $new_status );
