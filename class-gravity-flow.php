@@ -3207,7 +3207,7 @@ PRIMARY KEY  (id)
 					}
 					?>
 					<div class="notice error is-dismissible gravityflow_validation_error" style="padding:6px;">
-						<?php esc_html_e( $feedback->get_error_message() ); ?>
+						<?php echo esc_html( $feedback->get_error_message() ); ?>
 					</div>
 					<?php
 
@@ -3218,7 +3218,7 @@ PRIMARY KEY  (id)
 
 					?>
 					<div class="updated notice notice-success is-dismissible" style="padding:6px;">
-						<?php echo esc_html( $feedback ); ?>
+						<?php echo $feedback; ?>
 					</div>
 					<?php
 
@@ -3464,7 +3464,7 @@ PRIMARY KEY  (id)
 		 * @param $form
 		 * @param $entry
 		 *
-		 * @return bool|string|WP_Error
+		 * @return bool|string|WP_Error Return a success feedback message safe for page output or a WP_Error instance with an error.
 		 */
 		public function maybe_process_admin_action( $form, $entry ) {
 			$feedback = false;
