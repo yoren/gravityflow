@@ -435,10 +435,17 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 		if ( $new_status == 'complete' ) {
 			$note_message = __( 'Entry updated and marked complete.', 'gravityflow' );
-			$feedback = $this->confirmation_messageEnable ? $this->confirmation_messageValue : $note_message;
-
+			if ( $this->confirmation_messageEnable ) {
+				$feedback = $this->confirmation_messageValue;
+				$feedback = do_shortcode( $feedback );
+				$feedback = GFCommon::replace_variables( $feedback, $form, $this->get_entry(), false, true, true, 'html' );
+				$feedback = $this->replace_variables( $feedback, $assignee );
+				$feedback = wp_kses_post( $feedback );
+			} else {
+				$feedback = $note_message;
+			}
 		} else {
-			$feedback = __( 'Entry updated - in progress.', 'gravityflow' );
+			$feedback = esc_html__( 'Entry updated - in progress.', 'gravityflow' );
 			$note_message = $feedback;
 		}
 
