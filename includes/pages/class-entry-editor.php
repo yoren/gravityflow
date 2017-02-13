@@ -195,10 +195,7 @@ class Gravity_Flow_Entry_Editor {
 				continue;
 			}
 
-			if ( ! $dynamic_conditional_logic_enabled ) {
-				$field->conditionalLogicFields = null;
-				$field->conditionalLogic = null;
-			} else {
+			if ( $dynamic_conditional_logic_enabled ) {
 				$conditional_logic_fields      = GFFormDisplay::get_conditional_logic_fields( $form, $field->id );
 				$field->conditionalLogicFields = $conditional_logic_fields;
 			}
@@ -268,14 +265,26 @@ class Gravity_Flow_Entry_Editor {
 		unset( $form['save'] );
 		unset( $form['button']['conditionalLogic'] );
 
+		$dynamic_conditional_logic_enabled = $this->_is_dynamic_conditional_logic_enabled;
+
 		foreach ( $form['fields'] as $key => $field ) {
 			if ( $field->type == 'page' ) {
 				unset( $form['fields'][ $key ] );
 				continue;
 			}
 
-			// Populate the $_display_fields array.
-			$this->is_display_field( $field, true );
+			$is_applicable_field = $this->is_editable_field( $field );
+
+			if ( ! $is_applicable_field ) {
+				// Populate the $_display_fields array.
+				$is_applicable_field = $this->is_display_field( $field, true );
+			}
+
+			if ( ! $dynamic_conditional_logic_enabled || ! $is_applicable_field ) {
+				// Clear the field conditional logic properties as conditional logic is not enabled for the step or the field is not for display or editable.
+				$field->conditionalLogicFields = null;
+				$field->conditionalLogic       = null;
+			}
 		}
 
 		return $form;
@@ -291,31 +300,9 @@ class Gravity_Flow_Entry_Editor {
 	 * @return bool
 	 */
 	public function can_remove_field( $field ) {
-		$can_remove_field = ! ( $this->is_editable_field( $field ) || $this->is_display_field( $field ) )
-		                    && $this->_is_dynamic_conditional_logic_enabled
-		                    && empty( $field->conditionalLogic )
-		                    && ! $this->has_dependent_logic_field( $field );
+		$can_remove_field = ! ( $this->is_editable_field( $field ) || $this->is_display_field( $field ) ) && empty( $field->conditionalLogicFields );
 
 		return $can_remove_field;
-	}
-
-	/**
-	 * Determines if there are display or editable fields with conditional logic based on the current field.
-	 *
-	 * @param GF_Field $field The current field.
-	 *
-	 * @return bool
-	 */
-	public function has_dependent_logic_field( $field ) {
-		if ( ! empty( $field->conditionalLogicFields ) ) {
-			foreach ( $field->conditionalLogicFields as $logicField ) {
-				if ( in_array( $logicField, $this->_editable_fields ) || in_array( $logicField, $this->_display_fields ) ) {
-					return true;
-				}
-			}
-		}
-
-		return false;
 	}
 
 	/**
