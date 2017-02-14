@@ -110,8 +110,6 @@
     background-color:#FFF8DC;
 }
 
-/* Notes */
-
 #gravityflow-add-note-container{
     float:right;
 }
@@ -188,6 +186,10 @@
 #gravityflow-admin-action{
     width:170px;
 
+}
+
+#gravityflow-note{
+    width:100%;
 }
 
 
