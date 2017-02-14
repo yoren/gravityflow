@@ -252,6 +252,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 	public $last_updated;
 
+	private $_forms = array();
+
 	/**
 	 * All the args for the table.
 	 *
@@ -773,6 +775,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		}
 		$label = esc_html( $display_name );
 
+		$form_id = rgar( $item, 'form_id' );
+		$form = $this->get_form( $form_id );
+
+		/**
+		 * Allow the value displayed in the Submitter column to be overridden.
+		 *
+		 * @param string $label The display_name of the logged-in user who submitted the form or the guest ip address.
+		 * @param array $item The entry object for the row currently being processed.
+		 * @param array $form The form object for the current entry.
+		 */
+		$label = apply_filters( 'gravityflow_status_submitter_name', $label, $item, $form );
+
 		$url_entry = esc_url( $url_entry );
 
 		$link  = "<a href='{$url_entry}'>$label</a>";
@@ -783,7 +797,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
 
 		$form_id = $item['form_id'];
-		$form    = GFAPI::get_form( $form_id );
+		$form    = $this->get_form( $form_id );
 
 		$label = esc_html( $form['title'] );
 
@@ -883,7 +897,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$args = $this->get_filter_args();
 
 		if ( ! empty( $args['form-id'] ) && ! empty( $this->field_ids ) ) {
-			$form = GFAPI::get_form( $args['form-id'] );
+			$form = $this->get_form( $args['form-id'] );
 
 			foreach ( $this->field_ids as $field_id ) {
 				$field_id = trim( $field_id );
@@ -969,7 +983,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		}
 		$f = isset( $_REQUEST['f'] ) ? $_REQUEST['f'] : '';
 		if ( ! empty( $args['form-id'] ) && $f !== '' ) {
-			$form                  = GFAPI::get_form( absint( $args['form-id'] ) );
+			$form                  = $this->get_form( absint( $args['form-id'] ) );
 			$field_filters         = $this->get_field_filters_from_request( $form );
 			$args['field_filters'] = $field_filters;
 		}
@@ -1522,7 +1536,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$entry = GFAPI::get_entry( $entry_id );
 			$form_id = absint( $entry['form_id'] );
 			if ( ! isset( $forms[ $form_id ] ) ) {
-				$forms[ $form_id ] = GFAPI::get_form( $form_id );
+				$forms[ $form_id ] = $this->get_form( $form_id );
 			}
 			$form = $forms[ $form_id ];
 			$current_step = gravity_flow()->get_current_step( $form, $entry );
@@ -1602,5 +1616,14 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	public function sanitize_date( $unsafe_date ) {
 		$safe_date = preg_replace( '([^0-9-])', '', $unsafe_date );
 		return (string) $safe_date;
+	}
+
+	private function get_form( $form_id ) {
+		if ( isset( $this->_forms[ $form_id ] ) ) {
+			return $this->_forms[ $form_id ];
+		}
+
+		$this->_forms[ $form_id ] = GFAPI::get_form( $form_id );
+		return $this->_forms[ $form_id ];
 	}
 } //class

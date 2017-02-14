@@ -5,6 +5,8 @@
     Gravity Forms to Pipe Drive CRM Add-On and Gravity Forms SendinBlue Add-On.
 - Added the custom confirmation message to the user input step.
 - Added support for the gform_field_validation filter to the user input step.
+- Added the gravityflow_status_submitter_name filter.
+- Added performance improvements to the status page.
 - Updated merge tag processing for the Assignee and User type fields to support additional user property/meta modifiers.
 - Updated the gravityflow_workflow_detail_sidebar hook to include $current_step and $args as the third and fourth parameters.
 - Updated the user Input button text to "Submit" instead of "Update" when the default status is hidden.
