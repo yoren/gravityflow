@@ -7,6 +7,12 @@
 - Added support for the gform_field_validation filter to the user input step.
 - Added the gravityflow_status_submitter_name filter.
 - Added performance improvements to the status page.
+- Added support for repeat reminders via the gravityflow_assignee_eamil_reminder_repeat_days filter.
+    Example:
+    add_filter( 'gravityflow_assignee_eamil_reminder_repeat_days', 'sh_gravityflow_assignee_eamil_reminder_repeat_days', 10, 4 );
+    function sh_gravityflow_assignee_eamil_reminder_repeat_days( $form, $entry, $step, $assignee ) {
+    	return 3; // Send reminders every 3 days after the initial assignee email.
+    }
 - Updated merge tag processing for the Assignee and User type fields to support additional user property/meta modifiers.
 - Updated the gravityflow_workflow_detail_sidebar hook to include $current_step and $args as the third and fourth parameters.
 - Updated the user Input button text to "Submit" instead of "Update" when the default status is hidden.

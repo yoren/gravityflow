@@ -4349,6 +4349,7 @@ AND m.meta_value='queued'";
 			$this->log_debug( __METHOD__ . '(): workflow form IDs: ' . print_r( $form_ids, true ) );
 
 			foreach ( $form_ids as $form_id ) {
+				$form = GFAPI::get_form( $form_id );
 				$steps = $this->get_steps( $form_id );
 				foreach ( $steps as $step ) {
 					if ( ! $step || ! $step instanceof Gravity_Flow_Step ) {
@@ -4398,8 +4399,6 @@ AND m.meta_value='queued'";
 
 							$current_step->add_note( esc_html__( 'Step expired', 'gravityflow' ), 0, $current_step->get_type() );
 
-							$form = GFAPI::get_form( $form_id );
-
 							gravity_flow()->process_workflow( $form, $entry['id'] );
 
 							// Next entry
@@ -4419,10 +4418,33 @@ AND m.meta_value='queued'";
 									$this->log_debug( __METHOD__ . '(): trigger_timestamp: ' . $trigger_timestamp  . ' - ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $trigger_timestamp ), 'F j, Y H:i:s' ) );
 									$current_step->maybe_send_assignee_notification( $assignee, true );
 									$assignee->set_reminder_timestamp();
-									$this->log_debug( __METHOD__ . '(): sent reminder about entry ' . $entry['id'] . ' to ' . $assignee->get_key() );
+									$this->log_debug( __METHOD__ . '(): sent first reminder about entry ' . $entry['id'] . ' to ' . $assignee->get_key() );
 								}
 								if ( time() > $trigger_timestamp && $reminder_timestamp !== false ) {
-									$this->log_debug( __METHOD__ . '(): not sending reminder to ' . $assignee->get_key() . ' for entry ' . $entry['id'] . ' because it was already sent: ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $reminder_timestamp ), 'F j, Y H:i:s' ) );
+									$this->log_debug( __METHOD__ . '(): not sending first reminder to ' . $assignee->get_key() . ' for entry ' . $entry['id'] . ' because a reminder was already sent: ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $reminder_timestamp ), 'F j, Y H:i:s' ) );
+									$repeat_days = 0; // Todo: add step settings
+									/**
+									 * Allows the number of days between each assignee email reminder to be modified.
+									 *
+									 * Return zero to deactivate the repeat reminder.
+									 *
+									 * @param int                   $repeat_days The number of days between each reminder.
+									 * @param array                 $form
+									 * @param array                 $entry
+									 * @param Gravity_Flow_Step     $step
+									 * @param Gravity_Flow_Assignee $assignee
+									 */
+									$repeat_days = apply_filters( 'gravityflow_assignee_eamil_reminder_repeat_days', $repeat_days, $form, $entry, $step, $assignee );
+									if ( $repeat_days > 0 ) {
+										$repeat_trigger_timestamp = $reminder_timestamp + ( (int) $repeat_days * DAY_IN_SECONDS );
+										if ( time() > $repeat_trigger_timestamp ) {
+											$current_step->maybe_send_assignee_notification( $assignee, true );
+											$assignee->set_reminder_timestamp();
+											$this->log_debug( __METHOD__ . '(): sent repeat reminder about entry ' . $entry['id'] . ' to ' . $assignee->get_key() );
+										} else {
+											$this->log_debug( __METHOD__ . '(): repeat reminder to ' . $assignee->get_key() .' for entry ' . $entry['id'] . ' is scheduled for ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $repeat_trigger_timestamp ), 'F j, Y H:i:s' ) );
+										}
+									}
 								}
 								if ( time() < $trigger_timestamp && $reminder_timestamp == false ) {
 									$this->log_debug( __METHOD__ . '(): reminder to ' . $assignee->get_key() .' for entry ' . $entry['id'] . ' is scheduled for ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $trigger_timestamp ), 'F j, Y H:i:s' ) );
