@@ -4340,6 +4340,12 @@ AND m.meta_value='queued'";
 			}
 		}
 
+		/**
+		 * Expire entries that need to be expired and send pending reminder emails.
+		 *
+		 * @since 1.5.1 Added support for repeat reminders.
+		 * @since unknown
+		 */
 		public function maybe_process_expiration_and_reminders() {
 
 			$this->log_debug( __METHOD__ . '(): starting' );
