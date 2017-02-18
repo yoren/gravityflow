@@ -1702,6 +1702,79 @@ PRIMARY KEY  (id)
 			return $html;
 		}
 
+		public function settings_checkbox_and_container( $field, $echo = true ) {
+			// prepare checkbox
+
+			$checkbox_input = rgars( $field, 'checkbox' );
+
+			$checkbox_field = array(
+				'type'       => 'checkbox',
+				'name'       => $field['name'] . 'Enable',
+				'label'      => esc_html__( 'Enable', 'gravityforms' ),
+				'horizontal' => true,
+				'value'      => '1',
+				'choices'    => false,
+				'tooltip'    => false,
+			);
+
+			$checkbox_field = wp_parse_args( $checkbox_input, $checkbox_field );
+
+			$is_enabled   = $this->get_setting( $checkbox_field['name'] );
+
+			// a little more with the checkbox
+			if ( empty( $checkbox_field['choices'] ) ) {
+				$checkbox_field['choices'] = array(
+					array(
+						'name'          => $checkbox_field['name'],
+						'label'         => $checkbox_field['label'],
+						'onchange'      => sprintf( "( function( $, elem ) {
+								$( elem ).parents( 'td' ).css( 'position', 'relative' );
+								if( $( elem ).prop( 'checked' ) ) {
+									$( '%1\$s' ).fadeIn();
+								} else {
+									$( '%1\$s' ).fadeOut();
+								}
+							} )( jQuery, this );",
+							"#{$field['name']}Container" ),
+					),
+				);
+			}
+
+			// get markup
+
+			$container_settings_markup = '';
+
+			if ( isset( $field['settings'] ) && is_array( $field['settings'] ) ) {
+				foreach(  $field['settings'] as $setting ) {
+					if ( ! isset( $setting['type'] ) ) {
+						continue;
+					}
+					$method = 'settings_' . $setting['type'];
+					if ( isset( $setting['before'] ) ) {
+						$container_settings_markup .= rgar( $setting, 'before' );
+						unset( $setting['before'] );
+					}
+					if ( method_exists( $this, $method ) ) {
+						$container_settings_markup .= $this->{$method}( $setting, false );
+					}
+				}
+			}
+
+			$html = sprintf(
+				'%s <br /><div id="%s" class="%s">%s</div>',
+				$this->settings_checkbox( $checkbox_field, false ),
+				$field['name'] . 'Container',
+				$is_enabled ? '' : 'hidden',
+				$container_settings_markup
+			);
+
+			if ( $echo ) {
+				echo $html;
+			}
+
+			return $html;
+		}
+
 		public function settings_checkbox_and_textarea( $field, $echo = true ) {
 			// prepare checkbox
 
@@ -4428,27 +4501,29 @@ AND m.meta_value='queued'";
 								}
 								if ( time() > $trigger_timestamp && $reminder_timestamp !== false ) {
 									$this->log_debug( __METHOD__ . '(): not sending first reminder to ' . $assignee->get_key() . ' for entry ' . $entry['id'] . ' because a reminder was already sent: ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $reminder_timestamp ), 'F j, Y H:i:s' ) );
-									$repeat_days = 0; // Todo: add step settings
-									/**
-									 * Allows the number of days between each assignee email reminder to be modified.
-									 *
-									 * Return zero to deactivate the repeat reminder.
-									 *
-									 * @param int                   $repeat_days The number of days between each reminder.
-									 * @param array                 $form
-									 * @param array                 $entry
-									 * @param Gravity_Flow_Step     $step
-									 * @param Gravity_Flow_Assignee $assignee
-									 */
-									$repeat_days = apply_filters( 'gravityflow_assignee_eamil_reminder_repeat_days', $repeat_days, $form, $entry, $step, $assignee );
-									if ( $repeat_days > 0 ) {
-										$repeat_trigger_timestamp = $reminder_timestamp + ( (int) $repeat_days * DAY_IN_SECONDS );
-										if ( time() > $repeat_trigger_timestamp ) {
-											$current_step->maybe_send_assignee_notification( $assignee, true );
-											$assignee->set_reminder_timestamp();
-											$this->log_debug( __METHOD__ . '(): sent repeat reminder about entry ' . $entry['id'] . ' to ' . $assignee->get_key() );
-										} else {
-											$this->log_debug( __METHOD__ . '(): repeat reminder to ' . $assignee->get_key() .' for entry ' . $entry['id'] . ' is scheduled for ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $repeat_trigger_timestamp ), 'F j, Y H:i:s' ) );
+									if ( $current_step->resend_assignee_email_repeatEnable ) {
+										$repeat_days = absint( $current_step->resend_assignee_email_repeatValue );
+										/**
+										 * Allows the number of days between each assignee email reminder to be modified.
+										 *
+										 * Return zero to deactivate the repeat reminder.
+										 *
+										 * @param int                   $repeat_days The number of days between each reminder.
+										 * @param array                 $form
+										 * @param array                 $entry
+										 * @param Gravity_Flow_Step     $step
+										 * @param Gravity_Flow_Assignee $assignee
+										 */
+										$repeat_days = apply_filters( 'gravityflow_assignee_eamil_reminder_repeat_days', $repeat_days, $form, $entry, $current_step, $assignee );
+										if ( $repeat_days > 0 ) {
+											$repeat_trigger_timestamp = $reminder_timestamp + ( (int) $repeat_days * DAY_IN_SECONDS );
+											if ( time() > $repeat_trigger_timestamp ) {
+												$current_step->maybe_send_assignee_notification( $assignee, true );
+												$assignee->set_reminder_timestamp();
+												$this->log_debug( __METHOD__ . '(): sent repeat reminder about entry ' . $entry['id'] . ' to ' . $assignee->get_key() );
+											} else {
+												$this->log_debug( __METHOD__ . '(): repeat reminder to ' . $assignee->get_key() .' for entry ' . $entry['id'] . ' is scheduled for ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $repeat_trigger_timestamp ), 'F j, Y H:i:s' ) );
+											}
 										}
 									}
 								}
