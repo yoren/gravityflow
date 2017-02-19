@@ -240,7 +240,7 @@ class Gravity_Flow_Common_Step_Settings {
 						'text'     => array(
 							'default_value' => 3,
 							'class' => 'small-text',
-							'before'  => esc_html__( 'Repeat every', 'gravityflow' ),
+							'before'  => esc_html__( 'Repeat every', 'gravityflow' ) . ' ',
 							'after'   => ' ' . esc_html__( 'day(s)', 'gravityflow' ),
 						),
 					),
