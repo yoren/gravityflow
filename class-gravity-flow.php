@@ -1631,12 +1631,27 @@ PRIMARY KEY  (id)
 			<?php
 		}
 
-		public function settings_checkbox_and_text( $field, $echo = true ) {
-			// prepare checkbox
+		/**
+		 * Renders or returns markup for a checkbox plus container composite setting.
+		 *
+		 * The container will be displayed or hidden depending on the value of the checkbox field.
+		 *
+		 * @since 1.5.1
+		 *
+		 * @param array $field
+		 * @param bool  $echo
+		 *
+		 * @return string
+		 */
+		public function settings_checkbox_and_container( $field, $echo = true ) {
 
-			$checkbox_input = rgars( $field, 'checkbox' );
+			$checkbox_field = rgar( $field, 'checkbox' );
 
-			$checkbox_field = array(
+			if ( empty( $checkbox_field ) ) {
+				return '';
+			}
+
+			$checkbox_defaults = array(
 				'type'       => 'checkbox',
 				'name'       => $field['name'] . 'Enable',
 				'label'      => esc_html__( 'Enable', 'gravityforms' ),
@@ -1646,25 +1661,8 @@ PRIMARY KEY  (id)
 				'tooltip'    => false,
 			);
 
-			$checkbox_field = wp_parse_args( $checkbox_input, $checkbox_field );
+			$checkbox_field = wp_parse_args( $checkbox_field, $checkbox_defaults );
 
-			// prepare textbox
-
-			$text_input = rgars( $field, 'text' );
-			$is_enabled   = $this->get_setting( $checkbox_field['name'] );
-
-			$text_field = array(
-				'name'    => $field['name'] . 'Value',
-				'type'    => 'select',
-				'class'   => '',
-				'tooltip' => false,
-			);
-
-			$text_field['class'] .= ' ' . $text_field['name'];
-
-			$text_field = wp_parse_args( $text_input, $text_field );
-
-			// a little more with the checkbox
 			if ( empty( $checkbox_field['choices'] ) ) {
 				$checkbox_field['choices'] = array(
 					array(
@@ -1678,21 +1676,49 @@ PRIMARY KEY  (id)
 									$( '%1\$s' ).fadeOut();
 								}
 							} )( jQuery, this );",
-						"#{$text_field['name']}Span" ),
+							"#{$field['name']}Container" ),
 					),
 				);
 			}
 
-			// get markup
+			$field['checkbox'] = $checkbox_field;
+
+			$checkbox_field = rgar( $field, 'checkbox' );
+
+			$is_enabled = $this->get_setting( $checkbox_field['name'] );
+
+			$container_settings_markup = '';
+
+			if ( isset( $field['settings'] ) && is_array( $field['settings'] ) ) {
+				foreach (  $field['settings'] as $setting ) {
+					if ( ! isset( $setting['type'] ) ) {
+						continue;
+					}
+					$method = 'settings_' . $setting['type'];
+					if ( isset( $setting['before'] ) ) {
+						$container_settings_markup .= rgar( $setting, 'before' );
+						unset( $setting['before'] );
+					}
+					if ( isset( $setting['after'] ) ) {
+						$after = rgar( $setting, 'after' );
+						unset( $setting['after'] );
+					} else {
+						$after = '';
+					}
+					if ( method_exists( $this, $method ) ) {
+						$container_settings_markup .= $this->{$method}( $setting, false );
+					}
+					$container_settings_markup .= isset( $setting['tooltip'] ) ? gform_tooltip( $setting['tooltip'], rgar( $setting, 'tooltip_class' ) . ' tooltip ' . $setting['name'], true ) : '';
+					$container_settings_markup .= $after;
+				}
+			}
 
 			$html = sprintf(
-				'%s <br /><span id="%s" class="%s">%s %s %s</span>',
+				'%s <div id="%s" class="%s">%s</div>',
 				$this->settings_checkbox( $checkbox_field, false ),
-				$text_field['name'] . 'Span',
+				$field['name'] . 'Container',
 				$is_enabled ? '' : 'hidden',
-				esc_html( rgar( $text_field, 'before_input' ) ),
-				$this->settings_text( $text_field, false ),
-				$text_field['tooltip'] ? gform_tooltip( $text_field['tooltip'], rgar( $text_field, 'tooltip_class' ) . ' tooltip ' . $text_field['name'], true ) : ''
+				$container_settings_markup
 			);
 
 			if ( $echo ) {
@@ -1702,31 +1728,61 @@ PRIMARY KEY  (id)
 			return $html;
 		}
 
-		public function settings_checkbox_and_textarea( $field, $echo = true ) {
-			// prepare checkbox
+		/**
+		 * Renders or returns a composite setting with a checkbox and text field.
+		 *
+		 * The text field will be hidden or displayed depending on the value of the checkbox.
+		 *
+		 * @since 1.5.1 Updated to use Gravity_Flow::settings_checkbox_and_container()
+		 * @since unknown
+		 *
+		 * @param array $field
+		 * @param bool  $echo
+		 *
+		 * @return string
+		 */
+		public function settings_checkbox_and_text( $field, $echo = true ) {
 
-			$checkbox_input = rgars( $field, 'checkbox' );
-
-			$checkbox_field = array(
-				'type'       => 'checkbox',
-				'name'       => $field['name'] . 'Enable',
-				'label'      => esc_html__( 'Enable', 'gravityforms' ),
-				'horizontal' => true,
-				'value'      => '1',
-				'choices'    => false,
-				'tooltip'    => false,
-			);
-
-			$checkbox_field = wp_parse_args( $checkbox_input, $checkbox_field );
-
-			// prepare textarea
-
-			$textarea_input = rgars( $field, 'textarea' );
-			$is_enabled   = $this->get_setting( $checkbox_field['name'] );
+			$text_input = rgars( $field, 'text' );
 
 			$text_field = array(
 				'name'    => $field['name'] . 'Value',
-				'type'    => 'select',
+				'type'    => 'text',
+				'class'   => '',
+				'tooltip' => false,
+			);
+
+			$text_field['class'] .= ' ' . $text_field['name'];
+
+			$text_field = wp_parse_args( $text_input, $text_field );
+
+			unset( $field['textarea'] );
+
+			$field['settings'] = array( $text_field );
+
+			return $this->settings_checkbox_and_container( $field, $echo );
+		}
+
+		/**
+		 * Renders or returns a composite setting with a checkbox and text field.
+		 *
+		 * The text field will be hidden or displayed depending on the value of the checkbox.
+		 *
+		 * @since 1.5.1 Updated to use Gravity_Flow::settings_checkbox_and_container()
+		 * @since unknown
+		 *
+		 * @param array $field
+		 * @param bool  $echo
+		 *
+		 * @return string
+		 */
+		public function settings_checkbox_and_textarea( $field, $echo = true ) {
+
+			$textarea_input = rgars( $field, 'textarea' );
+
+			$text_field = array(
+				'name'    => $field['name'] . 'Value',
+				'type'    => 'textarea',
 				'class'   => '',
 				'tooltip' => false,
 			);
@@ -1735,42 +1791,11 @@ PRIMARY KEY  (id)
 
 			$text_field = wp_parse_args( $textarea_input, $text_field );
 
-			// a little more with the checkbox
-			if ( empty( $checkbox_field['choices'] ) ) {
-				$checkbox_field['choices'] = array(
-					array(
-						'name'          => $checkbox_field['name'],
-						'label'         => $checkbox_field['label'],
-						'onchange'      => sprintf( "( function( $, elem ) {
-								$( elem ).parents( 'td' ).css( 'position', 'relative' );
-								if( $( elem ).prop( 'checked' ) ) {
-									$( '%1\$s' ).fadeIn();
-								} else {
-									$( '%1\$s' ).fadeOut();
-								}
-							} )( jQuery, this );",
-							"#{$text_field['name']}Span" ),
-					),
-				);
-			}
+			unset( $field['textarea'] );
 
-			// get markup
+			$field['settings'] = array( $text_field );
 
-			$html = sprintf(
-				'%s <br /><span id="%s" class="%s">%s %s %s</span>',
-				$this->settings_checkbox( $checkbox_field, false ),
-				$text_field['name'] . 'Span',
-				$is_enabled ? '' : 'hidden',
-				esc_html( rgar( $text_field, 'before_input' ) ),
-				$this->settings_textarea( $text_field, false ),
-				$text_field['tooltip'] ? gform_tooltip( $text_field['tooltip'], rgar( $text_field, 'tooltip_class' ) . ' tooltip ' . $text_field['name'], true ) : ''
-			);
-
-			if ( $echo ) {
-				echo $html;
-			}
-
-			return $html;
+			return $this->settings_checkbox_and_container( $field, $echo );
 		}
 
 		public function settings_visual_editor( $field ) {
@@ -4340,6 +4365,12 @@ AND m.meta_value='queued'";
 			}
 		}
 
+		/**
+		 * Expire entries that need to be expired and send pending reminder emails.
+		 *
+		 * @since 1.5.1 Added support for repeat reminders.
+		 * @since unknown
+		 */
 		public function maybe_process_expiration_and_reminders() {
 
 			$this->log_debug( __METHOD__ . '(): starting' );
@@ -4349,6 +4380,7 @@ AND m.meta_value='queued'";
 			$this->log_debug( __METHOD__ . '(): workflow form IDs: ' . print_r( $form_ids, true ) );
 
 			foreach ( $form_ids as $form_id ) {
+				$form = GFAPI::get_form( $form_id );
 				$steps = $this->get_steps( $form_id );
 				foreach ( $steps as $step ) {
 					if ( ! $step || ! $step instanceof Gravity_Flow_Step ) {
@@ -4398,8 +4430,6 @@ AND m.meta_value='queued'";
 
 							$current_step->add_note( esc_html__( 'Step expired', 'gravityflow' ), 0, $current_step->get_type() );
 
-							$form = GFAPI::get_form( $form_id );
-
 							gravity_flow()->process_workflow( $form, $entry['id'] );
 
 							// Next entry
@@ -4419,10 +4449,35 @@ AND m.meta_value='queued'";
 									$this->log_debug( __METHOD__ . '(): trigger_timestamp: ' . $trigger_timestamp  . ' - ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $trigger_timestamp ), 'F j, Y H:i:s' ) );
 									$current_step->maybe_send_assignee_notification( $assignee, true );
 									$assignee->set_reminder_timestamp();
-									$this->log_debug( __METHOD__ . '(): sent reminder about entry ' . $entry['id'] . ' to ' . $assignee->get_key() );
+									$this->log_debug( __METHOD__ . '(): sent first reminder about entry ' . $entry['id'] . ' to ' . $assignee->get_key() );
 								}
 								if ( time() > $trigger_timestamp && $reminder_timestamp !== false ) {
-									$this->log_debug( __METHOD__ . '(): not sending reminder to ' . $assignee->get_key() . ' for entry ' . $entry['id'] . ' because it was already sent: ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $reminder_timestamp ), 'F j, Y H:i:s' ) );
+									$this->log_debug( __METHOD__ . '(): not sending first reminder to ' . $assignee->get_key() . ' for entry ' . $entry['id'] . ' because a reminder was already sent: ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $reminder_timestamp ), 'F j, Y H:i:s' ) );
+									if ( $current_step->resend_assignee_email_repeatEnable ) {
+										$repeat_days = absint( $current_step->resend_assignee_email_repeatValue );
+										/**
+										 * Allows the number of days between each assignee email reminder to be modified.
+										 *
+										 * Return zero to deactivate the repeat reminder.
+										 *
+										 * @param int                   $repeat_days The number of days between each reminder.
+										 * @param array                 $form
+										 * @param array                 $entry
+										 * @param Gravity_Flow_Step     $step
+										 * @param Gravity_Flow_Assignee $assignee
+										 */
+										$repeat_days = apply_filters( 'gravityflow_assignee_eamil_reminder_repeat_days', $repeat_days, $form, $entry, $current_step, $assignee );
+										if ( $repeat_days > 0 ) {
+											$repeat_trigger_timestamp = $reminder_timestamp + ( (int) $repeat_days * DAY_IN_SECONDS );
+											if ( time() > $repeat_trigger_timestamp ) {
+												$current_step->maybe_send_assignee_notification( $assignee, true );
+												$assignee->set_reminder_timestamp();
+												$this->log_debug( __METHOD__ . '(): sent repeat reminder about entry ' . $entry['id'] . ' to ' . $assignee->get_key() );
+											} else {
+												$this->log_debug( __METHOD__ . '(): repeat reminder to ' . $assignee->get_key() .' for entry ' . $entry['id'] . ' is scheduled for ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $repeat_trigger_timestamp ), 'F j, Y H:i:s' ) );
+											}
+										}
+									}
 								}
 								if ( time() < $trigger_timestamp && $reminder_timestamp == false ) {
 									$this->log_debug( __METHOD__ . '(): reminder to ' . $assignee->get_key() .' for entry ' . $entry['id'] . ' is scheduled for ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $trigger_timestamp ), 'F j, Y H:i:s' ) );
