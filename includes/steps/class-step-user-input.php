@@ -904,26 +904,20 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	}
 
 	public function save_entry( $form, &$lead, $editable_fields ) {
-		global $wpdb;
 
 		$this->log_debug( __METHOD__ . '(): Saving entry.' );
 
-		$lead_detail_table = GFFormsModel::get_lead_details_table_name();
-		$is_new_lead       = $lead == null;
+		$is_new_lead = $lead == null;
 
 		// Bailing if null
 		if ( $is_new_lead ) {
 			return;
 		}
 
-		$current_fields = $wpdb->get_results( $wpdb->prepare( "SELECT id, field_number FROM $lead_detail_table WHERE lead_id=%d", $lead['id'] ) );
-
 		$total_fields = array();
 
 		/* @var $calculation_fields GF_Field[] */
 		$calculation_fields = array();
-
-		GFCommon::log_debug( __METHOD__ . '(): Saving entry fields.' );
 
 		foreach ( $form['fields'] as &$field ) {
 			/* @var $field GF_Field */
@@ -953,8 +947,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				$field->conditionalLogic = null;
 			}
 
-			$this->log_debug( __METHOD__ . "(): Saving field {$field->label}(#{$field->id} - {$field->type})." );
-
 			if ( $field->get_input_type() == 'fileupload' ) {
 				$this->maybe_save_field_files( $field, $form, $lead );
 				continue;
@@ -968,18 +960,16 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 			if ( is_array( $inputs ) ) {
 				foreach ( $inputs as $input ) {
-					GFFormsModel::save_input( $form, $field, $lead, $current_fields, $input['id'] );
+					$this->save_input( $form, $field, $lead, $input['id'] );
 				}
 			} else {
-				GFFormsModel::save_input( $form, $field, $lead, $current_fields, $field->id );
+				$this->save_input( $form, $field, $lead, $field->id );
 			}
 		}
 
 		if ( ! empty( $calculation_fields ) ) {
+			$this->log_debug( __METHOD__ . '(): Saving calculation fields.' );
 			foreach ( $calculation_fields as $calculation_field ) {
-
-				$this->log_debug( __METHOD__ . "(): Saving calculated field {$calculation_field->label}(#{$calculation_field->id} - {$calculation_field->type})." );
-
 				// Make sure that the value gets recalculated
 				$calculation_field->conditionalLogic = null;
 
@@ -999,11 +989,11 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 						}
 					}
 					foreach ( $inputs as $input ) {
-						GFFormsModel::save_input( $form, $calculation_field, $lead, $current_fields, $input['id'] );
+						$this->save_input( $form, $calculation_field, $lead, $input['id'] );
 						GFFormsModel::refresh_lead_field_value( $lead['id'], $input['id'] );
 					}
 				} else {
-					GFFormsModel::save_input( $form, $calculation_field, $lead, $current_fields, $calculation_field->id );
+					$this->save_input( $form, $calculation_field, $lead, $calculation_field->id );
 					GFFormsModel::refresh_lead_field_value( $lead['id'], $calculation_field->id );
 				}
 			}
@@ -1013,11 +1003,40 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 		//saving total field as the last field of the form.
 		if ( ! empty( $total_fields ) ) {
+			$this->log_debug( __METHOD__ . '(): Saving total fields.' );
 			foreach ( $total_fields as $total_field ) {
-				$this->log_debug( __METHOD__ . '(): Saving total field.' );
-				GFFormsModel::save_input( $form, $total_field, $lead, $current_fields, $total_field->id );
+				$this->save_input( $form, $total_field, $lead, $total_field->id );
 				GFFormsModel::refresh_lead_field_value( $lead['id'], $total_field->id );
 			}
+		}
+	}
+
+	/**
+	 * Update the input value in the entry.
+	 *
+	 * @param array $form The form currently being processed.
+	 * @param GF_Field $field The current fields properties.
+	 * @param array $entry The entry currently being processed.
+     * @param int|string $input_id The ID of the field or input currently being processed.
+	 */
+	public function save_input( $form, $field, &$entry, $input_id ) {
+		$input_name = 'input_' . str_replace( '.', '_', $input_id );
+
+		if ( $field->enableCopyValuesOption && rgpost( 'input_' . $field->id . '_copy_values_activated' ) ) {
+			$source_field_id   = $field->copyValuesOptionField;
+			$source_input_name = str_replace( 'input_' . $field->id, 'input_' . $source_field_id, $input_name );
+			$value             = rgpost( $source_input_name );
+		} else {
+			$value = rgpost( $input_name );
+		}
+
+		$value = GFFormsModel::maybe_trim_input( $value, $form['id'], $field );
+		$value = GFFormsModel::prepare_value( $form, $field, $value, $input_name, $entry['id'], $entry );
+
+		$result = GFAPI::update_entry_field( $entry['id'], $input_id, $value );
+		$this->log_debug( __METHOD__ . "(): Saving: {$field->label}(#{$input_id} - {$field->type}). Result: " . var_export( $result, 1 ) );
+		if ( $result ) {
+			$entry[ $input_id ] = $value;
 		}
 	}
 
@@ -1039,7 +1058,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		$value          = $field->get_value_save_entry( $existing_value, $form, $input_name, $entry['id'], $entry );
 
 		if ( ! empty( $value ) && $existing_value != $value ) {
-			GFAPI::update_entry_field( $entry['id'], $field->id, $value );
+			$result = GFAPI::update_entry_field( $entry['id'], $field->id, $value );
+			$this->log_debug( __METHOD__ . "(): Saving: {$field->label}(#{$field->id} - {$field->type}). Result: " . var_export( $result, 1 ) );
 		}
 	}
 
