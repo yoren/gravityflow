@@ -4,12 +4,16 @@ function SetDefaultValues_workflow_assignee_select(field) {
 	field.gravityflowAssigneeFieldShowRoles = true;
 	field.gravityflowAssigneeFieldShowFields = true;
 
+	field.choices = '';
+
+
 	return field;
 }
 
 function SetDefaultValues_workflow_user(field) {
 
 	field.label = gravityflow_form_editor_js_strings.user.defaults.label;
+	field.choices = '';
 
 	return field;
 }
@@ -17,6 +21,7 @@ function SetDefaultValues_workflow_user(field) {
 function SetDefaultValues_workflow_role(field) {
 
 	field.label = gravityflow_form_editor_js_strings.role.defaults.label;
+	field.choices = '';
 
 	return field;
 }
@@ -48,6 +53,9 @@ function SetAssigneeFieldShowUsers() {
 
 jQuery(document).bind('gform_load_field_settings', function (event, field, form) {
 	var isAssigneeField = field.type == 'workflow_assignee_select';
+
+	// The choices are dynamic. Ensure they're are not set in the form meta.
+	field.choices = '';
 
 	if (isAssigneeField) {
 		var showUsers = field.gravityflowAssigneeFieldShowUsers;

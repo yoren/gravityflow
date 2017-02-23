@@ -75,8 +75,12 @@ class Gravity_Flow_Field_User extends GF_Field_Select {
 
 		$account_choices = apply_filters( 'gravityflow_user_field', $account_choices, $form_id, $this );
 
-		$this->choices = $account_choices;
-		$choices       = GFCommon::get_select_choices( $this, $value );
+		if ( ! $this->is_form_editor() ) {
+			// Prevent the choices from being stored in the form meta
+			$this->choices = $account_choices;
+		}
+
+		$choices = GFCommon::get_select_choices( $this, $value );
 
 		return $choices;
 	}

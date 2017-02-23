@@ -65,7 +65,10 @@ class Gravity_Flow_Field_Role extends GF_Field_Select {
 
 		$role_choices = apply_filters( 'gravityflow_role_field', $role_choices, $form_id, $this );
 
-		$this->choices = $role_choices;
+		if ( ! $this->is_form_editor() ) {
+			// Prevent the choices from being stored in the form meta
+			$this->choices = $role_choices;
+		}
 
 		$choices = GFCommon::get_select_choices( $this, $value );
 
