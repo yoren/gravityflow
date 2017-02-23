@@ -2,7 +2,7 @@
 - Added support for GravityView to be used to create inbox views. Requires the GravityView Advanced Filter Extension.
 - Added updater support for beta extensions.
 - Added support for configuring a step to process feeds for the following third-party add-ons:
-    Gravity Forms to Pipe Drive CRM Add-On and Gravity Forms SendinBlue Add-On.
+    Gravity Forms Constant Contact Add-On, Gravity Forms to Pipe Drive CRM Add-On, and Gravity Forms SendinBlue Add-On.
 - Added the custom confirmation message to the user input step.
 - Added support for the gform_field_validation filter to the user input step.
 - Added the gravityflow_status_submitter_name filter.
