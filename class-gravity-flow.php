@@ -176,6 +176,7 @@ if ( class_exists( 'GFForms' ) ) {
 
 		public function upgrade( $previous_version ) {
 			if ( empty( $previous_version ) ) {
+				// New installation
 				$settings = $this->get_app_settings();
 				if ( defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ) {
 					$settings['license_key'] = GRAVITY_FLOW_LICENSE_KEY;
@@ -185,6 +186,11 @@ if ( class_exists( 'GFForms' ) ) {
 				$settings['background_updates'] = true;
 				$this->update_app_settings( $settings );
 
+			} else {
+				// Upgrade
+				if ( version_compare( $previous_version,'1.5.1', '<' ) ) {
+					$this->fix_workflow_field_choices();
+				}
 			}
 			$this->setup_db();
 		}
@@ -220,12 +226,49 @@ duration int(10) unsigned not null,
 PRIMARY KEY  (id)
 ) $charset_collate;";
 
-			//Fixes issue with dbDelta lower-casing table names, which cause problems on case sensitive DB servers.
-			add_filter( 'dbdelta_create_queries', array( 'RGForms', 'dbdelta_fix_case' ) );
+			// Fixes an issue with dbDelta lower-casing table names, which cause problems on case sensitive DB servers.
+			if ( class_exists( 'GF_Upgrade' ) ) {
+				add_filter( 'dbdelta_create_queries', array( gf_upgrade(), 'dbdelta_fix_case' ) );
+			} else {
+				// deprecated since Gravity Forms 2.2
+				add_filter( 'dbdelta_create_queries', array( 'RGForms', 'dbdelta_fix_case' ) );
+			}
 
 			dbDelta( $sql );
 
-			remove_filter( 'dbdelta_create_queries', array( 'RGForms', 'dbdelta_fix_case' ) );
+			if ( class_exists( 'GF_Upgrade' ) ) {
+				remove_filter( 'dbdelta_create_queries', array( gf_upgrade(), 'dbdelta_fix_case' ) );
+			} else {
+				// deprecated since Gravity Forms 2.2
+				remove_filter( 'dbdelta_create_queries', array( 'RGForms', 'dbdelta_fix_case' ) );
+			}
+		}
+
+		/**
+		 * Fixes and issue with the Assignee, User and Role fields where the choices are saved in the form meta causing
+		 * conditional logic and field filters to display a dropdown with out of date choices.
+		 *
+		 * @since 1.5.1
+		 */
+		private function fix_workflow_field_choices() {
+			$forms = GFAPI::get_forms();
+			foreach ( $forms as $form ) {
+				$form_dirty = false;
+				if ( isset( $form['fields'] ) && is_array( $form['fields'] ) ) {
+					foreach ( $form['fields'] as $field ) {
+						/** @var GF_Field $field */
+						if ( in_array( $field->type, array( 'workflow_assignee_select', 'workflow_user', 'workflow_role' ) ) ) {
+							if ( is_array( $field->choices ) ) {
+								$field->choices = '';
+								$form_dirty = true;
+							}
+						}
+					}
+				}
+				if ( $form_dirty ) {
+					GFAPI::update_form( $form );
+				}
+			}
 		}
 
 		// Enqueue the JavaScript and output the root url and the nonce.
