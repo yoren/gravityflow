@@ -4,12 +4,16 @@ function SetDefaultValues_workflow_assignee_select(field) {
 	field.gravityflowAssigneeFieldShowRoles = true;
 	field.gravityflowAssigneeFieldShowFields = true;
 
+	field.choices = '';
+
+
 	return field;
 }
 
 function SetDefaultValues_workflow_user(field) {
 
 	field.label = gravityflow_form_editor_js_strings.user.defaults.label;
+	field.choices = '';
 
 	return field;
 }
@@ -17,6 +21,7 @@ function SetDefaultValues_workflow_user(field) {
 function SetDefaultValues_workflow_role(field) {
 
 	field.label = gravityflow_form_editor_js_strings.role.defaults.label;
+	field.choices = '';
 
 	return field;
 }
@@ -48,6 +53,13 @@ function SetAssigneeFieldShowUsers() {
 
 jQuery(document).bind('gform_load_field_settings', function (event, field, form) {
 	var isAssigneeField = field.type == 'workflow_assignee_select';
+	var isWorkflowUserField = field.type == 'workflow_user';
+	var isWorkflowRoleField = field.type == 'workflow_role';
+	var isWorkflowDiscussionField = field.type == 'workflow_discussion';
+
+	if ( isAssigneeField || isWorkflowUserField || isWorkflowRoleField ) {
+		field.choices = '';
+	}
 
 	if (isAssigneeField) {
 		var showUsers = field.gravityflowAssigneeFieldShowUsers;
@@ -61,11 +73,11 @@ jQuery(document).bind('gform_load_field_settings', function (event, field, form)
 		}
 	}
 
-	if (isAssigneeField || field.type == 'workflow_user') {
+	if (isAssigneeField || isWorkflowUserField) {
 		jQuery('#gravityflow_users_role_filter').val(field.gravityflowUsersRoleFilter);
 	}
 
-	if (field.type == 'workflow_discussion') {
+	if ( isWorkflowDiscussionField ) {
 		var timestamp_format = field.gravityflowDiscussionTimestampFormat == undefined ? '' : field.gravityflowDiscussionTimestampFormat;
 		jQuery('#gravityflow_discussion_timestamp_format').val(timestamp_format);
 	}
