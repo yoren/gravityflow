@@ -2,7 +2,7 @@
 - Added support for GravityView to be used to create inbox views. Requires the GravityView Advanced Filter Extension.
 - Added updater support for beta extensions.
 - Added support for configuring a step to process feeds for the following third-party add-ons:
-    Gravity Forms to Pipe Drive CRM Add-On and Gravity Forms SendinBlue Add-On.
+    Gravity Forms Constant Contact Add-On, Gravity Forms to Pipe Drive CRM Add-On, and Gravity Forms SendinBlue Add-On.
 - Added the custom confirmation message to the user input step.
 - Added support for the gform_field_validation filter to the user input step.
 - Added the gravityflow_status_submitter_name filter.
@@ -27,4 +27,4 @@
 - Fixed an issue which could prevent the value drop down for the Gravity View Advanced Filter Extension being populated with the Workflow Assignee choices.
 - Fixed a JavaScript error on the User Input step related to conditional logic dependent fields which are not editable or display fields.
 - Fixed an issue with conditional routing where the Source URL, Starred and IP fields are ignored in rules.
-
+- Fixed an issue which prevented the values from post fields being saved on the User Input step.

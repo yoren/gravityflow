@@ -20,6 +20,11 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 	protected $_editable_fields = array();
 
+	protected $_update_post_fields = array(
+		'fields' => array(),
+		'images' => array(),
+	);
+
 	public function get_label() {
 		return esc_html__( 'User Input', 'gravityflow' );
 	}
@@ -316,6 +321,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			GFFormsModel::set_entry_meta( $entry, $form );
 
 			$this->refresh_entry();
+
+			$this->maybe_process_post_fields( $form, $entry['post_id'] );
 
 			GFCache::flush();
 
@@ -904,26 +911,20 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	}
 
 	public function save_entry( $form, &$lead, $editable_fields ) {
-		global $wpdb;
 
 		$this->log_debug( __METHOD__ . '(): Saving entry.' );
 
-		$lead_detail_table = GFFormsModel::get_lead_details_table_name();
-		$is_new_lead       = $lead == null;
+		$is_new_lead = $lead == null;
 
 		// Bailing if null
 		if ( $is_new_lead ) {
 			return;
 		}
 
-		$current_fields = $wpdb->get_results( $wpdb->prepare( "SELECT id, field_number FROM $lead_detail_table WHERE lead_id=%d", $lead['id'] ) );
-
 		$total_fields = array();
 
 		/* @var $calculation_fields GF_Field[] */
 		$calculation_fields = array();
-
-		GFCommon::log_debug( __METHOD__ . '(): Saving entry fields.' );
 
 		foreach ( $form['fields'] as &$field ) {
 			/* @var $field GF_Field */
@@ -953,9 +954,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				$field->conditionalLogic = null;
 			}
 
-			$this->log_debug( __METHOD__ . "(): Saving field {$field->label}(#{$field->id} - {$field->type})." );
-
-			if ( $field->get_input_type() == 'fileupload' ) {
+			if ( in_array( $field->get_input_type(), array( 'fileupload', 'post_image' ) ) ) {
 				$this->maybe_save_field_files( $field, $form, $lead );
 				continue;
 			}
@@ -968,18 +967,16 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 			if ( is_array( $inputs ) ) {
 				foreach ( $inputs as $input ) {
-					GFFormsModel::save_input( $form, $field, $lead, $current_fields, $input['id'] );
+					$this->save_input( $form, $field, $lead, $input['id'] );
 				}
 			} else {
-				GFFormsModel::save_input( $form, $field, $lead, $current_fields, $field->id );
+				$this->save_input( $form, $field, $lead, $field->id );
 			}
 		}
 
 		if ( ! empty( $calculation_fields ) ) {
+			$this->log_debug( __METHOD__ . '(): Saving calculation fields.' );
 			foreach ( $calculation_fields as $calculation_field ) {
-
-				$this->log_debug( __METHOD__ . "(): Saving calculated field {$calculation_field->label}(#{$calculation_field->id} - {$calculation_field->type})." );
-
 				// Make sure that the value gets recalculated
 				$calculation_field->conditionalLogic = null;
 
@@ -999,11 +996,11 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 						}
 					}
 					foreach ( $inputs as $input ) {
-						GFFormsModel::save_input( $form, $calculation_field, $lead, $current_fields, $input['id'] );
+						$this->save_input( $form, $calculation_field, $lead, $input['id'] );
 						GFFormsModel::refresh_lead_field_value( $lead['id'], $input['id'] );
 					}
 				} else {
-					GFFormsModel::save_input( $form, $calculation_field, $lead, $current_fields, $calculation_field->id );
+					$this->save_input( $form, $calculation_field, $lead, $calculation_field->id );
 					GFFormsModel::refresh_lead_field_value( $lead['id'], $calculation_field->id );
 				}
 			}
@@ -1013,10 +1010,48 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 		//saving total field as the last field of the form.
 		if ( ! empty( $total_fields ) ) {
+			$this->log_debug( __METHOD__ . '(): Saving total fields.' );
 			foreach ( $total_fields as $total_field ) {
-				$this->log_debug( __METHOD__ . '(): Saving total field.' );
-				GFFormsModel::save_input( $form, $total_field, $lead, $current_fields, $total_field->id );
+				$this->save_input( $form, $total_field, $lead, $total_field->id );
 				GFFormsModel::refresh_lead_field_value( $lead['id'], $total_field->id );
+			}
+		}
+	}
+
+	/**
+	 * Update the input value in the entry.
+	 *
+	 * @since 1.5.1-dev
+	 *
+	 * @param array      $form     The form currently being processed.
+	 * @param GF_Field   $field    The current fields properties.
+	 * @param array      $entry    The entry currently being processed.
+	 * @param int|string $input_id The ID of the field or input currently being processed.
+	 */
+	public function save_input( $form, $field, &$entry, $input_id ) {
+		$input_name = 'input_' . str_replace( '.', '_', $input_id );
+
+		if ( $field->enableCopyValuesOption && rgpost( 'input_' . $field->id . '_copy_values_activated' ) ) {
+			$source_field_id   = $field->copyValuesOptionField;
+			$source_input_name = str_replace( 'input_' . $field->id, 'input_' . $source_field_id, $input_name );
+			$value             = rgpost( $source_input_name );
+		} else {
+			$value = rgpost( $input_name );
+		}
+
+		$existing_value = rgar( $entry, $input_id );
+		$value          = GFFormsModel::maybe_trim_input( $value, $form['id'], $field );
+		$value          = GFFormsModel::prepare_value( $form, $field, $value, $input_name, $entry['id'], $entry );
+
+		if ( $existing_value != $value ) {
+			$result = GFAPI::update_entry_field( $entry['id'], $input_id, $value );
+			$this->log_debug( __METHOD__ . "(): Saving: {$field->label}(#{$input_id} - {$field->type}). Result: " . var_export( $result, 1 ) );
+			if ( $result ) {
+				$entry[ $input_id ] = $value;
+			}
+
+			if ( GFCommon::is_post_field( $field ) && ! in_array( $field->id, $this->_update_post_fields['fields'] ) ) {
+				$this->_update_post_fields['fields'][] = $field->id;
 			}
 		}
 	}
@@ -1025,8 +1060,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	 * If any new files where uploaded save them to the entry.
 	 *
 	 * @param GF_Field $field The current fields properties.
-	 * @param array $form The form currently being processed.
-	 * @param array $entry The entry currently being processed.
+	 * @param array    $form  The form currently being processed.
+	 * @param array    $entry The entry currently being processed.
 	 */
 	public function maybe_save_field_files( $field, $form, $entry ) {
 		$input_name = 'input_' . $field->id;
@@ -1039,7 +1074,12 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		$value          = $field->get_value_save_entry( $existing_value, $form, $input_name, $entry['id'], $entry );
 
 		if ( ! empty( $value ) && $existing_value != $value ) {
-			GFAPI::update_entry_field( $entry['id'], $field->id, $value );
+			$result = GFAPI::update_entry_field( $entry['id'], $field->id, $value );
+			$this->log_debug( __METHOD__ . "(): Saving: {$field->label}(#{$field->id} - {$field->type}). Result: " . var_export( $result, 1 ) );
+
+			if ( GFCommon::is_post_field( $field ) && ! in_array( $field->id, $this->_update_post_fields['images'] ) ) {
+				$this->_update_post_fields['images'][] = $field->id;
+			}
 		}
 	}
 
@@ -1058,6 +1098,271 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 		return $text;
 	}
+
+	/**
+	 * If a post exists for this entry initiate the update.
+	 *
+	 * @since 1.5.1-dev
+	 *
+	 * @param array $form    The form currently being processed.
+	 * @param int   $post_id The ID of the post created from the current entry.
+	 */
+	public function maybe_process_post_fields( $form, $post_id ) {
+		$this->log_debug( __METHOD__ . '(): running.' );
+
+		if ( empty( $post_id ) ) {
+			$this->log_debug( __METHOD__ . '(): aborting; no post id' );
+
+			return;
+		}
+
+		$post = get_post( $post_id );
+
+		if ( ! $post ) {
+			$this->log_debug( __METHOD__ . '(): aborting; unable to get post.' );
+
+			return;
+		}
+
+		$result = $this->process_post_fields( $form, $post );
+		$this->log_debug( __METHOD__ . '(): wp_update_post result => ' . print_r( $result, 1 ) );
+	}
+
+	/**
+	 * Update the post with the field values which have changed.
+	 *
+	 * @since 1.5.1-dev
+	 *
+	 * @param array   $form The form currently being processed.
+	 * @param WP_Post $post The post to be updated.
+	 *
+	 * @return int|WP_Error
+	 */
+	public function process_post_fields( $form, $post ) {
+		$entry       = $this->get_entry();
+		$post_images = $this->process_post_images( $form, $entry );
+
+		foreach ( $this->_update_post_fields['fields'] as $field_id ) {
+
+			$field = GFFormsModel::get_field( $form, $field_id );
+			$value = GFFormsModel::get_lead_field_value( $entry, $field );
+
+			switch ( $field->type ) {
+				case 'post_title' :
+					$post_title       = $this->get_post_title( $value, $form, $entry, $post_images );
+					$post->post_title = $post_title;
+					$post->post_name  = $post_title;
+					break;
+
+				case 'post_content' :
+					$post->post_content = $this->get_post_content( $value, $form, $entry, $post_images );
+					break;
+
+				case 'post_excerpt' :
+					$post->post_excerpt = GFCommon::encode_shortcodes( $value );
+					break;
+
+				case 'post_tags' :
+					$this->set_post_tags( $value, $post->ID );
+					break;
+
+				case 'post_category' :
+					$this->set_post_categories( $value, $post->ID );
+					break;
+
+				case 'post_custom_field' :
+					$this->set_post_meta( $field, $value, $form, $entry, $post_images );
+					break;
+			}
+		}
+
+		return wp_update_post( $post, true );
+	}
+
+	/**
+	 * Attach any new images to the post and set the featured image.
+	 *
+	 * @since 1.5.1-dev
+	 *
+	 * @param array $form  The form currently being processed.
+	 * @param array $entry The entry currently being processed.
+	 *
+	 * @return array
+	 */
+	public function process_post_images( $form, $entry ) {
+		$post_images = array();
+		$post_id     = $entry['post_id'];
+
+		foreach ( $this->_update_post_fields['images'] as $field_id ) {
+			$value = rgar( $entry, $field_id );
+			list( $url, $title, $caption, $description ) = rgexplode( '|:|', $value, 4 );
+
+			if ( empty( $url ) ) {
+				continue;
+			}
+
+			$image_meta = array(
+				'post_excerpt' => $caption,
+				'post_content' => $description,
+			);
+
+			// Adding title only if it is not empty. It will default to the file name if it is not in the array.
+			if ( ! empty( $title ) ) {
+				$image_meta['post_title'] = $title;
+			}
+
+			$media_id = GFFormsModel::media_handle_upload( $url, $post_id, $image_meta );
+
+			if ( $media_id ) {
+				$post_images[ $field_id ] = $media_id;
+
+				// Setting the featured image.
+				$field = RGFormsModel::get_field( $form, $field_id );
+				if ( $field && $field->postFeaturedImage ) {
+					$result = set_post_thumbnail( $post_id, $media_id );
+				}
+			}
+
+		}
+
+		return $post_images;
+	}
+
+	/**
+	 * Get the post title.
+	 *
+	 * @since 1.5.1-dev
+	 *
+	 * @param string $value       The entry field value.
+	 * @param array  $form        The form currently being processed.
+	 * @param array  $entry       The entry currently being processed.
+	 * @param array  $post_images The images which have been attached to the post.
+	 *
+	 * @return string
+	 */
+	public function get_post_title( $value, $form, $entry, $post_images ) {
+		if ( rgar( $form, 'postTitleTemplateEnabled' ) ) {
+			return GFFormsModel::process_post_template( $form['postTitleTemplate'], 'post_title', $post_images, array(), $form, $entry );
+		}
+
+		return GFCommon::encode_shortcodes( $value );
+	}
+
+	/**
+	 * Get the post content.
+	 *
+	 * @since 1.5.1-dev
+	 *
+	 * @param string $value       The entry field value.
+	 * @param array  $form        The form currently being processed.
+	 * @param array  $entry       The entry currently being processed.
+	 * @param array  $post_images The images which have been attached to the post.
+	 *
+	 * @return string
+	 */
+	public function get_post_content( $value, $form, $entry, $post_images ) {
+		if ( rgar( $form, 'postContentTemplateEnabled' ) ) {
+			return GFFormsModel::process_post_template( $form['postContentTemplate'], 'post_content', $post_images, array(), $form, $entry );
+		}
+
+		return GFCommon::encode_shortcodes( $value );
+	}
+
+	/**
+	 * Set the post tags.
+	 *
+	 * @since 1.5.1-dev
+	 *
+	 * @param string|array $value   The entry field value.
+	 * @param int          $post_id The ID of the post created from the current entry.
+	 */
+	public function set_post_tags( $value, $post_id ) {
+		$post_tags = array( $value ) ? array_values( $value ) : explode( ',', $value );
+
+		wp_set_post_tags( $post_id, $post_tags, false );
+	}
+
+	/**
+	 * Set the post categories.
+	 *
+	 * @since 1.5.1-dev
+	 *
+	 * @param string|array $value   The entry field value.
+	 * @param int          $post_id The ID of the post created from the current entry.
+	 */
+	public function set_post_categories( $value, $post_id ) {
+		$post_categories = array();
+
+		foreach ( explode( ',', $value ) as $cat_string ) {
+			$cat_array = explode( ':', $cat_string );
+			// the category id is the last item in the array, access it using end() in case the category name includes colons.
+			array_push( $post_categories, end( $cat_array ) );
+		}
+
+		wp_set_post_categories( $post_id, $post_categories, false );
+	}
+
+	/**
+	 * Set the post meta.
+	 *
+	 * @since 1.5.1-dev
+	 *
+	 * @param GF_Field     $field       The Post Custom Field.
+	 * @param string|array $value       The entry field value.
+	 * @param array        $form        The form currently being processed.
+	 * @param array        $entry       The entry currently being processed.
+	 * @param array        $post_images The images which have been attached to the post.
+	 */
+	public function set_post_meta( $field, $value, $form, $entry, $post_images ) {
+		$post_id = $entry['post_id'];
+
+		delete_post_meta( $post_id, $field->postCustomFieldName );
+
+		if ( ! empty( $field->customFieldTemplateEnabled ) ) {
+			$value = GFFormsModel::process_post_template( $field->customFieldTemplate, 'post_custom_field', $post_images, array(), $form, $entry );
+		}
+
+		switch ( $field->inputType ) {
+			case 'list' :
+				$value = maybe_unserialize( $value );
+				if ( is_array( $value ) ) {
+					foreach ( $value as $item ) {
+						if ( is_array( $item ) ) {
+							$item = implode( '|', $item );
+						}
+
+						if ( ! rgblank( $item ) ) {
+							add_post_meta( $post_id, $field->postCustomFieldName, $item );
+						}
+					}
+				}
+				break;
+
+			case 'multiselect' :
+			case 'checkbox' :
+				$value = ! is_array( $value ) ? explode( ',', $value ) : $value;
+				foreach ( $value as $item ) {
+					if ( ! rgblank( $item ) ) {
+						add_post_meta( $post_id, $field->postCustomFieldName, $item );
+					}
+				}
+				break;
+
+			case 'date' :
+				$value = GFCommon::date_display( $value, $field->dateFormat );
+				if ( ! rgblank( $value ) ) {
+					add_post_meta( $post_id, $field->postCustomFieldName, $value );
+				}
+				break;
+
+			default :
+				if ( ! rgblank( $value ) ) {
+					add_post_meta( $post_id, $field->postCustomFieldName, $value );
+				}
+				break;
+		}
+	}
+
 }
 
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_User_Input() );
