@@ -53,9 +53,13 @@ function SetAssigneeFieldShowUsers() {
 
 jQuery(document).bind('gform_load_field_settings', function (event, field, form) {
 	var isAssigneeField = field.type == 'workflow_assignee_select';
+	var isWorkflowUserField = field.type == 'workflow_user';
+	var isWorkflowRoleField = field.type == 'workflow_role';
+	var isWorkflowDiscussionField = field.type == 'workflow_discussion';
 
-	// The choices are dynamic. Ensure they're are not set in the form meta.
-	field.choices = '';
+	if ( isAssigneeField || isWorkflowUserField || isWorkflowRoleField ) {
+		field.choices = '';
+	}
 
 	if (isAssigneeField) {
 		var showUsers = field.gravityflowAssigneeFieldShowUsers;
@@ -69,11 +73,11 @@ jQuery(document).bind('gform_load_field_settings', function (event, field, form)
 		}
 	}
 
-	if (isAssigneeField || field.type == 'workflow_user') {
+	if (isAssigneeField || isWorkflowUserField) {
 		jQuery('#gravityflow_users_role_filter').val(field.gravityflowUsersRoleFilter);
 	}
 
-	if (field.type == 'workflow_discussion') {
+	if ( isWorkflowDiscussionField ) {
 		var timestamp_format = field.gravityflowDiscussionTimestampFormat == undefined ? '' : field.gravityflowDiscussionTimestampFormat;
 		jQuery('#gravityflow_discussion_timestamp_format').val(timestamp_format);
 	}
