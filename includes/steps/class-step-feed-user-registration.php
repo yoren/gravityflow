@@ -53,11 +53,7 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 
 		if ( class_exists( 'GF_User_Registration' ) ) {
 
-			add_action( 'gform_user_registered', array( 'Gravity_Flow_Step_Feed_User_Registration', 'filter_gform_user_registered' ), 10, 4 );
-
 			parent::process_feed( $feed );
-
-			remove_action( 'gform_user_registered', array( 'Gravity_Flow_Step_Feed_User_Registration', 'filter_gform_user_registered' ), 10 );
 
 			$activation_enabled = isset( $feed['meta']['userActivationEnable'] ) &&  $feed['meta']['userActivationEnable'];
 
