@@ -14,6 +14,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+add_action( 'gform_user_registered', array( 'Gravity_Flow_Step_Feed_User_Registration', 'action_gform_user_registered' ), 10, 4 );
 
 class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Add_On {
 	public $_step_type = 'user_registration';
@@ -48,12 +49,23 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 		return $feeds;
 	}
 
-	public function process_feed( $feed ) {
+	function process_feed( $feed ) {
+
 		if ( class_exists( 'GF_User_Registration' ) ) {
+
+			add_action( 'gform_user_registered', array( 'Gravity_Flow_Step_Feed_User_Registration', 'filter_gform_user_registered' ), 10, 4 );
+
 			parent::process_feed( $feed );
 
-			return true;
+			remove_action( 'gform_user_registered', array( 'Gravity_Flow_Step_Feed_User_Registration', 'filter_gform_user_registered' ), 10 );
+
+			$activation_enabled = isset( $feed['meta']['userActivationEnable'] ) &&  $feed['meta']['userActivationEnable'];
+
+			$step_complete = ! $activation_enabled;
+
+			return $step_complete;
 		}
+		// User Registration < 3.0
 		$form  = $this->get_form();
 		$entry = $this->get_entry();
 		remove_filter( 'gform_disable_registration', '__return_true' );
@@ -61,7 +73,7 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 
 		// Make sure it's not run twice
 		add_filter( 'gform_disable_registration', '__return_true' );
-		
+
 		return true;
 	}
 
@@ -83,6 +95,78 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 		$label = $feed['meta']['feed_type'] == 'create' ? __( 'Create', 'gravityflow' ) : __( 'Update', 'gravityflow' );
 
 		return $label;
+	}
+
+	public function workflow_detail_box( $form, $args ) {
+		$step_status = $this->get_status();
+		$status_label = $this->get_status_label( $step_status );
+
+		$display_step_status = (bool) $args['step_status'];
+
+		?>
+		<h4 style="margin-bottom:10px;"><?php echo $this->get_name() . ' (' . $status_label . ')' ?></h4>
+		<?php if ( $display_step_status ) : ?>
+
+			<div>
+				<ul>
+					<li>
+						<?php
+						echo sprintf( '%s: %s', esc_html__( 'User Registration', 'gravityflow' ), $status_label );
+						?>
+					</li>
+				</ul>
+			</div>
+
+			<?php
+		endif;
+	}
+
+	public function entry_detail_status_box( $form ) {
+		$step_status = $this->get_status();
+		$status_label = $this->get_status_label( $step_status );
+
+		?>
+		<h4 style="padding:10px;"><?php echo $this->get_name() . ': ' . $status_label ?></h4>
+
+		<div style="padding:10px;">
+			<ul>
+				<?php
+				echo sprintf( '%s: %s', esc_html__( 'User Registration', 'gravityflow' ), $status_label );
+				?>
+			</ul>
+		</div>
+		<?php
+	}
+
+	public static function action_gform_user_registered( $user_id, $feed, $entry, $user_pass ) {
+
+		$api = new Gravity_Flow_API( $entry['form_id'] );
+		$step = $api->get_current_step( $entry );
+		if ( ! $step ) {
+			return;
+		}
+		if ( $step->get_type() == 'user_registration' ) {
+
+			$entry_id = $entry['id'];
+
+			/* @var Gravity_Flow_Step_Feed_Add_On $step */
+
+			GFFormsModel::update_lead_property( $entry_id, 'created_by', $user_id, false, true );
+			$activation_enabled = isset( $feed['meta']['userActivationEnable'] ) &&  $feed['meta']['userActivationEnable'];
+			if ( $activation_enabled ) {
+				$label = $step->get_feed_label( $feed );
+				$note  = sprintf( esc_html__( 'User Registration feed processed: %s', 'gravityflow' ), $label );
+				$step->log_debug( __METHOD__ . '() - Feed processing complete: ' . $label );
+				$step->add_note( $note, 0, $step->get_type() );
+				$feed_id = $feed['id'];
+				$add_on_feeds = $step->get_processed_add_on_feeds( $entry_id );
+				if ( ! in_array( $feed_id, $add_on_feeds ) ) {
+					$add_on_feeds[] = $feed_id;
+					$step->update_processed_feeds( $add_on_feeds, $entry_id );
+					$api->process_workflow( $entry_id );
+				}
+			}
+		}
 	}
 }
 

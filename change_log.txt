@@ -14,6 +14,8 @@
     function sh_gravityflow_assignee_eamil_reminder_repeat_days( $form, $entry, $step, $assignee ) {
     	return 3; // Send reminders every 3 days after the initial assignee email. Return zero to disable.
     }
+- Added support for manual activation in the User Registration Add-On. The User Registration step will now wait in a pending state until the account has been activated.
+- Updated the User Registration step to assigned entry to the newly created user account.
 - Updated merge tag processing for the Assignee and User type fields to support additional user property/meta modifiers.
 - Updated the gravityflow_workflow_detail_sidebar hook to include $current_step and $args as the third and fourth parameters.
 - Updated the user Input button text to "Submit" instead of "Update" when the default status is hidden.
