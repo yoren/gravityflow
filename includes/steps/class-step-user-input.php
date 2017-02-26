@@ -1079,6 +1079,13 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 			if ( GFCommon::is_post_field( $field ) && ! in_array( $field->id, $this->_update_post_fields['images'] ) ) {
 				$this->_update_post_fields['images'][] = $field->id;
+
+				$post_images = gform_get_meta( $entry['id'], '_post_images' );
+				if ( $post_images && isset( $post_images[ $field->id ] ) ) {
+					wp_delete_attachment( $post_images[ $field->id ] );
+					unset( $post_images[ $field->id ] );
+					gform_update_meta( $entry['id'], '_post_images', $post_images, $form['id'] );
+				}
 			}
 		}
 	}
@@ -1139,8 +1146,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	 * @return int|WP_Error
 	 */
 	public function process_post_fields( $form, $post ) {
-		$entry       = $this->get_entry();
-		$post_images = $this->process_post_images( $form, $entry );
+		$entry                = $this->get_entry();
+		$post_images          = $this->process_post_images( $form, $entry );
+		$has_content_template = rgar( $form, 'postContentTemplateEnabled' );
 
 		foreach ( $this->_update_post_fields['fields'] as $field_id ) {
 
@@ -1155,7 +1163,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					break;
 
 				case 'post_content' :
-					$post->post_content = $this->get_post_content( $value, $form, $entry, $post_images );
+					if ( ! $has_content_template ) {
+						$post->post_content = GFCommon::encode_shortcodes( $value );
+					}
 					break;
 
 				case 'post_excerpt' :
@@ -1176,6 +1186,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			}
 		}
 
+		if ( $has_content_template ) {
+			$post->post_content = GFFormsModel::process_post_template( $form['postContentTemplate'], 'post_content', $post_images, array(), $form, $entry );
+		}
+
 		return wp_update_post( $post, true );
 	}
 
@@ -1190,8 +1204,11 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	 * @return array
 	 */
 	public function process_post_images( $form, $entry ) {
-		$post_images = array();
 		$post_id     = $entry['post_id'];
+		$post_images = gform_get_meta( $entry['id'], '_post_images' );
+		if ( ! $post_images ) {
+			$post_images = array();
+		}
 
 		foreach ( $this->_update_post_fields['images'] as $field_id ) {
 			$value = rgar( $entry, $field_id );
@@ -1225,6 +1242,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 		}
 
+		if ( ! empty( $post_images ) ) {
+			gform_update_meta( $entry['id'], '_post_images', $post_images, $form['id'] );
+		}
+
 		return $post_images;
 	}
 
@@ -1243,26 +1264,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	public function get_post_title( $value, $form, $entry, $post_images ) {
 		if ( rgar( $form, 'postTitleTemplateEnabled' ) ) {
 			return GFFormsModel::process_post_template( $form['postTitleTemplate'], 'post_title', $post_images, array(), $form, $entry );
-		}
-
-		return GFCommon::encode_shortcodes( $value );
-	}
-
-	/**
-	 * Get the post content.
-	 *
-	 * @since 1.5.1-dev
-	 *
-	 * @param string $value       The entry field value.
-	 * @param array  $form        The form currently being processed.
-	 * @param array  $entry       The entry currently being processed.
-	 * @param array  $post_images The images which have been attached to the post.
-	 *
-	 * @return string
-	 */
-	public function get_post_content( $value, $form, $entry, $post_images ) {
-		if ( rgar( $form, 'postContentTemplateEnabled' ) ) {
-			return GFFormsModel::process_post_template( $form['postContentTemplate'], 'post_content', $post_images, array(), $form, $entry );
 		}
 
 		return GFCommon::encode_shortcodes( $value );
@@ -1360,6 +1361,51 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					add_post_meta( $post_id, $field->postCustomFieldName, $value );
 				}
 				break;
+		}
+	}
+
+	/**
+	 * Add the gform_after_create_post filter.
+	 *
+	 * @since 1.5.1-dev
+	 */
+	public function intercept_submission() {
+		$form_id = $this->get_form_id();
+		add_filter( "gform_after_create_post_{$form_id}", array( $this, 'action_after_create_post' ), 10, 3 );
+	}
+
+	/**
+	 * Store the media IDs for the processed post images in the entry meta.
+	 *
+	 * @since 1.5.1-dev
+	 *
+	 * @param int   $post_id The ID of the post created from the current entry.
+	 * @param array $entry   The entry currently being processed.
+	 * @param array $form    The form currently being processed.
+	 */
+	public function action_after_create_post( $post_id, $entry, $form ) {
+		$post_images = gform_get_meta( $entry['id'], '_post_images' );
+
+		if ( $post_images ) {
+			return;
+		}
+
+		$post_images = array();
+
+		foreach ( $form['fields'] as $field ) {
+			if ( $field->type !== 'post_image' || rgempty( $field->id, $entry ) ) {
+				continue;
+			}
+
+			$props = rgexplode( '|:|', $entry[ $field->id ], 5 );
+
+			if ( ! empty( $props[4] ) ) {
+				$post_images[ $field->id ] = $props[4];
+			}
+		}
+
+		if ( ! empty( $post_images ) ) {
+			gform_add_meta( $entry['id'], '_post_images', $post_images );
 		}
 	}
 
