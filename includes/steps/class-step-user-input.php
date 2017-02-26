@@ -1397,6 +1397,12 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	 * @param array $form    The form currently being processed.
 	 */
 	public function action_after_create_post( $post_id, $entry, $form ) {
+		$post_images = gform_get_meta( $entry['id'], '_post_images' );
+
+		if ( $post_images ) {
+			return;
+		}
+
 		$post_images = array();
 
 		foreach ( $form['fields'] as $field ) {
