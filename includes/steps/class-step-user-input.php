@@ -1079,6 +1079,13 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 			if ( GFCommon::is_post_field( $field ) && ! in_array( $field->id, $this->_update_post_fields['images'] ) ) {
 				$this->_update_post_fields['images'][] = $field->id;
+
+				$post_images = gform_get_meta( $entry['id'], '_post_images' );
+				if ( $post_images && isset( $post_images[ $field->id ] ) ) {
+					wp_delete_attachment( $post_images[ $field->id ] );
+					unset( $post_images[ $field->id ] );
+					gform_update_meta( $entry['id'], '_post_images', $post_images, $form['id'] );
+				}
 			}
 		}
 	}
@@ -1190,8 +1197,11 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	 * @return array
 	 */
 	public function process_post_images( $form, $entry ) {
-		$post_images = array();
 		$post_id     = $entry['post_id'];
+		$post_images = gform_get_meta( $entry['id'], '_post_images' );
+		if ( ! $post_images ) {
+			$post_images = array();
+		}
 
 		foreach ( $this->_update_post_fields['images'] as $field_id ) {
 			$value = rgar( $entry, $field_id );
@@ -1223,6 +1233,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				}
 			}
 
+		}
+
+		if ( ! empty( $post_images ) ) {
+			gform_update_meta( $entry['id'], '_post_images', $post_images, $form['id'] );
 		}
 
 		return $post_images;
@@ -1360,6 +1374,45 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					add_post_meta( $post_id, $field->postCustomFieldName, $value );
 				}
 				break;
+		}
+	}
+
+	/**
+	 * Add the gform_after_create_post filter.
+	 *
+	 * @since 1.5.1-dev
+	 */
+	public function intercept_submission() {
+		$form_id = $this->get_form_id();
+		add_filter( "gform_after_create_post_{$form_id}", array( $this, 'action_after_create_post' ), 10, 3 );
+	}
+
+	/**
+	 * Store the media IDs for the processed post images in the entry meta.
+	 *
+	 * @since 1.5.1-dev
+	 *
+	 * @param int   $post_id The ID of the post created from the current entry.
+	 * @param array $entry   The entry currently being processed.
+	 * @param array $form    The form currently being processed.
+	 */
+	public function action_after_create_post( $post_id, $entry, $form ) {
+		$post_images = array();
+
+		foreach ( $form['fields'] as $field ) {
+			if ( $field->type !== 'post_image' || rgempty( $field->id, $entry ) ) {
+				continue;
+			}
+
+			$props = rgexplode( '|:|', $entry[ $field->id ], 5 );
+
+			if ( ! empty( $props[4] ) ) {
+				$post_images[ $field->id ] = $props[4];
+			}
+		}
+
+		if ( ! empty( $post_images ) ) {
+			gform_add_meta( $entry['id'], '_post_images', $post_images );
 		}
 	}
 
