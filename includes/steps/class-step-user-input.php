@@ -1146,8 +1146,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	 * @return int|WP_Error
 	 */
 	public function process_post_fields( $form, $post ) {
-		$entry       = $this->get_entry();
-		$post_images = $this->process_post_images( $form, $entry );
+		$entry                = $this->get_entry();
+		$post_images          = $this->process_post_images( $form, $entry );
+		$has_content_template = rgar( $form, 'postContentTemplateEnabled' );
 
 		foreach ( $this->_update_post_fields['fields'] as $field_id ) {
 
@@ -1162,7 +1163,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					break;
 
 				case 'post_content' :
-					$post->post_content = $this->get_post_content( $value, $form, $entry, $post_images );
+					if ( ! $has_content_template ) {
+						$post->post_content = GFCommon::encode_shortcodes( $value );
+					}
 					break;
 
 				case 'post_excerpt' :
@@ -1181,6 +1184,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					$this->set_post_meta( $field, $value, $form, $entry, $post_images );
 					break;
 			}
+		}
+
+		if ( $has_content_template ) {
+			$post->post_content = GFFormsModel::process_post_template( $form['postContentTemplate'], 'post_content', $post_images, array(), $form, $entry );
 		}
 
 		return wp_update_post( $post, true );
@@ -1257,26 +1264,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	public function get_post_title( $value, $form, $entry, $post_images ) {
 		if ( rgar( $form, 'postTitleTemplateEnabled' ) ) {
 			return GFFormsModel::process_post_template( $form['postTitleTemplate'], 'post_title', $post_images, array(), $form, $entry );
-		}
-
-		return GFCommon::encode_shortcodes( $value );
-	}
-
-	/**
-	 * Get the post content.
-	 *
-	 * @since 1.5.1-dev
-	 *
-	 * @param string $value       The entry field value.
-	 * @param array  $form        The form currently being processed.
-	 * @param array  $entry       The entry currently being processed.
-	 * @param array  $post_images The images which have been attached to the post.
-	 *
-	 * @return string
-	 */
-	public function get_post_content( $value, $form, $entry, $post_images ) {
-		if ( rgar( $form, 'postContentTemplateEnabled' ) ) {
-			return GFFormsModel::process_post_template( $form['postContentTemplate'], 'post_content', $post_images, array(), $form, $entry );
 		}
 
 		return GFCommon::encode_shortcodes( $value );
