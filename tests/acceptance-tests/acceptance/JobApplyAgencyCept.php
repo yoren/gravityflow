@@ -59,7 +59,7 @@ $I->click( 'button[value=approved]' );
 $I->wait(1);
 $I->fillField( 'input[name="input_4"]', '0210000000' );
 $I->fillField( 'textarea[name="gravityflow_note"]', 'Phone added' );
-$I->click( 'Update' );
+$I->click( 'Submit' );
 
 // Log out
 $I->logOut();
@@ -75,7 +75,7 @@ $I->click( 'Job apply agency' );
 // Check data
 $I->fillField( 'input[name="input_5"]', 'example@example.com' );
 $I->fillField( 'textarea[name="gravityflow_note"]', 'Email added' );
-$I->click( 'Update' );
+$I->click( 'Submit' );
 
 // Log out
 $I->logOut();

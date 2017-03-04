@@ -51,7 +51,7 @@ $I->click( 'button[value=rejected]' );
 // Change quantity
 $I->seeElement( 'input[name="input_6"]' );
 $I->fillField( 'input[name="input_6"]', '2' );
-$I->click( 'Update' );
+$I->click( 'Submit' );
 
 // Approve
 $I->see( '$44.00' );
