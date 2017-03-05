@@ -1,14 +1,14 @@
 # Copyright 2015-2017 Steven Henty.
 # Translators:
-# Erik van Beek <erik@aiwos.nl>, 2015-2016
+# Erik van Beek <erik@aiwos.nl>, 2015-2017
 # Steve Henty, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2017-01-01 11:15:16+00:00\n"
-"PO-Revision-Date: 2017-01-02 08:18+0000\n"
-"Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
+"POT-Creation-Date: 2017-01-02 21:51:39+00:00\n"
+"PO-Revision-Date: 2017-02-11 00:40+0000\n"
+"Last-Translator: Erik van Beek <erik@aiwos.nl>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/gravityflow/gravityflow/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -104,7 +104,7 @@ msgid ""
 "Build the conditional logic that should be applied to this step before it's "
 "allowed to be processed. If an entry does not meet the conditions of this "
 "step it will fall on to the next step in the list."
-msgstr ""
+msgstr "Maak de voorwaardelijke logica dat gebruikt moet worden voor deze Stap voordat het mag doorgaan. Als een Inzending niet aan de voorwaarden voldoet van deze stap, dan gaat het automatisch naar de volgende stap. "
 
 #: class-gravity-flow.php:786
 msgid "Enable Condition for this step"
@@ -130,7 +130,7 @@ msgstr "Een stap plannen zet inzendendingen in de wachtrij en voorkomt dat deze 
 msgid ""
 "Note: the schedule setting requires the WordPress Cron which is included and"
 " enabled by default unless your host has deactivated it."
-msgstr ""
+msgstr "N.B. het inplannen van acties maakt gebruik van WordPress Cron, welke standaard is geactiveerd, tenzij uw hosting bedrijf dit gedeactiveerd heeft. "
 
 #: class-gravity-flow.php:818 class-gravity-flow.php:5046
 msgid "Expired"
@@ -139,14 +139,14 @@ msgstr "Verlopen"
 #: class-gravity-flow.php:822 class-gravity-flow.php:1478
 #: class-gravity-flow.php:1485 class-gravity-flow.php:1491
 msgid "Expiration"
-msgstr ""
+msgstr "Vervaltijd"
 
 #: class-gravity-flow.php:823
 msgid ""
 "Enable the expiration setting to allow this step to expire. Once expired, "
 "the entry will automatically proceed to the step configured in the Next Step"
 " setting(s) below."
-msgstr ""
+msgstr "Sta toe dat de instellingen deze stap kan laten verlopen. Als dit verlopen is, gaat de inzending automatisch naar de volgende stap zoals aangegeven bij Volgende Stap. "
 
 #: class-gravity-flow.php:830
 msgid "Next step if"
@@ -166,11 +166,11 @@ msgstr "Er ging iets mis tijdens het opslaan van de stap instellingen"
 
 #: class-gravity-flow.php:876
 msgid "This step type is missing."
-msgstr ""
+msgstr "Het soort stap mist. "
 
 #: class-gravity-flow.php:878
 msgid "The plugin required by this step type is missing."
-msgstr ""
+msgstr "De plugin die nodig is voor deze stap mist. "
 
 #: class-gravity-flow.php:885
 msgid ""
@@ -242,7 +242,7 @@ msgstr "voordat"
 
 #: class-gravity-flow.php:1450
 msgid "Schedule expiration"
-msgstr ""
+msgstr "Plan vervaltijd"
 
 #: class-gravity-flow.php:1527
 msgid "This step expires on"
@@ -250,23 +250,23 @@ msgstr "Deze stap verloopt op"
 
 #: class-gravity-flow.php:1535
 msgid "This step will expire"
-msgstr ""
+msgstr "Deze stap zal verlopen op"
 
 #: class-gravity-flow.php:1540
 msgid "after the workflow step has started."
-msgstr ""
+msgstr "na de workflow stap gestart is. "
 
 #: class-gravity-flow.php:1547
 msgid "Status after expiration"
-msgstr ""
+msgstr "Status na vervaltijd"
 
 #: class-gravity-flow.php:1551
 msgid "Expiration Status"
-msgstr ""
+msgstr "Vervaltijd Status"
 
 #: class-gravity-flow.php:1561 class-gravity-flow.php:1565
 msgid "Next Step if Expired"
-msgstr ""
+msgstr "Volgende Stap na Verlopen"
 
 #: class-gravity-flow.php:1638 class-gravity-flow.php:1709
 #: includes/steps/class-step-approval.php:562
@@ -327,7 +327,7 @@ msgstr "Status"
 
 #: class-gravity-flow.php:2186
 msgid "Expires"
-msgstr ""
+msgstr "Verloopt"
 
 #: class-gravity-flow.php:2232 includes/steps/class-step-approval.php:961
 #: includes/steps/class-step-user-input.php:791
@@ -336,7 +336,7 @@ msgstr "Wachtrij"
 
 #: class-gravity-flow.php:2250
 msgid "Scheduled"
-msgstr ""
+msgstr "Gepland"
 
 #: class-gravity-flow.php:2261 class-gravity-flow.php:2262
 #: class-gravity-flow.php:4394 class-gravity-flow.php:4396
@@ -345,7 +345,7 @@ msgstr "Stap is verlopen"
 
 #: class-gravity-flow.php:2266
 msgid "Expired: refresh the page"
-msgstr ""
+msgstr "Verlopen: ververs deze pagina"
 
 #: class-gravity-flow.php:2283
 msgid "Admin"
@@ -393,7 +393,7 @@ msgstr "Gravity Flow Instellingen"
 
 #: class-gravity-flow.php:2576 class-gravity-flow.php:2687
 msgid "Labels"
-msgstr ""
+msgstr "Labels"
 
 #: class-gravity-flow.php:2591
 msgid "Uninstall"
@@ -410,17 +410,17 @@ msgstr "Geannuleerd"
 
 #: class-gravity-flow.php:2692
 msgid "Navigation"
-msgstr ""
+msgstr "Navigatie"
 
 #: class-gravity-flow.php:2700
 msgid "Status Labels"
-msgstr ""
+msgstr "Status Labels"
 
 #: class-gravity-flow.php:2707
 #: includes/steps/class-step-feed-user-registration.php:83
 #: includes/steps/class-step-user-input.php:934
 msgid "Update"
-msgstr "Updaten"
+msgstr "Bijwerken"
 
 #: class-gravity-flow.php:2722
 msgid "Invalid token"
@@ -503,7 +503,7 @@ msgstr "Selecteer de formulieren die u wilt publiceren op de Toevoegen pagina. "
 
 #: class-gravity-flow.php:2892
 msgid "Default Pages"
-msgstr ""
+msgstr "Standaard Pagina's"
 
 #: class-gravity-flow.php:2893
 msgid ""
@@ -511,7 +511,7 @@ msgid ""
 "example, the inbox page selected below will be used when preparing merge "
 "tags such as {workflow_inbox_link} when the page_id attribute is not "
 "specified."
-msgstr ""
+msgstr "Selecteer de pagina's die de volgende gravityflow shortcodes bevatten. Bijvoorbeeld, de inbox pagina die hieronder geselecteerd is zal gebruikt worden bij het maken van de merge tags zoals [workflow_inbox_link]  wanneer de pagina (page_id attribute) niet gespecificeerd is. "
 
 #: class-gravity-flow.php:2897 class-gravity-flow.php:5008
 #: includes/steps/class-step.php:973
@@ -536,7 +536,7 @@ msgstr "Er ging iets fout bij het opslaan van de instellingen"
 
 #: class-gravity-flow.php:2950
 msgid "Select page"
-msgstr ""
+msgstr "Selecteer pagina"
 
 #: class-gravity-flow.php:3065
 #: includes/wizard/steps/class-iw-step-pages.php:66
@@ -603,7 +603,7 @@ msgstr "Workflow geannuleerd. "
 
 #: class-gravity-flow.php:3478 class-gravity-flow.php:3490
 msgid "The entry does not currently have an active step."
-msgstr ""
+msgstr "Deze inzending heeft op dit moment geen actieve stap."
 
 #: class-gravity-flow.php:3487 includes/class-api.php:145
 msgid "Workflow Step restarted."
@@ -620,22 +620,22 @@ msgstr "Verzenden naar stap: : %s"
 
 #: class-gravity-flow.php:3526
 msgid "Workflow: approved or rejected"
-msgstr ""
+msgstr "Workflow: goedgekeurd of afgewezen"
 
 #: class-gravity-flow.php:3527
 msgid "Workflow: user input"
-msgstr ""
+msgstr "Workflow: gebruikers inbreng"
 
 #: class-gravity-flow.php:3528
 msgid "Workflow: complete"
-msgstr ""
+msgstr "Workflow: compleet"
 
 #: class-gravity-flow.php:4225
 msgid ""
 "Gravity Flow Steps imported. IMPORTANT: Check the assignees for each step. "
 "If the form was imported from a different installation with different user "
 "IDs then steps may need to be reassigned."
-msgstr ""
+msgstr "Gravity Flow Stappen zijn geïmporteerd. BELANGRIJK: Controleer de gemachtigde bij iedere stap. Als het formulier geimporteerd is van een andere installatie met andere gebruikers ID's, dan moeten wellicht stappen opnieuw ingesteld worden. "
 
 #: class-gravity-flow.php:4439
 msgid ""
@@ -708,11 +708,11 @@ msgstr "Goedgekeurd"
 #: class-gravity-flow.php:5043 includes/steps/class-step-approval.php:34
 #: includes/steps/class-step-approval.php:959
 msgid "Rejected"
-msgstr "Afgekeurd"
+msgstr "Afgewezen"
 
 #: class-gravity-flow.php:5104
 msgid "Oops! We couldn't find your lead. Please try again"
-msgstr ""
+msgstr "Oeps! We konden jouw 'lead' niet vinden. Probeer het opnieuw. "
 
 #: class-gravity-flow.php:5146 includes/pages/class-entry-detail.php:158
 msgid "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete"
@@ -720,63 +720,63 @@ msgstr "Wilt u dit bestand verwijderen? 'Annuleren' om te stoppen. 'OK' om te ve
 
 #: class-gravity-flow.php:5218
 msgid "All fields"
-msgstr ""
+msgstr "Alle velden"
 
 #: class-gravity-flow.php:5222
 msgid "Selected fields"
-msgstr ""
+msgstr "Geselecteerde velden"
 
 #: class-gravity-flow.php:5249
 msgid "Except"
-msgstr ""
+msgstr "Uitgezonderd"
 
 #: class-gravity-flow.php:5268
 msgid "Order Summary"
-msgstr ""
+msgstr "Bestelling Samenvatting"
 
 #: class-gravity-flow.php:5362 includes/steps/class-step-webhook.php:118
 msgid "Key"
-msgstr ""
+msgstr "Sleutel"
 
 #: class-gravity-flow.php:5363 includes/steps/class-step-webhook.php:119
 msgid "Value"
-msgstr ""
+msgstr "Waarde"
 
 #: class-gravity-flow.php:5469
 msgid "Reset"
-msgstr ""
+msgstr "Herstellen"
 
 #: class-gravity-flow.php:5504
 msgid "Add Custom Key"
-msgstr ""
+msgstr "Voeg Eigen Sleutel toe"
 
 #: class-gravity-flow.php:5507
 msgid "Add Custom Value"
-msgstr ""
+msgstr "Voeg Eigen Waarde toe"
 
 #: class-gravity-flow.php:5649
 msgid "Entry Link"
-msgstr ""
+msgstr "Inzending Link"
 
 #: class-gravity-flow.php:5650
 msgid "Entry URL"
-msgstr ""
+msgstr "Inzending URL"
 
 #: class-gravity-flow.php:5651
 msgid "Inbox Link"
-msgstr ""
+msgstr "Inbox Link"
 
 #: class-gravity-flow.php:5652
 msgid "Inbox URL"
-msgstr ""
+msgstr "Inbox URL"
 
 #: class-gravity-flow.php:5653
 msgid "Cancel Link"
-msgstr ""
+msgstr "Annuleren Link"
 
 #: class-gravity-flow.php:5654
 msgid "Cancel URL"
-msgstr ""
+msgstr "Annuleren URL"
 
 #: class-gravity-flow.php:5655 includes/steps/class-step-approval.php:828
 #: includes/steps/class-step-approval.php:858
@@ -796,90 +796,90 @@ msgstr "Gemachtigden"
 
 #: class-gravity-flow.php:5658
 msgid "Approve Link"
-msgstr ""
+msgstr "Goedkeuring Link"
 
 #: class-gravity-flow.php:5659
 msgid "Approve URL"
-msgstr ""
+msgstr "Goedkeuring URL"
 
 #: class-gravity-flow.php:5660
 msgid "Approve Token"
-msgstr ""
+msgstr "Goedkeuring Sleutel"
 
 #: class-gravity-flow.php:5661
 msgid "Reject Link"
-msgstr ""
+msgstr "Afwijzen Link"
 
 #: class-gravity-flow.php:5662
 msgid "Reject URL"
-msgstr ""
+msgstr "Afwijzen URL"
 
 #: class-gravity-flow.php:5663
 msgid "Reject Token"
-msgstr ""
+msgstr "Afwijzen Sleutel"
 
-#: includes/EDD_SL_Plugin_Updater.php:207
+#: includes/EDD_SL_Plugin_Updater.php:201
 msgid ""
 "There is a new version of %1$s available. %2$sView version %3$s details%4$s."
-msgstr ""
+msgstr "Er is een nieuwe versie van %1$s beschikbaar. %2$sBekijk versie %3$s details%4$s."
 
-#: includes/EDD_SL_Plugin_Updater.php:215
+#: includes/EDD_SL_Plugin_Updater.php:209
 msgid ""
 "There is a new version of %1$s available. %2$sView version %3$s details%4$s "
 "or %5$supdate now%6$s."
-msgstr ""
+msgstr "Er is een nieuwe versie van %1$s beschikbaar. %2$sBekijk versie %3$s details%4$s of %5$supdate nu%6$s."
 
-#: includes/EDD_SL_Plugin_Updater.php:388
+#: includes/EDD_SL_Plugin_Updater.php:377
 msgid "You do not have permission to install plugin updates"
 msgstr "U heeft geen toestemming om plugin updates te installeren"
 
-#: includes/EDD_SL_Plugin_Updater.php:388
+#: includes/EDD_SL_Plugin_Updater.php:377
 msgid "Error"
 msgstr "Fout"
 
 #: includes/class-common.php:71 includes/steps/class-step-webhook.php:253
 msgid "User IP"
-msgstr ""
+msgstr "Gebruiker IP"
 
 #: includes/class-common.php:74 includes/steps/class-step-webhook.php:254
 msgid "Source Url"
-msgstr ""
+msgstr "Bron URL"
 
 #: includes/class-common.php:77
 msgid "Payment Status"
-msgstr ""
+msgstr "Betaling Status"
 
 #: includes/class-common.php:80
 msgid "Transaction Id"
-msgstr ""
+msgstr "Transactie Id"
 
 #: includes/class-common.php:83
 msgid "Payment Date"
-msgstr ""
+msgstr "Betaling Datum"
 
 #: includes/class-common.php:86
 msgid "Payment Amount"
-msgstr ""
+msgstr "Betaling Bedrag"
 
 #: includes/class-rest-api.php:32
 msgid "Entry ID missing"
-msgstr ""
+msgstr "Inzending ID mist"
 
 #: includes/class-rest-api.php:38
 msgid "Workflow base missing"
-msgstr ""
+msgstr "Workflow basis ontbreekt"
 
 #: includes/class-rest-api.php:44 includes/class-rest-api.php:52
 msgid "Entry not found"
-msgstr ""
+msgstr "Inzending niet gevonden"
 
 #: includes/class-rest-api.php:56
 msgid "The entry is not on the expected step."
-msgstr ""
+msgstr "De inzending is niet bij de verwachte stap. "
 
 #: includes/class-web-api.php:197
 msgid "Forbidden"
-msgstr ""
+msgstr "Verboden"
 
 #: includes/fields/class-field-assignee-select.php:54
 #: includes/pages/class-reports.php:299 includes/pages/class-reports.php:357
@@ -889,32 +889,32 @@ msgstr "Gemachtigde"
 
 #: includes/fields/class-field-discussion.php:95
 msgid "Example comment."
-msgstr ""
+msgstr "Voorbeeld reactie. "
 
 #: includes/fields/class-field-discussion.php:189
 msgid "Delete Comment"
-msgstr ""
+msgstr "Reactie verwijderen"
 
 #: includes/fields/class-field-discussion.php:353
 msgid ""
 "Would you like to delete this comment? 'Cancel' to stop. 'OK' to delete"
-msgstr ""
+msgstr "Wil je dit commentaar verwijderen? 'Annuleren' om te stoppen. 'OK' om te verwijderen. "
 
 #: includes/fields/class-field-discussion.php:366
 msgid "There was an issue deleting this comment."
-msgstr ""
+msgstr "Er ging iets mis bij het verwijderen van dit commentaar. "
 
 #: includes/fields/class-fields.php:59 includes/fields/class-fields.php:74
 msgid "Workflow Fields"
-msgstr ""
+msgstr "Workflow Velden"
 
 #: includes/fields/class-fields.php:74
 msgid "Workflow Fields add advanced workflow functionality to your forms."
-msgstr ""
+msgstr "Workflow Velden voegen geavanceerde workflow functionaliteit toe aan formulieren. "
 
 #: includes/fields/class-fields.php:75 includes/fields/class-fields.php:178
 msgid "Custom Timestamp Format"
-msgstr ""
+msgstr "Eigen Tijd Formaat"
 
 #: includes/fields/class-fields.php:75
 msgid ""
@@ -1058,7 +1058,7 @@ msgstr "Inzender"
 
 #: includes/pages/class-inbox.php:209 includes/pages/class-status.php:938
 msgid "Last Updated"
-msgstr ""
+msgstr "Laatst Bijgewerkt"
 
 #: includes/pages/class-print-entries.php:23
 msgid "Form Id and Lead Id are required parameters."
@@ -1186,7 +1186,7 @@ msgstr "Zoeken"
 
 #: includes/pages/class-status.php:417
 msgid "yyyy-mm-dd"
-msgstr ""
+msgstr "jjjj-mm-dd"
 
 #: includes/pages/class-status.php:438
 msgid "Workflow Form"
@@ -1198,15 +1198,15 @@ msgstr ""
 
 #: includes/pages/class-status.php:610
 msgid "Include timelines"
-msgstr ""
+msgstr "Insluiten tijdlijnen"
 
 #: includes/pages/class-status.php:614
 msgid "Add page break between entries"
-msgstr ""
+msgstr "Voeg pagina einde toe tussen inzendingen"
 
 #: includes/pages/class-status.php:767
 msgid "(deleted)"
-msgstr ""
+msgstr "(verwijderd)"
 
 #: includes/pages/class-status.php:905
 msgid "Checkbox"
@@ -1223,7 +1223,7 @@ msgstr "Selecteren"
 
 #: includes/pages/class-status.php:1544
 msgid "Workflows restarted."
-msgstr ""
+msgstr "Workflows herstart."
 
 #: includes/pages/class-support.php:81
 msgid "Please check the documentation before submitting a support request"
@@ -1280,7 +1280,7 @@ msgstr "Goedkeuren"
 #: includes/steps/class-step-approval.php:1085
 #: includes/steps/class-step-approval.php:1300
 msgid "Reject"
-msgstr "Afkeuren"
+msgstr "Afwijzen"
 
 #: includes/steps/class-step-approval.php:78
 msgid "Invalid request method"
@@ -1288,11 +1288,11 @@ msgstr ""
 
 #: includes/steps/class-step-approval.php:91
 msgid "Action not supported"
-msgstr ""
+msgstr "Deze actie wordt niet ondersteund"
 
 #: includes/steps/class-step-approval.php:102
 msgid "Action not supported."
-msgstr ""
+msgstr "Deze actie wordt niet ondersteund."
 
 #: includes/steps/class-step-approval.php:122
 msgid "You're not authorized to perform this action."
@@ -1300,7 +1300,7 @@ msgstr ""
 
 #: includes/steps/class-step-approval.php:128
 msgid "Missing assignee."
-msgstr ""
+msgstr "Gemachtigde ontbreekt. "
 
 #: includes/steps/class-step-approval.php:137
 #: includes/steps/class-step-approval.php:457
@@ -1311,7 +1311,7 @@ msgstr "Goedkeuring"
 #: includes/steps/class-step-feed-wp-e-signature.php:139
 #: includes/steps/class-step-user-input.php:41
 msgid "Conditional Routing"
-msgstr ""
+msgstr "Voorwaardelijke Route"
 
 #: includes/steps/class-step-approval.php:159
 #: includes/steps/class-step-feed-wp-e-signature.php:57
@@ -1333,7 +1333,7 @@ msgstr "Stel dit in om een email te verzenden naar alle gemachtigden zodra deze 
 #: includes/steps/class-step-notification.php:95
 #: includes/steps/class-step-user-input.php:231
 msgid "From Name"
-msgstr ""
+msgstr "Van Naam"
 
 #: includes/steps/class-step-approval.php:175
 #: includes/steps/class-step-approval.php:276
@@ -1342,7 +1342,7 @@ msgstr ""
 #: includes/steps/class-step-notification.php:101
 #: includes/steps/class-step-user-input.php:237
 msgid "From Email"
-msgstr ""
+msgstr "Van E-mail"
 
 #: includes/steps/class-step-approval.php:182
 #: includes/steps/class-step-approval.php:284
@@ -1351,7 +1351,7 @@ msgstr ""
 #: includes/steps/class-step-notification.php:108
 #: includes/steps/class-step-user-input.php:245
 msgid "Reply To"
-msgstr ""
+msgstr "Antwoorden Naar"
 
 #: includes/steps/class-step-approval.php:188
 #: includes/steps/class-step-approval.php:290
@@ -1360,7 +1360,7 @@ msgstr ""
 #: includes/steps/class-step-notification.php:114
 #: includes/steps/class-step-user-input.php:251
 msgid "BCC"
-msgstr ""
+msgstr "BCC"
 
 #: includes/steps/class-step-approval.php:194
 #: includes/steps/class-step-approval.php:296
@@ -1369,7 +1369,7 @@ msgstr ""
 #: includes/steps/class-step-notification.php:120
 #: includes/steps/class-step-user-input.php:257
 msgid "Subject"
-msgstr ""
+msgstr "Onderwerp"
 
 #: includes/steps/class-step-approval.php:199
 #: includes/steps/class-step-feed-wp-e-signature.php:97
@@ -1388,7 +1388,7 @@ msgstr "Een nieuwe inzending wacht op goedkeuring. Controleer uw Workflow Inbox.
 #: includes/steps/class-step-notification.php:134
 #: includes/steps/class-step-user-input.php:272
 msgid "Disable auto-formatting"
-msgstr ""
+msgstr "Schakel auto-formatting uit"
 
 #: includes/steps/class-step-approval.php:212
 #: includes/steps/class-step-approval.php:314
@@ -1421,11 +1421,11 @@ msgstr "dag/dagen"
 
 #: includes/steps/class-step-approval.php:239
 msgid "Send email when the entry is rejected"
-msgstr "Verstuur email wanneer deze inzending is afgekeurd"
+msgstr "Verstuur email wanneer deze inzending is afgewezen"
 
 #: includes/steps/class-step-approval.php:240
 msgid "Enable this setting to send an email when the entry is rejected."
-msgstr "Stel dit in om een email te versturen wanneer de inzending is afgekeurd."
+msgstr "Stel dit in om een email te versturen wanneer de inzending is afgewezen."
 
 #: includes/steps/class-step-approval.php:248
 #: includes/steps/class-step-approval.php:337
@@ -1453,7 +1453,7 @@ msgstr "Bericht"
 
 #: includes/steps/class-step-approval.php:303
 msgid "Entry {entry_id} has been rejected"
-msgstr "Inzending {entry_id} is afgekeurd"
+msgstr "Inzending {entry_id} is afgewezen"
 
 #: includes/steps/class-step-approval.php:328
 msgid "Send email when the entry is approved"
@@ -1474,7 +1474,7 @@ msgstr "Inzending {entry_id} is goedgekeurd"
 #: includes/steps/class-step-approval.php:435
 #: includes/steps/class-step-user-input.php:316
 msgid "Attach PDF"
-msgstr ""
+msgstr "PDF bijvoegen"
 
 #: includes/steps/class-step-approval.php:461
 #: includes/steps/class-step-feed-wp-e-signature.php:133
@@ -1528,7 +1528,7 @@ msgstr "Alle gemachtigden moeten goedkeuren"
 #: includes/steps/class-step-feed-wp-e-signature.php:171
 #: includes/steps/class-step-user-input.php:168
 msgid "Instructions"
-msgstr ""
+msgstr "Uitleg"
 
 #: includes/steps/class-step-approval.php:504
 #: includes/steps/class-step-feed-wp-e-signature.php:173
@@ -1542,7 +1542,7 @@ msgstr ""
 #: includes/steps/class-step-feed-wp-e-signature.php:175
 #: includes/steps/class-step-user-input.php:172
 msgid "Display instructions"
-msgstr ""
+msgstr "Toon uitleg"
 
 #: includes/steps/class-step-approval.php:510
 msgid ""
@@ -1554,13 +1554,13 @@ msgstr ""
 #: includes/steps/class-step-feed-wp-e-signature.php:184
 #: includes/steps/class-step-user-input.php:180
 msgid "Display Fields"
-msgstr ""
+msgstr "Velden Tonen"
 
 #: includes/steps/class-step-approval.php:516
 #: includes/steps/class-step-feed-wp-e-signature.php:185
 #: includes/steps/class-step-user-input.php:181
 msgid "Select the fields to hide or display."
-msgstr ""
+msgstr "Selecteer de velden om te verbergen of te tonen. "
 
 #: includes/steps/class-step-approval.php:521
 #: includes/steps/class-step-feed-wp-e-signature.php:158
@@ -1587,7 +1587,7 @@ msgstr "Goedkeuring Email"
 
 #: includes/steps/class-step-approval.php:558
 msgid "Revert to User Input step"
-msgstr ""
+msgstr "Terug naar Gebruiker Input stap"
 
 #: includes/steps/class-step-approval.php:560
 msgid ""
@@ -1601,7 +1601,7 @@ msgstr ""
 #: includes/steps/class-step-approval.php:572
 #: includes/steps/class-step-user-input.php:199
 msgid "Workflow Note"
-msgstr ""
+msgstr "Workflow Notitie"
 
 #: includes/steps/class-step-approval.php:574
 #: includes/steps/class-step-user-input.php:201
@@ -1614,32 +1614,32 @@ msgstr ""
 #: includes/steps/class-step-user-input.php:192
 #: includes/steps/class-step-user-input.php:204
 msgid "Hidden"
-msgstr ""
+msgstr "Verborgen"
 
 #: includes/steps/class-step-approval.php:578
 #: includes/steps/class-step-user-input.php:205
 msgid "Not required"
-msgstr ""
+msgstr "Niet verplicht"
 
 #: includes/steps/class-step-approval.php:579
 msgid "Always required"
-msgstr ""
+msgstr "Altijd verplicht"
 
 #: includes/steps/class-step-approval.php:582
 msgid "Required if approved"
-msgstr ""
+msgstr "Verplicht bij goedkeuring"
 
 #: includes/steps/class-step-approval.php:586
 msgid "Required if rejected"
-msgstr ""
+msgstr "Verplicht bij afkeuren"
 
 #: includes/steps/class-step-approval.php:594
 msgid "Required if reverted"
-msgstr ""
+msgstr "Verplicht bij teruggaan "
 
 #: includes/steps/class-step-approval.php:598
 msgid "Required if reverted or rejected"
-msgstr ""
+msgstr "Verplicht bij teruggaan of afgekeurd"
 
 #: includes/steps/class-step-approval.php:609
 msgid "Post Action if Rejected:"
@@ -1651,11 +1651,11 @@ msgstr ""
 
 #: includes/steps/class-step-approval.php:614
 msgid "Trash Post"
-msgstr ""
+msgstr "Prullenbak Bericht"
 
 #: includes/steps/class-step-approval.php:615
 msgid "Delete Post"
-msgstr ""
+msgstr "Verwijder Bericht"
 
 #: includes/steps/class-step-approval.php:622
 msgid "Post Action if Approved:"
@@ -1663,7 +1663,7 @@ msgstr ""
 
 #: includes/steps/class-step-approval.php:625
 msgid "Publish Post"
-msgstr ""
+msgstr "Publiceer Bericht"
 
 #: includes/steps/class-step-approval.php:788
 msgid ""
@@ -1673,11 +1673,11 @@ msgstr "De status kon niet worden aangepast omdat deze stap al uitgevoerd is. "
 
 #: includes/steps/class-step-approval.php:824
 msgid "Reverted to step"
-msgstr ""
+msgstr "Teruggaan naar stap"
 
 #: includes/steps/class-step-approval.php:833
 msgid "Reverted to step:"
-msgstr ""
+msgstr "Teruggegaan naar stap: "
 
 #: includes/steps/class-step-approval.php:850
 msgid "Approved."
@@ -1685,7 +1685,7 @@ msgstr "Goedgekeurd."
 
 #: includes/steps/class-step-approval.php:852
 msgid "Rejected."
-msgstr "Afgekeurd."
+msgstr "Afgewezen."
 
 #: includes/steps/class-step-approval.php:875
 msgid "Entry Approved"
@@ -1693,7 +1693,7 @@ msgstr "Inzending Goedgekeurd"
 
 #: includes/steps/class-step-approval.php:877
 msgid "Entry Rejected"
-msgstr "Inzending Afgekeurd"
+msgstr "Inzending Afgewezen"
 
 #: includes/steps/class-step-approval.php:952
 msgid "Pending Approval"
@@ -1701,11 +1701,11 @@ msgstr "In afwachting van Goedkeuring"
 
 #: includes/steps/class-step-approval.php:1000
 msgid "(Missing)"
-msgstr ""
+msgstr "(Ontbrekend)"
 
 #: includes/steps/class-step-approval.php:1102
 msgid "Revert"
-msgstr ""
+msgstr "Terug"
 
 #: includes/steps/class-step-approval.php:1342
 msgid "Error: step already processed."
@@ -1713,7 +1713,7 @@ msgstr "Fout: deze stap is al uitgevoerd. "
 
 #: includes/steps/class-step-feed-activecampaign.php:23
 msgid "ActiveCampaign"
-msgstr ""
+msgstr "Actieve Campagne"
 
 #: includes/steps/class-step-feed-add-on.php:107
 #: includes/steps/class-step-feed-add-on.php:117
@@ -1726,27 +1726,27 @@ msgstr "U heeft nog geen feeds ingesteld. "
 
 #: includes/steps/class-step-feed-add-on.php:152
 msgid "Processed: %s"
-msgstr ""
+msgstr "Verwerkt: %s"
 
 #: includes/steps/class-step-feed-add-on.php:156
 msgid "Initiated: %s"
-msgstr ""
+msgstr "Gestart: %s"
 
 #: includes/steps/class-step-feed-agilecrm.php:23
 msgid "Agile CRM"
-msgstr ""
+msgstr "Agile CRM"
 
 #: includes/steps/class-step-feed-aweber.php:23
 msgid "AWeber"
-msgstr ""
+msgstr "AWeber"
 
 #: includes/steps/class-step-feed-batchbook.php:23
 msgid "Batchbook"
-msgstr ""
+msgstr "Batchbook"
 
 #: includes/steps/class-step-feed-breeze.php:23
 msgid "Breeze"
-msgstr ""
+msgstr "Breeze"
 
 #: includes/steps/class-step-feed-campaign-monitor.php:23
 msgid "Campaign Monitor"
@@ -1754,27 +1754,27 @@ msgstr "Campagne Monitor"
 
 #: includes/steps/class-step-feed-campfire.php:23
 msgid "Campfire"
-msgstr ""
+msgstr "Campfire"
 
 #: includes/steps/class-step-feed-capsulecrm.php:23
 msgid "Capsule CRM"
-msgstr ""
+msgstr "Capsule CRM"
 
 #: includes/steps/class-step-feed-cleverreach.php:23
 msgid "CleverReach"
-msgstr ""
+msgstr "CleverReach"
 
 #: includes/steps/class-step-feed-convertkit.php:24
 msgid "ConvertKit"
-msgstr ""
+msgstr "ConvertKit"
 
 #: includes/steps/class-step-feed-drip.php:24
 msgid "Drip"
-msgstr ""
+msgstr "Drip"
 
 #: includes/steps/class-step-feed-dropbox.php:23
 msgid "Dropbox"
-msgstr ""
+msgstr "Dropbox"
 
 #: includes/steps/class-step-feed-emma.php:23
 msgid "Emma"
@@ -1782,35 +1782,35 @@ msgstr "Emma"
 
 #: includes/steps/class-step-feed-freshbooks.php:23
 msgid "FreshBooks"
-msgstr ""
+msgstr "FreshBooks"
 
 #: includes/steps/class-step-feed-getresponse.php:23
 msgid "GetResponse"
-msgstr ""
+msgstr "GetResponse"
 
 #: includes/steps/class-step-feed-helpscout.php:23
 msgid "Help Scout"
-msgstr ""
+msgstr "Help Scout"
 
 #: includes/steps/class-step-feed-highrise.php:23
 msgid "Highrise"
-msgstr ""
+msgstr "Highrise"
 
 #: includes/steps/class-step-feed-hipchat.php:23
 msgid "HipChat"
-msgstr ""
+msgstr "HipChat"
 
 #: includes/steps/class-step-feed-hubspot.php:24
 msgid "HubSpot"
-msgstr ""
+msgstr "HubSpot"
 
 #: includes/steps/class-step-feed-icontact.php:23
 msgid "iContact"
-msgstr ""
+msgstr "iContact"
 
 #: includes/steps/class-step-feed-madmimi.php:23
 msgid "Mad Mimi"
-msgstr ""
+msgstr "Mad Mimi"
 
 #: includes/steps/class-step-feed-mailchimp.php:23
 msgid "MailChimp"
@@ -1818,11 +1818,11 @@ msgstr "MailChimp"
 
 #: includes/steps/class-step-feed-post-creation.php:23
 msgid "Post Creation"
-msgstr ""
+msgstr "Bericht Maken"
 
 #: includes/steps/class-step-feed-slack.php:23
 msgid "Slack"
-msgstr ""
+msgstr "Slack"
 
 #: includes/steps/class-step-feed-slicedinvoices.php:24
 msgid "Sliced Invoices"
@@ -1834,15 +1834,15 @@ msgstr ""
 
 #: includes/steps/class-step-feed-sprout-invoices.php:105
 msgid "Create Estimate"
-msgstr ""
+msgstr "Maak Schatting"
 
 #: includes/steps/class-step-feed-sprout-invoices.php:114
 msgid "Create Invoice"
-msgstr ""
+msgstr "Maak Factuur"
 
 #: includes/steps/class-step-feed-trello.php:23
 msgid "Trello"
-msgstr ""
+msgstr "Trello"
 
 #: includes/steps/class-step-feed-twilio.php:23
 msgid "Twilio"
@@ -1858,7 +1858,7 @@ msgstr "Maken"
 
 #: includes/steps/class-step-feed-wp-e-signature.php:26
 msgid "WP E-Signature"
-msgstr ""
+msgstr "WP E-Signature"
 
 #: includes/steps/class-step-feed-wp-e-signature.php:99
 msgid ""
@@ -1868,7 +1868,7 @@ msgstr ""
 
 #: includes/steps/class-step-feed-wp-e-signature.php:145
 msgid "Select Assignee"
-msgstr ""
+msgstr "Selecteer Gemachtigde"
 
 #: includes/steps/class-step-feed-wp-e-signature.php:179
 msgid ""
@@ -1878,7 +1878,7 @@ msgstr ""
 
 #: includes/steps/class-step-feed-wp-e-signature.php:283
 msgid "Title"
-msgstr ""
+msgstr "Titel"
 
 #: includes/steps/class-step-feed-wp-e-signature.php:286
 msgid "Invite Status"
@@ -1886,7 +1886,7 @@ msgstr ""
 
 #: includes/steps/class-step-feed-wp-e-signature.php:286
 msgid "Sent"
-msgstr ""
+msgstr "Verzonden"
 
 #: includes/steps/class-step-feed-wp-e-signature.php:286
 msgid "Error - Not Sent"
@@ -1894,7 +1894,7 @@ msgstr ""
 
 #: includes/steps/class-step-feed-wp-e-signature.php:293
 msgid "Resend"
-msgstr ""
+msgstr "Opnieuw verzenden"
 
 #: includes/steps/class-step-feed-wp-e-signature.php:302
 msgid "Review &amp; Sign"
@@ -1902,7 +1902,7 @@ msgstr ""
 
 #: includes/steps/class-step-feed-wp-e-signature.php:308
 msgid "Preview"
-msgstr ""
+msgstr "Preview"
 
 #: includes/steps/class-step-feed-wp-e-signature.php:349
 msgid "Document signed: %s"
@@ -1914,7 +1914,7 @@ msgstr "Zapier"
 
 #: includes/steps/class-step-feed-zohocrm.php:23
 msgid "Zoho CRM"
-msgstr ""
+msgstr "Zoho CRM"
 
 #: includes/steps/class-step-notification.php:21
 msgid "Notification"
@@ -1962,16 +1962,16 @@ msgstr "Bewerkbare Velden"
 #: includes/steps/class-step-user-input.php:85
 #: includes/steps/class-step-user-input.php:110
 msgid "Conditional Logic"
-msgstr ""
+msgstr "Voorwaardelijke Logica"
 
 #: includes/steps/class-step-user-input.php:88
 #: includes/steps/class-step-user-input.php:114
 msgid "Enable field conditional logic"
-msgstr ""
+msgstr "Voorwaardelijke logica inschakelen"
 
 #: includes/steps/class-step-user-input.php:97
 msgid "Dynamic"
-msgstr ""
+msgstr "Dynamisch"
 
 #: includes/steps/class-step-user-input.php:101
 msgid "Only when the page loads"
@@ -1983,7 +1983,7 @@ msgid ""
 "Fields and Sections support dynamic conditional logic. Pages do not support "
 "dynamic conditional logic so they will only be shown or hidden when the page"
 " loads."
-msgstr ""
+msgstr "Velden en Secties ondersteunen voorwaardelijke logica. Pagina's ondersteunen dit niet, dus zij worden alleen getoond of verborgen wanneer de pagina laadt. "
 
 #: includes/steps/class-step-user-input.php:126
 msgid "Highlight Editable Fields"
@@ -1991,11 +1991,11 @@ msgstr ""
 
 #: includes/steps/class-step-user-input.php:138
 msgid "Green triangle"
-msgstr ""
+msgstr "Groene driehoek"
 
 #: includes/steps/class-step-user-input.php:142
 msgid "Green Background"
-msgstr ""
+msgstr "Groene achtergrond"
 
 #: includes/steps/class-step-user-input.php:151
 msgid "Assignee Policy"
@@ -2019,7 +2019,7 @@ msgstr "Alle gemachtigden moeten deze stap afronden. "
 
 #: includes/steps/class-step-user-input.php:187
 msgid "Default Status Option"
-msgstr ""
+msgstr "Standaard Status Optie"
 
 #: includes/steps/class-step-user-input.php:188
 msgid ""
@@ -2034,7 +2034,7 @@ msgstr "In behandeling"
 
 #: includes/steps/class-step-user-input.php:206
 msgid "Always Required"
-msgstr ""
+msgstr "Altijd Verplicht"
 
 #: includes/steps/class-step-user-input.php:209
 msgid "Required if in progress"
@@ -2059,7 +2059,7 @@ msgstr "Inzending bijgewerkt - In behandeling."
 #: includes/steps/class-step-user-input.php:686
 #: includes/steps/class-step-user-input.php:710
 msgid "This field is required."
-msgstr ""
+msgstr "Dit veld is verplicht. "
 
 #: includes/steps/class-step-user-input.php:785
 msgid "Pending Input"
@@ -2088,15 +2088,15 @@ msgstr ""
 
 #: includes/steps/class-step-webhook.php:99
 msgid "All Fields"
-msgstr ""
+msgstr "Alle velden"
 
 #: includes/steps/class-step-webhook.php:103
 msgid "Select Fields"
-msgstr ""
+msgstr "Geselecteerde velden"
 
 #: includes/steps/class-step-webhook.php:114
 msgid "Field Values"
-msgstr ""
+msgstr "Veld Waarden"
 
 #: includes/steps/class-step-webhook.php:121
 msgid "Mapping"
@@ -2110,29 +2110,29 @@ msgstr ""
 
 #: includes/steps/class-step-webhook.php:236
 msgid "Select a Field"
-msgstr ""
+msgstr "Selecteer een Veld"
 
 #: includes/steps/class-step-webhook.php:243
 msgid "Select a %s Field"
-msgstr ""
+msgstr "Selecteer een %s Veld"
 
 #: includes/steps/class-step-webhook.php:252
 msgid "Entry Date"
-msgstr ""
+msgstr "Inzending Datum"
 
 #: includes/steps/class-step-webhook.php:255
 msgid "Created By"
-msgstr ""
+msgstr "Gemaakt Door"
 
 #: includes/steps/class-step-webhook.php:292
 #: includes/steps/class-step-webhook.php:299
 #: includes/steps/class-step-webhook.php:319
 msgid "Full"
-msgstr ""
+msgstr "Volledig"
 
 #: includes/steps/class-step-webhook.php:306
 msgid "Selected"
-msgstr ""
+msgstr "Geselecteerd"
 
 #: includes/steps/class-step.php:180
 msgid "Next Step"
@@ -2152,7 +2152,7 @@ msgstr "%s: niet verplicht"
 
 #: includes/steps/class-step.php:858
 msgid "Reminder"
-msgstr ""
+msgstr "Herinnering"
 
 #: includes/steps/class-step.php:973
 msgid "Entry"
@@ -2160,7 +2160,7 @@ msgstr "Inzending"
 
 #: includes/steps/class-step.php:1930
 msgid "Processed"
-msgstr ""
+msgstr "Verwerkt"
 
 #: includes/steps/class-step.php:2007
 msgid "A note is required"
@@ -2258,11 +2258,11 @@ msgstr ""
 
 #: includes/wizard/steps/class-iw-step-pages.php:26
 msgid "Yes, create inbox, status, and submit pages now."
-msgstr ""
+msgstr "Ja, maak inbox, status en toevoegen pagina's nu. "
 
 #: includes/wizard/steps/class-iw-step-pages.php:35
 msgid "Workflow Pages"
-msgstr ""
+msgstr "Workflow Pagina's"
 
 #: includes/wizard/steps/class-iw-step-updates.php:16
 msgid ""
@@ -2363,9 +2363,9 @@ msgctxt ""
 "Title for the uninstall section on the settings page for a Gravity Flow "
 "extension."
 msgid "Uninstall %s Extension"
-msgstr ""
+msgstr "Verwijder %s Uitbreiding"
 
 #: includes/class-extension.php:108 includes/class-feed-extension.php:109
 msgctxt "Button text on the settings page for an extension."
 msgid "Uninstall Extension"
-msgstr ""
+msgstr "Verwijder Uitbreiding"

@@ -47,7 +47,7 @@ $I->click( 'button[value=approved]' );
 // Verify number
 $I->seeElement( 'input[name="input_4"]' );
 $I->fillField( 'input[name="input_4"]', '40' );
-$I->click( 'Update' );
+$I->click( 'Submit' );
 
 // Revert
 $I->seeElement( 'button[value=revert]' );
@@ -56,7 +56,7 @@ $I->click( 'button[value=revert]' );
 // Update number
 $I->seeElement( 'input[name="input_4"]' );
 $I->fillField( 'input[name="input_4"]', '41' );
-$I->click( 'Update' );
+$I->click( 'Submit' );
 
 // Approve
 $I->seeElement( 'button[value=approved]' );

@@ -55,9 +55,41 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
-= 1.5.0.1 =
+= 1.6 =
 
+- Added support for GravityView to be used to create inbox views. Requires the GravityView Advanced Filter Extension.
+- Added updater support for beta extensions.
+- Added support for configuring a step to process feeds for the following third-party add-ons:
+    Gravity Forms Constant Contact Add-On, Gravity Forms to Pipe Drive CRM Add-On, and Gravity Forms SendinBlue Add-On.
+- Added the custom confirmation message to the user input step.
+- Added support for the gform_field_validation filter to the user input step.
+- Added the gravityflow_status_submitter_name filter.
+- Added performance improvements to the status page.
+- Added support for repeat reminders.
+- Added the gravityflow_assignee_eamil_reminder_repeat_days filter.
+    Example:
+    add_filter( 'gravityflow_assignee_eamil_reminder_repeat_days', 'sh_gravityflow_assignee_eamil_reminder_repeat_days', 10, 4 );
+    function sh_gravityflow_assignee_eamil_reminder_repeat_days( $form, $entry, $step, $assignee ) {
+    	return 3; // Send reminders every 3 days after the initial assignee email. Return zero to disable.
+    }
+- Added support for manual activation in the User Registration Add-On. The User Registration step will now wait in a pending state until the account has been activated.
+- Updated the User Registration step to assigned entry to the newly created user account.
+- Updated merge tag processing for the Assignee and User type fields to support additional user property/meta modifiers.
+- Updated the gravityflow_workflow_detail_sidebar hook to include $current_step and $args as the third and fourth parameters.
+- Updated the user Input button text to "Submit" instead of "Update" when the default status is hidden.
+- Updated the styles of the workflow box when the sidebar is not active to remove the padding.
+- Updated the activity log and reports to exclude deleted and trashed entries.
+- Fixed an issue with the inbox page which would result in the no pending tasks message when an access token is used by an assignee who is a registered user but not logged in.
+- Fixed an issue which prevented the value returned by the gravityflow_feedback_approval filter from being used.
+- Fixed a fatal error loading the status shortcode on some sites.
+- Fixed a JavaScript error on User Input steps with field conditional logic disabled.
+- Fixed the bottom bulk action drop down on the status page not displaying the print modal.
+- Fixed an issue which could prevent the value drop down for the Gravity View Advanced Filter Extension being populated with the Workflow Assignee choices.
+- Fixed a JavaScript error on the User Input step related to conditional logic dependent fields which are not editable or display fields.
+- Fixed an issue with conditional routing where the Source URL, Starred and IP fields are ignored in rules.
+- Fixed an issue which prevented the values from post fields being saved on the User Input step.
 - Fixed an issue with the approval actions.
+
 
 = 1.5.0 =
 

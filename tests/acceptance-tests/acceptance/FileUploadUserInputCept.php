@@ -24,11 +24,11 @@ $I->seeInCurrentUrl( '/wp-admin/' );
 $I->amOnWorkflowPage( 'Inbox' );
 $I->click( 'File Upload User Input' );
 $I->attachFile( 'input[name=input_2]', 'gravityflow-logo.png' );
-$I->click( 'Update' );
+$I->click( 'Submit' );
 $I->seeElement( 'div.gravityflow_validation_error' );
 
 $I->selectOption( 'input[name=input_3]', 'Second Choice' );
-$I->click( 'Update' );
+$I->click( 'Submit' );
 $I->seeLink( 'gravityflow-logo.png' );
 
 
