@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2017-01-01 11:15:16+00:00\n"
+"POT-Creation-Date: 2017-01-02 21:51:39+00:00\n"
 "PO-Revision-Date: 2017-01-02 08:18+0000\n"
 "Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
 "Language-Team: German (Germany) (http://www.transifex.com/gravityflow/gravityflow/language/de_DE/)\n"
@@ -817,22 +817,22 @@ msgstr ""
 msgid "Reject Token"
 msgstr ""
 
-#: includes/EDD_SL_Plugin_Updater.php:207
+#: includes/EDD_SL_Plugin_Updater.php:201
 msgid ""
 "There is a new version of %1$s available. %2$sView version %3$s details%4$s."
 msgstr ""
 
-#: includes/EDD_SL_Plugin_Updater.php:215
+#: includes/EDD_SL_Plugin_Updater.php:209
 msgid ""
 "There is a new version of %1$s available. %2$sView version %3$s details%4$s "
 "or %5$supdate now%6$s."
 msgstr ""
 
-#: includes/EDD_SL_Plugin_Updater.php:388
+#: includes/EDD_SL_Plugin_Updater.php:377
 msgid "You do not have permission to install plugin updates"
 msgstr "Dir fehlt die benötigte Berechtigung um Pluginupdates zu installieren"
 
-#: includes/EDD_SL_Plugin_Updater.php:388
+#: includes/EDD_SL_Plugin_Updater.php:377
 msgid "Error"
 msgstr "Fehler"
 
