@@ -44,7 +44,7 @@ $I->amOnWorkflowPage( 'Inbox' );
 $I->click( 'Dynamically pre populate fields' );
 $I->fillField( 'input[name="input_2"]', '11' );
 $I->fillField( 'textarea[name="gravityflow_note"]', 'Quantity updated!' );
-$I->click( 'Update' );
+$I->click( 'Submit' );
 
 // Log out
 $I->logOut();

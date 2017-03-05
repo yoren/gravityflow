@@ -53,6 +53,6 @@ $I->click( 'Reject' );
 // Complete
 $I->see( 'Rejected request (Pending Input)' );
 
-$I->click( 'Update' );
+$I->click( 'Submit' );
 
 $I->see( 'Status: Rejected' );
