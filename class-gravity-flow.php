@@ -5834,15 +5834,17 @@ AND m.meta_value='queued'";
 		 * @return mixed
 		 */
 		public function filter_gravityview_search_criteria( $search_criteria, $form_ids, $view_id ) {
-			$field_filters = $search_criteria['search_criteria']['field_filters'];
-			foreach ( $field_filters as &$field_filter ) {
-				if ( is_array( $field_filter ) && $field_filter['key'] == 'workflow_assignee' ) {
-					$assignee_key          = $field_filter['value'] == 'current_user' ? gravity_flow()->get_current_user_assignee_key() : $field_filter['value'];
-					$field_filter['key']   = 'workflow_' . str_replace( '|', '_', $assignee_key );
-					$field_filter['value'] = 'pending';
+			if ( isset( $search_criteria['search_criteria']['field_filters'] ) && is_array( $search_criteria['search_criteria']['field_filters'] ) ) {
+				$field_filters = $search_criteria['search_criteria']['field_filters'];
+				foreach ( $field_filters as &$field_filter ) {
+					if ( is_array( $field_filter ) && $field_filter['key'] == 'workflow_assignee' ) {
+						$assignee_key          = $field_filter['value'] == 'current_user' ? gravity_flow()->get_current_user_assignee_key() : $field_filter['value'];
+						$field_filter['key']   = 'workflow_' . str_replace( '|', '_', $assignee_key );
+						$field_filter['value'] = 'pending';
+					}
 				}
+				$search_criteria['search_criteria']['field_filters'] = $field_filters;
 			}
-			$search_criteria['search_criteria']['field_filters'] = $field_filters;
 
 			return $search_criteria;
 		}
@@ -5867,11 +5869,13 @@ AND m.meta_value='queued'";
 
 			$keys = array();
 
-			foreach ( $criteria['search_criteria']['field_filters'] as $filter ) {
-				if ( is_array( $filter ) && strpos( $filter['key'], 'workflow_' ) !== false && ! isset( $entry[ $filter['key'] ] ) ) {
-					$meta_value              = gform_get_meta( $entry['id'], $filter['key'] );
-					$entry[ $filter['key'] ] = $meta_value;
-					$keys[]                  = $filter['key'];
+			if ( isset( $search_criteria['search_criteria']['field_filters'] ) && is_array( $search_criteria['search_criteria']['field_filters'] ) ) {
+				foreach ( $criteria['search_criteria']['field_filters'] as $filter ) {
+					if ( is_array( $filter ) && strpos( $filter['key'], 'workflow_' ) !== false && ! isset( $entry[ $filter['key'] ] ) ) {
+						$meta_value              = gform_get_meta( $entry['id'], $filter['key'] );
+						$entry[ $filter['key'] ] = $meta_value;
+						$keys[]                  = $filter['key'];
+					}
 				}
 			}
 
