@@ -1,4 +1,8 @@
+sudo: false
 language: php
+cache:
+  directories:
+    - node_modules
 php:
 - 5.2
 - 5.3
@@ -8,18 +12,23 @@ php:
 - 7.0
 - hhvm
 env:
-- WP_VERSION=latest WP_MULTISITE=0
-- WP_VERSION=4.6 WP_MULTISITE=0
-- WP_VERSION=4.5 WP_MULTISITE=0
-- WP_VERSION=4.4 WP_MULTISITE=0
-- WP_VERSION=4.3 WP_MULTISITE=0
-- WP_VERSION=4.2 WP_MULTISITE=0
-- WP_VERSION=4.1 WP_MULTISITE=0
-- WP_VERSION=4.0 WP_MULTISITE=0
+  - WP_VERSION=latest WP_MULTISITE=0
+  - WP_VERSION=4.6 WP_MULTISITE=0
+  - WP_VERSION=4.5 WP_MULTISITE=0
+  - WP_VERSION=4.4 WP_MULTISITE=0
+  - WP_VERSION=4.3 WP_MULTISITE=0
+  - WP_VERSION=4.2 WP_MULTISITE=0
+  - WP_VERSION=4.1 WP_MULTISITE=0
+  - WP_VERSION=4.0 WP_MULTISITE=0
+  global:
+    - WP_TRAVISCI=travis:phpunit
 before_script:
 - |
-  # Remove Xdebug for a huge performance increase:
-  phpenv config-rm xdebug.ini
+  # Remove Xdebug for a huge performance increase, but not from nightly or hhvm:
+    stable='^[0-9\.]+$'
+    if [[ "$TRAVIS_PHP_VERSION" =~ $stable ]]; then
+      phpenv config-rm xdebug.ini
+    fi
 - |
   # Export Composer's global bin dir to PATH, but not on PHP 5.2:
   if [[ ${TRAVIS_PHP_VERSION:0:3} != "5.2" ]]; then
