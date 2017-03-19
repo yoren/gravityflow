@@ -55,6 +55,10 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.6.1 =
+
+- Fixed an issue which can cause an error in GravityView views.
+
 = 1.6 =
 
 - Added support for GravityView to be used to create inbox views. Requires the GravityView Advanced Filter Extension.
