@@ -6,7 +6,7 @@
 
         if(window['gformInitDatepicker']) {gformInitDatepicker();}
 
-        $('#assignees, #editable_fields, #rejection_notification_users, #approval_notification_users, #workflow_notification_users, .gravityflow-multiselect-ui').multiSelect();
+        $('#assignees, #editable_fields, #workflow_notification_users, .gravityflow-multiselect-ui').multiSelect();
 
         var gravityFlowIsDirty = false, gravityFlowSubmitted = false;
 
@@ -38,62 +38,11 @@
 
         setSubSettings();
 
-        var $assigneeNotificationEnabled = $('#assignee_notification_enabled'),
-            $assigneeNotificationMessage = $('#gaddon-setting-tab-field-assignee_notification_message');
-        $assigneeNotificationEnabled.click(function () {
-            $assigneeNotificationMessage.fadeToggle('normal');
-            $('#gaddon-setting-tab-field-assignee_notification_from_name').fadeToggle();
-            $('#gaddon-setting-tab-field-assignee_notification_from_email').fadeToggle();
-            $('#gaddon-setting-tab-field-assignee_notification_reply_to').fadeToggle();
-            $('#gaddon-setting-tab-field-assignee_notification_bcc').fadeToggle();
-            $('#gaddon-setting-tab-field-assignee_notification_subject').fadeToggle();
-            $('#gaddon-setting-tab-field-resend_assignee_email').fadeToggle();
-            $('#gaddon-setting-tab-field-assignee_notification_gpdf').fadeToggle();
-            $('#gaddon-setting-tab-field-assignee_notification_autoformat').fadeToggle();
-            $('#gaddon-setting-tab-tab_assignee_notification i.gravityflow-tab-checked').toggle();
-            $('#gaddon-setting-tab-tab_assignee_notification i.gravityflow-tab-unchecked').toggle();
-        });
-        var assigneeNotificationChecked = $assigneeNotificationEnabled.prop('checked');
-        $assigneeNotificationMessage.toggle(assigneeNotificationChecked);
-        $('#gaddon-setting-tab-field-assignee_notification_from_name').toggle( assigneeNotificationChecked );
-        $('#gaddon-setting-tab-field-assignee_notification_from_email').toggle( assigneeNotificationChecked );
-        $('#gaddon-setting-tab-field-assignee_notification_reply_to').toggle( assigneeNotificationChecked );
-        $('#gaddon-setting-tab-field-assignee_notification_bcc').toggle( assigneeNotificationChecked );
-        $('#gaddon-setting-tab-field-assignee_notification_subject').toggle( assigneeNotificationChecked );
-        $('#gaddon-setting-tab-field-resend_assignee_email').toggle( assigneeNotificationChecked );
-        $('#gaddon-setting-tab-field-assignee_notification_gpdf').toggle( assigneeNotificationChecked );
-        $('#gaddon-setting-tab-field-assignee_notification_autoformat').toggle(assigneeNotificationChecked );
-        $('#gaddon-setting-tab-tab_assignee_notification i.gravityflow-tab-checked').toggle(assigneeNotificationChecked);
-        $('#gaddon-setting-tab-tab_assignee_notification i.gravityflow-tab-unchecked').toggle(!assigneeNotificationChecked);
-
-        var rejectionNotificationEnabled = $('#rejection_notification_enabled').prop('checked');
-        toggleRejectionNotificationSettings(rejectionNotificationEnabled);
-        $('#rejection_notification_enabled').click(function () {
-            toggleRejectionNotificationSettings(this.checked);
-        });
-
         var selectedType = $("input[name=_gaddon_setting_type]:checked");
         toggleType(selectedType.val());
 
         $('#gaddon-setting-row-type input[type=radio]').change(function () {
             toggleType(this.value);
-        });
-
-
-        $('#gaddon-setting-tab-field-rejection_notification_type input[type=radio]').click(function () {
-            toggleRejectionNotificationType(this.value);
-        });
-
-
-        $('#gaddon-setting-tab-field-approval_notification_type input[type=radio]').click(function () {
-            toggleApprovalNotificationType(this.value);
-        });
-
-
-        var approvalNotificationEnabled = $('#approval_notification_enabled').prop('checked');
-        toggleApprovalNotificationSettings(approvalNotificationEnabled);
-        $('#approval_notification_enabled').click(function () {
-            toggleApprovalNotificationSettings(this.checked);
         });
 
 		$('#gaddon-setting-row-workflow_notification_type input[type=radio]').click(function () {
@@ -208,79 +157,6 @@
 
         $routingSetting.gfRoutingSetting(options);
 
-        // Rejection Notification Routing
-
-        var $rejectionNotificationRoutingSetting = $('#gform_user_routing_setting_rejection_notification_routing');
-
-        var rejectionNotificationRoutingJSON = $('#rejection_notification_routing').val();
-
-        var rejection_notification_routing_items = rejectionNotificationRoutingJSON ? $.parseJSON(rejectionNotificationRoutingJSON) : null;
-
-        if (!rejection_notification_routing_items) {
-            rejection_notification_routing_items = [{
-                assignee: gf_routing_setting_strings['accounts'][0]['choices'][0]['value'],
-                fieldId: '0',
-                operator: 'is',
-                value: '',
-                type: '',
-            }];
-            $('#approval_rejection_notification_routing').val($.toJSON(rejection_notification_routing_items));
-        }
-
-        var rejectionNotificationOptions = {
-            fieldName: $rejectionNotificationRoutingSetting.data('field_name'),
-            fieldId: $rejectionNotificationRoutingSetting.data('field_id'),
-            settings: gf_routing_setting_strings['fields'],
-            accounts: gf_routing_setting_strings['accounts'],
-            imagesURL: gf_vars.baseUrl + "/images",
-            items: rejection_notification_routing_items,
-            callbacks: {
-                addNewTarget: function (obj, target) {
-                    var str = GravityFlowFeedSettings.getUsersMarkup('assignee');
-                    return str;
-                }
-            }
-        };
-
-        $rejectionNotificationRoutingSetting.gfRoutingSetting(rejectionNotificationOptions);
-
-        // Approval Notification Routing
-
-        var $approvalNotificationRoutingSetting = $('#gform_user_routing_setting_approval_notification_routing');
-
-        var approvalNotificationRoutingJSON = $('#approval_notification_routing').val();
-
-        var approval_notification_routing_items = approvalNotificationRoutingJSON ? $.parseJSON(approvalNotificationRoutingJSON) : null;
-
-        if (!approval_notification_routing_items) {
-            approval_notification_routing_items = [{
-                assignee: gf_routing_setting_strings['accounts'][0]['choices'][0]['value'],
-                fieldId: '0',
-                operator: 'is',
-                value: '',
-                type: '',
-            }];
-            $('#approval_notification_routing').val($.toJSON(approval_notification_routing_items));
-        }
-
-        var approvalNotificationOptions = {
-            fieldName: $approvalNotificationRoutingSetting.data('field_name'),
-            fieldId: $approvalNotificationRoutingSetting.data('field_id'),
-            settings: gf_routing_setting_strings['fields'],
-            accounts: gf_routing_setting_strings['accounts'],
-            imagesURL: gf_vars.baseUrl + "/images",
-            items: approval_notification_routing_items,
-            callbacks: {
-                addNewTarget: function (obj, target) {
-                    var str = GravityFlowFeedSettings.getUsersMarkup('assignee');
-                    return str;
-                }
-            }
-        };
-
-        $approvalNotificationRoutingSetting.gfRoutingSetting(approvalNotificationOptions);
-
-
 		// Workflow Notification Routing
 
 		var $workflowNotificationRoutingSetting = $('#gform_user_routing_setting_workflow_notification_routing');
@@ -319,6 +195,64 @@
 
 		//-----
 
+	    GravityFlowFeedSettings.initNotificationTab = function (type) {
+		    $('#' + type + '_notification_users').multiSelect();
+
+		    var $enabledSetting = $('#' + type + '_notification_enabled');
+
+		    toggleNotificationTabSettings($enabledSetting.prop('checked'), type);
+
+		    $enabledSetting.click(function () {
+			    toggleNotificationTabSettings(this.checked, type);
+		    });
+
+		    $('#gaddon-setting-tab-field-' + type + '_notification_type input[type=radio]').click(function () {
+			    toggleNotificationTabSettings(true, type);
+		    });
+
+		    var $routingSetting = $('#gform_user_routing_setting_' + type + '_notification_routing');
+
+		    if ($routingSetting.length) {
+			    var $routingJSONInput = $('#' + type + '_notification_routing'),
+				    routingJSON = $routingJSONInput.val(),
+				    routingItems = routingJSON ? $.parseJSON(routingJSON) : null;
+
+			    if (!routingItems) {
+				    routingItems = [{
+					    assignee: gf_routing_setting_strings['accounts'][0]['choices'][0]['value'],
+					    fieldId: '0',
+					    operator: 'is',
+					    value: '',
+					    type: ''
+				    }];
+				    $routingJSONInput.val($.toJSON(routingItems));
+			    }
+
+			    var routingOptions = {
+				    fieldName: $routingSetting.data('field_name'),
+				    fieldId: $routingSetting.data('field_id'),
+				    settings: gf_routing_setting_strings['fields'],
+				    accounts: gf_routing_setting_strings['accounts'],
+				    imagesURL: gf_vars.baseUrl + "/images",
+				    items: routingItems,
+				    callbacks: {
+					    addNewTarget: function (obj, target) {
+						    return GravityFlowFeedSettings.getUsersMarkup('assignee');
+					    }
+				    }
+			    };
+
+			    $routingSetting.gfRoutingSetting(routingOptions);
+		    }
+
+	    };
+
+	    var notificationTabs = ['assignee', 'rejection', 'approval', 'in_progress', 'complete'];
+
+	    for (var i = 0; i < notificationTabs.length; i++) {
+		    GravityFlowFeedSettings.initNotificationTab(notificationTabs[i]);
+	    }
+
 		if (window.gform) {
             gform.addFilter('gform_merge_tags', GravityFlowFeedSettings.gravityflow_add_merge_tags);
         }
@@ -329,21 +263,41 @@
 
     });
 
-    function toggleRejectionNotificationType(showType) {
-        var fields = {
-            select: ['rejection_notification_users', 'rejection_notification_from_name', 'rejection_notification_from_email', 'rejection_notification_reply_to', 'rejection_notification_bcc', 'rejection_notification_subject', 'rejection_notification_message', 'rejection_notification_gpdf', 'rejection_notification_autoformat'],
-            routing: ['rejection_notification_routing', 'rejection_notification_from_name', 'rejection_notification_from_email', 'rejection_notification_reply_to', 'rejection_notification_bcc', 'rejection_notification_subject', 'rejection_notification_message', 'rejection_notification_gpdf', 'rejection_notification_autoformat']
-        };
-        toggleFields(fields, showType, true);
-    }
+	function toggleNotificationTabSettings(enabled, notificationType) {
+		var $NotificationTypeSetting = $('#gaddon-setting-tab-field-' + notificationType + '_notification_type');
+		$NotificationTypeSetting.toggle(enabled);
+		if (enabled) {
+			var selected = $NotificationTypeSetting.find('input[type=radio]:checked').val();
+			toggleNotificationTabFields(selected, notificationType);
+			$('#gaddon-setting-tab-tab_' + notificationType + '_notification i.gravityflow-tab-checked').show();
+			$('#gaddon-setting-tab-tab_' + notificationType + '_notification i.gravityflow-tab-unchecked').hide();
+		} else {
+			toggleNotificationTabFields('off', notificationType);
+			$('#gaddon-setting-tab-tab_' + notificationType + '_notification i.gravityflow-tab-checked').hide();
+			$('#gaddon-setting-tab-tab_' + notificationType + '_notification i.gravityflow-tab-unchecked').show();
+		}
+	}
 
-    function toggleApprovalNotificationType(showType) {
-        var fields = {
-            select: ['approval_notification_users', 'approval_notification_from_name', 'approval_notification_from_email', 'approval_notification_reply_to', 'approval_notification_bcc', 'approval_notification_subject', 'approval_notification_message', 'approval_notification_gpdf', 'approval_notification_autoformat'],
-            routing: ['approval_notification_routing', 'approval_notification_from_name', 'approval_notification_from_email', 'approval_notification_reply_to', 'approval_notification_bcc', 'approval_notification_subject', 'approval_notification_message', 'approval_notification_gpdf', 'approval_notification_autoformat']
-        };
-        toggleFields(fields, showType, true);
-    }
+	function toggleNotificationTabFields(showType, notificationType) {
+		var fields = ['users', 'routing', 'from_name', 'from_email', 'reply_to', 'bcc', 'subject', 'message', 'autoformat', 'resend', 'gpdf'],
+			prefix = '#gaddon-setting-tab-field-' + notificationType + '_notification_';
+
+		$.each(fields, function (i, field) {
+			$(prefix + field).hide();
+		});
+
+		if (showType == 'off') {
+			return;
+		}
+
+		$.each(fields, function (i, field) {
+			if (field == 'users' && showType == 'routing' || field == 'routing' && showType == 'select') {
+				return true;
+			}
+
+			$(prefix + field).fadeToggle('normal');
+		});
+	}
 
 	function toggleWorkflowNotificationType(showType) {
 		var fields = {
@@ -377,36 +331,6 @@
                 });
             }
         });
-    }
-
-    function toggleRejectionNotificationSettings(enabled) {
-        var $rejectionNotificationType = $('#gaddon-setting-tab-field-rejection_notification_type');
-        $rejectionNotificationType.toggle(enabled);
-        if (enabled) {
-            var selected = $rejectionNotificationType.find('input[type=radio]:checked').val();
-            toggleRejectionNotificationType(selected);
-            $('#gaddon-setting-tab-tab_rejection_notification i.gravityflow-tab-checked').show();
-            $('#gaddon-setting-tab-tab_rejection_notification i.gravityflow-tab-unchecked').hide();
-        } else {
-            toggleRejectionNotificationType('off');
-            $('#gaddon-setting-tab-tab_rejection_notification i.gravityflow-tab-checked').hide();
-            $('#gaddon-setting-tab-tab_rejection_notification i.gravityflow-tab-unchecked').show();
-        }
-    }
-
-    function toggleApprovalNotificationSettings(enabled) {
-        var $approvalNotificationType = $('#gaddon-setting-tab-field-approval_notification_type');
-        $approvalNotificationType.toggle(enabled);
-        if (enabled) {
-            var selected = $approvalNotificationType.find('input[type=radio]:checked').val();
-            toggleApprovalNotificationType(selected);
-            $('#gaddon-setting-tab-tab_approval_notification i.gravityflow-tab-checked').show();
-            $('#gaddon-setting-tab-tab_approval_notification i.gravityflow-tab-unchecked').hide();
-        } else {
-            toggleApprovalNotificationType('off');
-            $('#gaddon-setting-tab-tab_approval_notification i.gravityflow-tab-checked').hide();
-            $('#gaddon-setting-tab-tab_approval_notification i.gravityflow-tab-unchecked').show();
-        }
     }
 
 	function toggleWorkflowNotificationSettings(enabled) {
