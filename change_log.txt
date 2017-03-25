@@ -1,2 +1,3 @@
 
 - Added the ability to configure emails to be sent when a User Input step updates the entry and remains in progress and when the step is completed.
+- Fixed an issue with the notification message when the Discussion field merge tag content exceeded the max line length.
