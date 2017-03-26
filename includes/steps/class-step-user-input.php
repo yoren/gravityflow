@@ -149,7 +149,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				'name'          => 'default_status',
 				'type'          => 'select',
 				'label'         => __( 'Save Progress Option', 'gravityflow' ),
-				'tooltip'       => __( 'Select the default value for the status on the workflow detail page. Select Disabled to hide the status options.', 'gravityflow' ),
+				'tooltip'       => __( 'This setting allows the assignee to save the field values without submitting the form as complete. Select Disabled to hide the "in progress" option or select the default value for the radio buttons.', 'gravityflow' ),
 				'default_value' => 'hidden',
 				'choices'       => array(
 					array( 'label' => __( 'Disabled', 'gravityflow' ), 'value' => 'hidden' ),
