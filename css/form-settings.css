@@ -14,12 +14,7 @@
 }
 
 .mt-_gaddon_setting_workflow_notification_message,
-.mt-_gaddon_setting_assignee_notification_message,
-.mt-_gaddon_setting_rejection_notification_message,
-.mt-_gaddon_setting_approval_notification_message,
-.mt-_gaddon_setting_assignee_notification_message,
-.mt-_gaddon_setting_in_progress_notification_message,
-.mt-_gaddon_setting_complete_notification_message {
+.gravityflow-tab-field span[class^="mt-_gaddon_setting_"] {
     float: right;
     position: relative;
     right: 15px;
@@ -27,12 +22,7 @@
 }
 
 #wp-_gaddon_setting_workflow_notification_message-wrap,
-#wp-_gaddon_setting_assignee_notification_message-wrap,
-#wp-_gaddon_setting_rejection_notification_message-wrap,
-#wp-_gaddon_setting_approval_notification_message-wrap,
-#wp-_gaddon_setting_assignee_notification_message-wrap,
-#wp-_gaddon_setting_in_progress_notification_message-wrap,
-#wp-_gaddon_setting_complete_notification_message-wrap {
+.gravityflow-tab-field div.wp-editor-wrap {
     margin-right: 15px;
 }
 

@@ -147,15 +147,14 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			$settings_api->get_setting_display_fields(),
 			array(
 				'name'          => 'default_status',
-				'type'          => 'radio',
-				'label'         => __( 'Default Status Option', 'gravityflow' ),
-				'tooltip'       => __( 'Select the default value for the status on the workflow detail page. Select Hidden to hide the status options.', 'gravityflow' ),
+				'type'          => 'select',
+				'label'         => __( 'Save Progress Option', 'gravityflow' ),
+				'tooltip'       => __( 'Select the default value for the status on the workflow detail page. Select Disabled to hide the status options.', 'gravityflow' ),
 				'default_value' => 'hidden',
-				'horizontal'    => true,
 				'choices'       => array(
-					array( 'label' => __( 'Hidden', 'gravityflow' ), 'value' => 'hidden' ),
-					array( 'label' => __( 'In progress', 'gravityflow' ), 'value' => 'in_progress' ),
-					array( 'label' => __( 'Complete', 'gravityflow' ), 'value' => 'complete' ),
+					array( 'label' => __( 'Disabled', 'gravityflow' ), 'value' => 'hidden' ),
+					array( 'label' => __( 'Radio buttons (default: In progress)', 'gravityflow' ), 'value' => 'in_progress' ),
+					array( 'label' => __( 'Radio buttons (default: Complete)', 'gravityflow' ), 'value' => 'complete' ),
 				),
 			),
 			array(
