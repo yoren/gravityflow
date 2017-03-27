@@ -820,26 +820,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 	}
 
-	/**
-	 * Send the applicable notification if it is enabled and has assignees.
-	 *
-	 * @param string $type The type of notification currently being processed; approval or rejection.
-	 */
-	public function maybe_send_notification( $type ) {
-		if ( ! $this->{$type . '_notification_enabled'} ) {
-			return;
-		}
-
-		$assignees = $this->get_notification_assignees( $type );
-
-		if ( empty( $assignees ) ) {
-			return;
-		}
-
-		$notification = $this->get_notification( $type );
-		$this->send_notifications( $assignees, $notification );
-	}
-
 	public function send_approval_notification() {
 		$this->maybe_send_notification( 'approval' );
 	}
