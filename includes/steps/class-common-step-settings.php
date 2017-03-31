@@ -211,37 +211,40 @@ class Gravity_Flow_Common_Step_Settings {
 			return array();
 		}
 
+		$prefix = rgar( $config, 'name_prefix' );
+
 		return array(
 			array(
-				'name'     => 'resend_assignee_email',
+				'name'     => $prefix . '_notification_resend',
 				'label'    => '',
 				'type'     => 'checkbox_and_container',
 				'checkbox' => array(
 					'label' => __( 'Send reminder', 'gravityflow' ),
+					'name'  => 'resend_assignee_emailEnable'
 				),
 				'settings' => array(
 					array(
 						'name'          => 'resend_assignee_emailValue',
 						'label'         => esc_html__( 'Reminder', 'gravityflow' ),
 						'type'          => 'text',
-						'before'  => esc_html__( 'Resend the assignee email after', 'gravityflow' ) . ' ',
-						'after'   => ' ' . esc_html__( 'day(s)', 'gravityflow' ),
+						'before'        => esc_html__( 'Resend the assignee email after', 'gravityflow' ) . ' ',
+						'after'         => ' ' . esc_html__( 'day(s)', 'gravityflow' ),
 						'default_value' => 7,
-						'class' => 'small-text',
+						'class'         => 'small-text',
 					),
 					array(
-						'name'          => 'resend_assignee_email_repeat',
-						'label'         => '',
-						'type'          => 'checkbox_and_text',
-						'before'  => '<br />',
+						'name'     => 'resend_assignee_email_repeat',
+						'label'    => '',
+						'type'     => 'checkbox_and_text',
+						'before'   => '<br />',
 						'checkbox' => array(
 							'label' => esc_html__( 'Repeat reminder', 'gravityflow' ),
 						),
 						'text'     => array(
 							'default_value' => 3,
-							'class' => 'small-text',
-							'before'  => esc_html__( 'Repeat every', 'gravityflow' ) . ' ',
-							'after'   => ' ' . esc_html__( 'day(s)', 'gravityflow' ),
+							'class'         => 'small-text',
+							'before'        => esc_html__( 'Repeat every', 'gravityflow' ) . ' ',
+							'after'         => ' ' . esc_html__( 'day(s)', 'gravityflow' ),
 						),
 					),
 				),
