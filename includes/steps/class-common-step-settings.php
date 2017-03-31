@@ -296,7 +296,7 @@ class Gravity_Flow_Common_Step_Settings {
 			'name_prefix'            => 'assignee',
 			'label'                  => '',
 			'tooltip'                => '',
-			'checkbox_label'         => __( 'Assignee Email', 'gravityflow' ),
+			'checkbox_label'         => __( 'Send an email to the assignee', 'gravityflow' ),
 			'checkbox_tooltip'       => __( 'Enable this setting to send email to each of the assignees as soon as the entry has been assigned. If a role is configured to receive emails then all the users with that role will receive the email.', 'gravityflow' ),
 			'checkbox_default_value' => false,
 			'default_message'        => '',

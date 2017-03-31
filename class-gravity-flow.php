@@ -5290,6 +5290,7 @@ AND m.meta_value='queued'";
 			$steps = $api->get_steps();
 
 			if ( ! empty( $steps ) ) {
+				gform_add_meta( $entry['id'], 'workflow_final_status', 'pending', $form['id'] );
 				$this->log_debug( __METHOD__ . '(): triggering workflow for entry ID: ' . $entry['id'] );
 				gravity_flow()->maybe_process_feed( $entry, $form );
 				$api->process_workflow( $entry['id'] );
@@ -5869,7 +5870,9 @@ AND m.meta_value='queued'";
 
 			$keys = array();
 
-			if ( isset( $search_criteria['search_criteria']['field_filters'] ) && is_array( $search_criteria['search_criteria']['field_filters'] ) ) {
+			// Add the workflow assignee entry meta to the entry.
+			// This is necessary because assignee meta keys are not registered so they're not added automatically to the entry.
+			if ( isset( $criteria['search_criteria']['field_filters'] ) && is_array( $criteria['search_criteria']['field_filters'] ) ) {
 				foreach ( $criteria['search_criteria']['field_filters'] as $filter ) {
 					if ( is_array( $filter ) && strpos( $filter['key'], 'workflow_' ) !== false && ! isset( $entry[ $filter['key'] ] ) ) {
 						$meta_value              = gform_get_meta( $entry['id'], $filter['key'] );
