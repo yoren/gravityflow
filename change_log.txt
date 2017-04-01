@@ -1,2 +1,2 @@
-
+- Added support for unfiltered HTML in the instructions setting for users with the unfiltered_html capability.
 - Fixed an issue with the GravityView integration where the single view doesn't display if an assignee is defined the Advanced Filter criteria.
