@@ -164,7 +164,12 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 
 				$display_name = apply_filters( 'gravityflowdiscussion_display_name_discussion_field', $display_name, $item, $this );
 				if ( $format == 'html' ) {
-					$content = sprintf( '<div class="gravityflow-dicussion-item-header"><span class="gravityflow-dicussion-item-name">%s</span> <span class="gravityflow-dicussion-item-date">%s</span>%s</div><div class="gravityflow-dicussion-item-value">%s</div>', $display_name, $date, $this->get_delete_button( $item['id'], $entry_id ), $this->format_comment_value( $item['value'] ) );
+					$content = sprintf( '<div class="gravityflow-dicussion-item-header">
+<span class="gravityflow-dicussion-item-name">%s</span> <span class="gravityflow-dicussion-item-date">%s</span>
+%s</div>
+<div class="gravityflow-dicussion-item-value">
+%s
+</div>', $display_name, $date, $this->get_delete_button( $item['id'], $entry_id ), $this->format_comment_value( $item['value'] ) );
 
 					$return .= sprintf( '<div id="gravityflow-discussion-item-%s" class="gravityflow-discussion-item">%s</div>', sanitize_key( $item['id'] ), $content );
 				} elseif ( $format == 'text' ) {
