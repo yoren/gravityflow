@@ -387,7 +387,7 @@ class Gravity_Flow_Entry_Detail {
 		 *
 		 * @param bool $sanitize_instructions Whether to sanitize the confirmation message. default: false
 		 */
-		$sanitize_instructions = apply_filters( 'gform_sanitize_confirmation_message', $sanitize_instructions );
+		$sanitize_instructions = apply_filters( 'gravityflow_sanitize_instructions', $sanitize_instructions );
 		if ( $sanitize_instructions ) {
 			$instructions = wp_kses_post( $instructions );
 		}
