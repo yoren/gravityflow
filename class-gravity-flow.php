@@ -1821,24 +1821,39 @@ PRIMARY KEY  (id)
 		 */
 		public function settings_checkbox_and_textarea( $field, $echo = true ) {
 
+			$field = $this->prepare_settings_checkbox_and_textarea( $field );
+
+			return $this->settings_checkbox_and_container( $field, $echo );
+		}
+
+		public function prepare_settings_checkbox_and_textarea( $field ) {
 			$textarea_input = rgars( $field, 'textarea' );
 
-			$text_field = array(
+			$textarea_field = array(
 				'name'    => $field['name'] . 'Value',
 				'type'    => 'textarea',
 				'class'   => '',
 				'tooltip' => false,
 			);
 
-			$text_field['class'] .= ' ' . $text_field['name'];
+			$textarea_field['class'] .= ' ' . $textarea_field['name'];
 
-			$text_field = wp_parse_args( $textarea_input, $text_field );
+			$textarea_field = wp_parse_args( $textarea_input, $textarea_field );
 
 			unset( $field['textarea'] );
 
-			$field['settings'] = array( $text_field );
+			$field['settings'] = array( 'textarea' => $textarea_field );
+			return $field;
+		}
 
-			return $this->settings_checkbox_and_container( $field, $echo );
+		public function validate_checkbox_and_textarea_settings( $field, $settings ) {
+			$field = $this->prepare_settings_checkbox_and_textarea( $field );
+
+			$checkbox_field = $field['checkbox'];
+			$textarea_field = $field['settings']['textarea'];
+
+			$this->validate_checkbox_settings( $checkbox_field, $settings );
+			$this->validate_textarea_settings( $textarea_field, $settings );
 		}
 
 		public function settings_visual_editor( $field ) {
