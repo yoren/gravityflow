@@ -4,4 +4,5 @@
 - Fixed an issue with the notification message when the Discussion field merge tag content exceeded the max line length.
 - Fixed an issue with the GravityView integration where the single view doesn't display if an assignee is defined the Advanced Filter criteria.
 - Renamed the User Input step 'Default Status Option' setting to 'Save Progress Option' and changed the setting type from radio buttons to drop down.
+- Updated the Sliced Invoices step to remain pending when the processed feed creates an invoice, until the invoice is paid.
 
