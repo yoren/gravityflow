@@ -25,6 +25,33 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 	}
 
 	/**
+	 * Returns the settings for this step.
+	 *
+	 * @since 1.6.1-dev-2 Added the Step Completion setting.
+	 *
+	 * @return array
+	 */
+	public function get_settings() {
+		$settings = parent::get_settings();
+
+		if ( ! $this->is_supported() ) {
+			return $settings;
+		}
+
+		$settings['fields'][] = array(
+			'name'    => 'post_feed_completion',
+			'type'    => 'select',
+			'label'   => __( 'Step Completion', 'gravityflow' ),
+			'choices' => array(
+				array( 'label' => __( 'Immediately following feed processing', 'gravityflow' ), 'value' => '' ),
+				array( 'label' => __( 'Delay until invoices are paid', 'gravityflow' ), 'value' => 'delayed' ),
+			),
+		);
+
+		return $settings;
+	}
+
+	/**
 	 * Processes the given feed for the add-on.
 	 *
 	 * @since 1.6.1-dev-2
@@ -34,7 +61,7 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 	 * @return bool Returning false if the feed created an invoice to ensure the next step is not processed until after the invoice is paid.
 	 */
 	public function process_feed( $feed ) {
-		if ( rgars( $feed, 'meta/post_type' ) !== 'invoice' ) {
+		if ( rgars( $feed, 'meta/post_type' ) !== 'invoice' || $this->post_feed_completion !== 'delayed' ) {
 			return parent::process_feed( $feed );
 		}
 
