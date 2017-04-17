@@ -87,6 +87,60 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 		update_post_meta( $id, '_gravityflow-step-id', $this->get_id() );
 	}
 
+	/**
+	 * Display the workflow detail box for this step.
+	 *
+	 * @since 1.6.1-dev-2
+	 *
+	 * @param array $form The current form.
+	 * @param array $args The page arguments.
+	 */
+	public function workflow_detail_box( $form, $args ) {
+		$args = array(
+			'post_type'  => 'sliced_invoice',
+			'meta_query' => array(
+				array(
+					'key'   => '_gform-entry-id',
+					'value' => $this->get_entry_id(),
+				),
+				array(
+					'key'   => '_gravityflow-step-id',
+					'value' => $this->get_id(),
+				),
+			),
+		);
+
+		$invoices = get_posts( $args );
+
+		if ( ! empty( $invoices ) ) {
+			echo sprintf( '<h4 style="margin-bottom:10px;">%s</h4>', $this->get_label() );
+
+			/* @var WP_Post $invoice */
+			foreach ( $invoices as $invoice ) {
+				$title = $invoice->post_title;
+
+				if ( ! $title ) {
+					$feed_id = $feed_id = get_post_meta( $invoice->ID, '_gform-feed-id', true );
+					$feed    = gravity_flow()->get_feed( $feed_id );
+					$title   = rgar( $feed['meta'], 'feedName' );
+				}
+
+				echo sprintf( '%s: %s<br><br>', esc_html__( 'Title', 'gravityflow' ), esc_html( $title ) );
+				echo sprintf( '%s: %s<br><br>', esc_html__( 'Number', 'gravityflow' ), esc_html( get_post_meta( $invoice->ID, '_sliced_invoice_number', true ) ) );
+
+				if ( class_exists( 'Sliced_Shared' ) ) {
+					echo sprintf( '%s: %s<br><br>', esc_html__( 'Status', 'gravityflow' ), esc_html( Sliced_Shared::get_status( $invoice->ID, 'invoice' ) ) );
+				}
+
+				echo '<div class="gravityflow-action-buttons">';
+				echo sprintf( '<a href="%s" target="_blank" class="button button-large button-primary">%s</a><br><br>', get_permalink( $invoice ), esc_html__( 'Preview', 'gravityflow' ) );
+				echo '</div>';
+
+			}
+
+		}
+	}
+
 }
 
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_Sliced_Invoices() );
