@@ -162,6 +162,10 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 				echo sprintf( '%s: %s<br><br>', esc_html__( 'Title', 'gravityflow' ), esc_html( $title ) );
 				echo sprintf( '%s: %s<br><br>', esc_html__( 'Number', 'gravityflow' ), esc_html( get_post_meta( $invoice->ID, '_sliced_invoice_number', true ) ) );
 
+				if ( function_exists( 'sliced_get_invoice_total' ) ) {
+					echo sprintf( '%s: %s<br><br>', esc_html__( 'Total', 'gravityflow' ), esc_html( sliced_get_invoice_total( $invoice->ID ) ) );
+				}
+
 				if ( class_exists( 'Sliced_Shared' ) ) {
 					echo sprintf( '%s: %s<br><br>', esc_html__( 'Status', 'gravityflow' ), esc_html( Sliced_Shared::get_status( $invoice->ID, 'invoice' ) ) );
 				}
