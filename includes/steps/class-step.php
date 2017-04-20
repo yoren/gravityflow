@@ -793,7 +793,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$assignees = $this->get_assignees();
 
 		if ( empty( $assignees ) ) {
-			$note = sprintf( __( '%s: not required', 'gravityflow' ), $this->get_name() );
+			$note = sprintf( __( '%s: No assignees', 'gravityflow' ), $this->get_name() );
 			$this->add_note( $note, 0, 'gravityflow' );
 		} else {
 			foreach ( $assignees as $assignee ) {
