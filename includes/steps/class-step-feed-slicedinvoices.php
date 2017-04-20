@@ -38,17 +38,51 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 			return $settings;
 		}
 
-		$settings['fields'][] = array(
-			'name'    => 'post_feed_completion',
-			'type'    => 'select',
-			'label'   => __( 'Step Completion', 'gravityflow' ),
-			'choices' => array(
-				array( 'label' => __( 'Immediately following feed processing', 'gravityflow' ), 'value' => '' ),
-				array( 'label' => __( 'Delay until invoices are paid', 'gravityflow' ), 'value' => 'delayed' ),
-			),
+		$settings_api = $this->get_common_settings_api();
+
+		$fields = array(
+			$settings_api->get_setting_assignee_type(),
+			$settings_api->get_setting_assignees(),
+			$settings_api->get_setting_assignee_routing(),
+			$settings_api->get_setting_notification_tabs( array(
+				array(
+					'label'  => __( 'Assignee Email', 'gravityflow' ),
+					'id'     => 'tab_assignee_notification',
+					'fields' => $settings_api->get_setting_notification( array(
+						'type' => 'assignee',
+					) ),
+				)
+			) ),
+			$settings_api->get_setting_instructions(),
+			$settings_api->get_setting_display_fields(),
+			array(
+				'name'    => 'post_feed_completion',
+				'type'    => 'select',
+				'label'   => __( 'Step Completion', 'gravityflow' ),
+				'choices' => array(
+					array( 'label' => __( 'Immediately following feed processing', 'gravityflow' ), 'value' => '' ),
+					array( 'label' => __( 'Delay until invoices are paid', 'gravityflow' ), 'value' => 'delayed' ),
+				),
+			)
 		);
 
+		$settings['fields'] = array_merge( $settings['fields'], $fields );
+
 		return $settings;
+	}
+
+	/**
+	 * Processes this step.
+	 *
+	 * @since 1.6.1-dev-2
+	 *
+	 * @return bool Is the step complete?
+	 */
+	public function process() {
+		$complete = parent::process();
+		$this->assign();
+
+		return $complete;
 	}
 
 	/**
