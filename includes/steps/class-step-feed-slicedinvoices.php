@@ -41,6 +41,17 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 		$settings_api = $this->get_common_settings_api();
 
 		$fields = array(
+			array(
+				'name'    => 'product_line_items',
+				'type'    => 'checkbox',
+				'label'   => __( 'Line Items', 'gravityflow' ),
+				'choices' => array(
+					array(
+						'label' => __( 'Set the line items from the entry Order Summary', 'gravityflow' ),
+						'name'  => 'product_line_items_enabled'
+					),
+				),
+			),
 			$settings_api->get_setting_assignee_type(),
 			$settings_api->get_setting_assignees(),
 			$settings_api->get_setting_assignee_routing(),
@@ -95,19 +106,16 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 	 * @return bool Returning false if the feed created an invoice to ensure the next step is not processed until after the invoice is paid.
 	 */
 	public function process_feed( $feed ) {
-		if ( rgars( $feed, 'meta/post_type' ) !== 'invoice' || $this->post_feed_completion !== 'delayed' ) {
-			return parent::process_feed( $feed );
-		}
-
-		add_action( 'sliced_gravityforms_feed_processed', array( $this, 'sliced_gravityforms_feed_processed' ), 10, 3 );
+		add_action( 'sliced_gravityforms_feed_processed', array( $this, 'sliced_gravityforms_feed_processed' ), 1, 3 );
 		parent::process_feed( $feed );
-		remove_action( 'sliced_gravityforms_feed_processed', array( $this, 'sliced_gravityforms_feed_processed' ) );
+		remove_action( 'sliced_gravityforms_feed_processed', array( $this, 'sliced_gravityforms_feed_processed' ), 1 );
 
-		return false;
+		return rgars( $feed, 'meta/post_type' ) !== 'invoice' || $this->post_feed_completion !== 'delayed' ? true : false;
+
 	}
 
 	/**
-	 * Store the entry, feed, and step IDs in the invoice (post) meta.
+	 * If applicable, store the line items, entry, feed, and step IDs in the post meta.
 	 *
 	 * @since 1.6.1-dev-2
 	 *
@@ -116,9 +124,57 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 	 * @param array $entry The entry which created the invoice.
 	 */
 	public function sliced_gravityforms_feed_processed( $id, $feed, $entry ) {
-		update_post_meta( $id, '_gform-entry-id', rgar( $entry, 'id' ) );
-		update_post_meta( $id, '_gform-feed-id', rgar( $feed, 'id' ) );
-		update_post_meta( $id, '_gravityflow-step-id', $this->get_id() );
+		if ( rgars( $feed, 'meta/post_type' ) === 'invoice' && $this->post_feed_completion === 'delayed' ) {
+			update_post_meta( $id, '_gform-entry-id', rgar( $entry, 'id' ) );
+			update_post_meta( $id, '_gform-feed-id', rgar( $feed, 'id' ) );
+			update_post_meta( $id, '_gravityflow-step-id', $this->get_id() );
+		}
+
+		if ( ! $this->product_line_items_enabled ) {
+			return;
+		}
+
+		$products = GFCommon::get_product_fields( $this->get_form(), $entry );
+
+		if ( empty( $products['products'] ) ) {
+			return;
+		}
+
+		$line_items = array();
+
+		foreach ( $products['products'] as $product ) {
+			$options = array();
+			if ( is_array( rgar( $product, 'options' ) ) ) {
+				foreach ( $product['options'] as $option ) {
+					$options[] = $option['option_name'];
+				}
+			}
+
+			$description = '';
+			if ( ! empty( $options ) ) {
+				$description = esc_html__( 'options: ', 'gravityflow' ) . ' ' . implode( ', ', $options );
+			}
+
+			$line_items[] = array(
+				'qty'         => esc_html( rgar( $product, 'quantity' ) ),
+				'title'       => esc_html( rgar( $product, 'name' ) ),
+				'description' => wp_kses_post( $description ),
+				'amount'      => GFCommon::to_number( rgar( $product, 'price', 0 ), $entry['currency'] ),
+			);
+		}
+
+		if ( ! empty( $products['shipping']['name'] ) ) {
+			$line_items[] = array(
+				'qty'         => 1,
+				'title'       => esc_html( $products['shipping']['name'] ),
+				'description' => '',
+				'amount'      => GFCommon::to_number( rgar( $products['shipping'], 'price', 0 ), $entry['currency'] ),
+			);
+		}
+
+		if ( ! empty( $line_items ) ) {
+			update_post_meta( $id, '_sliced_items', $line_items );
+		}
 	}
 
 	/**
