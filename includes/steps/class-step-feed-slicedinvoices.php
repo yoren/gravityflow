@@ -106,6 +106,10 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 	 * @return bool Returning false if the feed created an invoice to ensure the next step is not processed until after the invoice is paid.
 	 */
 	public function process_feed( $feed ) {
+		if ( $this->product_line_items_enabled ) {
+			$feed['meta']['mappedFields_line_items'] = '';
+		}
+
 		add_action( 'sliced_gravityforms_feed_processed', array( $this, 'sliced_gravityforms_feed_processed' ), 1, 3 );
 		parent::process_feed( $feed );
 		remove_action( 'sliced_gravityforms_feed_processed', array( $this, 'sliced_gravityforms_feed_processed' ), 1 );
@@ -205,6 +209,9 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 		if ( ! empty( $invoices ) ) {
 			echo sprintf( '<h4 style="margin-bottom:10px;">%s</h4>', $this->get_label() );
 
+			$assignee_key = gravity_flow()->get_current_user_assignee_key();
+			$is_assignee  = $this->is_assignee( $assignee_key );
+
 			/* @var WP_Post $invoice */
 			foreach ( $invoices as $invoice ) {
 				$title = $invoice->post_title;
@@ -227,6 +234,9 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 				}
 
 				echo '<div class="gravityflow-action-buttons">';
+				if ( $is_assignee ) {
+					echo sprintf( '<a href="%s" target="_blank" class="button button-large button-primary">%s</a> ', get_edit_post_link( $invoice->ID ), esc_html__( 'Edit', 'gravityflow' ) );
+				}
 				echo sprintf( '<a href="%s" target="_blank" class="button button-large button-primary">%s</a><br><br>', get_permalink( $invoice ), esc_html__( 'Preview', 'gravityflow' ) );
 				echo '</div>';
 
