@@ -52,6 +52,18 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 					),
 				),
 			),
+			array(
+				'name'    => 'quote_status',
+				'type'    => 'select',
+				'label'   => __( 'Default Quote Status', 'gravityflow' ),
+				'choices' => $this->get_sliced_status_choices( 'quote' ),
+			),
+			array(
+				'name'    => 'invoice_status',
+				'type'    => 'select',
+				'label'   => __( 'Default Invoice Status', 'gravityflow' ),
+				'choices' => $this->get_sliced_status_choices( 'invoice' ),
+			),
 			$settings_api->get_setting_assignee_type(),
 			$settings_api->get_setting_assignees(),
 			$settings_api->get_setting_assignee_routing(),
@@ -80,6 +92,32 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 		$settings['fields'] = array_merge( $settings['fields'], $fields );
 
 		return $settings;
+	}
+
+	/**
+	 * Gets the choices array for the default status settings.
+	 *
+	 * @param string $type The object type; invoice or quote.
+	 *
+	 * @since 1.6.1-dev-2
+	 *
+	 * @return array
+	 */
+	public function get_sliced_status_choices( $type ) {
+		$terms   = get_terms( array( 'taxonomy' => $type . '_status', 'hide_empty' => 0 ) );
+		$choices = array();
+
+		if ( ! is_wp_error( $terms ) ) {
+			/* @var WP_Term $term */
+			foreach ( $terms as $term ) {
+				$choices[] = array(
+					'label' => $term->name,
+					'value' => $term->slug !== 'draft' ? $term->slug : ''
+				);
+			}
+		}
+
+		return $choices;
 	}
 
 	/**
@@ -119,7 +157,7 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 	}
 
 	/**
-	 * If applicable, store the line items, entry, feed, and step IDs in the post meta.
+	 * Perform any actions once the invoice/quote has been created.
 	 *
 	 * @since 1.6.1-dev-2
 	 *
@@ -128,12 +166,37 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 	 * @param array $entry The entry which created the invoice.
 	 */
 	public function sliced_gravityforms_feed_processed( $id, $feed, $entry ) {
-		if ( rgars( $feed, 'meta/post_type' ) === 'invoice' && $this->post_feed_completion === 'delayed' ) {
-			update_post_meta( $id, '_gform-entry-id', rgar( $entry, 'id' ) );
-			update_post_meta( $id, '_gform-feed-id', rgar( $feed, 'id' ) );
-			update_post_meta( $id, '_gravityflow-step-id', $this->get_id() );
-		}
 
+		$this->maybe_set_line_items( $id, $entry );
+
+		if ( rgars( $feed, 'meta/post_type' ) === 'invoice' ) {
+			if ( $this->post_feed_completion === 'delayed' ) {
+				// Store the IDs so we can complete the step once the invoice is paid.
+				update_post_meta( $id, '_gform-entry-id', rgar( $entry, 'id' ) );
+				update_post_meta( $id, '_gform-feed-id', rgar( $feed, 'id' ) );
+				update_post_meta( $id, '_gravityflow-step-id', $this->get_id() );
+			}
+
+			if ( $this->invoice_status && class_exists( 'Sliced_Invoice' ) ) {
+				Sliced_Invoice::set_status( $this->invoice_status, $id );
+			}
+		} else {
+			if ( $this->quote_status && class_exists( 'Sliced_Quote' ) ) {
+				// Args are reversed, not a typo.
+				Sliced_Quote::set_status( $id, $this->quote_status );
+			}
+		}
+	}
+
+	/**
+	 * Set the invoice/quote line items from the entry products, if enabled.
+	 *
+	 * @since 1.6.1-dev-2
+	 *
+	 * @param int $id The invoice (post) ID.
+	 * @param array $entry The entry which created the invoice.
+	 */
+	public function maybe_set_line_items( $id, $entry ) {
 		if ( ! $this->product_line_items_enabled ) {
 			return;
 		}
