@@ -210,14 +210,14 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 			echo sprintf( '<h4 style="margin-bottom:10px;">%s</h4>', $this->get_label() );
 
 			$assignee_key = gravity_flow()->get_current_user_assignee_key();
-			$is_assignee  = $this->is_assignee( $assignee_key );
+			$can_edit     = $this->is_assignee( $assignee_key ) && current_user_can( 'edit_posts' );
 
 			/* @var WP_Post $invoice */
 			foreach ( $invoices as $invoice ) {
 				$title = $invoice->post_title;
 
 				if ( ! $title ) {
-					$feed_id = $feed_id = get_post_meta( $invoice->ID, '_gform-feed-id', true );
+					$feed_id = get_post_meta( $invoice->ID, '_gform-feed-id', true );
 					$feed    = gravity_flow()->get_feed( $feed_id );
 					$title   = rgar( $feed['meta'], 'feedName' );
 				}
@@ -234,7 +234,7 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 				}
 
 				echo '<div class="gravityflow-action-buttons">';
-				if ( $is_assignee ) {
+				if ( $can_edit ) {
 					echo sprintf( '<a href="%s" target="_blank" class="button button-large button-primary">%s</a> ', get_edit_post_link( $invoice->ID ), esc_html__( 'Edit', 'gravityflow' ) );
 				}
 				echo sprintf( '<a href="%s" target="_blank" class="button button-large button-primary">%s</a><br><br>', get_permalink( $invoice ), esc_html__( 'Preview', 'gravityflow' ) );
