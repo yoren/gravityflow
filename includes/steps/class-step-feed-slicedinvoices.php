@@ -139,6 +139,9 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 				update_post_meta( $id, '_gform-entry-id', rgar( $entry, 'id' ) );
 				update_post_meta( $id, '_gform-feed-id', rgar( $feed, 'id' ) );
 				update_post_meta( $id, '_gravityflow-step-id', $this->get_id() );
+				if ( function_exists( 'sliced_get_accepted_payment_methods' ) ) {
+					update_post_meta( $id, '_sliced_payment_methods', array_keys( sliced_get_accepted_payment_methods() ) );
+				}
 			}
 
 			$invoice_status = rgars( $feed, 'meta/invoice_status' );
