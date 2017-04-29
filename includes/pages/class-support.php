@@ -37,27 +37,27 @@ class Gravity_Flow_Support {
 			$body_json = json_encode( $body );
 
 			$options = array(
-				'method' => 'POST',
-				'timeout' => 30,
+				'method'      => 'POST',
+				'timeout'     => 30,
 				'redirection' => 5,
-				'blocking' => true,
-				'sslverify' => false,
-				'headers' => array(),
-				'body' => $body_json,
-				'cookies' => array(),
+				'blocking'    => true,
+				'sslverify'   => false,
+				'headers'     => array(),
+				'body'        => $body_json,
+				'cookies'     => array(),
 			);
 
 			$raw_response = wp_remote_post( 'https://gravityflow.io/gravityformsapi/forms/3/submissions/', $options );
 
 			if ( is_wp_error( $raw_response ) ) {
-				$message = '<div class="error notice notice-error is-dismissible below-h2"><p>There was a problem submitting your feedback. Please send it by email to stevehenty@gmail.com.</p></div>';
+				$message = '<div class="error notice notice-error is-dismissible below-h2"><p>' . esc_html__('There was a problem submitting your feedback. Please send it by email to support@gravityflow.io.', 'gravityflow' ) . '</p></div>';
 			}
 			$response_json = wp_remote_retrieve_body( $raw_response );
 
 			$response = json_decode( $response_json, true );
 
 			if ( rgar( $response, 'status' ) == '200' ) {
-				$message = '<div class="updated notice notice-success is-dismissible below-h2"><p>Thank you! I\'ll be in touch soon</p></div>';
+				$message = '<div class="updated notice notice-success is-dismissible below-h2"><p>' . esc_html__( 'Thank you! I\'ll be in touch soon', 'gravityflow' ) . '</p></div>';
 			}
 		}
 
@@ -139,6 +139,13 @@ class Gravity_Flow_Support {
 
 	}
 
+	/**
+	 * Get the debug info which will appear as a note on the Help Scout ticket.
+	 *
+	 * @since 1.6.1-dev-2 Use the system report available with Gravity Forms 2.2+.
+	 *
+	 * @return string
+	 */
 	public static function get_site_info() {
 		if ( gravity_flow()->is_gravityforms_supported( '2.2' ) ) {
 			require_once( GFCommon::get_base_path() . '/includes/system-status/class-gf-system-report.php' );
@@ -147,7 +154,6 @@ class Gravity_Flow_Support {
 
 			return $system_report_text;
 		}
-
 
 		if ( ! function_exists( 'get_plugins' ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
