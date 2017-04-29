@@ -278,6 +278,38 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 	}
 
 	/**
+	 * When restarting the workflow or step delete the step ID from the post meta of the invoices which already exist.
+	 *
+	 * @since 1.6.1-dev-2
+	 */
+	public function restart_action() {
+		$args = array(
+			'post_type'  => 'sliced_invoice',
+			'meta_query' => array(
+				array(
+					'key'   => '_gform-entry-id',
+					'value' => $this->get_entry_id(),
+				),
+				array(
+					'key'   => '_gravityflow-step-id',
+					'value' => $this->get_id(),
+				),
+			),
+		);
+
+		$invoices = get_posts( $args );
+
+		if ( empty( $invoices ) ) {
+			return;
+		}
+
+		/* @var WP_Post $invoice */
+		foreach ( $invoices as $invoice ) {
+			delete_post_meta( $invoice->ID, '_gravityflow-step-id' );
+		}
+	}
+
+	/**
 	 * Resume the workflow if the invoice is paid and originated from a feed processed by one of our steps.
 	 *
 	 * @since 1.6.1-dev-2
