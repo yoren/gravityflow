@@ -147,15 +147,14 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			$settings_api->get_setting_display_fields(),
 			array(
 				'name'          => 'default_status',
-				'type'          => 'radio',
-				'label'         => __( 'Default Status Option', 'gravityflow' ),
-				'tooltip'       => __( 'Select the default value for the status on the workflow detail page. Select Hidden to hide the status options.', 'gravityflow' ),
+				'type'          => 'select',
+				'label'         => __( 'Save Progress Option', 'gravityflow' ),
+				'tooltip'       => __( 'This setting allows the assignee to save the field values without submitting the form as complete. Select Disabled to hide the "in progress" option or select the default value for the radio buttons.', 'gravityflow' ),
 				'default_value' => 'hidden',
-				'horizontal'    => true,
 				'choices'       => array(
-					array( 'label' => __( 'Hidden', 'gravityflow' ), 'value' => 'hidden' ),
-					array( 'label' => __( 'In progress', 'gravityflow' ), 'value' => 'in_progress' ),
-					array( 'label' => __( 'Complete', 'gravityflow' ), 'value' => 'complete' ),
+					array( 'label' => __( 'Disabled', 'gravityflow' ), 'value' => 'hidden' ),
+					array( 'label' => __( 'Radio buttons (default: In progress)', 'gravityflow' ), 'value' => 'in_progress' ),
+					array( 'label' => __( 'Radio buttons (default: Complete)', 'gravityflow' ), 'value' => 'complete' ),
 				),
 			),
 			array(
@@ -185,6 +184,30 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					'fields' => $settings_api->get_setting_notification( array(
 						'checkbox_default_value' => true,
 						'default_message'        => __( 'A new entry requires your input', 'gravityflow' ),
+					) ),
+				),
+				array(
+					'label'  => __( 'In Progress Email', 'gravityflow' ),
+					'id'     => 'tab_in_progress_notification',
+					'fields' => $settings_api->get_setting_notification( array(
+						'name_prefix'      => 'in_progress',
+						'checkbox_label'   => __( 'Send email when the step is in progress.', 'gravityflow' ),
+						'checkbox_tooltip' => __( 'Enable this setting to send an email when the entry is updated but the step is not completed.', 'gravityflow' ),
+						'default_message'  => __( 'Entry {entry_id} has been updated and remains in progress.', 'gravityflow' ),
+						'send_to_fields'   => true,
+						'resend_field'     => false,
+					) ),
+				),
+				array(
+					'label'  => __( 'Complete Email', 'gravityflow' ),
+					'id'     => 'tab_complete_notification',
+					'fields' => $settings_api->get_setting_notification( array(
+						'name_prefix'      => 'complete',
+						'checkbox_label'   => __( 'Send email when the step is complete.', 'gravityflow' ),
+						'checkbox_tooltip' => __( 'Enable this setting to send an email when the entry is updated completing the step.', 'gravityflow' ),
+						'default_message'  => __( 'Entry {entry_id} has been updated completing the step.', 'gravityflow' ),
+						'send_to_fields'   => true,
+						'resend_field'     => false,
 					) ),
 				),
 			) ),
@@ -333,6 +356,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 			$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
 
+			$this->maybe_send_notification( $new_status );
 		}
 
 		return $feedback;
