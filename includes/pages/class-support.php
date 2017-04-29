@@ -129,7 +129,7 @@ class Gravity_Flow_Support {
 						<input type="checkbox" name="gravityflow_debug_info" value="1" checked="checked"/>
 						<?php esc_html_e( 'Send debugging information. (This includes some system information and a list of active plugins. No forms or entry data will be sent.)', 'gravityflow' ); ?>
 					</label>
-					</br /><br />
+					<br /><br />
 					<input id="gravityflow_send" type="submit" class="button button-primary button-large" name="gravityflow_send_feedback" value="<?php esc_html_e( 'Send', 'gravityflow' ); ?>" />
 
 				</div>
@@ -140,6 +140,14 @@ class Gravity_Flow_Support {
 	}
 
 	public static function get_site_info() {
+		if ( gravity_flow()->is_gravityforms_supported( '2.2' ) ) {
+			require_once( GFCommon::get_base_path() . '/includes/system-status/class-gf-system-report.php' );
+			$sections           = GF_System_Report::get_system_report();
+			$system_report_text = GF_System_Report::get_system_report_text( $sections );
+
+			return $system_report_text;
+		}
+
 
 		if ( ! function_exists( 'get_plugins' ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
