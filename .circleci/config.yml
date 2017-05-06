@@ -1,0 +1,11 @@
+version: 2
+jobs:
+  build:
+    machine: true
+    working_directory: ~/gravityflow
+    steps:
+      - checkout
+      - run:
+          name: Run acceptance tests
+          command: |
+            docker-compose run --rm codeception run -vvv
