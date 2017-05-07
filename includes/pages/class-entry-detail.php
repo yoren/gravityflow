@@ -679,6 +679,8 @@ class Gravity_Flow_Entry_Detail {
 
 			$display_field = self::is_display_field( $field, $current_step, $form, $entry, $is_product_field );
 
+			$field->gravityflow_is_display_field = $display_field;
+
 			switch ( RGFormsModel::get_input_type( $field ) ) {
 				case 'section' :
 
