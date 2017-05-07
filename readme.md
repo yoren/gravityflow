@@ -1,7 +1,7 @@
 Gravity Flow
 ==============================
 
-[![Build Status](https://travis-ci.org/gravityflow/gravityflow.svg?branch=master)](https://travis-ci.org/gravityflow/gravityflow)
+[![Build Status](https://travis-ci.org/gravityflow/gravityflow.svg?branch=master)](https://travis-ci.org/gravityflow/gravityflow)  [![CircleCI](https://circleci.com/gh/gravityflow/gravityflow.svg?style=svg)](https://circleci.com/gh/gravityflow/gravityflow)
 
 Gravity Flow is a commercial plugin for WordPress which provides a Workflow platform for forms created in Gravity Forms.
 
