@@ -200,6 +200,8 @@ class Gravity_Flow_Entry_Editor {
 				$field->conditionalLogicFields = $conditional_logic_fields;
 			}
 
+			$field->gravityflow_is_display_field = $this->is_display_field( $field );
+
 			// Remove unneeded fields from the form to prevent JS errors resulting from scripts expecting fields to be present and visible.
 			if ( $this->can_remove_field( $field ) ) {
 				continue;
@@ -227,8 +229,11 @@ class Gravity_Flow_Entry_Editor {
 
 				$field->description = null;
 				$field->maxLength   = null;
-			} elseif ( ! $this->_has_editable_product_field && $is_product_field && $field->type != 'total' ) {
-				$this->_has_editable_product_field = true;
+			} else {
+				$field->gravityflow_is_editable = true;
+				if ( ! $this->_has_editable_product_field && $is_product_field && $field->type != 'total' ) {
+					$this->_has_editable_product_field = true;
+				}
 			}
 
 			if ( empty( $field->label ) ) {

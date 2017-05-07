@@ -35,6 +35,10 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 		return esc_html__( 'Sliced Invoices', 'gravityflow' );
 	}
 
+	public function get_icon_url() {
+		return $this->get_base_url() . '/images/sliced-invoices-icon.svg';
+	}
+
 	/**
 	 * Returns the settings for this step.
 	 *
