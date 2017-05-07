@@ -1,6 +1,6 @@
 FROM php:7.0-cli
 
-MAINTAINER Rocketgenius support@gravityforms.com
+MAINTAINER Steve Henty steve@gravityflow.io
 
 # Install required system packages
 RUN apt-get update && \
