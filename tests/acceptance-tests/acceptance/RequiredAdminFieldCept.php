@@ -39,4 +39,4 @@ $I->selectOption( 'input[name=input_13]', 'Second Choice' );
 $I->selectOption( 'input[name=gravityflow_status]', 'complete' );
 $I->click( 'Update' );
 $I->waitForElement( 'div.notice-success', 3 );
-$I->waitForElement( 'Entry updated and marked complete', 3 );
+$I->waitForText( 'Entry updated and marked complete', 3 );
