@@ -5,9 +5,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2017-03-05 11:08:07+00:00\n"
-"PO-Revision-Date: 2017-03-06 09:48+0000\n"
-"Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
+"POT-Creation-Date: 2017-03-09 14:24:45+00:00\n"
+"PO-Revision-Date: 2017-04-18 09:27+0000\n"
+"Last-Translator: michael edi <michaeledi@163.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/gravityflow/gravityflow/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -169,7 +169,7 @@ msgstr "此步骤缺少类型。"
 
 #: class-gravity-flow.php:925
 msgid "The plugin required by this step type is missing."
-msgstr ""
+msgstr "缺少此步骤所需的插件。"
 
 #: class-gravity-flow.php:932
 msgid ""
@@ -500,7 +500,7 @@ msgstr "选择要在提交页面上发布的表单。"
 
 #: class-gravity-flow.php:2965
 msgid "Default Pages"
-msgstr ""
+msgstr "默认页面"
 
 #: class-gravity-flow.php:2966
 msgid ""
@@ -508,7 +508,7 @@ msgid ""
 "example, the inbox page selected below will be used when preparing merge "
 "tags such as {workflow_inbox_link} when the page_id attribute is not "
 "specified."
-msgstr ""
+msgstr "选择包含以下GravityFlow短代码的页面。例如，当未指定短代码（如{workflow_inbox_link}）的page_id属性时，将使用下面选择的页面作为默认的收件箱页面。"
 
 #: class-gravity-flow.php:2970 class-gravity-flow.php:5109
 #: includes/steps/class-step.php:986
@@ -534,7 +534,7 @@ msgstr "保存设置时出错"
 
 #: class-gravity-flow.php:3023
 msgid "Select page"
-msgstr ""
+msgstr "选择页面"
 
 #: class-gravity-flow.php:3138
 #: includes/wizard/steps/class-iw-step-pages.php:66
@@ -752,27 +752,27 @@ msgstr "添加自定义的值"
 
 #: class-gravity-flow.php:5750
 msgid "Entry Link"
-msgstr ""
+msgstr "条目链接"
 
 #: class-gravity-flow.php:5751
 msgid "Entry URL"
-msgstr ""
+msgstr "条目URL"
 
 #: class-gravity-flow.php:5752
 msgid "Inbox Link"
-msgstr ""
+msgstr "收件箱链接"
 
 #: class-gravity-flow.php:5753
 msgid "Inbox URL"
-msgstr ""
+msgstr "收件箱URL"
 
 #: class-gravity-flow.php:5754
 msgid "Cancel Link"
-msgstr ""
+msgstr "取消步骤链接"
 
 #: class-gravity-flow.php:5755
 msgid "Cancel URL"
-msgstr ""
+msgstr "取消步骤URL"
 
 #: class-gravity-flow.php:5756 includes/steps/class-step-approval.php:491
 #: includes/steps/class-step-approval.php:521
@@ -792,50 +792,50 @@ msgstr "负责人"
 
 #: class-gravity-flow.php:5759
 msgid "Approve Link"
-msgstr ""
+msgstr "批准链接"
 
 #: class-gravity-flow.php:5760
 msgid "Approve URL"
-msgstr ""
+msgstr "批准URL"
 
 #: class-gravity-flow.php:5761
 msgid "Approve Token"
-msgstr ""
+msgstr "批准Token"
 
 #: class-gravity-flow.php:5762
 msgid "Reject Link"
-msgstr ""
+msgstr "拒绝链接"
 
 #: class-gravity-flow.php:5763
 msgid "Reject URL"
-msgstr ""
+msgstr "拒绝URL"
 
 #: class-gravity-flow.php:5764
 msgid "Reject Token"
-msgstr ""
+msgstr "拒绝Token"
 
 #: class-gravity-flow.php:5811
 msgid "Current User"
-msgstr ""
+msgstr "当前用户"
 
 #: class-gravity-flow.php:5817
 msgid "Workflow Assignee"
-msgstr ""
+msgstr "工作流负责人"
 
 #: includes/EDD_SL_Plugin_Updater.php:201
 msgid ""
 "There is a new version of %1$s available. %2$sView version %3$s details%4$s."
-msgstr ""
+msgstr "有一个新版本的 %1$s 可用。%2$s查看版本 %3$s 详情%4$s."
 
 #: includes/EDD_SL_Plugin_Updater.php:209
 msgid ""
 "There is a new version of %1$s available. %2$sView version %3$s details%4$s "
 "or %5$supdate now%6$s."
-msgstr ""
+msgstr "新版本%1$s可用。 %2$s查看版本 %3$s 详细%4$s 或 %5$s 现在更新 %6$s。"
 
 #: includes/EDD_SL_Plugin_Updater.php:404
 msgid "You do not have permission to install plugin updates"
-msgstr "你没有权限安装插件的更新"
+msgstr "你没有权限更新插件。"
 
 #: includes/EDD_SL_Plugin_Updater.php:404
 msgid "Error"
@@ -867,39 +867,39 @@ msgstr "支付金额"
 
 #: includes/class-gravityview-detail-link.php:26
 msgid "Link to Workflow Entry Detail"
-msgstr ""
+msgstr "链接到工作流条目详情"
 
 #: includes/class-gravityview-detail-link.php:61
 msgid "Workflow Detail Link"
-msgstr ""
+msgstr "工作流详情链接"
 
 #: includes/class-gravityview-detail-link.php:63
 msgid "Display a link to the workflow detail page."
-msgstr ""
+msgstr "显示一个指向工作流详情页面的链接。"
 
 #: includes/class-gravityview-detail-link.php:129
 msgid "Link Text:"
-msgstr ""
+msgstr "链接文本："
 
 #: includes/class-gravityview-detail-link.php:131
 msgid "View Details"
-msgstr ""
+msgstr "查看详情"
 
 #: includes/class-rest-api.php:35
 msgid "Entry ID missing"
-msgstr ""
+msgstr "条目ID缺失"
 
 #: includes/class-rest-api.php:41
 msgid "Workflow base missing"
-msgstr ""
+msgstr "工作流基础丢失"
 
 #: includes/class-rest-api.php:47 includes/class-rest-api.php:55
 msgid "Entry not found"
-msgstr ""
+msgstr "未找到条目"
 
 #: includes/class-rest-api.php:59
 msgid "The entry is not on the expected step."
-msgstr ""
+msgstr "该条目不在预期的步骤。"
 
 #: includes/class-web-api.php:203
 msgid "Forbidden"
@@ -1350,11 +1350,11 @@ msgstr "天"
 
 #: includes/steps/class-common-step-settings.php:238
 msgid "Repeat reminder"
-msgstr ""
+msgstr "重复提醒"
 
 #: includes/steps/class-common-step-settings.php:243
 msgid "Repeat every"
-msgstr ""
+msgstr "重复每当"
 
 #: includes/steps/class-common-step-settings.php:273
 msgid "Attach PDF"
@@ -1431,17 +1431,17 @@ msgstr "选择要隐藏或显示的字段。"
 
 #: includes/steps/class-common-step-settings.php:441
 msgid "Confirmation Message"
-msgstr ""
+msgstr "确认消息"
 
 #: includes/steps/class-common-step-settings.php:443
 msgid ""
 "Activate this setting to display a custom confirmation message to the "
 "assignee for the current step."
-msgstr ""
+msgstr "激活此设置可以向当前步骤的负责人显示自定义确认消息。"
 
 #: includes/steps/class-common-step-settings.php:445
 msgid "Display a custom confirmation message"
-msgstr ""
+msgstr "显示自定义确认消息"
 
 #: includes/steps/class-step-approval.php:35
 msgid "Next step if Rejected"
@@ -1465,23 +1465,23 @@ msgstr "拒绝"
 
 #: includes/steps/class-step-approval.php:78
 msgid "Invalid request method"
-msgstr ""
+msgstr "请求方式无效"
 
 #: includes/steps/class-step-approval.php:91
 msgid "Action not supported"
-msgstr ""
+msgstr "不支持此操作"
 
 #: includes/steps/class-step-approval.php:102
 msgid "Action not supported."
-msgstr ""
+msgstr "不支持此操作。"
 
 #: includes/steps/class-step-approval.php:122
 msgid "You're not authorized to perform this action."
-msgstr ""
+msgstr "您无权执行此操作。"
 
 #: includes/steps/class-step-approval.php:128
 msgid "Missing assignee."
-msgstr ""
+msgstr "缺少负责人。"
 
 #: includes/steps/class-step-approval.php:137
 #: includes/steps/class-step-approval.php:148
@@ -1732,7 +1732,7 @@ msgstr "CleverReach"
 
 #: includes/steps/class-step-feed-constant-contact.php:23
 msgid "Constant Contact"
-msgstr ""
+msgstr "Constant Contact"
 
 #: includes/steps/class-step-feed-convertkit.php:24
 msgid "ConvertKit"
@@ -1788,15 +1788,15 @@ msgstr "MailChimp"
 
 #: includes/steps/class-step-feed-pipedrive.php:25
 msgid "Pipedrive"
-msgstr ""
+msgstr "Pipedrive"
 
 #: includes/steps/class-step-feed-post-creation.php:23
 msgid "Post Creation"
-msgstr ""
+msgstr "Post Creation"
 
 #: includes/steps/class-step-feed-sendinblue.php:24
 msgid "SendinBlue"
-msgstr ""
+msgstr "SendinBlue"
 
 #: includes/steps/class-step-feed-slack.php:23
 msgid "Slack"
@@ -1808,15 +1808,15 @@ msgstr "Sliced Invoices"
 
 #: includes/steps/class-step-feed-sprout-invoices.php:36
 msgid "Sprout Invoices"
-msgstr ""
+msgstr "Sprout Invoices"
 
 #: includes/steps/class-step-feed-sprout-invoices.php:105
 msgid "Create Estimate"
-msgstr ""
+msgstr "创建估价"
 
 #: includes/steps/class-step-feed-sprout-invoices.php:114
 msgid "Create Invoice"
-msgstr ""
+msgstr "创建发票"
 
 #: includes/steps/class-step-feed-trello.php:23
 msgid "Trello"
@@ -1838,7 +1838,7 @@ msgstr "创建"
 
 #: includes/steps/class-step-feed-user-registration.php:154
 msgid "User Registration feed processed: %s"
-msgstr ""
+msgstr "用户注册流程已处理：％s 个"
 
 #: includes/steps/class-step-feed-wp-e-signature.php:26
 msgid "WP E-Signature"
@@ -2029,7 +2029,7 @@ msgstr "一个新条目需要您输入"
 
 #: includes/steps/class-step-user-input.php:191
 msgid "Thank you."
-msgstr ""
+msgstr "谢谢。"
 
 #: includes/steps/class-step-user-input.php:444
 msgid "Entry updated and marked complete."
@@ -2067,55 +2067,55 @@ msgstr "格式"
 
 #: includes/steps/class-step-webhook.php:92
 msgid "Request Body"
-msgstr ""
+msgstr "请求主体"
 
 #: includes/steps/class-step-webhook.php:99
 msgid "All Fields"
-msgstr ""
+msgstr "所有字段"
 
 #: includes/steps/class-step-webhook.php:103
 msgid "Select Fields"
-msgstr ""
+msgstr "选择字段"
 
 #: includes/steps/class-step-webhook.php:114
 msgid "Field Values"
-msgstr ""
+msgstr "字段值"
 
 #: includes/steps/class-step-webhook.php:121
 msgid "Mapping"
-msgstr ""
+msgstr "映射"
 
 #: includes/steps/class-step-webhook.php:121
 msgid ""
 "Map the fields of this form to the selected form. Values from this form will"
 " be saved in the entry in the selected form"
-msgstr ""
+msgstr "将本表单的字段映射到选定的表单。本表单的值将保存到选择的表单条目中。"
 
 #: includes/steps/class-step-webhook.php:236
 msgid "Select a Field"
-msgstr ""
+msgstr "选择一个字段"
 
 #: includes/steps/class-step-webhook.php:243
 msgid "Select a %s Field"
-msgstr ""
+msgstr "选择一个 %s 字段"
 
 #: includes/steps/class-step-webhook.php:252
 msgid "Entry Date"
-msgstr ""
+msgstr "条目日期"
 
 #: includes/steps/class-step-webhook.php:255
 msgid "Created By"
-msgstr ""
+msgstr "创建者"
 
 #: includes/steps/class-step-webhook.php:292
 #: includes/steps/class-step-webhook.php:299
 #: includes/steps/class-step-webhook.php:319
 msgid "Full"
-msgstr ""
+msgstr "全部"
 
 #: includes/steps/class-step-webhook.php:306
 msgid "Selected"
-msgstr ""
+msgstr "已选择"
 
 #: includes/steps/class-step.php:180
 msgid "Next Step"
@@ -2123,11 +2123,11 @@ msgstr "下一步"
 
 #: includes/steps/class-step.php:239
 msgid " Not implemented"
-msgstr ""
+msgstr "未执行"
 
 #: includes/steps/class-step.php:253
 msgid "Method '%s' not implemented. Must be overridden in subclass."
-msgstr ""
+msgstr "方法'%s'未执行。必须在子类中被覆盖。"
 
 #: includes/steps/class-step.php:755
 msgid "%s: not required"
@@ -2222,26 +2222,26 @@ msgid ""
 "the built-in WordPress admin pages (Workflow menu). If you want to use your "
 "site styles, or if you want to use the one-click approval links, then you'll"
 " need to add some pages to your site."
-msgstr ""
+msgstr "Gravity Flow可以从您的站点的前端和内置的WordPress管理页面（工作流程菜单）访问。如果您想使用您的网站样式，或者您想要使用一键式批准链接，那么您需要在网站上添加一些页面。"
 
 #: includes/wizard/steps/class-iw-step-pages.php:13
 msgid ""
 "Would you like to create custom inbox, status, and submit pages now? The "
 "pages will contain the %s[gravityflow] shortcode%s enabling assignees to "
 "interact with the workflow from the front end of the site."
-msgstr ""
+msgstr "您要立即创建自定义收件箱，状态和提交页面吗？这些页面将包含％s [gravityflow] 短代码％s，使流程负责人能够在前端处理工作流程。"
 
 #: includes/wizard/steps/class-iw-step-pages.php:20
 msgid "No, use the WordPress Admin (Workflow menu)."
-msgstr ""
+msgstr "不，使用WordPress管理员界面（工作流程菜单）。"
 
 #: includes/wizard/steps/class-iw-step-pages.php:26
 msgid "Yes, create inbox, status, and submit pages now."
-msgstr ""
+msgstr "是的，现在创建收件箱，状态和提交页面。"
 
 #: includes/wizard/steps/class-iw-step-pages.php:35
 msgid "Workflow Pages"
-msgstr ""
+msgstr "工作流页面"
 
 #: includes/wizard/steps/class-iw-step-updates.php:16
 msgid ""

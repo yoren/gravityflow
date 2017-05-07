@@ -1,13 +1,14 @@
 # Copyright 2015-2017 Steven Henty.
 # Translators:
 # Giacomo Papasidero <giacomo@diventarefelici.it>, 2016
+# Maurizio Di Mauro <maux99@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2017-03-05 11:08:07+00:00\n"
-"PO-Revision-Date: 2017-03-06 09:48+0000\n"
-"Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
+"POT-Creation-Date: 2017-03-09 14:24:45+00:00\n"
+"PO-Revision-Date: 2017-03-31 19:22+0000\n"
+"Last-Translator: Maurizio Di Mauro <maux99@gmail.com>\n"
 "Language-Team: Italian (Italy) (http://www.transifex.com/gravityflow/gravityflow/language/it_IT/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -169,7 +170,7 @@ msgstr "Questo tipo di passo è mancante."
 
 #: class-gravity-flow.php:925
 msgid "The plugin required by this step type is missing."
-msgstr ""
+msgstr "Manca il plugin necessario per questa fase."
 
 #: class-gravity-flow.php:932
 msgid ""
@@ -535,7 +536,7 @@ msgstr "C'è stato un errore nel salvataggio delle impostazioni"
 
 #: class-gravity-flow.php:3023
 msgid "Select page"
-msgstr ""
+msgstr "Selezionare la pagina"
 
 #: class-gravity-flow.php:3138
 #: includes/wizard/steps/class-iw-step-pages.php:66
@@ -755,27 +756,27 @@ msgstr "Aggiungi un valore personalizzato"
 
 #: class-gravity-flow.php:5750
 msgid "Entry Link"
-msgstr ""
+msgstr "Inserire il link"
 
 #: class-gravity-flow.php:5751
 msgid "Entry URL"
-msgstr ""
+msgstr "Inserire URL"
 
 #: class-gravity-flow.php:5752
 msgid "Inbox Link"
-msgstr ""
+msgstr "Link Inbox"
 
 #: class-gravity-flow.php:5753
 msgid "Inbox URL"
-msgstr ""
+msgstr "URL Inbox"
 
 #: class-gravity-flow.php:5754
 msgid "Cancel Link"
-msgstr ""
+msgstr "Cancellare Link"
 
 #: class-gravity-flow.php:5755
 msgid "Cancel URL"
-msgstr ""
+msgstr "Cancellare URL"
 
 #: class-gravity-flow.php:5756 includes/steps/class-step-approval.php:491
 #: includes/steps/class-step-approval.php:521
@@ -795,15 +796,15 @@ msgstr "Destinatari"
 
 #: class-gravity-flow.php:5759
 msgid "Approve Link"
-msgstr ""
+msgstr "Approvare Link"
 
 #: class-gravity-flow.php:5760
 msgid "Approve URL"
-msgstr ""
+msgstr "Approvare URL"
 
 #: class-gravity-flow.php:5761
 msgid "Approve Token"
-msgstr ""
+msgstr "Approvare Token"
 
 #: class-gravity-flow.php:5762
 msgid "Reject Link"
