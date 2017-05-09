@@ -8,6 +8,6 @@ jobs:
       - run:
           name: Run acceptance tests
           command: |
-            docker-compose run --rm codeception run -vvv
+            docker-compose run --rm codeception run --html -vvv
       - store_artifacts:
           path: ~/gravityflow/tests/acceptance-tests/_output
