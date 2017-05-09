@@ -6,6 +6,11 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Split the tests
+          command: |
+          circleci tests glob "[^_]*.php" | xargs -n 1 echo
+          circleci tests glob "[^_]*.php" | circleci tests split
+      - run:
           name: Run acceptance tests
           command: |
             docker-compose run --rm codeception run --html -vvv
