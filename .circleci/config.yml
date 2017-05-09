@@ -8,8 +8,8 @@ jobs:
       - run:
           name: Split the tests
           command: |
-          circleci tests glob "[^_]*.php" | xargs -n 1 echo
-          circleci tests glob "[^_]*.php" | circleci tests split
+            circleci tests glob "[^_]*.php" | xargs -n 1 echo
+            circleci tests glob "[^_]*.php" | circleci tests split
       - run:
           name: Run acceptance tests
           command: |
