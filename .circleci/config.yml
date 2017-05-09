@@ -8,6 +8,7 @@ jobs:
       - run:
           name: Split the tests
           command: |
+            mkdir ~/gravityflow/tests/acceptance-tests/_output
             circleci tests glob ~/gravityflow/tests/acceptance-tests/acceptance/[^_]*.php | circleci tests split | xargs -n 1 echo
             circleci tests glob ~/gravityflow/tests/acceptance-tests/acceptance/[^_]*.php | circleci tests split | xargs -n 1 echo >> ~/gravityflow/tests/acceptance-tests/_output/split-tests.txt
       - run:
