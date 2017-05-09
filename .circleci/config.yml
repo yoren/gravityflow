@@ -9,11 +9,11 @@ jobs:
           name: Split the tests
           command: |
             circleci tests glob ~/gravityflow/tests/acceptance-tests/acceptance/[^_]*.php | circleci tests split | xargs -n 1 echo
-            circleci tests glob ~/gravityflow/tests/acceptance-tests/acceptance/[^_]*.php | circleci tests split | xargs -n 1 echo >> ~/gravityflow/tests/acceptance-tests/_data/tests.txt
+            circleci tests glob ~/gravityflow/tests/acceptance-tests/acceptance/[^_]*.php | circleci tests split | xargs -n 1 echo >> ~/gravityflow/tests/acceptance-tests/_data/split-tests.txt
       - run:
           name: Run acceptance tests
           command: |
-            docker-compose run --rm codeception run --html -vvv
+            docker-compose run --rm codeception run --html -vvv -o "groups: split-tests: ~/gravityflow/tests/acceptance-tests/_data/split-tests.txt" -g split-tests
       - store_artifacts:
           path: ~/gravityflow/tests/acceptance-tests/_output
           path: ~/gravityflow/tests/acceptance-tests/_data
