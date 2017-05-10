@@ -18,10 +18,7 @@ RUN docker-php-ext-install \
     bcmath \
     zip
 
-# Install pecl extensions
-RUN pecl install mongodb xdebug && \
-    docker-php-ext-enable mongodb && \
-    docker-php-ext-enable xdebug
+RUN docker-php-ext-enable xdebug
 
 # Add mysql driver required for wp-browser
 RUN docker-php-ext-install mysqli
