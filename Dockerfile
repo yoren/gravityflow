@@ -18,8 +18,6 @@ RUN docker-php-ext-install \
     bcmath \
     zip
 
-RUN docker-php-ext-enable xdebug
-
 # Add mysql driver required for wp-browser
 RUN docker-php-ext-install mysqli
 
