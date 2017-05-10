@@ -10,8 +10,8 @@ jobs:
           command: |
             mkdir ~/gravityflow/tests/acceptance-tests/acceptance/ci-split-tests
             TESTFILES=$(circleci tests glob ~/gravityflow/tests/acceptance-tests/acceptance/[^_]*.php | circleci tests split --split-by=timings)
-            $TESTFILES | xargs -n 1 echo
-            cp $TESTFILES ~/gravityflow/tests/acceptance-tests/acceptance/ci-split-tests
+            echo ${TESTFILES} | xargs -n 1 echo
+            cp ${TESTFILES} ~/gravityflow/tests/acceptance-tests/acceptance/ci-split-tests
       - run:
           name: Run acceptance tests
           command: |
