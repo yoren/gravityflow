@@ -5707,12 +5707,7 @@ AND m.meta_value='queued'";
 		 * @return string
 		 */
 		public function settings_feed_condition( $field, $echo = true ) {
-			$step_id    = absint( rgget( 'fid' ) );
-			$form_id    = absint( rgget( 'id' ) );
-			$entry_meta = GFFormsModel::get_entry_meta( $form_id );
-
-			unset( $entry_meta['workflow_final_status'], $entry_meta['workflow_step'], $entry_meta[ 'workflow_step_status_' . $step_id ] );
-
+			$entry_meta  = array_merge( $this->get_feed_condition_entry_meta(), $this->get_feed_condition_entry_properties() );
 			$find        = 'var feedCondition';
 			$replacement = sprintf( 'var entry_meta = %s; %s', json_encode( $entry_meta ), $find );
 			$html        = str_replace( $find, $replacement, parent::settings_feed_condition( $field, false ) );
@@ -5722,6 +5717,99 @@ AND m.meta_value='queued'";
 			}
 
 			return $html;
+		}
+
+		/**
+		 * Get the entry meta for use with the feed_condition setting.
+		 *
+		 * @since 1.7.1-dev
+		 *
+		 * @return array
+		 */
+		public function get_feed_condition_entry_meta() {
+			$step_id    = absint( rgget( 'fid' ) );
+			$form_id    = absint( rgget( 'id' ) );
+			$entry_meta = GFFormsModel::get_entry_meta( $form_id );
+
+			unset( $entry_meta['workflow_final_status'], $entry_meta['workflow_step'], $entry_meta[ 'workflow_step_status_' . $step_id ] );
+
+			return $entry_meta;
+		}
+
+		/**
+		 * Get the entry properties for use with the feed_condition setting.
+		 *
+		 * @since 1.7.1-dev
+		 *
+		 * @return array
+		 */
+		public function get_feed_condition_entry_properties() {
+			return array(
+				'ip'             => array(
+					'label'  => esc_html__( 'User IP', 'gravityflow' ),
+					'filter' => array(
+						'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+					),
+				),
+				'source_url'     => array(
+					'label'  => esc_html__( 'Source URL', 'gravityflow' ),
+					'filter' => array(
+						'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+					),
+				),
+				'payment_status' => array(
+					'label'  => esc_html__( 'Payment Status', 'gravityflow' ),
+					'filter' => array(
+						'operators' => array( 'is', 'isnot' ),
+						'choices'   => array(
+							array(
+								'text'  => esc_html__( 'Paid', 'gravityflow' ),
+								'value' => 'Paid',
+							),
+							array(
+								'text'  => esc_html__( 'Processing', 'gravityflow' ),
+								'value' => 'Processing',
+							),
+							array(
+								'text'  => esc_html__( 'Failed', 'gravityflow' ),
+								'value' => 'Failed',
+							),
+							array(
+								'text'  => esc_html__( 'Active', 'gravityflow' ),
+								'value' => 'Active',
+							),
+							array(
+								'text'  => esc_html__( 'Cancelled', 'gravityflow' ),
+								'value' => 'Cancelled',
+							),
+							array(
+								'text'  => esc_html__( 'Pending', 'gravityflow' ),
+								'value' => 'Pending',
+							),
+							array(
+								'text'  => esc_html__( 'Refunded', 'gravityflow' ),
+								'value' => 'Refunded',
+							),
+							array(
+								'text'  => esc_html__( 'Voided', 'gravityflow' ),
+								'value' => 'Voided',
+							),
+						),
+					),
+				),
+				'payment_amount' => array(
+					'label'  => esc_html__( 'Payment Amount', 'gravityflow' ),
+					'filter' => array(
+						'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+					),
+				),
+				'transaction_id' => array(
+					'label'  => esc_html__( 'Transaction ID', 'gravityflow' ),
+					'filter' => array(
+						'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+					),
+				),
+			);
 		}
 
 		/**
