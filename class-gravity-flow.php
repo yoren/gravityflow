@@ -5696,6 +5696,33 @@ AND m.meta_value='queued'";
 			return $select_field;
 		}
 
+		/**
+		 * Display or return the markup for the feed_condition field type.
+		 *
+		 * @since 1.7.1-dev Added support for logic based on the entry meta.
+		 *
+		 * @param array $field The field properties.
+		 * @param bool  $echo  Should the setting markup be echoed.
+		 *
+		 * @return string
+		 */
+		public function settings_feed_condition( $field, $echo = true ) {
+			$step_id    = absint( rgget( 'fid' ) );
+			$form_id    = absint( rgget( 'id' ) );
+			$entry_meta = GFFormsModel::get_entry_meta( $form_id );
+
+			unset( $entry_meta['workflow_final_status'], $entry_meta['workflow_step'], $entry_meta[ 'workflow_step_status_' . $step_id ] );
+
+			$find        = 'var feedCondition';
+			$replacement = sprintf( 'var entry_meta = %s; %s', json_encode( $entry_meta ), $find );
+			$html        = str_replace( $find, $replacement, parent::settings_feed_condition( $field, false ) );
+
+			if ( $echo ) {
+				echo $html;
+			}
+
+			return $html;
+		}
 
 		/**
 		 * Target for the gform_pre_replace_merge_tags filter. Replaces the workflow_timeline and created_by merge tags.
