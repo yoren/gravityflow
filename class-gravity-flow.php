@@ -4548,7 +4548,9 @@ AND m.meta_value='queued'";
 
 							$current_step->log_event( esc_html__( 'Step expired', 'gravityflow' ) );
 
-							$current_step->add_note( esc_html__( 'Step expired', 'gravityflow' ), 0, $current_step->get_type() );
+							$expiration_note = $current_step->get_name() . ': ' . esc_html__( 'Step expired', 'gravityflow' );
+
+							$current_step->add_note( $expiration_note, 0, $current_step->get_type() );
 
 							gravity_flow()->process_workflow( $form, $entry['id'] );
 
