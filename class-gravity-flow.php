@@ -445,12 +445,14 @@ PRIMARY KEY  (id)
 					wp_enqueue_script( 'gravityflow_status_list', $this->get_base_url() . "/js/status-list{$min}.js",  array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'gform_datepicker_init' ), $this->_version );
 					wp_enqueue_script( 'gform_field_filter', GFCommon::get_base_url() . "/js/gf_field_filter{$min}.js",  array( 'jquery', 'gform_datepicker_init' ), $this->_version );
 					wp_enqueue_script( 'gravityflow_frontend', $this->get_base_url() . "/js/frontend{$min}.js",  array(), $this->_version );
+					wp_enqueue_script( 'gravityflow_inbox', $this->get_base_url() . "/js/inbox{$min}.js",  array(), $this->_version );
+
 					wp_enqueue_style( 'gform_admin',  GFCommon::get_base_url() . "/css/admin{$min}.css", null, $this->_version );
 					wp_enqueue_style( 'gravityflow_entry_detail',  $this->get_base_url() . "/css/entry-detail{$min}.css", null, $this->_version );
 					wp_enqueue_style( 'gravityflow_frontend_css', $this->get_base_url() . "/css/frontend{$min}.css", null, $this->_version );
 					wp_enqueue_style( 'gravityflow_status', $this->get_base_url() . "/css/status{$min}.css", null, $this->_version );
 					wp_localize_script( 'gravityflow_status_list', 'gravityflow_status_list_strings', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
-					wp_localize_script( 'gravityflow_frontend', 'gravityflow_frontend_strings', array( 'restUrl' => esc_url_raw( rest_url() ), 'nonce' => wp_create_nonce( 'wp_rest' ) ) );
+					wp_localize_script( 'gravityflow_inbox', 'gravityflow_inbox_strings', array( 'restUrl' => esc_url_raw( rest_url() ), 'nonce' => wp_create_nonce( 'wp_rest' ) ) );
 
 					/**
 					 * Allows additional scripts to be enqueued when the gravityflow shortcode is present on the page.

@@ -1,1 +1,2 @@
+- Added the workflow note field to the quick actions in the inbox. The note field is only displayed when required by the step settings.
 - Updated the note for expired steps to include the step name.
