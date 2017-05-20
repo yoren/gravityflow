@@ -5744,6 +5744,18 @@ AND m.meta_value='queued'";
 		 * @return array
 		 */
 		public function get_feed_condition_entry_properties() {
+			$args = apply_filters( 'gform_filters_get_users', array(
+				'number' => 200,
+				'fields' => array( 'ID', 'user_login' )
+			) );
+
+			$users        = get_users( $args );
+			$user_choices = array();
+
+			foreach ( $users as $user ) {
+				$user_choices[] = array( 'text' => $user->user_login, 'value' => $user->ID );
+			}
+
 			return array(
 				'ip'             => array(
 					'label'  => esc_html__( 'User IP', 'gravityflow' ),
@@ -5807,6 +5819,13 @@ AND m.meta_value='queued'";
 					'label'  => esc_html__( 'Transaction ID', 'gravityflow' ),
 					'filter' => array(
 						'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+					),
+				),
+				'created_by' => array(
+					'label'  => esc_html__( 'Created By', 'gravityflow' ),
+					'filter' => array(
+						'operators' => array( 'is', 'isnot' ),
+						'choices'   => $user_choices,
 					),
 				),
 			);
