@@ -5833,6 +5833,48 @@ AND m.meta_value='queued'";
 		}
 
 		/**
+		 * Fork of GFCommon::evaluate_conditional_logic which supports evaluating logic based on entry properties.
+		 *
+		 * @since 1.7.1-dev
+		 *
+		 * @param array $logic The conditional logic to be evaluated.
+		 * @param array $form The current form.
+		 * @param array $entry The current entry.
+		 *
+		 * @return bool
+		 */
+		public function evaluate_conditional_logic( $logic, $form, $entry ) {
+			if ( ! $logic || ! is_array( rgar( $logic, 'rules' ) ) ) {
+				return true;
+			}
+
+			$entry_meta      = array_merge( $this->get_feed_condition_entry_meta(), $this->get_feed_condition_entry_properties() );
+			$entry_meta_keys = array_keys( $entry_meta );
+			$match_count     = 0;
+
+			if ( is_array( $logic['rules'] ) ) {
+				foreach ( $logic['rules'] as $rule ) {
+
+					if ( in_array( $rule['fieldId'], $entry_meta_keys ) ) {
+						$is_value_match = GFFormsModel::is_value_match( rgar( $entry, $rule['fieldId'] ), $rule['value'], $rule['operator'], null, $rule, $form );
+					} else {
+						$source_field   = GFFormsModel::get_field( $form, $rule['fieldId'] );
+						$field_value    = empty( $entry ) ? GFFormsModel::get_field_value( $source_field, array() ) : GFFormsModel::get_lead_field_value( $entry, $source_field );
+						$is_value_match = GFFormsModel::is_value_match( $field_value, $rule['value'], $rule['operator'], $source_field, $rule, $form );
+					}
+
+					if ( $is_value_match ) {
+						$match_count ++;
+					}
+				}
+			}
+
+			$do_action = ( $logic['logicType'] == 'all' && $match_count == sizeof( $logic['rules'] ) ) || ( $logic['logicType'] == 'any' && $match_count > 0 );
+
+			return $do_action;
+		}
+
+		/**
 		 * Target for the gform_pre_replace_merge_tags filter. Replaces the workflow_timeline and created_by merge tags.
 		 *
 		 *
