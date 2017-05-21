@@ -3847,15 +3847,14 @@ PRIMARY KEY  (id)
 		}
 
 		public function get_first_step( $form_id, $entry ) {
+			$form  = GFAPI::get_form( $form_id );
 			$steps = $this->get_steps( $form_id, $entry );
 			foreach ( $steps as $step ) {
-				if ( $step->is_active() ) {
-					$form = GFAPI::get_form( $form_id );
-					if ( $step->is_condition_met( $form ) ) {
-						return $step;
-					}
+				if ( $step->is_active() && $step->is_condition_met( $form ) ) {
+					return $step;
 				}
 			}
+
 			return false;
 		}
 
