@@ -5745,16 +5745,18 @@ AND m.meta_value='queued'";
 		 * @return array
 		 */
 		public function get_feed_condition_entry_properties() {
-			$args = apply_filters( 'gform_filters_get_users', array(
-				'number' => 200,
-				'fields' => array( 'ID', 'user_login' )
-			) );
-
-			$users        = get_users( $args );
 			$user_choices = array();
 
-			foreach ( $users as $user ) {
-				$user_choices[] = array( 'text' => $user->user_login, 'value' => $user->ID );
+			if ( $this->is_form_settings() ) {
+				$args = apply_filters( 'gform_filters_get_users', array(
+					'number' => 200,
+					'fields' => array( 'ID', 'user_login' )
+				) );
+
+				$users = get_users( $args );
+				foreach ( $users as $user ) {
+					$user_choices[] = array( 'text' => $user->user_login, 'value' => $user->ID );
+				}
 			}
 
 			return array(
