@@ -37,7 +37,7 @@ $I->seeElement( 'div.validation_error' );
 $I->fillField( 'input[name=input_1]', '1234' );
 $I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 ); // needed for chromedriver
 $I->click( 'Submit' );
-$I->see( 'Thanks for contacting us! We will get in touch with you shortly.' );
+$I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.', 3 );
 
 // Login to wp-admin
 $I->loginAsAdmin();
