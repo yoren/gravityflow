@@ -7,6 +7,7 @@ services:
       - wordpress
     environment:
       - GITHUB_TOKEN=$GITHUB_TOKEN
+      - GF_KEY=$GF_KEY
     volumes:
       - ${PWD}:/project
       - wp-core:/wp-core
