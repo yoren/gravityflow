@@ -9,9 +9,9 @@ services:
       - GITHUB_TOKEN=$GITHUB_TOKEN
       - GF_KEY=$GF_KEY
     volumes:
-      - ${PWD}:/project
+      - ./:/project
       - wp-core:/wp-core
-      - ${PWD}:/wp-core/wp-content/plugins/gravityflow
+      - ./:/wp-core/wp-content/plugins/gravityflow
     entrypoint: /docker-entrypoint.sh
   wordpress:
     image: wordpress:latest
@@ -20,7 +20,7 @@ services:
       - chrome
     volumes:
       - wp-core:/var/www/html
-      - ${PWD}:/var/www/html/wp-content/plugins/gravityflow
+      - ./:/var/www/html/wp-content/plugins/gravityflow
     ports:
       - 8080:80
     environment:
