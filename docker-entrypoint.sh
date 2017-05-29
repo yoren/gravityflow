@@ -42,6 +42,7 @@ if [ -z ${GITHUB_TOKEN} ]; then
 
     wp-su plugin install gravityformscli --force --activate
     wp-su gf install --key=${GF_KEY} --force
+    wp-su gf tool verify-checksums
 
 else
 
