@@ -7,7 +7,7 @@ wp-su() {
 
 # Clean up from previous tests
 rm -rf /wp-core/wp-content/uploads/gravity_forms
-rm -rf /wp-core/wp-content/plugins/gravityforms
+
 
 # Make sure permissions are correct.
 cd /wp-core
@@ -38,13 +38,16 @@ fi
 
 if [ -z ${GITHUB_TOKEN} ]; then
 
-    echo "Install the latest version of Gravity Forms using the CLI"
+    echo "Installing the latest version of Gravity Forms using the CLI"
 
     wp-su plugin install gravityformscli --force --activate
-    wp-su gf install --key=${GF_KEY} --force
+    wp-su gf install --key=${GF_KEY} --activate --force --quiet
+    echo "Gravity Forms installation complete"
     wp-su gf tool verify-checksums
 
 else
+
+    rm -rf /wp-core/wp-content/plugins/gravityforms
 
     echo "Grabbing the latest development master of Gravity Forms"
 
