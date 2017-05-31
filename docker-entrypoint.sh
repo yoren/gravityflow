@@ -25,7 +25,7 @@ done
 echo 'The database is ready'
 
 # Make sure WordPress is installed.
-if ! $(wp core is-installed); then
+if ! $(wp-su core is-installed); then
 
     echo "Installing WordPress"
 
