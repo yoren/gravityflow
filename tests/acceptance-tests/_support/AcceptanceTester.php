@@ -37,6 +37,7 @@ class AcceptanceTester extends \Codeception\Actor {
 	 */
 	public function amOnWorkflowPage( $page ) {
 		$I = $this;
+		$I->amOnPage( '/wp-admin' );
 		$I->click( 'Workflow' );
 		$I->click( $page );
 		$I->see( "Workflow $page" );
