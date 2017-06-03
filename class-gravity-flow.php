@@ -2255,14 +2255,14 @@ PRIMARY KEY  (id)
 			$display_workflow_info = (bool) $args['workflow_info'];
 
 			?>
-			<div class="postbox">
+			<div id="gravityflow-status-box-container" class="postbox">
 
 				<h3 class="hndle" style="cursor:default;">
 					<span><?php if ( $display_workflow_info ) { echo esc_html( $this->translate_navigation_label( 'workflow' ) ); } ?></span>
 				</h3>
 
 				<div id="submitcomment" class="submitbox">
-					<div id="minor-publishing">
+					<div id="minor-publishing" class="gravityflow-status-box">
 						<?php
 
 						$this->maybe_display_entry_detail_workflow_info( $current_step, $form, $entry, $args );
