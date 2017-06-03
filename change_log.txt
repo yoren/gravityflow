@@ -1,1 +1,2 @@
+- Added support for editable fields on the User Input step with calculations based on non-editable and/or non-display fields.
 - Updated the note for expired steps to include the step name.

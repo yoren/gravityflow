@@ -9,6 +9,7 @@ RUN apt-get update && \
             zlib1g-dev \
             libssl-dev \
             mysql-client \
+            sudo less \
         --no-install-recommends && \
         apt-get clean && \
         rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -31,6 +32,12 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
         --install-dir=/usr/local/bin
 RUN composer global require --optimize-autoloader \
         "hirak/prestissimo"
+
+
+# Add WP-CLI
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+RUN chmod +x wp-cli.phar
+RUN mv wp-cli.phar /usr/local/bin/wp
 
 # Prepare application
 WORKDIR /repo
