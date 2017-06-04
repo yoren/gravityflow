@@ -17,6 +17,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 
 class Gravity_Flow_Step_Feed_Sprout_Invoices extends Gravity_Flow_Step_Feed_Add_On {
 	public $_step_type = 'sprout_invoices';
+	protected $_slug = 'gravityformssproutinvoices';
 
 	/**
 	 * The ID of the form the Form Integrations plugin is configured to work with.
