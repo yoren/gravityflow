@@ -202,11 +202,13 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 *      'key' => 'approve',
 	 *      'icon' => $this->get_approve_icon(),
 	 *      'label' => __( 'Approve', 'gravityflow' ),
+	 *      'show_note_field' => true
 	 *   ),
 	 * array(
 	 *      'key' => 'reject',
 	 *      'icon' => $this->get_reject_icon(),
 	 *      'label' => __( 'Reject', 'gravityflow' ),
+	 *      'show_note_field' => false
 	 *   ),
 	 * );
 	 *

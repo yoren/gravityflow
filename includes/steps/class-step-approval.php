@@ -52,14 +52,26 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	public function get_actions() {
 		return array(
 			array(
-				'key' => 'approve',
-				'icon' => $this->get_approve_icon(),
-				'label' => __( 'Approve', 'gravityflow' ),
+				'key'             => 'approve',
+				'icon'            => $this->get_approve_icon(),
+				'label'           => __( 'Approve', 'gravityflow' ),
+				'show_note_field' => in_array( $this->note_mode, array(
+						'required_if_approved',
+						'required_if_reverted_or_rejected',
+						'required',
+					)
+				),
 			),
 			array(
-				'key' => 'reject',
-				'icon' => $this->get_reject_icon(),
-				'label' => __( 'Reject', 'gravityflow' ),
+				'key'             => 'reject',
+				'icon'            => $this->get_reject_icon(),
+				'label'           => __( 'Reject', 'gravityflow' ),
+				'show_note_field' => in_array( $this->note_mode, array(
+						'required_if_rejected',
+						'required_if_reverted_or_rejected',
+						'required',
+					)
+				),
 			),
 		);
 	}
@@ -91,16 +103,27 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			return new WP_Error( 'invalid_action', __( 'Action not supported', 'gravityflow' ) );
 		}
 
+		$note = $request['gravityflow_note'];
+
+		$valid_note = $this->validate_note_mode( $new_status, $note );
+
+		if ( ! $valid_note ) {
+			$response = array( 'status' => 'note_required', 'feedback' => __( 'A note is required.', 'gravityflow' ) );
+			$response = rest_ensure_response( $response );
+			return $response;
+		}
+
 		$assignee_key = isset( $request['assignee'] ) ? $request['assignee'] : gravity_flow()->get_current_user_assignee_key();
 
 		$assignee = new Gravity_Flow_Assignee( $assignee_key, $this );
 
-		$response = $this->process_assignee_status( $assignee, $new_status, $this->get_form() );
-
+		$feedback = $this->process_assignee_status( $assignee, $new_status, $this->get_form() );
 
 		if ( empty( $assignee ) ) {
 			return new WP_Error( 'not_supported', __( 'Action not supported.', 'gravityflow' ) );
 		}
+
+		$response = array( 'status' => 'success', 'feedback' => $feedback );
 
 		$response = rest_ensure_response( $response );
 
