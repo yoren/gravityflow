@@ -1,4 +1,6 @@
 - Added the workflow note field to the quick actions in the inbox. The note field is only displayed when required by the step settings.
 - Added support for editable fields on the User Input step with calculations based on non-editable and/or non-display fields.
 - Updated the note for expired steps to include the step name.
+- Updated step conditional logic to support rules based on entry meta and properties.
+- Updated the User and Role type fields so the step conditional logic rule value will use the choice drop down instead of text input.
 - API: Fixed an issue with the add-on slug which prevents feed interception for third party add-ons.

@@ -2257,14 +2257,14 @@ PRIMARY KEY  (id)
 			$display_workflow_info = (bool) $args['workflow_info'];
 
 			?>
-			<div class="postbox">
+			<div id="gravityflow-status-box-container" class="postbox">
 
 				<h3 class="hndle" style="cursor:default;">
 					<span><?php if ( $display_workflow_info ) { echo esc_html( $this->translate_navigation_label( 'workflow' ) ); } ?></span>
 				</h3>
 
 				<div id="submitcomment" class="submitbox">
-					<div id="minor-publishing">
+					<div id="minor-publishing" class="gravityflow-status-box">
 						<?php
 
 						$this->maybe_display_entry_detail_workflow_info( $current_step, $form, $entry, $args );
@@ -3849,15 +3849,14 @@ PRIMARY KEY  (id)
 		}
 
 		public function get_first_step( $form_id, $entry ) {
+			$form  = GFAPI::get_form( $form_id );
 			$steps = $this->get_steps( $form_id, $entry );
 			foreach ( $steps as $step ) {
-				if ( $step->is_active() ) {
-					$form = GFAPI::get_form( $form_id );
-					if ( $step->is_condition_met( $form ) ) {
-						return $step;
-					}
+				if ( $step->is_active() && $step->is_condition_met( $form ) ) {
+					return $step;
 				}
 			}
+
 			return false;
 		}
 
@@ -5700,6 +5699,184 @@ AND m.meta_value='queued'";
 			return $select_field;
 		}
 
+		/**
+		 * Display or return the markup for the feed_condition field type.
+		 *
+		 * @since 1.7.1-dev Added support for logic based on the entry meta.
+		 *
+		 * @param array $field The field properties.
+		 * @param bool  $echo  Should the setting markup be echoed.
+		 *
+		 * @return string
+		 */
+		public function settings_feed_condition( $field, $echo = true ) {
+			$entry_meta  = array_merge( $this->get_feed_condition_entry_meta(), $this->get_feed_condition_entry_properties() );
+			$find        = 'var feedCondition';
+			$replacement = sprintf( 'var entry_meta = %s; %s', json_encode( $entry_meta ), $find );
+			$html        = str_replace( $find, $replacement, parent::settings_feed_condition( $field, false ) );
+
+			if ( $echo ) {
+				echo $html;
+			}
+
+			return $html;
+		}
+
+		/**
+		 * Get the entry meta for use with the feed_condition setting.
+		 *
+		 * @since 1.7.1-dev
+		 *
+		 * @return array
+		 */
+		public function get_feed_condition_entry_meta() {
+			$step_id    = absint( rgget( 'fid' ) );
+			$form_id    = absint( rgget( 'id' ) );
+			$entry_meta = GFFormsModel::get_entry_meta( $form_id );
+
+			unset( $entry_meta['workflow_final_status'], $entry_meta['workflow_step'], $entry_meta[ 'workflow_step_status_' . $step_id ] );
+
+			return $entry_meta;
+		}
+
+		/**
+		 * Get the entry properties for use with the feed_condition setting.
+		 *
+		 * @since 1.7.1-dev
+		 *
+		 * @return array
+		 */
+		public function get_feed_condition_entry_properties() {
+			$user_choices = array();
+
+			if ( $this->is_form_settings() ) {
+				$args = apply_filters( 'gform_filters_get_users', array(
+					'number' => 200,
+					'fields' => array( 'ID', 'user_login' )
+				) );
+
+				$users = get_users( $args );
+				foreach ( $users as $user ) {
+					$user_choices[] = array( 'text' => $user->user_login, 'value' => $user->ID );
+				}
+			}
+
+			return array(
+				'ip'             => array(
+					'label'  => esc_html__( 'User IP', 'gravityflow' ),
+					'filter' => array(
+						'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+					),
+				),
+				'source_url'     => array(
+					'label'  => esc_html__( 'Source URL', 'gravityflow' ),
+					'filter' => array(
+						'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+					),
+				),
+				'payment_status' => array(
+					'label'  => esc_html__( 'Payment Status', 'gravityflow' ),
+					'filter' => array(
+						'operators' => array( 'is', 'isnot' ),
+						'choices'   => array(
+							array(
+								'text'  => esc_html__( 'Paid', 'gravityflow' ),
+								'value' => 'Paid',
+							),
+							array(
+								'text'  => esc_html__( 'Processing', 'gravityflow' ),
+								'value' => 'Processing',
+							),
+							array(
+								'text'  => esc_html__( 'Failed', 'gravityflow' ),
+								'value' => 'Failed',
+							),
+							array(
+								'text'  => esc_html__( 'Active', 'gravityflow' ),
+								'value' => 'Active',
+							),
+							array(
+								'text'  => esc_html__( 'Cancelled', 'gravityflow' ),
+								'value' => 'Cancelled',
+							),
+							array(
+								'text'  => esc_html__( 'Pending', 'gravityflow' ),
+								'value' => 'Pending',
+							),
+							array(
+								'text'  => esc_html__( 'Refunded', 'gravityflow' ),
+								'value' => 'Refunded',
+							),
+							array(
+								'text'  => esc_html__( 'Voided', 'gravityflow' ),
+								'value' => 'Voided',
+							),
+						),
+					),
+				),
+				'payment_amount' => array(
+					'label'  => esc_html__( 'Payment Amount', 'gravityflow' ),
+					'filter' => array(
+						'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+					),
+				),
+				'transaction_id' => array(
+					'label'  => esc_html__( 'Transaction ID', 'gravityflow' ),
+					'filter' => array(
+						'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+					),
+				),
+				'created_by' => array(
+					'label'  => esc_html__( 'Created By', 'gravityflow' ),
+					'filter' => array(
+						'operators' => array( 'is', 'isnot' ),
+						'choices'   => $user_choices,
+					),
+				),
+			);
+		}
+
+		/**
+		 * Fork of GFCommon::evaluate_conditional_logic which supports evaluating logic based on entry properties.
+		 *
+		 * @since 1.7.1-dev
+		 *
+		 * @param array $logic The conditional logic to be evaluated.
+		 * @param array $form The current form.
+		 * @param array $entry The current entry.
+		 *
+		 * @return bool
+		 */
+		public function evaluate_conditional_logic( $logic, $form, $entry ) {
+			if ( ! $logic || ! is_array( rgar( $logic, 'rules' ) ) ) {
+				return true;
+			}
+
+			$entry_meta      = array_merge( $this->get_feed_condition_entry_meta(), $this->get_feed_condition_entry_properties() );
+			$entry_meta_keys = array_keys( $entry_meta );
+			$match_count     = 0;
+
+			if ( is_array( $logic['rules'] ) ) {
+				foreach ( $logic['rules'] as $rule ) {
+
+					if ( in_array( $rule['fieldId'], $entry_meta_keys ) ) {
+						$is_value_match = GFFormsModel::is_value_match( rgar( $entry, $rule['fieldId'] ), $rule['value'], $rule['operator'], null, $rule, $form );
+					} else {
+						$source_field   = GFFormsModel::get_field( $form, $rule['fieldId'] );
+						$field_value    = empty( $entry ) ? GFFormsModel::get_field_value( $source_field, array() ) : GFFormsModel::get_lead_field_value( $entry, $source_field );
+						$is_value_match = GFFormsModel::is_value_match( $field_value, $rule['value'], $rule['operator'], $source_field, $rule, $form );
+					}
+
+					if ( $is_value_match ) {
+						$match_count ++;
+					}
+				}
+			}
+
+			$do_action = ( $logic['logicType'] == 'all' && $match_count == sizeof( $logic['rules'] ) ) || ( $logic['logicType'] == 'any' && $match_count > 0 );
+
+			return $do_action;
+		}
 
 		/**
 		 * Target for the gform_pre_replace_merge_tags filter. Replaces the workflow_timeline and created_by merge tags.
