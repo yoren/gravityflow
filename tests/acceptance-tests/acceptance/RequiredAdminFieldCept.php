@@ -33,9 +33,8 @@ $I->waitForElement( 'div.validation_message', 3 );
 
 // Check field conditional logic on the user input step
 $I->see( 'This field is required' );
-
 $I->selectOption( 'input[name=input_13]', 'Second Choice' );
-
+$I->scrollTo( '#gravityflow-note' );
 $I->selectOption( 'input[name=gravityflow_status]', 'complete' );
 $I->click( 'Update' );
 $I->waitForElement( 'div.notice-success', 3 );
