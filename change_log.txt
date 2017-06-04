@@ -1,2 +1,3 @@
+- Added the workflow note field to the quick actions in the inbox. The note field is only displayed when required by the step settings.
 - Added support for editable fields on the User Input step with calculations based on non-editable and/or non-display fields.
 - Updated the note for expired steps to include the step name.
