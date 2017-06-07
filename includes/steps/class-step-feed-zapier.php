@@ -19,6 +19,7 @@ class Gravity_Flow_Step_Feed_Zapier extends Gravity_Flow_Step_Feed_Add_On {
 	public $_step_type = 'zapier';
 
 	protected $_class_name = 'GFZapier';
+	protected $_slug = 'gravityformszapier';
 
 	public function get_label() {
 		return esc_html__( 'Zapier', 'gravityflow' );
