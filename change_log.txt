@@ -5,3 +5,4 @@
 - Updated step conditional logic to support rules based on entry meta and properties.
 - Updated the User and Role type fields so the step conditional logic rule value will use the choice drop down instead of text input.
 - API: Fixed an issue with the add-on slug which prevents feed interception for third party add-ons.
+- Fixed a JS error on the entry detail page when a User Input step has an editable Chained Select field and conditional logic is not enabled.
