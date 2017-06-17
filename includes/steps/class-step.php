@@ -1816,6 +1816,80 @@ abstract class Gravity_Flow_Step extends stdClass {
 		}
 
 		GFFormsModel::add_note( $this->get_entry_id(), $user_id, $user_name, $note, 'gravityflow' );
+		$this->update_workflow_notes();
+	}
+
+	/**
+	 * Store the ID of the added note in the 'workflow_notes' entry meta item for this step.
+	 *
+	 * @since 1.7.1-dev
+	 */
+	public function update_workflow_notes() {
+		$notes = $this->get_workflow_notes();
+
+		global $wpdb;
+		$notes[ $this->get_id() ][] = $wpdb->insert_id;
+
+		gform_update_meta( $this->get_entry_id(), 'workflow_notes', $notes );
+	}
+
+	/**
+	 * Get the 'workflow_notes' entry meta item.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @return array
+	 */
+	public function get_workflow_notes() {
+		$notes = gform_get_meta( $this->get_entry_id(), 'workflow_notes' );
+
+		if ( empty( $notes ) ) {
+			$notes = array();
+		}
+
+		return $notes;
+	}
+
+	/**
+	 * Get the user submitted notes for a step.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param int $step_id The ID of the step the notes are to be retrieved for or 0 to get the notes for the current step.
+	 *
+	 * @return array
+	 */
+	public function get_step_notes( $step_id = 0 ) {
+		if ( empty( $step_id ) ) {
+			$step_id = $this->get_id();
+		}
+
+		$notes      = rgar( $this->get_workflow_notes(), $step_id, array() );
+		$step_notes = array();
+
+		if ( ! empty( $notes ) ) {
+			$lead_notes = GFFormsModel::get_lead_notes( $this->get_entry_id() );
+			$prefix     = esc_html__( 'Note', 'gravityflow' ) . ': ';
+
+			foreach ( $lead_notes as &$note ) {
+				if ( ! in_array( $note->id, $notes ) ) {
+					continue;
+				}
+
+				$note_position = strpos( $note->value, $prefix );
+
+				if ( $note_position === false ) {
+					continue;
+				}
+
+				$index        = $note_position + strlen( $prefix );
+				$note->value  = substr( $note->value, $index );
+				$step_notes[] = $note;
+			}
+
+		}
+
+		return $step_notes;
 	}
 
 	/**
