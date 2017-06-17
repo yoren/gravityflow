@@ -965,18 +965,12 @@ abstract class Gravity_Flow_Step extends stdClass {
 			foreach ( $assignees_matches as $assignees_match ) {
 				$full_tag       = $assignees_match[0];
 				$options_string = isset( $assignees_match[2] ) ? $assignees_match[2] : '';
-				$options        = shortcode_parse_atts( $options_string );
 
-				$a                 = shortcode_atts(
-					array(
-						'status'       => true,
-						'user_email'   => true,
-						'display_name' => true,
-					), $options
-				);
-				$a['status']       = strtolower( $a['status'] ) == 'false' ? false : true;
-				$a['user_email']   = strtolower( $a['user_email'] ) == 'false' ? false : true;
-				$a['display_name'] = strtolower( $a['display_name'] ) == 'false' ? false : true;
+				$a = Gravity_Flow_Common::get_string_attributes( $options_string, array(
+					'status'       => true,
+					'user_email'   => true,
+					'display_name' => true,
+				) );
 
 				$assignees_text_arr = array();
 				$assignees          = $this->get_assignees();
@@ -1021,15 +1015,12 @@ abstract class Gravity_Flow_Step extends stdClass {
 				$location       = $match[1];
 				$type           = $match[2];
 				$options_string = isset( $match[4] ) ? $match[4] : '';
-				$options        = shortcode_parse_atts( $options_string );
 
-				$a = shortcode_atts(
-					array(
-						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
-						'text'    => $location == 'inbox' ? esc_html__( 'Inbox', 'gravityflow' ) : esc_html__( 'Entry', 'gravityflow' ),
-						'token'   => false,
-					), $options
-				);
+				$a = Gravity_Flow_Common::get_string_attributes( $options_string, array(
+					'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
+					'text'    => $location == 'inbox' ? esc_html__( 'Inbox', 'gravityflow' ) : esc_html__( 'Entry', 'gravityflow' ),
+					'token'   => false,
+				) );
 
 				$token = $this->get_workflow_url_access_token( $a, $assignee );
 
@@ -1059,7 +1050,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return string
 	 */
 	public function get_workflow_url_access_token( $a, $assignee ) {
-		$force_token = strtolower( $a['token'] ) == 'true' ? true : false;
+		$force_token = $a['token'];
 		$token       = '';
 
 		if ( $assignee && $force_token ) {
@@ -1099,14 +1090,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 					$full_tag       = $match[0];
 					$type           = $match[1];
 					$options_string = isset( $match[3] ) ? $match[3] : '';
-					$options        = shortcode_parse_atts( $options_string );
 
-					$a = shortcode_atts(
-						array(
-							'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
-							'text'    => esc_html__( 'Cancel Workflow', 'gravityflow' ),
-						), $options
-					);
+					$a = Gravity_Flow_Common::get_string_attributes( $options_string, array(
+						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
+						'text'    => esc_html__( 'Cancel Workflow', 'gravityflow' ),
+					) );
 
 					$url = $this->get_entry_url( $a['page_id'], $assignee, $cancel_token );
 

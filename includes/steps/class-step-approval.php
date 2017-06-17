@@ -889,13 +889,10 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			foreach ( $matches as $match ) {
 				$full_tag       = $match[0];
 				$options_string = isset( $match[2] ) ? $match[2] : '';
-				$options        = shortcode_parse_atts( $options_string );
 
-				$a = shortcode_atts(
-					array(
-						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
-					), $options
-				);
+				$a = Gravity_Flow_Common::get_string_attributes( $options_string, array(
+					'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
+				) );
 
 				$approve_url = $this->get_entry_url( $a['page_id'], $assignee, $approve_token );
 				$approve_url = esc_url_raw( $approve_url );
@@ -909,14 +906,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			foreach ( $matches as $match ) {
 				$full_tag       = $match[0];
 				$options_string = isset( $match[2] ) ? $match[2] : '';
-				$options        = shortcode_parse_atts( $options_string );
 
-				$a = shortcode_atts(
-					array(
-						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
-						'text'    => esc_html__( 'Approve', 'gravityflow' ),
-					), $options
-				);
+				$a = Gravity_Flow_Common::get_string_attributes( $options_string, array(
+					'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
+					'text'    => esc_html__( 'Approve', 'gravityflow' ),
+				) );
 
 				$approve_url  = $this->get_entry_url( $a['page_id'], $assignee, $approve_token );
 				$approve_url  = esc_url_raw( $approve_url );
@@ -939,13 +933,10 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			foreach ( $matches as $match ) {
 				$full_tag       = $match[0];
 				$options_string = isset( $match[2] ) ? $match[2] : '';
-				$options        = shortcode_parse_atts( $options_string );
 
-				$a = shortcode_atts(
-					array(
-						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
-					), $options
-				);
+				$a = Gravity_Flow_Common::get_string_attributes( $options_string, array(
+					'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
+				) );
 
 				$reject_url = $this->get_entry_url( $a['page_id'], $assignee, $reject_token );
 				$reject_url = esc_url_raw( $reject_url );
@@ -958,14 +949,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			foreach ( $matches as $match ) {
 				$full_tag       = $match[0];
 				$options_string = isset( $match[2] ) ? $match[2] : '';
-				$options        = shortcode_parse_atts( $options_string );
 
-				$a = shortcode_atts(
-					array(
-						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
-						'text'    => esc_html__( 'Reject', 'gravityflow' ),
-					), $options
-				);
+				$a = Gravity_Flow_Common::get_string_attributes( $options_string, array(
+					'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
+					'text'    => esc_html__( 'Reject', 'gravityflow' ),
+				) );
 
 				$reject_url  = $this->get_entry_url( $a['page_id'], $assignee, $reject_token );
 				$reject_url  = esc_url_raw( $reject_url );
