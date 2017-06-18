@@ -3136,7 +3136,6 @@ PRIMARY KEY  (id)
 			$response = $this->perform_edd_license_request( 'check_license', $value );
 
 			return json_decode( wp_remote_retrieve_body( $response ) );
-
 		}
 
 		public function license_validation( $field, $field_setting ) {
@@ -3180,7 +3179,7 @@ PRIMARY KEY  (id)
 			// Prepare the request arguments
 			$args = array(
 				'timeout'   => 10,
-				'sslverify' => false,
+				'sslverify' => true,
 				'body'      => array(
 					'edd_action' => $edd_action,
 					'license'    => trim( $license ),
@@ -3252,7 +3251,38 @@ PRIMARY KEY  (id)
 				return $result;
 			}
 
+			if ( GFAPI::current_user_can_any( 'gform_full_access' ) && $this->is_dev_version() && ! SCRIPT_DEBUG ) {
+				$message = esc_html__( 'Important: Gravity Flow (Development Version) is missing some important files that were not included in the installation package. Consult the installation instructions for further details.', 'gravityflow' );
+				GFCommon::add_message( $message, true );
+			};
+
 			return false;
+		}
+
+		/**
+		 * Checks whether the current version is a development version. The development version does not include
+		 * minified CSS and JavaScript files.
+		 *
+		 * Interim build packages of the development version generated during continuous integration do contain
+		 * the minified files and are therefore not considered development versions despite the version number.
+		 * These builds contain the commit hash in the plugin version.
+		 *
+		 * @since 1.7.1
+		 *
+		 * @return bool
+		 */
+		public function is_dev_version() {
+			$is_dev_version = false;
+			$version = $this->get_version();
+			if ( strpos( $version, '-dev' ) > 0  ) {
+				$plugin_data    = get_plugin_data( $this->get_base_path() . '/gravityflow.php' );
+				$plugin_version = $plugin_data['Version'];
+				$hash = str_replace( $version, '', $plugin_version );
+				if ( empty( $hash ) ) {
+					$is_dev_version = true;
+				}
+			}
+			return $is_dev_version;
 		}
 
 
@@ -3266,6 +3296,7 @@ PRIMARY KEY  (id)
 			}
 
 			$this->inbox_page();
+
 		}
 
 		public function inbox_page( $args = array() ) {
@@ -3391,7 +3422,10 @@ PRIMARY KEY  (id)
 							<img width="45" height="22" src="<?php echo $this->get_base_url(); ?>/images/gravityflow-icon-blue-grad.svg" style="margin-right:5px;"/>
 							<span><?php esc_html_e( 'Workflow Inbox', 'gravityflow' ); ?></span>
 						</h2>
-					<?php
+
+						<?php GFCommon::display_admin_message(); ?>
+
+						<?php
 						$this->toolbar();
 					endif;
 
@@ -3467,6 +3501,8 @@ PRIMARY KEY  (id)
 						<span><?php esc_html_e( 'Workflow Activity', 'gravityflow' ); ?></span>
 
 					</h2>
+
+					<?php GFCommon::display_admin_message(); ?>
 
 					<?php $this->toolbar(); ?>
 				<?php
@@ -4154,6 +4190,10 @@ PRIMARY KEY  (id)
 		}
 
 		public function support() {
+			if ( $this->maybe_display_installation_wizard() ) {
+				return;
+			}
+
 			require_once( $this->get_base_path() . '/includes/pages/class-support.php' );
 			Gravity_Flow_Support::display();
 		}
