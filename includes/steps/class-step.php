@@ -959,9 +959,81 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 		$text = $this->replace_workflow_url_variables( $text, $assignee );
 		$text = $this->replace_workflow_cancel_variables( $text, $assignee );
+		$text = $this->replace_assignee_variables( $text );
+		$text = $this->replace_workflow_note_variables( $text );
 
+		return $text;
+	}
+
+	/**
+	 * Replace the {workflow_note} merge tags.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param string $text The text being processed.
+	 *
+	 * @return string
+	 */
+	public function replace_workflow_note_variables( $text ) {
+		preg_match_all( '/{workflow_note(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
+
+		if ( ! empty( $matches ) ) {
+			foreach ( $matches as $match ) {
+				$full_tag  = $match[0];
+				$modifiers = rgar( $match, 2 );
+
+				$a = Gravity_Flow_Common::get_string_attributes( $modifiers, array(
+					'step_id'      => null,
+					'display_name' => false,
+					'display_date' => false
+				) );
+
+				$replacement = '';
+				$notes       = $this->get_step_notes( $a['step_id'] );
+
+				if ( ! empty( $notes ) ) {
+					$replacement_array = array();
+
+					foreach ( $notes as $note ) {
+						$name = $a['display_name'] ? esc_html( $note->user_name ) : '';
+						$date = $a['display_date'] ? esc_html( GFCommon::format_date( $note->date_created, false, 'd M Y g:i a', false ) ) : '';
+
+						$replacement = '';
+
+						if ( $name || $date ) {
+							$sep = $name && $date ? ': ' : '';
+
+							$replacement .= sprintf( '<div class="gravityflow-note-header">%s%s%s</div>', $name, $sep, $date );
+						}
+
+						$replacement .= sprintf( '<div class="gravityflow-note-value">%s</div>', nl2br( esc_html( $note->value ) ) );
+
+						$replacement_array[] = $replacement;
+					}
+
+					$replacement = implode( '<br>', $replacement_array );
+				}
+
+				$text = str_replace( $full_tag, $replacement, $text );
+			}
+		}
+
+		return $text;
+	}
+
+	/**
+	 * Replace the {assignees} merge tags.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param string $text The text being processed.
+	 *
+	 * @return string
+	 */
+	public function replace_assignee_variables( $text ) {
 		preg_match_all( '/{assignees(:(.*?))?}/', $text, $assignees_matches, PREG_SET_ORDER );
-		if ( is_array( $assignees_matches ) ) {
+
+		if ( ! empty( $assignees_matches ) ) {
 			foreach ( $assignees_matches as $assignees_match ) {
 				$full_tag       = $assignees_match[0];
 				$options_string = isset( $assignees_match[2] ) ? $assignees_match[2] : '';
@@ -1829,6 +1901,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 		global $wpdb;
 		$notes[ $this->get_id() ][] = $wpdb->insert_id;
+		$notes['last_step']         = $this->get_id();
 
 		gform_update_meta( $this->get_entry_id(), 'workflow_notes', $notes );
 	}
@@ -1860,11 +1933,13 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return array
 	 */
 	public function get_step_notes( $step_id = 0 ) {
+		$workflow_notes = $this->get_workflow_notes();
+
 		if ( empty( $step_id ) ) {
-			$step_id = $this->get_id();
+			$step_id = rgar( $workflow_notes, 'last_step', $this->get_id() );
 		}
 
-		$notes      = rgar( $this->get_workflow_notes(), $step_id, array() );
+		$notes      = rgar( $workflow_notes, $step_id, array() );
 		$step_notes = array();
 
 		if ( ! empty( $notes ) ) {

@@ -476,7 +476,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				$feedback = $note_message;
 			}
 		} else {
-			$feedback = esc_html__( 'Entry updated - in progress.', 'gravityflow' );
+			$feedback     = esc_html__( 'Entry updated - in progress.', 'gravityflow' );
 			$note_message = $feedback;
 		}
 
@@ -498,7 +498,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			$note .= sprintf( "\n%s: %s", esc_html__( 'Note', 'gravityflow' ), $user_note );
 		}
 
-		$this->add_note( $note );
+		$user_id = ( $assignee->get_type() == 'user_id' ) ? $assignee->get_id() : 0;
+		$this->add_note( $note, $user_id, $assignee->get_display_name() );
 
 		$status = $this->evaluate_status();
 		$this->update_step_status( $status );
@@ -1112,22 +1113,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Replace the workflow_note merge tag and the tags in the base step class.
-	 *
-	 * @param string $text The text with merge tags.
-	 * @param Gravity_Flow_Assignee $assignee
-	 *
-	 * @return mixed
-	 */
-	public function replace_variables( $text, $assignee ) {
-		$text    = parent::replace_variables( $text, $assignee );
-		$comment = rgpost( 'gravityflow_note' );
-		$text    = str_replace( '{workflow_note}', $comment, $text );
-
-		return $text;
 	}
 
 	/**

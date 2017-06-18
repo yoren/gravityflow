@@ -858,9 +858,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 * @return mixed
 	 */
 	public function replace_variables( $text, $assignee ) {
-		$text    = parent::replace_variables( $text, $assignee );
-		$comment = rgpost( 'gravityflow_note' );
-		$text    = str_replace( '{workflow_note}', $comment, $text );
+		$text = parent::replace_variables( $text, $assignee );
 
 		$expiration_days = apply_filters( 'gravityflow_approval_token_expiration_days', 2, $assignee );
 

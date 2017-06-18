@@ -4,4 +4,6 @@
 - Updated the note for expired steps to include the step name.
 - Updated step conditional logic to support rules based on entry meta and properties.
 - Updated the User and Role type fields so the step conditional logic rule value will use the choice drop down instead of text input.
+- Updated the {workflow_note} merge tag to support the optional step_id, display_name, and display_date modifiers e.g. {workflow_note: step_id=5 display_name=true display_date=true}.
 - API: Fixed an issue with the add-on slug which prevents feed interception for third party add-ons.
+- Fixed an issue where the {workflow_note} merge tag would not return the note when the merge tag was not processed immediately after the note was added.

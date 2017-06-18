@@ -121,22 +121,6 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 	}
 
 	/**
-	 * Replace the workflow_note merge tag and the tags in the base step class.
-	 *
-	 * @param string $text The text with merge tags.
-	 * @param Gravity_Flow_Assignee $assignee
-	 *
-	 * @return mixed
-	 */
-	public function replace_variables( $text, $assignee ) {
-		$text    = parent::replace_variables( $text, $assignee );
-		$comment = rgpost( 'gravityflow_note' );
-		$text    = str_replace( '{workflow_note}', $comment, $text );
-
-		return $text;
-	}
-
-	/**
 	 * Prevent the notifications assigned to the current step from being sent during form submission.
 	 */
 	public function intercept_submission() {
