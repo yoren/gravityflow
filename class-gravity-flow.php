@@ -1080,13 +1080,14 @@ PRIMARY KEY  (id)
 		public function get_asssignee_status_by_entry( $form_id ) {
 			global $wpdb;
 			$assignee_status_by_entry = array();
-			$table = GFFormsModel::get_lead_meta_table_name();
-			$lead_table = GFFormsModel::get_lead_table_name();
+			$table = Gravity_Flow_Common::get_entry_meta_table_name();
+			$entry_table = Gravity_Flow_Common::get_entry_table_name();
+			$entry_id_column = Gravity_Flow_Common::get_entry_id_column_name();
 			$sql = $wpdb->prepare( "
-			SELECT *
+			SELECT m.form_id, m.{$entry_id_column} as entry_id, m.meta_key, m.meta_value
 			FROM $table m
-			INNER JOIN $lead_table l
-			ON l.id = m.lead_id
+			INNER JOIN $entry_table l
+			ON l.id = m.{$entry_id_column}
 			WHERE m.meta_key LIKE %s
 			AND m.meta_key NOT LIKE '%%_timestamp'
 			AND m.form_id=%d
@@ -1096,18 +1097,18 @@ PRIMARY KEY  (id)
 			if ( ! is_wp_error( $rows ) && count( $rows ) > 0 ) {
 				foreach ( $rows as $row ) {
 					$user_id = str_replace( 'workflow_user_id_', '', $row->meta_key );
-					if ( ! isset( $assignee_status_by_entry[ $row->lead_id ] ) ) {
-						$assignee_status_by_entry[ $row->lead_id ] = array();
+					if ( ! isset( $assignee_status_by_entry[ $row->entry_id ] ) ) {
+						$assignee_status_by_entry[ $row->entry_id ] = array();
 					}
-					$assignee_status_by_entry[ $row->lead_id ][ 'user_id|' . $user_id ] = $row->meta_value;
+					$assignee_status_by_entry[ $row->entry_id ][ 'user_id|' . $user_id ] = $row->meta_value;
 				}
 			}
 
 			$sql = $wpdb->prepare( "
-			SELECT *
+			SELECT m.form_id, m.{$entry_id_column} as entry_id, m.meta_key, m.meta_value
 			FROM $table m
-			INNER JOIN $lead_table l
-			ON l.id = m.lead_id
+			INNER JOIN $entry_table l
+			ON l.id = m.{$entry_id_column}
 			WHERE m.meta_key LIKE %s
 			AND m.meta_key NOT LIKE '%%_timestamp'
 			AND m.form_id=%d
@@ -1117,18 +1118,18 @@ PRIMARY KEY  (id)
 			if ( ! is_wp_error( $rows ) && count( $rows ) > 0 ) {
 				foreach ( $rows as $row ) {
 					$user_id = str_replace( 'workflow_email_', '', $row->meta_key );
-					if ( ! isset( $assignee_status_by_entry[ $row->lead_id ] ) ) {
-						$assignee_status_by_entry[ $row->lead_id ] = array();
+					if ( ! isset( $assignee_status_by_entry[ $row->entry_id ] ) ) {
+						$assignee_status_by_entry[ $row->entry_id ] = array();
 					}
-					$assignee_status_by_entry[ $row->lead_id ][ 'email|' . $user_id ] = $row->meta_value;
+					$assignee_status_by_entry[ $row->entry_id ][ 'email|' . $user_id ] = $row->meta_value;
 				}
 			}
 
 			$sql = $wpdb->prepare( "
-			SELECT *
+			SELECT m.form_id, m.{$entry_id_column} as entry_id, m.meta_key, m.meta_value
 			FROM $table m
-			INNER JOIN $lead_table l
-			ON l.id = m.lead_id
+			INNER JOIN $entry_table l
+			ON l.id = m.{$entry_id_column}
 			WHERE m.meta_key LIKE %s
 			AND m.meta_key NOT LIKE '%%_timestamp'
 			AND m.form_id=%d
@@ -1138,10 +1139,10 @@ PRIMARY KEY  (id)
 			if ( ! is_wp_error( $rows ) && count( $rows ) > 0 ) {
 				foreach ( $rows as $row ) {
 					$user_id = str_replace( 'workflow_role_', '', $row->meta_key );
-					if ( ! isset( $assignee_status_by_entry[ $row->lead_id ] ) ) {
-						$assignee_status_by_entry[ $row->lead_id ] = array();
+					if ( ! isset( $assignee_status_by_entry[ $row->entry_id ] ) ) {
+						$assignee_status_by_entry[ $row->entry_id ] = array();
 					}
-					$assignee_status_by_entry[ $row->lead_id ][ 'role|' . $user_id ] = 'role|' . $user_id;
+					$assignee_status_by_entry[ $row->entry_id ][ 'role|' . $user_id ] = 'role|' . $user_id;
 				}
 			}
 
@@ -3957,7 +3958,7 @@ PRIMARY KEY  (id)
 				'page'             => 'inbox',
 				'form'             => null,
 				'form_id'          => null,
-				'fields'           => '',
+				'fields'           => array(),
 				'display_all'      => null,
 				'actions_column'   => false,
 				'allow_anonymous'  => false,
@@ -4449,14 +4450,15 @@ PRIMARY KEY  (id)
 
 			global $wpdb;
 
-			$lead_table = GFFormsModel::get_lead_table_name();
-			$meta_table = GFFormsModel::get_lead_meta_table_name();
+			$entry_table = Gravity_Flow_Common::get_entry_table_name();
+			$meta_table = Gravity_Flow_Common::get_entry_meta_table_name();
+			$entry_id_column = Gravity_Flow_Common::get_entry_id_column_name();
 
 			$sql = "
 SELECT l.id, l.form_id
-FROM $lead_table l
+FROM $entry_table l
 INNER JOIN $meta_table m
-ON l.id = m.lead_id
+ON l.id = m.{$entry_id_column}
 AND l.status='active'
 AND m.meta_key LIKE 'workflow_step_status_%'
 AND m.meta_value='queued'";
