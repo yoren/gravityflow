@@ -23,7 +23,7 @@ class Gravity_Flow_Activity {
 	}
 
 	public static function get_entry_table_name() {
-			return version_compare( Gravity_Flow_Common::get_gravityforms_db_version(), '2.3-dev-1', '<' ) ? GFFormsModel::get_lead_table_name() : GFFormsModel::get_entry_table_name();
+		return Gravity_Flow_Common::get_entry_table_name();
 	}
 
 	public static function get_events( $limit = 400, $objects = array( 'workflow', 'step', 'assignee' ) ) {
