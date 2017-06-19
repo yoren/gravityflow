@@ -165,7 +165,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	}
 
 	public function get_settings() {
-        $settings_api = $this->get_common_settings_api();
+		$settings_api = $this->get_common_settings_api();
 
 		$settings = array(
 			'title'  => esc_html__( 'Approval', 'gravityflow' ),
@@ -174,19 +174,19 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				$settings_api->get_setting_assignees(),
 				$settings_api->get_setting_assignee_routing(),
 				array(
-					'name'          => 'unanimous_approval',
+					'name'          => 'assignee_policy',
 					'label'         => __( 'Approval Policy', 'gravityflow' ),
 					'tooltip'       => __( 'Define how approvals should be processed. If all assignees must approve then the entry will require unanimous approval before the step can be completed. If the step is assigned to a role only one user in that role needs to approve.', 'gravityflow' ),
 					'type'          => 'radio',
-					'default_value' => false,
+					'default_value' => 'all',
 					'choices'       => array(
 						array(
-							'label' => __( 'At least one assignee must approve', 'gravityflow' ),
-							'value' => false,
+							'label' => __( 'Only one assignee is required to approve', 'gravityflow' ),
+							'value' => 'any',
 						),
 						array(
 							'label' => __( 'All assignees must approve', 'gravityflow' ),
-							'value' => true,
+							'value' => 'all',
 						),
 					),
 				),
@@ -234,7 +234,10 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$steps                   = gravity_flow()->get_steps( $form_id );
 		foreach ( $steps as $step ) {
 			if ( $step->get_type() === 'user_input' ) {
-				$user_input_step_choices[] = array( 'label' => $step->get_name(), 'value' => $step->get_id() );
+				$user_input_step_choices[] = array(
+					'label' => $step->get_name(),
+					'value' => $step->get_id(),
+				);
 			}
 		}
 
@@ -265,11 +268,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				array( 'value' => 'required', 'label' => esc_html__( 'Always required', 'gravityflow' ) ),
 				array(
 					'value' => 'required_if_approved',
-					'label' => esc_html__( 'Required if approved', 'gravityflow' )
+					'label' => esc_html__( 'Required if approved', 'gravityflow' ),
 				),
 				array(
 					'value' => 'required_if_rejected',
-					'label' => esc_html__( 'Required if rejected', 'gravityflow' )
+					'label' => esc_html__( 'Required if rejected', 'gravityflow' ),
 				),
 			),
 		);
