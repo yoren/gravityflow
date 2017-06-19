@@ -952,6 +952,17 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$columns['workflow_timestamp'] = esc_html__( 'Last Updated', 'gravityflow' );
 		}
 
+		/**
+		 * Allows the columns to be filtered for the status table.
+		 *
+		 * @since 1.7.1
+		 *
+		 * @param array $columns The columns to be filtered
+		 * @param array $args The array of args for this status table.
+		 * @param WP_List_Table $this The current WP_List_Table object.
+		 */
+		$columns = apply_filters( 'gravityflow_columns_status_table', $columns, $args, $this );
+
 		return $columns;
 	}
 
