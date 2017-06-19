@@ -342,7 +342,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				$step_status = 'rejected';
 				break;
 			}
-			if ( $this->type == 'select' && ! $this->unanimous_approval ) {
+			if ( $this->assignee_policy == 'any' ) {
 				if ( $approver_status == 'approved' ) {
 					$step_status = 'approved';
 					break;
