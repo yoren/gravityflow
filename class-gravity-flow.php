@@ -3252,7 +3252,7 @@ PRIMARY KEY  (id)
 			}
 
 			if ( GFAPI::current_user_can_any( 'gform_full_access' ) && $this->is_dev_version() && ! SCRIPT_DEBUG ) {
-				$message = esc_html__( 'Important: Gravity Flow (Development Version) is missing some important files that were not included in the installation package. Consult the installation instructions for further details.', 'gravityflow' );
+				$message = esc_html__( 'Important: Gravity Flow (Development Version) is missing some important files that were not included in the installation package. Consult the readme.md file for further details.', 'gravityflow' );
 				GFCommon::add_message( $message, true );
 			};
 
