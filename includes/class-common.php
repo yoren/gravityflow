@@ -19,9 +19,9 @@ class Gravity_Flow_Common {
 	/**
 	 * Returns a URl to a workflow page.
 	 *
-	 * @param int|null $page_id
+	 * @param int|null              $page_id
 	 * @param Gravity_Flow_Assignee $assignee
-	 * @param string $access_token
+	 * @param string                $access_token
 	 *
 	 * @return string
 	 */
@@ -51,8 +51,8 @@ class Gravity_Flow_Common {
 	/**
 	 * If form and field ids have bee specified for display on the inbox/status page add the columns.
 	 *
-	 * @param array $columns The inbox/status page columns.
-	 * @param int $form_id The form ID of the entries to be displayed or 0 to display entries from all forms.
+	 * @param array $columns   The inbox/status page columns.
+	 * @param int   $form_id   The form ID of the entries to be displayed or 0 to display entries from all forms.
 	 * @param array $field_ids The field IDs or entry properties/meta to be displayed.
 	 *
 	 * @return array
@@ -167,4 +167,28 @@ class Gravity_Flow_Common {
 
 		return $attributes;
 	}
+
+	public static function get_gravityforms_db_version() {
+
+		if ( method_exists( 'GFFormsModel', 'get_database_version' ) ) {
+			$db_version = GFFormsModel::get_database_version();
+		} else {
+			$db_version = GFForms::$version;
+		}
+
+		return $db_version;
+	}
+
+	public static function get_entry_table_name() {
+		return version_compare( self::get_gravityforms_db_version(), '2.3-dev-1', '<' ) ? GFFormsModel::get_lead_table_name() : GFFormsModel::get_entry_table_name();
+	}
+
+	public static function get_entry_meta_table_name() {
+		return version_compare( self::get_gravityforms_db_version(), '2.3-dev-1', '<' ) ? GFFormsModel::get_lead_meta_table_name() : GFFormsModel::get_entry_meta_table_name();
+	}
+
+	public static function get_entry_id_column_name() {
+		return version_compare( self::get_gravityforms_db_version(), '2.3-dev-1', '<' ) ? 'lead_id' : 'entry_id';
+	}
+
 }

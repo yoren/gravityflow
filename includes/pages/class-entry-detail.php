@@ -236,6 +236,8 @@ class Gravity_Flow_Entry_Detail {
 				class="gf_admin_page_formid">ID: <?php echo absint( $form['id'] ); ?></span>
 		</h2>
 
+		<?php GFCommon::display_admin_message(); ?>
+
 		<div id="gf_form_toolbar">
 			<ul id="gf_form_toolbar_links">
 
