@@ -101,15 +101,14 @@ class Gravity_Flow_Support {
 		$user = wp_get_current_user();
 
 		?>
+		<style>
+			.gravityflow_feedback_form label {
+				padding: 20px 0 10px;
+				display: block;
+				font-weight: bold;
+			}
+		</style>
 		<div class="wrap gf_entry_wrap">
-			<style>
-				.gravityflow_feedback_form  label{
-					padding: 20px 0 10px;
-					display:block;
-					font-weight: bold;
-				}
-			</style>
-
 			<h2 class="gf_admin_page_title">
 				<span><?php esc_html_e( 'Gravity Flow Support', 'gravityflow' ); ?></span>
 
