@@ -135,4 +135,27 @@ class Gravity_Flow_Common {
 
 		return $choices;
 	}
+
+	public static function get_gravityforms_db_version() {
+
+		if ( method_exists( 'GFFormsModel', 'get_database_version' ) ) {
+			$db_version = GFFormsModel::get_database_version();
+		} else {
+			$db_version = GFForms::$version;
+		}
+
+		return $db_version;
+	}
+
+	public static function get_entry_table_name() {
+		return version_compare( self::get_gravityforms_db_version(), '2.3-dev-1', '<' ) ? GFFormsModel::get_lead_table_name() : GFFormsModel::get_entry_table_name();
+	}
+
+	public static function get_entry_meta_table_name() {
+		return version_compare( self::get_gravityforms_db_version(), '2.3-dev-1', '<' ) ? GFFormsModel::get_lead_meta_table_name() : GFFormsModel::get_entry_meta_table_name();
+	}
+
+	public static function get_entry_id_column_name() {
+		return version_compare( self::get_gravityforms_db_version(), '2.3-dev-1', '<' ) ? 'lead_id' : 'entry_id';
+	}
 }
