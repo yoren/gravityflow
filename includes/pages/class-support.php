@@ -111,7 +111,7 @@ class Gravity_Flow_Support {
 			</style>
 
 			<h2 class="gf_admin_page_title">
-				<span><?php esc_html_e( 'Support', 'gravityflow' ); ?></span>
+				<span><?php esc_html_e( 'Gravity Flow Support', 'gravityflow' ); ?></span>
 
 			</h2>
 			<p>
