@@ -23,7 +23,9 @@ class Gravity_Flow_Support {
 		$license_key = gravity_flow()->get_app_setting( 'license_key' );
 
 		if ( empty( $license_key ) ) {
-			$license_message = esc_html__( 'Please activate your license to access this page.', 'gravityflow' );
+			$activate_url = admin_url( 'admin.php?page=gravityflow_settings' );
+			/* Translators: the placeholders are link tags pointing to the Gravity Flow settings page */
+			$license_message = sprintf( esc_html__( 'Please %1$sactivate%2$s your license to access this page.', 'gravityflow' ), "<a href=\"{$activate_url}\">", '</a>' );
 		} else {
 			$response = gravity_flow()->perform_edd_license_request( 'check_license', $license_key );
 			if ( is_wp_error( $response ) ) {
@@ -43,7 +45,7 @@ class Gravity_Flow_Support {
 			?>
 			<div class="wrap gf_entry_wrap">
 				<h2 class="gf_admin_page_title">
-					<span><?php esc_html_e( 'Support', 'gravityflow' ); ?></span>
+					<span><?php esc_html_e( 'Gravity Flow Support', 'gravityflow' ); ?></span>
 				</h2>
 			<?php
 			GFCommon::display_admin_message();
