@@ -76,7 +76,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	}
 
 	public function get_value_merge_tag( $value, $input_id, $entry, $form, $modifier, $raw_value, $url_encode, $esc_html, $format, $nl2br ) {
-		$value = $this->format_discussion_value( $value, $format );
+		$value = $this->format_discussion_value( $raw_value, $format );
 
 		return $value;
 	}
@@ -140,7 +140,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 					$item = rgar( $discussion, 0 );
 
 					return $this->format_discussion_item( $item, $format, $entry_id );
-				} elseif ( in_array( 'last', $modifiers ) ) {
+				} elseif ( in_array( 'latest', $modifiers ) ) {
 					$item = end( $discussion );
 
 					return $this->format_discussion_item( $item, $format, $entry_id );
