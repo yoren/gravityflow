@@ -403,6 +403,18 @@ class Gravity_Flow_Entry_Editor {
 		$html = $field->get_field_input( $this->form, $value, $this->entry );
 		$html .= $this->maybe_get_coupon_script( $field );
 
+		if ( $field->type === 'chainedselect' && function_exists( 'gf_chained_selects' ) ) {
+			if ( ! wp_script_is( 'gform_chained_selects' ) ) {
+				wp_enqueue_script( 'gform_chained_selects' );
+				gf_chained_selects()->localize_scripts();
+			}
+
+			if ( ! $this->_is_dynamic_conditional_logic_enabled && wp_script_is( 'gform_conditional_logic' ) ) {
+				$script = "if ( typeof window.gf_form_conditional_logic === 'undefined' ) { window.gf_form_conditional_logic = []; }";
+				GFFormDisplay::add_init_script( $field->formId, 'conditional_logic', GFFormDisplay::ON_PAGE_RENDER, $script );
+			}
+		}
+
 		return $html;
 	}
 
