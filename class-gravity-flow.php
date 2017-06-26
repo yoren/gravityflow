@@ -175,6 +175,9 @@ if ( class_exists( 'GFForms' ) ) {
 		}
 
 		public function upgrade( $previous_version ) {
+
+			wp_cache_flush();
+
 			if ( empty( $previous_version ) ) {
 				// New installation
 				$settings = $this->get_app_settings();
@@ -191,7 +194,14 @@ if ( class_exists( 'GFForms' ) ) {
 				if ( version_compare( $previous_version,'1.5.1', '<' ) ) {
 					$this->fix_workflow_field_choices();
 				}
+
+				if ( version_compare( $previous_version,'1.7.1-dev', '<' ) ) {
+					$this->upgrade_171();
+				}
 			}
+
+			wp_cache_flush();
+
 			$this->setup_db();
 		}
 
@@ -267,6 +277,36 @@ PRIMARY KEY  (id)
 				}
 				if ( $form_dirty ) {
 					GFAPI::update_form( $form );
+				}
+			}
+		}
+
+		public function upgrade_171() {
+			$steps = $this->get_steps();
+
+			foreach( $steps as $step ) {
+				$step_id = $step->get_id();
+				$step_dirty = false;
+				$feed_meta = $step->get_feed_meta();
+				$step_type = $step->get_type();
+
+				if ( $step_type == 'approval' && $step->type == 'select' ) {
+					$unanimous_approval = $step->unanimous_approval;
+					if ( ! $unanimous_approval ) {
+						$step->assignee_policy = 'any';
+					} else {
+						$step->assignee_policy = 'all';
+					}
+					$step_dirty = true;
+				}
+
+				if ( in_array( $step_type, array( 'approval', 'user_input' ) ) && $step->type == 'routing' ) {
+					$step->assignee_policy = 'all';
+					$step_dirty            = true;
+				}
+
+				if ( $step_dirty ) {
+					$this->save_feed_settings( $step->get_id(), $step->get_form_id(), $step->get_feed_meta() );
 				}
 			}
 		}
@@ -376,7 +416,7 @@ PRIMARY KEY  (id)
 					'handle'  => 'gravityflow_entry_detail',
 					'src'     => $this->get_base_url() . "/js/entry-detail{$min}.js",
 					'version' => $this->_version,
-					'deps'    => array( 'jquery', 'sack', 'gform_conditional_logic' ),
+					'deps'    => array( 'jquery', 'sack' ),
 					'enqueue' => array(
 						array(
 							'query' => 'page=gravityflow-inbox',

@@ -149,7 +149,7 @@ class Gravity_Flow_Print_Entries {
 	 *
 	 * @param array $entry_ids The IDs of the entries to be included in this printout.
 	 */
-	public function get_header( $entry_ids ) {
+	public static function get_header( $entry_ids ) {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
 
 		?>
