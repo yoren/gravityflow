@@ -1532,16 +1532,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Get the assignee key for the current access token or user.
 	 *
-	 * @return string
+	 * @return string|bool
 	 */
 	public function get_current_assignee_key() {
-		if ( $token = gravity_flow()->decode_access_token() ) {
-			$assignee_key = sanitize_text_field( $token['sub'] );
-		} else {
-			$assignee_key = 'user_id|' . get_current_user_id();
-		}
 
-		return $assignee_key;
+		return gravity_flow()->get_current_user_assignee_key();
 	}
 
 	/**
@@ -1861,66 +1856,26 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Adds a note to the timeline. The timeline is a filtered subset of the Gravity Forms Entry notes.
 	 *
-	 * @param $note
-	 * @param bool|int $user_id
-	 * @param bool $user_name
-	 */
-	public function add_note( $note, $user_id = false, $user_name = false ) {
-		global $current_user;
-
-		if ( $user_id === false ) {
-			$type = '';
-			if ( $token = gravity_flow()->decode_access_token() ) {
-				$assignee_key = sanitize_text_field( $token['sub'] );
-				list( $type, $user_id ) = rgexplode( '|', $assignee_key, 2 );
-			} elseif ( is_user_logged_in() ) {
-				$user_id = $current_user->ID;
-				$type    = 'user_id';
-			}
-			if ( $type == 'user_id' ) {
-				$user      = get_user_by( 'id', $user_id );
-				$user_name = $user ? $user->display_name : '';
-			}
-		}
-
-		if ( empty( $user_name ) ) {
-			$user_name = 'gravityflow';
-		}
-
-		GFFormsModel::add_note( $this->get_entry_id(), $user_id, $user_name, $note, 'gravityflow' );
-		$this->update_workflow_notes();
-	}
-
-	/**
-	 * Store the ID of the added note in the 'workflow_notes' entry meta item for this step.
+	 * @since 1.7.1-dev Updated to store notes in the entry meta.
+	 * @since unknown
 	 *
-	 * @since 1.7.1-dev
+	 * @param string $note         The note to be added.
+	 * @param bool   $is_user_note Formerly $user_id; as of 1.7.1-dev indicates if the current note was added by the user.
+	 * @param bool   $deprecated   Formerly $user_name; no longer used as of 1.7.1-dev.
 	 */
-	public function update_workflow_notes() {
-		$notes = $this->get_workflow_notes();
+	public function add_note( $note, $is_user_note = false, $deprecated = false ) {
+		$notes = Gravity_Flow_Common::get_workflow_notes( $this->get_entry_id() );
 
-		global $wpdb;
-		$notes[ $this->get_id() ][] = $wpdb->insert_id;
-		$notes['last_step']         = $this->get_id();
+		$notes[] = array(
+			'id'             => uniqid( '', true ),
+			'step_id'        => $this->get_id(),
+			'assignee_key'   => $this->get_current_assignee_key(),
+			'user_submitted' => $is_user_note,
+			'date_created'   => date( 'Y-m-d H:i:s' ),
+			'value'          => $note,
+		);
 
-		gform_update_meta( $this->get_entry_id(), 'workflow_notes', $notes );
-	}
-
-	/**
-	 * Get the 'workflow_notes' entry meta item.
-	 *
-	 * @since 1.7.1-dev
-	 *
-	 * @return array
-	 */
-	public function get_workflow_notes() {
-		$notes = gform_get_meta( $this->get_entry_id(), 'workflow_notes' );
-
-		if ( empty( $notes ) ) {
-			$notes = array();
-		}
-
-		return $notes;
+		gform_update_meta( $this->get_entry_id(), 'workflow_notes', json_encode( $notes ) );
 	}
 
 	/**

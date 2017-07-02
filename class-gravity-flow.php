@@ -5459,14 +5459,19 @@ AND m.meta_value='queued'";
 			}
 		}
 
+		/**
+		 * Get the assignee key for the current access token or user.
+		 *
+		 * @return string|bool
+		 */
 		public function get_current_user_assignee_key() {
-			global $current_user;
 			$assignee_key = false;
 			if ( $token = gravity_flow()->decode_access_token() ) {
 				$assignee_key = sanitize_text_field( $token['sub'] );
 			} elseif ( is_user_logged_in() ) {
-				$assignee_key = 'user_id|' . $current_user->ID;
+				$assignee_key = 'user_id|' . get_current_user_id();
 			}
+
 			return $assignee_key;
 		}
 
