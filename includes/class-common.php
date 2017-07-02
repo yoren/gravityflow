@@ -168,6 +168,20 @@ class Gravity_Flow_Common {
 		return $attributes;
 	}
 
+	/**
+	 * Get the 'workflow_notes' entry meta item.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @return array
+	 */
+	public static function get_workflow_notes( $entry_id ) {
+		$notes_json  = gform_get_meta( $entry_id, 'workflow_notes' );
+		$notes_array = empty( $notes_json ) ? array() : json_decode( $notes_json, true );
+
+		return $notes_array;
+	}
+
 	public static function get_gravityforms_db_version() {
 
 		if ( method_exists( 'GFFormsModel', 'get_database_version' ) ) {
