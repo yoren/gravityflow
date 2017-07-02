@@ -2453,7 +2453,7 @@ PRIMARY KEY  (id)
 		public function display_expired_step_details( $current_step, $form, $entry_id ) {
 			$current_step->log_event( esc_html__( 'Step expired', 'gravityflow' ) );
 			$note = esc_html__( 'Step expired', 'gravityflow' ) . ': ' . $current_step->get_name();
-			$current_step->add_note( $note, 0, $current_step->get_type() );
+			$current_step->add_note( $note );
 			$this->process_workflow( $form, $entry_id );
 			$current_step = null;
 			printf( '<h4>%s</h4>', esc_html__( 'Expired: refresh the page', 'gravityflow' ) );
@@ -4633,7 +4633,7 @@ AND m.meta_value='queued'";
 
 							$expiration_note = $current_step->get_name() . ': ' . esc_html__( 'Step expired', 'gravityflow' );
 
-							$current_step->add_note( $expiration_note, 0, $current_step->get_type() );
+							$current_step->add_note( $expiration_note );
 
 							gravity_flow()->process_workflow( $form, $entry['id'] );
 

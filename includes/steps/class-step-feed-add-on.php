@@ -158,7 +158,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 						$add_on_feeds = $this->maybe_unset_processed_feed( $add_on_feeds, $feed['id'] );
 					}
 
-					$this->add_note( $note, 0, $this->get_type() );
+					$this->add_note( $note );
 				} else {
 					$this->log_debug( __METHOD__ . '() - Feed condition not met' );
 				}

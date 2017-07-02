@@ -533,6 +533,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 * @param Gravity_Flow_Assignee $assignee The step assignee.
 	 */
 	public function add_status_update_note( $new_status, $assignee ) {
+		$user_note = rgpost( 'gravityflow_note' );
+		if ( ! empty( $user_note ) ) {
+			$this->add_note( $user_note, true );
+		}
+
 		$note = '';
 
 		if ( $new_status == 'approved' ) {
@@ -542,12 +547,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		}
 
 		if ( ! empty( $note ) ) {
-			$user_note = rgpost( 'gravityflow_note' );
-			if ( ! empty( $user_note ) ) {
-				$note .= sprintf( "\n%s: %s", __( 'Note', 'gravityflow' ), $user_note );
-			}
-			$user_id = ( $assignee->get_type() == 'user_id' ) ? $assignee->get_id() : 0;
-			$this->add_note( $note, $user_id, $assignee->get_display_name() );
+			$this->add_note( $note );
 		}
 	}
 

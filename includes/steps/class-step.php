@@ -795,8 +795,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$assignees = $this->get_assignees();
 
 		if ( empty( $assignees ) ) {
-			$note = sprintf( __( '%s: No assignees', 'gravityflow' ), $this->get_name() );
-			$this->add_note( $note, 0, 'gravityflow' );
+			$this->add_note( sprintf( __( '%s: No assignees', 'gravityflow' ), $this->get_name() ) );
 		} else {
 			foreach ( $assignees as $assignee ) {
 				$assignee->update_status( 'pending' );
@@ -1859,18 +1858,18 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @since 1.7.1-dev Updated to store notes in the entry meta.
 	 * @since unknown
 	 *
-	 * @param string $note         The note to be added.
-	 * @param bool   $is_user_note Formerly $user_id; as of 1.7.1-dev indicates if the current note was added by the user.
-	 * @param bool   $deprecated   Formerly $user_name; no longer used as of 1.7.1-dev.
+	 * @param string $note           The note to be added.
+	 * @param bool   $user_submitted Formerly $user_id; as of 1.7.1-dev indicates if the current note was added by the user.
+	 * @param bool   $deprecated     Formerly $user_name; no longer used as of 1.7.1-dev.
 	 */
-	public function add_note( $note, $is_user_note = false, $deprecated = false ) {
+	public function add_note( $note, $user_submitted = false, $deprecated = false ) {
 		$notes = Gravity_Flow_Common::get_workflow_notes( $this->get_entry_id() );
 
 		$notes[] = array(
 			'id'             => uniqid( '', true ),
 			'step_id'        => $this->get_id(),
 			'assignee_key'   => $this->get_current_assignee_key(),
-			'user_submitted' => $is_user_note,
+			'user_submitted' => $user_submitted,
 			'date_created'   => date( 'Y-m-d H:i:s' ),
 			'value'          => $note,
 		);
@@ -2096,7 +2095,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	public function process_assignee_status( $assignee, $new_status, $form ) {
 		$assignee->update_status( $new_status );
 		$note = $this->get_name() . ': ' . esc_html__( 'Processed', 'gravityflow' );
-		$this->add_note( $note, 0, $this->get_type() );
+		$this->add_note( $note );
 
 		return $note;
 	}

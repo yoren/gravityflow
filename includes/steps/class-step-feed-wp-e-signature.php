@@ -229,9 +229,8 @@ function gravity_flow_step_esign_signature_saved( $args ) {
 				if ( $step ) {
 					$feed  = gravity_flow()->get_feed( $feed_id );
 					$label = $step->get_feed_label( $feed );
-					$note  = sprintf( esc_html__( 'Document signed: %s', 'gravityflow' ), $label );
+					$step->add_note( sprintf( esc_html__( 'Document signed: %s', 'gravityflow' ), $label ) );
 					$step->log_debug( __METHOD__ . '() - Feed processing complete: ' . $label );
-					$step->add_note( $note, 0, $step->get_type() );
 
 					$add_on_feeds = $step->get_processed_add_on_feeds( $entry_id );
 					if ( ! in_array( $feed_id, $add_on_feeds ) ) {
