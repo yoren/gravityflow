@@ -285,12 +285,11 @@ PRIMARY KEY  (id)
 			$steps = $this->get_steps();
 
 			foreach( $steps as $step ) {
-				$step_id = $step->get_id();
 				$step_dirty = false;
-				$feed_meta = $step->get_feed_meta();
 				$step_type = $step->get_type();
 
-				if ( $step_type == 'approval' && $step->type == 'select' ) {
+				if ( $step_type == 'approval' && $step->type == 'select' && ! $step->assignee_policy ) {
+					// Convert unanimous_approval setting to assignee_policy if not already.
 					$unanimous_approval = $step->unanimous_approval;
 					if ( ! $unanimous_approval ) {
 						$step->assignee_policy = 'any';
@@ -300,9 +299,13 @@ PRIMARY KEY  (id)
 					$step_dirty = true;
 				}
 
-				if ( in_array( $step_type, array( 'approval', 'user_input' ) ) && $step->type == 'routing' ) {
+				if ( in_array( $step_type, array( 'approval', 'user_input' ) )
+				     && $step->type == 'routing'
+				     && ! $step->assignee_policy_171_migration_complete
+				) {
 					$step->assignee_policy = 'all';
-					$step_dirty            = true;
+					$step->assignee_policy_171_migration_complete = true;
+					$step_dirty = true;
 				}
 
 				if ( $step_dirty ) {
