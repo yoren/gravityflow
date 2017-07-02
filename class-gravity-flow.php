@@ -4403,22 +4403,23 @@ PRIMARY KEY  (id)
 
 		}
 
-		public function add_timeline_note( $entry_id, $note, $user_id = false, $user_name = false ) {
-			global $current_user;
-			if ( $user_id === false ) {
-				$user_id = $current_user->ID;
-			}
+		/**
+		 * Add a note to the specified entry.
+		 *
+		 * @since 1.7.1-dev Updated to store notes in entry meta.
+		 *
+		 * @param int    $entry_id       The ID of the entry the note is to be added to.
+		 * @param string $note           The note to be added.
+		 * @param bool   $user_submitted Formerly $user_id; as of 1.7.1-dev indicates if the note was added by the user.
+		 * @param bool   $deprecated     Formerly $user_name; no longer used as of 1.7.1-dev.
+		 */
+		public function add_timeline_note( $entry_id, $note, $user_submitted = false, $deprecated = false ) {
+			$entry        = GFAPI::get_entry( $entry_id );
+			$form         = GFAPI::get_form( $entry['form_id'] );
+			$current_step = $this->get_current_step( $form, $entry );
+			$step_id      = $current_step ? $current_step->get_id() : 0;
 
-			if ( $user_name === false ) {
-				global $current_user;
-				$user_name = $current_user->display_name;
-			}
-
-			if ( empty( $user_name ) && $token = $this->decode_access_token() ) {
-				$user_name = $this->parse_token_assignee( $token )->get_id();
-			}
-
-			GFFormsModel::add_note( $entry_id, $user_id, $user_name, $note, 'gravityflow' );
+			Gravity_Flow_Common::update_workflow_notes( $note, $entry_id, $step_id, $user_submitted );
 		}
 
 		public function filter_gform_export_form( $form ) {

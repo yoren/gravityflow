@@ -1863,18 +1863,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @param bool   $deprecated     Formerly $user_name; no longer used as of 1.7.1-dev.
 	 */
 	public function add_note( $note, $user_submitted = false, $deprecated = false ) {
-		$notes = Gravity_Flow_Common::get_workflow_notes( $this->get_entry_id() );
-
-		$notes[] = array(
-			'id'             => uniqid( '', true ),
-			'step_id'        => $this->get_id(),
-			'assignee_key'   => $this->get_current_assignee_key(),
-			'user_submitted' => $user_submitted,
-			'date_created'   => date( 'Y-m-d H:i:s' ),
-			'value'          => $note,
-		);
-
-		gform_update_meta( $this->get_entry_id(), 'workflow_notes', json_encode( $notes ) );
+		Gravity_Flow_Common::update_workflow_notes( $note, $this->get_entry_id(), $this->get_id(), $user_submitted );
 	}
 
 	/**

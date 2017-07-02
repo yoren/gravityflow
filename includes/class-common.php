@@ -182,6 +182,31 @@ class Gravity_Flow_Common {
 		return $notes_array;
 	}
 
+	/**
+	 * Add a note to the 'workflow_notes' entry meta item.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param string $note           The note to be added.
+	 * @param int    $entry_id       The ID of the entry the note is to be added to.
+	 * @param int    $step_id        The ID of the current step.
+	 * @param bool   $user_submitted Indicates if the note was added by the user.
+	 */
+	public static function update_workflow_notes( $note, $entry_id, $step_id, $user_submitted = false ) {
+		$notes = Gravity_Flow_Common::get_workflow_notes( $entry_id );
+
+		$notes[] = array(
+			'id'             => uniqid( '', true ),
+			'step_id'        => $step_id,
+			'assignee_key'   => gravity_flow()->get_current_user_assignee_key(),
+			'user_submitted' => $user_submitted,
+			'date_created'   => date( 'Y-m-d H:i:s' ),
+			'value'          => $note,
+		);
+
+		gform_update_meta( $entry_id, 'workflow_notes', json_encode( $notes ) );
+	}
+
 	public static function get_gravityforms_db_version() {
 
 		if ( method_exists( 'GFFormsModel', 'get_database_version' ) ) {
