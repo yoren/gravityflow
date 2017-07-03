@@ -322,7 +322,7 @@ PRIMARY KEY  (id)
 			if ( is_array( $form['fields'] ) ) {
 				foreach ( $form['fields'] as $field ) {
 					/* @var GF_Field $field */
-					$input_fields[] = array( 'key' => absint( $field->id ), 'text' => esc_html__( $field->get_field_label( false, null ) ) );
+					$input_fields[] = array( 'key' => absint( $field->id ), 'text' => esc_html__( $field->get_field_label( false, null ), 'gravityflow' ) );
 				}
 			}
 
@@ -879,7 +879,7 @@ PRIMARY KEY  (id)
 					),
 					array(
 						'name' => 'scheduled',
-						'label' => esc_html__( 'Schedule' ),
+						'label' => esc_html__( 'Schedule', 'gravityflow' ),
 						'type' => 'schedule',
 						'tooltip' => esc_html__( 'Scheduling a step will queue entries and prevent them from starting this step until the specified date or until the delay period has elapsed.', 'gravityflow' )
 									. ' ' . esc_html__( 'Note: the schedule setting requires the WordPress Cron which is included and enabled by default unless your host has deactivated it.', 'gravityflow' ),
@@ -1372,11 +1372,11 @@ PRIMARY KEY  (id)
 				'default_value' => 'delay',
 				'choices' => array(
 					array(
-						'label' => esc_html__( 'Delay' ),
+						'label' => esc_html__( 'Delay', 'gravityflow' ),
 						'value' => 'delay',
 					),
 					array(
-						'label' => esc_html__( 'Date' ),
+						'label' => esc_html__( 'Date', 'gravityflow' ),
 						'value' => 'date',
 					),
 				),
@@ -1388,7 +1388,7 @@ PRIMARY KEY  (id)
 
 			if ( ! empty( $date_fields ) ) {
 				$schedule_type['choices'][] = array(
-						'label' => esc_html__( 'Date Field' ),
+						'label' => esc_html__( 'Date Field', 'gravityflow' ),
 						'value' => 'date_field',
 					);
 
@@ -1554,11 +1554,11 @@ PRIMARY KEY  (id)
 				'default_value' => 'delay',
 				'choices' => array(
 					array(
-						'label' => esc_html__( 'Delay' ),
+						'label' => esc_html__( 'Delay', 'gravityflow' ),
 						'value' => 'delay',
 					),
 					array(
-						'label' => esc_html__( 'Date' ),
+						'label' => esc_html__( 'Date', 'gravityflow' ),
 						'value' => 'date',
 					),
 				),
@@ -1570,7 +1570,7 @@ PRIMARY KEY  (id)
 
 			if ( ! empty( $date_fields ) ) {
 				$expiration_type['choices'][] = array(
-					'label' => esc_html__( 'Date Field' ),
+					'label' => esc_html__( 'Date Field', 'gravityflow' ),
 					'value' => 'date_field',
 				);
 
@@ -1804,7 +1804,7 @@ PRIMARY KEY  (id)
 			$checkbox_defaults = array(
 				'type'       => 'checkbox',
 				'name'       => $field['name'] . 'Enable',
-				'label'      => esc_html__( 'Enable', 'gravityforms' ),
+				'label'      => esc_html__( 'Enable', 'gravityflow' ),
 				'horizontal' => true,
 				'value'      => '1',
 				'choices'    => false,
