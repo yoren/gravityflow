@@ -958,8 +958,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 		$text = $this->replace_workflow_url_variables( $text, $assignee );
 		$text = $this->replace_workflow_cancel_variables( $text, $assignee );
-		$text = $this->replace_assignee_variables( $text );
-		$text = $this->replace_workflow_note_variables( $text );
 
 		return $text;
 	}
@@ -1020,55 +1018,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return $text;
 	}
 
-	/**
-	 * Replace the {assignees} merge tags.
-	 *
-	 * @since 1.7.1-dev
-	 *
-	 * @param string $text The text being processed.
-	 *
-	 * @return string
-	 */
-	public function replace_assignee_variables( $text ) {
-		preg_match_all( '/{assignees(:(.*?))?}/', $text, $assignees_matches, PREG_SET_ORDER );
 
-		if ( ! empty( $assignees_matches ) ) {
-			foreach ( $assignees_matches as $assignees_match ) {
-				$full_tag       = $assignees_match[0];
-				$options_string = isset( $assignees_match[2] ) ? $assignees_match[2] : '';
-
-				$a = Gravity_Flow_Common::get_string_attributes( $options_string, array(
-					'status'       => true,
-					'user_email'   => true,
-					'display_name' => true,
-				) );
-
-				$assignees_text_arr = array();
-				$assignees          = $this->get_assignees();
-				foreach ( $assignees as $step_assignee ) {
-					$assignee_line = '';
-					if ( $a['display_name'] ) {
-						$assignee_line .= $step_assignee->get_display_name();
-					}
-					if ( $a['user_email'] && $step_assignee->get_type() == 'user_id' ) {
-						if ( $assignee_line ) {
-							$assignee_line .= ', ';
-						}
-						$assignee_user = new WP_User( $step_assignee->get_id() );
-						$assignee_line .= $assignee_user->user_email;
-					}
-					if ( $a['status'] ) {
-						$assignee_line .= ' (' . $step_assignee->get_status() . ')';
-					}
-					$assignees_text_arr[] = $assignee_line;
-				}
-				$assignees_text = join( "\n", $assignees_text_arr );
-				$text           = str_replace( $full_tag, $assignees_text, $text );
-			}
-		}
-
-		return $text;
-	}
 
 	/**
 	 * Replace the {workflow_entry_link}, {workflow_entry_url}, {workflow_inbox_link}, and {workflow_inbox_url} merge tags.
@@ -1867,50 +1817,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
-	 * Get the user submitted notes for a step.
-	 *
-	 * @since 1.7.1-dev
-	 *
-	 * @param int $step_id The ID of the step the notes are to be retrieved for or 0 to get the notes for the current step.
-	 *
-	 * @return array
-	 */
-	public function get_step_notes( $step_id = 0 ) {
-		$workflow_notes = $this->get_workflow_notes();
-
-		if ( empty( $step_id ) ) {
-			$step_id = rgar( $workflow_notes, 'last_step', $this->get_id() );
-		}
-
-		$notes      = rgar( $workflow_notes, $step_id, array() );
-		$step_notes = array();
-
-		if ( ! empty( $notes ) ) {
-			$lead_notes = GFFormsModel::get_lead_notes( $this->get_entry_id() );
-			$prefix     = esc_html__( 'Note', 'gravityflow' ) . ': ';
-
-			foreach ( $lead_notes as &$note ) {
-				if ( ! in_array( $note->id, $notes ) ) {
-					continue;
-				}
-
-				$note_position = strpos( $note->value, $prefix );
-
-				if ( $note_position === false ) {
-					continue;
-				}
-
-				$index        = $note_position + strlen( $prefix );
-				$note->value  = substr( $note->value, $index );
-				$step_notes[] = $note;
-			}
-
-		}
-
-		return $step_notes;
-	}
-
-	/**
 	 * Evaluates a routing rule.
 	 *
 	 * @param $routing_rule
@@ -1959,6 +1865,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$notification['subject'] = $this->replace_variables( $notification['subject'], null );
 		}
 
+		$message = $notification['message'];
+
 		foreach ( $assignees as $assignee ) {
 			/* @var Gravity_Flow_Assignee $assignee */
 			$assignee_type = $assignee->get_type();
@@ -1969,7 +1877,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 				$notification['to']      = $email;
 				$notification['id']      = 'workflow_step_' . $this->get_id() . '_email_' . $email;
 				$notification['name']    = $notification['id'];
-				$notification['message'] = $this->replace_variables( $notification['message'], $assignee );
+				$notification['message'] = $this->replace_variables( $message, $assignee );
 				$this->send_notification( $notification );
 
 				return;
@@ -1986,7 +1894,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 				$notification['id']      = 'workflow_step_' . $this->get_id() . '_user_' . $user->ID;
 				$notification['name']    = $notification['id'];
 				$notification['to']      = $user->user_email;
-				$notification['message'] = $this->replace_variables( $notification['message'], $assignee );
+				$notification['message'] = $this->replace_variables( $message, $assignee );
 				$this->send_notification( $notification );
 			}
 		}

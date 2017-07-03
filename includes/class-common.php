@@ -207,6 +207,61 @@ class Gravity_Flow_Common {
 		gform_update_meta( $entry_id, 'workflow_notes', json_encode( $notes ) );
 	}
 
+	/**
+	 * Get an array containing the notes from the entry meta and the legacy notes from the GF notes table.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param array $entry The current entry.
+	 *
+	 * @return array
+	 */
+	public static function get_notes( $entry ) {
+		$notes       = array_reverse( self::get_workflow_notes( $entry['id'] ) );
+		$entry_notes = array_reverse( RGFormsModel::get_lead_notes( $entry['id'] ) );
+
+		foreach ( $entry_notes as $note ) {
+			if ( $note->note_type !== 'gravityflow' ) {
+				continue;
+			}
+
+			$notes[] = array(
+				'id'             => $note->id,
+				'step_id'        => ! $note->user_id ? $note->user_name : 0,
+				'assignee_key'   => $note->user_id ? 'user_id|' . $note->user_id : false,
+				'user_submitted' => (bool) $note->user_id,
+				'date_created'   => $note->date_created,
+				'value'          => $note->value,
+			);
+		}
+
+		$notes[] = self::get_initial_note( $entry );
+
+		return $notes;
+	}
+
+	/**
+	 * Get the Workflow Submitted note.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param array $entry The current entry.
+	 *
+	 * @return array
+	 */
+	public static function get_initial_note( $entry ) {
+		$user = get_userdata( $entry['created_by'] );
+
+		return array(
+			'id'             => 0,
+			'step_id'        => 0,
+			'assignee_key'   => $user ? 'user_id|' . $user->ID : false,
+			'user_submitted' => false,
+			'date_created'   => $entry['date_created'],
+			'value'          => esc_html__( 'Workflow Submitted', 'gravityflow' ),
+		);
+	}
+
 	public static function get_gravityforms_db_version() {
 
 		if ( method_exists( 'GFFormsModel', 'get_database_version' ) ) {

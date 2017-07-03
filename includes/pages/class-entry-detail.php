@@ -353,7 +353,6 @@ class Gravity_Flow_Entry_Detail {
 
 			$instructions = $current_step->instructionsValue;
 			$instructions = GFCommon::replace_variables( $instructions, $form, $entry, false, true, $nl2br );
-			$instructions = $current_step->replace_variables( $instructions, null );
 			$instructions = do_shortcode( $instructions );
 			$instructions = self::maybe_sanitize_instructions( $instructions );
 
@@ -492,7 +491,7 @@ class Gravity_Flow_Entry_Detail {
 	 * @param array $form The current form.
 	 */
 	public static function timeline( $entry, $form ) {
-		$notes = self::get_notes( $entry );
+		$notes = Gravity_Flow_Common::get_notes( $entry );
 		self::notes_grid( $notes );
 	}
 
@@ -525,61 +524,6 @@ class Gravity_Flow_Entry_Detail {
 		$notes = array_reverse( $notes );
 
 		return $notes;
-	}
-
-	/**
-	 * Get an array containing the notes from the entry meta and the legacy notes from the GF notes table.
-	 *
-	 * @since 1.7.1-dev
-	 *
-	 * @param array $entry The current entry.
-	 *
-	 * @return array
-	 */
-	public static function get_notes( $entry ) {
-		$notes       = array_reverse( Gravity_Flow_Common::get_workflow_notes( $entry['id'] ) );
-		$entry_notes = array_reverse( RGFormsModel::get_lead_notes( $entry['id'] ) );
-
-		foreach ( $entry_notes as $note ) {
-			if ( $note->note_type !== 'gravityflow' ) {
-				continue;
-			}
-
-			$notes[] = array(
-				'id'             => $note->id,
-				'step_id'        => ! $note->user_id ? $note->user_name : 0,
-				'assignee_key'   => $note->user_id ? 'user_id|' . $note->user_id : false,
-				'user_submitted' => (bool) $note->user_id,
-				'date_created'   => $note->date_created,
-				'value'          => $note->value,
-			);
-		}
-
-		$notes[] = self::get_initial_note( $entry );
-
-		return $notes;
-	}
-
-	/**
-	 * Get the Workflow Submitted note.
-	 *
-	 * @since 1.7.1-dev
-	 *
-	 * @param array $entry The current entry.
-	 *
-	 * @return array
-	 */
-	public static function get_initial_note( $entry ) {
-		$user = get_userdata( $entry['created_by'] );
-
-		return array(
-			'id'             => 0,
-			'step_id'        => 0,
-			'assignee_key'   => $user ? 'user_id|' . $user->ID : false,
-			'user_submitted' => false,
-			'date_created'   => $entry['date_created'],
-			'value'          => esc_html__( 'Workflow Submitted', 'gravityflow' ),
-		);
 	}
 
 	/**
