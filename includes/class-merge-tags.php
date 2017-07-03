@@ -142,7 +142,7 @@ class Gravity_Flow_Merge_Tags {
 	}
 
 	/**
-	 * Replace the {workflow_timeline} merge tags with the entire timeline for the current ecru.
+	 * Replace the {workflow_timeline} merge tags with the entire timeline for the current entry.
 	 *
 	 * @since 1.7.1-dev
 	 *

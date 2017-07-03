@@ -963,64 +963,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
-	 * Replace the {workflow_note} merge tags.
-	 *
-	 * @since 1.7.1-dev
-	 *
-	 * @param string $text The text being processed.
-	 *
-	 * @return string
-	 */
-	public function replace_workflow_note_variables( $text ) {
-		preg_match_all( '/{workflow_note(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
-
-		if ( ! empty( $matches ) ) {
-			foreach ( $matches as $match ) {
-				$full_tag  = $match[0];
-				$modifiers = rgar( $match, 2 );
-
-				$a = Gravity_Flow_Common::get_string_attributes( $modifiers, array(
-					'step_id'      => null,
-					'display_name' => false,
-					'display_date' => false
-				) );
-
-				$replacement = '';
-				$notes       = $this->get_step_notes( $a['step_id'] );
-
-				if ( ! empty( $notes ) ) {
-					$replacement_array = array();
-
-					foreach ( $notes as $note ) {
-						$name = $a['display_name'] ? esc_html( $note->user_name ) : '';
-						$date = $a['display_date'] ? esc_html( GFCommon::format_date( $note->date_created, false, 'd M Y g:i a', false ) ) : '';
-
-						$replacement = '';
-
-						if ( $name || $date ) {
-							$sep = $name && $date ? ': ' : '';
-
-							$replacement .= sprintf( '<div class="gravityflow-note-header">%s%s%s</div>', $name, $sep, $date );
-						}
-
-						$replacement .= sprintf( '<div class="gravityflow-note-value">%s</div>', nl2br( esc_html( $note->value ) ) );
-
-						$replacement_array[] = $replacement;
-					}
-
-					$replacement = implode( '<br>', $replacement_array );
-				}
-
-				$text = str_replace( $full_tag, $replacement, $text );
-			}
-		}
-
-		return $text;
-	}
-
-
-
-	/**
 	 * Replace the {workflow_entry_link}, {workflow_entry_url}, {workflow_inbox_link}, and {workflow_inbox_url} merge tags.
 	 *
 	 * @param string $text The text being processed.
