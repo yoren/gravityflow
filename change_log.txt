@@ -2,6 +2,7 @@
 - Added support for editable fields on the User Input step with calculations based on non-editable and/or non-display fields.
 - Added the gravityflow_columns_status_table filter to allow the columns to be filtered on the status table.
 - Added support for first, latest, and limit modifiers on the Discussion field merge tag e.g. {label:2:first}, {label:2:latest}, and {label:2:limit=3}.
+- Added support for using the {workflow_note} and {assignees} merge tags in Gravity Forms notifications.
 - Updated the note for expired steps to include the step name.
 - Updated step conditional logic to support rules based on entry meta and properties.
 - Updated the User and Role type fields so the step conditional logic rule value will use the choice drop down instead of text input.
