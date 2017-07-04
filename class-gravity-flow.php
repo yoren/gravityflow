@@ -322,7 +322,10 @@ PRIMARY KEY  (id)
 			if ( is_array( $form['fields'] ) ) {
 				foreach ( $form['fields'] as $field ) {
 					/* @var GF_Field $field */
-					$input_fields[] = array( 'key' => absint( $field->id ), 'text' => esc_html__( $field->get_field_label( false, null ), 'gravityflow' ) );
+					$input_fields[] = array(
+						'key'  => absint( $field->id ),
+						'text' => esc_html( $field->get_field_label( false, null ) ),
+					);
 				}
 			}
 
@@ -336,7 +339,9 @@ PRIMARY KEY  (id)
 					'src'      => $this->get_base_url() . "/js/form-editor{$min}.js",
 					'version'  => $this->_version,
 					'enqueue'  => array(
-						array( 'admin_page' => array( 'form_editor' ) ),
+						array(
+							'admin_page' => array('form_editor'),
+						),
 					),
 					'strings' => array(
 						'user' => array(
