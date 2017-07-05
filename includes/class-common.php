@@ -218,7 +218,7 @@ class Gravity_Flow_Common {
 	 * @param bool   $user_submitted Indicates if the note was added by the user.
 	 */
 	public static function add_workflow_note( $note, $entry_id, $step_id, $user_submitted = false ) {
-		$notes = Gravity_Flow_Common::get_workflow_notes( $entry_id );
+		$notes = self::get_workflow_notes( $entry_id );
 
 		$notes[] = array(
 			'id'             => uniqid( '', true ),

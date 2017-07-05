@@ -1755,7 +1755,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @param bool   $deprecated     Formerly $user_name; no longer used as of 1.7.1-dev.
 	 */
 	public function add_note( $note, $user_submitted = false, $deprecated = false ) {
-		Gravity_Flow_Common::update_workflow_notes( $note, $this->get_entry_id(), $this->get_id(), $user_submitted );
+		Gravity_Flow_Common::add_workflow_note( $note, $this->get_entry_id(), $this->get_id(), $user_submitted );
 	}
 
 	/**
