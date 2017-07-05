@@ -1010,6 +1010,19 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		}
 		$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
 
+		/**
+		 * Allows the user feedback to be modified after processing the token action.
+		 *
+		 * @since 1.7.1
+		 *
+		 * @param string                $feedback   The feedback to send to the browser.
+		 * @param array                 $entry      The current entry array.
+		 * @param Gravity_Flow_Assignee $assignee   The assignee object.
+		 * @param string                $new_status The new status
+		 * @param array                 $form       The current form array.
+		 */
+		$feedback = apply_filters( 'gravityflow_feedback_approval_token', $feedback, $entry, $assignee, $new_status, $form );
+
 		return $feedback;
 	}
 
