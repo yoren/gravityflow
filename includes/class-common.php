@@ -169,15 +169,40 @@ class Gravity_Flow_Common {
 	}
 
 	/**
+	 * Format the date/time or timestamp for display.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param int|string $date_or_timestamp The unix timestamp or string in the Y-m-d H:i:s format to be formatted.
+	 * @param string     $format            The format the date/time should be returned in. Default is d M Y g:i a.
+	 * @param bool       $is_human          Indicates if the date/time should be returned in a human readable format such as "1 hour ago". Default is false.
+	 * @param bool       $include_time      Indicates if the time should be included in the returned string. Default is false.
+	 *
+	 * @return string
+	 */
+	public static function format_date( $date_or_timestamp, $format = 'd M Y g:i a', $is_human = false, $include_time = false ) {
+		$date_time = is_integer( $date_or_timestamp ) ? date( 'Y-m-d H:i:s', $date_or_timestamp ) : $date_or_timestamp;
+
+		return GFCommon::format_date( $date_time, $is_human, $format, $include_time );
+	}
+
+	/**
 	 * Get the 'workflow_notes' entry meta item.
 	 *
 	 * @since 1.7.1-dev
 	 *
+	 * @param int  $entry_id   The ID of the entry the notes are to be retrieved for.
+	 * @param bool $for_output Should the notes be ordered newest to oldest? Default is false.
+	 *
 	 * @return array
 	 */
-	public static function get_workflow_notes( $entry_id ) {
+	public static function get_workflow_notes( $entry_id, $for_output = false ) {
 		$notes_json  = gform_get_meta( $entry_id, 'workflow_notes' );
 		$notes_array = empty( $notes_json ) ? array() : json_decode( $notes_json, true );
+
+		if ( $for_output && ! empty( $notes_array ) ) {
+			$notes_array = array_reverse( $notes_array );
+		}
 
 		return $notes_array;
 	}
@@ -192,7 +217,7 @@ class Gravity_Flow_Common {
 	 * @param int    $step_id        The ID of the current step.
 	 * @param bool   $user_submitted Indicates if the note was added by the user.
 	 */
-	public static function update_workflow_notes( $note, $entry_id, $step_id, $user_submitted = false ) {
+	public static function add_workflow_note( $note, $entry_id, $step_id, $user_submitted = false ) {
 		$notes = Gravity_Flow_Common::get_workflow_notes( $entry_id );
 
 		$notes[] = array(
@@ -200,7 +225,7 @@ class Gravity_Flow_Common {
 			'step_id'        => $step_id,
 			'assignee_key'   => gravity_flow()->get_current_user_assignee_key(),
 			'user_submitted' => $user_submitted,
-			'date_created'   => date( 'Y-m-d H:i:s' ),
+			'date_created'   => time(),
 			'value'          => $note,
 		);
 
@@ -217,7 +242,7 @@ class Gravity_Flow_Common {
 	 * @return array
 	 */
 	public static function get_notes( $entry ) {
-		$notes       = array_reverse( self::get_workflow_notes( $entry['id'] ) );
+		$notes       = self::get_workflow_notes( $entry['id'], true );
 		$entry_notes = array_reverse( RGFormsModel::get_lead_notes( $entry['id'] ) );
 
 		foreach ( $entry_notes as $note ) {

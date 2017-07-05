@@ -579,7 +579,7 @@ class Gravity_Flow_Entry_Detail {
 	 * @since 1.7.1-dev
 	 *
 	 * @param string $display_name The assignee display name, step or workflow label.
-	 * @param string $date_created The date and time the note was created.
+	 * @param string $date_created The date and time or timestamp the note was created.
 	 *
 	 * @return string
 	 */
@@ -587,7 +587,7 @@ class Gravity_Flow_Entry_Detail {
 		return sprintf(
 			'<div class="gravityflow-note-header"><div class="gravityflow-note-title">%s</div><div class="gravityflow-note-meta">%s</div></div>',
 			esc_html( $display_name ),
-			esc_html( GFCommon::format_date( $date_created, false, 'd M Y g:i a', false ) )
+			esc_html( Gravity_Flow_Common::format_date( $date_created ) )
 		);
 	}
 

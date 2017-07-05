@@ -4426,7 +4426,7 @@ PRIMARY KEY  (id)
 			$current_step = $this->get_current_step( $form, $entry );
 			$step_id      = $current_step ? $current_step->get_id() : 0;
 
-			Gravity_Flow_Common::update_workflow_notes( $note, $entry_id, $step_id, $user_submitted );
+			Gravity_Flow_Common::add_workflow_note( $note, $entry_id, $step_id, $user_submitted );
 		}
 
 		public function filter_gform_export_form( $form ) {

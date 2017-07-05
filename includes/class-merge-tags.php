@@ -183,7 +183,7 @@ class Gravity_Flow_Merge_Tags {
 		foreach ( $notes as $note ) {
 			$html .= sprintf(
 				'<br>%s: %s<br>%s<br>',
-				esc_html( GFCommon::format_date( $note['date_created'], false, 'd M Y g:i a', false ) ),
+				esc_html( Gravity_Flow_Common::format_date( $note['date_created'] ) ),
 				esc_html( $this->get_timeline_display_name( $note ) ),
 				nl2br( esc_html( $note['value'] ) )
 			);
@@ -192,6 +192,15 @@ class Gravity_Flow_Merge_Tags {
 		return $html;
 	}
 
+	/**
+	 * Get the timeline note display name.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param array $note The note properties.
+	 *
+	 * @return string
+	 */
 	public function get_timeline_display_name( $note ) {
 		if ( $note['assignee_key'] ) {
 			$assignee     = new Gravity_Flow_Assignee( $note['assignee_key'] );
@@ -244,7 +253,7 @@ class Gravity_Flow_Merge_Tags {
 							$name = '';
 						}
 
-						$date = $a['display_date'] ? GFCommon::format_date( $note['date_created'], false, 'd M Y g:i a', false ) : '';
+						$date = $a['display_date'] ? Gravity_Flow_Common::format_date( $note['date_created'] ) : '';
 
 						$replacement = '';
 
@@ -280,7 +289,7 @@ class Gravity_Flow_Merge_Tags {
 	 * @return array
 	 */
 	public function get_user_notes( $entry_id, $step_id ) {
-		$notes      = array_reverse( Gravity_Flow_Common::get_workflow_notes( $entry_id ) );
+		$notes      = Gravity_Flow_Common::get_workflow_notes( $entry_id, true );
 		$user_notes = array();
 
 		foreach ( $notes as $note ) {
