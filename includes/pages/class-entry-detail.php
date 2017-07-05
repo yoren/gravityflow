@@ -567,7 +567,7 @@ class Gravity_Flow_Entry_Detail {
 
 		return sprintf(
 			'<div class="gravityflow-note-body-wrap"><div class="gravityflow-note-body">%s<div class="gravityflow-note-body">%s%s</div></div></div>',
-			self::get_note_header( $display_name, $note['date_created'] ),
+			self::get_note_header( $display_name, $note['timestamp'] ),
 			$note_prefix,
 			nl2br( esc_html( $note['value'] ) )
 		);

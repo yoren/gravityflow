@@ -50,7 +50,7 @@ class Gravity_Flow_Merge_Tags {
 	 * @param string $text       The current text in which merge tags are being replaced.
 	 * @param array  $form       The current form.
 	 * @param array  $entry      The current entry.
-	 * @param bool   $url_encode Indicates if URLs found in the replaced value should be encoded.
+	 * @param bool   $url_encode Indicates if the replaced value should be URL encoded.
 	 * @param bool   $esc_html   Indicates if HTML found in the replaced value should be escaped.
 	 * @param bool   $nl2br      Indicates if newlines should be converted to html <br> tags
 	 * @param string $format     Determines how the value should be formatted. HTML or text.
@@ -183,7 +183,7 @@ class Gravity_Flow_Merge_Tags {
 		foreach ( $notes as $note ) {
 			$html .= sprintf(
 				'<br>%s: %s<br>%s<br>',
-				esc_html( Gravity_Flow_Common::format_date( $note['date_created'] ) ),
+				esc_html( Gravity_Flow_Common::format_date( $note['timestamp'] ) ),
 				esc_html( $this->get_timeline_display_name( $note ) ),
 				nl2br( esc_html( $note['value'] ) )
 			);
@@ -232,7 +232,7 @@ class Gravity_Flow_Merge_Tags {
 				$full_tag  = $match[0];
 				$modifiers = rgar( $match, 2 );
 
-				$a = Gravity_Flow_Common::get_string_attributes( $modifiers, array(
+				$a = Gravity_Flow_Common::get_merge_tag_attributes( $modifiers, array(
 					'step_id'      => null,
 					'display_name' => false,
 					'display_date' => false
@@ -253,7 +253,7 @@ class Gravity_Flow_Merge_Tags {
 							$name = '';
 						}
 
-						$date = $a['display_date'] ? Gravity_Flow_Common::format_date( $note['date_created'] ) : '';
+						$date = $a['display_date'] ? Gravity_Flow_Common::format_date( $note['timestamp'] ) : '';
 
 						$replacement = '';
 
@@ -325,7 +325,7 @@ class Gravity_Flow_Merge_Tags {
 				$full_tag       = $assignees_match[0];
 				$options_string = isset( $assignees_match[2] ) ? $assignees_match[2] : '';
 
-				$a = Gravity_Flow_Common::get_string_attributes( $options_string, array(
+				$a = Gravity_Flow_Common::get_merge_tag_attributes( $options_string, array(
 					'status'       => true,
 					'user_email'   => true,
 					'display_name' => true,

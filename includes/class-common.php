@@ -146,7 +146,7 @@ class Gravity_Flow_Common {
 	 *
 	 * @return array
 	 */
-	public static function get_string_attributes( $string, $defaults = array() ) {
+	public static function get_merge_tag_attributes( $string, $defaults = array() ) {
 		$attributes = shortcode_parse_atts( $string );
 
 		if ( empty( $attributes ) ) {
@@ -225,7 +225,7 @@ class Gravity_Flow_Common {
 			'step_id'        => $step_id,
 			'assignee_key'   => gravity_flow()->get_current_user_assignee_key(),
 			'user_submitted' => $user_submitted,
-			'date_created'   => time(),
+			'timestamp'      => time(),
 			'value'          => $note,
 		);
 
@@ -255,7 +255,7 @@ class Gravity_Flow_Common {
 				'step_id'        => ! $note->user_id ? $note->user_name : 0,
 				'assignee_key'   => $note->user_id ? 'user_id|' . $note->user_id : false,
 				'user_submitted' => (bool) $note->user_id,
-				'date_created'   => $note->date_created,
+				'timestamp'      => $note->date_created,
 				'value'          => $note->value,
 			);
 		}
@@ -282,7 +282,7 @@ class Gravity_Flow_Common {
 			'step_id'        => 0,
 			'assignee_key'   => $user ? 'user_id|' . $user->ID : false,
 			'user_submitted' => false,
-			'date_created'   => $entry['date_created'],
+			'timestamp'      => $entry['date_created'],
 			'value'          => esc_html__( 'Workflow Submitted', 'gravityflow' ),
 		);
 	}

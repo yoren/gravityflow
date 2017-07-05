@@ -979,7 +979,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 				$type           = $match[2];
 				$options_string = isset( $match[4] ) ? $match[4] : '';
 
-				$a = Gravity_Flow_Common::get_string_attributes( $options_string, array(
+				$a = Gravity_Flow_Common::get_merge_tag_attributes( $options_string, array(
 					'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
 					'text'    => $location == 'inbox' ? esc_html__( 'Inbox', 'gravityflow' ) : esc_html__( 'Entry', 'gravityflow' ),
 					'token'   => false,
@@ -1054,7 +1054,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 					$type           = $match[1];
 					$options_string = isset( $match[3] ) ? $match[3] : '';
 
-					$a = Gravity_Flow_Common::get_string_attributes( $options_string, array(
+					$a = Gravity_Flow_Common::get_merge_tag_attributes( $options_string, array(
 						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
 						'text'    => esc_html__( 'Cancel Workflow', 'gravityflow' ),
 					) );
