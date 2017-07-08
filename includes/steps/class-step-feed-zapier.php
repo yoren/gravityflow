@@ -22,7 +22,7 @@ class Gravity_Flow_Step_Feed_Zapier extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_slug = 'gravityformszapier';
 
 	public function get_label() {
-		return esc_html__( 'Zapier', 'gravityflow' );
+		return 'Zapier';
 	}
 
 	public function get_icon_url() {

@@ -20,7 +20,7 @@ class Gravity_Flow_Print_Entries {
 		$entry_ids = self::get_entry_ids();
 
 		if ( empty( $entry_ids ) ) {
-			die( esc_html__( 'Form Id and Lead Id are required parameters.', 'gravityflow' ) );
+			die( esc_html__( 'Form ID and Lead ID are required parameters.', 'gravityflow' ) );
 		}
 
 		self::get_header( $entry_ids );
