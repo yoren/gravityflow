@@ -77,7 +77,7 @@ class Gravity_Flow_Common {
 					$columns[ $id ] = __( 'Payment Status', 'gravityflow' );
 					break;
 				case 'transaction_id' :
-					$columns[ $id ] = __( 'Transaction Id', 'gravityflow' );
+					$columns[ $id ] = __( 'Transaction ID', 'gravityflow' );
 					break;
 				case 'payment_date' :
 					$columns[ $id ] = __( 'Payment Date', 'gravityflow' );

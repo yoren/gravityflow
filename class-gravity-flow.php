@@ -2350,7 +2350,7 @@ PRIMARY KEY  (id)
 				$entry_id_link = '<a href="' . admin_url( 'admin.php?page=gf_entries&view=entry&id=' . absint( $form['id'] ) . '&lid=' . absint( $entry['id'] ) ) . '">' . $entry_id . '</a>';
 			}
 
-			printf( '%s: %s<br/><br/>%s: %s', esc_html__( 'Entry Id', 'gravityflow' ), $entry_id_link, esc_html__( 'Submitted', 'gravityflow' ), esc_html( GFCommon::format_date( $entry['date_created'], true, 'Y/m/d' ) ) );
+			printf( '%s: %s<br/><br/>%s: %s', esc_html__( 'Entry ID', 'gravityflow' ), $entry_id_link, esc_html__( 'Submitted', 'gravityflow' ), esc_html( GFCommon::format_date( $entry['date_created'], true, 'Y/m/d' ) ) );
 
 			if ( ! empty( $entry['workflow_timestamp'] ) ) {
 				$last_updated = date( 'Y-m-d H:i:s', $entry['workflow_timestamp'] );
