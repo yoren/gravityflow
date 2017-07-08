@@ -22,7 +22,7 @@ class Gravity_Flow_Step_Feed_Sendinblue extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_slug = 'gravityformssendinblue';
 
 	public function get_label() {
-		return esc_html__( 'SendinBlue', 'gravityflow' );
+		return 'SendinBlue';
 	}
 
 	public function get_icon_url() {

@@ -34,7 +34,7 @@ class Gravity_Flow_Step_Feed_Sprout_Invoices extends Gravity_Flow_Step_Feed_Add_
 	protected $_invoice_form_id = false;
 
 	public function get_label() {
-		return esc_html__( 'Sprout Invoices', 'gravityflow' );
+		return 'Sprout Invoices';
 	}
 
 	public function get_icon_url() {

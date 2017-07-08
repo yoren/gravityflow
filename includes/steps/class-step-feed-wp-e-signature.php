@@ -23,7 +23,7 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 
 
 	public function get_label() {
-		return esc_html__( 'WP E-Signature', 'gravityflow' );
+		return 'WP E-Signature';
 	}
 
 	public function get_feed_label( $feed ) {
