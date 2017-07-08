@@ -491,12 +491,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		 */
 		$feedback = apply_filters( 'gravityflow_feedback_message_user_input', $feedback, $new_status, $assignee, $form, $this );
 
-		$user_note = rgpost( 'gravityflow_note' );
-		if ( ! empty( $user_note ) ) {
-			$this->add_note( $user_note, true );
-		}
-
-		$this->add_note( sprintf( '%s: %s', $this->get_name(), $note_message ) );
+		$note = sprintf( '%s: %s', $this->get_name(), $note_message );
+		$this->add_note( $note . $this->maybe_add_user_note(), true );
 
 		$status = $this->evaluate_status();
 		$this->update_step_status( $status );

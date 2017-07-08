@@ -491,39 +491,20 @@ class Gravity_Flow_Entry_Detail {
 	 * @param array $form The current form.
 	 */
 	public static function timeline( $entry, $form ) {
-		$notes = Gravity_Flow_Common::get_notes( $entry );
+		$notes = self::get_timeline_notes( $entry );
 		self::notes_grid( $notes );
 	}
 
 	/**
-	 * @deprecated
+	 * Get the timeline notes for the current entry.
+	 *
+	 * @param array $entry The current entry.
+	 *
+	 * @return array
 	 */
 	public static function get_timeline_notes( $entry ) {
-		_deprecated_function( __METHOD__, '1.7.1-dev', 'Gravity_Flow_Entry_Detail::get_notes' );
 
-		$notes = RGFormsModel::get_lead_notes( $entry['id'] );
-
-		foreach ( $notes as $key => $note ) {
-			if ( $note->note_type !== 'gravityflow' ) {
-				unset( $notes[ $key ] );
-			}
-		}
-
-		reset( $notes );
-
-		$initial_note               = new stdClass();
-		$initial_note->id           = 0;
-		$initial_note->date_created = $entry['date_created'];
-		$initial_note->value        = esc_html__( 'Workflow Submitted', 'gravityflow' );
-		$initial_note->user_id      = $entry['created_by'];
-		$user                       = get_user_by( 'id', $entry['created_by'] );
-		$initial_note->user_name    = $user ? $user->display_name : $entry['ip'];
-
-		array_unshift( $notes, $initial_note );
-
-		$notes = array_reverse( $notes );
-
-		return $notes;
+		return Gravity_Flow_Common::get_timeline_notes( $entry );
 	}
 
 	/**
@@ -556,20 +537,16 @@ class Gravity_Flow_Entry_Detail {
 	 *
 	 * @since 1.7.1-dev
 	 *
-	 * @param string                  $display_name The user display name, step or workflow label.
-	 * @param array                   $note         The note properties.
-	 * @param Gravity_Flow_Step|false $step         The step which added the note or false for legacy notes.
+	 * @param string $display_name The user display name, step or workflow label.
+	 * @param object $note         The note properties.
 	 *
 	 * @return string
 	 */
-	public static function get_note_body( $note, $display_name, $step ) {
-		$note_prefix = $note['user_submitted'] && $step && $step->get_name() ? sprintf( '%s: ', esc_html( $step->get_name() ) ) : '';
-
+	public static function get_note_body( $note, $display_name ) {
 		return sprintf(
-			'<div class="gravityflow-note-body-wrap"><div class="gravityflow-note-body">%s<div class="gravityflow-note-body">%s%s</div></div></div>',
-			self::get_note_header( $display_name, $note['timestamp'] ),
-			$note_prefix,
-			nl2br( esc_html( $note['value'] ) )
+			'<div class="gravityflow-note-body-wrap"><div class="gravityflow-note-body">%s<div class="gravityflow-note-body">%s</div></div></div>',
+			self::get_note_header( $display_name, $note->date_created ),
+			nl2br( esc_html( $note->value ) )
 		);
 	}
 
@@ -579,7 +556,7 @@ class Gravity_Flow_Entry_Detail {
 	 * @since 1.7.1-dev
 	 *
 	 * @param string $display_name The assignee display name, step or workflow label.
-	 * @param string $date_created The date and time or timestamp the note was created.
+	 * @param string $date_created The date and time the note was created.
 	 *
 	 * @return string
 	 */
@@ -607,25 +584,17 @@ class Gravity_Flow_Entry_Detail {
 		}
 
 		foreach ( $notes as $note ) {
-			$step = is_numeric( $note['step_id'] ) ? gravity_flow()->get_step( $note['step_id'] ) : Gravity_Flow_Steps::get( $note['step_id'] );
-
-			if ( $note['assignee_key'] ) {
-				$assignee     = new Gravity_Flow_Assignee( $note['assignee_key'] );
-				$display_name = $assignee->get_display_name();
-				$user_id      = $assignee->get_type() === 'user_id' ? $assignee->get_id() : false;
-			} else {
-				$display_name = $step ? $step->get_label() : gravity_flow()->translate_navigation_label( 'Workflow' );
-				$user_id      = false;
-			}
-
-			$step_type = $step ? $step->get_type() : $display_name;
+			$user_id      = $note->user_id;
+			$step         = Gravity_Flow_Common::get_timeline_note_step( $note );
+			$display_name = Gravity_Flow_Common::get_timeline_note_display_name( $note, $step );
+			$step_type    = $step ? $step->get_type() : $display_name;
 
 			echo sprintf(
 				'<div id="gravityflow-note-%s" class="gravityflow-note gravityflow-note-%s">%s%s</div>',
-				esc_attr( $note['id'] ),
+				esc_attr( $note->id ),
 				esc_attr( $step_type ),
 				self::get_avatar( $user_id, $step ),
-				self::get_note_body( $note, $display_name, $step )
+				self::get_note_body( $note, $display_name )
 			);
 		}
 	}

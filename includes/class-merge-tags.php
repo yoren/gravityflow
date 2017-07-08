@@ -20,26 +20,19 @@ class Gravity_Flow_Merge_Tags {
 	 *
 	 * @since 1.7.1-dev
 	 */
-	private $_current_step = false;
-
-	/**
-	 * Gravity_Flow_Merge_Tags constructor.
-	 *
-	 * @since 1.7.1-dev
-	 */
-	public function __construct() {
-		if ( gravity_flow()->is_gravityforms_supported() ) {
-			$this->add_hooks();
-		}
-	}
+	private static $_current_step = false;
 
 	/**
 	 * Add the filter where merge tag replacement will occur.
 	 *
 	 * @since 1.7.1-dev
 	 */
-	public function add_hooks() {
-		add_filter( 'gform_pre_replace_merge_tags', array( $this, 'replace_merge_tags' ), 10, 7 );
+	public static function init() {
+		if ( ! gravity_flow()->is_gravityforms_supported() ) {
+			return;
+		}
+
+		add_filter( 'gform_pre_replace_merge_tags', array( __CLASS__, 'replace_merge_tags' ), 10, 7 );
 	}
 
 	/**
@@ -50,26 +43,26 @@ class Gravity_Flow_Merge_Tags {
 	 * @param string $text       The current text in which merge tags are being replaced.
 	 * @param array  $form       The current form.
 	 * @param array  $entry      The current entry.
-	 * @param bool   $url_encode Indicates if the replaced value should be URL encoded.
-	 * @param bool   $esc_html   Indicates if HTML found in the replaced value should be escaped.
+	 * @param bool   $url_encode Indicates if the replacement value should be URL encoded.
+	 * @param bool   $esc_html   Indicates if HTML found in the replacement value should be escaped.
 	 * @param bool   $nl2br      Indicates if newlines should be converted to html <br> tags
 	 * @param string $format     Determines how the value should be formatted. HTML or text.
 	 *
 	 * @return string
 	 */
-	public function replace_merge_tags( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
+	public static function replace_merge_tags( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
 		if ( strpos( $text, '{' ) === false  || empty( $entry ) ) {
 			return $text;
 		}
 
-		$text = $this->replace_created_by( $text, $entry );
-		$text = $this->replace_workflow_timeline( $text, $entry );
+		$text = self::replace_created_by( $text, $entry );
+		$text = self::replace_workflow_timeline( $text, $entry );
 
-		$current_step = $this->get_current_step( $form, $entry );
+		$current_step = self::get_current_step( $form, $entry );
 
 		if ( $current_step ) {
-			$text = $this->replace_workflow_note( $text, $entry, $current_step );
-			$text = $this->replace_assignees( $text, $current_step );
+			$text = self::replace_workflow_note( $text, $entry, $current_step );
+			$text = self::replace_assignees( $text, $current_step );
 			$text = $current_step->replace_variables( $text, null );
 		}
 
@@ -77,27 +70,27 @@ class Gravity_Flow_Merge_Tags {
 	}
 
 	/**
-	 * If applicable get the current step.
+	 * Get the current step.
 	 *
 	 * @since 1.7.1-dev
 	 *
-	 * @param array $form The current form.
+	 * @param array $form  The current form.
 	 * @param array $entry The current entry.
 	 *
 	 * @return Gravity_Flow_Step|false
 	 */
-	public function get_current_step( $form, $entry ) {
+	public static function get_current_step( $form, $entry ) {
 		if ( ! isset( $entry['workflow_step'] ) ) {
-			$this->_current_step = false;
+			self::$_current_step = false;
 
 			return false;
 		}
 
-		if ( ! $this->_current_step || $this->_current_step->get_id() != $entry['workflow_step'] ) {
-			$this->_current_step = gravity_flow()->get_current_step( $form, $entry );
+		if ( ! self::$_current_step || self::$_current_step->get_id() != $entry['workflow_step'] ) {
+			self::$_current_step = gravity_flow()->get_current_step( $form, $entry );
 		}
 
-		return $this->_current_step;
+		return self::$_current_step;
 	}
 
 	/**
@@ -110,7 +103,7 @@ class Gravity_Flow_Merge_Tags {
 	 *
 	 * @return string
 	 */
-	public function replace_created_by( $text, $entry ) {
+	public static function replace_created_by( $text, $entry ) {
 		if ( empty( $entry['created_by'] ) ) {
 			return $text;
 		}
@@ -151,12 +144,12 @@ class Gravity_Flow_Merge_Tags {
 	 *
 	 * @return string
 	 */
-	public function replace_workflow_timeline( $text, $entry ) {
+	public static function replace_workflow_timeline( $text, $entry ) {
 		preg_match_all( '/{workflow_timeline(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
 
 		if ( is_array( $matches ) && isset( $matches[0] ) ) {
 			$full_tag = $matches[0][0];
-			$timeline = $this->get_timeline( $entry );
+			$timeline = self::get_timeline( $entry );
 			$text     = str_replace( $full_tag, $timeline, $text );
 		}
 
@@ -172,45 +165,26 @@ class Gravity_Flow_Merge_Tags {
 	 *
 	 * @return string
 	 */
-	public function get_timeline( $entry ) {
+	public static function get_timeline( $entry ) {
 		$html  = '';
-		$notes = Gravity_Flow_Common::get_notes( $entry );
+		$notes = Gravity_Flow_Common::get_timeline_notes( $entry );
 
 		if ( empty( $notes ) ) {
 			return $html;
 		}
 
 		foreach ( $notes as $note ) {
+			$step = Gravity_Flow_Common::get_timeline_note_step( $note );
+
 			$html .= sprintf(
 				'<br>%s: %s<br>%s<br>',
-				esc_html( Gravity_Flow_Common::format_date( $note['timestamp'] ) ),
-				esc_html( $this->get_timeline_display_name( $note ) ),
-				nl2br( esc_html( $note['value'] ) )
+				esc_html( Gravity_Flow_Common::format_date( $note->date_created ) ),
+				esc_html( Gravity_Flow_Common::get_timeline_note_display_name( $note, $step ) ),
+				nl2br( esc_html( $note->value ) )
 			);
 		}
 
 		return $html;
-	}
-
-	/**
-	 * Get the timeline note display name.
-	 *
-	 * @since 1.7.1-dev
-	 *
-	 * @param array $note The note properties.
-	 *
-	 * @return string
-	 */
-	public function get_timeline_display_name( $note ) {
-		if ( $note['assignee_key'] ) {
-			$assignee     = new Gravity_Flow_Assignee( $note['assignee_key'] );
-			$display_name = $assignee->get_display_name();
-		} else {
-			$step         = is_numeric( $note['step_id'] ) ? gravity_flow()->get_step( $note['step_id'] ) : Gravity_Flow_Steps::get( $note['step_id'] );
-			$display_name = $step ? $step->get_label() : gravity_flow()->translate_navigation_label( 'Workflow' );
-		}
-
-		return $display_name;
 	}
 
 	/**
@@ -224,7 +198,7 @@ class Gravity_Flow_Merge_Tags {
 	 *
 	 * @return string
 	 */
-	public function replace_workflow_note( $text, $entry, $current_step ) {
+	public static function replace_workflow_note( $text, $entry, $current_step ) {
 		preg_match_all( '/{workflow_note(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
 
 		if ( ! empty( $matches ) ) {
@@ -239,7 +213,7 @@ class Gravity_Flow_Merge_Tags {
 				) );
 
 				$replacement = '';
-				$notes       = $this->get_user_notes( $entry['id'], $a['step_id'] );
+				$notes       = self::get_step_notes( $entry['id'], $a['step_id'] );
 
 				if ( ! empty( $notes ) ) {
 					$replacement_array = array();
@@ -288,23 +262,23 @@ class Gravity_Flow_Merge_Tags {
 	 *
 	 * @return array
 	 */
-	public function get_user_notes( $entry_id, $step_id ) {
+	public static function get_step_notes( $entry_id, $step_id ) {
 		$notes      = Gravity_Flow_Common::get_workflow_notes( $entry_id, true );
-		$user_notes = array();
+		$step_notes = array();
 
 		foreach ( $notes as $note ) {
-			if ( ! $note['user_submitted'] || ( $step_id && $step_id != $note['step_id'] ) ) {
+			if ( $step_id && $step_id != $note['step_id'] ) {
 				continue;
 			}
 
-			$user_notes[] = $note;
+			$step_notes[] = $note;
 
 			if ( is_null( $step_id ) ) {
 				break;
 			}
 		}
 
-		return $user_notes;
+		return $step_notes;
 	}
 
 	/**
@@ -317,7 +291,7 @@ class Gravity_Flow_Merge_Tags {
 	 *
 	 * @return string
 	 */
-	public function replace_assignees( $text, $current_step ) {
+	public static function replace_assignees( $text, $current_step ) {
 		preg_match_all( '/{assignees(:(.*?))?}/', $text, $assignees_matches, PREG_SET_ORDER );
 
 		if ( ! empty( $assignees_matches ) ) {
@@ -362,4 +336,4 @@ class Gravity_Flow_Merge_Tags {
 
 }
 
-new Gravity_Flow_Merge_Tags();
+Gravity_Flow_Merge_Tags::init();

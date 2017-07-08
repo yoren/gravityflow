@@ -208,32 +208,30 @@ class Gravity_Flow_Common {
 	}
 
 	/**
-	 * Add a note to the 'workflow_notes' entry meta item.
+	 * Add a user submitted note to the 'workflow_notes' entry meta item.
 	 *
 	 * @since 1.7.1-dev
 	 *
-	 * @param string $note           The note to be added.
-	 * @param int    $entry_id       The ID of the entry the note is to be added to.
-	 * @param int    $step_id        The ID of the current step.
-	 * @param bool   $user_submitted Indicates if the note was added by the user.
+	 * @param string $note     The note to be added.
+	 * @param int    $entry_id The ID of the entry the note is to be added to.
+	 * @param int    $step_id  The ID of the current step.
 	 */
-	public static function add_workflow_note( $note, $entry_id, $step_id, $user_submitted = false ) {
+	public static function add_workflow_note( $note, $entry_id, $step_id ) {
 		$notes = self::get_workflow_notes( $entry_id );
 
 		$notes[] = array(
-			'id'             => uniqid( '', true ),
-			'step_id'        => $step_id,
-			'assignee_key'   => gravity_flow()->get_current_user_assignee_key(),
-			'user_submitted' => $user_submitted,
-			'timestamp'      => time(),
-			'value'          => $note,
+			'id'           => uniqid( '', true ),
+			'step_id'      => $step_id,
+			'assignee_key' => gravity_flow()->get_current_user_assignee_key(),
+			'timestamp'    => time(),
+			'value'        => $note,
 		);
 
 		gform_update_meta( $entry_id, 'workflow_notes', json_encode( $notes ) );
 	}
 
 	/**
-	 * Get an array containing the notes from the entry meta and the legacy notes from the GF notes table.
+	 * Get the timeline notes for the current entry.
 	 *
 	 * @since 1.7.1-dev
 	 *
@@ -241,26 +239,20 @@ class Gravity_Flow_Common {
 	 *
 	 * @return array
 	 */
-	public static function get_notes( $entry ) {
-		$notes       = self::get_workflow_notes( $entry['id'], true );
-		$entry_notes = array_reverse( RGFormsModel::get_lead_notes( $entry['id'] ) );
+	public static function get_timeline_notes( $entry ) {
+		$notes = RGFormsModel::get_lead_notes( $entry['id'] );
 
-		foreach ( $entry_notes as $note ) {
+		foreach ( $notes as $key => $note ) {
 			if ( $note->note_type !== 'gravityflow' ) {
-				continue;
+				unset( $notes[ $key ] );
 			}
-
-			$notes[] = array(
-				'id'             => $note->id,
-				'step_id'        => ! $note->user_id ? $note->user_name : 0,
-				'assignee_key'   => $note->user_id ? 'user_id|' . $note->user_id : false,
-				'user_submitted' => (bool) $note->user_id,
-				'timestamp'      => $note->date_created,
-				'value'          => $note->value,
-			);
 		}
 
-		$notes[] = self::get_initial_note( $entry );
+		reset( $notes );
+
+		array_unshift( $notes, self::get_initial_note( $entry ) );
+
+		$notes = array_reverse( $notes );
 
 		return $notes;
 	}
@@ -272,19 +264,57 @@ class Gravity_Flow_Common {
 	 *
 	 * @param array $entry The current entry.
 	 *
-	 * @return array
+	 * @return object
 	 */
 	public static function get_initial_note( $entry ) {
-		$user = get_userdata( $entry['created_by'] );
+		$initial_note               = new stdClass();
+		$initial_note->id           = 0;
+		$initial_note->date_created = $entry['date_created'];
+		$initial_note->value        = esc_html__( 'Workflow Submitted', 'gravityflow' );
+		$initial_note->user_id      = $entry['created_by'];
+		$user                       = get_user_by( 'id', $entry['created_by'] );
+		$initial_note->user_name    = $user ? $user->display_name : $entry['ip'];
 
-		return array(
-			'id'             => 0,
-			'step_id'        => 0,
-			'assignee_key'   => $user ? 'user_id|' . $user->ID : false,
-			'user_submitted' => false,
-			'timestamp'      => $entry['date_created'],
-			'value'          => esc_html__( 'Workflow Submitted', 'gravityflow' ),
-		);
+		return $initial_note;
+	}
+
+	/**
+	 * Get the step for the current timeline note.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param object $note The note properties.
+	 *
+	 * @return bool|Gravity_Flow_Step
+	 */
+	public static function get_timeline_note_step( $note ) {
+		$step = empty( $note->user_id ) ? Gravity_Flow_Steps::get( $note->user_name ) : false;
+
+		return $step;
+	}
+
+	/**
+	 * Get the display name for the current timeline note.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param object                 $note The note properties.
+	 * @param bool|Gravity_Flow_Step $step The step or false if not available.
+	 *
+	 * @return string
+	 */
+	public static function get_timeline_note_display_name( $note, $step ) {
+		if ( empty( $note->user_id ) ) {
+			if ( $note->user_name !== 'gravityflow' && $step ) {
+				$display_name = $step->get_label();
+			} else {
+				$display_name = gravity_flow()->translate_navigation_label( 'Workflow' );
+			}
+		} else {
+			$display_name = $note->user_name;
+		}
+
+		return $display_name;
 	}
 
 	public static function get_gravityforms_db_version() {

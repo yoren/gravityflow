@@ -510,14 +510,10 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 			if ( $step ) {
 				$this->end();
-				$note      = $this->get_name() . ': ' . esc_html__( 'Reverted to step', 'gravityflow' ) . ' - ' . $step->get_label();
-				$user_note = rgpost( 'gravityflow_note' );
 
-				if ( ! empty( $user_note ) ) {
-					$note .= sprintf( "\n%s: %s", __( 'Note', 'gravityflow' ), $user_note );
-				}
+				$note = $this->get_name() . ': ' . esc_html__( 'Reverted to step', 'gravityflow' ) . ' - ' . $step->get_label();
+				$this->add_note( $note . $this->maybe_add_user_note(), true );
 
-				$this->add_note( $note );
 				$step->start();
 				$feedback = esc_html__( 'Reverted to step:', 'gravityflow' ) . ' ' . $step->get_label();
 			}
@@ -533,11 +529,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 * @param Gravity_Flow_Assignee $assignee The step assignee.
 	 */
 	public function add_status_update_note( $new_status, $assignee ) {
-		$user_note = rgpost( 'gravityflow_note' );
-		if ( ! empty( $user_note ) ) {
-			$this->add_note( $user_note, true );
-		}
-
 		$note = '';
 
 		if ( $new_status == 'approved' ) {
@@ -547,7 +538,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		}
 
 		if ( ! empty( $note ) ) {
-			$this->add_note( $note );
+			$this->add_note( $note . $this->maybe_add_user_note(), true );
 		}
 	}
 

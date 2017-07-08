@@ -1750,12 +1750,42 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @since 1.7.1-dev Updated to store notes in the entry meta.
 	 * @since unknown
 	 *
-	 * @param string $note           The note to be added.
-	 * @param bool   $user_submitted Formerly $user_id; as of 1.7.1-dev indicates if the current note was added by the user.
-	 * @param bool   $deprecated     Formerly $user_name; no longer used as of 1.7.1-dev.
+	 * @param string $note          The note to be added.
+	 * @param bool   $is_user_event Formerly $user_id; as of 1.7.1-dev indicates if the current note is the result of an assignee action.
+	 * @param bool   $deprecated    Formerly $user_name; no longer used as of 1.7.1-dev.
 	 */
-	public function add_note( $note, $user_submitted = false, $deprecated = false ) {
-		Gravity_Flow_Common::add_workflow_note( $note, $this->get_entry_id(), $this->get_id(), $user_submitted );
+	public function add_note( $note, $is_user_event = false, $deprecated = false ) {
+		$user_id   = false;
+		$user_name = $this->get_type();
+
+		if ( $is_user_event ) {
+			$assignee_key = $this->get_current_assignee_key();
+			$assignee     = $this->get_assignee( $assignee_key );
+			if ( $assignee->get_type() === 'user_id' ) {
+				$user_id   = $assignee->get_id();
+				$user_name = $assignee->get_display_name();
+			}
+		}
+
+		GFFormsModel::add_note( $this->get_entry_id(), $user_id, $user_name, $note, 'gravityflow' );
+	}
+
+	/**
+	 * Adds a user submitted note.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @return string The user note which was added or an empty string.
+	 */
+	public function maybe_add_user_note() {
+		$note = trim( rgpost( 'gravityflow_note' ) );
+
+		if ( $note ) {
+			Gravity_Flow_Common::add_workflow_note( $note, $this->get_entry_id(), $this->get_id() );
+			$note = sprintf( "\n%s: %s", __( 'Note', 'gravityflow' ), $note );
+		}
+
+		return $note;
 	}
 
 	/**
