@@ -544,13 +544,15 @@ class Gravity_Flow_Entry_Detail {
 
 		$display_empty_fields = (bool) apply_filters( 'gravityflow_entry_detail_grid_display_empty_fields', $display_empty_fields, $form, $entry );
 
+		$step_class = empty( $current_step ) ? 'gravityflow-workflow-complete' : 'gravityflow-step-' . $current_step->get_type();
+
 		?>
 
 		<input type="hidden" name="action" id="action" value="" />
 		<input type="hidden" name="save" id="action" value="Update" />
 		<input type="hidden" name="screen_mode" id="screen_mode" value="<?php echo esc_attr( rgpost( 'screen_mode' ) ) ?>" />
 
-		<table cellspacing="0" class="widefat fixed entry-detail-view">
+		<table cellspacing="0" class="widefat fixed entry-detail-view <?php echo esc_attr( $step_class ) ?>">
 			<thead>
 			<tr>
 				<th id="details">
