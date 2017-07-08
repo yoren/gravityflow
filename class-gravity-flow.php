@@ -2167,6 +2167,11 @@ PRIMARY KEY  (id)
 					'text'  => $this->translate_status_label( 'complete' ),
 				);
 
+				$workflow_final_status_options[] = array(
+					'value' => 'cancelled',
+					'text' => $this->translate_status_label( 'cancelled' ),
+				);
+
 				// Remove duplicates
 				$workflow_final_status_options = array_map( 'unserialize', array_unique( array_map( 'serialize', $workflow_final_status_options ) ) );
 
