@@ -223,25 +223,23 @@ class Gravity_Flow_Merge_Tags {
 	 * @return string
 	 */
 	public static function get_timeline( $entry ) {
-		$html  = '';
 		$notes = Gravity_Flow_Common::get_timeline_notes( $entry );
 
 		if ( empty( $notes ) ) {
-			return $html;
+			return '';
 		}
+
+		$return = array();
 
 		foreach ( $notes as $note ) {
 			$step = Gravity_Flow_Common::get_timeline_note_step( $note );
+			$name = Gravity_Flow_Common::get_timeline_note_display_name( $note, $step );
+			$date = Gravity_Flow_Common::format_date( $note->date_created );
 
-			$html .= sprintf(
-				"\n%s: %s\n%s\n",
-				Gravity_Flow_Common::format_date( $note->date_created ),
-				Gravity_Flow_Common::get_timeline_note_display_name( $note, $step ),
-				$note->value
-			);
+			$return[] = self::format_note( $note->value, $name, $date );
 		}
 
-		return $html;
+		return implode( "\n\n", $return );
 	}
 
 	/**
@@ -258,8 +256,6 @@ class Gravity_Flow_Merge_Tags {
 		preg_match_all( '/{workflow_note(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
 
 		if ( ! empty( $matches ) ) {
-			$format = self::$_format;
-
 			foreach ( $matches as $match ) {
 				$full_tag  = $match[0];
 				$modifiers = rgar( $match, 2 );
@@ -277,11 +273,13 @@ class Gravity_Flow_Merge_Tags {
 					$replacement_array = array();
 
 					foreach ( $notes as $note ) {
-						$replacement_array[] = self::format_note( $note, $a, $format );
+						$name = $a['display_name'] ? self::get_assignee_display_name( $note['assignee_key'] ) : '';
+						$date = $a['display_date'] ? Gravity_Flow_Common::format_date( $note['timestamp'] ) : '';
+
+						$replacement_array[] = self::format_note( $note['value'], $name, $date );
 					}
 
-					$glue        = $format === 'html' ? '<br>' : "\n";
-					$replacement = implode( $glue, $replacement_array );
+					$replacement = self::format_merge_tag_value( implode( "\n\n", $replacement_array ) );
 				}
 
 				$text = str_replace( $full_tag, $replacement, $text );
@@ -296,35 +294,16 @@ class Gravity_Flow_Merge_Tags {
 	 *
 	 * @since 1.7.1-dev
 	 *
-	 * @param array  $note   The note properties.
-	 * @param array  $a      The merge tag attributes.
-	 * @param string $format Determines how the value should be formatted. HTML or text.
+	 * @param string $note_value   The note value.
+	 * @param string $display_name The note display name.
+	 * @param string $date         The note creation date.
 	 *
 	 * @return string
 	 */
-	public static function format_note( $note, $a, $format ) {
-		$name   = $a['display_name'] ? self::get_assignee_display_name( $note['assignee_key'] ) : '';
-		$date   = $a['display_date'] ? Gravity_Flow_Common::format_date( $note['timestamp'] ) : '';
-		$return = '';
+	public static function format_note( $note_value, $display_name, $date ) {
+		$separator = $display_name && $date ? ': ' : '';
 
-		if ( $name || $date ) {
-			$sep    = $name && $date ? ': ' : '';
-			$return .= esc_html( $name ) . $sep . esc_html( $date );
-
-			if ( $format === 'html' ) {
-				$return = sprintf( '<div class="gravityflow-note-header">%s</div>', $return );
-			} else {
-				$return .= "\n";
-			}
-		}
-
-		if ( $format === 'html' ) {
-			$return .= sprintf( '<div class="gravityflow-note-value">%s</div>', nl2br( esc_html( $note['value'] ) ) );
-		} else {
-			$return .= esc_html( $note['value'] );
-		}
-
-		return $return;
+		return sprintf( "%s%s%s\n%s", $display_name, $separator, $date, $note_value );
 	}
 
 	/**
