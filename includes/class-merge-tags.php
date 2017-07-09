@@ -23,6 +23,34 @@ class Gravity_Flow_Merge_Tags {
 	private static $_current_step = false;
 
 	/**
+	 * @var bool $_url_encode Indicates if the replacement value should be URL encoded.
+	 *
+	 * @since 1.7.1-dev
+	 */
+	private static $_url_encode = false;
+
+	/**
+	 * @var bool $_esc_html Indicates if HTML found in the replacement value should be escaped.
+	 *
+	 * @since 1.7.1-dev
+	 */
+	private static $_esc_html = true;
+
+	/**
+	 * @var bool $_nl2br Indicates if newlines should be converted to html <br> tags.
+	 *
+	 * @since 1.7.1-dev
+	 */
+	private static $_nl2br = true;
+
+	/**
+	 * @var string $_format Determines how the value should be formatted. HTML or text.
+	 *
+	 * @since 1.7.1-dev
+	 */
+	private static $_format = 'html';
+
+	/**
 	 * Add the filter where merge tag replacement will occur.
 	 *
 	 * @since 1.7.1-dev
@@ -51,22 +79,38 @@ class Gravity_Flow_Merge_Tags {
 	 * @return string
 	 */
 	public static function replace_merge_tags( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
-		if ( strpos( $text, '{' ) === false  || empty( $entry ) ) {
+		if ( strpos( $text, '{' ) === false || empty( $entry ) ) {
 			return $text;
 		}
 
+		self::set_properties( func_get_args() );
+
 		$text = self::replace_created_by( $text, $entry );
 		$text = self::replace_workflow_timeline( $text, $entry );
+		$text = self::replace_workflow_note( $text, $entry );
 
 		$current_step = self::get_current_step( $form, $entry );
 
 		if ( $current_step ) {
-			$text = self::replace_workflow_note( $text, $entry, $current_step );
 			$text = self::replace_assignees( $text, $current_step );
 			$text = $current_step->replace_variables( $text, null );
 		}
 
 		return $text;
+	}
+
+	/**
+	 * Set the formatting related class properties.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param array $args The arguments available to the gform_pre_replace_merge_tags filter.
+	 */
+	public static function set_properties( $args ) {
+		self::$_url_encode = (bool) $args[3];
+		self::$_esc_html   = (bool) $args[4];
+		self::$_nl2br      = (bool) $args[5];
+		self::$_format     = $args[6];
 	}
 
 	/**
@@ -91,6 +135,19 @@ class Gravity_Flow_Merge_Tags {
 		}
 
 		return self::$_current_step;
+	}
+
+	/**
+	 * Formats the value which will replace the merge tag.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param string $value The value to be formatted.
+	 *
+	 * @return string
+	 */
+	public static function format_merge_tag_value( $value ) {
+		return GFCommon::format_variable_value( $value, self::$_url_encode, self::$_esc_html, self::$_format, self::$_nl2br );
 	}
 
 	/**
@@ -127,7 +184,7 @@ class Gravity_Flow_Merge_Tags {
 					$value = $entry_creator->get( $property );
 				}
 
-				$text = str_replace( $full_tag, esc_html( $value ), $text );
+				$text = str_replace( $full_tag, self::format_merge_tag_value( $value ), $text );
 			}
 		}
 
@@ -150,7 +207,7 @@ class Gravity_Flow_Merge_Tags {
 		if ( is_array( $matches ) && isset( $matches[0] ) ) {
 			$full_tag = $matches[0][0];
 			$timeline = self::get_timeline( $entry );
-			$text     = str_replace( $full_tag, $timeline, $text );
+			$text     = str_replace( $full_tag, self::format_merge_tag_value( $timeline ), $text );
 		}
 
 		return $text;
@@ -177,10 +234,10 @@ class Gravity_Flow_Merge_Tags {
 			$step = Gravity_Flow_Common::get_timeline_note_step( $note );
 
 			$html .= sprintf(
-				'<br>%s: %s<br>%s<br>',
-				esc_html( Gravity_Flow_Common::format_date( $note->date_created ) ),
-				esc_html( Gravity_Flow_Common::get_timeline_note_display_name( $note, $step ) ),
-				nl2br( esc_html( $note->value ) )
+				"\n%s: %s\n%s\n",
+				Gravity_Flow_Common::format_date( $note->date_created ),
+				Gravity_Flow_Common::get_timeline_note_display_name( $note, $step ),
+				$note->value
 			);
 		}
 
@@ -192,16 +249,17 @@ class Gravity_Flow_Merge_Tags {
 	 *
 	 * @since 1.7.1-dev
 	 *
-	 * @param string            $text         The text to be processed.
-	 * @param array             $entry        The current entry.
-	 * @param Gravity_Flow_Step $current_step The current step for this entry.
+	 * @param string $text  The text to be processed.
+	 * @param array  $entry The current entry.
 	 *
 	 * @return string
 	 */
-	public static function replace_workflow_note( $text, $entry, $current_step ) {
+	public static function replace_workflow_note( $text, $entry ) {
 		preg_match_all( '/{workflow_note(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
 
 		if ( ! empty( $matches ) ) {
+			$format = self::$_format;
+
 			foreach ( $matches as $match ) {
 				$full_tag  = $match[0];
 				$modifiers = rgar( $match, 2 );
@@ -219,30 +277,11 @@ class Gravity_Flow_Merge_Tags {
 					$replacement_array = array();
 
 					foreach ( $notes as $note ) {
-
-						if ( $a['display_name'] ) {
-							$assignee = $current_step->get_assignee( $note['assignee_key'] );
-							$name     = $assignee->get_display_name();
-						} else {
-							$name = '';
-						}
-
-						$date = $a['display_date'] ? Gravity_Flow_Common::format_date( $note['timestamp'] ) : '';
-
-						$replacement = '';
-
-						if ( $name || $date ) {
-							$sep = $name && $date ? ': ' : '';
-
-							$replacement .= sprintf( '<div class="gravityflow-note-header">%s%s%s</div>', esc_html( $name ), $sep, esc_html( $date ) );
-						}
-
-						$replacement .= sprintf( '<div class="gravityflow-note-value">%s</div>', nl2br( esc_html( $note['value'] ) ) );
-
-						$replacement_array[] = $replacement;
+						$replacement_array[] = self::format_note( $note, $a, $format );
 					}
 
-					$replacement = implode( '<br>', $replacement_array );
+					$glue        = $format === 'html' ? '<br>' : "\n";
+					$replacement = implode( $glue, $replacement_array );
 				}
 
 				$text = str_replace( $full_tag, $replacement, $text );
@@ -250,6 +289,61 @@ class Gravity_Flow_Merge_Tags {
 		}
 
 		return $text;
+	}
+
+	/**
+	 * Format a note for output.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param array  $note   The note properties.
+	 * @param array  $a      The merge tag attributes.
+	 * @param string $format Determines how the value should be formatted. HTML or text.
+	 *
+	 * @return string
+	 */
+	public static function format_note( $note, $a, $format ) {
+		$name   = $a['display_name'] ? self::get_assignee_display_name( $note['assignee_key'] ) : '';
+		$date   = $a['display_date'] ? Gravity_Flow_Common::format_date( $note['timestamp'] ) : '';
+		$return = '';
+
+		if ( $name || $date ) {
+			$sep    = $name && $date ? ': ' : '';
+			$return .= esc_html( $name ) . $sep . esc_html( $date );
+
+			if ( $format === 'html' ) {
+				$return = sprintf( '<div class="gravityflow-note-header">%s</div>', $return );
+			} else {
+				$return .= "\n";
+			}
+		}
+
+		if ( $format === 'html' ) {
+			$return .= sprintf( '<div class="gravityflow-note-value">%s</div>', nl2br( esc_html( $note['value'] ) ) );
+		} else {
+			$return .= esc_html( $note['value'] );
+		}
+
+		return $return;
+	}
+
+	/**
+	 * Get the assignee display name.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param string|Gravity_Flow_Assignee $assignee_or_key The assignee key or object.
+	 *
+	 * @return string
+	 */
+	public static function get_assignee_display_name( $assignee_or_key ) {
+		if ( ! $assignee_or_key instanceof Gravity_Flow_Assignee ) {
+			$assignee = new Gravity_Flow_Assignee( $assignee_or_key );
+		} else {
+			$assignee = $assignee_or_key;
+		}
+
+		return $assignee->get_display_name();
 	}
 
 	/**
@@ -292,12 +386,12 @@ class Gravity_Flow_Merge_Tags {
 	 * @return string
 	 */
 	public static function replace_assignees( $text, $current_step ) {
-		preg_match_all( '/{assignees(:(.*?))?}/', $text, $assignees_matches, PREG_SET_ORDER );
+		preg_match_all( '/{assignees(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
 
-		if ( ! empty( $assignees_matches ) ) {
-			foreach ( $assignees_matches as $assignees_match ) {
-				$full_tag       = $assignees_match[0];
-				$options_string = isset( $assignees_match[2] ) ? $assignees_match[2] : '';
+		if ( ! empty( $matches ) ) {
+			foreach ( $matches as $match ) {
+				$full_tag       = $match[0];
+				$options_string = isset( $match[2] ) ? $match[2] : '';
 
 				$a = Gravity_Flow_Common::get_merge_tag_attributes( $options_string, array(
 					'status'       => true,
@@ -326,8 +420,9 @@ class Gravity_Flow_Merge_Tags {
 					}
 					$assignees_text_arr[] = $assignee_line;
 				}
+
 				$assignees_text = join( "\n", $assignees_text_arr );
-				$text           = str_replace( $full_tag, $assignees_text, $text );
+				$text           = str_replace( $full_tag, self::format_merge_tag_value( $assignees_text ), $text );
 			}
 		}
 
