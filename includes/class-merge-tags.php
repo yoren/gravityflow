@@ -146,8 +146,40 @@ class Gravity_Flow_Merge_Tags {
 	 *
 	 * @return string
 	 */
-	public static function format_merge_tag_value( $value ) {
+	public static function format_value( $value ) {
 		return GFCommon::format_variable_value( $value, self::$_url_encode, self::$_esc_html, self::$_format, self::$_nl2br );
+	}
+
+	/**
+	 * Retrieve attributes from a string (i.e. merge tag modifiers).
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param string $string   The string to retrieve the attributes from.
+	 * @param array  $defaults The supported attributes and their defaults.
+	 *
+	 * @return array
+	 */
+	public static function get_attributes( $string, $defaults = array() ) {
+		$attributes = shortcode_parse_atts( $string );
+
+		if ( empty( $attributes ) ) {
+			$attributes = array();
+		}
+
+		if ( ! empty( $defaults ) ) {
+			$attributes = shortcode_atts( $defaults, $attributes );
+
+			foreach ( $defaults as $attribute => $default ) {
+				if ( $default === true ) {
+					$attributes[ $attribute ] = strtolower( $attributes[ $attribute ] ) == 'false' ? false : true;
+				} elseif ( $default === false ) {
+					$attributes[ $attribute ] = strtolower( $attributes[ $attribute ] ) == 'true' ? true : false;
+				}
+			}
+		}
+
+		return $attributes;
 	}
 
 	/**
@@ -184,7 +216,7 @@ class Gravity_Flow_Merge_Tags {
 					$value = $entry_creator->get( $property );
 				}
 
-				$text = str_replace( $full_tag, self::format_merge_tag_value( $value ), $text );
+				$text = str_replace( $full_tag, self::format_value( $value ), $text );
 			}
 		}
 
@@ -207,7 +239,7 @@ class Gravity_Flow_Merge_Tags {
 		if ( is_array( $matches ) && isset( $matches[0] ) ) {
 			$full_tag = $matches[0][0];
 			$timeline = self::get_timeline( $entry );
-			$text     = str_replace( $full_tag, self::format_merge_tag_value( $timeline ), $text );
+			$text     = str_replace( $full_tag, self::format_value( $timeline ), $text );
 		}
 
 		return $text;
@@ -260,7 +292,7 @@ class Gravity_Flow_Merge_Tags {
 				$full_tag  = $match[0];
 				$modifiers = rgar( $match, 2 );
 
-				$a = Gravity_Flow_Common::get_merge_tag_attributes( $modifiers, array(
+				$a = self::get_attributes( $modifiers, array(
 					'step_id'      => null,
 					'display_name' => false,
 					'display_date' => false
@@ -279,7 +311,7 @@ class Gravity_Flow_Merge_Tags {
 						$replacement_array[] = self::format_note( $note['value'], $name, $date );
 					}
 
-					$replacement = self::format_merge_tag_value( implode( "\n\n", $replacement_array ) );
+					$replacement = self::format_value( implode( "\n\n", $replacement_array ) );
 				}
 
 				$text = str_replace( $full_tag, $replacement, $text );
@@ -372,7 +404,7 @@ class Gravity_Flow_Merge_Tags {
 				$full_tag       = $match[0];
 				$options_string = isset( $match[2] ) ? $match[2] : '';
 
-				$a = Gravity_Flow_Common::get_merge_tag_attributes( $options_string, array(
+				$a = self::get_attributes( $options_string, array(
 					'status'       => true,
 					'user_email'   => true,
 					'display_name' => true,
@@ -401,7 +433,7 @@ class Gravity_Flow_Merge_Tags {
 				}
 
 				$assignees_text = join( "\n", $assignees_text_arr );
-				$text           = str_replace( $full_tag, self::format_merge_tag_value( $assignees_text ), $text );
+				$text           = str_replace( $full_tag, self::format_value( $assignees_text ), $text );
 			}
 		}
 

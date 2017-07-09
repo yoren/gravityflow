@@ -137,38 +137,6 @@ class Gravity_Flow_Common {
 	}
 
 	/**
-	 * Retrieve attributes from a string (i.e. merge tag modifiers).
-	 *
-	 * @since 1.7.1-dev
-	 *
-	 * @param string $string   The string to retrieve the attributes from.
-	 * @param array  $defaults The supported attributes and their defaults.
-	 *
-	 * @return array
-	 */
-	public static function get_merge_tag_attributes( $string, $defaults = array() ) {
-		$attributes = shortcode_parse_atts( $string );
-
-		if ( empty( $attributes ) ) {
-			$attributes = array();
-		}
-
-		if ( ! empty( $defaults ) ) {
-			$attributes = shortcode_atts( $defaults, $attributes );
-
-			foreach ( $defaults as $attribute => $default ) {
-				if ( $default === true ) {
-					$attributes[ $attribute ] = strtolower( $attributes[ $attribute ] ) == 'false' ? false : true;
-				} elseif ( $default === false ) {
-					$attributes[ $attribute ] = strtolower( $attributes[ $attribute ] ) == 'true' ? true : false;
-				}
-			}
-		}
-
-		return $attributes;
-	}
-
-	/**
 	 * Format the date/time or timestamp for display.
 	 *
 	 * @since 1.7.1-dev
