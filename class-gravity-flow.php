@@ -873,7 +873,7 @@ PRIMARY KEY  (id)
 					array(
 						'name'           => 'condition',
 						'tooltip'        => esc_html__( "Build the conditional logic that should be applied to this step before it's allowed to be processed. If an entry does not meet the conditions of this step it will fall on to the next step in the list.", 'gravityflow' ),
-						'label'          => 'Condition',
+						'label'          => esc_html__( 'Condition' ),
 						'type'           => 'feed_condition',
 						'checkbox_label' => esc_html__( 'Enable Condition for this step', 'gravityflow' ),
 						'instructions'   => esc_html__( 'Perform this step if', 'gravityflow' ),
