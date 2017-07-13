@@ -100,7 +100,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		}
 
 		if ( empty( $new_status ) ) {
-			return new WP_Error( 'invalid_action', __( 'Action not supported', 'gravityflow' ) );
+			return new WP_Error( 'invalid_action', __( 'Action not supported.', 'gravityflow' ) );
 		}
 
 		$note = $request['gravityflow_note'];

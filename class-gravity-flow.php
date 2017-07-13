@@ -880,7 +880,7 @@ PRIMARY KEY  (id)
 					),
 					array(
 						'name' => 'scheduled',
-						'label' => esc_html__( 'Schedule' ),
+						'label' => esc_html__( 'Schedule', 'gravityflow' ),
 						'type' => 'schedule',
 						'tooltip' => esc_html__( 'Scheduling a step will queue entries and prevent them from starting this step until the specified date or until the delay period has elapsed.', 'gravityflow' )
 									. ' ' . esc_html__( 'Note: the schedule setting requires the WordPress Cron which is included and enabled by default unless your host has deactivated it.', 'gravityflow' ),
