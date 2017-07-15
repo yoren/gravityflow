@@ -303,7 +303,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$this->detail_base_url    = $args['detail_base_url'];
 		$this->constraint_filters = $args['constraint_filters'];
 		if ( ! is_array( $args['field_ids'] ) ) {
-			$args['field_ids'] = explode( ',', $args['field_ids'] );
+			$args['field_ids'] = empty( $args['field_ids'] ) ? array() : explode( ',', $args['field_ids'] );
 		}
 		$this->field_ids    = $args['field_ids'];
 		$this->display_all  = $args['display_all'];
@@ -952,6 +952,17 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$columns['workflow_timestamp'] = esc_html__( 'Last Updated', 'gravityflow' );
 		}
 
+		/**
+		 * Allows the columns to be filtered for the status table.
+		 *
+		 * @since 1.7.1
+		 *
+		 * @param array $columns The columns to be filtered
+		 * @param array $args The array of args for this status table.
+		 * @param WP_List_Table $this The current WP_List_Table object.
+		 */
+		$columns = apply_filters( 'gravityflow_columns_status_table', $columns, $args, $this );
+
 		return $columns;
 	}
 
@@ -1051,15 +1062,28 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$end_clause     = $this->get_end_clause( $args );
 		$user_id_clause = $this->get_user_id_clause();
 
-		$lead_table = GFFormsModel::get_lead_table_name();
-		$meta_table = GFFormsModel::get_lead_meta_table_name();
+		if ( version_compare( $this->get_gravityforms_db_version(), '2.3-dev-1', '<' ) ) {
+			$lead_table = GFFormsModel::get_lead_table_name();
+			$meta_table = GFFormsModel::get_lead_meta_table_name();
 
-		$sql     = "SELECT
+			$sql     = "SELECT
 		(SELECT count(distinct(l.id)) FROM $lead_table l WHERE l.status='active' $form_clause $start_clause $end_clause $user_id_clause) as total,
 		(SELECT count(distinct(l.id)) FROM $lead_table l INNER JOIN  $meta_table m ON l.id = m.lead_id WHERE l.status='active' AND meta_key='workflow_final_status' AND meta_value='pending' $form_clause $start_clause $end_clause $user_id_clause) as pending,
 		(SELECT count(distinct(l.id)) FROM $lead_table l INNER JOIN  $meta_table m ON l.id = m.lead_id WHERE l.status='active' AND meta_key='workflow_final_status' AND meta_value NOT IN('pending', 'cancelled') $form_clause $start_clause $end_clause $user_id_clause) as complete,
 		(SELECT count(distinct(l.id)) FROM $lead_table l INNER JOIN  $meta_table m ON l.id = m.lead_id WHERE l.status='active' AND meta_key='workflow_final_status' AND meta_value='cancelled' $form_clause $start_clause $end_clause $user_id_clause) as cancelled
 		";
+		} else {
+			$entry_table = GFFormsModel::get_entry_table_name();
+			$meta_table = GFFormsModel::get_entry_meta_table_name();
+
+			$sql     = "SELECT
+		(SELECT count(distinct(l.id)) FROM $entry_table l WHERE l.status='active' $form_clause $start_clause $end_clause $user_id_clause) as total,
+		(SELECT count(distinct(l.id)) FROM $entry_table l INNER JOIN  $meta_table m ON l.id = m.entry_id WHERE l.status='active' AND meta_key='workflow_final_status' AND meta_value='pending' $form_clause $start_clause $end_clause $user_id_clause) as pending,
+		(SELECT count(distinct(l.id)) FROM $entry_table l INNER JOIN  $meta_table m ON l.id = m.entry_id WHERE l.status='active' AND meta_key='workflow_final_status' AND meta_value NOT IN('pending', 'cancelled') $form_clause $start_clause $end_clause $user_id_clause) as complete,
+		(SELECT count(distinct(l.id)) FROM $entry_table l INNER JOIN  $meta_table m ON l.id = m.entry_id WHERE l.status='active' AND meta_key='workflow_final_status' AND meta_value='cancelled' $form_clause $start_clause $end_clause $user_id_clause) as cancelled
+		";
+		}
+
 		$results = $wpdb->get_results( $sql );
 
 		return $results[0];
@@ -1625,5 +1649,9 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		$this->_forms[ $form_id ] = GFAPI::get_form( $form_id );
 		return $this->_forms[ $form_id ];
+	}
+
+	private function get_gravityforms_db_version() {
+		return Gravity_Flow_Common::get_gravityforms_db_version();
 	}
 } //class

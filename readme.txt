@@ -2,7 +2,7 @@
 Contributors: stevehenty
 Tags: workflow, approvals, gravity forms
 Requires at least: 4.2
-Tested up to: 4.7
+Tested up to: 4.7.4
 License: GPL-3.0+
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -54,6 +54,24 @@ https://gravityflow.io/contact/
 Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.io/out/gravityforms).
 
 == ChangeLog ==
+
+= 1.7 =
+- Added support for unfiltered HTML in the instructions setting for users with the unfiltered_html capability.
+- Added the ability to configure emails to be sent when a User Input step updates the entry and remains in progress and when the step is completed.
+- Added the date field option to the step expiration setting.
+- Added the $field->gravityflow_is_editable and $field->gravityflow_is_display_field properties to provide context to Gravity Forms add-ons that don't extend GF_Field for custom fields.
+- Added new functionality to the Sliced Invoices step:
+	- The Assign To, Assignee Email, Instructions, Display Fields, and Expiration settings.
+	- The Step Completion setting allowing completion of the step to be delayed until the invoice is paid.
+	- When the step is pending invoice payment the invoice details will be displayed in the workflow detail box on the inbox detail page.
+- Fixed an issue with the notification message when the Discussion field merge tag content exceeded the max line length.
+- Fixed an issue with the GravityView integration where the single view doesn't display if an assignee is defined the Advanced Filter criteria.
+- Updated the "no assignees" note from "not required" which could have been confusing in some situations.
+- Updated the feed configuration page for the Sliced Invoices & Gravity Forms Add-On:
+	- Added settings for the default status of the invoice/quote.
+	- Updated the choices for the Line Items map field to only include List type fields and the option to use the entry order summary.
+- Renamed the User Input step 'Default Status Option' setting to 'Save Progress Option' and changed the setting type from radio buttons to drop down.
+
 
 = 1.6.1 =
 
