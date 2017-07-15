@@ -5996,6 +5996,11 @@ AND m.meta_value='queued'";
 		 * @return string
 		 */
 		public function replace_variables( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
+
+			if ( strpos( $text, '{' ) === false  || empty( $entry ) ) {
+				return $text;
+			}
+
 			$step = gravity_flow()->get_current_step( $form, $entry );
 			$args = compact( 'form', 'entry', 'url_encode', 'esc_html', 'nl2br', 'format', 'step' );
 			$merge_tags = Gravity_Flow_Merge_Tags::get_all( $args );
