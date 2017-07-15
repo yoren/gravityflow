@@ -323,7 +323,10 @@ PRIMARY KEY  (id)
 			if ( is_array( $form['fields'] ) ) {
 				foreach ( $form['fields'] as $field ) {
 					/* @var GF_Field $field */
-					$input_fields[] = array( 'key' => absint( $field->id ), 'text' => esc_html__( $field->get_field_label( false, null ) ) );
+					$input_fields[] = array(
+						'key'  => absint( $field->id ),
+						'text' => esc_html( $field->get_field_label( false, null ) ),
+					);
 				}
 			}
 
@@ -337,7 +340,9 @@ PRIMARY KEY  (id)
 					'src'      => $this->get_base_url() . "/js/form-editor{$min}.js",
 					'version'  => $this->_version,
 					'enqueue'  => array(
-						array( 'admin_page' => array( 'form_editor' ) ),
+						array(
+							'admin_page' => array('form_editor'),
+						),
 					),
 					'strings' => array(
 						'user' => array(
@@ -1373,11 +1378,11 @@ PRIMARY KEY  (id)
 				'default_value' => 'delay',
 				'choices' => array(
 					array(
-						'label' => esc_html__( 'Delay' ),
+						'label' => esc_html__( 'Delay', 'gravityflow' ),
 						'value' => 'delay',
 					),
 					array(
-						'label' => esc_html__( 'Date' ),
+						'label' => esc_html__( 'Date', 'gravityflow' ),
 						'value' => 'date',
 					),
 				),
@@ -1389,7 +1394,7 @@ PRIMARY KEY  (id)
 
 			if ( ! empty( $date_fields ) ) {
 				$schedule_type['choices'][] = array(
-						'label' => esc_html__( 'Date Field' ),
+						'label' => esc_html__( 'Date Field', 'gravityflow' ),
 						'value' => 'date_field',
 					);
 
@@ -1555,11 +1560,11 @@ PRIMARY KEY  (id)
 				'default_value' => 'delay',
 				'choices' => array(
 					array(
-						'label' => esc_html__( 'Delay' ),
+						'label' => esc_html__( 'Delay', 'gravityflow' ),
 						'value' => 'delay',
 					),
 					array(
-						'label' => esc_html__( 'Date' ),
+						'label' => esc_html__( 'Date', 'gravityflow' ),
 						'value' => 'date',
 					),
 				),
@@ -1571,7 +1576,7 @@ PRIMARY KEY  (id)
 
 			if ( ! empty( $date_fields ) ) {
 				$expiration_type['choices'][] = array(
-					'label' => esc_html__( 'Date Field' ),
+					'label' => esc_html__( 'Date Field', 'gravityflow' ),
 					'value' => 'date_field',
 				);
 
@@ -1805,7 +1810,7 @@ PRIMARY KEY  (id)
 			$checkbox_defaults = array(
 				'type'       => 'checkbox',
 				'name'       => $field['name'] . 'Enable',
-				'label'      => esc_html__( 'Enable', 'gravityforms' ),
+				'label'      => esc_html__( 'Enable', 'gravityflow' ),
 				'horizontal' => true,
 				'value'      => '1',
 				'choices'    => false,
@@ -2461,7 +2466,7 @@ PRIMARY KEY  (id)
 		public function display_expired_step_details( $current_step, $form, $entry_id ) {
 			$current_step->log_event( esc_html__( 'Step expired', 'gravityflow' ) );
 			$note = esc_html__( 'Step expired', 'gravityflow' ) . ': ' . $current_step->get_name();
-			$current_step->add_note( $note, 0, $current_step->get_type() );
+			$current_step->add_note( $note );
 			$this->process_workflow( $form, $entry_id );
 			$current_step = null;
 			printf( '<h4>%s</h4>', esc_html__( 'Expired: refresh the page', 'gravityflow' ) );
@@ -4411,19 +4416,22 @@ PRIMARY KEY  (id)
 
 		}
 
-		public function add_timeline_note( $entry_id, $note, $user_id = false, $user_name = false ) {
-			global $current_user;
-			if ( $user_id === false ) {
-				$user_id = $current_user->ID;
-			}
-
-			if ( $user_name === false ) {
-				global $current_user;
-				$user_name = $current_user->display_name;
-			}
-
-			if ( empty( $user_name ) && $token = $this->decode_access_token() ) {
-				$user_name = $this->parse_token_assignee( $token )->get_id();
+		/**
+		 * Add a step note to the specified entry.
+		 *
+		 * @param int         $entry_id  The ID of the entry the note is to be added to.
+		 * @param string      $note      The note to be added.
+		 * @param bool|int    $user_id   The user ID or false.
+		 * @param bool|string $user_name The user name or step type.
+		 */
+		public function add_timeline_note( $entry_id, $note, $user_id = false, $user_name = 'gravityflow' ) {
+			$assignee_key = $this->get_current_user_assignee_key();
+			if ( $assignee_key ) {
+				$assignee = new Gravity_Flow_Assignee( $assignee_key );
+				if ( $assignee->get_type() === 'user_id' ) {
+					$user_id   = $assignee->get_id();
+					$user_name = $assignee->get_display_name();
+				}
 			}
 
 			GFFormsModel::add_note( $entry_id, $user_id, $user_name, $note, 'gravityflow' );
@@ -4641,7 +4649,7 @@ AND m.meta_value='queued'";
 
 							$expiration_note = $current_step->get_name() . ': ' . esc_html__( 'Step expired', 'gravityflow' );
 
-							$current_step->add_note( $expiration_note, 0, $current_step->get_type() );
+							$current_step->add_note( $expiration_note );
 
 							gravity_flow()->process_workflow( $form, $entry['id'] );
 
@@ -5467,14 +5475,19 @@ AND m.meta_value='queued'";
 			}
 		}
 
+		/**
+		 * Get the assignee key for the current access token or user.
+		 *
+		 * @return string|bool
+		 */
 		public function get_current_user_assignee_key() {
-			global $current_user;
 			$assignee_key = false;
 			if ( $token = gravity_flow()->decode_access_token() ) {
 				$assignee_key = sanitize_text_field( $token['sub'] );
 			} elseif ( is_user_logged_in() ) {
-				$assignee_key = 'user_id|' . $current_user->ID;
+				$assignee_key = 'user_id|' . get_current_user_id();
 			}
+
 			return $assignee_key;
 		}
 
@@ -5983,70 +5996,20 @@ AND m.meta_value='queued'";
 		 * @return string
 		 */
 		public function replace_variables( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
-			preg_match_all( '/{workflow_timeline(:(.*?))?}/', $text, $timeline_matches, PREG_SET_ORDER );
-			if ( is_array( $timeline_matches ) && isset( $timeline_matches[0] ) ) {
-				$full_tag = $timeline_matches[0][0];
-				$timeline = $this->get_timeline( $entry );
-				$text = str_replace( $full_tag, $timeline, $text );
+
+			if ( strpos( $text, '{' ) === false  || empty( $entry ) ) {
+				return $text;
 			}
 
-			preg_match_all( '/{created_by(:(.*?))?}/', $text, $created_by_matches, PREG_SET_ORDER );
-			if ( is_array( $created_by_matches ) ) {
+			$step = gravity_flow()->get_current_step( $form, $entry );
+			$args = compact( 'form', 'entry', 'url_encode', 'esc_html', 'nl2br', 'format', 'step' );
+			$merge_tags = Gravity_Flow_Merge_Tags::get_all( $args );
 
-				if ( ! empty( $entry['created_by'] ) ) {
-					$entry_creator = new WP_User( $entry['created_by'] );
-
-					foreach ( $created_by_matches as $created_by_match ) {
-
-						if ( ! isset( $created_by_match[2] ) ) {
-							continue;
-						}
-
-						$full_tag = $created_by_match[0];
-
-						$property = $created_by_match[2];
-
-						if ( $property == 'roles' ) {
-							$value = implode( ', ', $entry_creator->roles );
-						} else {
-							$value = $entry_creator->get( $property );
-						}
-						$value = esc_html( $value );
-
-						$text = str_replace( $full_tag, $value, $text );
-					}
-				}
+			foreach ( $merge_tags as $merge_tag ) {
+				$text = $merge_tag->replace( $text );
 			}
 
 			return $text;
-		}
-
-		public function get_timeline( $entry ) {
-			require_once( gravity_flow()->get_base_path() . '/includes/pages/class-entry-detail.php' );
-			$notes = Gravity_Flow_Entry_Detail::get_timeline_notes( $entry );
-
-			$html = '';
-			foreach ( $notes as  $note ) {
-				$html .= '<br />';
-				$html .= GFCommon::format_date( $note->date_created, false, 'd M Y g:i a', false );
-				$html .= ': ';
-				if ( empty( $note->user_id ) ) {
-					if ( $note->user_name !== 'gravityflow' ) {
-						$step = Gravity_Flow_Steps::get( $note->user_name );
-						if ( $step ) {
-							$html .= $step->get_label();
-						}
-					} else {
-						$html .= esc_html( gravity_flow()->translate_navigation_label( 'Workflow' ) );
-					}
-				} else {
-					$html .= esc_html( $note->user_name );
-				}
-				$html .= '<br />';
-				$html .= nl2br( esc_html( $note->value ) );
-				$html .= '<br />';
-			}
-			return $html;
 		}
 
 		public function fields_have_conditional_logic( $form ) {

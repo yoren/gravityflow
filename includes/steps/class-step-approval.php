@@ -510,14 +510,10 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 			if ( $step ) {
 				$this->end();
-				$note      = $this->get_name() . ': ' . esc_html__( 'Reverted to step', 'gravityflow' ) . ' - ' . $step->get_label();
-				$user_note = rgpost( 'gravityflow_note' );
 
-				if ( ! empty( $user_note ) ) {
-					$note .= sprintf( "\n%s: %s", __( 'Note', 'gravityflow' ), $user_note );
-				}
+				$note = $this->get_name() . ': ' . esc_html__( 'Reverted to step', 'gravityflow' ) . ' - ' . $step->get_label();
+				$this->add_note( $note . $this->maybe_add_user_note(), true );
 
-				$this->add_note( $note );
 				$step->start();
 				$feedback = esc_html__( 'Reverted to step:', 'gravityflow' ) . ' ' . $step->get_label();
 			}
@@ -542,12 +538,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		}
 
 		if ( ! empty( $note ) ) {
-			$user_note = rgpost( 'gravityflow_note' );
-			if ( ! empty( $user_note ) ) {
-				$note .= sprintf( "\n%s: %s", __( 'Note', 'gravityflow' ), $user_note );
-			}
-			$user_id = ( $assignee->get_type() == 'user_id' ) ? $assignee->get_id() : 0;
-			$this->add_note( $note, $user_id, $assignee->get_display_name() );
+			$this->add_note( $note . $this->maybe_add_user_note(), true );
 		}
 	}
 
@@ -861,121 +852,17 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 * @return mixed
 	 */
 	public function replace_variables( $text, $assignee ) {
-		$text    = parent::replace_variables( $text, $assignee );
-		$comment = rgpost( 'gravityflow_note' );
-		$text    = str_replace( '{workflow_note}', $comment, $text );
+		$text = parent::replace_variables( $text, $assignee );
 
-		$expiration_days = apply_filters( 'gravityflow_approval_token_expiration_days', 2, $assignee );
-
-		$expiration_str = '+' . (int) $expiration_days . ' days';
-
-		$expiration_timestamp = strtotime( $expiration_str );
-
-		$scopes = array(
-			'pages'           => array( 'inbox' ),
-			'step_id'         => $this->get_id(),
-			'entry_timestamp' => $this->get_entry_timestamp(),
-			'entry_id'        => $this->get_entry_id(),
-			'action'          => 'approve',
+		$args = array(
+			'assignee' => $assignee,
+			'step' => $this,
 		);
 
-		$approve_token = '';
-
-		if ( $assignee ) {
-			$approve_token = gravity_flow()->generate_access_token( $assignee, $scopes, $expiration_timestamp );
-
-			$text = str_replace( '{workflow_approve_token}', $approve_token, $text );
-		}
-
-		preg_match_all( '/{workflow_approve_url(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
-		if ( is_array( $matches ) ) {
-			foreach ( $matches as $match ) {
-				$full_tag       = $match[0];
-				$options_string = isset( $match[2] ) ? $match[2] : '';
-				$options        = shortcode_parse_atts( $options_string );
-
-				$a = shortcode_atts(
-					array(
-						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
-					), $options
-				);
-
-				$approve_url = $this->get_entry_url( $a['page_id'], $assignee, $approve_token );
-				$approve_url = esc_url_raw( $approve_url );
-
-				$text = str_replace( $full_tag, $approve_url, $text );
-			}
-		}
-
-		preg_match_all( '/{workflow_approve_link(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
-		if ( is_array( $matches ) ) {
-			foreach ( $matches as $match ) {
-				$full_tag       = $match[0];
-				$options_string = isset( $match[2] ) ? $match[2] : '';
-				$options        = shortcode_parse_atts( $options_string );
-
-				$a = shortcode_atts(
-					array(
-						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
-						'text'    => esc_html__( 'Approve', 'gravityflow' ),
-					), $options
-				);
-
-				$approve_url  = $this->get_entry_url( $a['page_id'], $assignee, $approve_token );
-				$approve_url  = esc_url_raw( $approve_url );
-				$approve_link = sprintf( '<a href="%s">%s</a>', $approve_url, esc_html( $a['text'] ) );
-				$text         = str_replace( $full_tag, $approve_link, $text );
-			}
-		}
-
-		$scopes['action'] = 'reject';
-
-		$reject_token = '';
-
-		if ( $assignee ) {
-			$reject_token = gravity_flow()->generate_access_token( $assignee, $scopes, $expiration_timestamp );
-			$text         = str_replace( '{workflow_reject_token}', $reject_token, $text );
-		}
-
-		preg_match_all( '/{workflow_reject_url(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
-		if ( is_array( $matches ) ) {
-			foreach ( $matches as $match ) {
-				$full_tag       = $match[0];
-				$options_string = isset( $match[2] ) ? $match[2] : '';
-				$options        = shortcode_parse_atts( $options_string );
-
-				$a = shortcode_atts(
-					array(
-						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
-					), $options
-				);
-
-				$reject_url = $this->get_entry_url( $a['page_id'], $assignee, $reject_token );
-				$reject_url = esc_url_raw( $reject_url );
-				$text       = str_replace( $full_tag, $reject_url, $text );
-			}
-		}
-
-		preg_match_all( '/{workflow_reject_link(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
-		if ( is_array( $matches ) ) {
-			foreach ( $matches as $match ) {
-				$full_tag       = $match[0];
-				$options_string = isset( $match[2] ) ? $match[2] : '';
-				$options        = shortcode_parse_atts( $options_string );
-
-				$a = shortcode_atts(
-					array(
-						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
-						'text'    => esc_html__( 'Reject', 'gravityflow' ),
-					), $options
-				);
-
-				$reject_url  = $this->get_entry_url( $a['page_id'], $assignee, $reject_token );
-				$reject_url  = esc_url_raw( $reject_url );
-				$reject_link = sprintf( '<a href="%s">%s</a>', $reject_url, esc_html( $a['text'] ) );
-				$text        = str_replace( $full_tag, $reject_link, $text );
-			}
-		}
+		$text = Gravity_Flow_Merge_Tags::get( 'workflow_approve_token', $args )->replace( $text );
+		$text = Gravity_Flow_Merge_Tags::get( 'workflow_approve', $args )->replace( $text );
+		$text = Gravity_Flow_Merge_Tags::get( 'workflow_reject_token', $args )->replace( $text );
+		$text = Gravity_Flow_Merge_Tags::get( 'workflow_reject', $args )->replace( $text );
 
 		return $text;
 	}

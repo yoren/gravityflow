@@ -3,10 +3,13 @@
 - Added the gravityflow_columns_status_table filter to allow the columns to be filtered on the status table.
 - Added support for first, latest, and limit modifiers on the Discussion field merge tag e.g. {label:2:first}, {label:2:latest}, and {label:2:limit=3}.
 - Added a class name to the entry detail table for the current step.
+- Added support for using the {workflow_note} and {assignees} merge tags in Gravity Forms notifications.
 - Added "Cancelled" to the final status entry meta options available in entry filters.
 - Updated the note for expired steps to include the step name.
 - Updated step conditional logic to support rules based on entry meta and properties.
 - Updated the User and Role type fields so the step conditional logic rule value will use the choice drop down instead of text input.
+- Updated the {workflow_note} merge tag to support the optional step_id, display_name, and display_date modifiers e.g. {workflow_note: step_id=5 display_name=true display_date=true}.
+- Fixed an issue where the {workflow_note} merge tag would not return the note when the merge tag was not processed immediately after the note was added.
 - Fixed some strings for translation.
 - Fixed a php notice when printing entries.
 - Fixed Discussion field merge tag not returning content when used in the step instructions.
