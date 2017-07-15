@@ -231,6 +231,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Process the REST request for an entry.
 	 *
+	 * @deprecated 1.7.1
+	 *
 	 * @param WP_REST_Request $request
 	 *
 	 * @return WP_REST_Response|mixed If response generated an error, WP_Error, if response
@@ -242,7 +244,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
-	 * Check if a given request has permission.
+	 * Check if a REST request has permission.
 	 *
 	 * @since  1.4.3
 	 * @access public
@@ -251,9 +253,60 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 *
 	 * @return WP_Error|boolean
 	 */
-	public function rest_request_permissions_check( $request ) {
-		return new WP_Error( 'invalid-method', sprintf( __( "Method '%s' not implemented. Must be overridden in subclass." ), __METHOD__ ), array( 'status' => 405 ) );
+	public function rest_permission_callback( $request ) {
+		$assignee_key = gravity_flow()->get_current_user_assignee_key();
+
+		if ( empty( $assignee_key ) ) {
+			return false;
+		}
+
+		if ( ! is_user_logged_in() ) {
+
+			// Email assignee authentication & nonce check.
+
+			$nonce = $request->get_header( 'x_wp_nonce' );
+
+			if ( empty( $nonce ) ) {
+				if ( isset( $request['_wpnonce'] ) ) {
+					$nonce = $request['_wpnonce'];
+				} elseif ( isset( $request['HTTP_X_WP_NONCE'] ) ) {
+					$nonce = $request['HTTP_X_WP_NONCE'];
+				}
+			}
+
+			if ( empty( $nonce ) ) {
+				return false;
+			}
+
+			// Check the nonce.
+			$result = wp_verify_nonce( $nonce, 'wp_rest' );
+
+			if ( ! $result ) {
+				return new WP_Error( 'rest_cookie_invalid_nonce', __( 'Cookie nonce is invalid' ), array( 'status' => 403 ) );
+			}
+		}
+
+		if ( $this->is_assignee( $assignee_key ) ) {
+			return true;
+		}
+
+		return false;
 	}
+
+	/**
+	 * Process the REST request for an entry.
+	 *
+	 * @param WP_REST_Request $request
+	 *
+	 * @return WP_REST_Response|mixed If response generated an error, WP_Error, if response
+	 *                                is already an instance, WP_HTTP_Response, otherwise
+	 *                                returns a new WP_REST_Response instance.
+	 */
+	public function rest_callback( $request ) {
+		return new WP_Error( 'not_implemented', __( ' Not implemented', 'gravityflow' ) );
+	}
+
+
 
 	/**
 	 * Returns the translated label for a status key.
