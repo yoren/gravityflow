@@ -71,7 +71,11 @@ class Gravity_Flow_Merge_Tag_Assignees extends Gravity_Flow_Merge_Tag {
 						$assignee_line .= $assignee_user->user_email;
 					}
 					if ( $a['status'] ) {
-						$assignee_line .= ' (' . $step_assignee->get_status() . ')';
+						$status = $step_assignee->get_status();
+						if ( ! $status ) {
+							$status = 'pending';
+						}
+						$assignee_line .= ' (' . gravity_flow()->translate_status_label( $status ) . ')';
 					}
 					$assignees_text_arr[] = $assignee_line;
 				}
