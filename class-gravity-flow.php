@@ -91,13 +91,15 @@ if ( class_exists( 'GFForms' ) ) {
 
 			add_action( 'gravityflow_cron', array( $this, 'cron' ) );
 			add_action( 'wp', array( $this, 'filter_wp' ) );
-			if ( ! is_user_logged_in() ) {
-				add_filter( 'nonce_user_logged_out', array( $this, 'filter_nonce_user_logged_out' ) );
-			}
+
 		}
 
 		public function init() {
 			parent::init();
+
+			if ( ! is_user_logged_in() ) {
+				add_filter( 'nonce_user_logged_out', array( $this, 'filter_nonce_user_logged_out' ) );
+			}
 
 			add_shortcode( 'gravityflow', array( $this, 'shortcode' ) );
 
