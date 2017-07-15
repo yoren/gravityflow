@@ -216,7 +216,7 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 	 * Prevent the failed requirements page being added to the Forms > Settings area.
 	 * Add the settings link to the installed plugins page.
 	 *
-	 * @since 1.6.1-dev-2
+	 * @since 1.7.1-dev
 	 */
 	public function failed_requirements_init() {
 		add_filter( 'plugin_action_links', array( $this, 'plugin_settings_link' ), 10, 2 );
@@ -228,7 +228,7 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 	 * @param array  $links An array of plugin action links.
 	 * @param string $file  Path to the plugin file relative to the plugins directory.
 	 *
-	 * @since 1.6.1-dev-2
+	 * @since 1.7.1-dev
 	 *
 	 * @return array
 	 */
