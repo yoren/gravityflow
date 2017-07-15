@@ -1015,11 +1015,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					}
 					foreach ( $inputs as $input ) {
 						$this->save_input( $form, $calculation_field, $lead, $input['id'] );
-						GFFormsModel::refresh_lead_field_value( $lead['id'], $input['id'] );
 					}
 				} else {
 					$this->save_input( $form, $calculation_field, $lead, $calculation_field->id );
-					GFFormsModel::refresh_lead_field_value( $lead['id'], $calculation_field->id );
 				}
 			}
 		}
@@ -1031,7 +1029,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			$this->log_debug( __METHOD__ . '(): Saving total fields.' );
 			foreach ( $total_fields as $total_field ) {
 				$this->save_input( $form, $total_field, $lead, $total_field->id );
-				GFFormsModel::refresh_lead_field_value( $lead['id'], $total_field->id );
 			}
 		}
 	}

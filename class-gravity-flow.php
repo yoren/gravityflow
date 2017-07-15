@@ -103,6 +103,7 @@ if ( class_exists( 'GFForms' ) ) {
 			remove_filter( 'gform_entry_post_save', array( $this, 'maybe_process_feed' ), 10 );
 			add_filter( 'auto_update_plugin', array( $this, 'maybe_auto_update' ), 10, 2 );
 			add_filter( 'gform_enqueue_scripts', array( $this, 'filter_gform_enqueue_scripts' ), 10, 2 );
+			add_filter( 'gform_pre_replace_merge_tags', array( $this, 'replace_variables' ), 10, 7 );
 
 			add_action( 'gform_entry_created', array( $this, 'action_entry_created' ), 8, 2 );
 			add_action( 'gform_register_init_scripts', array( $this, 'filter_gform_register_init_scripts' ), 10, 3 );
@@ -5978,6 +5979,32 @@ AND m.meta_value='queued'";
 			$do_action = ( $logic['logicType'] == 'all' && $match_count == sizeof( $logic['rules'] ) ) || ( $logic['logicType'] == 'any' && $match_count > 0 );
 
 			return $do_action;
+		}
+
+		/**
+		 * Target for the gform_pre_replace_merge_tags filter. Replaces the workflow_timeline and created_by merge tags.
+		 *
+		 *
+		 * @param string $text
+		 * @param array $form
+		 * @param array $entry
+		 * @param bool $url_encode
+		 * @param bool $esc_html
+		 * @param bool $nl2br
+		 * @param string $format
+		 *
+		 * @return string
+		 */
+		public function replace_variables( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
+			$step = gravity_flow()->get_current_step( $form, $entry );
+			$args = compact( 'form', 'entry', 'url_encode', 'esc_html', 'nl2br', 'format', 'step' );
+			$merge_tags = Gravity_Flow_Merge_Tags::get_all( $args );
+
+			foreach ( $merge_tags as $merge_tag ) {
+				$text = $merge_tag->replace( $text );
+			}
+
+			return $text;
 		}
 
 		public function fields_have_conditional_logic( $form ) {

@@ -947,7 +947,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Override this method to replace merge tags.
 	 * Important: call the parent method first.
-	 * $text = parent::replace_variables( $text, $user_id );
+	 * $text = parent::replace_variables( $text, $assignee );
 	 *
 	 * @param $text
 	 * @param Gravity_Flow_Assignee $assignee
@@ -956,8 +956,13 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 */
 	public function replace_variables( $text, $assignee ) {
 
-		$text = $this->replace_workflow_url_variables( $text, $assignee );
-		$text = $this->replace_workflow_cancel_variables( $text, $assignee );
+		$args = array(
+			'assignee' => $assignee,
+			'step' => $this,
+		);
+
+		$text = Gravity_Flow_Merge_Tags::get( 'workflow_url', $args )->replace( $text );
+		$text = Gravity_Flow_Merge_Tags::get( 'workflow_cancel', $args )->replace( $text );
 
 		return $text;
 	}
@@ -971,35 +976,14 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return string
 	 */
 	public function replace_workflow_url_variables( $text, $assignee ) {
-		preg_match_all( '/{workflow_(entry|inbox)_(url|link)(:(.*?))?}/', $text, $workflow_url_matches, PREG_SET_ORDER );
-		if ( is_array( $workflow_url_matches ) ) {
-			foreach ( $workflow_url_matches as $match ) {
-				$full_tag       = $match[0];
-				$location       = $match[1];
-				$type           = $match[2];
-				$options_string = isset( $match[4] ) ? $match[4] : '';
+		_deprecated_function( 'replace_workflow_url_variables', '1.7.2', 'Gravity_Flow_Merge_Tags::get( \'workflow_url\', $args )->replace()' );
 
-				$a = Gravity_Flow_Merge_Tags::get_attributes( $options_string, array(
-					'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
-					'text'    => $location == 'inbox' ? esc_html__( 'Inbox', 'gravityflow' ) : esc_html__( 'Entry', 'gravityflow' ),
-					'token'   => false,
-				) );
+		$args = array(
+			'assignee' => $assignee,
+			'step' => $this,
+		);
 
-				$token = $this->get_workflow_url_access_token( $a, $assignee );
-
-				if ( $location == 'inbox' ) {
-					$url = $this->get_inbox_url( $a['page_id'], $assignee, $token );
-				} else {
-					$url = $this->get_entry_url( $a['page_id'], $assignee, $token );
-				}
-
-				if ( $type == 'link' ) {
-					$url = sprintf( '<a href="%s">%s</a>', $url, $a['text'] );
-				}
-
-				$text = str_replace( $full_tag, $url, $text );
-			}
-		}
+		$text = Gravity_Flow_Merge_Tags::get( 'workflow_url', $args )->replace( $text );
 
 		return $text;
 	}
@@ -1013,6 +997,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return string
 	 */
 	public function get_workflow_url_access_token( $a, $assignee ) {
+		_deprecated_function( 'get_workflow_url_access_token', '1.7.2', 'gravity_flow()->generate_access_token' );
+
 		$force_token = $a['token'];
 		$token       = '';
 
@@ -1029,45 +1015,20 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * Replace the {workflow_cancel_link} and {workflow_cancel_url} merge tags.
 	 *
 	 * @param string $text The text being processed.
-	 * @param Gravity_Flow_Assignee $assignee The assignee properties.
+	 * @param Gravity_Flow_Assignee $assignee The assignee.
 	 *
 	 * @return string
 	 */
 	public function replace_workflow_cancel_variables( $text, $assignee ) {
+		_deprecated_function( 'replace_workflow_cancel_variables', '1.7.2', 'Gravity_Flow_Merge_Tags::get( \'workflow_cancel\', $args )->replace()' );
+
 		if ( $assignee ) {
-			preg_match_all( '/{workflow_cancel_(url|link)(:(.*?))?}/', $text, $cancel_matches, PREG_SET_ORDER );
-			if ( is_array( $cancel_matches ) ) {
-				$expiration_days      = apply_filters( 'gravityflow_cancel_token_expiration_days', 2, $assignee );
-				$expiration_str       = '+' . (int) $expiration_days . ' days';
-				$expiration_timestamp = strtotime( $expiration_str );
+			$args = array(
+				'assignee' => $assignee,
+				'step' => $this,
+			);
 
-				$scopes = array(
-					'pages'    => array( 'inbox' ),
-					'entry_id' => $this->get_entry_id(),
-					'action'   => 'cancel_workflow',
-				);
-
-				$cancel_token = gravity_flow()->generate_access_token( $assignee, $scopes, $expiration_timestamp );
-
-				foreach ( $cancel_matches as $match ) {
-					$full_tag       = $match[0];
-					$type           = $match[1];
-					$options_string = isset( $match[3] ) ? $match[3] : '';
-
-					$a = Gravity_Flow_Merge_Tags::get_attributes( $options_string, array(
-						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
-						'text'    => esc_html__( 'Cancel Workflow', 'gravityflow' ),
-					) );
-
-					$url = $this->get_entry_url( $a['page_id'], $assignee, $cancel_token );
-
-					if ( $type == 'link' ) {
-						$url = sprintf( '<a href="%s">%s</a>', $url, $a['text'] );
-					}
-
-					$text = str_replace( $full_tag, $url, $text );
-				}
-			}
+			$text = Gravity_Flow_Merge_Tags::get( 'workflow_cancel', $args )->replace( $text );
 		}
 
 		return $text;
@@ -1083,6 +1044,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return string
 	 */
 	public function get_entry_url( $page_id = null, $assignee = null, $access_token = '' ) {
+
+		_deprecated_function( 'get_entry_url', '1.7.2', 'Gravity_Flow_Common::get_workflow_url' );
 
 		$query_args = array(
 			'page' => 'gravityflow-inbox',
@@ -1104,6 +1067,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return string
 	 */
 	public function get_inbox_url( $page_id = null, $assignee = null, $access_token = '' ) {
+		_deprecated_function( 'get_inbox_url', '1.7.2', 'Gravity_Flow_Common::get_workflow_url' );
 
 		$query_args = array(
 			'page' => 'gravityflow-inbox',
