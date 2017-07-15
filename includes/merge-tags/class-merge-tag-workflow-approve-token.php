@@ -52,16 +52,11 @@ class Gravity_Flow_Merge_Tag_Approve_Token extends Gravity_Flow_Merge_Tag_Workfl
 				return $text;
 			}
 
-			$approve_token = $this->get_token();
+			$token = $this->get_token();
 
-			$text = str_replace( '{workflow_approve_token}', $approve_token, $text );
+			$token = $this->format_value( $token );
 
-			if ( is_array( $matches ) ) {
-				foreach ( $matches as $match ) {
-					$full_tag = $match[0];
-					$text     = str_replace( $full_tag, $approve_token, $text );
-				}
-			}
+			$text = str_replace( '{workflow_approve_token}', $token, $text );
 		}
 
 		return $text;
@@ -81,9 +76,9 @@ class Gravity_Flow_Merge_Tag_Approve_Token extends Gravity_Flow_Merge_Tag_Workfl
 			'entry_id'        => $this->step->get_entry_id(),
 			'action'          => 'approve',
 		);
-		$approve_token = gravity_flow()->generate_access_token( $this->assignee, $scopes, $expiration_timestamp );
+		$token = gravity_flow()->generate_access_token( $this->assignee, $scopes, $expiration_timestamp );
 
-		return $approve_token;
+		return $token;
 	}
 }
 

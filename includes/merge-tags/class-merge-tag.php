@@ -55,7 +55,7 @@ abstract class Gravity_Flow_Merge_Tag {
 	 *
 	 * @since 1.7.1-dev
 	 */
-	protected $_format = 'html';
+	protected $format = 'html';
 
 	/**
 	 * @var Gravity_Flow_Step $step The current step.

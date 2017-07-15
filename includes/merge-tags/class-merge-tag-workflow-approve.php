@@ -67,6 +67,8 @@ class Gravity_Flow_Merge_Tag_Approve extends Gravity_Flow_Merge_Tag_Approve_Toke
 					$approve_url = $this->get_entry_url( $a['page_id'], $approve_token );
 					$approve_url = esc_url_raw( $approve_url );
 
+					$approve_url = $this->format_value( $approve_url );
+
 					if ( $type == 'link' ) {
 						$approve_url = sprintf( '<a href="%s">%s</a>', $approve_url, $a['text'] );
 					}

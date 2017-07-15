@@ -59,6 +59,8 @@ class Gravity_Flow_Merge_Tag_Workflow_Url extends Gravity_Flow_Merge_Tag {
 					$url = $this->get_entry_url( $a['page_id'], $token );
 				}
 
+				$url = $this->format_value( $url );
+
 				if ( $type == 'link' ) {
 					$url = sprintf( '<a href="%s">%s</a>', $url, $a['text'] );
 				}

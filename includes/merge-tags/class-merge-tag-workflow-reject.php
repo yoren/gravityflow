@@ -64,14 +64,16 @@ class Gravity_Flow_Merge_Tag_Workflow_Reject extends Gravity_Flow_Merge_Tag_Work
 						'text'    => esc_html__( 'Reject', 'gravityflow' ),
 					) );
 
-					$approve_url = $this->get_entry_url( $a['page_id'], $reject_token );
-					$approve_url = esc_url_raw( $approve_url );
+					$url = $this->get_entry_url( $a['page_id'], $reject_token );
+					$url = esc_url_raw( $url );
+
+					$url = $this->format_value( $url );
 
 					if ( $type == 'link' ) {
-						$approve_url = sprintf( '<a href="%s">%s</a>', $approve_url, $a['text'] );
+						$url = sprintf( '<a href="%s">%s</a>', $url, $a['text'] );
 					}
 
-					$text = str_replace( $full_tag, $approve_url, $text );
+					$text = str_replace( $full_tag, $url, $text );
 				}
 			}
 		}

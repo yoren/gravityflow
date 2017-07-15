@@ -71,6 +71,8 @@ class Gravity_Flow_Merge_Tag_Workflow_Cancel extends Gravity_Flow_Merge_Tag_Work
 
 				$url = $this->get_entry_url( $a['page_id'], $cancel_token );
 
+				$url = $this->format_value( $url );
+
 				if ( $type == 'link' ) {
 					$url = sprintf( '<a href="%s">%s</a>', $url, $a['text'] );
 				}
