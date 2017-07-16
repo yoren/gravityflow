@@ -990,15 +990,15 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 		$user_assignee_args = array(
 			'type' => $assignee_type,
-			'id' => $assignee_id,
+			'id'   => $assignee_id,
 		);
 		foreach ( $users as $user ) {
 			$user_assignee_args['user'] = $user;
-			$user_assignee = new Gravity_Flow_Assignee( $user_assignee_args, $this );
-			$notification['id']      = 'workflow_step_' . $this->get_id() . '_user_' . $user->ID;
-			$notification['name']    = $notification['id'];
-			$notification['to']      = $user->user_email;
-			$notification['message'] = $this->replace_variables( $message, $user_assignee );
+			$user_assignee              = $this->get_assignee( $user_assignee_args );
+			$notification['id']         = 'workflow_step_' . $this->get_id() . '_user_' . $user->ID;
+			$notification['name']       = $notification['id'];
+			$notification['to']         = $user->user_email;
+			$notification['message']    = $this->replace_variables( $message, $user_assignee );
 			$this->send_notification( $notification );
 		}
 	}
