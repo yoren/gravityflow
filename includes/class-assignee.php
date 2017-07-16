@@ -111,9 +111,6 @@ class Gravity_Flow_Assignee {
 				$entry      = $this->step->get_entry();
 				$this->id   = absint( rgar( $entry, $id ) );
 				$this->type = 'user_id';
-				if ( ! isset( $this->user ) ) {
-					$this->user = get_user_by( 'ID', $this->id );
-				}
 				break;
 			case  'assignee_role_field' :
 				$entry      = $this->step->get_entry();
@@ -124,12 +121,6 @@ class Gravity_Flow_Assignee {
 				$entry      = $this->step->get_entry();
 				$this->id   = sanitize_email( rgar( $entry, $id ) );
 				$this->type = 'email';
-				if ( ! isset( $this->user ) ) {
-					$user = get_user_by( 'email', $this->id );
-					if ( $user ) {
-						$this->user = $user;
-					}
-				}
 				break;
 			case 'entry' :
 				$entry      = $this->step->get_entry();
@@ -141,11 +132,29 @@ class Gravity_Flow_Assignee {
 				$this->id   = $id;
 		}
 
-		if ( $this->type == 'user_id' && ! isset( $this->user ) ) {
-			$this->user = get_user_by( 'ID', $this->id );
-		}
-
+		$this->maybe_set_user();
 		$this->key = $this->type . '|' . $this->id;
+	}
+
+	/**
+	 * If applicable, set the user property for the assignee.
+	 *
+	 * @since 1.7.1
+	 */
+	public function maybe_set_user() {
+		if ( ! $this->get_user() ) {
+			if ( $this->get_type() === 'user_id' ) {
+				$user = get_user_by( 'ID', $this->get_id() );
+			} elseif ( $this->get_type() === 'email' ) {
+				$user = get_user_by( 'email', $this->get_id() );
+			} else {
+				$user = false;
+			}
+
+			if ( $user ) {
+				$this->user = $user;
+			}
+		}
 	}
 
 	public function get_id() {
@@ -224,12 +233,8 @@ class Gravity_Flow_Assignee {
 	}
 
 	public function get_display_name() {
-		if ( $this->get_type() == 'user_id' ) {
-			$user = get_user_by( 'id', $this->get_id() );
-			$name = $user ? $user->display_name : $this->get_id();
-		} else {
-			$name = $this->get_id();
-		}
+		$user = $this->get_user();
+		$name = $user ? $user->display_name : $this->get_id();
 
 		return $name;
 	}
