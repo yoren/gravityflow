@@ -4890,6 +4890,12 @@ AND m.meta_value='queued'";
 				);
 			}
 
+			$user = $assignee->get_user();
+
+			if ( ! empty( $user ) ) {
+				$scopes['user_id'] = $user->ID;
+			}
+
 			if ( empty( $expiration_timestamp ) ) {
 				$expiration_timestamp = strtotime( '+30 days' );
 			}
