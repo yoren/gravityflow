@@ -988,11 +988,17 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 		$this->log_debug( __METHOD__ . sprintf( '() sending assignee notifications to %d users', count( $users ) ) );
 
+		$user_assignee_args = array(
+			'type' => $assignee_type,
+			'id' => $assignee_id,
+		);
 		foreach ( $users as $user ) {
+			$user_assignee_args['user'] = $user;
+			$user_assignee = new Gravity_Flow_Assignee( $user_assignee_args, $this );
 			$notification['id']      = 'workflow_step_' . $this->get_id() . '_user_' . $user->ID;
 			$notification['name']    = $notification['id'];
 			$notification['to']      = $user->user_email;
-			$notification['message'] = $this->replace_variables( $message, $assignee );
+			$notification['message'] = $this->replace_variables( $message, $user_assignee );
 			$this->send_notification( $notification );
 		}
 	}

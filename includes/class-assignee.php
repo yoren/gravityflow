@@ -16,12 +16,61 @@ if ( ! class_exists( 'GFForms' ) ) {
 }
 
 class Gravity_Flow_Assignee {
+
+	/**
+	 * The ID of this assignee.
+	 *
+	 * @since 1.0
+	 *
+	 * @var string
+	 */
 	protected $id;
+
+	/* @var string The Type of this assignee */
+
+	/**
+	 * The Type of this assignee.
+	 *
+	 * @since 1.0
+	 *
+	 * @var string
+	 */
 	protected $type;
+
+	/**
+	 * The Assignee key.
+	 *
+	 * @since 1.0
+	 *
+	 * @var string
+	 */
 	protected $key;
+
+	/**
+	 * The editable fields for this assignee.
+	 *
+	 * @since 1.0
+	 *
+	 * @var array
+	 */
 	protected $editable_fields = array();
 
-	/* @var Gravity_Flow_Step|bool */
+	/**
+	 * The WordPress user account for this assignee
+	 *
+	 * @since 1.7.1
+	 *
+	 * @var WP_User
+	 */
+	protected $user = null;
+
+	/**
+	 * The step.
+	 *
+	 * @since 1.0
+	 *
+	 * @var Gravity_Flow_Step|bool
+	 */
 	protected $step;
 
 	/**
@@ -44,6 +93,9 @@ class Gravity_Flow_Assignee {
 			$type = $args['type'];
 			if ( isset( $args['editable_fields'] ) ) {
 				$this->editable_fields = $args['editable_fields'];
+			}
+			if ( isset( $args['user'] ) && $args['user'] instanceof WP_User ) {
+				$this->user = $args['user'];
 			}
 		} else {
 			throw new Exception( 'Assignees must be instantiated with either a string or an array' );
@@ -99,6 +151,16 @@ class Gravity_Flow_Assignee {
 		return $this->editable_fields;
 	}
 
+	/**
+	 * Returns the user account for this assignee.
+	 *
+	 * @since 1.7.1
+	 *
+	 * @return WP_User
+	 */
+	public function get_user() {
+		return $this->user;
+	}
 
 	/**
 	 * Returns the status.
