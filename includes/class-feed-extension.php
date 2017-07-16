@@ -34,10 +34,20 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 
 	public function app_settings_tabs( $settings_tabs ) {
 
+		$callback = 'app_settings_tab';
+
+		if ( is_callable( array( $this, 'meets_minimum_requirements' ) ) ) {
+			$meets_requirements = $this->meets_minimum_requirements();
+
+			if ( ! $meets_requirements['meets_requirements'] ) {
+				$callback = 'failed_requirements_page';
+			}
+		}
+
 		$settings_tabs[] = array(
 			'name'     => $this->_slug,
 			'label'    => $this->get_short_title(),
-			'callback' => array( $this, 'app_settings_tab' ),
+			'callback' => array( $this, $callback ),
 		);
 
 		return $settings_tabs;
@@ -200,5 +210,35 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 
 	public function toolbar_menu_items( $menu_items ) {
 		return $menu_items;
+	}
+
+	/**
+	 * Prevent the failed requirements page being added to the Forms > Settings area.
+	 * Add the settings link to the installed plugins page.
+	 *
+	 * @since 1.7.1-dev
+	 */
+	public function failed_requirements_init() {
+		add_filter( 'plugin_action_links', array( $this, 'plugin_settings_link' ), 10, 2 );
+	}
+
+	/**
+	 * Add the settings link for the extension to the installed plugins page.
+	 *
+	 * @param array  $links An array of plugin action links.
+	 * @param string $file  Path to the plugin file relative to the plugins directory.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @return array
+	 */
+	public function plugin_settings_link( $links, $file ) {
+		if ( $file != $this->_path ) {
+			return $links;
+		}
+
+		array_unshift( $links, '<a href="' . admin_url( 'admin.php' ) . '?page=gravityflow_settings&view=' . $this->_slug . '">' . esc_html__( 'Settings', 'gravityflow' ) . '</a>' );
+
+		return $links;
 	}
 }
