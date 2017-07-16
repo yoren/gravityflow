@@ -4,7 +4,7 @@
 - Added the gravityflow_field_value_status_table filter to allow the field values to be filtered on the status table.
 - Added support for first, latest, and limit modifiers on the Discussion field merge tag e.g. {label:2:first}, {label:2:latest}, and {label:2:limit=3}.
 - Added a class name to the entry detail table for the current step.
-- Added support for using the {workflow_note} and {assignees} merge tags in Gravity Forms notifications.
+- Added support for using the {workflow_entry_link}, {workflow_entry_url}, {workflow_inbox_link}, {workflow_inbox_url}, {workflow_note} and {assignees} merge tags in Gravity Forms notifications.
 - Added "Cancelled" to the final status entry meta options available in entry filters.
 - Updated the note for expired steps to include the step name.
 - Updated step conditional logic to support rules based on entry meta and properties.
