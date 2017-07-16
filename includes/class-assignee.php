@@ -111,6 +111,9 @@ class Gravity_Flow_Assignee {
 				$entry      = $this->step->get_entry();
 				$this->id   = absint( rgar( $entry, $id ) );
 				$this->type = 'user_id';
+				if ( ! isset( $this->user ) ) {
+					$this->user = get_user_by( 'ID', $this->id );
+				}
 				break;
 			case  'assignee_role_field' :
 				$entry      = $this->step->get_entry();
@@ -121,6 +124,12 @@ class Gravity_Flow_Assignee {
 				$entry      = $this->step->get_entry();
 				$this->id   = sanitize_email( rgar( $entry, $id ) );
 				$this->type = 'email';
+				if ( ! isset( $this->user ) ) {
+					$user = get_user_by( 'email', $this->id );
+					if ( $user ) {
+						$this->user = $user;
+					}
+				}
 				break;
 			case 'entry' :
 				$entry      = $this->step->get_entry();
@@ -130,6 +139,10 @@ class Gravity_Flow_Assignee {
 			default :
 				$this->type = $type;
 				$this->id   = $id;
+		}
+
+		if ( $this->type == 'user_id' && ! isset( $this->user ) ) {
+			$this->user = get_user_by( 'ID', $this->id );
 		}
 
 		$this->key = $this->type . '|' . $this->id;
