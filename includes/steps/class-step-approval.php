@@ -79,13 +79,15 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	/**
 	 * Process the REST request for an entry.
 	 *
+	 * @since 1.7.1
+	 *
 	 * @param WP_REST_Request $request
 	 *
 	 * @return WP_REST_Response|mixed If response generated an error, WP_Error, if response
 	 *                                is already an instance, WP_HTTP_Response, otherwise
 	 *                                returns a new WP_REST_Response instance.
 	 */
-	public function handle_rest_request( $request ) {
+	public function rest_callback( $request ) {
 		if ( $request->get_method() !== 'POST' ) {
 			return new WP_Error( 'invalid_request_method', __( 'Invalid request method' ) );
 		}
@@ -128,28 +130,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$response = rest_ensure_response( $response );
 
 		return $response;
-	}
-
-	/**
-	 * Check if a given request has permission.
-	 *
-	 * @since  1.4.3
-	 * @access public
-	 *
-	 * @param WP_REST_Request $request Full data about the request.
-	 *
-	 * @return WP_Error|boolean
-	 */
-	public function rest_request_permissions_check( $request ) {
-		if ( isset( $request['assignee'] ) && ! gravity_flow()->current_user_can_any( 'gravityflow_create_steps' ) ) {
-			return new WP_Error( 'not_allowed', __( "You're not authorized to perform this action.", 'gravityflow' ), array( 'status' => 403 ) );
-		}
-
-		$assignee = isset( $request['assignee'] ) ? $request['assignee'] : gravity_flow()->get_current_user_assignee_key();
-
-		if ( empty( $assignee ) ) {
-			return new WP_Error( 'not_allowed', __( 'Missing assignee.', 'gravityflow' ), array( 'status' => 403 ) );
-		}
 	}
 
 	public function supports_expiration() {
