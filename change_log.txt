@@ -1,6 +1,7 @@
 - Added the workflow note field to the quick actions in the inbox. The note field is only displayed when required by the step settings.
 - Added support for editable fields on the User Input step with calculations based on non-editable and/or non-display fields.
 - Added the gravityflow_columns_status_table filter to allow the columns to be filtered on the status table.
+- Added the gravityflow_field_value_status_table filter to allow the field values to be filtered on the status table.
 - Added support for first, latest, and limit modifiers on the Discussion field merge tag e.g. {label:2:first}, {label:2:latest}, and {label:2:limit=3}.
 - Added a class name to the entry detail table for the current step.
 - Added support for using the {workflow_note} and {assignees} merge tags in Gravity Forms notifications.
