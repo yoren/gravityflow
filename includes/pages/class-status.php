@@ -636,7 +636,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
 		$url_entry = esc_url( $url_entry );
 		$label = absint( $item['id'] );
-		$label = apply_filters( 'gravityflow_status_field_value', $label, $item['form_id'], 'id', $item );
+
+		/**
+		 * Allows the field value to be filtered in the status table.
+		 *
+		 * @since 1.7.1
+		 *
+		 * @param string $label The value to be displayed
+		 * @param int $item['form_id'] The Form ID
+		 * @param string 'id'
+		 * @param array $item The entry array.
+		 */
+		$label = apply_filters( 'gravityflow_field_value_status_table', $label, $item['form_id'], 'id', $item );
 
 		$link = "<a href='{$url_entry}'>$label</a>";
 		echo $link;
@@ -657,7 +668,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		}
 
 		$label = esc_html( $value );
-		$label = apply_filters( 'gravityflow_status_field_value', $label, $item['form_id'], $column_name, $item );
+
+		/**
+		 * Allows the field value to be filtered in the status table.
+		 *
+		 * @since 1.7.1
+		 *
+		 * @param string $label The value to be displayed
+		 * @param int $item['form_id'] The Form ID
+		 * @param string $column_name
+		 * @param array $item The entry array.
+		 */
+		$label = apply_filters( 'gravityflow_field_value_status_table', $label, $item['form_id'], $column_name, $item );
 
 		$link = "<a href='{$url_entry}'>$label</a>";
 		echo $link;
@@ -668,7 +690,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$final_status = rgar( $item, 'workflow_final_status' );
 		$label = empty( $final_status ) ? '' : gravity_flow()->translate_status_label( $final_status );
 		$label = esc_html( $label );
-		$label = apply_filters( 'gravityflow_status_field_value', $label, $item['form_id'], 'final_status', $item );
+
+		/**
+		 * Allows the field value to be filtered in the status table.
+		 *
+		 * @since 1.7.1
+		 *
+		 * @param string $label The value to be displayed
+		 * @param int $item['form_id'] The Form ID
+		 * @param string 'final_status'
+		 * @param array $item The entry array.
+		 */
+		$label = apply_filters( 'gravityflow_field_value_status_table', $label, $item['form_id'], 'final_status', $item );
 		$url_entry = esc_url( $url_entry );
 		$link = "<a href='{$url_entry}'>$label</a>";
 
@@ -789,7 +822,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		 * @param array $form The form object for the current entry.
 		 */
 		$label = apply_filters( 'gravityflow_status_submitter_name', $label, $item, $form );
-		$label = apply_filters( 'gravityflow_status_field_value', $label, $item['form_id'], 'created_by', $item );
+
+		/**
+		 * Allows the field value to be filtered in the status table.
+		 *
+		 * @since 1.7.1
+		 *
+		 * @param string $label The value to be displayed
+		 * @param int $item['form_id'] The Form ID
+		 * @param string 'created_by'
+		 * @param array $item The entry array.
+		 */
+		$label = apply_filters( 'gravityflow_field_value_status_table', $label, $item['form_id'], 'created_by', $item );
 
 		$url_entry = esc_url( $url_entry );
 
@@ -804,7 +848,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$form    = $this->get_form( $form_id );
 
 		$label = esc_html( $form['title'] );
-		$label = apply_filters( 'gravityflow_status_field_value', $label, $item['form_id'], 'form_id', $item );
+
+		/**
+		 * Allows the field value to be filtered in the status table.
+		 *
+		 * @since 1.7.1
+		 *
+		 * @param string $label The value to be displayed
+		 * @param int $item['form_id'] The Form ID
+		 * @param string 'form_id'
+		 * @param array $item The entry array.
+		 */
+		$label = apply_filters( 'gravityflow_field_value_status_table', $label, $item['form_id'], 'form_id', $item );
 
 		$url_entry = esc_url( $url_entry );
 
@@ -821,7 +876,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$url_entry = esc_url( $url_entry );
 
 			$label = $step ? esc_html( $step->get_name() ) : '';
-			$label = apply_filters( 'gravityflow_status_field_value', $label, $item['form_id'], 'workflow_step', $item );
+
+			/**
+			 * Allows the field value to be filtered in the status table.
+			 *
+			 * @since 1.7.1
+			 *
+			 * @param string $label The value to be displayed
+			 * @param int $item['form_id'] The Form ID
+			 * @param string 'workflow_step'
+			 * @param array $item The entry array.
+			 */
+			$label = apply_filters( 'gravityflow_field_value_status_table', $label, $item['form_id'], 'workflow_step', $item );
 			$link  = "<a href='{$url_entry}'>$label</a>";
 			$output = $link;
 		} else {
@@ -842,7 +908,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
 		$url_entry = esc_url( $url_entry );
 		$label = GFCommon::format_date( $item['date_created'] );
-		$label = apply_filters( 'gravityflow_status_field_value', $label, $item['form_id'], 'date_created', $item );
+
+		/**
+		 * Allows the field value to be filtered in the status table.
+		 *
+		 * @since 1.7.1
+		 *
+		 * @param string $label The value to be displayed
+		 * @param int $item['form_id'] The Form ID
+		 * @param string 'date_created'
+		 * @param array $item The entry array.
+		 */
+		$label = apply_filters( 'gravityflow_field_value_status_table', $label, $item['form_id'], 'date_created', $item );
 		$link  = "<a href='{$url_entry}'>$label</a>";
 		echo $link;
 	}
@@ -854,7 +931,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$last_updated = date( 'Y-m-d H:i:s', $item['workflow_timestamp'] );
 			$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
 			$last_updated = esc_html( GFCommon::format_date( $last_updated, true, 'Y/m/d' ) );
-			$last_updated = apply_filters( 'gravityflow_status_field_value', $last_updated, $item['form_id'], 'workflow_timestamp', $item );
+
+			/**
+			 * Allows the field value to be filtered in the status table.
+			 *
+			 * @since 1.7.1
+			 *
+			 * @param string $label The value to be displayed
+			 * @param int $item['form_id'] The Form ID
+			 * @param string 'workflow_timestamp'
+			 * @param array $item The entry array.
+			 */
+			$last_updated = apply_filters( 'gravityflow_field_value_status_table', $last_updated, $item['form_id'], 'workflow_timestamp', $item );
 			$url_entry = esc_url( $url_entry );
 			$label  = "<a href='{$url_entry}'>$last_updated</a>";
 		}
