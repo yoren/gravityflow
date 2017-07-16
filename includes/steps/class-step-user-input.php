@@ -468,15 +468,15 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			$note_message = __( 'Entry updated and marked complete.', 'gravityflow' );
 			if ( $this->confirmation_messageEnable ) {
 				$feedback = $this->confirmation_messageValue;
-				$feedback = GFCommon::replace_variables( $feedback, $form, $this->get_entry(), false, true, true, 'html' );
 				$feedback = $this->replace_variables( $feedback, $assignee );
+				$feedback = GFCommon::replace_variables( $feedback, $form, $this->get_entry(), false, true, true, 'html' );
 				$feedback = do_shortcode( $feedback );
 				$feedback = wp_kses_post( $feedback );
 			} else {
 				$feedback = $note_message;
 			}
 		} else {
-			$feedback = esc_html__( 'Entry updated - in progress.', 'gravityflow' );
+			$feedback     = esc_html__( 'Entry updated - in progress.', 'gravityflow' );
 			$note_message = $feedback;
 		}
 
@@ -492,13 +492,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		$feedback = apply_filters( 'gravityflow_feedback_message_user_input', $feedback, $new_status, $assignee, $form, $this );
 
 		$note = sprintf( '%s: %s', $this->get_name(), $note_message );
-
-		$user_note = rgpost( 'gravityflow_note' );
-		if ( ! empty( $user_note ) ) {
-			$note .= sprintf( "\n%s: %s", esc_html__( 'Note', 'gravityflow' ), $user_note );
-		}
-
-		$this->add_note( $note );
+		$this->add_note( $note . $this->maybe_add_user_note(), true );
 
 		$status = $this->evaluate_status();
 		$this->update_step_status( $status );
@@ -1021,11 +1015,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					}
 					foreach ( $inputs as $input ) {
 						$this->save_input( $form, $calculation_field, $lead, $input['id'] );
-						GFFormsModel::refresh_lead_field_value( $lead['id'], $input['id'] );
 					}
 				} else {
 					$this->save_input( $form, $calculation_field, $lead, $calculation_field->id );
-					GFFormsModel::refresh_lead_field_value( $lead['id'], $calculation_field->id );
 				}
 			}
 		}
@@ -1037,7 +1029,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			$this->log_debug( __METHOD__ . '(): Saving total fields.' );
 			foreach ( $total_fields as $total_field ) {
 				$this->save_input( $form, $total_field, $lead, $total_field->id );
-				GFFormsModel::refresh_lead_field_value( $lead['id'], $total_field->id );
 			}
 		}
 	}
@@ -1112,22 +1103,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Replace the workflow_note merge tag and the tags in the base step class.
-	 *
-	 * @param string $text The text with merge tags.
-	 * @param Gravity_Flow_Assignee $assignee
-	 *
-	 * @return mixed
-	 */
-	public function replace_variables( $text, $assignee ) {
-		$text    = parent::replace_variables( $text, $assignee );
-		$comment = rgpost( 'gravityflow_note' );
-		$text    = str_replace( '{workflow_note}', $comment, $text );
-
-		return $text;
 	}
 
 	/**

@@ -82,6 +82,7 @@ class Gravity_Flow_Bootstrap {
 
 		self::include_steps();
 		self::include_fields();
+		self::include_merge_tags();
 
 		GFAddOn::register( 'Gravity_Flow' );
 		do_action( 'gravityflow_loaded' );
@@ -101,6 +102,15 @@ class Gravity_Flow_Bootstrap {
 		require_once( dirname( __FILE__ ) . '/includes/fields/class-fields.php' );
 
 		foreach ( glob( dirname( __FILE__ ) . '/includes/fields/class-field-*.php' ) as $gravity_flow_filename ) {
+			require_once( $gravity_flow_filename );
+		}
+	}
+
+	public static function include_merge_tags() {
+		require_once( dirname( __FILE__ ) . '/includes/merge-tags/class-merge-tag.php' );
+		require_once( dirname( __FILE__ ) . '/includes/merge-tags/class-merge-tags.php' );
+
+		foreach ( glob( dirname( __FILE__ ) . '/includes/merge-tags/class-merge-tag-*.php' ) as $gravity_flow_filename ) {
 			require_once( $gravity_flow_filename );
 		}
 	}
