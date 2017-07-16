@@ -4805,14 +4805,13 @@ AND m.meta_value='queued'";
 
 				if ( ! empty( $token ) && ! isset( $token['scopes']['action'] )&& ! is_user_logged_in() ) {
 					// Remove the token from the URL to avoid accidental sharing.
-					$secure = ( 'https' === parse_url( site_url(), PHP_URL_SCHEME ) );
+					$secure = ( 'https' === parse_url( home_url(), PHP_URL_SCHEME ) );
 					$sanitized_cookie = sanitize_text_field( $_GET['gflow_access_token'] );
 					setcookie( 'gflow_access_token', $sanitized_cookie, null, SITECOOKIEPATH, null, $secure, true );
-					$protocol = ( ! empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443 ) ? 'https://' : 'http://';
 
 					$request_uri = remove_query_arg( 'gflow_access_token' );
 
-					$redirect_url = $protocol . $_SERVER['HTTP_HOST'] . $request_uri;
+					$redirect_url = home_url() . $request_uri;
 
 					$this->log_debug( __METHOD__ . '(): redirect url: ' . $redirect_url );
 
