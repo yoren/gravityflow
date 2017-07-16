@@ -141,7 +141,7 @@ class Gravity_Flow_Assignee {
 	 *
 	 * @since 1.7.1
 	 */
-	public function maybe_set_user() {
+	private function maybe_set_user() {
 		if ( ! $this->get_user() ) {
 			if ( $this->get_type() === 'user_id' ) {
 				$user = get_user_by( 'ID', $this->get_id() );
