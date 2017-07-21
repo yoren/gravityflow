@@ -1875,7 +1875,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 				$notification['message'] = $this->replace_variables( $message, $assignee );
 				$this->send_notification( $notification );
 
-				return;
+				continue;
 			}
 
 
