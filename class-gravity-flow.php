@@ -6263,7 +6263,7 @@ AND m.meta_value='queued'";
 			members_register_cap_group(
 				'gravityflow',
 				array(
-					'label' => __( 'Gravity Flow', 'gravityflow' ),
+					'label' => $this->get_short_title(),
 					'icon'  => 'dashicons-gravityflow',
 					'caps'  => array(),
 				)
