@@ -1,0 +1,1 @@
+Added support for Members version 2.0+; moved the capabilities to a new Gravity Flow group with human readable labels.

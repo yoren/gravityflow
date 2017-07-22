@@ -29,6 +29,31 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 	public function init_admin() {
 		parent::init_admin();
 		add_filter( 'gravityflow_settings_menu_tabs', array( $this, 'app_settings_tabs' ) );
+
+		// Members 2.0+ Integration.
+		if ( function_exists( 'members_register_cap_group' ) ) {
+			remove_filter( 'members_get_capabilities', array( $this, 'members_get_capabilities' ) );
+			add_filter( 'gravityflow_members_capabilities', array( $this, 'get_members_capabilities' ) );
+		}
+	}
+
+	/**
+	 * Add the extension capabilities to the Gravity Flow group in Members.
+	 *
+	 * Override to provide human readable labels.
+	 *
+	 * @since 1.8.1-dev
+	 *
+	 * @param array $caps The capabilities and their human readable labels.
+	 *
+	 * @return array
+	 */
+	public function get_members_capabilities( $caps ) {
+		foreach ( $this->_capabilities as $capability ) {
+			$caps[ $capability ] = $capability;
+		}
+
+		return $caps;
 	}
 
 	public function app_settings_tabs( $settings_tabs ) {
