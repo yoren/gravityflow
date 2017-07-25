@@ -1,0 +1,1 @@
+Fixed empty fields being displayed on the user input step when 'show empty fields' was not enabled.
