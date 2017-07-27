@@ -494,7 +494,9 @@ class Gravity_Flow_Entry_Editor {
 			return $html;
 		}
 
-		$html = '<div style="display:none;">' . $html . '</div>';
+		if ( $html ) {
+			$html = '<div style="display:none;">' . $html . '</div>';
+		}
 
 		$value = $this->maybe_get_product_calculation_value( $value, $field );
 
