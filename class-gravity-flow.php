@@ -145,6 +145,12 @@ if ( class_exists( 'GFForms' ) ) {
 				add_action( 'gform_post_form_duplicated', array( $this, 'post_form_duplicated' ), 10, 2 );
 			}
 
+			// Members 2.0+ Integration.
+			if ( function_exists( 'members_register_cap_group' ) ) {
+				remove_filter( 'members_get_capabilities', array( $this, 'members_get_capabilities' ) );
+				add_action( 'members_register_cap_groups', array( $this, 'members_register_cap_group' ) );
+				add_action( 'members_register_caps', array( $this, 'members_register_caps' ) );
+			}
 		}
 
 		public function init_ajax() {
@@ -717,6 +723,14 @@ PRIMARY KEY  (id)
 					'version' => $this->_version,
 					'enqueue' => array(
 						array( 'field_types' => array( 'workflow_discussion' ) ),
+					),
+				),
+				array(
+					'handle'  => 'gravityflow_dashicons',
+					'src'     => $this->get_base_url() . "/css/dashicons{$min}.css",
+					'version' => $this->_version,
+					'enqueue' => array(
+						array( 'query' => 'page=roles&action=edit' ),
 					),
 				),
 			);
@@ -6238,6 +6252,64 @@ AND m.meta_value='queued'";
 			$check_entry_display = ! $entry || is_wp_error( $entry );
 
 			return $check_entry_display;
+		}
+
+		/**
+		 * Register the Gravity Flow capabilities group with the Members plugin.
+		 *
+		 * @since 1.8.1-dev
+		 */
+		public function members_register_cap_group() {
+			members_register_cap_group(
+				'gravityflow',
+				array(
+					'label' => $this->get_short_title(),
+					'icon'  => 'dashicons-gravityflow',
+					'caps'  => array(),
+				)
+			);
+		}
+
+		/**
+		 * Register the capabilities and their human readable labels with the Members plugin.
+		 *
+		 * @since 1.8.1-dev
+		 */
+		public function members_register_caps() {
+			$caps = $this->get_members_caps();
+
+			foreach ( $caps as $cap => $label ) {
+				members_register_cap(
+					$cap,
+					array(
+						'label' => $label,
+						'group' => 'gravityflow'
+					)
+				);
+			}
+		}
+
+		/**
+		 * Get the capabilities and their human readable labels to be registered with the Members plugin.
+		 *
+		 * @since 1.8.1-dev
+		 */
+		public function get_members_caps() {
+			$status_label = $this->translate_navigation_label( 'status' );
+			$caps         = array(
+				'gravityflow_inbox'                         => $this->translate_navigation_label( 'inbox' ),
+				'gravityflow_workflow_detail_admin_actions' => __( 'Entry Detail Admin Actions', 'gravityflow' ),
+				'gravityflow_submit'                        => $this->translate_navigation_label( 'submit' ),
+				'gravityflow_status'                        => $status_label,
+				'gravityflow_status_view_all'               => $status_label . ' - ' . __( 'View All', 'gravityflow' ),
+				'gravityflow_reports'                       => $this->translate_navigation_label( 'reports' ),
+				'gravityflow_activity'                      => $this->translate_navigation_label( 'activity' ),
+				'gravityflow_settings'                      => __( 'Manage Settings', 'gravityflow' ),
+				'gravityflow_uninstall'                     => __( 'Uninstall', 'gravityflow' ),
+				'gravityflow_create_steps'                  => __( 'Manage Form Steps', 'gravityflow' ),
+			);
+
+			return apply_filters( 'gravityflow_members_capabilities', $caps );
 		}
 	}
 }

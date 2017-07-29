@@ -333,12 +333,14 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 			$previous_assignees = $this->get_assignees();
 
+			$original_entry = $entry;
+
 			$this->save_entry( $form, $entry, $editable_fields );
 
 			remove_action( 'gform_after_update_entry', array( gravity_flow(), 'filter_after_update_entry' ) );
 
-			do_action( 'gform_after_update_entry', $form, $entry['id'] );
-			do_action( "gform_after_update_entry_{$form['id']}", $form, $entry['id'] );
+			do_action( 'gform_after_update_entry', $form, $entry['id'], $original_entry );
+			do_action( "gform_after_update_entry_{$form['id']}", $form, $entry['id'], $original_entry );
 
 			$entry = GFFormsModel::get_lead( $entry['id'] );
 			GFFormsModel::set_entry_meta( $entry, $form );

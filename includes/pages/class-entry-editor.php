@@ -392,6 +392,10 @@ class Gravity_Flow_Entry_Editor {
 			if ( $field->get_input_type() == 'email' && $field->emailConfirmEnabled ) {
 				$_POST[ 'input_' . $field->id . '_2' ] = $value;
 			}
+
+			if ( $field->get_input_type() == 'multiselect' && $field->storageType === 'json' ) {
+				$value = json_decode( $value, true );
+			}
 		}
 
 		if ( $field->get_input_type() == 'fileupload' ) {
