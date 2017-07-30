@@ -62,16 +62,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * The assignees for this step.
 	 *
+	 * @since 1.8.1
+	 *
 	 * @var Gravity_Flow_Assignee[]
 	 */
-	private $_assignee_details = array();
-
-	/**
-	 * The assignee keys for this step.
-	 *
-	 * @var array
-	 */
-	private $_assignee_keys = array();
+	protected $_assignees = array();
 
 	/**
 	 * The assignee emails for which notifications have been processed.
@@ -1388,9 +1383,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return Gravity_Flow_Assignee[]
 	 */
 	public function get_assignees() {
-		$assignees = $this->get_assignee_details();
-		if ( ! empty( $assignees ) ) {
-			return $assignees;
+		if ( ! empty( $this->_assignees ) ) {
+			return $this->_assignees;
 		}
 
 		if ( ! empty( $this->type ) ) {
@@ -1398,7 +1392,17 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$this->maybe_add_routing_assignees();
 			$this->log_debug( __METHOD__ . '(): assignees: ' . print_r( $this->get_assignee_keys(), true ) );
 
-			return $this->get_assignee_details();
+			/**
+			 * Allows the assignees to be modified for the step.
+			 *
+			 * @since 1.8.1
+			 *
+			 * @param Gravity_Flow_Assignee[] $this->_assignees The array of Assignees.
+			 * @param Gravity_Flow_Step       $this The current step.
+			 */
+			$this->_assignees = apply_filters( 'gravityflow_step_assignees', $this->_assignees, $this );
+
+			return $this->_assignees;
 		}
 
 		return array();
@@ -1407,18 +1411,20 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Retrieve an array containing this steps assignee details.
 	 *
+	 * @deprecated 1.8.1
+	 *
 	 * @return Gravity_Flow_Assignee[]
 	 */
 	public function get_assignee_details() {
-		return $this->_assignee_details;
+		_deprecated_function( 'get_assignee_details', '1.8.1', '$this->_assignees or get_assignees' );
+		return $this->_assignees;
 	}
 
 	/**
 	 * Flush assignee details.
 	 */
 	public function flush_assignees() {
-		$this->_assignee_details = array();
-		$this->_assignee_keys = array();
+		$this->_assignees = array();
 	}
 
 	/**
@@ -1427,7 +1433,12 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return array
 	 */
 	public function get_assignee_keys() {
-		return $this->_assignee_keys;
+		$assignees = $this->_assignees;
+		$assignee_keys = array();
+		foreach( $assignees as $assignee ) {
+			$assignee_keys[] = $assignee->get_key();
+		}
+		return $assignee_keys;
 	}
 
 	/**
@@ -1551,8 +1562,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 			}
 
 			if ( $object ) {
-				$this->_assignee_details[] = $assignee;
-				$this->_assignee_keys[]    = $key;
+				$this->_assignees[] = $assignee;
 			}
 		}
 	}
