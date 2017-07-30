@@ -303,7 +303,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 		$form_id = $form['id'];
 
-		if ( isset( $_POST['gforms_save_entry'] ) && check_admin_referer( 'gforms_save_entry', 'gforms_save_entry' ) ) {
+		if ( isset( $_POST['gforms_save_entry'] ) && rgpost( 'step_id' ) == $this->get_id() && check_admin_referer( 'gforms_save_entry', 'gforms_save_entry' ) ) {
 
 			$new_status = rgpost( 'gravityflow_status' );
 
