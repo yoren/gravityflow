@@ -138,6 +138,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					'name'          => 'format',
 					'label'         => esc_html__( 'Format', 'gravityflow' ),
 					'type'          => 'select',
+					'tooltip'       => esc_html__( 'If JSON is selected then the Content-Type header will be set to application/json', 'gravityflow' ),
 					'onchange'      => "jQuery(this).closest('form').submit();",
 					'default_value' => 'json',
 					'choices'       => array(
@@ -381,10 +382,13 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		// Remove request headers with undefined name.
 		unset( $headers[ null ] );
 
-		if ( in_array( $method, array( 'POST', 'PUT', 'PATCH' ) ) ) {
+		if ( $this->body == 'raw' ) {
+			$body = $this->raw_body;
+			$body = GFCommon::replace_variables( $body, $this->get_form(), $entry, false, false, false, 'text' );
+		} elseif ( in_array( $method, array( 'POST', 'PUT', 'PATCH' ) ) ) {
 			$body = $this->get_request_body();
 			if ( $this->format == 'json' ) {
-				$headers = array( 'Content-type' => 'application/json' );
+				$headers['Content-type'] = 'application/json';
 				$body    = json_encode( $body );
 			} else {
 				$headers = array();
