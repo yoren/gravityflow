@@ -25,7 +25,7 @@ if ( class_exists( 'GFForms' ) ) {
 		public $_version = GRAVITY_FLOW_VERSION;
 
 		// The Framework will display an appropriate message on the plugins page if necessary
-		protected $_min_gravityforms_version = '1.9.14';
+		protected $_min_gravityforms_version = '2.1';
 
 		protected $_slug = 'gravityflow';
 
@@ -5628,7 +5628,6 @@ AND m.meta_value='queued'";
 			/* Setup custom key text field */
 			$custom_key_field['name'] .= '_custom_key_{i}';
 			$custom_key_field['class'] = 'custom_key custom_key_{i}';
-			$custom_key_field['style'] = 'width:200px;max-width:90%;';
 			$custom_key_field['value'] = '{custom_key}';
 
 			/* Setup value field drop down */
@@ -5640,7 +5639,6 @@ AND m.meta_value='queued'";
 			/* Setup custom value text field */
 			$custom_value_field['name'] .= '_custom_value_{i}';
 			$custom_value_field['class'] = 'custom_value custom_value_{i}';
-			$custom_value_field['style'] = 'width:200px;max-width:90%;';
 			$custom_value_field['value'] = '{custom_value}';
 
 			/* Remove unneeded values */
