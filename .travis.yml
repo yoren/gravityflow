@@ -79,7 +79,7 @@ before_script:
 - grunt --version
 - git --version
 - svn --version
-- git clone https://${GFTOKEN}@github.com/stevehenty/gravityforms.git $PWD/tmp/gravityforms
+- git clone https://${GFTOKEN}@github.com/gravityforms/gravityforms.git $PWD/tmp/gravityforms
 - bash tests/bin/install.sh wordpress_unit_tests root '' localhost $WP_VERSION
 script: phpunit
 notifications:

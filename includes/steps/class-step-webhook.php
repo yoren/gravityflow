@@ -37,7 +37,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 	public function get_settings() {
 
-		return array(
+		$settings = array(
 			'title'  => esc_html__( 'Outgoing Webhook', 'gravityflow' ),
 			'fields' => array(
 				array(
@@ -69,12 +69,77 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 							'label' => 'DELETE',
 							'value' => 'delete',
 						),
+						array(
+							'label' => 'PATCH',
+							'value' => 'patch',
+						),
 					),
 				),
 				array(
+					'label'          => esc_html__( 'Request Headers', 'gravityflow' ),
+					'name'           => 'requestHeaders',
+					'type'           => 'generic_map',
+					'required'       => false,
+					'merge_tags'     => true,
+					'tooltip'        => sprintf(
+						'<h6>%s</h6>%s',
+						esc_html__( 'Request Headers', 'gravityflow' ),
+						esc_html__( 'Setup the HTTP headers to be sent with the webhook request.', 'gravityflow' )
+					),
+					'key_choices' => $this->get_header_choices(),
+					// The Add-On Framework now contains the generic map field but with a slight difference
+					// The key_field and value_field elements are included here for when Gravity Flow removes the generic map field.
+					'key_field'      => array(
+						'choices'      => $this->get_header_choices(),
+						'custom_value' => true,
+						'title'        => esc_html__( 'Name', 'gravityflow' ),
+					),
+					'value_field'    => array(
+						'choices'      => 'form_fields',
+						'custom_value' => true,
+					),
+				),
+				array(
+					'name' => 'body',
+					'label' => esc_html__( 'Request Body', 'gravityflow' ),
+					'type' => 'radio',
+					'default_value' => 'select',
+					'horizontal' => true,
+					'onchange'    => "jQuery(this).closest('form').submit();",
+					'choices' => array(
+						array(
+							'label' => __( 'Select Fields', 'gravityflow' ),
+							'value' => 'select',
+						),
+						array(
+							'label' => __( 'Raw request', 'gravityflow' ),
+							'value' => 'raw',
+						),
+					),
+					'dependency' => array(
+						'field'  => 'method',
+						'values' => array( 'post', 'put', 'patch' ),
+					),
+				),
+			),
+		);
+
+		if ( in_array( $this->get_setting( 'method' ), array( 'post', 'put', 'patch', '' ) ) ) {
+
+			if ( $this->get_setting( 'body' ) == 'raw' ) {
+				$settings['fields'][] = array(
+					'name'  => 'raw_body',
+					'label' => esc_html__( 'Raw Body', 'gravityflow' ),
+					'type'  => 'textarea',
+				);
+			} else {
+
+				$settings['fields'][] = array(
 					'name'          => 'format',
 					'label'         => esc_html__( 'Format', 'gravityflow' ),
 					'type'          => 'select',
+					'tooltip'       => esc_html__( 'If JSON is selected then the Content-Type header will be set to application/json', 'gravityflow' ),
+					'onchange'      => "jQuery(this).closest('form').submit();",
 					'default_value' => 'json',
 					'choices'       => array(
 						array(
@@ -86,15 +151,15 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 							'value' => 'form',
 						),
 					),
-				),
-				array(
-					'name' => 'body_type',
-					'label' => esc_html__( 'Request Body', 'gravityflow' ),
-					'type' => 'radio',
+				);
+				$settings['fields'][] = array(
+					'name'          => 'body_type',
+					'label'         => esc_html__( 'Body Content', 'gravityflow' ),
+					'type'          => 'radio',
 					'default_value' => 'all_fields',
-					'horizontal' => true,
-					'onchange'    => "jQuery(this).closest('form').submit();",
-					'choices' => array(
+					'horizontal'    => true,
+					'onchange'      => "jQuery(this).closest('form').submit();",
+					'choices'       => array(
 						array(
 							'label' => __( 'All Fields', 'gravityflow' ),
 							'value' => 'all_fields',
@@ -104,28 +169,177 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 							'value' => 'select_fields',
 						),
 					),
-					'dependency' => array(
-						'field'  => 'method',
-						'values' => array( 'post', 'put' ),
+					'dependency'    => array(
+						'field'  => 'body',
+						'values' => array( 'select', '' ),
 					),
-				),
-				array(
-					'name' => 'mappings',
-					'label' => esc_html__( 'Field Values', 'gravityflow' ),
-					'type' => 'generic_map',
-					'enable_custom_key' => false,
+				);
+				$settings['fields'][] = array(
+					'name'                => 'mappings',
+					'label'               => esc_html__( 'Field Values', 'gravityflow' ),
+					'type'                => 'generic_map',
+					'enable_custom_key'   => false,
 					'enable_custom_value' => true,
-					'key_field_title' => esc_html__( 'Key', 'gravityflow' ),
-					'value_field_title' => esc_html__( 'Value', 'gravityflow' ),
-					'value_choices' => $this->value_mappings(),
-					'tooltip'   => '<h6>' . esc_html__( 'Mapping', 'gravityflow' ) . '</h6>' . esc_html__( 'Map the fields of this form to the selected form. Values from this form will be saved in the entry in the selected form' , 'gravityflow' ),
-					'dependency' => array(
+					'key_field_title'     => esc_html__( 'Key', 'gravityflow' ),
+					'value_field_title'   => esc_html__( 'Value', 'gravityflow' ),
+					'value_choices'       => $this->value_mappings(),
+					'tooltip'             => '<h6>' . esc_html__( 'Mapping', 'gravityflow' ) . '</h6>' . esc_html__( 'Map the fields of this form to the selected form. Values from this form will be saved in the entry in the selected form', 'gravityflow' ),
+					'dependency'          => array(
 						'field'  => 'body_type',
 						'values' => array( 'select_fields' ),
 					),
-				),
+				);
+			}
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * Prepares common HTTP header names as choices.
+	 *
+	 * @since  1.0
+	 * @access public
+	 *
+	 * @return array
+	 */
+	public function get_header_choices() {
+
+		return array(
+			array(
+				'label' => esc_html__( 'Select a Name', 'gravityformswebhooks' ),
+				'value' => '',
+			),
+			array(
+				'label' => 'Accept',
+				'value' => 'Accept',
+			),
+			array(
+				'label' => 'Accept-Charset',
+				'value' => 'Accept-Charset',
+			),
+			array(
+				'label' => 'Accept-Encoding',
+				'value' => 'Accept-Encoding',
+			),
+			array(
+				'label' => 'Accept-Language',
+				'value' => 'Accept-Language',
+			),
+			array(
+				'label' => 'Accept-Datetime',
+				'value' => 'Accept-Datetime',
+			),
+			array(
+				'label' => 'Authorization',
+				'value' => 'Authorization',
+			),
+			array(
+				'label' => 'Cache-Control',
+				'value' => 'Cache-Control',
+			),
+			array(
+				'label' => 'Connection',
+				'value' => 'Connection',
+			),
+			array(
+				'label' => 'Cookie',
+				'value' => 'Cookie',
+			),
+			array(
+				'label' => 'Content-Length',
+				'value' => 'Content-Length',
+			),
+			array(
+				'label' => 'Content-Type',
+				'value' => 'Content-Type',
+			),
+			array(
+				'label' => 'Date',
+				'value' => 'Date',
+			),
+			array(
+				'label' => 'Expect',
+				'value' => 'Expect',
+			),
+			array(
+				'label' => 'Forwarded',
+				'value' => 'Forwarded',
+			),
+			array(
+				'label' => 'From',
+				'value' => 'From',
+			),
+			array(
+				'label' => 'Host',
+				'value' => 'Host',
+			),
+			array(
+				'label' => 'If-Match',
+				'value' => 'If-Match',
+			),
+			array(
+				'label' => 'If-Modified-Since',
+				'value' => 'If-Modified-Since',
+			),
+			array(
+				'label' => 'If-None-Match',
+				'value' => 'If-None-Match',
+			),
+			array(
+				'label' => 'If-Range',
+				'value' => 'If-Range',
+			),
+			array(
+				'label' => 'If-Unmodified-Since',
+				'value' => 'If-Unmodified-Since',
+			),
+			array(
+				'label' => 'Max-Forwards',
+				'value' => 'Max-Forwards',
+			),
+			array(
+				'label' => 'Origin',
+				'value' => 'Origin',
+			),
+			array(
+				'label' => 'Pragma',
+				'value' => 'Pragma',
+			),
+			array(
+				'label' => 'Proxy-Authorization',
+				'value' => 'Proxy-Authorization',
+			),
+			array(
+				'label' => 'Range',
+				'value' => 'Range',
+			),
+			array(
+				'label' => 'Referer',
+				'value' => 'Referer',
+			),
+			array(
+				'label' => 'TE',
+				'value' => 'TE',
+			),
+			array(
+				'label' => 'User-Agent',
+				'value' => 'User-Agent',
+			),
+			array(
+				'label' => 'Upgrade',
+				'value' => 'Upgrade',
+			),
+			array(
+				'label' => 'Via',
+				'value' => 'Via',
+			),
+			array(
+				'label' => 'Warning',
+				'value' => 'Warning',
 			),
 		);
+
 	}
 
 	/**
@@ -161,12 +375,20 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 		$body = null;
 
-		$headers = array();
 
-		if ( in_array( $method, array( 'POST', 'PUT' ) ) ) {
+		// Get request headers.
+		$headers = gravity_flow()->get_generic_map_fields( $this->get_feed_meta(), 'requestHeaders', $this->get_form(), $entry );
+
+		// Remove request headers with undefined name.
+		unset( $headers[ null ] );
+
+		if ( $this->body == 'raw' ) {
+			$body = $this->raw_body;
+			$body = GFCommon::replace_variables( $body, $this->get_form(), $entry, false, false, false, 'text' );
+		} elseif ( in_array( $method, array( 'POST', 'PUT', 'PATCH' ) ) ) {
 			$body = $this->get_request_body();
 			if ( $this->format == 'json' ) {
-				$headers = array( 'Content-type' => 'application/json' );
+				$headers['Content-type'] = 'application/json';
 				$body    = json_encode( $body );
 			} else {
 				$headers = array();
