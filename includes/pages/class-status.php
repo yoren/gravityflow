@@ -68,13 +68,17 @@ class Gravity_Flow_Status {
 	 * @return array
 	 */
 	public static function maybe_add_constraint_filters( $args ) {
+
 		if ( empty( $args['constraint_filters'] ) ) {
-			$args['constraint_filters'] = apply_filters( 'gravityflow_status_filter', array(
+			$args['constraint_filters'] = array(
 				'form_id'    => 0,
 				'start_date' => '',
 				'end_date'   => '',
-			) );
+			);
 		}
+
+		$args['constraint_filters'] = apply_filters( 'gravityflow_status_filter', $args['constraint_filters'] );
+
 		if ( ! isset( $args['constraint_filters']['form_id'] ) ) {
 			$args['constraint_filters']['form_id'] = 0;
 		}

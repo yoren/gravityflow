@@ -4215,9 +4215,6 @@ PRIMARY KEY  (id)
 				'detail_base_url'    => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
 				'display_header'     => false,
 				'action_url'         => 'http' . ( isset( $_SERVER['HTTPS'] ) ? 's' : '' ) . '://' . "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}?",
-				'constraint_filters' => array(
-					'form_id' => $a['form'],
-				),
 				'field_ids'          => $a['fields'] ? explode( ',', $a['fields'] ) : '',
 				'display_all'        => $a['display_all'],
 				'id_column'          => $a['id_column'],
@@ -4229,6 +4226,12 @@ PRIMARY KEY  (id)
 				'workflow_info'      => $a['workflow_info'],
 				'sidebar'            => $a['sidebar'],
 			);
+
+			if ( isset( $a['form'] ) ) {
+				$args['constraint_filters'] = array(
+					'form_id' => $a['form'],
+				);
+			}
 
 			if ( ! is_user_logged_in() && $a['allow_anonymous'] ) {
 				$args['bulk_actions'] = array();
