@@ -6,3 +6,4 @@ Added the Raw body setting to the OUtgoing webhook step settings.
 Fixed an issue populating multi-select fields with the existing entry value on the user input step when the field uses the new json storageType.
 Fixed the $original_entry parameter not being passed when the gform_after_update_entry hook is triggered on entry update by the user input step.
 Fixed empty fields being displayed on the user input step when 'show empty fields' was not enabled.
+Fixed an issue with the shortcode where the gravityflow_status_filter and gravityflow_permission_granted_entry_detail filters don't fire.

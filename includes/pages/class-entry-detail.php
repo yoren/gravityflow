@@ -48,16 +48,27 @@ class Gravity_Flow_Entry_Detail {
 			<?php
 			self::maybe_show_header( $form, $args );
 
-			if ( $check_view_entry_permissions ) {
-				$permission_granted = self::is_permission_granted( $entry, $form, $current_step );
+			$permission_granted = $check_view_entry_permissions ? self::is_permission_granted( $entry, $form, $current_step ) : true;
 
-				if ( ! $permission_granted ) {
-					$permission_denied_message = esc_attr__( "You don't have permission to view this entry.", 'gravityflow' );
-					$permission_denied_message = apply_filters( 'gravityflow_permission_denied_message_entry_detail', $permission_denied_message, $current_step );
-					echo $permission_denied_message;
+			/**
+			 * Allows the the permission check to be overridden for the workflow entry detail page.
+			 *
+			 * @param bool $permission_granted Whether permission is granted to open the entry.
+			 * @param array $entry
+			 * @param array $form
+			 * @param Gravity_Flow_Step $current_step
+			 */
+			$permission_granted = apply_filters( 'gravityflow_permission_granted_entry_detail', $permission_granted, $entry, $form, $current_step );
 
-					return;
-				}
+			gravity_flow()->log_debug( __METHOD__ . '() $permission_granted: ' . ( $permission_granted ? 'yes' : 'no' ) );
+
+
+			if ( ! $permission_granted ) {
+				$permission_denied_message = esc_attr__( "You don't have permission to view this entry.", 'gravityflow' );
+				$permission_denied_message = apply_filters( 'gravityflow_permission_denied_message_entry_detail', $permission_denied_message, $current_step );
+				echo $permission_denied_message;
+
+				return;
 			}
 
 			$url     = remove_query_arg( array( 'gworkflow_token', 'new_status' ) );
@@ -299,18 +310,6 @@ class Gravity_Flow_Entry_Detail {
 				$permission_granted = true;
 			}
 		}
-
-		/**
-		 * Allows the the permission check to be overridden for the workflow entry detail page.
-		 *
-		 * @param bool $permission_granted Whether permission is granted to open the entry.
-		 * @param array $entry
-		 * @param array $form
-		 * @param Gravity_Flow_Step $current_step
-		 */
-		$permission_granted = apply_filters( 'gravityflow_permission_granted_entry_detail', $permission_granted, $entry, $form, $current_step );
-
-		gravity_flow()->log_debug( __METHOD__ . '() $permission_granted: ' . ( $permission_granted ? 'yes' : 'no' ) );
 
 		return $permission_granted;
 	}

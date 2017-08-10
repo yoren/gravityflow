@@ -53,7 +53,19 @@ class Gravity_Flow_Print_Entries {
 
 				require_once( $gravity_flow->get_base_path() . '/includes/pages/class-entry-detail.php' );
 
-				if ( ! Gravity_Flow_Entry_Detail::is_permission_granted( $entry, $form, $current_step ) ) {
+				$permission_granted = Gravity_Flow_Entry_Detail::is_permission_granted( $entry, $form, $current_step );
+
+				/**
+				 * Allows the the permission check to be overridden for the workflow entry detail page.
+				 *
+				 * @param bool $permission_granted Whether permission is granted to open the entry.
+				 * @param array $entry
+				 * @param array $form
+				 * @param Gravity_Flow_Step $current_step
+				 */
+				$permission_granted = apply_filters( 'gravityflow_permission_granted_entry_detail', $permission_granted, $entry, $form, $current_step );
+
+				if ( ! $permission_granted ) {
 					esc_attr_e( "You don't have permission to view this entry.", 'gravityflow' );
 					continue;
 				}
