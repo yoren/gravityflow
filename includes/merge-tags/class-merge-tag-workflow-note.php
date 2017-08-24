@@ -49,14 +49,14 @@ class Gravity_Flow_Merge_Tag_Workflow_Note extends Gravity_Flow_Merge_Tag {
 				$modifiers = rgar( $match, 2 );
 
 				$a = $this->get_attributes( $modifiers, array(
-					'step_id'         => null,
-					'display_name'    => false,
-					'display_date'    => false,
-					'all_occurrences' => true,
+					'step_id'      => null,
+					'display_name' => false,
+					'display_date' => false,
+					'history'      => false,
 				) );
 
 				$replacement = '';
-				$notes       = $this->get_step_notes( $entry['id'], $a['step_id'], $a['all_occurrences'] );
+				$notes       = $this->get_step_notes( $entry['id'], $a['step_id'], $a['history'] );
 
 				if ( ! empty( $notes ) ) {
 					$replacement_array = array();
@@ -83,29 +83,25 @@ class Gravity_Flow_Merge_Tag_Workflow_Note extends Gravity_Flow_Merge_Tag {
 	 *
 	 * @since 1.7.1-dev
 	 *
-	 * @param int      $entry_id        The current entry ID.
-	 * @param int|null $step_id         The step ID or null to return the most recent note.
-	 * @param bool     $all_occurrences Include notes from all occurrences of the specified step.
+	 * @param int      $entry_id The current entry ID.
+	 * @param int|null $step_id  The step ID or null to return the most recent note.
+	 * @param bool     $history  Include notes from previous occurrences of the specified step.
 	 *
 	 * @return array
 	 */
-	protected function get_step_notes( $entry_id, $step_id, $all_occurrences ) {
+	protected function get_step_notes( $entry_id, $step_id, $history ) {
 		$notes      = Gravity_Flow_Common::get_workflow_notes( $entry_id, true );
 		$step_notes = array();
 
 		$step_found            = false;
-		$step_timestamp        = $step_id && ! $all_occurrences ? gform_get_meta( $entry_id, 'workflow_step_' . $step_id . '_timestamp' ) : 0;
-		$step_status_timestamp = $step_id && ! $all_occurrences ? gform_get_meta( $entry_id, 'workflow_step_status_' . $step_id . '_timestamp' ) : 0;
+		$step_timestamp        = $step_id && ! $history ? gform_get_meta( $entry_id, 'workflow_step_' . $step_id . '_timestamp' ) : 0;
+		$step_status_timestamp = $step_id && ! $history ? gform_get_meta( $entry_id, 'workflow_step_status_' . $step_id . '_timestamp' ) : 0;
 
 		foreach ( $notes as $note ) {
-			if ( $step_found && ! $all_occurrences ) {
-				if ( $step_id != $note['step_id'] ) {
-					break;
-				}
-
-				if ( $note['timestamp'] < $step_timestamp || $note['timestamp'] > $step_status_timestamp ) {
-					break;
-				}
+			if ( $step_found && ! $history &&
+			     ( $step_id != $note['step_id'] || $note['timestamp'] < $step_timestamp || $note['timestamp'] > $step_status_timestamp )
+			) {
+				break;
 			}
 
 			if ( $step_id && $step_id != $note['step_id'] ) {

@@ -3,7 +3,7 @@ Added the gravityflow_step_assignees filter.
 Added PATCH to the list of request methods in the request method setting of the Outgoing Webhook step settings.
 Added Headers to the Outgoing Webhook step settings.
 Added the Raw body setting to the OUtgoing webhook step settings.
-Updated the {workflow_note} merge tag to support the all_occurrences modifier when using the step_id modifier e.g. {workflow_note:step_id=5 all_occurrences=false}.
+Updated the {workflow_note} merge tag to support the history modifier to control if notes from previous occurrences of the step are output e.g. {workflow_note:step_id=5 history=true}.
 Fixed an issue populating multi-select fields with the existing entry value on the user input step when the field uses the new json storageType.
 Fixed the $original_entry parameter not being passed when the gform_after_update_entry hook is triggered on entry update by the user input step.
 Fixed empty fields being displayed on the user input step when 'show empty fields' was not enabled.
