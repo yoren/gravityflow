@@ -1511,7 +1511,7 @@ PRIMARY KEY  (id)
 					$this->settings_text( $delay_offset_field );
 					$this->settings_select( $unit_field );
 					echo '&nbsp;';
-					esc_html_e( 'after the workflow step is triggered.' );
+					esc_html_e( 'after the workflow step is triggered.', 'gravityflow' );
 					?>
 				</div>
 				<div class="gravityflow-schedule-date-field-container" <?php echo $schedule_date_fields_style ?>>
