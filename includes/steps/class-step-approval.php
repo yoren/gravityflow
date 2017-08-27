@@ -702,7 +702,17 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				<div>
 					<label for="gravityflow-note">
 						<?php
-						esc_html_e( 'Note', 'gravityflow' );
+						$note_label = esc_html__( 'Note', 'gravityflow' );
+						/**
+						 * Allows the label for the Note field on the approval step to be modified.
+						 *
+						 * @since 1.8.1
+						 *
+						 * @param string @note_label the label
+						 * @param Gravity_Flow_Step_Approval $this The current Approval Step.
+						 */
+						$note_label = apply_filters( 'gravityflow_approval_note_label_workflow_detail', $note_label, $this );
+						echo $note_label;
 						$required_indicator = ( $this->note_mode == 'required' ) ? '*' : '';
 						printf( "<span class='gfield_required'>%s</span>", $required_indicator );
 						?>
@@ -732,7 +742,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					 * Allows the 'Approve' label to be modified on the Approval step.
 					 *
 					 * @params string $approve_label The label to be modified.
-					 * @params Gravity_Flow_Step $this The current step.
+					 * @params Gravity_Flow_Step_Approval $this The current step.
 					 */
 					$approve_label = apply_filters( 'gravityflow_approve_label_workflow_detail', $approve_label, $this );
 
@@ -748,7 +758,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					 * Allows the 'Reject' label to be modified on the Approval step.
 					 *
 					 * @params string $reject_label The label to be modified.
-					 * @params Gravity_Flow_Step $this The current step.
+					 * @params Gravity_Flow_Step_Approval $this The current step.
 					 */
 					$reject_label = apply_filters( 'gravityflow_reject_label_workflow_detail', $reject_label, $this );
 
@@ -765,7 +775,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 						 * Allows the 'Revert' label to be modified on the Approval step.
 						 *
 						 * @params string $revert_label The label to be modified.
-						 * @params Gravity_Flow_Step $this The current step.
+						 * @params Gravity_Flow_Step_Approval $this The current step.
 						 */
 						$revert_label = apply_filters( 'gravityflow_revert_label_workflow_detail', $revert_label, $this );
 
