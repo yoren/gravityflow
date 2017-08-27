@@ -183,7 +183,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					'id'     => 'tab_assignee_notification',
 					'fields' => $settings_api->get_setting_notification( array(
 						'checkbox_default_value' => true,
-						'default_message'        => __( 'A new entry requires your input', 'gravityflow' ),
+						'default_message'        => __( 'A new entry requires your input.', 'gravityflow' ),
 					) ),
 				),
 				array(
