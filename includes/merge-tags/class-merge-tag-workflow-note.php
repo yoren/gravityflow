@@ -83,16 +83,20 @@ class Gravity_Flow_Merge_Tag_Workflow_Note extends Gravity_Flow_Merge_Tag {
 	 *
 	 * @since 1.7.1-dev
 	 *
-	 * @param int         $entry_id The current entry ID.
-	 * @param null|string $step_id  The step ID, name, or null to return the most recent note.
-	 * @param bool        $history  Include notes from previous occurrences of the specified step.
+	 * @param int             $entry_id The current entry ID.
+	 * @param null|string|int $step_id  The step ID or name. Null will return the most recent note.
+	 * @param bool            $history  Include notes from previous occurrences of the specified step.
 	 *
 	 * @return array
 	 */
 	protected function get_step_notes( $entry_id, $step_id, $history ) {
 		$notes      = Gravity_Flow_Common::get_workflow_notes( $entry_id, true );
 		$step_notes = array();
-		$step_id    = $this->get_step_id_from_name( $step_id );
+
+		if ( ! is_numeric( $step_id ) && is_string( $step_id ) ) {
+			// Try to look up the step ID by step name.
+			$step_id = $this->get_step_id_by_name( $step_id );
+		}
 
 		$step_found            = false;
 		$step_timestamp        = $step_id && ! $history ? gform_get_meta( $entry_id, 'workflow_step_' . $step_id . '_timestamp' ) : 0;
@@ -123,15 +127,16 @@ class Gravity_Flow_Merge_Tag_Workflow_Note extends Gravity_Flow_Merge_Tag {
 	/**
 	 * Retrieve the step id for the specified step name.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.8.1
 	 *
-	 * @param null|string $step_id The step ID, name, or null to return the most recent note.
+	 * @param string $step_name The step name.
 	 *
-	 * @return null|string
+	 * @return int|false The step ID or false if not found.
 	 */
-	protected function get_step_id_from_name( $step_id ) {
-		if ( is_string( $step_id ) && ! is_numeric( $step_id ) ) {
-			$step_name = strtolower( $step_id );
+	protected function get_step_id_by_name( $step_name ) {
+		$step_id = false;
+		if ( is_string( $step_name ) && ! is_numeric( $step_name ) ) {
+			$step_name = strtolower( $step_name );
 			$steps     = gravity_flow()->get_steps( $this->form['id'] );
 
 			foreach ( $steps as $step ) {
