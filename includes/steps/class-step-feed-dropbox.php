@@ -17,7 +17,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 class Gravity_Flow_Step_Feed_Dropbox extends Gravity_Flow_Step_Feed_Add_On {
 	public $_step_type = 'dropbox';
 
-	protected $_class_name = 'GFDropbox';
+	protected $_class_name = 'GF_Dropbox';
 
 	public function get_label() {
 		return 'Dropbox';
@@ -25,6 +25,14 @@ class Gravity_Flow_Step_Feed_Dropbox extends Gravity_Flow_Step_Feed_Add_On {
 
 	public function get_icon_url() {
 		return $this->get_base_url() . '/images/dropbox-icon.svg';
+	}
+
+	public function get_feed_add_on_class_name() {
+		if ( class_exists( 'GFDropbox' ) ) {
+			$this->_class_name = 'GFDropbox';
+		}
+
+		return $this->_class_name;
 	}
 
 	/**
