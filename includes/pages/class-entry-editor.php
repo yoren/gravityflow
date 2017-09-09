@@ -755,10 +755,6 @@ class Gravity_Flow_Entry_Editor {
 	 * @param array $form The filtered form object.
 	 */
 	public function deregsiter_init_scripts( $form ) {
-		if ( ! gravity_flow()->is_gravityforms_supported( '2.0.3' ) ) {
-			return;
-		}
-
 		$script_names = $this->_non_editable_field_script_names;
 		if ( ! empty( $script_names ) ) {
 			$init_scripts = GFFormDisplay::$init_scripts[ $form['id'] ];

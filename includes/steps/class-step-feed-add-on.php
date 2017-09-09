@@ -211,15 +211,8 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	 */
 	public function intercept_submission() {
 		$form_id = $this->get_form_id();
-		if ( gravity_flow()->is_gravityforms_supported( '2.0-beta-2' ) ) {
-			$slug = $this->get_slug();
-			add_filter( "gform_{$slug}_pre_process_feeds_{$form_id}", array( $this, 'pre_process_feeds' ), 10, 2 );
-		} else {
-			add_filter( "gform_is_delayed_pre_process_feed_{$form_id}", array(
-				$this,
-				'is_delayed_pre_process_feed'
-			), 10, 4 );
-		}
+		$slug    = $this->get_slug();
+		add_filter( "gform_{$slug}_pre_process_feeds_{$form_id}", array( $this, 'pre_process_feeds' ), 10, 2 );
 	}
 
 	/**
@@ -281,36 +274,6 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 		}
 
 		return $feeds;
-	}
-
-	/**
-	 * Prevent the feeds assigned to the current step from being processed by the associated add-on.
-	 *
-	 * @param bool $is_delayed Is feed processing delayed?
-	 * @param array $form The form object currently being processed.
-	 * @param array $entry The entry object currently being processed.
-	 * @param string $slug The Add-On slug e.g. gravityformsmailchimp
-	 *
-	 * @todo Remove once min GF version reaches 2.0.
-	 *
-	 * @return bool
-	 */
-	public function is_delayed_pre_process_feed( $is_delayed, $form, $entry, $slug ) {
-		if ( $slug == $this->get_slug() ) {
-			$feeds = $this->get_feeds();
-			if ( is_array( $feeds ) ) {
-				foreach ( $feeds as $feed ) {
-					$setting_key = 'feed_' . $feed['id'];
-					if ( $this->{$setting_key} ) {
-						$this->get_add_on_instance()->log_debug( __METHOD__ . "(): Delaying feed (#{$feed['id']} - {$this->get_feed_label( $feed )}) for entry #{$entry['id']}." );
-
-						return true;
-					}
-				}
-			}
-		}
-
-		return $is_delayed;
 	}
 
 	/**
