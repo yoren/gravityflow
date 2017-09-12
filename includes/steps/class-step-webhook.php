@@ -76,6 +76,41 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					),
 				),
 				array(
+					'name'          => 'authentication',
+					'label'         => esc_html__( 'Request Authentication Type', 'gravityflow' ),
+					'type'          => 'select',
+					'default_value' => 'basic',
+					'choices'       => array(
+						array(
+							'label' => 'Basic',
+							'value' => 'basic',
+						),
+						array(
+							'label' => 'OAuth1',
+							'value' => 'oauth1',
+						),
+						
+					),
+				),
+				array(
+					'name'  => 'basic_username',
+					'label' => esc_html__( 'Username', 'gravityflow' ),
+					'type'  => 'text',
+					'dependency' => array(
+						'field' => 'authentication',
+						'values' => array('basic')
+					),
+				),
+				array(
+					'name'  => 'basic_password',
+					'label' => esc_html__( 'Password', 'gravityflow' ),
+					'type'  => 'text',
+					'dependency' => array(
+						'field' => 'authentication',
+						'values' => array('basic')
+					),
+				),
+				array(
 					'label'          => esc_html__( 'Request Headers', 'gravityflow' ),
 					'name'           => 'requestHeaders',
 					'type'           => 'generic_map',
@@ -229,10 +264,6 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			array(
 				'label' => 'Accept-Datetime',
 				'value' => 'Accept-Datetime',
-			),
-			array(
-				'label' => 'Authorization',
-				'value' => 'Authorization',
 			),
 			array(
 				'label' => 'Cache-Control',
