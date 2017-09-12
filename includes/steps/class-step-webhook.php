@@ -98,7 +98,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					'type'  => 'text',
 					'dependency' => array(
 						'field' => 'authentication',
-						'values' => array('basic')
+						'values' => array( 'basic' )
 					),
 				),
 				array(
@@ -107,7 +107,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					'type'  => 'text',
 					'dependency' => array(
 						'field' => 'authentication',
-						'values' => array('basic')
+						'values' => array( 'basic' )
 					),
 				),
 				array(
@@ -413,8 +413,8 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		// Remove request headers with undefined name.
 		unset( $headers[ null ] );
 		if ($this->authentication == "basic") {
-			$auth_string = sprintf("%s:%s", $this->basic_username, $this->basic_password);
-			$headers['Authorization'] = sprintf("Basic %s", base64_encode($auth_string));
+			$auth_string = sprintf( "%s:%s", $this->basic_username, $this->basic_password );
+			$headers['Authorization'] = sprintf( "Basic %s", base64_encode($auth_string) );
 		}
 		if ( $this->body == 'raw' ) {
 			$body = $this->raw_body;
