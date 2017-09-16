@@ -79,17 +79,17 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					'name'          => 'authentication',
 					'label'         => esc_html__( 'Request Authentication Type', 'gravityflow' ),
 					'type'          => 'select',
-					'default_value' => 'basic',
+					'onchange'    => "jQuery(this).closest('form').submit();",
+					'default_value' => '',
 					'choices'       => array(
+						array(
+							'label' => 'None',
+							'value' => '',
+						),
 						array(
 							'label' => 'Basic',
 							'value' => 'basic',
 						),
-						array(
-							'label' => 'OAuth1',
-							'value' => 'oauth1',
-						),
-						
 					),
 				),
 				array(
@@ -98,7 +98,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					'type'  => 'text',
 					'dependency' => array(
 						'field' => 'authentication',
-						'values' => array( 'basic' )
+						'values' => array( 'basic' ),
 					),
 				),
 				array(
@@ -107,7 +107,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					'type'  => 'text',
 					'dependency' => array(
 						'field' => 'authentication',
-						'values' => array( 'basic' )
+						'values' => array( 'basic' ),
 					),
 				),
 				array(
@@ -412,10 +412,12 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 		// Remove request headers with undefined name.
 		unset( $headers[ null ] );
-		if ($this->authentication == "basic") {
-			$auth_string = sprintf( "%s:%s", $this->basic_username, $this->basic_password );
-			$headers['Authorization'] = sprintf( "Basic %s", base64_encode($auth_string) );
+
+		if ( $this->authentication == 'basic' ) {
+			$auth_string = sprintf( '%s:%s', $this->basic_username, $this->basic_password );
+			$headers['Authorization'] = sprintf( 'Basic %s', base64_encode( $auth_string ) );
 		}
+
 		if ( $this->body == 'raw' ) {
 			$body = $this->raw_body;
 			$body = GFCommon::replace_variables( $body, $this->get_form(), $entry, false, false, false, 'text' );
