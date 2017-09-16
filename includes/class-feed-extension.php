@@ -22,13 +22,26 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 
 	public function init() {
 		parent::init();
+
+		$meets_requirements = $this->meets_minimum_requirements();
+		if ( ! $meets_requirements['meets_requirements'] ) {
+			return;
+		}
+
 		add_filter( 'gravityflow_menu_items', array( $this, 'menu_items' ) );
 		add_filter( 'gravityflow_toolbar_menu_items', array( $this, 'toolbar_menu_items' ) );
 	}
 
 	public function init_admin() {
 		parent::init_admin();
+
+		$meets_requirements = $this->meets_minimum_requirements();
+		if ( ! $meets_requirements['meets_requirements'] ) {
+			return;
+		}
+
 		add_filter( 'gravityflow_settings_menu_tabs', array( $this, 'app_settings_tabs' ) );
+		add_filter( 'plugin_action_links', array( $this, 'plugin_settings_link' ), 10, 2 );
 
 		// Members 2.0+ Integration.
 		if ( function_exists( 'members_register_cap_group' ) ) {
@@ -58,20 +71,10 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 
 	public function app_settings_tabs( $settings_tabs ) {
 
-		$callback = 'app_settings_tab';
-
-		if ( is_callable( array( $this, 'meets_minimum_requirements' ) ) ) {
-			$meets_requirements = $this->meets_minimum_requirements();
-
-			if ( ! $meets_requirements['meets_requirements'] ) {
-				$callback = 'failed_requirements_page';
-			}
-		}
-
 		$settings_tabs[] = array(
 			'name'     => $this->_slug,
 			'label'    => $this->get_short_title(),
-			'callback' => array( $this, $callback ),
+			'callback' => array( $this, 'app_settings_tab' ),
 		);
 
 		return $settings_tabs;
@@ -237,13 +240,44 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 	}
 
 	/**
-	 * Prevent the failed requirements page being added to the Forms > Settings area.
-	 * Add the settings link to the installed plugins page.
+	 * Add the failed requirements error message.
 	 *
 	 * @since 1.7.1-dev
 	 */
 	public function failed_requirements_init() {
-		add_filter( 'plugin_action_links', array( $this, 'plugin_settings_link' ), 10, 2 );
+		$failed_requirements = $this->meets_minimum_requirements();
+
+		// Prepare errors list.
+		$errors = '';
+		foreach ( $failed_requirements['errors'] as $error ) {
+			$errors .= sprintf( '<li>%s</li>', esc_html( $error ) );
+		}
+
+		// Prepare error message.
+		$error_message = sprintf(
+			'%s<br />%s<ol>%s</ol>',
+			sprintf( esc_html__( '%s is not able to run because your WordPress environment has not met the minimum requirements.', 'gravityflow' ), $this->_title ),
+			sprintf( esc_html__( 'Please resolve the following issues to use %s:', 'gravityflow' ), $this->get_short_title() ),
+			$errors
+		);
+
+		// Add error message.
+		GFCommon::add_error_message( $error_message );
+	}
+
+	/**
+	 * Determine if the add-ons minimum requirements have been met with Gravity Forms 2.2+.
+	 *
+	 * @since 1.8.1-dev
+	 *
+	 * @return array
+	 */
+	public function meets_minimum_requirements() {
+		if ( $this->is_gravityforms_supported( '2.2' ) ) {
+			return parent::meets_minimum_requirements();
+		}
+
+		return array( 'meets_requirements' => true, 'errors' => array() );
 	}
 
 	/**

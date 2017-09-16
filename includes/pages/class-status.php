@@ -388,7 +388,6 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$this->output_filter_scripts();
 		$this->output_print_modal();
 		$this->process_bulk_action();
-		GFCommon::display_admin_message();
 	}
 
 	/**
@@ -1644,9 +1643,9 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		if ( ! empty( $feedback ) ) {
 			if ( is_wp_error( $feedback ) ) {
-				GFCommon::add_message( $feedback->get_error_message(), true );
+				$this->display_message( $feedback->get_error_message(), true );
 			} else {
-				GFCommon::add_message( $feedback );
+				$this->display_message( $feedback );
 			}
 			return;
 		}
@@ -1680,9 +1679,23 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		}
 
 		$message = esc_html__( 'Workflows restarted.',  'gravityflow' );
-		GFCommon::add_message( $message );
+		$this->display_message( $message );
 
 		return;
+	}
+
+	/**
+	 * Displays an error or updated type message.
+	 *
+	 * @since 1.8.1-dev
+	 *
+	 * @param  string $message  The message to be displayed.
+	 * @param bool    $is_error Is this an error message? Default false.
+	 */
+	public function display_message( $message, $is_error = false ) {
+		$class = $is_error ? 'error' : 'updated';
+
+		echo '<div class="' . $class . ' below-h2"><p><strong>' . esc_html( $message ) . '</strong></p></div>';
 	}
 
 	public function export() {
