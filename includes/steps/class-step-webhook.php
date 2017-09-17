@@ -563,6 +563,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				$url
 			);
 			$access_credentials = get_user_meta( get_current_user_id(), $this->oauth1_client->data_store['full_credentials'], true);
+			$this->log_debug( __METHOD__ . '() - access credentials: ' . print_r( $access_credentials, true ) );
 			$this->oauth1_client->config['token'] = $access_credentials['oauth_token'];
 			$this->oauth1_client->config['token_secret'] = $access_credentials['oauth_token_secret'];
 			
