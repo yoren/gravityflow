@@ -85,9 +85,9 @@ class Gravity_Flow_Oauth1_Client {
 	
 	//Flows
 	function requestToken() {
-		$response = wp_remote_post( $this->api_auth_urls['oauth1']['request'], [
+		$response = wp_remote_post( $this->api_auth_urls['oauth1']['request'], array(
             'headers' => $this->requestTokenHeaders(),
-        ] );
+        ) );
 		if ( !is_wp_error( $response) ) {
 			parse_str( $response['body'], $temporary_credentials );
 			return $temporary_credentials;
@@ -97,7 +97,7 @@ class Gravity_Flow_Oauth1_Client {
 		}
 	}
 	
-	function getFullRequestHeader( $url, $httpVerb, $options = [] ) {
+	function getFullRequestHeader( $url, $httpVerb, $options = array() ) {
 		$parameters = $this->full_request_params();
 		if ( !empty( $options ) ) {
             $parameters = array_merge( $parameters, $options );
@@ -110,9 +110,9 @@ class Gravity_Flow_Oauth1_Client {
 	}
 	
 	function requestAccessToken( $verifier ) {
-		$response = wp_remote_post( $this->api_auth_urls['oauth1']['access'], [
+		$response = wp_remote_post( $this->api_auth_urls['oauth1']['access'], array(
             'headers' => $this->requestAccessTokenHeaders($verifier),
-        ] );
+        ) );
 		if ( !is_wp_error( $response ) ) {
 			parse_str( $response['body'], $access_credentials );
 			return $access_credentials;
@@ -127,9 +127,9 @@ class Gravity_Flow_Oauth1_Client {
 
         $parameters['oauth_signature'] = $this->hmac_sign( $this->api_auth_urls['oauth1']['request'], $parameters );
 
-        return [
+        return array(
             'Authorization' => $this->authorizationHeaders( $parameters ),
-        ];
+        );
 	}
 	
 	function requestAccessTokenHeaders( $verifier ) {
@@ -137,9 +137,9 @@ class Gravity_Flow_Oauth1_Client {
 
         $parameters['oauth_signature'] = $this->hmac_sign( $this->api_auth_urls['oauth1']['access'], $parameters );
 
-        return [
+        return array(
             'Authorization' => $this->authorizationHeaders( $parameters ),
-        ];
+        );
 	}
 	
 	public function nonce()
@@ -184,7 +184,7 @@ class Gravity_Flow_Oauth1_Client {
         return base64_encode( $this->hash( $baseString ) );
 	}
 
-	public function baseString( $uri, array $parameters = [], $httpVerb = 'POST' ) {
+	public function baseString( $uri, array $parameters = array(), $httpVerb = 'POST' ) {
         ksort( $parameters );
 
         $parameters = http_build_query( $parameters, '', '&', PHP_QUERY_RFC3986 );
