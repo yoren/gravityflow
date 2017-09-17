@@ -282,7 +282,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					'class' => 'fieldwidth-3 fieldheight-2',
 					'dependency'    => array(
 						'field'  => 'body',
-						'value' => 'raw'
+						'values' => array( 'raw' ),
 					),	
 						'values' => array( 'select', '' ),
 					)
