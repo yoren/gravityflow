@@ -79,7 +79,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			$this->get_temp_creds( $this->get_setting( 'oauth1_consumer_key' ), $this->get_setting( 'oauth1_consumer_secret' ) );
 			
 			$_SESSION['temp_secret'] = $this->temporary_credentials['oauth_token_secret'];
-			if (!isset($this->temporary_credentials['oauth_token'])) {
+			if ( !isset($this->temporary_credentials['oauth_token']) ) {
 				?><p class='oauth_failed'>Temporary credits request failed - check your settings and make sure to register this url as the callback url in your receiving app.</p><?php
 			}
 			$auth_creds = array( 'oauth_consumer_key' => $this->get_setting( 'oauth1_consumer_key' ), 'oauth_consumer_secret' => $this->get_setting( 'oauth1_consumer_secret' ) ) + $this->temporary_credentials;
@@ -169,6 +169,10 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 						array(
 							'label' => 'Basic',
 							'value' => 'basic',
+						),
+						array(
+							'label' => 'OAuth1',
+							'value' => 'oauth1',
 						),
 					),
 				),
@@ -527,7 +531,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				$headers = array();
 			}
 		}
-		if ($this->authentication == 'oauth1') {
+		if ( $this->authentication == 'oauth1' ) {
 			require_once( trailingslashit( dirname(__DIR__) ) . '/class-oauth1-client.php' );
 			$this->oauth1_client = new Gravity_Flow_Oauth1_Client(
 				array(
@@ -542,6 +546,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			$access_credentials = get_user_meta( get_current_user_id(), $this->oauth1_client->data_store['full_credentials'], true);
 			$this->oauth1_client->config['token'] = $access_credentials['oauth_token'];
 			$this->oauth1_client->config['token_secret'] = $access_credentials['oauth_token_secret'];
+			
 			//Note we don't send the final $options[] parameter in here because our request is always sent in the body
 			$headers['Authorization'] = $this->oauth1_client->getFullRequestHeader( $this->get_setting('url'), $method );
 		}
@@ -560,7 +565,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		$args = apply_filters( 'gravityflow_webhook_args_' . $this->get_form_id(), $args, $entry, $this );
 
 		$response = wp_remote_request( $url, $args );
-		error_log("RESP: " . print_r($response,true));
+
 		$this->log_debug( __METHOD__ . '() - response: ' . print_r( $response, true ) );
 
 		if ( is_wp_error( $response ) ) {
