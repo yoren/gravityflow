@@ -3552,6 +3552,8 @@ PRIMARY KEY  (id)
 						<span><?php esc_html_e( 'Workflow Status', 'gravityflow' ); ?></span>
 					</h2>
 
+					<?php GFCommon::display_admin_message(); ?>
+
 					<?php $this->toolbar(); ?>
 					<?php
 				endif;
@@ -3631,6 +3633,8 @@ PRIMARY KEY  (id)
 						<span><?php esc_html_e( 'Workflow Reports', 'gravityflow' ); ?></span>
 
 					</h2>
+
+					<?php GFCommon::display_admin_message(); ?>
 
 					<?php $this->toolbar(); ?>
 					<?php

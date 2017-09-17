@@ -254,6 +254,28 @@ table.entry-products col.entry-products-col4{
     padding-right: 38px;
     position: relative;
 }
+
+.gravityflow_workflow_wrap div.updated,
+.gravityflow_workflow_wrap div.error {
+    display: block;
+    background: #fff;
+    border-left: 4px solid #7ad03a;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    margin: 5px 15px 2px;
+    padding: 1px 12px;
+}
+
+.gravityflow_workflow_wrap div.error {
+    border-left-color: #dc3232;
+}
+
+.gravityflow_workflow_wrap div.updated p,
+.gravityflow_workflow_wrap div.error p {
+    margin: 0.5em 0;
+    padding: 2px;
+}
+
 .wrap .notice, .wrap div.updated, .wrap div.error, .media-upload-form .notice, .media-upload-form div.error {
     margin: 5px 0 15px;
 }
