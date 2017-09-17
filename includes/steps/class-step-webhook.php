@@ -36,9 +36,17 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	public function get_icon_url() {
 		return '<i class="fa fa-external-link"></i>';
 	}
+
+	/**
+	 * Handles OAuth1 authentication
+	 * !Note - the callback_url in the client constructor must be registered in the WP-Api application callback_url
+	 * So for the docs the current web address of the step setting form is taken and used to setup the application and put into
+	 * the callback url field.
+	 * @return void
+	 */ 
 	
 	public function process_auth() {
-		if ( $this->get_setting('authentication') != 'oauth1' ) {
+		if ( $this->get_setting( 'authentication' ) != 'oauth1' ) {
 			return;
 		}
 		session_start();
@@ -78,8 +86,8 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			$auth_app_page = add_query_arg( $auth_creds, $this->oauth1_client->api_auth_urls['oauth1']['authorize'] );
 			update_user_meta( get_current_user_id(), $this->oauth1_client->data_store['progress'], 'redirected_for_auth' );
 			?><script>
-					window.onload=function(){
-						if (confirm('You will now be redirected to the oauthserver to authorize the app - if you aren\'t logged in you will need to log in first. If you need to change any of the details for the webhook please hit NO/Cancel and resave the correct details)) {
+					window.onload = function() {
+						if ( confirm( 'You will now be redirected to the oauthserver to authorize the app - if you aren\'t logged in you will need to log in first. If you need to change any of the details for the webhook please hit NO/Cancel and resave the correct details.' ) ) {
 							window.location = '<?php echo $auth_app_page; ?>';
 						}
 					}
@@ -105,7 +113,6 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		}
 		else if ( $this->oauth_progress == 'access_tokens_received' ) {
 			?><p class='oauth_granted'>Your webhook is authorised via OAuth and can make requests to <?php echo $this->url; ?></p><?php
-			$access_credentials = get_user_meta( get_current_user_id(), $this->oauth1_client->data_store['full_credentials'], true );
 		}
 	}
 
@@ -503,8 +510,8 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		// Remove request headers with undefined name.
 		unset( $headers[ null ] );
 		if ($this->authentication == 'basic') {
-			$auth_string = sprintf( "%s:%s", $this->basic_username, $this->basic_password );
-			$headers['Authorization'] = sprintf( "Basic %s", base64_encode($auth_string) );
+			$auth_string = sprintf( '%s:%s', $this->basic_username, $this->basic_password );
+			$headers['Authorization'] = sprintf( 'Basic %s', base64_encode( $auth_string ) );
 		}
 		
 		if ( $this->body == 'raw' ) {
@@ -519,12 +526,12 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				$headers = array();
 			}
 		}
-		if ($this->authentication == "oauth1") {
+		if ($this->authentication == 'oauth1') {
 			require_once( trailingslashit( dirname(__DIR__) ) . '/class-oauth1-client.php' );
 			$this->oauth1_client = new Gravity_Flow_Oauth1_Client(
 				array(
-					'consumer_key' => $this->get_setting('oauth1_consumer_key'),
-					'consumer_secret' => $this->get_setting('oauth1_consumer_secret'),
+					'consumer_key' => $this->get_setting( 'oauth1_consumer_key' ),
+					'consumer_secret' => $this->get_setting( 'oauth1_consumer_secret' ),
 					'token' => '',
 					'token_secret' => '',
 				),
@@ -533,8 +540,9 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			);
 			$access_credentials = get_user_meta( get_current_user_id(), $this->oauth1_client->data_store['full_credentials'], true);
 			$this->oauth1_client->config['token'] = $access_credentials['oauth_token'];
-			$this->oauth1_client->config['token_secret'] = $access_credentials['oauth_token_secret']; 
-			$headers['Authorization'] = $this->oauth1_client->getFullRequestHeader( $this->get_setting('url'), $method, array( $body ) );
+			$this->oauth1_client->config['token_secret'] = $access_credentials['oauth_token_secret'];
+			//Note we don't send the final $options[] parameter in here because our request is always sent in the body
+			$headers['Authorization'] = $this->oauth1_client->getFullRequestHeader( $this->get_setting('url'), $method );
 		}
 
 		$args = array(
@@ -551,7 +559,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		$args = apply_filters( 'gravityflow_webhook_args_' . $this->get_form_id(), $args, $entry, $this );
 
 		$response = wp_remote_request( $url, $args );
-
+		error_log("RESP: " . print_r($response,true));
 		$this->log_debug( __METHOD__ . '() - response: ' . print_r( $response, true ) );
 
 		if ( is_wp_error( $response ) ) {
