@@ -153,7 +153,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					),
 					'dependency' => array(
 						'field'  => 'method',
-						'values' => array( 'post', 'put', 'patch' ),
+						'values' => array( '', 'post', 'put', 'patch' ),
 					),
 				),
 			),
@@ -166,6 +166,8 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					'name'  => 'raw_body',
 					'label' => esc_html__( 'Raw Body', 'gravityflow' ),
 					'type'  => 'textarea',
+					'class' => 'fieldwidth-3 fieldheight-2',
+					'save_callback' => array( $this, 'save_callback_raw_body' ),
 				);
 			} else {
 
@@ -371,6 +373,32 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			),
 		);
 
+	}
+
+	/**
+	 * Settings are JSON decoded so this callback resets the value to the raw value and strips scripts if the current
+	 * user cannot unfiltered_html.
+	 *
+	 * @since 1.8.1
+	 *
+	 * @param $field
+	 * @param $field_setting
+	 *
+	 * @return string
+	 */
+	function save_callback_raw_body( $field, $field_setting ) {
+
+		global $_gaddon_posted_settings;
+
+		$raw_value = rgpost( '_gaddon_setting_raw_body' );
+
+		if ( ! current_user_can( 'unfiltered_html' ) ) {
+			$raw_value = wp_kses_post( $raw_value );
+		}
+
+		$_gaddon_posted_settings['raw_body'] = $raw_value;
+
+		return $raw_value;
 	}
 
 	/**
