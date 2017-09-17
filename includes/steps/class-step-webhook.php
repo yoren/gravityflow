@@ -510,7 +510,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		// Remove request headers with undefined name.
 		unset( $headers[ null ] );
 
-		if ( $this->authentication == 'basic') {
+		if ( $this->authentication == 'basic' ) {
 			$auth_string = sprintf( '%s:%s', $this->basic_username, $this->basic_password );
 			$headers['Authorization'] = sprintf( 'Basic %s', base64_encode( $auth_string ) );
 		}
