@@ -280,12 +280,6 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					'label' => esc_html__( 'Raw Body', 'gravityflow' ),
 					'type'  => 'textarea',
 					'class' => 'fieldwidth-3 fieldheight-2',
-					'dependency'    => array(
-						'field'  => 'body',
-						'values' => array( 'raw' ),
-					),	
-						'values' => array( 'select', '' ),
-					)
 				);
 			} else {
 
