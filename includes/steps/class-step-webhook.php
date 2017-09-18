@@ -49,7 +49,6 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		if ( $this->get_setting( 'authentication' ) != 'oauth1' ) {
 			return;
 		}
-		session_start();
 		$consumer_key = $this->get_setting( 'oauth1_consumer_key' );
 		$consumer_secret = $this->get_setting( 'oauth1_consumer_secret' );
 		$url = $this->get_setting( 'url' );
@@ -78,7 +77,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			}
 			$this->get_temp_creds( $this->get_setting( 'oauth1_consumer_key' ), $this->get_setting( 'oauth1_consumer_secret' ) );
 			
-			$_SESSION['temp_secret'] = $this->temporary_credentials['oauth_token_secret'];
+			set_transient( 'temp_creds_secret_' . get_current_user_id(), $this->temporary_credentials['oauth_token_secret'], HOUR_IN_SECONDS );
 			if ( !isset($this->temporary_credentials['oauth_token']) ) {
 				?><p class='oauth_failed'>Temporary credits request failed - check your settings and make sure to register this url as the callback url in your receiving app.</p><?php
 			}
@@ -100,14 +99,15 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			else {
 				try {
 					$this->oauth1_client->config['token'] = $_GET['oauth_token'];
-					$this->oauth1_client->config['token_secret'] = $_SESSION['temp_secret'];
+					$this->oauth1_client->config['token_secret'] = get_transient( 'temp_creds_secret_' . get_current_user_id() );
 					$access_credentials = $this->oauth1_client->requestAccessToken( $_GET['oauth_verifier'] );
 					update_user_meta( get_current_user_id(), $this->oauth1_client->data_store['full_credentials'], $access_credentials );
 					update_user_meta( get_current_user_id(), $this->oauth1_client->data_store['progress'], 'access_tokens_received' );
+					
 					?><p class='oauth_granted'>Your webhook is now authorized via OAuth and can make requests to <?php echo $this->get_setting( 'url' ); ?></p><?php
 				} catch (Exception $e) {
 					?><p class='oauth_failed'>Oauth verification failed. Please contact support</p><?php
-					error_log( 'Exception caught ' . $e->getMessage() );
+					$this->log_debug( __METHOD__ . '() - Exception caught ' . $e->getMessage() );
 				}
 			}
 		}
@@ -531,10 +531,11 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			$auth_string = sprintf( '%s:%s', $this->basic_username, $this->basic_password );
 			$headers['Authorization'] = sprintf( 'Basic %s', base64_encode( $auth_string ) );
 		}
-
+		$this->log_debug( __METHOD__ . '() - log body setting ' . $this->body . ' :: ' . $this->raw_body);
 		if ( $this->body == 'raw' ) {
 			$body = $this->raw_body;
 			$body = GFCommon::replace_variables( $body, $this->get_form(), $entry, false, false, false, 'text' );
+			$this->log_debug( __METHOD__ . '() - got body after replace vars: ' . $body );
 		} elseif ( in_array( $method, array( 'POST', 'PUT', 'PATCH' ) ) ) {
 			$body = $this->get_request_body();
 			if ( $this->format == 'json' ) {
@@ -579,7 +580,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		$args = apply_filters( 'gravityflow_webhook_args_' . $this->get_form_id(), $args, $entry, $this );
 
 		$response = wp_remote_request( $url, $args );
-
+		$this->log_debug( __METHOD__ . '() - request: ' . print_r( $args, true ) );
 		$this->log_debug( __METHOD__ . '() - response: ' . print_r( $response, true ) );
 
 		if ( is_wp_error( $response ) ) {

@@ -88,11 +88,12 @@ class Gravity_Flow_Oauth1_Client {
 		$response = wp_remote_post( $this->api_auth_urls['oauth1']['request'], array(
             'headers' => $this->requestTokenHeaders(),
         ) );
-		if ( !is_wp_error( $response) ) {
+		if ( !is_wp_error( $response) && $response['response']['code'] == 200 ) {
 			parse_str( $response['body'], $temporary_credentials );
 			return $temporary_credentials;
 		}
 		else {
+			gravity_flow()->log_debug( __METHOD__ . '() - response: ' . print_r( $response, true ) ); 
 			throw new UnexpectValueException( 'Problem with remote post for temporary credentials' );
 		}
 	}
@@ -113,11 +114,12 @@ class Gravity_Flow_Oauth1_Client {
 		$response = wp_remote_post( $this->api_auth_urls['oauth1']['access'], array(
             'headers' => $this->requestAccessTokenHeaders($verifier),
         ) );
-		if ( !is_wp_error( $response ) ) {
+		if ( !is_wp_error( $response ) && $response['response']['code'] == 200 ) {
 			parse_str( $response['body'], $access_credentials );
 			return $access_credentials;
 		}
 		else {
+			gravity_flow()->log_debug( __METHOD__ . '() - response: ' . print_r( $response, true ) ); 
 			throw new UnexpectValueException( 'Problem with remote post for access credentials' );
 		}
 	}
