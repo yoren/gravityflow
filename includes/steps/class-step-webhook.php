@@ -101,7 +101,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					$this->oauth1_client->config['token'] = $_GET['oauth_token'];
 					$this->oauth1_client->config['token_secret'] = get_transient( 'temp_creds_secret_' . get_current_user_id() );
 					$access_credentials = $this->oauth1_client->requestAccessToken( $_GET['oauth_verifier'] );
-					update_user_meta( get_current_user_id(), $this->oauth1_client->data_store['full_credentials'], $access_credentials );
+					update_option( $this->oauth1_client->data_store['full_credentials'], $access_credentials );
 					update_user_meta( get_current_user_id(), $this->oauth1_client->data_store['progress'], 'access_tokens_received' );
 					
 					?><p class='oauth_granted'>Your webhook is now authorized via OAuth and can make requests to <?php echo $this->get_setting( 'url' ); ?></p><?php
@@ -557,11 +557,13 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				'gravi_flow_' . $this->get_setting('oauth1_consumer_key'),
 				$url
 			);
-			$access_credentials = get_user_meta( get_current_user_id(), $this->oauth1_client->data_store['full_credentials'], true);
-			$this->log_debug( __METHOD__ . '() - access credentials: ' . print_r( $access_credentials, true ) );
-			$this->oauth1_client->config['token'] = $access_credentials['oauth_token'];
-			$this->oauth1_client->config['token_secret'] = $access_credentials['oauth_token_secret'];
-			
+			$access_credentials = get_option( $this->oauth1_client->data_store['full_credentials'], true);
+			if ( !$access_credentials ) ) {
+			 $this->log_debug( __METHOD__ . '() - No access credentials: ' . print_r( $access_credentials, true ) );
+			} else {
+				$this->oauth1_client->config['token'] = $access_credentials['oauth_token'];
+				$this->oauth1_client->config['token_secret'] = $access_credentials['oauth_token_secret'];
+			}
 			//Note we don't send the final $options[] parameter in here because our request is always sent in the body
 			$headers['Authorization'] = $this->oauth1_client->getFullRequestHeader( $this->get_setting('url'), $method );
 		}
