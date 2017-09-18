@@ -197,7 +197,7 @@ class Gravity_Flow_Oauth1_Client {
 	public function key() {
         $key = rawurlencode( $this->config['consumer_secret'] ) . '&';
 
-        if ( !is_null( $this->config['token_secret'] ) ) {
+        if ( array_key_exists( 'token_secret', $this->config ) && !is_null( $this->config['token_secret'] ) ) {
             $key .= rawurlencode( $this->config['token_secret'] );
         }
 
