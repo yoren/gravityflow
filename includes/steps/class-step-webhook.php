@@ -265,13 +265,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				global $_gaddon_posted_settings;
 
 				if ( ! empty( $_gaddon_posted_settings ) ) {
-					$raw_value = rgpost( '_gaddon_setting_raw_body' );
-
-					if ( ! current_user_can( 'unfiltered_html' ) ) {
-						$raw_value = wp_kses_post( $raw_value );
-					}
-
-					$_gaddon_posted_settings['raw_body'] = $raw_value;
+					$this->set_posted_raw_body_value();
 				}
 
 				$settings['fields'][] = array(
@@ -279,6 +273,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					'label' => esc_html__( 'Raw Body', 'gravityflow' ),
 					'type'  => 'textarea',
 					'class' => 'fieldwidth-3 fieldheight-2',
+					'save_callback' => array( $this, 'save_callback_raw_body' ),
 				);
 			} else {
 
@@ -484,6 +479,44 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			),
 		);
 
+	}
+
+	/**
+	 * Settings are JSON decoded so this callback resets the value to the raw value and strips scripts if the current
+	 * user cannot unfiltered_html. This circumvents the automatic parsing of JSON values by the add-on framework.
+	 *
+	 * @since 1.8.1
+	 *
+	 * @param $field
+	 * @param $field_setting
+	 *
+	 * @return string
+	 */
+	function save_callback_raw_body( $field, $field_setting ) {
+		return $this->set_posted_raw_body_value();
+	}
+
+
+	/**
+	 * Sets the value of the raw_body setting in the $_gaddon_posted_settings global and strips scripts if the current
+	 * user cannot unfiltered_html. This circumvents the automatic parsing of JSON values by the add-on framework.
+	 *
+	 * @since 1.8.1
+	 *
+	 * @return string the raw value
+	 */
+	protected function set_posted_raw_body_value() {
+		global $_gaddon_posted_settings;
+
+		$raw_value = rgpost( '_gaddon_setting_raw_body' );
+
+		if ( ! current_user_can( 'unfiltered_html' ) ) {
+			$raw_value = wp_kses_post( $raw_value );
+		}
+
+		$_gaddon_posted_settings['raw_body'] = $raw_value;
+
+		return $raw_value;
 	}
 
 	/**
