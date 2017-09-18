@@ -65,7 +65,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			);
 			
 		} catch ( Exception $e ) {
-			error_log( 'Exception caught ' . $e->getMessage() );
+			$this->log_debug( __METHOD__ . '() - Exception caught ' . $e->getMessage() );
 			return;
 		}
 		
@@ -885,7 +885,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			$this->temporary_credentials = $this->oauth1_client->requestToken();
 			update_user_meta( get_current_user_id(), $this->oauth1_client->data_store['progress'], 'temp_creds_received' );
 		} catch (Exception $e) {
-			error_log( 'Exception caught ' . $e->getMessage() );
+			$this->log_debug( __METHOD__ . '() - Exception caught ' . $e->getMessage() );
 		}
 	}
 	
