@@ -75,8 +75,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				?><h5>Please enter your consumer key and secret in the settings fields below</h5><?php
 				return;
 			}
-			$this->get_temp_creds( $this->get_setting( 'oauth1_consumer_key' ), $this->get_setting( 'oauth1_consumer_secret' ) );
-			
+			$this->get_temp_creds( );			
 			set_transient( 'temp_creds_secret_' . get_current_user_id(), $this->temporary_credentials['oauth_token_secret'], HOUR_IN_SECONDS );
 			if ( !isset($this->temporary_credentials['oauth_token']) ) {
 				?><p class='oauth_failed'>Temporary credits request failed - check your settings and make sure to register this url as the callback url in your receiving app.</p><?php
@@ -882,7 +881,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	 * 
 	 * @return string
 	 */
-	function get_temp_creds( $consumer_key, $consumer_secret ) {
+	function get_temp_creds() {
 		try {
 			$this->temporary_credentials = $this->oauth1_client->requestToken();
 			update_user_meta( get_current_user_id(), $this->oauth1_client->data_store['progress'], 'temp_creds_received' );
