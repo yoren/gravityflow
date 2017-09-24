@@ -1793,10 +1793,12 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 		if ( $is_user_event ) {
 			$assignee_key = $this->get_current_assignee_key();
-			$assignee     = $this->get_assignee( $assignee_key );
-			if ( $assignee->get_type() === 'user_id' ) {
-				$user_id   = $assignee->get_id();
-				$user_name = $assignee->get_display_name();
+			if ( $assignee_key ) {
+				$assignee = $this->get_assignee( $assignee_key );
+				if ( $assignee_key instanceof Gravity_Flow_Assignee && $assignee->get_type() === 'user_id' ) {
+					$user_id   = $assignee->get_id();
+					$user_name = $assignee->get_display_name();
+				}
 			}
 		}
 

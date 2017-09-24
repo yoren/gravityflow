@@ -153,7 +153,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					),
 					'dependency' => array(
 						'field'  => 'method',
-						'values' => array( 'post', 'put', 'patch' ),
+						'values' => array( '', 'post', 'put', 'patch' ),
 					),
 				),
 			),
@@ -162,10 +162,23 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		if ( in_array( $this->get_setting( 'method' ), array( 'post', 'put', 'patch', '' ) ) ) {
 
 			if ( $this->get_setting( 'body' ) == 'raw' ) {
+				global $_gaddon_posted_settings;
+
+				if ( ! empty( $_gaddon_posted_settings ) ) {
+					$raw_value = rgpost( '_gaddon_setting_raw_body' );
+
+					if ( ! current_user_can( 'unfiltered_html' ) ) {
+						$raw_value = wp_kses_post( $raw_value );
+					}
+
+					$_gaddon_posted_settings['raw_body'] = $raw_value;
+				}
+
 				$settings['fields'][] = array(
 					'name'  => 'raw_body',
 					'label' => esc_html__( 'Raw Body', 'gravityflow' ),
 					'type'  => 'textarea',
+					'class' => 'fieldwidth-3 fieldheight-2',
 				);
 			} else {
 
