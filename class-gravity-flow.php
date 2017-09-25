@@ -130,6 +130,11 @@ if ( class_exists( 'GFForms' ) ) {
 
 		public function init_admin() {
 			parent::init_admin();
+			$this->oauth_connection_statuses = array(
+				'get_temporary_credentials' => __( 'Using Consumer Key and Secret to Get Temporary Credentials', 'gravityflow' ),
+				'user_authorize_app' => __( 'Redirecting for user authorization - you may need to login first', 'gravityflow' ),
+				'get_access_credentials' => __( 'Using credentials from user authorization to get permanent credentials', 'gravityflow' ),
+			);
 			add_action( 'gform_entry_detail_sidebar_middle', array( $this, 'entry_detail_status_box' ), 10, 2 );
 			add_filter( 'gform_notification_events', array( $this, 'add_notification_event' ), 10, 2 );
 
@@ -151,6 +156,7 @@ if ( class_exists( 'GFForms' ) ) {
 				add_action( 'members_register_cap_groups', array( $this, 'members_register_cap_group' ) );
 				add_action( 'members_register_caps', array( $this, 'members_register_caps' ) );
 			}
+			add_action( 'admin_init', array( $this, 'process_oauth1_flow' ) );
 		}
 
 		public function init_ajax() {
@@ -373,6 +379,17 @@ PRIMARY KEY  (id)
 							),
 						),
 					),
+				),
+				array(
+					'handle'   => 'gravityflow_settings_js',
+					'src'      => $this->get_base_url() . "/js/settings.js",
+					'version'  => $this->_version,
+					'enqueue'  => array(
+						array( 'query' => 'page=gravityflow_settings&view=connected_apps' ),
+					),
+					'strings' => array(
+						'nonce' => wp_create_nonce('gflow_settings_js'),
+					)
 				),
 				array(
 					'handle'  => 'gravityflow_multi_select',
@@ -715,6 +732,7 @@ PRIMARY KEY  (id)
 						array( 'query' => 'page=gravityflow_settings&view=_empty_' ),
 						array( 'query' => 'page=gravityflow_settings&view=settings' ),
 						array( 'query' => 'page=gravityflow_settings&view=labels' ),
+						array( 'query' => 'page=gravityflow_settings&view=connected_apps' ),
 					),
 				),
 				array(
@@ -968,9 +986,7 @@ PRIMARY KEY  (id)
 				}
 				$step_settings['dependency'] = array( 'field' => 'step_type', 'values' => array( $type ) );
 				$settings[] = $step_settings;
-				if ( is_callable( array( $step_class, 'process_auth' ) ) ) {
-					$step_class->process_auth();
-				}
+				
 			}
 
 			$list_url         = remove_query_arg( 'fid' );
@@ -2818,6 +2834,11 @@ PRIMARY KEY  (id)
 					'label' => __( 'Labels', 'gravityflow' ),
 					'callback' => array( $this, 'app_settings_label_tab' ),
 				),
+				array(
+					'name' => 'connected_apps',
+					'label' => __( 'Connected Apps', 'gravityflow' ),
+					'callback' => array( $this, 'app_settings_connected_apps_tab' ),
+				),
 				/*
 				array(
 					'name' => 'tools',
@@ -2950,6 +2971,351 @@ PRIMARY KEY  (id)
 			</form>
 
 			<?php
+		}
+
+		/**
+		 * Processes Auth settings, initial run creates unique_id and app
+		 * subsequent run processes the authorization
+		 *
+		 * @return void
+		 *
+		 **/
+		function process_oauth1_flow() {
+			if (isset($_GET['DBG_DEL'])) {
+				delete_user_meta( get_current_user_id(), 'gravityflow_app_settings_connected_apps' );
+			}
+			if ( $_POST['gflow_authorize_app'] == 'Authorize App' || isset( $_GET['oauth_verifier'] ) ) {
+				if ( $_POST['gflow_authorize_app'] == 'Authorize App' && !wp_verify_nonce( $_REQUEST['_wpnonce'], 'nonce_authorize_app' ) ) {
+					wp_die('Failed Security Check - refresh page and try again');
+				}
+				if ( isset( $_POST['oauth_type'] ) ) {
+					$process_func = sprintf( 'process_auth_%s', $_POST['oauth_type'] );
+				}
+				else {
+					$this->connected_apps = get_user_meta( get_current_user_id(), 'gravityflow_app_settings_connected_apps', true );
+					$current_app = $this->connected_apps[ sanitize_text_field( $_GET['app'] ) ];
+					$process_func = sprintf( 'process_auth_%s', $current_app['oauth_type'] );
+				}
+				
+				if ( is_callable( array( $this, $process_func ) ) ) {
+					$this->$process_func();
+				}
+				else {
+					$this->log_debug( __METHOD__ . '() - processing function ' . $process_func . ' not callable' );
+				}
+				
+			} else if ( $_POST['gflow_add_app'] == 'Next' ) {
+				if ( !wp_verify_nonce( $_REQUEST['_wpnonce'], 'nonce_create_app' ) ) {
+					wp_die( 'Failed Security Check - refresh page and try again' );
+				}
+
+				$this->connected_apps = get_user_meta( get_current_user_id(), 'gravityflow_app_settings_connected_apps', true );
+				$app_name = $_POST['app_name'];
+				$unique_name = $this->get_unique_name($app_name);			
+				$app_auth_type = $_POST['oauth_type'];
+				$app_api_url = $_POST['api_url'];
+				
+				$this->connected_apps[$unique_name] = array(
+					'app_id' => $unique_name,
+					'app_name' => $app_name,
+					'api_url' => $app_api_url,
+					'oauth_type' => $app_auth_type,
+					'status' => '<span class="oauth-not-verified">Not Verified</span>',
+				);
+				update_user_meta( get_current_user_id(), 'gravityflow_app_settings_connected_apps', $this->connected_apps );
+				wp_safe_redirect( add_query_arg( 'app', $unique_name ) );
+			}
+
+
+		}
+
+		function get_unique_name($app_name) {
+			$unique_name = md5($app_name);
+				
+			if ( $this->connected_apps !== '' && is_array( $this->connected_apps ) ) {
+				$connected_app_keys = array_keys( $this->connected_apps );
+				if ( in_array( $unique_name, $connected_app_keys ) ) {
+					while( in_array( $unique_name, $connected_app_keys ) ) {
+						$unique_name = md5($unique_name);
+					}
+				}
+			}
+			return $unique_name;
+		}
+
+		/**
+		 * Render the content for the app Settings > Connected Apps tab.
+		 */
+		public function app_settings_connected_apps_tab() {
+			global $wpdb;
+			require_once( GFCommon::get_base_path() . '/tooltips.php' );
+			
+			$current_app_ident = sanitize_text_field( $_GET['app'] );
+			$this->connected_apps = get_user_meta( get_current_user_id(), 'gravityflow_app_settings_connected_apps', true );
+
+			if ( isset( $_GET['delete'] ) ) { 
+				echo "DELETING $current_app_ident";
+
+				unset( $this->connected_apps[$current_app_ident] );
+				update_user_meta( get_current_user_id(), 'gravityflow_app_settings_connected_apps', $this->connected_apps );
+				$wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->usermeta} WHERE user_id=%d AND meta_key REGEXP %s", get_current_user_id(), $current_app_ident ) );
+				$url = remove_query_arg( array( 'app', 'delete' ) );
+				?><script>window.location.href = '<?php echo $url; ?>'; </script><?php
+				exit;
+			}
+			$editing_app = is_array( $this->connected_apps[$current_app_ident] ) && $this->connected_apps[$current_app_ident]['status'] !== '';
+
+			
+			//$partial_connections = get_user_meta( get_current_user_id(), 'gravity_flow_partial_connections', true );
+			?>
+
+			<h3><span><i class="fa fa-cogs"></i> <?php esc_html_e( 'Connected Apps Interface', 'gravityflow' ); ?></span></h3>
+			<?php
+
+			$auth_display = isset( $_GET['oauth_verifier'] )  || $editing_app ? '' : 'style="display:none"';
+			?>
+
+			<div id='authorization_statuses' <?php echo $auth_display; ?>>
+				<h5>Authorization Steps/Statuses</h5>
+				<ul id='auth_steps'>
+					<?php
+					foreach( $this->oauth_connection_statuses as $status => $display) {
+						
+						$meta_key = $current_app_ident . '_' . $status;
+						if ( get_user_meta( get_current_user_id(), $meta_key, true ) != '') {
+							$display = get_user_meta( get_current_user_id(), $meta_key, true );
+						}
+						?>
+						<li><span style="font-weight:bold"><?php echo ucwords( str_replace( '_', ' ', $status ) ); ?></span>: <?php echo $display; ?></li>
+						<?php
+					}
+					?>
+				</ul>
+				<p>If you don't see Success for all of the above steps, please resubmit the form below to retry</p>
+			</div>
+			<?php
+			
+
+			
+			if ( !isset($_GET['app'] ) ) {
+				
+
+				if ( count( $this->connected_apps ) > 0 ) { ?>
+					<table id='gravity_flow_connected_apps'>
+						<thead>
+							<tr>
+								<th>App Name</th>
+								<th>Status</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php
+							foreach( $this->connected_apps as $connected_app ) {
+							?>
+							<tr>
+								<td><?php echo $connected_app['app_name']; ?></td>
+								<td><?php echo $connected_app['status']; ?></td>
+								<td><a href='<?php echo add_query_arg( array( 'app' => $connected_app['app_id'] ), remove_query_arg( 'delete' ) ); ?>' id='edit_connected_app' data-app='<?php echo $connected_app['app_id']; ?>'>Edit</a> |
+									<a id='delete_connected_app' href='<?php echo add_query_arg( array( 'app' => $connected_app['app_id'], 'delete' => true ) ); ?>'>Delete</a>
+								</td>
+							</tr>
+							<?php
+							}
+							?>
+						</tbody>
+					</table>
+					<?php
+				}
+			}
+			if ( empty( $current_app_ident ) ) {
+				$show_form = 'style="display:none"';
+				?><button id="show_initial_oauth1_form" onclick="document.getElementById('add_connected_app').style.display = 'block'">Add New Connected App</button><?php
+			}
+			else {
+				$show_form = '';
+				$current_app = $this->connected_apps[$current_app_ident];
+			}
+			?>
+			<h2 <?php echo $show_form; ?>>Add/Edit Connected App</h2>
+			<form class='oauth' id='add_connected_app' method="POST" <?php echo $show_form; ?>>
+				
+				
+				<p id='app_name_field'>
+					<label for='app_name'>App Name</label>
+					<input class='required' type='text' name='app_name' value='<?php echo $current_app['app_name']; ?>' />
+					
+				</p>
+				<p id='oauth_type_field'>
+					<label for='oauth_type'>Oauth Type</label>
+					<select name='oauth_type'>
+						<option value='wp_oauth1'>WordPress OAuth1</option>
+					</select>
+				</p>
+				<p id='api_url_field'>
+						<label for='api_url_field'>Api URL (needed to grab oauth server urls)</label>
+						<input class='required' type='text' name='api_url' value='<?php echo $current_app['api_url']; ?>' />
+				</p>
+				<?php if ( empty( $current_app_ident ) ) {
+					?>
+				<?php wp_nonce_field( 'nonce_create_app' ); ?>
+				<p>
+					<input type='submit' id='gflow_add_app' name='gflow_add_app' class='button primary' value='Next' />
+				</p>
+				<?php }
+				else {
+					?><h4>Please take the current url as it must be added (registered) as the callback url on the server (receiving application).</h4>
+					<input type='hidden' name='authorizing_app' value='<?php echo $current_app_ident; ?>' />
+				
+					<p id='consumer_key_field'>
+						<label for='consumer_key'>Consumer Key</label>
+						<input class='required' type='text' name='consumer_key' value='<?php echo $current_app['consumer_key']; ?>' />
+					</p>
+					<p id='consumer_secret_field'>
+						<label for='consumer_secret_field'>Consumer Secret</label>
+						<input class='required' type='text' name='consumer_secret' value='<?php echo $current_app['consumer_secret']; ?>' />
+					</p>
+					<?php wp_nonce_field( 'nonce_authorize_app' ); ?>
+					<p>
+						<input type='submit' id='gflow_authorize_app' name='gflow_authorize_app' class='button primary' value='Authorize App' />
+						<p class='step_explained'>On clicking this button you will be redirected to the api's oauth server to authorize this connection.</p>
+					</p>
+					<?php 
+				} 
+				?>
+				
+			</form>
+			<?php
+				
+		}
+
+		/**
+	 	* Handles OAuth1 authentication
+	 	* !Note - the callback_url in the client constructor must be registered in the WP-Api application callback_url
+	 	* So for the docs the current web address of the step setting form is taken and used to setup the application and put into
+	 	* the callback url field.
+	 	* @return void
+	 	*/ 
+	
+		public function process_auth_wp_oauth1() {
+			require_once( trailingslashit(plugin_dir_path(__FILE__) )  . 'includes/class-oauth1-client.php' );
+			$this->connected_apps = get_user_meta( get_current_user_id(), 'gravityflow_app_settings_connected_apps', true );
+
+			$app_ident = sanitize_text_field( $_GET['app'] );
+			if (isset($_POST['consumer_key']) || isset($_POST['app_name']) ) {
+				$current_app = $this->connected_apps[$app_ident];
+				$reauth = false;
+				if ( $_POST['app_name'] != $current_app['app_name'] || $_POST['api_url'] != $current_app['api_url'] ) {
+					$this->connected_apps[$app_ident]['app_name'] = sanitize_text_field( $_POST['app_name'] );
+					$this->connected_apps[$app_ident]['api_url'] = sanitize_text_field( $_POST['api_url'] );
+				}
+				
+				$app_ident = sanitize_text_field( $_POST['authorizing_app'] );
+				if ( $_POST['consumer_key'] != $current_app['consumer_key'] || $_POST['consumer_secret'] != $current_app['consumer_secret'] ) {
+					$this->connected_apps[$app_ident]['consumer_key'] = sanitize_text_field( $_POST['consumer_key'] );
+					$this->connected_apps[$app_ident]['consumer_secret'] = sanitize_text_field( $_POST['consumer_secret'] );
+					$reauth = true;
+				}
+				update_user_meta( get_current_user_id(), 'gravityflow_app_settings_connected_apps', $this->connected_apps );
+				if ( !$reauth ) {
+					wp_safe_redirect( remove_query_arg() );
+				}
+			}
+			$statuses = array_keys( $this->oauth_connection_statuses );
+			$status = $statuses[0];
+			$this->log_debug( __METHOD__ . '() - building oauth config for ' . $app_ident . ' from ' . print_r($this->connected_apps[$app_ident],true) );
+
+			try {
+				$this->oauth1_client = new Gravity_Flow_Oauth1_Client(
+					array(
+						'consumer_key' => $this->connected_apps[$app_ident]['consumer_key'],
+						'consumer_secret' => $this->connected_apps[$app_ident]['consumer_secret'],
+						'callback_url' => add_query_arg( array( 'page' => 'gravityflow_settings', 'view' => 'connected_apps', 'app' => $app_ident ), admin_url( 'admin.php' ) ),
+					),
+					'gravi_flow_' . $consumer_key,
+					$this->connected_apps[$app_ident]['api_url']
+				);
+			
+			} catch ( Exception $e ) {
+				$this->log_debug( __METHOD__ . '() - Exception caught ' . $e->getMessage() );
+				update_user_meta( get_current_user_id(), "{$app_ident}_{$status}", '<span class="oauth-failed">FAILED</span>' );
+					$url = remove_query_arg( array( 'oauth_token', 'oauth_verifier', 'wp_scope' ) );
+					wp_safe_redirect( $url );
+				
+			}
+			$statuses = array_keys( $this->oauth_connection_statuses );
+			if ( !isset( $_GET['oauth_verifier'] ) ) {
+				$status = $statuses[0];
+				$temp_creds = $this->get_temp_creds( $app_ident );
+				
+				if ( $temp_creds === false ) {
+					update_user_meta( get_current_user_id(), "{$app_ident}_{$status}", '<span class="oauth-failed">FAILED</span>' );
+					wp_safe_redirect( remove_query_arg() );
+					exit;
+				}
+				else {
+					set_transient( $app_ident . '_temp_creds_secret_' . get_current_user_id(), $temp_creds['oauth_token_secret'], HOUR_IN_SECONDS );
+					update_user_meta( get_current_user_id(), "{$app_ident}_{$status}", '<span class="oauth-success">SUCCESS</span>' );
+					$auth_creds = array( 
+						'oauth_consumer_key' => $consumer_key, 
+						'oauth_consumer_secret' => $consumer_secret 
+					) + $temp_creds;
+
+					$auth_app_page = add_query_arg( $auth_creds, $this->oauth1_client->api_auth_urls['oauth1']['authorize'] );
+					?><script>
+						window.onload = function() {
+							window.location = '<?php echo $auth_app_page; ?>';
+						}
+					</script><?php
+				}
+			} else {
+				$status = $statuses[1];
+				if ( empty( $_GET['oauth_verifier'] ) || ! isset( $_GET['oauth_token'] ) || empty($_GET['oauth_token'] ) ) {
+					update_user_meta( get_current_user_id(), "{$app_ident}_{$status}", '<span class="oauth-failed">FAILED</span>' );
+				} else if ( ! get_transient( $app_ident . '_temp_creds_secret_' . get_current_user_id() ) ) {
+						update_user_meta( get_current_user_id, "{$app_ident}_{$status}", '<span class="oauth-failed">FAILED</span>' );
+				} else {
+					update_user_meta( get_current_user_id(), "{$app_ident}_{$status}", '<span class="oauth-success">SUCCESS</span>' );
+					$status = $statuses[2];
+					try {
+						$this->oauth1_client->config['token'] = $_GET['oauth_token'];
+						$this->oauth1_client->config['token_secret'] = get_transient( $app_ident . '_temp_creds_secret_' . get_current_user_id() );
+						$access_credentials = $this->oauth1_client->requestAccessToken( $_GET['oauth_verifier'] );
+						update_user_meta( get_current_user_id(), "{$app_ident}_{$status}", '<span class="oauth-success">SUCCESS</span>' );
+						$this->connected_apps[$app_ident]['access_creds'] = $access_credentials;
+						$this->connected_apps[$app_ident]['status'] = '<span class="oauth-verified">Verified</span>';
+					update_user_meta( get_current_user_id(), 'gravityflow_app_settings_connected_apps', $this->connected_apps );
+						
+					} catch (Exception $e) {
+						update_user_meta( get_current_user_id, "{$app_ident}_{$status}", '<span class="oauth-failed">FAILED</span>' );
+						$this->log_debug( __METHOD__ . '() - Exception caught ' . $e->getMessage() );
+					}
+				}
+				$url = remove_query_arg( array('oauth_token','oauth_verifier','wp_scope') );
+				wp_safe_redirect( $url ); 
+			}
+
+		}
+		
+		/**
+		 * Helper to use the consumer key and secret entered to get temporary credentials
+		 * and then allow the user to authorize the webhook's connection using those credentials.
+		 * 
+		 * 
+		 * @param string $fields the fields being validated.
+		 * @param array $settings The settings
+		 * 
+		 * @return string
+		 */
+		function get_temp_creds($app_ident) {
+			try {
+				$temporary_credentials = $this->oauth1_client->requestToken();
+				return $temporary_credentials;
+			} catch (Exception $e) {
+				$this->log_debug( __METHOD__ . '() - Exception caught ' . $e->getMessage() );
+				return false;
+			}
+			return false;
 		}
 
 		public function app_tools_tab() {

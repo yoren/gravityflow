@@ -70,11 +70,11 @@ class Gravity_Flow_Oauth1_Client {
 					return $api_details['authentication'];
 				}
 				else {
-					throw new UnexpectValueException( sprintf( 'No authentication array in api details from %s', $this->api_base_url ) );
+					throw new Exception( sprintf( 'No authentication array in api details from %s', $this->api_base_url ) );
 				}
 			}
 			else {
-				throw new UnexpectValueException( sprintf( 'Problem with remote get call for %s. WP_Error: %s', $this->api_base_url, $api_details->get_error_message() ) );
+				throw new Exception( sprintf( 'Problem with remote get call for %s. WP_Error: %s', $this->api_base_url, $api_details->get_error_message() ) );
 			}
 		}
 		else {
@@ -94,7 +94,7 @@ class Gravity_Flow_Oauth1_Client {
 		}
 		else {
 			gravity_flow()->log_debug( __METHOD__ . '() - response: ' . print_r( $response, true ) ); 
-			throw new UnexpectValueException( 'Problem with remote post for temporary credentials' );
+			throw new Exception( 'Problem with remote post for temporary credentials' );
 		}
 	}
 	
@@ -120,7 +120,7 @@ class Gravity_Flow_Oauth1_Client {
 		}
 		else {
 			gravity_flow()->log_debug( __METHOD__ . '() - response: ' . print_r( $response, true ) ); 
-			throw new UnexpectValueException( 'Problem with remote post for access credentials' );
+			throw new Exception( 'Problem with remote post for access credentials' );
 		}
 	}
 	
