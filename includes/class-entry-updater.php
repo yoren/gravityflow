@@ -129,7 +129,7 @@ class Gravity_Flow_Entry_Updater {
 		$form  = $this->_form;
 
 		$is_valid          = $this->_step->validate_note( $new_status, $form );
-		$is_valid          = $this->validate_editable_fields( $is_valid, $form );
+		$is_valid          = $this->is_valid_editable_fields( $is_valid, $form );
 		$validation_result = $this->_step->get_validation_result( $is_valid, $form, $new_status );
 
 		if ( is_wp_error( $validation_result ) ) {
@@ -138,6 +138,12 @@ class Gravity_Flow_Entry_Updater {
 			$this->log_debug( __METHOD__ . '(): Aborting; Failed validation.' );
 
 			return $validation_result;
+		}
+
+		if ( empty( $this->_editable_fields ) ) {
+			$this->log_debug( __METHOD__ . '(): Aborting; No editable fields.' );
+
+			return true;
 		}
 
 		$original_entry     = $this->_entry;
@@ -181,6 +187,10 @@ class Gravity_Flow_Entry_Updater {
 	 * @return array
 	 */
 	public function get_files_pre_validation() {
+		if ( empty( $this->_editable_fields ) ) {
+			return array();
+		}
+
 		$files = GFCommon::json_decode( rgpost( 'gform_uploaded_files' ) );
 		if ( ! is_array( $files ) ) {
 			$files = array();
@@ -201,7 +211,11 @@ class Gravity_Flow_Entry_Updater {
 	 *
 	 * @return bool
 	 */
-	public function validate_editable_fields( $valid, &$form ) {
+	public function is_valid_editable_fields( $valid, &$form ) {
+		if ( empty( $this->_editable_fields ) ) {
+			return $valid;
+		}
+
 		$this->log_debug( __METHOD__ . '(): Running.' );
 
 		$conditional_logic_enabled           = gravity_flow()->fields_have_conditional_logic( $form ) && $this->_step->conditional_logic_editable_fields_enabled;
@@ -291,7 +305,7 @@ class Gravity_Flow_Entry_Updater {
 	 * @param array $files An array of files which have already been uploaded.
 	 */
 	public function maybe_upload_files( $form, $files ) {
-		if ( empty( $_FILES ) ) {
+		if ( empty( $this->_editable_fields ) || empty( $_FILES ) ) {
 			return;
 		}
 
