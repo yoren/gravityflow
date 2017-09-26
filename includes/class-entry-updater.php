@@ -78,7 +78,7 @@ class Gravity_Flow_Entry_Updater {
 	 * @param Gravity_Flow_Step $step  The current step for the entry being updated.
 	 */
 	public function __construct( $form, $step ) {
-		$this->_form            = $form;
+		$this->_form            = gf_apply_filters( array( 'gform_pre_validation', $form['id'] ), $form );
 		$this->_step            = $step;
 		$this->_entry           = $step->get_entry();
 		$this->_editable_fields = $step->get_editable_fields();
