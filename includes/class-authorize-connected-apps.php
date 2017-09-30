@@ -62,14 +62,14 @@ class Authorize_Connected_Apps {
 			'app_id' => $app['app_id'],
 			'app_name' => $app['app_name'],
 			'api_url' => $app['api_url'],
-			'oauth_type' => $app['oauth_type'],
+			'app_type' => $app['app_type'],
 			'status' => 'Not Verified',
 		);
 		$connected_apps[ sanitize_text_field( $_POST['app'] ) ] = $new_app;
 		update_option( 'gravityflow_app_settings_connected_apps', $connected_apps );
-		wp_send_json( array( 
-			'success' => true, 
-			'app' => 'ready for reauth' 
+		wp_send_json( array(
+			'success' => true,
+			'app' => 'ready for reauth',
 		) );
 	}
 
@@ -82,25 +82,23 @@ class Authorize_Connected_Apps {
 	 **/
 	function process_auth_flow() {
 		$this->connected_apps = get_option( 'gravityflow_app_settings_connected_apps' );
-		if ( $_POST['gflow_authorize_app'] == 'Authorize App' || isset( $_GET['oauth_verifier'] ) ) {
+		if ( 'Authorize App' === $_POST['gflow_authorize_app'] || isset( $_GET['oauth_verifier'] ) ) {
 			$this->app_ident = sanitize_text_field( $_GET['app'] );
 			$this->current_app = $this->connected_apps[ $this->app_ident ];
-			if ( $_POST['gflow_authorize_app'] == 'Authorize App' && !wp_verify_nonce( $_REQUEST['_wpnonce'], 'nonce_authorize_app' ) ) {
+			if ( 'Authorize App' === $_POST['gflow_authorize_app'] && ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'nonce_authorize_app' ) ) {
 				wp_die( 'Failed Security Check - refresh page and try again' );
 			}
-			if ( isset( $_POST['oauth_type'] ) ) {
-				$process_func = sprintf( 'process_auth_%s', sanitize_text_field( $_POST['oauth_type'] ) );
+			if ( isset( $_POST['app_type'] ) ) {
+				$process_func = sprintf( 'process_auth_%s', sanitize_text_field( $_POST['app_type'] ) );
 			} else {
-				$process_func = sprintf( 'process_auth_%s', $this->current_app['oauth_type'] );
+				$process_func = sprintf( 'process_auth_%s', $this->current_app['app_type'] );
 			}
 			if ( is_callable( array( $this, $process_func ) ) ) {
 				$this->$process_func();
-			}
-			else {
+			} else {
 				gravity_flow()->log_debug( __METHOD__ . '() - processing function ' . $process_func . ' not callable' );
 			}
-				
-		} else if ( $_POST['gflow_add_app'] == 'Next' ) {
+		} elseif ( 'Next' === $_POST['gflow_add_app'] ) {
 			if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'nonce_create_app' ) ) {
 				wp_die( 'Failed Security Check - refresh page and try again' );
 			}
@@ -108,14 +106,14 @@ class Authorize_Connected_Apps {
 			$this->connected_apps = get_option( 'gravityflow_app_settings_connected_apps' );
 			$app_name = $_POST['app_name'];
 			$unique_name = $this->get_unique_name( $app_name );			
-			$app_auth_type = $_POST['oauth_type'];
+			$app_type = $_POST['app_type'];
 			$app_api_url = $_POST['api_url'];
 
-			$this->connected_apps[$unique_name] = array(
+			$this->connected_apps[ $unique_name ] = array(
 				'app_id' => $unique_name,
 				'app_name' => $app_name,
 				'api_url' => $app_api_url,
-				'oauth_type' => $app_auth_type,
+				'app_type' => $app_type,
 				'status' => 'Not Verified',
 			);
 			update_option( 'gravityflow_app_settings_connected_apps', $this->connected_apps );

@@ -3079,64 +3079,98 @@ PRIMARY KEY  (id)
 					echo __( ' Connected App', 'gravityflow' ); 
 					?>
 				</h2>
-				<p id='status_row'>
-					<span style="font-weight: bold">Status:</span> <a class='thickbox' href='<?php echo  esc_url( '#TB_inline?width=500&height=300&inlineId=authorization_statuses_edit' ); ?>'><?php echo gf_conn_apps()->wrap_status_message( $current_app['status'] ); ?></a>
-				</p>
+				
 				<form class='oauth' id='add_connected_app' method="POST">
-					<p id='app_name_field'>
-						<label for='app_name'><?php _e( 'App Name', 'gravityflow' ); // xss ok. ?></label>
-						<input class='required' type='text' name='app_name' value='<?php echo esc_attr( $current_app['app_name'] ); ?>' />
-					</p>
-					<p id='oauth_type_field'>
-						<label for='oauth_type'><?php _e( 'Oauth Type', 'gravityflow' ); ?></label>
-						<select name='oauth_type'>
-							<option value='wp_oauth1'><?php _e( 'WordPress OAuth1', 'gravityflow' ); // xss ok. ?></option>
-						</select>
-					</p>
-					<p id='api_url_field'>
-						<label for='api_url_field'><?php _e( 'Api URL (needed to grab oauth server urls)', 'gravityflow' ); // xss ok. ?></label>
-						<input class='required' type='text' name='api_url' value='<?php echo esc_attr( $current_app['api_url'] ); ?>' />
-					</p>
+					<table class="form-table gforms_form_settings">
+						<tbody>
+							<tr>
+								<td id='status_row'>
+									<span style="font-weight: bold">Status:</span>
+								</td> 
+								<td>
+									<a class='thickbox' href='<?php echo  esc_url( '#TB_inline?width=500&height=300&inlineId=authorization_statuses_edit' ); ?>'><?php echo gf_conn_apps()->wrap_status_message( $current_app['status'] ); ?></a>
+								</td>
+							</tr>
+							<tr id="gaddon-setting-row-step_name">
+								<th><?php esc_html_e( 'App Name', 'gravityflow' ); gform_tooltip( __( 'Enter a name for the app.', 'gravityflow' ) ); ?><span class="required">*</span></th>
+								<td>
+									<!--<label for='app_name'><?php _e( 'App Name', 'gravityflow' ); // xss ok. ?></label>//-->
+									<input class='required medium gaddon-setting gaddon-text' type='text' name='app_name' value='<?php echo esc_attr( $current_app['app_name'] ); ?>' />
+								</td>
+							</tr>
+							<tr>
+								<th><?php esc_html_e( 'App Type', 'gravityflow' ); gform_tooltip( __( 'Select app type.', 'gravityflow' ) ); ?></th>
+								<td>
+									<select name='app_type'>
+										<option value='wp_oauth1'><?php _e( 'WordPress OAuth1', 'gravityflow' ); // xss ok. ?></option>
+									</select>
+								</td>
+							</tr>
+							<tr id="gaddon-setting-row-step_name">
+								<th><?php echo esc_html_e( 'API Url (needed to grab oauth server urls)', 'gravityflow' ); gform_tooltip( __( 'Enter api url.', 'gravityflow' ) ); ?><span class="required">*</span>
+								</th>
+								<td>
+									<input class='required medium gaddon-setting gaddon-text' type='text' name='api_url' value='<?php echo esc_attr( $current_app['api_url'] ); ?>' />
+								</td>
+							</tr>
+							
+							<?php
+							if ( empty( $current_app_ident ) ) {
+								?>
+								<tr>
+									<td><?php wp_nonce_field( 'nonce_create_app' ); ?></td>
+									<td><input type='submit' id='gflow_add_app' name='gflow_add_app' class='button primary' value='Next' /></td>
+								</tr>
+								<?php
+							} elseif ( ! array_key_exists( 'consumer_key', $current_app ) && ! array_key_exists( 'consumer_secret', $current_app) ) {
+								?>
+								<tr>
+									<td colspan="2">
+										<h4><?php _e( 'Please take the current url as it must be added (registered) as the callback url on the server (receiving application).', 'gravityflow' ) //xss ok.; ?></h4>
+										<input type='hidden' name='authorizing_app' value='<?php echo esc_attr( $current_app_ident ); ?>' />
+									</td>
+								</tr>
+								<tr>
+									<th><?php esc_html_e( 'Consumer Key', 'gravityflow'); gform_tooltip( __( 'Enter consumer key you get when setting up the receiving app', 'gravityflow' ) ); ?><span class="required">*</span>			</th>
+									<td>
+										<input class='required medium gaddon-setting gaddon-text' type='text' name='consumer_key' value='<?php echo esc_attr( $current_app['consumer_key'] ); ?>' />
+									</td>
+								</tr>
+								<tr>
+									<th><?php esc_html_e( 'Consumer Secret', 'gravityflow'); gform_tooltip( __( 'Enter consumer secret you get when setting up the receiving app', 'gravityflow' ) ); ?><span class="required">*</span>
+									</th>
+									<td>
+										<input class='required medium gaddon-setting gaddon-text' type='text' name='consumer_secret' value='<?php echo esc_attr( $current_app['consumer_secret'] ); ?>' />
+									</td>
+								</tr>
+								<tr>
+									<td><?php wp_nonce_field( 'nonce_authorize_app' ); ?></td>
+									<td>
+										<input type='submit' id='gflow_authorize_app' name='gflow_authorize_app' class='button primary' value='Authorize App' />
+										<p class='step_explained'><?php _e( 'On clicking this button you will be redirected to the api\'s oauth server to authorize this connection.', 'gravityflow' ); // xss ok. ?></p>
+									</td>
+								</tr>
+
+								<?php 
+							} else {
+								?>
+								<tr>
+									<td colspan="2">
+										<input type='button' data-app='<?php echo $current_app_ident; ?>' id='gflow_reauthorize_app' class='button primary' value='ReAuthorize App' />
+										<p class='step_explained'><?php _e( 'On clicking this button your existing authorization will be wiped and the form reloaded for you to reauthorize the app.', 'gravityflow' ); // xss ok. ?></p>
+									</td>
+								</tr>
+								<?php	
+							}
+							?>
+								<tr>
+									<td colspan="2">
+										<a class="button" href="<?php echo remove_query_arg('app'); ?>"><?php _e( 'Return to list', 'gravityflow' ); // xss ok. ?></a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 					<?php
-					if ( empty( $current_app_ident ) ) {
-						wp_nonce_field( 'nonce_create_app' ); 
-						?>
-						<p>
-							<input type='submit' id='gflow_add_app' name='gflow_add_app' class='button primary' value='Next' />
-						</p>
-						<?php 
-					}
-					elseif ( ! array_key_exists( 'consumer_key', $current_app ) && ! array_key_exists( 'consumer_secret', $current_app) ) {
-						?><h4><?php _e( 'Please take the current url as it must be added (registered) as the callback url on the server (receiving application).', 'gravityflow' ) //xss ok.; ?></h4>
-						<input type='hidden' name='authorizing_app' value='<?php echo esc_attr( $current_app_ident ); ?>' />
-				
-						<p id='consumer_key_field'>
-							<label for='consumer_key'><?php _e( 'Consumer Key', 'gravityflow' ); // xss ok. ?></label>
-							<input class='required' type='text' name='consumer_key' value='<?php echo esc_attr( $current_app['consumer_key'] ); ?>' />
-						</p>
-						<p id='consumer_secret_field'>
-							<label for='consumer_secret_field'><?php _e( 'Consumer Secret', 'gravityflow' ); // xss ok. ?></label>
-							<input class='required' type='text' name='consumer_secret' value='<?php echo esc_attr( $current_app['consumer_secret'] ); ?>' />
-						</p>
-							<?php wp_nonce_field( 'nonce_authorize_app' ); ?>
-						<p>
-							<input type='submit' id='gflow_authorize_app' name='gflow_authorize_app' class='button primary' value='Authorize App' />
-							<p class='step_explained'><?php _e( 'On clicking this button you will be redirected to the api\'s oauth server to authorize this connection.', 'gravityflow' ); // xss ok. ?></p>
-						</p>
-						<?php 
-					} else {
-						?>
-						<p>
-							<input type='button' data-app='<?php echo $current_app_ident; ?>' id='gflow_reauthorize_app' class='button primary' value='ReAuthorize App' />
-							<p class='step_explained'><?php _e( 'On clicking this button your existing authorization will be wiped and the form reloaded for you to reauthorize the app.', 'gravityflow' ); // xss ok. ?></p>
-						</p>
-						<?php	
-					}
-					?>
-					<a class="button" href="<?php echo remove_query_arg('app'); ?>"><?php _e( 'Return to list', 'gravityflow' ); // xss ok. ?></a>
-				
-			</form>
-			<?php
 		}
 
 		public function app_tools_tab() {
