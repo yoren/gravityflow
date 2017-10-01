@@ -3015,7 +3015,7 @@ PRIMARY KEY  (id)
 					<?php
 					$oauth_connection_statuses = gravityflow_connected_apps()->get_connection_statuses();
 					foreach ( $oauth_connection_statuses as $status => $display ) {
-						$option_key = $current_app_id . '_' . sanitize_text_field( $status );
+						$option_key = 'gflow_conn_app_status_' . $current_app_id . '_' . sanitize_text_field( $status );
 						if ( get_option( $option_key, '' ) !== '' ) {
 							$display = get_option( $option_key );
 						}

@@ -50,8 +50,11 @@ class Gravity_Flow_Connected_Apps {
 	 *
 	 */
 	function __construct() {
-		add_action( 'admin_init', array( $this, 'process_auth_flow' ) );
-		add_action( 'wp_ajax_gravity_flow_reauth_app', array( $this, 'reauthorize_app' ) );
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			add_action( 'wp_ajax_gravity_flow_reauth_app', array( $this, 'reauthorize_app' ) );
+		} else {
+			add_action( 'admin_init', array( $this, 'maybe_process_auth_flow' ) );
+		}
 	}
 
 	/**
@@ -87,28 +90,34 @@ class Gravity_Flow_Connected_Apps {
 		) );
 	}
 
+	function maybe_process_auth_flow() {
+		if ( ( isset( $_POST['gflow_add_app'] )
+		         || isset( $_POST['gflow_authorize_app'] )
+		         || isset( $_GET['oauth_verifier'] ) )
+		) {
+			$this->process_auth_flow();
+		}
+	}
+
 	/**
 	 * Processes Auth settings, initial run creates unique_id and app
 	 * subsequent run processes the authorization
 	 *
 	 */
 	function process_auth_flow() {
-		if ( ! ( isset( $_POST['gflow_add_app'] )
-		         || isset( $_POST['gflow_authorize_app'] )
-		         || isset( $_GET['oauth_verifier'] ) )
-		) {
-			return;
-		}
 
 		$adding_app = rgpost( 'gflow_add_app' ) === 'Next';
 		$authorizing_app = rgpost( 'gflow_authorize_app' ) === 'Authorize App';
 
 		if ( $authorizing_app || isset( $_GET['oauth_verifier'] ) ) {
+
 			$this->current_app_id = sanitize_text_field( rgget( 'app' ) );
 			$this->current_app    = $this->get_app( $this->current_app_id );
+
 			if ( $authorizing_app && ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'nonce_authorize_app' ) ) {
 				wp_die( 'Failed Security Check - refresh page and try again' );
 			}
+
 			if ( isset( $_POST['app_type'] ) ) {
 				$process_func = sprintf( 'process_auth_%s', sanitize_text_field( $_POST['app_type'] ) );
 			} else {
@@ -149,6 +158,15 @@ class Gravity_Flow_Connected_Apps {
 	 *
 	 */
 	public function process_auth_wp_oauth1() {
+
+		if ( ! ( isset( $_POST['consumer_key'] )
+		         || isset( $_POST['app_name'] )
+		         || isset( $_GET['app'] )
+		         || isset( $_GET['oauth_verifier'] ) )
+		) {
+			return;
+		}
+
 		require_once( 'class-oauth1-client.php' );
 		$current_app_id = wp_unslash( sanitize_text_field( rgget( 'app' ) ) );
 
@@ -188,22 +206,22 @@ class Gravity_Flow_Connected_Apps {
 		$status = $this->status_keys[1];
 		$app_ident = $this->current_app_id;
 		if ( empty( $_GET['oauth_verifier'] ) || ! isset( $_GET['oauth_token'] ) || empty($_GET['oauth_token'] ) ) {
-			update_option( "{$app_ident}_{$status}", 'FAILED' );
+			update_option( "gflow_conn_app_status_{$app_ident}_{$status}", 'FAILED' );
 		} elseif ( ! get_transient( $app_ident . '_temp_creds_secret_' . get_current_user_id() ) ) {
-			update_option( "{$app_ident}_{$status}", 'FAILED' );
+			update_option( "gflow_conn_app_status_{$app_ident}_{$status}", 'FAILED' );
 		} else {
-			update_option( "{$app_ident}_{$status}", 'SUCCESS' );
+			update_option( "gflow_conn_app_status_{$app_ident}_{$status}", 'SUCCESS' );
 			$status = $this->status_keys[2];
 			try {
 				$this->oauth1_client->config['token'] = $_GET['oauth_token'];
 				$this->oauth1_client->config['token_secret'] = get_transient( $app_ident . '_temp_creds_secret_' . get_current_user_id() );
 				$access_credentials = $this->oauth1_client->request_access_token( $_GET['oauth_verifier'] );
-				update_option( "{$app_ident}_{$status}", 'SUCCESS' );
+				update_option( "gflow_conn_app_status_{$app_ident}_{$status}", 'SUCCESS' );
 				$this->current_app['access_creds'] = $access_credentials;
 				$this->current_app['status'] = 'Verified';
 				$this->update_app( $app_ident, $this->current_app )	;
 			} catch ( Exception $e ) {
-				update_option( "{$app_ident}_{$status}", 'FAILED' );
+				update_option( "gflow_conn_app_status_{$app_ident}_{$status}", 'FAILED' );
 				gravity_flow()->log_debug( __METHOD__ . '() - Exception caught ' . $e->getMessage() );
 			}
 		}
@@ -221,12 +239,12 @@ class Gravity_Flow_Connected_Apps {
 		$temp_creds = $this->get_temp_creds( $app_ident );
 
 		if ( false === $temp_creds ) {
-			update_option( "{$app_ident}_{$status}", 'FAILED' );
+			update_option( "gflow_conn_app_status_{$app_ident}_{$status}", 'FAILED' );
 			wp_safe_redirect( remove_query_arg( '' ) );
 			exit;
 		} else {
 			set_transient( $app_ident . '_temp_creds_secret_' . get_current_user_id(), $temp_creds['oauth_token_secret'], HOUR_IN_SECONDS );
-			update_option( "{$app_ident}_{$status}", 'SUCCESS' );
+			update_option( "gflow_conn_app_status_{$app_ident}_{$status}", 'SUCCESS' );
 
 			$auth_app_page = esc_url_raw( add_query_arg( $temp_creds, $this->oauth1_client->api_auth_urls['oauth1']['authorize'] ) );
 			?><script>
@@ -346,7 +364,6 @@ class Gravity_Flow_Connected_Apps {
 	}
 
 	function delete_app( $app_id ) {
-		global $wpdb;
 
 		if ( empty( $app_id ) || ! is_string( $app_id ) ) {
 			return false;
@@ -354,8 +371,12 @@ class Gravity_Flow_Connected_Apps {
 
 		// Delete the option with the app settings.
 		delete_option( 'gflow_conn_app_' . $app_id );
+
 		// Delete statuses
-		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", $app_id . '_%' ) );
+		$statuses = $this->get_connection_statuses();
+		foreach ( array_keys( $statuses ) as $key ) {
+			delete_option( 'gflow_conn_app_status_' . $app_id . $key );
+		}
 		return true;
 	}
 
