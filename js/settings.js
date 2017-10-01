@@ -1,4 +1,4 @@
-;(function (GravityFlowFeedSettings, $) {
+;(function (GravityFlowSettings, $) {
 
 	"use strict";
 
@@ -11,7 +11,7 @@
 				if ($(this).val() == "") {
 					error = true;
 					if ($(this).closest('p').find('p.error').length < 1) {
-						$(this).before('<p class="error">Please fill in all required fields</p>');
+						$(this).before('<p class="error">' + gravityflow_settings_js_strings.required_fields + '</p>');
 					}
 				}
 				else {
@@ -22,19 +22,32 @@
 				return false;
 			}
 		});
+
 		$('#gflow_reauthorize_app').click(function(e) {
 			e.preventDefault();
-			console.log("CLICK");
 			var secure = gravityflow_settings_js_strings.nonce;
 			var app = $(this).data('app');
 			$.post(gravityflow_settings_js_strings.ajaxurl, {security: secure, action: 'gravity_flow_reauth_app', app: app}, function(response) {
-				console.log(response);
 				if (response.success) {
 					window.location.reload();
 				}
 			})
-		})
+		});
+
+		$('#new-app').click(function(){
+			$(this).hide();
+			$('#connected_apps_table_container').hide();
+			$('#connected_app_form_container').fadeIn();
+		});
+
+		$('#gflow_add_app_cancel').click(function () {
+
+			$('#connected_app_form_container').hide();
+			$('#new-app').show();
+			$('#connected_apps_table_container').fadeIn();
+
+		});
 	});
 	
 	
-}(window.GravityFlowFeedSettings = window.GravityFlowFeedSettings || {}, jQuery));
+}(window.GravityFlowSettings = window.GravityFlowSettings || {}, jQuery));

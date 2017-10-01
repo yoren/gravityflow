@@ -91,9 +91,6 @@ if ( class_exists( 'GFForms' ) ) {
 
 			add_action( 'gravityflow_cron', array( $this, 'cron' ) );
 			add_action( 'wp', array( $this, 'filter_wp' ) );
-			include $this->get_base_path() . "/includes/class-authorize-connected-apps.php";
-			$this->oauth_connection_statuses = gf_conn_apps()->get_connection_statuses();
-
 		}
 
 		public function init() {
@@ -388,7 +385,8 @@ PRIMARY KEY  (id)
 					),
 					'strings' => array(
 						'nonce' => wp_create_nonce( 'gflow_settings_js' ),
-						'ajaxurl' => admin_url( 'admin-ajax.php' )
+						'ajaxurl' => admin_url( 'admin-ajax.php' ),
+						'required_fields' => esc_html__( 'Please fill in all required fields', 'gravityflow' ),
 					)
 				),
 				array(
@@ -2979,195 +2977,196 @@ PRIMARY KEY  (id)
 		public function app_settings_connected_apps_tab() {
 			global $wpdb;
 			add_thickbox();
+
+			$current_app = array();
+
 			require_once( GFCommon::get_base_path() . '/tooltips.php' );
 
-			$current_app_ident = wp_unslash( sanitize_text_field( $_GET['app'] ) );
-			$this->connected_apps = get_option( 'gravityflow_app_settings_connected_apps' );
+			$current_app_id = wp_unslash( sanitize_text_field( rgget( 'app' ) ) );
+			$connected_apps = gravityflow_connected_apps()->get_connected_apps();
 
 			if ( isset( $_GET['delete'] ) && wp_verify_nonce( $_REQUEST['_nonce'], 'gflow_delete_app' ) ) {
 
-				// linter telling me I need to escape but DELETING is a fixed string not dynamic output and current_app_ident is already sanitized.
-				echo __( 'DELETING', 'gravityflow' ) . $current_app_ident; // xss ok.
-
-				unset( $this->connected_apps[ $current_app_ident ] );
-				update_option( 'gravityflow_app_settings_connected_apps', $this->connected_apps );
-				$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name REGEXP %s", $current_app_ident ) );
+				gravityflow_connected_apps()->delete_app( $current_app_id );
 				$url = add_query_arg( array( 'page' => 'gravityflow_settings', 'view' => 'connected_apps' ), esc_url( admin_url( 'admin.php ' ) ) );
+				echo sprintf( esc_html__( 'App deleted. Redirecting...', 'gravityflow' ), $current_app_id );
+
 				?>
 				<script>window.location.href = '<?php echo $url; ?>'; </script>
 				<?php
 				exit;
 			}
-			if ( empty( $current_app_ident ) ) {
-				// Marking xss ok where _e or __ is making plain string translatable not dynamic or html output!
-				?>
-				<h3><span><i class="fa fa-cogs"></i> <?php _e( 'Connected Apps Interface', 'gravityflow' ); // xss ok. ?></span> 
-				<a class="add-new-h2" id="show_initial_oauth1_form" onclick="document.getElementById('connected_app_form_container').style.display = 'block'; document.getElementById('gravity_flow_connected_apps').style.display = 'none';" href="javascript:void(0);"><?php _e( 'Add New', 'gravityflow' ); // xss ok. ?></a>
-			</h3>
-			<?php
-			}
-
 
 			?>
+				<h3><span><i class="fa fa-cogs"></i> <?php esc_html_e( 'Connected Apps', 'gravityflow' ); ?></span>
+			<?php
+
+			if ( empty( $current_app_id ) ) {
+				?>
+				<a class="add-new-h2" id="new-app"><?php esc_html_e( 'Add New', 'gravityflow' ); ?></a>
+			<?php
+			}
+			?>
+			</h3>
 
 			<div id='authorization_statuses_edit' style='display:none'>
-				<h5>Authorization Steps/Statuses</h5>
+				<h3><?php esc_html_e( 'Authorization Status Details', 'gravityflow' ); ?></h3>
 				<ul id='auth_steps'>
 					<?php
-					foreach ( $this->oauth_connection_statuses as $status => $display ) {					
-						$option_key = $current_app_ident . '_' . sanitize_text_field( $status );
+					$oauth_connection_statuses = gravityflow_connected_apps()->get_connection_statuses();
+					foreach ( $oauth_connection_statuses as $status => $display ) {
+						$option_key = $current_app_id . '_' . sanitize_text_field( $status );
 						if ( get_option( $option_key, '' ) !== '' ) {
 							$display = get_option( $option_key );
 						}
 						?>
-						<li><span style="font-weight:bold"><?php echo esc_html( ucwords( str_replace( '_', ' ', $status ) ) ); ?></span>: <?php echo gf_conn_apps()->wrap_status_message( $display ); ?></li>
+						<li><span style="font-weight:bold"><?php echo esc_html( ucwords( str_replace( '_', ' ', $status ) ) ); ?></span>: <?php echo gravityflow_connected_apps()->wrap_status_message( $display ); ?></li>
 						<?php
 					}
 					?>
 				</ul>
-				<p><?php _e( 'If you don\'t see Success for all of the above steps, please check details and try again.', 'gravityflow' ); // xss ok. ?></p>
+				<p><?php esc_html_e( 'If you don\'t see Success for all of the above steps, please check details and try again.', 'gravityflow' ); ?></p>
 			</div>
 			<?php
 
 			if ( ! isset( $_GET['app'] ) ) {
-				// Not editing app!
-				if ( count( $this->connected_apps ) > 0 ) { 
-					?>
-					<table class='wp-list-table widefat fixed striped feeds' id='gravity_flow_connected_apps'>
-						<thead>
-							<tr>
-								<th scope="col" class="manage-column"><?php _e( 'App Name', 'gravityflow' ); // xss ok. ?></th>
-								<th scope="col" class="manage-column"><?php _e( 'Status', 'gravityflow' ); // xss ok. ?></th>
-								<th scope="col" class="manage-column"><?php _e( 'Actions', 'gravityflow' ); // xss ok. ?></th>
-							</tr>
-						</thead>
-						<tbody id='the-list'>
-							<?php
-							foreach ( $this->connected_apps as $key => $connected_app ) {
-							?>
-							<tr>
-								<td><?php echo esc_html( $connected_app['app_name'] ); ?></td>
-								<td><?php echo gf_conn_apps()->wrap_status_message( $connected_app['status'] ); ?></td>
-								<td><a href='<?php echo esc_url( add_query_arg( array( 'app' => $connected_app['app_id'] ), remove_query_arg( 'delete' ) ) ); ?>' id='edit_connected_app' data-app='<?php echo $connected_app['app_id']; ?>'><?php _e( 'Edit', 'gravityflow' ); ?></a> |
-									<a id='delete_connected_app' href='<?php echo esc_url( add_query_arg( array( 'app' => $connected_app['app_id'], 'delete' => true, '_nonce' => wp_create_nonce( 'gflow_delete_app' ) ) ) ); ?>'><?php _e( 'Delete', 'gravityflow' ); ?></a>
-								</td>
-							</tr>
-							<?php
-							}
-							?>
-						</tbody>
-						<tfoot>
-							<tr>
-								<th scope="col" class="manage-column"><?php _e( 'App Name', 'gravityflow' ); // xss ok. ?></th>
-								<th scope="col" class="manage-column"><?php _e( 'Status', 'gravityflow' ); // xss ok. ?></th>
-								<th scope="col" class="manage-column"><?php _e( 'Actions', 'gravityflow' ); // xss ok. ?></th>
-							</tr>
-						</tfoot>
-					</table>
-					<?php
-				}
+
+				$table = new Gravity_Flow_Connected_Apps_Table();
+				$table->prepare_items();
+
+				?>
+				<div id='connected_apps_table_container'>
+					<p><?php esc_html_e( 'Note: Connected Apps is currently a beta feature of the Outgoing Webhook step. If you come across any issues, please open a support request.', 'gravityflow' ); ?></p>
+				<?php
+				$table->display();
+				?>
+				</div>
+				<?php
+
 			} else {
-				$current_app = $this->connected_apps[ $current_app_ident ];
+				$current_app = $connected_apps[ $current_app_id ];
 			}
 
-			$show_form = ( ! empty( $current_app_ident ) ) ? '' : 'display:none';
+			$show_form = ( ! empty( $current_app_id ) ) ? '' : 'display:none';
+
+			$status   = rgar( $current_app, 'status' );
+			$app_name = rgar( $current_app, 'app_name' );
+			$api_url  = rgar( $current_app, 'api_url' );
 			?>
 			<div id='connected_app_form_container' style='<?php echo esc_attr( $show_form ); ?>'>
+
 				<h2>
-					<?php 
-					echo empty( $current_app_ident ) ? __( 'Add', 'gravityflow' ) : __( 'Edit', 'gravityflow' );
-					echo __( ' Connected App', 'gravityflow' ); 
+					<?php
+					$is_edit = ! empty( $current_app_id );
+					echo $is_edit ? esc_html__( 'Edit App', 'gravityflow' ) : esc_html__( 'Add an App', 'gravityflow' );
 					?>
 				</h2>
 				
 				<form class='oauth' id='add_connected_app' method="POST">
 					<table class="form-table gforms_form_settings">
 						<tbody>
-							<tr>
-								<td id='status_row'>
-									<span style="font-weight: bold">Status:</span>
-								</td> 
-								<td>
-									<a class='thickbox' href='<?php echo  esc_url( '#TB_inline?width=500&height=300&inlineId=authorization_statuses_edit' ); ?>'><?php echo gf_conn_apps()->wrap_status_message( $current_app['status'] ); ?></a>
-								</td>
-							</tr>
 							<tr id="gaddon-setting-row-step_name">
-								<th><?php esc_html_e( 'App Name', 'gravityflow' ); gform_tooltip( __( 'Enter a name for the app.', 'gravityflow' ) ); ?><span class="required">*</span></th>
+								<th>
+								<label for='app_name'>
+								<?php
+								esc_html_e( 'App Name', 'gravityflow' );
+								echo ' ';
+								gform_tooltip( __( 'Enter a name for the app.', 'gravityflow' ) );
+								?>
+								<span class="required">*</span>
+								</th>
 								<td>
-									<!--<label for='app_name'><?php _e( 'App Name', 'gravityflow' ); // xss ok. ?></label>//-->
-									<input class='required medium gaddon-setting gaddon-text' type='text' name='app_name' value='<?php echo esc_attr( $current_app['app_name'] ); ?>' />
+									<input class='required medium gaddon-setting gaddon-text' type='text' id="app_name" name='app_name' value='<?php esc_attr_e( $app_name ); ?>' />
 								</td>
 							</tr>
 							<tr>
-								<th><?php esc_html_e( 'App Type', 'gravityflow' ); gform_tooltip( __( 'Select app type.', 'gravityflow' ) ); ?></th>
+								<th>
+								<label for='app_type'>
+								<?php
+								esc_html_e( 'App Type', 'gravityflow' );
+								echo ' ';
+								gform_tooltip( esc_html__( 'Currently only WordPress sites using the official WordPress REST API OAuth1 plugin are supported.', 'gravityflow' ) ); ?></th>
+								</label>
 								<td>
-									<select name='app_type'>
-										<option value='wp_oauth1'><?php _e( 'WordPress OAuth1', 'gravityflow' ); // xss ok. ?></option>
+									<select id="app_type" name='app_type'>
+										<option value='wp_oauth1'><?php esc_html_e( 'WordPress OAuth1', 'gravityflow' ); ?></option>
 									</select>
 								</td>
 							</tr>
 							<tr id="gaddon-setting-row-step_name">
-								<th><?php echo esc_html_e( 'API Url (needed to grab oauth server urls)', 'gravityflow' ); gform_tooltip( __( 'Enter api url.', 'gravityflow' ) ); ?><span class="required">*</span>
+								<th>
+								<label for='api_url'>
+								<?php
+								esc_html_e( 'URL', 'gravityflow' );
+								echo ' ';
+								gform_tooltip( __( 'Enter the URL of the site.', 'gravityflow' ) );
+								?>
+								<span class="required">*</span>
+								</label>
 								</th>
 								<td>
-									<input class='required medium gaddon-setting gaddon-text' type='text' name='api_url' value='<?php echo esc_attr( $current_app['api_url'] ); ?>' />
+									<input id="api_url" class='required medium gaddon-setting gaddon-text' type='text' name='api_url' value='<?php echo esc_url( $api_url ); ?>' />
 								</td>
 							</tr>
-							
+							<?php if ( $is_edit ) : ?>
+								<tr>
+									<th id='status_row'>
+										<?php esc_html_e( 'Authorization Status', 'gravityflow' ); ?>
+									</th>
+									<td>
+										<a class='thickbox' href='#TB_inline?width=500&height=300&inlineId=authorization_statuses_edit'><?php echo gravityflow_connected_apps()->wrap_status_message( $status ); ?></a>
+									</td>
+								</tr>
+							<?php endif; ?>
 							<?php
-							if ( empty( $current_app_ident ) ) {
+							if ( empty( $current_app_id ) ) {
 								?>
 								<tr>
 									<td><?php wp_nonce_field( 'nonce_create_app' ); ?></td>
-									<td><input type='submit' id='gflow_add_app' name='gflow_add_app' class='button primary' value='Next' /></td>
+									<td><input type='submit' id='gflow_add_app' name='gflow_add_app' class='button primary' value='Next' /> <button type='button' id='gflow_add_app_cancel' class='button primary'><?php esc_html_e( 'Cancel', 'gravityflow' );?></td>
 								</tr>
 								<?php
-							} elseif ( ! array_key_exists( 'consumer_key', $current_app ) && ! array_key_exists( 'consumer_secret', $current_app) ) {
+							}
+							if ( $is_edit && ! array_key_exists( 'consumer_key', $current_app ) && ! array_key_exists( 'consumer_secret', $current_app ) ) {
 								?>
 								<tr>
 									<td colspan="2">
-										<h4><?php _e( 'Please take the current url as it must be added (registered) as the callback url on the server (receiving application).', 'gravityflow' ) //xss ok.; ?></h4>
-										<input type='hidden' name='authorizing_app' value='<?php echo esc_attr( $current_app_ident ); ?>' />
+										<h4><?php esc_html_e( 'Before continuing, copy and paste the current URL from your browser\'s address bar into the Callback settings of the registered application.', 'gravityflow' ); ?></h4>
+										<input type='hidden' name='authorizing_app' value='<?php echo esc_attr( $current_app_id ); ?>' />
 									</td>
 								</tr>
 								<tr>
-									<th><?php esc_html_e( 'Consumer Key', 'gravityflow'); gform_tooltip( __( 'Enter consumer key you get when setting up the receiving app', 'gravityflow' ) ); ?><span class="required">*</span>			</th>
+									<th><?php esc_html_e( 'Client Key', 'gravityflow'); gform_tooltip( __( 'Enter the Client Key.', 'gravityflow' ) ); ?><span class="required">*</span>			</th>
 									<td>
-										<input class='required medium gaddon-setting gaddon-text' type='text' name='consumer_key' value='<?php echo esc_attr( $current_app['consumer_key'] ); ?>' />
+										<input class='required medium gaddon-setting gaddon-text' type='text' name='consumer_key' value='<?php echo esc_attr( rgar( $current_app, 'consumer_key' ) ); ?>' />
 									</td>
 								</tr>
 								<tr>
-									<th><?php esc_html_e( 'Consumer Secret', 'gravityflow'); gform_tooltip( __( 'Enter consumer secret you get when setting up the receiving app', 'gravityflow' ) ); ?><span class="required">*</span>
+									<th><?php esc_html_e( 'Client Secret', 'gravityflow'); gform_tooltip( __( 'Enter Client Secret.', 'gravityflow' ) ); ?><span class="required">*</span>
 									</th>
 									<td>
-										<input class='required medium gaddon-setting gaddon-text' type='text' name='consumer_secret' value='<?php echo esc_attr( $current_app['consumer_secret'] ); ?>' />
+										<input class='required medium gaddon-setting gaddon-text' type='text' name='consumer_secret' value='<?php echo esc_attr( rgar( $current_app, 'consumer_secret' ) ); ?>' />
 									</td>
 								</tr>
 								<tr>
 									<td><?php wp_nonce_field( 'nonce_authorize_app' ); ?></td>
 									<td>
 										<input type='submit' id='gflow_authorize_app' name='gflow_authorize_app' class='button primary' value='Authorize App' />
-										<p class='step_explained'><?php _e( 'On clicking this button you will be redirected to the api\'s oauth server to authorize this connection.', 'gravityflow' ); // xss ok. ?></p>
 									</td>
 								</tr>
 
 								<?php 
-							} else {
+							}
+							if ( $is_edit && array_key_exists( 'consumer_key', $current_app ) && array_key_exists( 'consumer_secret', $current_app ) ) {
 								?>
 								<tr>
 									<td colspan="2">
-										<input type='button' data-app='<?php echo $current_app_ident; ?>' id='gflow_reauthorize_app' class='button primary' value='ReAuthorize App' />
-										<p class='step_explained'><?php _e( 'On clicking this button your existing authorization will be wiped and the form reloaded for you to reauthorize the app.', 'gravityflow' ); // xss ok. ?></p>
+										<input type='button' data-app='<?php echo $current_app_id; ?>' id='gflow_reauthorize_app' class='button primary' value='Re-authorize App' />
 									</td>
 								</tr>
 								<?php	
 							}
 							?>
-								<tr>
-									<td colspan="2">
-										<a class="button" href="<?php echo remove_query_arg('app'); ?>"><?php _e( 'Return to list', 'gravityflow' ); // xss ok. ?></a>
-									</td>
-								</tr>
 							</tbody>
 						</table>
 					<?php
@@ -6539,6 +6538,57 @@ AND m.meta_value='queued'";
 			);
 
 			return apply_filters( 'gravityflow_members_capabilities', $caps );
+		}
+
+		/**
+		 * Renders the header for the tabs UI.
+		 *
+		 * Fixes an issue in the add-on framework where tab links don't clean existing params.
+		 *
+		 * @param        $tabs
+		 * @param        $current_tab
+		 * @param        $title
+		 * @param string $message
+		 */
+		public function app_tab_page_header( $tabs, $current_tab, $title, $message = '' ) {
+
+			// Print admin styles
+			wp_print_styles( array( 'jquery-ui-styles', 'gform_admin' ) );
+
+			?>
+
+			<div class="wrap <?php echo GFCommon::get_browser_class() ?>">
+
+				<?php if ( $message ) { ?>
+					<div id="message" class="updated"><p><?php echo $message; ?></p></div>
+				<?php } ?>
+
+				<h2><?php echo esc_html( $title ) ?></h2>
+
+				<div id="gform_tab_group" class="gform_tab_group vertical_tabs">
+					<ul id="gform_tabs" class="gform_tabs">
+						<?php
+						foreach ( $tabs as $tab ) {
+							if ( isset( $tab['permission'] ) && ! $this->current_user_can_any( $tab['permission'] ) ) {
+								continue;
+							}
+							$label = isset( $tab['label'] ) ? $tab['label'] : $tab['name'];
+							?>
+							<li <?php echo urlencode( $current_tab ) == $tab['name'] ? "class='active'" : '' ?>>
+								<a href="<?php echo esc_url( add_query_arg( array(
+									'view' => $tab['name'],
+									'page' => 'gravityflow_settings',
+								), admin_url( 'admin.php' ) ) ); ?>"><?php echo esc_html( $label ) ?></a>
+							</li>
+							<?php
+						}
+						?>
+					</ul>
+
+					<div id="gform_tab_container" class="gform_tab_container">
+						<div class="gform_tab_content" id="tab_<?php echo $current_tab ?>">
+
+		<?php
 		}
 	}
 }

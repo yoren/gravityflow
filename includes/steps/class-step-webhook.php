@@ -37,16 +37,21 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		return '<i class="fa fa-external-link"></i>';
 	}
 
-	
 	public function get_settings() {
-		$connected_apps = get_user_meta( get_current_user_id(), 'gravityflow_app_settings_connected_apps', true );
-		$connected_apps_options = array();
-		foreach($connected_apps as $key => $app) {
-			$connected_apps_options[$key] = array(
-				'label' => __( $app['app_id'], 'gravityflow' ),
+		$connected_apps = get_option( 'gravityflow_app_settings_connected_apps', array() );
+		$connected_apps_options = array(
+			array(
+				'label' => esc_html__( 'Select a Connected App', 'gravityflow' ),
+				'value' => '',
+			),
+		);
+		foreach ( $connected_apps as $key => $app ) {
+			$connected_apps_options[ $key ] = array(
+				'label' => $app['app_name'],
 				'value' => $app['app_id'],
 			);
 		}
+
 		$settings = array(
 			'title'  => esc_html__( 'Outgoing Webhook', 'gravityflow' ),
 			'fields' => array(
@@ -101,8 +106,8 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 							'value' => 'basic',
 						),
 						array(
-							'label' => 'OAuth1',
-							'value' => 'oauth1',
+							'label' => 'Connected App',
+							'value' => 'connected_app',
 						),
 					),
 				),
@@ -125,16 +130,18 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					),
 				),
 				array(
-					'name'  => 'oauth1_connected_app',
-					'label' => esc_html__( 'Oauth App - see Settings > Connected Apps', 'gravityflow' ),
+					'name'  => 'connected_app',
+					'label' => esc_html__( 'Connected App', 'gravityflow' ),
 					'type'  => 'select',
+					'tooltip' => esc_html__( 'Manage your connected apps in the Workflow->Settings->Connected Apps page. ', 'gravityflow' ),
 					'dependency' => array(
 						'field' => 'authentication',
-						'values' => array( 'oauth1' )
+						'values' => array(
+							'connected_app',
+						),
 					),
 					'choices' => $connected_apps_options,
 				),
-				
 				array(
 					'label'          => esc_html__( 'Request Headers', 'gravityflow' ),
 					'name'           => 'requestHeaders',
@@ -501,31 +508,34 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				$headers = array();
 			}
 		}
-		if ( $this->authentication == 'oauth1' ) {
-			$connected_apps = get_user_meta( get_current_user_id(), 'gravityflow_app_settings_connected_apps', true );
-			$connected_app = $connected_apps[$this->get_setting('oauth1_connected_app')];
+		if ( $this->authentication == 'connected_app' ) {
+			$app_id = $this->get_setting( 'connected_app' );
+			$connected_app      = gravityflow_connected_apps()->get_app( $app_id );
+			if ( empty( $connected_app ) ) {
+				$this->log_debug( __METHOD__ . '() - Connected app not found: ' . $app_id );
+			}
 			$access_credentials = $connected_app['access_creds'];
 
-			require_once( trailingslashit( dirname(__DIR__) ) . '/class-oauth1-client.php' );
+			require_once( dirname( __FILE__ ) . '/../class-oauth1-client.php' );
 			$this->oauth1_client = new Gravity_Flow_Oauth1_Client(
 				array(
-					'consumer_key' => $connected_app['consumer_key'],
+					'consumer_key'    => $connected_app['consumer_key'],
 					'consumer_secret' => $connected_app['consumer_secret'],
-					'token' => $access_credentials['oauth_token'],
-					'token_secret' => $access_credentials['oauth_token_secret'],
+					'token'           => $access_credentials['oauth_token'],
+					'token_secret'    => $access_credentials['oauth_token_secret'],
 				),
 				'gravi_flow_' . $connected_app['consumer_key'],
 				$this->get_setting( 'url' )
 			);
-			
-			if ( !is_array( $access_credentials ) ) {
-			 $this->log_debug( __METHOD__ . '() - No access credentials: ' . print_r( $access_credentials, true ) );
+
+			if ( ! is_array( $access_credentials ) ) {
+				$this->log_debug( __METHOD__ . '() - No access credentials: ' . print_r( $access_credentials, true ) );
 			} else {
-				$this->oauth1_client->config['token'] = $access_credentials['oauth_token'];
+				$this->oauth1_client->config['token']        = $access_credentials['oauth_token'];
 				$this->oauth1_client->config['token_secret'] = $access_credentials['oauth_token_secret'];
 			}
-			//Note we don't send the final $options[] parameter in here because our request is always sent in the body
-			$headers['Authorization'] = $this->oauth1_client->getFullRequestHeader( $this->get_setting('url'), $method );
+			// Note we don't send the final $options[] parameter in here because our request is always sent in the body
+			$headers['Authorization'] = $this->oauth1_client->get_full_request_header( $this->get_setting( 'url' ), $method );
 		}
 
 		$args = array(
