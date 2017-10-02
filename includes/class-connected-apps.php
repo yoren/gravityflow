@@ -336,7 +336,7 @@ class Gravity_Flow_Connected_Apps {
 
 		$table  = $wpdb->options;
 
-		$key = 'gflow_conn_app_%';
+		$key = 'gflow_conn_app_config_%';
 
 		$results = $wpdb->get_results( $wpdb->prepare( "
 			SELECT *
@@ -360,7 +360,7 @@ class Gravity_Flow_Connected_Apps {
 	 * @return array
 	 */
 	function get_app( $app_id ) {
-		return get_option( 'gflow_conn_app_' . $app_id, array() );
+		return get_option( 'gflow_conn_app_config_' . $app_id, array() );
 	}
 
 	function delete_app( $app_id ) {
@@ -370,7 +370,7 @@ class Gravity_Flow_Connected_Apps {
 		}
 
 		// Delete the option with the app settings.
-		delete_option( 'gflow_conn_app_' . $app_id );
+		delete_option( 'gflow_conn_app_config_' . $app_id );
 
 		// Delete statuses
 		$statuses = $this->get_connection_statuses();
@@ -390,7 +390,7 @@ class Gravity_Flow_Connected_Apps {
 	function add_app( $app_config ) {
 		$app_id = uniqid();
 		$app_config['app_id'] = $app_id;
-		add_option( 'gflow_conn_app_' . $app_id, $app_config );
+		add_option( 'gflow_conn_app_config_' . $app_id, $app_config );
 		return $app_id;
 	}
 
@@ -403,7 +403,7 @@ class Gravity_Flow_Connected_Apps {
 	 */
 	function update_app( $app_id, $app_config ) {
 		$app_config['app_id'] = $app_id;
-		update_option( 'gflow_conn_app_' . $app_id, $app_config );
+		update_option( 'gflow_conn_app_config_' . $app_id, $app_config );
 		return $app_id;
 	}
 }
