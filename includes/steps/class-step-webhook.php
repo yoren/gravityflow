@@ -38,7 +38,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	}
 
 	public function get_settings() {
-		$connected_apps = get_option( 'gravityflow_app_settings_connected_apps', array() );
+		$connected_apps = gravityflow_connected_apps()->get_connected_apps();
 		$connected_apps_options = array(
 			array(
 				'label' => esc_html__( 'Select a Connected App', 'gravityflow' ),
