@@ -153,6 +153,9 @@ if ( class_exists( 'GFForms' ) ) {
 				add_action( 'members_register_caps', array( $this, 'members_register_caps' ) );
 			}
 
+			if ( $this->is_app_settings() ) {
+				require_once( GFCommon::get_base_path() . '/tooltips.php' );
+			}
 		}
 
 		public function init_ajax() {
@@ -2937,8 +2940,6 @@ PRIMARY KEY  (id)
 		 * Render the content for the app Settings > Labels tab.
 		 */
 		public function app_settings_label_tab() {
-			require_once( GFCommon::get_base_path() . '/tooltips.php' );
-
 			$this->maybe_update_app_settings_labels();
 
 			$labels = get_option( 'gravityflow_app_settings_labels', array() );
@@ -2975,12 +2976,9 @@ PRIMARY KEY  (id)
 		 * Render the content for the app Settings > Connected Apps tab.
 		 */
 		public function app_settings_connected_apps_tab() {
-			global $wpdb;
 			add_thickbox();
 
 			$current_app = array();
-
-			require_once( GFCommon::get_base_path() . '/tooltips.php' );
 
 			$current_app_id = wp_unslash( sanitize_text_field( rgget( 'app' ) ) );
 			$connected_apps = gravityflow_connected_apps()->get_connected_apps();
@@ -3173,7 +3171,6 @@ PRIMARY KEY  (id)
 		}
 
 		public function app_tools_tab() {
-			require_once( GFCommon::get_base_path() . '/tooltips.php' );
 			$message = '';
 			$success = null;
 
