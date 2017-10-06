@@ -201,7 +201,7 @@ class Gravity_Flow_Inbox {
 			$columns['actions'] = '';
 		}
 
-		if ( empty( $args['form_id'] ) ) {
+		if ( empty( $args['form_id'] ) || is_array( $args['form_id']) ) {
 			$columns['form_title'] = __( 'Form', 'gravityflow' );
 		}
 
