@@ -36,7 +36,6 @@ class Gravity_Flow_Oauth1_Client {
 	 * @param string $url                   the app url used for collecting the auth urls.
 	 *
 	 * @throws InvalidArgumentException If missing keys in config.
-	 * @return void
 	 */
 	public function __construct( $config, $connection_identifier, $url ) {
 
@@ -63,11 +62,11 @@ class Gravity_Flow_Oauth1_Client {
 	}
 
 	/**
-	 * Hits the app url and collects authorization endpoint urls
+	 * Hits the app url and collects authorization endpoint urls.
 	 *
 	 * @throws Exception If collection of api auth urls fails.
 	 * @return array
-	 **/
+	 */
 	function get_auth_urls() {
 		if ( get_option( $this->data_store['auth_urls'] ) !== false ) {
 			return get_option( $this->data_store['auth_urls'] );
@@ -99,7 +98,7 @@ class Gravity_Flow_Oauth1_Client {
 	}
 
 	/**
-	 * Request token i.e. temporary credentials using consumer key and secret
+	 * Request token i.e. temporary credentials using consumer key and secret.
 	 *
 	 * @throws Exception If request for temporary credentials fails
 	 *
@@ -120,14 +119,14 @@ class Gravity_Flow_Oauth1_Client {
 	}
 
 	/**
-	 * Gets request header for final access request
+	 * Gets request header for final access request.
 	 *
 	 * @param string $url       Url for the request.
 	 * @param string $http_verb Request type (GET, POST etc).
 	 * @param array  $options   Optional array of options.
 	 *
 	 * @return string
-	 **/
+	 */
 	function get_full_request_header( $url, $http_verb, $options = array() ) {
 		$parameters = $this->full_request_params();
 		if ( ! empty( $options ) ) {
@@ -141,14 +140,14 @@ class Gravity_Flow_Oauth1_Client {
 	}
 
 	/**
-	 * Request access token from oauth server
+	 * Request access token from oauth server.
 	 *
 	 * @param string $verifier The code sent back after authorizing at remote site.
 	 *
 	 * @throws Exception If remote request fails.
 	 *
 	 * @return array
-	 **/
+	 */
 	function request_access_token( $verifier ) {
 		$response = wp_remote_post( $this->api_auth_urls['oauth1']['access'], array(
 			'headers' => $this->request_access_token_headers( $verifier ),
@@ -164,7 +163,7 @@ class Gravity_Flow_Oauth1_Client {
 	}
 
 	/**
-	 * Get headers for token request
+	 * Get headers for token request.
 	 *
 	 * @return array
 	 */
@@ -179,7 +178,7 @@ class Gravity_Flow_Oauth1_Client {
 	}
 
 	/**
-	 * Get headers for access token request
+	 * Get headers for access token request.
 	 *
 	 * @param string $verifier Code sent back after authorizing app on remote site.
 	 *
@@ -196,7 +195,7 @@ class Gravity_Flow_Oauth1_Client {
 	}
 
 	/**
-	 * Generates nonce for oauth requests
+	 * Generates nonce for oauth requests.
 	 *
 	 * @return string
 	 */
@@ -205,7 +204,7 @@ class Gravity_Flow_Oauth1_Client {
 	}
 
 	/**
-	 * Sets up params for request token request
+	 * Sets up params for request token request.
 	 *
 	 * @return array
 	 */
@@ -220,7 +219,7 @@ class Gravity_Flow_Oauth1_Client {
 	}
 
 	/**
-	 * Sets up params for full request
+	 * Sets up params for full request.
 	 *
 	 * @return array
 	 */
@@ -235,7 +234,7 @@ class Gravity_Flow_Oauth1_Client {
 	}
 
 	/**
-	 * Sets up params for request access token request
+	 * Sets up params for request access token request.
 	 *
 	 * @param string $verifier Verification code sent back after authorizing app at remote site.
 	 *
@@ -253,7 +252,7 @@ class Gravity_Flow_Oauth1_Client {
 	}
 
 	/**
-	 * Signs oauth request
+	 * Signs oauth request.
 	 *
 	 * @param string $uri        Url used to sign the request.
 	 * @param array  $parameters Parameters to build into signature.
@@ -268,7 +267,7 @@ class Gravity_Flow_Oauth1_Client {
 	}
 
 	/**
-	 * Builds base string for request signing
+	 * Builds base string for request signing.
 	 *
 	 * @param string $uri        Url in the request.
 	 * @param array  $parameters Params from the request.
@@ -285,7 +284,7 @@ class Gravity_Flow_Oauth1_Client {
 	}
 
 	/**
-	 * Get key:secret pair for request
+	 * Get key:secret pair for request.
 	 *
 	 * @return string
 	 */
@@ -311,7 +310,7 @@ class Gravity_Flow_Oauth1_Client {
 	}
 
 	/**
-	 * Build header for request
+	 * Build header for request.
 	 *
 	 * @param array $parameters Oauth parameters to be sent.
 	 *
