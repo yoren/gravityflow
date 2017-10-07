@@ -76,7 +76,8 @@ class Gravity_Flow_Oauth1_Client {
 
 		if ( ! is_wp_error( $page ) ) {
 			$headers            = $page['headers'];
-			$link_parts         = explode( '; ', $headers['link'] );
+			$link               = rgar( $headers['link'], 0, $headers['link'] );
+			$link_parts         = explode( '; ', $link );
 			$this->api_base_url = str_replace( array( '<', '>' ), '', $link_parts[0] );
 			$api_details        = wp_remote_get( $this->api_base_url );
 			if ( ! is_wp_error( $api_details ) ) {
