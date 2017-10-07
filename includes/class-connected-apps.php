@@ -577,13 +577,15 @@ class Gravity_Flow_Connected_Apps {
 							<th><?php esc_html_e( 'Client Secret', 'gravityflow'); gform_tooltip( __( 'Enter Client Secret.', 'gravityflow' ) ); ?><span class="required">*</span>
 							</th>
 							<td>
-								<input class='required medium gaddon-setting gaddon-text' type='text' name='consumer_secret' value='<?php echo esc_attr( rgar( $current_app, 'consumer_secret' ) ); ?>' />
+								<input class="required medium gaddon-setting gaddon-text" type="text" name="consumer_secret" value="<?php echo esc_attr( rgar( $current_app, 'consumer_secret' ) ); ?>" />
 							</td>
 						</tr>
 						<tr>
 							<td><?php wp_nonce_field( 'nonce_authorize_app' ); ?></td>
 							<td>
-								<input type='submit' id='gflow_authorize_app' name='gflow_authorize_app' class='button primary' value='Authorize App' />
+								<input type="hidden" id="gflow_authorize_app_hidden_action" name="gflow_authorize_app" value="Authorize App" />
+								<input type="submit" id="gflow_authorize_app_button" name="gflow_authorize_app" class="button primary" value="<?php esc_html_e( 'Authorize App', 'gravityflow' ); ?>" />
+
 							</td>
 						</tr>
 
@@ -593,7 +595,7 @@ class Gravity_Flow_Connected_Apps {
 						?>
 						<tr>
 							<td colspan="2">
-								<input type='button' data-app='<?php echo $current_app_id; ?>' id='gflow_reauthorize_app' class='button primary' value='Re-authorize App' />
+								<input type="button" data-app="<?php echo $current_app_id; ?>" id="gflow_reauthorize_app" class="button primary" value="<?php esc_html_e( 'Re-authorize App', 'gravityflow'); ?>"/>
 							</td>
 						</tr>
 						<?php
