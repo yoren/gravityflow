@@ -2,7 +2,7 @@
 Contributors: stevehenty
 Tags: workflow, approvals, gravity forms
 Requires at least: 4.2
-Tested up to: 4.8
+Tested up to: 4.8.2
 License: GPL-3.0+
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -54,6 +54,23 @@ https://gravityflow.io/contact/
 Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.io/out/gravityforms).
 
 == ChangeLog ==
+
+= 1.9.0 =
+- Added support for Members version 2.0+; moved the capabilities to a new Gravity Flow group with human readable labels.
+- Added the gravityflow_step_assignees filter.
+- Added PATCH to the list of request methods in the request method setting of the Outgoing Webhook step settings.
+- Added Headers to the Outgoing Webhook step settings.
+- Added the Raw body setting to the Outgoing webhook step settings.
+- Updated the {workflow_note} merge tag to support the history modifier to control if notes from previous occurrences of the step are output e.g. {workflow_note:step_id=5 history=true}.
+- Updated the {workflow_note} merge tag step_id attribute to also support step names e.g. {workflow_note:step_id='manager approval'}.
+- Updated the field conditional logic setting to be enabled by default on the User Input Step.
+- Fixed an issue populating multi-select fields with the existing entry value on the user input step when the field uses the new json storageType.
+- Fixed the $original_entry parameter not being passed when the gform_after_update_entry hook is triggered on entry update by the user input step.
+- Fixed empty fields being displayed on the user input step when 'show empty fields' was not enabled.
+- Fixed an issue with the shortcode where the gravityflow_status_filter and gravityflow_permission_granted_entry_detail filters don't fire.
+- Fixed the Dropbox step for Gravity Forms Dropbox Add-On versions 2.0+.
+- Fixed and issue which can cause an error when the Update Entry step is triggered by the schedule setting or by an anonymous user.
+
 
 = 1.8.0 =
 - Added the workflow note field to the quick actions in the inbox. The note field is only displayed when required by the step settings.
