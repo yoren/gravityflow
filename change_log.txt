@@ -1,0 +1,1 @@
+Fixed an issue which can cause the settings tabs not to appear on some installations.

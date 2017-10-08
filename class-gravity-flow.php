@@ -6382,8 +6382,8 @@ AND m.meta_value='queued'";
 							?>
 							<li <?php echo urlencode( $current_tab ) == $tab['name'] ? "class='active'" : '' ?>>
 								<a href="<?php echo esc_url( add_query_arg( array(
-									'view' => $tab['name'],
 									'page' => 'gravityflow_settings',
+									'view' => $tab['name'],
 								), admin_url( 'admin.php' ) ) ); ?>"><?php echo esc_html( $label ) ?></a>
 							</li>
 							<?php
