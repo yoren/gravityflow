@@ -61,6 +61,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Added PATCH to the list of request methods in the request method setting of the Outgoing Webhook step settings.
 - Added Headers to the Outgoing Webhook step settings.
 - Added the Raw body setting to the Outgoing webhook step settings.
+- Added the Connected Apps Settings page to allow the Outgoing Webhook step to connect to WordPress sites running the official OAuth1 Server plugin.
 - Updated the {workflow_note} merge tag to support the history modifier to control if notes from previous occurrences of the step are output e.g. {workflow_note:step_id=5 history=true}.
 - Updated the {workflow_note} merge tag step_id attribute to also support step names e.g. {workflow_note:step_id='manager approval'}.
 - Updated the field conditional logic setting to be enabled by default on the User Input Step.
