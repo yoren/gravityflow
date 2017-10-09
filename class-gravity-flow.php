@@ -91,7 +91,6 @@ if ( class_exists( 'GFForms' ) ) {
 
 			add_action( 'gravityflow_cron', array( $this, 'cron' ) );
 			add_action( 'wp', array( $this, 'filter_wp' ) );
-
 		}
 
 		public function init() {
@@ -130,6 +129,8 @@ if ( class_exists( 'GFForms' ) ) {
 
 		public function init_admin() {
 			parent::init_admin();
+			//Move include into maybe_process auth_function if condition if connection statuses can be kept in auth class;
+			
 			add_action( 'gform_entry_detail_sidebar_middle', array( $this, 'entry_detail_status_box' ), 10, 2 );
 			add_filter( 'gform_notification_events', array( $this, 'add_notification_event' ), 10, 2 );
 
@@ -150,6 +151,10 @@ if ( class_exists( 'GFForms' ) ) {
 				remove_filter( 'members_get_capabilities', array( $this, 'members_get_capabilities' ) );
 				add_action( 'members_register_cap_groups', array( $this, 'members_register_cap_group' ) );
 				add_action( 'members_register_caps', array( $this, 'members_register_caps' ) );
+			}
+
+			if ( $this->is_app_settings() ) {
+				require_once( GFCommon::get_base_path() . '/tooltips.php' );
 			}
 		}
 
@@ -309,7 +314,7 @@ PRIMARY KEY  (id)
 					$step_dirty = true;
 				}
 
-				if ( in_array( $step_type, array( 'approval', 'user_input' ) )
+				if ( in_array( $step_type, array( 'approval', 'user_input' ), true )
 				     && $step->type == 'routing'
 				     && ! $step->assignee_policy_171_migration_complete
 				) {
@@ -373,6 +378,19 @@ PRIMARY KEY  (id)
 							),
 						),
 					),
+				),
+				array(
+					'handle'   => 'gravityflow_settings_js',
+					'src'      => $this->get_base_url() . "/js/settings.js",
+					'version'  => $this->_version,
+					'enqueue'  => array(
+						array( 'query' => 'page=gravityflow_settings&view=connected_apps' ),
+					),
+					'strings' => array(
+						'nonce' => wp_create_nonce( 'gflow_settings_js' ),
+						'ajaxurl' => admin_url( 'admin-ajax.php' ),
+						'required_fields' => esc_html__( 'Please fill in all required fields', 'gravityflow' ),
+					)
 				),
 				array(
 					'handle'  => 'gravityflow_multi_select',
@@ -636,7 +654,7 @@ PRIMARY KEY  (id)
 					'version' => $this->_version,
 					'enqueue' => array(
 						array(
-							'query'      => 'page=gravityflow-inbox',
+							'query' => 'page=gravityflow-inbox',
 						),
 					),
 				),
@@ -715,6 +733,7 @@ PRIMARY KEY  (id)
 						array( 'query' => 'page=gravityflow_settings&view=_empty_' ),
 						array( 'query' => 'page=gravityflow_settings&view=settings' ),
 						array( 'query' => 'page=gravityflow_settings&view=labels' ),
+						array( 'query' => 'page=gravityflow_settings&view=connected_apps' ),
 					),
 				),
 				array(
@@ -968,6 +987,7 @@ PRIMARY KEY  (id)
 				}
 				$step_settings['dependency'] = array( 'field' => 'step_type', 'values' => array( $type ) );
 				$settings[] = $step_settings;
+				
 			}
 
 			$list_url         = remove_query_arg( 'fid' );
@@ -2815,6 +2835,11 @@ PRIMARY KEY  (id)
 					'label' => __( 'Labels', 'gravityflow' ),
 					'callback' => array( $this, 'app_settings_label_tab' ),
 				),
+				array(
+					'name' => 'connected_apps',
+					'label' => __( 'Connected Apps', 'gravityflow' ),
+					'callback' => array( $this, 'app_settings_connected_apps_tab' ),
+				),
 				/*
 				array(
 					'name' => 'tools',
@@ -2915,8 +2940,6 @@ PRIMARY KEY  (id)
 		 * Render the content for the app Settings > Labels tab.
 		 */
 		public function app_settings_label_tab() {
-			require_once( GFCommon::get_base_path() . '/tooltips.php' );
-
 			$this->maybe_update_app_settings_labels();
 
 			$labels = get_option( 'gravityflow_app_settings_labels', array() );
@@ -2949,8 +2972,14 @@ PRIMARY KEY  (id)
 			<?php
 		}
 
+		/**
+		 * Render the content for the app Settings > Connected Apps tab.
+		 */
+		public function app_settings_connected_apps_tab() {
+			gravityflow_connected_apps()->settings_tab();
+		}
+
 		public function app_tools_tab() {
-			require_once( GFCommon::get_base_path() . '/tooltips.php' );
 			$message = '';
 			$success = null;
 
@@ -6315,6 +6344,57 @@ AND m.meta_value='queued'";
 			);
 
 			return apply_filters( 'gravityflow_members_capabilities', $caps );
+		}
+
+		/**
+		 * Renders the header for the tabs UI.
+		 *
+		 * Fixes an issue in the add-on framework where tab links don't clean existing params.
+		 *
+		 * @param        $tabs
+		 * @param        $current_tab
+		 * @param        $title
+		 * @param string $message
+		 */
+		public function app_tab_page_header( $tabs, $current_tab, $title, $message = '' ) {
+
+			// Print admin styles
+			wp_print_styles( array( 'jquery-ui-styles', 'gform_admin' ) );
+
+			?>
+
+			<div class="wrap <?php echo GFCommon::get_browser_class() ?>">
+
+				<?php if ( $message ) { ?>
+					<div id="message" class="updated"><p><?php echo $message; ?></p></div>
+				<?php } ?>
+
+				<h2><?php echo esc_html( $title ) ?></h2>
+
+				<div id="gform_tab_group" class="gform_tab_group vertical_tabs">
+					<ul id="gform_tabs" class="gform_tabs">
+						<?php
+						foreach ( $tabs as $tab ) {
+							if ( isset( $tab['permission'] ) && ! $this->current_user_can_any( $tab['permission'] ) ) {
+								continue;
+							}
+							$label = isset( $tab['label'] ) ? $tab['label'] : $tab['name'];
+							?>
+							<li <?php echo urlencode( $current_tab ) == $tab['name'] ? "class='active'" : '' ?>>
+								<a href="<?php echo esc_url( add_query_arg( array(
+									'page' => 'gravityflow_settings',
+									'view' => $tab['name'],
+								), admin_url( 'admin.php' ) ) ); ?>"><?php echo esc_html( $label ) ?></a>
+							</li>
+							<?php
+						}
+						?>
+					</ul>
+
+					<div id="gform_tab_container" class="gform_tab_container">
+						<div class="gform_tab_content" id="tab_<?php echo $current_tab ?>">
+
+		<?php
 		}
 	}
 }
