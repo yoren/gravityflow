@@ -55,6 +55,9 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 1.9.1 =
+- Fixed an issue which can cause the settings tabs not to appear on some installations.
+
 = 1.9.0 =
 - Added support for Members version 2.0+; moved the capabilities to a new Gravity Flow group with human readable labels.
 - Added the gravityflow_step_assignees filter.
