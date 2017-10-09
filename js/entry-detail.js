@@ -44,3 +44,16 @@ function printPage (sURL) {
     document.body.appendChild(oHiddFrame);
 }
 
+function displayDiscussionItemToggle(formId, fieldId) {
+    if( jQuery('#field_' + formId + '_' + fieldId) ) {
+        jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-discussion-item').toggle();
+        
+        oldText = jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-dicussion-item-toggle-display').attr('title');
+        newText = jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-dicussion-item-toggle-display').data('altTitle');
+        
+        jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-dicussion-item-toggle-display').attr('title', newText).text(newText);
+        jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-dicussion-item-toggle-display').data('altTitle', oldText);
+        
+    }
+}
+

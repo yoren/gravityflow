@@ -171,6 +171,11 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 
 			$count = 0;
 
+			$view_more_label = esc_attr__( 'View More', 'gravityflow' );
+			$view_less_label = esc_attr__( 'View Less', 'gravityflow' );
+
+			$return .= sprintf( "<a href='javascript:void(0);' title='%s' data-altTitle='%s' onclick='displayDiscussionItemToggle(%d, %d);'  class='gravityflow-dicussion-item-toggle-display'>%s</a>", $view_more_label, $view_less_label, $this['formId'], $this['id'], __('View More', 'gravityflow') );
+					
 			foreach ( $discussion as $item ) {
 				if ( $has_limit && $count === $limit ) {
 					break;
