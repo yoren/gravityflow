@@ -44,15 +44,18 @@ function printPage (sURL) {
     document.body.appendChild(oHiddFrame);
 }
 
-function displayDiscussionItemToggle(formId, fieldId) {
+function displayDiscussionItemToggle(formId, fieldId, displayCount) {
+    
     if( jQuery('#field_' + formId + '_' + fieldId) ) {
-        jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-discussion-item').toggle();
+        displayCount = displayCount;
+        
+        jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-discussion-item:gt(' + displayCount + ')').toggle();
         
         oldText = jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-dicussion-item-toggle-display').attr('title');
-        newText = jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-dicussion-item-toggle-display').data('altTitle');
+        newText = jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-dicussion-item-toggle-display').data('title');
         
         jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-dicussion-item-toggle-display').attr('title', newText).text(newText);
-        jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-dicussion-item-toggle-display').data('altTitle', oldText);
+        jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-dicussion-item-toggle-display').data('title', oldText);
         
     }
 }

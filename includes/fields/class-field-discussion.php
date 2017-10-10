@@ -171,10 +171,28 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 
 			$count = 0;
 
-			$view_more_label = esc_attr__( 'View More', 'gravityflow' );
-			$view_less_label = esc_attr__( 'View Less', 'gravityflow' );
+			if ( false == $this->is_form_editor() ) {
+				
+				/**
+				* Set the amount of discussion field comments to be shown / toggled.
+				*
+				* @param int $display_count Amount of comments to be shown. Default is 10
+				* @param Gravity_Flow_Field_Discussion $this The field currently being processed.
+				*
+				* @since 1.9.2-dev
+				*/
+				$display_count = apply_filters( 'gravityflowdiscussion_display_count', 3, $this );
+				
+				if( count( $discussion ) > $display_count ) {
 
-			$return .= sprintf( "<a href='javascript:void(0);' title='%s' data-altTitle='%s' onclick='displayDiscussionItemToggle(%d, %d);'  class='gravityflow-dicussion-item-toggle-display'>%s</a>", $view_more_label, $view_less_label, $this['formId'], $this['id'], __('View More', 'gravityflow') );
+					$view_more_label = esc_attr__( 'View More', 'gravityflow' );
+					$view_less_label = esc_attr__( 'View Less', 'gravityflow' );
+				
+					$return .= sprintf( "<a href='javascript:void(0);' title='%s' data-title='%s' onclick='displayDiscussionItemToggle(%d, %d, %d);'  class='gravityflow-dicussion-item-toggle-display'>%s</a>", $view_more_label, $view_less_label, $this['formId'], $this['id'], $display_count, __('View More', 'gravityflow') );
+
+				}
+
+			}
 					
 			foreach ( $discussion as $item ) {
 				if ( $has_limit && $count === $limit ) {
@@ -215,7 +233,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	 *
 	 * @return string
 	 */
-	public function format_discussion_item( $item, $format, $entry_id ) {
+	public function format_discussion_item( $item, $format, $entry_id, $hidden = false) {
 		$item_datetime    = date( 'Y-m-d H:i:s', $item['timestamp'] );
 		$timestamp_format = empty( $this->gravityflowDiscussionTimestampFormat ) ? 'd M Y g:i a' : $this->gravityflowDiscussionTimestampFormat;
 		$date             = esc_html( GFCommon::format_date( $item_datetime, false, $timestamp_format, false ) );
@@ -238,7 +256,11 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 %s
 </div>', $display_name, $date, $this->get_delete_button( $item['id'], $entry_id ), $this->format_comment_value( $item['value'] ) );
 
-			$return .= sprintf( '<div id="gravityflow-discussion-item-%s" class="gravityflow-discussion-item">%s</div>', sanitize_key( $item['id'] ), $content );
+			if( $hidden == true ) {
+				$return .= sprintf( '<div id="gravityflow-discussion-item-%s" class="gravityflow-discussion-item" style="display:none;">%s</div>', sanitize_key( $item['id'] ), $content );
+			} else {
+				$return .= sprintf( '<div id="gravityflow-discussion-item-%s" class="gravityflow-discussion-item">%s</div>', sanitize_key( $item['id'] ), $content );
+			}
 		} elseif ( $format == 'text' ) {
 			$return = $date . ': ' . $display_name . "\n";
 			$return .= $item['value'];
