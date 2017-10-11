@@ -174,32 +174,42 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 			if ( false == $this->is_form_editor() ) {
 				
 				/**
-				* Set the amount of discussion field comments to be shown / toggled.
+				* Set the amount of discussion field comments to be shown without toggle.
 				*
 				* @param int $display_count Amount of comments to be shown. Default is 10
 				* @param Gravity_Flow_Field_Discussion $this The field currently being processed.
 				*
 				* @since 1.9.2-dev
 				*/
-				$display_count = apply_filters( 'gravityflowdiscussion_display_count', 3, $this );
-				
-				if( count( $discussion ) > $display_count ) {
+				//$display_count = apply_filters( 'gravityflowdiscussion_display_count', 10, $this );
+				$max_display_count = 5;
+
+				if( count( $discussion ) > $max_display_count ) {
 
 					$view_more_label = esc_attr__( 'View More', 'gravityflow' );
 					$view_less_label = esc_attr__( 'View Less', 'gravityflow' );
-				
-					$return .= sprintf( "<a href='javascript:void(0);' title='%s' data-title='%s' onclick='displayDiscussionItemToggle(%d, %d, %d);'  class='gravityflow-dicussion-item-toggle-display'>%s</a>", $view_more_label, $view_less_label, $this['formId'], $this['id'], $display_count, __('View More', 'gravityflow') );
+					
+					$return .= sprintf( "<a href='javascript:void(0);' title='%s' data-title='%s' onclick='displayDiscussionItemToggle(%d, %d, %d);'  class='gravityflow-dicussion-item-toggle-display'>%s</a>", $view_more_label, $view_less_label, $this['formId'], $this['id'], $max_display_count, __('View More', 'gravityflow') );
 
 				}
 
 			}
-					
+
 			foreach ( $discussion as $item ) {
 				if ( $has_limit && $count === $limit ) {
 					break;
 				}
 
-				$return .= $this->format_discussion_item( $item, $format, $entry_id );
+				if( false == $this->is_form_editor() ) {
+					if( 'html' == $format && $count <= $max_display_count ) {
+						$return .= $this->format_discussion_item( $item, $format, $entry_id, false );
+					} else {
+						$return .= $this->format_discussion_item( $item, $format, $entry_id, true );
+					}
+				} else {
+					$return .= $this->format_discussion_item( $item, $format, $entry_id, false );
+				}
+				
 				$count ++;
 			}
 

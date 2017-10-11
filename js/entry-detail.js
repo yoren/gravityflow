@@ -47,9 +47,8 @@ function printPage (sURL) {
 function displayDiscussionItemToggle(formId, fieldId, displayCount) {
     
     if( jQuery('#field_' + formId + '_' + fieldId) ) {
-        displayCount = displayCount;
         
-        jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-discussion-item:gt(' + displayCount + ')').toggle();
+        jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-discussion-item').slice(0, displayCount - 1).toggle();
         
         oldText = jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-dicussion-item-toggle-display').attr('title');
         newText = jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-dicussion-item-toggle-display').data('title');
