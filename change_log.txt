@@ -1,1 +1,1 @@
-
+- Fixed the HubSpot step for the "HubSpot for Gravity Forms" plugin versions 3.0+.
