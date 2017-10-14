@@ -674,7 +674,7 @@ class Gravity_Flow_Connected_Apps_Table extends WP_List_Table {
 	 * Outputs the no items message.
 	 */
 	function no_items() {
-		esc_html_e( 'You don\'t have any connected apps configured.', 'gravityflow' );
+		esc_html_e( 'You don\'t have any Connected Apps configured.', 'gravityflow' );
 	}
 
 	/**

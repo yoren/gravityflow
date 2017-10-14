@@ -133,7 +133,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					'name'  => 'connected_app',
 					'label' => esc_html__( 'Connected App', 'gravityflow' ),
 					'type'  => 'select',
-					'tooltip' => esc_html__( 'Manage your connected apps in the Workflow->Settings->Connected Apps page. ', 'gravityflow' ),
+					'tooltip' => esc_html__( 'Manage your Connected Apps in the Workflow->Settings->Connected Apps page. ', 'gravityflow' ),
 					'dependency' => array(
 						'field' => 'authentication',
 						'values' => array(
