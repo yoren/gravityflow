@@ -5,7 +5,7 @@ Plugin URI: https://gravityflow.io
 Description: Build Workflow Applications with Gravity Forms.
 Version: 1.9.2-dev
 Author: Gravity Flow
-Author URI: http://www.gravityflow.io
+Author URI: https://gravityflow.io
 License: GPL-3.0+
 Text Domain: gravityflow
 Domain Path: /languages
