@@ -113,7 +113,6 @@ class Gravity_Flow_Merge_Tag_Workflow_Url extends Gravity_Flow_Merge_Tag {
 	 * Returns the entry URL.
 	 *
 	 * @param int|null $page_id
-	 * @param Gravity_Flow_Assignee $assignee
 	 * @param string $access_token
 	 *
 	 * @return string
