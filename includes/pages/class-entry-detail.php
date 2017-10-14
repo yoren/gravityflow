@@ -521,6 +521,15 @@ class Gravity_Flow_Entry_Detail {
 			$avatar = get_avatar( $user_id, 65 );
 		} else {
 			$step_icon = $step ? $step->get_icon_url() : gravity_flow()->get_base_url() . '/images/gravityflow-icon-blue.svg';
+
+			/**
+			 * Allows the step icon to be filtered for the timeline.
+			 *
+			 * @param string $step_icon
+			 * @param Gravity_Flow_Step $step
+			 */
+			$step_icon = apply_filters( 'gravityflow_timeline_step_icon', $step_icon, $step );
+
 			if ( strpos( $step_icon, 'http' ) !== false ) {
 				$avatar = sprintf( '<img class="avatar avatar-65 photo" src="%s" style="width:65px;height:65px;" />', $step_icon );
 			} else {
