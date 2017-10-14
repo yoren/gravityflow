@@ -1,1 +1,3 @@
+- Added the gravityflow_pre_cancel_workflow action.
+- Added the gravityflow_timeline_step_icon filter.
 - Fixed the HubSpot step for the "HubSpot for Gravity Forms" plugin versions 3.0+.
