@@ -828,6 +828,15 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return $timestamp;
 	}
 
+	public function process_entry_edit() {
+
+		// Bail early if there are no editable fields
+
+		// Load Gravity_Flow_Entry_Editor
+
+		// Gravity_Flow_Entry_Editor::process()
+	}
+
 	/**
 	 * Process the step. For example, assign to a user, send to a service, send a notification or do nothing. Return (bool) $complete.
 	 *
