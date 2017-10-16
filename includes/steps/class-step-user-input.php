@@ -296,6 +296,15 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		return $editable_fields;
 	}
 
+	public function process_entry_edit() {
+
+		// Bail early if there are no editable fields
+
+		// Load Gravity_Flow_Entry_Editor
+
+		// Gravity_Flow_Entry_Editor::process()
+	}
+
 
 	public function maybe_process_status_update( $form, $entry ) {
 
