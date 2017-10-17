@@ -1,4 +1,3 @@
-
 (function (GravityFlowEntryDetail, $) {
     GravityFlowEntryDetail.printPage = function (sURL) {
         printPage (sURL);
@@ -44,18 +43,16 @@ function printPage (sURL) {
     document.body.appendChild(oHiddFrame);
 }
 
-function displayDiscussionItemToggle(formId, fieldId, displayCount) {
-    
-    if( jQuery('#field_' + formId + '_' + fieldId) ) {
+function displayDiscussionItemToggle(formId, fieldId, displayLimit) {
+	if ( jQuery( '#field_' + formId + '_' + fieldId ) ) {
         
-        jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-discussion-item').slice(0, displayCount - 1).toggle();
-        
-        oldText = jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-dicussion-item-toggle-display').attr('title');
-        newText = jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-dicussion-item-toggle-display').data('title');
-        
-        jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-dicussion-item-toggle-display').attr('title', newText).text(newText);
-        jQuery('#field_' + formId + '_' + fieldId + ' .gravityflow-dicussion-item-toggle-display').data('title', oldText);
-        
-    }
-}
+		jQuery( '#field_' + formId + '_' + fieldId + ' .gravityflow-discussion-item' ).slice( 0, displayLimit ).slideToggle( "fast" );
 
+		oldText = jQuery( '#field_' + formId + '_' + fieldId + ' .gravityflow-dicussion-item-toggle-display' ).attr( 'title' );
+		newText = jQuery( '#field_' + formId + '_' + fieldId + ' .gravityflow-dicussion-item-toggle-display' ).data( 'title' );
+
+		jQuery( '#field_' + formId + '_' + fieldId + ' .gravityflow-dicussion-item-toggle-display' ).attr( 'title', newText ).text( newText );
+		jQuery( '#field_' + formId + '_' + fieldId + ' .gravityflow-dicussion-item-toggle-display' ).data( 'title', oldText );
+
+	}
+}
