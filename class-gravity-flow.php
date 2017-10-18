@@ -4031,7 +4031,7 @@ PRIMARY KEY  (id)
 			if ( ! empty( $a['form'] ) && ! empty( $entry_id ) ) {
 				// Limited support for multiple shortcodes on the same page
 				$entry = GFAPI::get_entry( $entry_id );
-				if ( $entry['form_id'] !== $a['form'] ) {
+				if ( is_wp_error( $entry ) || $entry['form_id'] !== $a['form'] ) {
 					return;
 				}
 			}
