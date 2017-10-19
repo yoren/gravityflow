@@ -171,32 +171,30 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 
 			$count = 0;
 			$recent_display_limit = 0;
-			
-			if ( false == $this->is_form_editor() ) {
-				
+
+			if ( $entry_id && false === $this->is_form_editor() ) {
+
 				/**
-				* Set the amount of discussion field comments to be shown without toggle.
+				* Set the amount of discussion items to be shown on active user input step without toggle.
 				*
-				* @param int $display_count Amount of comments to be shown. Default is 10
+				* @param int $max_display_limit Amount of comments to be shown. Default is 10.
 				* @param Gravity_Flow_Field_Discussion $this The field currently being processed.
 				*
 				* @since 1.9.2-dev
 				*/
-				//$max_display_count = apply_filters( 'gravityflowdiscussion_display_count', 10, $this );
-				$max_display_count = 5;
+				$max_display_limit = apply_filters( 'gravityflow_discussion_items_display_limit', 10, $this );
 
-				if( count( $discussion ) > $max_display_count ) {
+				if ( count( $discussion ) > $max_display_limit ) {
 
-					$recent_display_limit = count( $discussion ) - $max_display_count;
+					$recent_display_limit = count( $discussion ) - $max_display_limit;
 
 					$view_more_label = esc_attr__( 'View More', 'gravityflow' );
 					$view_less_label = esc_attr__( 'View Less', 'gravityflow' );
-					
-					$return .= sprintf( "<a href='javascript:void(0);' title='%s' data-title='%s' onclick='displayDiscussionItemToggle(%d, %d, %d);'  class='gravityflow-dicussion-item-toggle-display'>%s</a>", $view_more_label, $view_less_label, $this['formId'], $this['id'], $recent_display_limit, __('View More', 'gravityflow') );
 
-				} 
+					$return .= sprintf( "<a href='javascript:void(0);' title='%s' data-title='%s' onclick='displayDiscussionItemToggle(%d, %d, %d);'  class='gravityflow-dicussion-item-toggle-display'>%s</a>", $view_more_label, $view_less_label, $this['formId'], $this['id'], $recent_display_limit, __( 'View More', 'gravityflow' ) );
 
-			} 
+				}
+			}
 
 			foreach ( $discussion as $item ) {
 
@@ -204,8 +202,8 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 					break;
 				}
 
-				if( false == $this->is_form_editor() || $recent_display_limit > 0 ) {
-					if( 'html' == $format && $count >= $recent_display_limit ) {
+				if ( false === $this->is_form_editor() || $recent_display_limit > 0 ) {
+					if ( 'html' === $format && $count >= $recent_display_limit ) {
 						$return .= $this->format_discussion_item( $item, $format, $entry_id, false );
 					} else {
 						$return .= $this->format_discussion_item( $item, $format, $entry_id, true );
@@ -213,10 +211,9 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 				} else {
 					$return .= $this->format_discussion_item( $item, $format, $entry_id, false );
 				}
-				
+
 				$count ++;
 			}
-
 		}
 
 		return $return;
@@ -242,12 +239,12 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	 * @param array    $item     The properties of the item to be processed.
 	 * @param string   $format   The requested format for the value; html or text.
 	 * @param int|null $entry_id The ID of the entry currently being edited or null in other locations.
-	 *
+	 * @param bool     $hidden   Whether to show/hide the item on initial display.
 	 * @since 1.7.1-dev
 	 *
 	 * @return string
 	 */
-	public function format_discussion_item( $item, $format, $entry_id, $hidden = false) {
+	public function format_discussion_item( $item, $format, $entry_id, $hidden = false ) {
 		$item_datetime    = date( 'Y-m-d H:i:s', $item['timestamp'] );
 		$timestamp_format = empty( $this->gravityflowDiscussionTimestampFormat ) ? 'd M Y g:i a' : $this->gravityflowDiscussionTimestampFormat;
 		$date             = esc_html( GFCommon::format_date( $item_datetime, false, $timestamp_format, false ) );
@@ -262,7 +259,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 		$return = '';
 
 		$display_name = apply_filters( 'gravityflowdiscussion_display_name_discussion_field', $display_name, $item, $this );
-		if ( $format == 'html' ) {
+		if ( 'html' === $format ) {
 			$content = sprintf( '<div class="gravityflow-dicussion-item-header">
 <span class="gravityflow-dicussion-item-name">%s</span> <span class="gravityflow-dicussion-item-date">%s</span>
 %s</div>
@@ -270,12 +267,12 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 %s
 </div>', $display_name, $date, $this->get_delete_button( $item['id'], $entry_id ), $this->format_comment_value( $item['value'] ) );
 
-			if( $hidden == true ) {
+			if ( true === $hidden ) {
 				$return .= sprintf( '<div id="gravityflow-discussion-item-%s" class="gravityflow-discussion-item" style="display:none;">%s</div>', sanitize_key( $item['id'] ), $content );
 			} else {
 				$return .= sprintf( '<div id="gravityflow-discussion-item-%s" class="gravityflow-discussion-item">%s</div>', sanitize_key( $item['id'] ), $content );
 			}
-		} elseif ( $format == 'text' ) {
+		} elseif ( 'text' === $format ) {
 			$return = $date . ': ' . $display_name . "\n";
 			$return .= $item['value'];
 		}
@@ -287,7 +284,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	 * Prepares the markup for the delete comment button when on the entry detail edit page.
 	 *
 	 * @param string $item_id The ID of the comment currently being processed.
-	 * @param int $entry_id The ID of the entry currently being processed.
+	 * @param int    $entry_id The ID of the entry currently being processed.
 	 *
 	 * @since 1.4.2-dev
 	 *
