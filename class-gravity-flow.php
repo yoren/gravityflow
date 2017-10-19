@@ -5454,7 +5454,7 @@ AND m.meta_value='queued'";
 				}
 
 				if ( ! $lead ) {
-					_e( "Oops! We couldn't find your lead. Please try again", 'gravityforms' );
+					_e( "Oops! We couldn't find your lead. Please try again", 'gravityflow' );
 
 					return;
 				}

@@ -643,8 +643,8 @@ class Gravity_Flow_Connected_Apps_Table extends WP_List_Table {
 		);
 		parent::__construct(
 			array(
-				'singular' => esc_html__( 'App', 'gravityforms' ),
-				'plural'   => esc_html__( 'Apps', 'gravityforms' ),
+				'singular' => esc_html__( 'App', 'gravityflow' ),
+				'plural'   => esc_html__( 'Apps', 'gravityflow' ),
 				'ajax'     => false,
 			)
 		);
