@@ -217,10 +217,14 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 				$count ++;
 			}
 
-			if ( ! empty( $hidden_items ) ) {
-				$return .= '<div class="gravityflow-dicussion-item-hidden" style="display: none;">' . $hidden_items . '</div>' . $display_items;
+			if ( $format === 'html' ) {
+				if ( count( $hidden_items ) ) {
+					$return .= '<div class="gravityflow-dicussion-item-hidden" style="display: none;">' . $hidden_items . '</div>' . $display_items;
+				} else {
+					$return .= $display_items;
+				}
 			} else {
-				$return .= $display_items;
+				$return .= $hidden_items . $display_items;
 			}
 		}
 
