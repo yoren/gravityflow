@@ -20,11 +20,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 	protected $_editable_fields = array();
 
-	protected $_update_post_fields = array(
-		'fields' => array(),
-		'images' => array(),
-	);
-
 	public function get_label() {
 		return esc_html__( 'User Input', 'gravityflow' );
 	}
