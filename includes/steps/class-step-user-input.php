@@ -304,8 +304,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			return false;
 		}
 
-		$entry_updater = $this->get_entry_updater( $form );
-		$result        = $entry_updater->process( $new_status );
+		$result = $this->process_entry_edit( $new_status );
 
 		if ( $result !== true ) {
 			return $result;
