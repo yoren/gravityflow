@@ -678,8 +678,11 @@ class Gravity_Flow_Entry_Detail {
 			<tr>
 				<td colspan="2">
 					<?php
-					require_once( 'class-entry-editor.php' );
-					$entry_editor = new Gravity_Flow_Entry_Editor( $form, $entry, $current_step, $display_empty_fields );
+					if ( ! class_exists( 'Gravity_Flow_Entry_Editor' ) ) {
+						require_once( 'class-entry-editor.php' );
+					}
+					$entry_editor = Gravity_Flow_Entry_Editor::get_instance( $form, $entry, $current_step, $display_empty_fields );
+					gravity_flow()->log_debug( __METHOD__ . '(): editor class => ' . print_r( $entry_editor, 1 ) );
 					$entry_editor->render_edit_form();
 					?>
 				</td>

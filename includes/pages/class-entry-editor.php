@@ -107,6 +107,30 @@ class Gravity_Flow_Entry_Editor {
 	 */
 	private $_has_editable_product_field = false;
 
+	private static $_instance = array();
+
+	/**
+	 * Gravity_Flow_Entry_Editor constructor.
+	 *
+	 * @param array             $form
+	 * @param array             $entry
+	 * @param Gravity_Flow_Step $step
+	 * @param bool              $display_empty_fields
+	 */
+	public static function get_instance( $form, $entry, $step, $display_empty_fields = null ) {
+		$key = $step->get_id() . '|' . $entry['id'];
+
+		if ( empty( self::$_instance[ $key ] ) ) {
+			gravity_flow()->log_debug( __METHOD__ . '(): no instance; creating one' );
+			self::$_instance[ $key ] = new self( $form, $entry, $step, $display_empty_fields );
+		} elseif ( $display_empty_fields !== null ) {
+			gravity_flow()->log_debug( __METHOD__ . '(): setting display_empty_fields for existing instance' );
+			self::$_instance[ $key ]->display_empty_fields = $display_empty_fields;
+		}
+
+		return self::$_instance[ $key ];
+	}
+
 	/**
 	 * Gravity_Flow_Entry_Editor constructor.
 	 *
