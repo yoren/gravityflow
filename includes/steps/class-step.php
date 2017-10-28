@@ -828,13 +828,23 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return $timestamp;
 	}
 
-	public function process_entry_edit() {
+	/**
+	 * Validate the submission and if the step has any editable fields update the entry.
+	 *
+	 * @param string $new_status The new status for the current step.
+	 *
+	 * @since 1.8.1-dev
+	 *
+	 * @return bool|WP_Error WP_Error for an invalid note and/or editable fields; False for an invalid referer or true when the entry/post update functionality has run.
+	 */
+	public function process_entry_edit( $new_status ) {
+		if ( ! class_exists( 'Gravity_Flow_Entry_Editor' ) ) {
+			require_once( gravity_flow()->get_base_path() . '/includes/pages/class-entry-editor.php' );
+		}
+		$entry_editor = Gravity_Flow_Entry_Editor::get_instance( $this->get_form(), $this->get_entry(), $this );
+		gravity_flow()->log_debug( __METHOD__ . '(): editor class => ' . print_r( $entry_editor, 1 ) );
 
-		// Bail early if there are no editable fields
-
-		// Load Gravity_Flow_Entry_Editor
-
-		// Gravity_Flow_Entry_Editor::process()
+		return $entry_editor->process( $new_status );
 	}
 
 	/**
@@ -2145,33 +2155,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 */
 	public function maybe_filter_validation_result( $validation_result, $new_status ) {
 		return $validation_result;
-	}
-
-	/**
-	 * Initialize the entry updater for the current step.
-	 *
-	 * @param array $form The form associated with the entry to be updated.
-	 *
-	 * @since 1.8.1-dev
-	 *
-	 * @return Gravity_Flow_Entry_Updater
-	 */
-	public function get_entry_updater( $form ) {
-		if ( ! class_exists( 'Gravity_Flow_Entry_Editor' ) ) {
-			require_once( gravity_flow()->get_base_path() . '/includes/pages/class-entry-editor.php' );
-		}
-		$entry_editor = Gravity_Flow_Entry_Editor::get_instance( $form, $this->get_entry(), $this );
-		gravity_flow()->log_debug( __METHOD__ . '(): editor class => ' . print_r( $entry_editor, 1 ) );
-
-
-
-		if ( ! class_exists( 'Gravity_Flow_Entry_Updater' ) ) {
-			require_once( gravity_flow()->get_base_path() . '/includes/class-entry-updater.php' );
-		}
-
-		$entry_editor = new Gravity_Flow_Entry_Updater( $form, $this );
-
-		return $entry_editor;
 	}
 
 }
