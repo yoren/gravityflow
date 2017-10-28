@@ -80,7 +80,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					'checkbox' => array(
 						'label'          => esc_html__( 'Enable field conditional logic', 'gravityflow' ),
 						'name'           => 'conditional_logic_editable_fields_enabled',
-						'defeault_value' => '0',
+						'default_value' => '1',
 					),
 					'select'   => array(
 						'name'    => 'conditional_logic_editable_fields_mode',
@@ -106,7 +106,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 						array(
 							'label'          => esc_html__( 'Enable field conditional logic', 'gravityflow' ),
 							'name'           => 'conditional_logic_editable_fields_enabled',
-							'defeault_value' => '0',
+							'default_value' => '1',
 						),
 					),
 				);

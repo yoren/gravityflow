@@ -97,7 +97,7 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 		if ( $this->maybe_uninstall() ) {
 			?>
 			<div class="push-alert-gold" style="border-left: 1px solid #E6DB55; border-right: 1px solid #E6DB55;">
-				<?php printf( esc_html_x( '%s has been successfully uninstalled. It can be re-activated from the %splugins page%s.', 'Displayed on the settings page after uninstalling a Gravity Flow extension.', 'gravityforms' ), esc_html( $this->_title ), "<a href='plugins.php'>", '</a>' ); ?>
+				<?php printf( esc_html_x( '%s has been successfully uninstalled. It can be re-activated from the %splugins page%s.', 'Displayed on the settings page after uninstalling a Gravity Flow extension.', 'gravityflow' ), esc_html( $this->_title ), "<a href='plugins.php'>", '</a>' ); ?>
 			</div>
 			<?php
 		} else {

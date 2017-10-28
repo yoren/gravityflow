@@ -114,6 +114,16 @@ class Gravity_Flow_API {
 		if ( ! $step ) {
 			return false;
 		}
+
+		/**
+		 * Fires before a workflow is cancelled.
+		 *
+		 * @param array $entry
+		 * @param array $form
+		 * @param Gravity_Flow_Step $step
+		 */
+		do_action( 'gravityflow_pre_cancel_workflow', $entry, $form, $step  );
+
 		$assignees = $step->get_assignees();
 		foreach ( $assignees as $assignee ) {
 			$assignee->remove();

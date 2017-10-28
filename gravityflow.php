@@ -3,9 +3,9 @@
 Plugin Name: Gravity Flow
 Plugin URI: https://gravityflow.io
 Description: Build Workflow Applications with Gravity Forms.
-Version: 1.8.1-dev
+Version: 1.9.2-dev
 Author: Gravity Flow
-Author URI: http://www.gravityflow.io
+Author URI: https://gravityflow.io
 License: GPL-3.0+
 Text Domain: gravityflow
 Domain Path: /languages
@@ -27,7 +27,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses.
 */
 
-define( 'GRAVITY_FLOW_VERSION', '1.8.1-dev' );
+define( 'GRAVITY_FLOW_VERSION', '1.9.2-dev' );
 
 define( 'GRAVITY_FLOW_EDD_STORE_URL', 'https://gravityflow.io' );
 
@@ -77,6 +77,7 @@ class Gravity_Flow_Bootstrap {
 
 		require_once( dirname( __FILE__ ) . '/includes/class-common.php' );
 
+		require_once( 'includes/class-connected-apps.php' );
 		require_once( 'class-gravity-flow.php' );
 		require_once( 'includes/models/class-activity.php' );
 
