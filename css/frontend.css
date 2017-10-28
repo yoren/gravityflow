@@ -37,12 +37,8 @@ table.entry-detail-view td{
 .gfield {
     margin-bottom:10px;
 }
-.gravityflow_workflow_wrap {
-    margin: 10px 20px 0 2px;
-}
 #post-body.columns-2 #post-body-content {
     float: left;
-    min-width: 400px;
     width: 100%;
 }
 #poststuff #post-body.columns-2 {
