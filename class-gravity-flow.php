@@ -3425,9 +3425,15 @@ PRIMARY KEY  (id)
 
 			$args = array_merge( $defaults, $args );
 
-			if ( rgget( 'view' ) == 'entry' ) {
+			if ( rgget( 'view' ) == 'entry' || ! empty( $args['entry_id'] ) ) {
 
 				$entry_id = absint( rgget( 'lid' ) );
+
+				if ( empty( $entry_id ) ) {
+
+					$entry_id = absint( $args['entry_id'] );
+
+				}
 
 				$entry = GFAPI::get_entry( $entry_id );
 
@@ -4028,6 +4034,15 @@ PRIMARY KEY  (id)
 
 			$entry_id = absint( rgget( 'lid' ) );
 
+			if ( empty( $entry_id ) ) {
+
+				if ( ! empty( $a['entry_id'] ) ) {
+
+					$entry_id = absint( $a['entry_id'] );
+
+				}
+			}
+
 			if ( ! empty( $a['form'] ) && ! empty( $entry_id ) ) {
 				// Limited support for multiple shortcodes on the same page
 				$entry = GFAPI::get_entry( $entry_id );
@@ -4055,7 +4070,7 @@ PRIMARY KEY  (id)
 					wp_enqueue_script( 'gravityflow_entry_detail' );
 					wp_enqueue_script( 'gravityflow_status_list' );
 
-					if ( rgget( 'view' ) ) {
+					if ( rgget( 'view' ) || ! empty( $a['entry_id'] ) ) {
 						$html .= $this->get_shortcode_status_page_detail( $a );
 					} else {
 						$html .= $this->get_shortcode_status_page( $a );
@@ -4113,6 +4128,7 @@ PRIMARY KEY  (id)
 				'page'             => 'inbox',
 				'form'             => null,
 				'form_id'          => null,
+				'entry_id'         => null,
 				'fields'           => array(),
 				'display_all'      => null,
 				'actions_column'   => false,
@@ -4166,6 +4182,7 @@ PRIMARY KEY  (id)
 
 			$args = array(
 				'form_id'              => $a['form'],
+				'entry_id'             => $a['entry_id'],
 				'id_column'            => $a['id_column'],
 				'submitter_column'     => $a['submitter_column'],
 				'step_column'          => $a['step_column'],
@@ -4203,6 +4220,7 @@ PRIMARY KEY  (id)
 			}
 
 			$args = array(
+				'entry_id'          => $a['entry_id'],
 				'show_header'       => false,
 				'detail_base_url'   => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
 				'check_permissions' => $check_permissions,
