@@ -135,6 +135,8 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Get an instance of this class.
 	 *
+	 * @since 1.8.1-dev
+	 *
 	 * @param array             $form
 	 * @param array             $entry
 	 * @param Gravity_Flow_Step $step
@@ -838,7 +840,7 @@ class Gravity_Flow_Entry_Editor {
 	 * @since 1.8.1-dev
 	 */
 	public function refresh_entry() {
-		$this->_entry = $this->step->refresh_entry();
+		$this->entry = $this->step->refresh_entry();
 	}
 
 	/**
