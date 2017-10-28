@@ -110,7 +110,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * An array of post field IDs to be used when updating the post created from the entry.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @var array
 	 */
@@ -119,14 +119,14 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * An array of post image field IDs to be used when updating the post created from the entry.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @var array
 	 */
 	private $_update_post_images = array();
 
 	/**
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @var Gravity_Flow_Entry_Editor[]
 	 */
@@ -135,7 +135,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Get an instance of this class.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @param array             $form
 	 * @param array             $entry
@@ -826,7 +826,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Add a message to the Gravity Flow log file.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @param string $message The message to be logged.
 	 */
@@ -837,7 +837,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Flushes and reloads the cached entry for the current step.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 */
 	public function refresh_entry() {
 		$this->entry = $this->step->refresh_entry();
@@ -851,7 +851,7 @@ class Gravity_Flow_Entry_Editor {
 	 *
 	 * @param string $new_status The new status for the current step.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @return bool|WP_Error WP_Error for an invalid note and/or editable fields; False for an invalid referer or true when the entry/post update functionality has run.
 	 */
@@ -910,7 +910,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Check the submission belongs to the current step and contains a valid nonce from the entry detail page.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @return bool
 	 */
@@ -921,7 +921,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Get an array of uploaded files for the current submission.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @return array
 	 */
@@ -943,7 +943,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Determine if the editable fields for this step are valid.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @param bool  $valid The steps current validation state.
 	 * @param array $form  The form currently being processed.
@@ -1038,7 +1038,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Determines if there are any fields which need files uploading to the temporary folder.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @param array $form  The form currently being processed.
 	 * @param array $files An array of files which have already been uploaded.
@@ -1073,7 +1073,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Get the temporary file path and create the folder if it does not already exist.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @param int $form_id The ID of the form currently being processed.
 	 *
@@ -1092,7 +1092,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Upload the file to the temporary folder for the current field.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @param GF_Field $field       The field properties.
 	 * @param array    $files       An array of files which have already been uploaded.
@@ -1124,7 +1124,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Trigger the updating of entry values for the appropriate fields.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 */
 	public function process_fields() {
 		$entry = $this->entry;
@@ -1194,7 +1194,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Update the entry with the calculation field values.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @param GF_Field[] $fields The calculation fields to be processed.
 	 * @param array      $entry  The entry being updated.
@@ -1237,7 +1237,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Update the entry with the total field values.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @param GF_Field[] $fields The total fields to be processed.
 	 */
@@ -1259,7 +1259,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * If any new files have been uploaded save them to the entry.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @param GF_Field $field The current fields properties.
 	 * @param array    $form  The form currently being processed.
@@ -1295,7 +1295,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Update the input value in the entry.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @param array      $form     The form currently being processed.
 	 * @param GF_Field   $field    The current fields properties.
@@ -1333,7 +1333,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * If a post exists for this entry initiate the update.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 */
 	public function maybe_process_post_fields() {
 		$this->log_debug( __METHOD__ . '(): Running.' );
@@ -1361,7 +1361,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Update the post with the field values which have changed.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @param WP_Post $post The post to be updated.
 	 *
@@ -1421,7 +1421,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Attach any new images to the post and set the featured image.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @param array $form  The form currently being processed.
 	 * @param array $entry The entry currently being processed.
@@ -1479,7 +1479,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Get the post title.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @param string $value       The entry field value.
 	 * @param array  $form        The form currently being processed.
@@ -1499,7 +1499,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Set the post tags.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @param string|array $value   The entry field value.
 	 * @param int          $post_id The ID of the post created from the current entry.
@@ -1513,7 +1513,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Set the post categories.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @param string|array $value   The entry field value.
 	 * @param int          $post_id The ID of the post created from the current entry.
@@ -1533,7 +1533,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Set the post meta.
 	 *
-	 * @since 1.8.1-dev
+	 * @since 1.9.2-dev
 	 *
 	 * @param GF_Field     $field       The Post Custom Field.
 	 * @param string|array $value       The entry field value.
