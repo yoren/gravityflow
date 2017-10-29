@@ -691,7 +691,6 @@ class Gravity_Flow_Entry_Detail {
 						require_once( 'class-entry-editor.php' );
 					}
 					$entry_editor = Gravity_Flow_Entry_Editor::get_instance( $form, $entry, $current_step, $display_empty_fields );
-					gravity_flow()->log_debug( __METHOD__ . '(): editor class => ' . print_r( $entry_editor, 1 ) );
 					$entry_editor->render_edit_form();
 					?>
 				</td>
