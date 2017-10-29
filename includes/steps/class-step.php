@@ -841,8 +841,10 @@ abstract class Gravity_Flow_Step extends stdClass {
 		if ( ! class_exists( 'Gravity_Flow_Entry_Editor' ) ) {
 			require_once( gravity_flow()->get_base_path() . '/includes/pages/class-entry-editor.php' );
 		}
-		$entry_editor = Gravity_Flow_Entry_Editor::get_instance( $this->get_form(), $this->get_entry(), $this );
-		gravity_flow()->log_debug( __METHOD__ . '(): editor class => ' . print_r( $entry_editor, 1 ) );
+
+		$form         = $this->get_form();
+		$form         = gf_apply_filters( array( 'gform_pre_validation', $form['id'] ), $form );
+		$entry_editor = Gravity_Flow_Entry_Editor::get_instance( $form, $this->get_entry(), $this );
 
 		return $entry_editor->process( $new_status );
 	}
