@@ -3873,7 +3873,7 @@ PRIMARY KEY  (id)
 		/**
 		 * Store the media IDs for the processed post images in the entry meta for use when steps with editable fields update the post.
 		 *
-		 * @since 1.8.1-dev
+		 * @since 1.9.2-dev
 		 *
 		 * @param int   $post_id The ID of the post created from the current entry.
 		 * @param array $entry   The entry currently being processed.
