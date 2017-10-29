@@ -148,10 +148,8 @@ class Gravity_Flow_Entry_Editor {
 		$key = $step->get_id() . '|' . $entry['id'];
 
 		if ( empty( self::$_instance[ $key ] ) ) {
-			gravity_flow()->log_debug( __METHOD__ . '(): no instance; creating one' );
 			self::$_instance[ $key ] = new self( $form, $entry, $step, $display_empty_fields );
 		} elseif ( $display_empty_fields !== null ) {
-			gravity_flow()->log_debug( __METHOD__ . '(): setting display_empty_fields for existing instance' );
 			self::$_instance[ $key ]->display_empty_fields = $display_empty_fields;
 		}
 
