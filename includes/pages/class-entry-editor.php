@@ -1276,16 +1276,27 @@ class Gravity_Flow_Entry_Editor {
 		if ( ! empty( $value ) && $existing_value != $value ) {
 			$result = GFAPI::update_entry_field( $entry['id'], $field->id, $value );
 			$this->log_debug( __METHOD__ . "(): Saving: {$field->label}(#{$field->id} - {$field->type}). Result: " . var_export( $result, 1 ) );
+			$this->maybe_pre_process_post_image( $field );
+		}
+	}
 
-			if ( GFCommon::is_post_field( $field ) && ! in_array( $field->id, $this->_update_post_images ) ) {
-				$this->_update_post_images[] = $field->id;
+	/**
+	 * If this is a post image field add it to the queue for processing when the post is updated.
+	 * Also delete the previous image uploaded using this field from the post.
+	 *
+	 * @since 1.9.2-dev
+	 *
+	 * @param GF_Field $field The current fields properties.
+	 */
+	public function maybe_pre_process_post_image( $field ) {
+		if ( GFCommon::is_post_field( $field ) && ! in_array( $field->id, $this->_update_post_images ) ) {
+			$this->_update_post_images[] = $field->id;
 
-				$post_images = gform_get_meta( $entry['id'], '_post_images' );
-				if ( $post_images && isset( $post_images[ $field->id ] ) ) {
-					wp_delete_attachment( $post_images[ $field->id ] );
-					unset( $post_images[ $field->id ] );
-					gform_update_meta( $entry['id'], '_post_images', $post_images, $form['id'] );
-				}
+			$post_images = gform_get_meta( $this->entry['id'], '_post_images' );
+			if ( $post_images && isset( $post_images[ $field->id ] ) ) {
+				wp_delete_attachment( $post_images[ $field->id ] );
+				unset( $post_images[ $field->id ] );
+				gform_update_meta( $this->entry['id'], '_post_images', $post_images, $this->form['id'] );
 			}
 		}
 	}
