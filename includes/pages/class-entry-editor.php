@@ -980,14 +980,13 @@ class Gravity_Flow_Entry_Editor {
 				if ( $field->get_input_type() == 'fileupload' ) {
 
 					if ( $field->isRequired && $submission_is_empty && rgempty( $field->id, $saved_entry ) ) {
-						$field->failed_validation  = true;
-						$field->validation_message = empty( $field->errorMessage ) ? esc_html__( 'This field is required.', 'gravityflow' ) : $field->errorMessage;
-						$valid                     = false;
+						$this->fail_required_validation( $field );
+						$valid = false;
 
 						continue;
 					}
 
-					$field->validate( '', $form );
+					$this->validate_editable_field( $field );
 					if ( $field->failed_validation ) {
 						$valid = false;
 					}
@@ -1004,24 +1003,11 @@ class Gravity_Flow_Entry_Editor {
 				}
 
 				if ( ! $field_is_hidden && $submission_is_empty && $field->isRequired ) {
-					$field->failed_validation  = true;
-					$field->validation_message = empty( $field->errorMessage ) ? esc_html__( 'This field is required.', 'gravityflow' ) : $field->errorMessage;
-					$valid                     = false;
+					$this->fail_required_validation( $field );
+					$valid = false;
 				} elseif ( ! $field_is_hidden && ! $submission_is_empty ) {
 					$value = GFFormsModel::get_field_value( $field );
-
-					$field->validate( $value, $form );
-					$custom_validation_result = gf_apply_filters( array(
-						'gform_field_validation',
-						$form['id'],
-						$field->id
-					), array(
-						'is_valid' => $field->failed_validation ? false : true,
-						'message'  => $field->validation_message,
-					), $value, $form, $field );
-
-					$field->failed_validation  = rgar( $custom_validation_result, 'is_valid' ) ? false : true;
-					$field->validation_message = rgar( $custom_validation_result, 'message' );
+					$this->validate_editable_field( $field, $value );
 
 					if ( $field->failed_validation ) {
 						$valid = false;
@@ -1031,6 +1017,43 @@ class Gravity_Flow_Entry_Editor {
 		}
 
 		return $valid;
+	}
+
+	/**
+	 * Update the field properties to indicate the field failed the required validation.
+	 *
+	 * @since 1.9.2-dev
+	 *
+	 * @param GF_Field $field The field properties.
+	 */
+	public function fail_required_validation( $field ) {
+		$field->failed_validation  = true;
+		$field->validation_message = empty( $field->errorMessage ) ? esc_html__( 'This field is required.', 'gravityflow' ) : $field->errorMessage;
+	}
+
+	/**
+	 * Validate the field and allow the result to be overridden by the gform_field_validation filter.
+	 *
+	 * @since 1.9.2-dev
+	 *
+	 * @param GF_Field $field The field properties.
+	 * @param mixed    $value The field value.
+	 */
+	public function validate_editable_field( $field, $value = '' ) {
+		$form = $this->form;
+
+		$field->validate( $value, $form );
+		$custom_validation_result = gf_apply_filters( array(
+			'gform_field_validation',
+			$form['id'],
+			$field->id
+		), array(
+			'is_valid' => $field->failed_validation ? false : true,
+			'message'  => $field->validation_message,
+		), $value, $form, $field );
+
+		$field->failed_validation  = rgar( $custom_validation_result, 'is_valid' ) ? false : true;
+		$field->validation_message = rgar( $custom_validation_result, 'message' );
 	}
 
 	/**
