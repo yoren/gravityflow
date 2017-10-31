@@ -959,8 +959,7 @@ class Gravity_Flow_Entry_Editor {
 		$page_load_conditional_logic_enabled = $conditional_logic_enabled && $this->step->conditional_logic_editable_fields_mode == 'page_load';
 		$dynamic_conditional_logic_enabled   = $conditional_logic_enabled && $this->step->conditional_logic_editable_fields_mode != 'page_load';
 
-		$editable_fields = $this->_editable_fields;
-		$saved_entry     = $this->entry;
+		$saved_entry = $this->entry;
 
 		if ( ! $conditional_logic_enabled || $page_load_conditional_logic_enabled ) {
 			$entry = $saved_entry;
@@ -970,53 +969,75 @@ class Gravity_Flow_Entry_Editor {
 
 		foreach ( $form['fields'] as $field ) {
 			/* @var GF_Field $field */
-			if ( in_array( $field->id, $editable_fields ) ) {
-				if ( ( $dynamic_conditional_logic_enabled && GFFormsModel::is_field_hidden( $form, $field, array() ) ) ) {
-					continue;
-				}
 
-				$submission_is_empty = $field->is_value_submission_empty( $form['id'] );
+			if ( ! $this->is_applicable_validation_field( $field, $form, $entry, $page_load_conditional_logic_enabled, $dynamic_conditional_logic_enabled ) ) {
+				continue;
+			}
 
-				if ( $field->get_input_type() == 'fileupload' ) {
+			$submission_is_empty = $field->is_value_submission_empty( $form['id'] );
 
-					if ( $field->isRequired && $submission_is_empty && rgempty( $field->id, $saved_entry ) ) {
-						$this->fail_required_validation( $field );
-						$valid = false;
+			if ( $field->get_input_type() == 'fileupload' ) {
 
-						continue;
-					}
-
-					$this->validate_editable_field( $field );
-					if ( $field->failed_validation ) {
-						$valid = false;
-					}
-
-					continue;
-				}
-
-				if ( $page_load_conditional_logic_enabled ) {
-					$field_is_hidden = GFFormsModel::is_field_hidden( $form, $field, array(), $entry );
-				} elseif ( $dynamic_conditional_logic_enabled ) {
-					$field_is_hidden = GFFormsModel::is_field_hidden( $form, $field, array() );
-				} else {
-					$field_is_hidden = false;
-				}
-
-				if ( ! $field_is_hidden && $submission_is_empty && $field->isRequired ) {
+				if ( $field->isRequired && $submission_is_empty && rgempty( $field->id, $saved_entry ) ) {
 					$this->fail_required_validation( $field );
 					$valid = false;
-				} elseif ( ! $field_is_hidden && ! $submission_is_empty ) {
-					$value = GFFormsModel::get_field_value( $field );
-					$this->validate_editable_field( $field, $value );
 
-					if ( $field->failed_validation ) {
-						$valid = false;
-					}
+					continue;
+				}
+
+				$this->validate_editable_field( $field );
+				if ( $field->failed_validation ) {
+					$valid = false;
+				}
+
+				continue;
+			}
+
+			if ( $submission_is_empty && $field->isRequired ) {
+				$this->fail_required_validation( $field );
+				$valid = false;
+			} elseif ( ! $submission_is_empty ) {
+				$value = GFFormsModel::get_field_value( $field );
+				$this->validate_editable_field( $field, $value );
+
+				if ( $field->failed_validation ) {
+					$valid = false;
 				}
 			}
 		}
 
 		return $valid;
+	}
+
+	/**
+	 * Determines if the field needs validating.
+	 *
+	 * The field needs validating if editable. Fields hidden by conditional logic should not be validated.
+	 *
+	 * @since 1.9.2-dev
+	 *
+	 * @param GF_Field $field                               The field properties.
+	 * @param array    $form                                The form currently being processed.
+	 * @param array    $entry                               The saved entry or the temporary entry created from the current $_POST.
+	 * @param bool     $page_load_conditional_logic_enabled Indicates if conditional logic is enabled for the step and set to page_load mode.
+	 * @param bool     $dynamic_conditional_logic_enabled   Indicates if conditional logic is enabled for the step and set to dynamic mode.
+	 *
+	 * @return bool
+	 */
+	public function is_applicable_validation_field( $field, $form, $entry, $page_load_conditional_logic_enabled, $dynamic_conditional_logic_enabled ) {
+		if ( ! $this->is_editable_field( $field ) ) {
+			return false;
+		}
+
+		if ( $page_load_conditional_logic_enabled ) {
+			$field_is_hidden = GFFormsModel::is_field_hidden( $form, $field, array(), $entry );
+		} elseif ( $dynamic_conditional_logic_enabled ) {
+			$field_is_hidden = GFFormsModel::is_field_hidden( $form, $field, array() );
+		} else {
+			$field_is_hidden = false;
+		}
+
+		return ! $field_is_hidden;
 	}
 
 	/**
