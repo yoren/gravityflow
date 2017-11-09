@@ -191,9 +191,12 @@ class Gravity_Flow_Assignee {
 	 */
 	public function get_status() {
 
-		$entry_id  = $this->step->get_entry_id();
-		$key       = $this->get_status_key();
-		$cache_key = $entry_id . '_' . $key;
+		$entry_id = $this->step->get_entry_id();
+		$key      = $this->get_status_key();
+
+		$cache_key = gravity_flow()->is_gravityforms_supported( '2.3-beta-3' ) ? get_current_blog_id() . '_' : '';
+		$cache_key .= $entry_id . '_' . $key;
+
 		global $_gform_lead_meta;
 		unset( $_gform_lead_meta[ $cache_key ] );
 
