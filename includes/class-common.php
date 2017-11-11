@@ -45,7 +45,20 @@ class Gravity_Flow_Common {
 			$query_args['gflow_access_token'] = $access_token;
 		}
 
-		return add_query_arg( $query_args, $base_url );
+		$url = add_query_arg( $query_args, $base_url );
+
+		/**
+		 * Allows the workflow URL (e.g. inbox or status page) to be modified.
+		 *
+		 * @since 1.9.2
+		 *
+		 * @param string $url The URL.
+		 * @param int|null $page_id The ID of the WordPress Page where the shortcode is located.
+		 * @param Gravity_Flow_Assignee $assignee The Assignee.
+		 */
+		$url = apply_filters( 'gravityflow_workflow_url', $url, $page_id, $assignee );
+
+		return $url;
 	}
 
 	/**
