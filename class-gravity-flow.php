@@ -129,8 +129,7 @@ if ( class_exists( 'GFForms' ) ) {
 
 		public function init_admin() {
 			parent::init_admin();
-			//Move include into maybe_process auth_function if condition if connection statuses can be kept in auth class;
-			
+
 			add_action( 'gform_entry_detail_sidebar_middle', array( $this, 'entry_detail_status_box' ), 10, 2 );
 			add_filter( 'gform_notification_events', array( $this, 'add_notification_event' ), 10, 2 );
 
