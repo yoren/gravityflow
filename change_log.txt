@@ -1,4 +1,6 @@
 - Added the gravityflow_pre_cancel_workflow action.
 - Added the gravityflow_timeline_step_icon filter.
+- Updated to support Gravity Forms version 2.3.
 - Fixed the HubSpot step for the "HubSpot for Gravity Forms" plugin versions 3.0+.
 - Fixed a fatal error which could occur when processing the shortcode with the form attribute and the specified entry can't be retrieved.
+- Fixed an issue with the timeline notes for Approval and User Input steps where the step icon is used instead of the user avatar.
