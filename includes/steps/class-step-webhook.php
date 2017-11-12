@@ -26,6 +26,8 @@ if ( ! class_exists( 'GFForms' ) ) {
  */
 class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	public $_step_type = 'webhook';
+	protected $temporary_credentials = array();
+	protected $oauth1_client;
 
 	public function get_label() {
 		return esc_html__( 'Outgoing Webhook', 'gravityflow' );
@@ -36,6 +38,19 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	}
 
 	public function get_settings() {
+		$connected_apps = gravityflow_connected_apps()->get_connected_apps();
+		$connected_apps_options = array(
+			array(
+				'label' => esc_html__( 'Select a Connected App', 'gravityflow' ),
+				'value' => '',
+			),
+		);
+		foreach ( $connected_apps as $key => $app ) {
+			$connected_apps_options[ $key ] = array(
+				'label' => $app['app_name'],
+				'value' => $app['app_id'],
+			);
+		}
 
 		$settings = array(
 			'title'  => esc_html__( 'Outgoing Webhook', 'gravityflow' ),
@@ -90,6 +105,10 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 							'label' => 'Basic',
 							'value' => 'basic',
 						),
+						array(
+							'label' => 'Connected App',
+							'value' => 'connected_app',
+						),
 					),
 				),
 				array(
@@ -109,6 +128,19 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 						'field' => 'authentication',
 						'values' => array( 'basic' ),
 					),
+				),
+				array(
+					'name'  => 'connected_app',
+					'label' => esc_html__( 'Connected App', 'gravityflow' ),
+					'type'  => 'select',
+					'tooltip' => esc_html__( 'Manage your Connected Apps in the Workflow->Settings->Connected Apps page. ', 'gravityflow' ),
+					'dependency' => array(
+						'field' => 'authentication',
+						'values' => array(
+							'connected_app',
+						),
+					),
+					'choices' => $connected_apps_options,
 				),
 				array(
 					'label'          => esc_html__( 'Request Headers', 'gravityflow' ),
@@ -158,20 +190,13 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				),
 			),
 		);
-
 		if ( in_array( $this->get_setting( 'method' ), array( 'post', 'put', 'patch', '' ) ) ) {
 
 			if ( $this->get_setting( 'body' ) == 'raw' ) {
 				global $_gaddon_posted_settings;
 
 				if ( ! empty( $_gaddon_posted_settings ) ) {
-					$raw_value = rgpost( '_gaddon_setting_raw_body' );
-
-					if ( ! current_user_can( 'unfiltered_html' ) ) {
-						$raw_value = wp_kses_post( $raw_value );
-					}
-
-					$_gaddon_posted_settings['raw_body'] = $raw_value;
+					$this->set_posted_raw_body_value();
 				}
 
 				$settings['fields'][] = array(
@@ -179,6 +204,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					'label' => esc_html__( 'Raw Body', 'gravityflow' ),
 					'type'  => 'textarea',
 					'class' => 'fieldwidth-3 fieldheight-2',
+					'save_callback' => array( $this, 'save_callback_raw_body' ),
 				);
 			} else {
 
@@ -239,7 +265,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				);
 			}
 		}
-
+		
 		return $settings;
 	}
 
@@ -387,6 +413,44 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	}
 
 	/**
+	 * Settings are JSON decoded so this callback resets the value to the raw value and strips scripts if the current
+	 * user cannot unfiltered_html. This circumvents the automatic parsing of JSON values by the add-on framework.
+	 *
+	 * @since 1.8.1
+	 *
+	 * @param $field
+	 * @param $field_setting
+	 *
+	 * @return string
+	 */
+	function save_callback_raw_body( $field, $field_setting ) {
+		return $this->set_posted_raw_body_value();
+	}
+
+
+	/**
+	 * Sets the value of the raw_body setting in the $_gaddon_posted_settings global and strips scripts if the current
+	 * user cannot unfiltered_html. This circumvents the automatic parsing of JSON values by the add-on framework.
+	 *
+	 * @since 1.8.1
+	 *
+	 * @return string the raw value
+	 */
+	protected function set_posted_raw_body_value() {
+		global $_gaddon_posted_settings;
+
+		$raw_value = rgpost( '_gaddon_setting_raw_body' );
+
+		if ( ! current_user_can( 'unfiltered_html' ) ) {
+			$raw_value = wp_kses_post( $raw_value );
+		}
+
+		$_gaddon_posted_settings['raw_body'] = $raw_value;
+
+		return $raw_value;
+	}
+
+	/**
 	 * Process the step. For example, assign to a user, send to a service, send a notification or do nothing. Return (bool) $complete.
 	 *
 	 * @return bool Is the step complete?
@@ -430,10 +494,11 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			$auth_string = sprintf( '%s:%s', $this->basic_username, $this->basic_password );
 			$headers['Authorization'] = sprintf( 'Basic %s', base64_encode( $auth_string ) );
 		}
-
+		$this->log_debug( __METHOD__ . '() - log body setting ' . $this->body . ' :: ' . $this->raw_body);
 		if ( $this->body == 'raw' ) {
 			$body = $this->raw_body;
 			$body = GFCommon::replace_variables( $body, $this->get_form(), $entry, false, false, false, 'text' );
+			$this->log_debug( __METHOD__ . '() - got body after replace vars: ' . $body );
 		} elseif ( in_array( $method, array( 'POST', 'PUT', 'PATCH' ) ) ) {
 			$body = $this->get_request_body();
 			if ( $this->format == 'json' ) {
@@ -442,6 +507,35 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			} else {
 				$headers = array();
 			}
+		}
+		if ( $this->authentication == 'connected_app' ) {
+			$app_id = $this->get_setting( 'connected_app' );
+			$connected_app      = gravityflow_connected_apps()->get_app( $app_id );
+			if ( empty( $connected_app ) ) {
+				$this->log_debug( __METHOD__ . '() - Connected app not found: ' . $app_id );
+			}
+			$access_credentials = $connected_app['access_creds'];
+
+			require_once( dirname( __FILE__ ) . '/../class-oauth1-client.php' );
+			$this->oauth1_client = new Gravity_Flow_Oauth1_Client(
+				array(
+					'consumer_key'    => $connected_app['consumer_key'],
+					'consumer_secret' => $connected_app['consumer_secret'],
+					'token'           => $access_credentials['oauth_token'],
+					'token_secret'    => $access_credentials['oauth_token_secret'],
+				),
+				'gravi_flow_' . $connected_app['consumer_key'],
+				$this->get_setting( 'url' )
+			);
+
+			if ( ! is_array( $access_credentials ) ) {
+				$this->log_debug( __METHOD__ . '() - No access credentials: ' . print_r( $access_credentials, true ) );
+			} else {
+				$this->oauth1_client->config['token']        = $access_credentials['oauth_token'];
+				$this->oauth1_client->config['token_secret'] = $access_credentials['oauth_token_secret'];
+			}
+			// Note we don't send the final $options[] parameter in here because our request is always sent in the body
+			$headers['Authorization'] = $this->oauth1_client->get_full_request_header( $this->get_setting( 'url' ), $method );
 		}
 
 		$args = array(
@@ -458,7 +552,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		$args = apply_filters( 'gravityflow_webhook_args_' . $this->get_form_id(), $args, $entry, $this );
 
 		$response = wp_remote_request( $url, $args );
-
+		$this->log_debug( __METHOD__ . '() - request: ' . print_r( $args, true ) );
 		$this->log_debug( __METHOD__ . '() - response: ' . print_r( $response, true ) );
 
 		if ( is_wp_error( $response ) ) {
@@ -747,6 +841,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 		return $selected_choice;
 	}
+	
 }
 
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Webhook() );

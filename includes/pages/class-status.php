@@ -484,7 +484,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 			$empty_filter = array(
 				'key'       => '',
-				'text'      => esc_html__( 'Fields', 'gravityforms' ),
+				'text'      => esc_html__( 'Fields', 'gravityflow' ),
 				'operators' => array(),
 			);
 			array_unshift( $form_filters, $empty_filter );
@@ -612,7 +612,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 						<p class="description"><?php esc_html_e( 'Print all of the selected entries at once.', 'gravityflow' ); ?></p>
 
 						<input type="checkbox" name="gravityflow-print-timelines" value="print_timelines" checked="checked" id="gravityflow-print-timelines"/>
-						<label for="gravityflow-print-timelines"><?php esc_html_e( 'Include timelines', 'gravityforms' ); ?></label>
+						<label for="gravityflow-print-timelines"><?php esc_html_e( 'Include timelines', 'gravityflow' ); ?></label>
 						<br/><br/>
 
 						<input type="checkbox" name="gravityflow-print-page-break" value="print_page_break" checked="checked" id="gravityflow-print-page-break"/>

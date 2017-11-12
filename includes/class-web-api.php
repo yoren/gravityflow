@@ -202,7 +202,7 @@ class Gravity_Flow_Web_API {
 	}
 
 	public function die_forbidden() {
-		$this->end( 403, __( 'Forbidden', 'gravityforms' ) );
+		$this->end( 403, __( 'Forbidden', 'gravityflow' ) );
 	}
 }
 
