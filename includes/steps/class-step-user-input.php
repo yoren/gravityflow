@@ -155,7 +155,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					array( 'label' => __( 'Disabled', 'gravityflow' ), 'value' => 'hidden' ),
 					array( 'label' => __( 'Radio buttons (default: In progress)', 'gravityflow' ), 'value' => 'in_progress' ),
 					array( 'label' => __( 'Radio buttons (default: Complete)', 'gravityflow' ), 'value' => 'complete' ),
-					array( 'label' => __( 'Submit buttons (Save Progress and Submit)', 'gravityflow' ), 'value' => 'submit_buttons' ),
+					array( 'label' => __( 'Submit buttons (Save and Submit)', 'gravityflow' ), 'value' => 'submit_buttons' ),
 				),
 			),
 			array(
@@ -775,17 +775,29 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			return;
 		}
 
-		?>
-		<script>
-			(function (GFFlowInput, $) {
-				$(document).ready(function () {
-					$('#gravityflow_update_button').prop('disabled', false);
-					$('#gravityflow_save_progress_button').prop('disabled', false);
-					$('#gravityflow_submit_button').prop('disabled', false);
-				});
-			}(window.GFFlowInput = window.GFFlowInput || {}, jQuery));
-		</script>
-		<?php
+		if ( $this->default_status == 'submit_buttons' ) {
+			?>
+			<script>
+				(function (GFFlowInput, $) {
+					$(document).ready(function () {
+						$('#gravityflow_save_progress_button').prop('disabled', false);
+						$('#gravityflow_submit_button').prop('disabled', false);
+					});
+				}(window.GFFlowInput = window.GFFlowInput || {}, jQuery));
+			</script>
+			<?php
+
+		} else {
+			?>
+			<script>
+				(function (GFFlowInput, $) {
+					$(document).ready(function () {
+						$('#gravityflow_update_button').prop('disabled', false);
+					});
+				}(window.GFFlowInput = window.GFFlowInput || {}, jQuery));
+			</script>
+			<?php
+		}
 	}
 
 	/**
@@ -847,7 +859,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 				$form_id          = absint( $form['id'] );
 
-				$save_progress_button_text   = esc_html__( 'Save Progress', 'gravityflow' );
+				$save_progress_button_text   = esc_html__( 'Save', 'gravityflow' );
 
 				/**
 				* Allows the save_progress button label to be modified on the User Input step when the Save Progress option is set to 'Submit Buttons'.
@@ -867,6 +879,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				* @params string $save_progress_button
 				*/
 				echo apply_filters( 'gravityflow_save_progress_button_user_input', $save_progress_button );
+				echo '&nbsp;&nbsp;';
 
 				$submit_button_text   = esc_html__( 'Submit', 'gravityflow' );
 
