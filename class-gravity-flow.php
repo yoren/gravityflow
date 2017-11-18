@@ -4034,13 +4034,8 @@ PRIMARY KEY  (id)
 
 			$entry_id = absint( rgget( 'lid' ) );
 
-			if ( empty( $entry_id ) ) {
-
-				if ( ! empty( $a['entry_id'] ) ) {
-
+			if ( empty( $entry_id ) && ! empty( $a['entry_id'] ) ) {
 					$entry_id = absint( $a['entry_id'] );
-
-				}
 			}
 
 			if ( ! empty( $a['form'] ) && ! empty( $entry_id ) ) {
@@ -4070,7 +4065,7 @@ PRIMARY KEY  (id)
 					wp_enqueue_script( 'gravityflow_entry_detail' );
 					wp_enqueue_script( 'gravityflow_status_list' );
 
-					if ( rgget( 'view' ) || ! empty( $a['entry_id'] ) ) {
+					if ( rgget( 'view' ) || ! empty( $entry_id ) ) {
 						$html .= $this->get_shortcode_status_page_detail( $a );
 					} else {
 						$html .= $this->get_shortcode_status_page( $a );
