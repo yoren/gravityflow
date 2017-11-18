@@ -250,6 +250,18 @@ class Gravity_Flow_Inbox {
 		$url_entry = esc_url_raw( sprintf( '%s&id=%d&lid=%d', $args['detail_base_url'], $entry['form_id'], $entry['id'] ) );
 		$link      = "<a href='%s'>%s</a>";
 
+		/**
+		 * Allows the entry link to be modified for each of the entries in the inbox table.
+		 *
+		 * @since 1.9.2
+		 *
+		 * @param string $link
+		 * @param string $url_entry
+		 * @param string $entry
+		 * @param string $args
+		 */
+		$link = apply_filters( 'gravityflow_entry_link_inbox_table', $link, $url_entry, $entry, $args );
+
 		echo '<tr>';
 
 		foreach ( $columns as $id => $label ) {
