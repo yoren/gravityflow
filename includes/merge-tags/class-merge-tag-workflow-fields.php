@@ -79,7 +79,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Fields extends Gravity_Flow_Merge_Tag {
 	 * @return bool
 	 */
 	public function merge_tag_filter( $value, $merge_tag, $modifiers, $field ) {
-		if ( ! $this->step->is_editable_field( $field ) && ! $this->step->is_display_field( $field, $this->form, $this->entry ) ) {
+		if ( ! $this->step->is_editable_field( $field ) && ! Gravity_Flow_Common::is_display_field( $field, $this->step, $this->form, $this->entry ) ) {
 			$this->step->log_debug( __METHOD__ . '(): removing field.' );
 			return false;
 		}

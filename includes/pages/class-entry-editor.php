@@ -574,7 +574,7 @@ class Gravity_Flow_Entry_Editor {
 			return false;
 		}
 
-		$display_field = $this->step->is_display_field( $field, $this->form, $this->entry );
+		$display_field = Gravity_Flow_Common::is_display_field( $field, $this->step, $this->form, $this->entry );
 
 		if ( $display_field ) {
 			$this->_display_fields[] = $field->id;

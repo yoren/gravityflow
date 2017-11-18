@@ -321,4 +321,38 @@ class Gravity_Flow_Common {
 		return version_compare( self::get_gravityforms_db_version(), '2.3-dev-1', '<' ) ? 'lead_id' : 'entry_id';
 	}
 
+	/**
+	 * Determines if a field should be displayed.
+	 *
+	 * @since 1.9.2-dev
+	 *
+	 * @param GF_Field               $field            The field properties.
+	 * @param Gravity_Flow_Step|null $current_step     The current step for this entry.
+	 * @param array                  $form             The form for the current entry.
+	 * @param array                  $entry            The entry being processed for display.
+	 * @param bool                   $is_product_field Is the current field one of the product field types.
+	 *
+	 * @return bool
+	 */
+	public static function is_display_field( $field, $current_step, $form, $entry, $is_product_field = false ) {
+		$display_field       = true;
+		$display_fields_mode = $current_step ? $current_step->display_fields_mode : 'all_fields';
+
+		if ( $display_fields_mode === 'selected_fields' ) {
+			$display_fields_selected = $current_step && is_array( $current_step->display_fields_selected ) ? $current_step->display_fields_selected : array();
+
+			if ( ! in_array( $field->id, $display_fields_selected ) ) {
+				$display_field = false;
+			}
+		} else {
+			if ( GFFormsModel::is_field_hidden( $form, $field, array(), $entry ) || $is_product_field ) {
+				$display_field = false;
+			}
+		}
+
+		$display_field = (bool) apply_filters( 'gravityflow_workflow_detail_display_field', $display_field, $field, $form, $entry, $current_step );
+
+		return $display_field;
+	}
+
 }

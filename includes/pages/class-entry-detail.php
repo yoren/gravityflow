@@ -903,7 +903,7 @@ class Gravity_Flow_Entry_Detail {
 	 * @return bool
 	 */
 	public static function is_display_field( $field, $current_step, $form, $entry, $is_product_field ) {
-		return $current_step->is_display_field( $field, $form, $entry, $is_product_field );
+		return Gravity_Flow_Common::is_display_field( $field, $current_step, $form, $entry, $is_product_field );
 	}
 
 	/**
