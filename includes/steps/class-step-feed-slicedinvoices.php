@@ -266,7 +266,13 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 				}
 
 				if ( class_exists( 'Sliced_Shared' ) ) {
-					echo sprintf( '%s: %s<br><br>', esc_html__( 'Status', 'gravityflow' ), esc_html( Sliced_Shared::get_status( $invoice->ID, 'invoice' ) ) );
+					$sent_status = '';
+
+					if ( class_exists( 'Sliced_Shared' ) && Sliced_Invoice::get_email_sent_date( $invoice->ID ) ) {
+						$sent_status = '&nbsp;&ndash;&nbsp;' . esc_html__( 'Invoice Sent', 'gravityflow' );
+					}
+
+					echo sprintf( '%s: %s%s<br><br>', esc_html__( 'Status', 'gravityflow' ), esc_html( Sliced_Shared::get_status( $invoice->ID, 'invoice' ) ), $sent_status );
 				}
 
 				echo '<div class="gravityflow-action-buttons">';
