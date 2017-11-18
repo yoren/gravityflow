@@ -268,7 +268,7 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 				if ( class_exists( 'Sliced_Shared' ) ) {
 					$sent_status = '';
 
-					if ( class_exists( 'Sliced_Shared' ) && Sliced_Invoice::get_email_sent_date( $invoice->ID ) ) {
+					if ( class_exists( 'Sliced_Invoice' ) && Sliced_Invoice::get_email_sent_date( $invoice->ID ) ) {
 						$sent_status = '&nbsp;&ndash;&nbsp;' . esc_html__( 'Invoice Sent', 'gravityflow' );
 					}
 
