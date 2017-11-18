@@ -775,29 +775,21 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			return;
 		}
 
-		if ( $this->default_status == 'submit_buttons' ) {
-			?>
-			<script>
-				(function (GFFlowInput, $) {
-					$(document).ready(function () {
+		?>
+		<script>
+			(function (GravityFlowUserInput, $) {
+				$(document).ready(function () {
+					<?php if ( $this->default_status == 'submit_buttons' ) { ?>
 						$('#gravityflow_save_progress_button').prop('disabled', false);
 						$('#gravityflow_submit_button').prop('disabled', false);
-					});
-				}(window.GFFlowInput = window.GFFlowInput || {}, jQuery));
-			</script>
-			<?php
-
-		} else {
-			?>
-			<script>
-				(function (GFFlowInput, $) {
-					$(document).ready(function () {
+					<?php } else { ?>
 						$('#gravityflow_update_button').prop('disabled', false);
-					});
-				}(window.GFFlowInput = window.GFFlowInput || {}, jQuery));
-			</script>
-			<?php
-		}
+					<?php } ?>
+				});
+			}(window.GravityFlowUserInput = window.GravityFlowUserInput || {}, jQuery));
+		</script>
+
+		<?php
 	}
 
 	/**
@@ -871,7 +863,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				$save_progress_button_text   = apply_filters( 'gravityflow_save_progress_button_text_user_input', $save_progress_button_text, $form, $this );
 				$save_progress_button_click  = "jQuery('#action').val('update'); jQuery('#gravityflow_status_hidden').val('in_progress'); jQuery('#gform_{$form_id}').submit(); return false;";
 				$save_progress_button_id     = 'gravityflow_save_progress_button';
-				$save_progress_button        = '<input id="' . $save_progress_button_id . '" disabled="disabled" class="button button-large button-primary" type="submit" tabindex="4" value="' . $save_progress_button_text . '" name="in_progress" onclick="' . $save_progress_button_click . '"/>';
+				$save_progress_button        = '<input id="' . $save_progress_button_id . '" disabled="disabled" class="button button-large button-secondary" type="submit" tabindex="4" value="' . $save_progress_button_text . '" name="in_progress" onclick="' . $save_progress_button_click . '" style="margin-right:10px;" />';
 
 				/**
 				* Allows the save_progress button to be modified on the User Input step when the Save Progress option is set to 'Submit Buttons'.
@@ -879,7 +871,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				* @params string $save_progress_button
 				*/
 				echo apply_filters( 'gravityflow_save_progress_button_user_input', $save_progress_button );
-				echo '&nbsp;&nbsp;';
 
 				$submit_button_text   = esc_html__( 'Submit', 'gravityflow' );
 
