@@ -2164,11 +2164,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return bool
 	 */
 	public function is_display_field( $field, $form, $entry, $is_product_field = false ) {
-		$display_field           = true;
-		$display_fields_mode     = $this->display_fields_mode;
-		$display_fields_selected = is_array( $this->display_fields_selected ) ? $this->display_fields_selected : array();
+		$display_field = true;
 
-		if ( $display_fields_mode == 'selected_fields' ) {
+		if ( $this->display_fields_mode === 'selected_fields' ) {
+			$display_fields_selected = is_array( $this->display_fields_selected ) ? $this->display_fields_selected : array();
+
 			if ( ! in_array( $field->id, $display_fields_selected ) ) {
 				$display_field = false;
 			}
