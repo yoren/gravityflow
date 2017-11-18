@@ -2138,5 +2138,50 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return $validation_result;
 	}
 
+	/**
+	 * Checks whether a field is an editable field.
+	 *
+	 * @since 1.9.2-dev
+	 *
+	 * @param GF_Field $field The field to be checked.
+	 *
+	 * @return bool
+	 */
+	public function is_editable_field( $field ) {
+		return in_array( $field->id, $this->get_editable_fields() );
+	}
+
+	/**
+	 * Determines if a field should be displayed.
+	 *
+	 * @since 1.9.2-dev
+	 *
+	 * @param GF_Field $field            The field properties.
+	 * @param array    $form             The form for the current entry.
+	 * @param array    $entry            The entry being processed for display.
+	 * @param bool     $is_product_field Is the current field one of the product field types.
+	 *
+	 * @return bool
+	 */
+	public function is_display_field( $field, $form, $entry, $is_product_field = false ) {
+		$display_field           = true;
+		$display_fields_mode     = $this->display_fields_mode;
+		$display_fields_selected = is_array( $this->display_fields_selected ) ? $this->display_fields_selected : array();
+
+		if ( $display_fields_mode == 'selected_fields' ) {
+			if ( ! in_array( $field->id, $display_fields_selected ) ) {
+				$display_field = false;
+			}
+		} else {
+			if ( GFFormsModel::is_field_hidden( $form, $field, array(), $entry ) || $is_product_field ) {
+				$display_field = false;
+			}
+		}
+
+		$display_field = (bool) apply_filters( 'gravityflow_workflow_detail_display_field', $display_field, $field, $form, $entry, $this );
+
+		return $display_field;
+	}
+
 }
 
