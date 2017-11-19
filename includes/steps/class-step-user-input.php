@@ -856,17 +856,20 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				/**
 				* Allows the save_progress button label to be modified on the User Input step when the Save Progress option is set to 'Submit Buttons'.
 				*
+				* @since 1.9.2
+				*
 				* @params string $save_progress_label.
 				* @params array  $form The form for the current entry.
 				* @params Gravity_Flow_Step $this The current step.
 				*/
 				$save_progress_button_text   = apply_filters( 'gravityflow_save_progress_button_text_user_input', $save_progress_button_text, $form, $this );
 				$save_progress_button_click  = "jQuery('#action').val('update'); jQuery('#gravityflow_status_hidden').val('in_progress'); jQuery('#gform_{$form_id}').submit(); return false;";
-				$save_progress_button_id     = 'gravityflow_save_progress_button';
-				$save_progress_button        = '<input id="' . $save_progress_button_id . '" disabled="disabled" class="button button-large button-secondary" type="submit" tabindex="4" value="' . $save_progress_button_text . '" name="in_progress" onclick="' . $save_progress_button_click . '" />';
+				$save_progress_button        = '<input id="gravityflow_save_progress_button" disabled="disabled" class="button button-large button-secondary" type="submit" tabindex="4" value="' . $save_progress_button_text . '" name="in_progress" onclick="' . $save_progress_button_click . '" />';
 
 				/**
 				* Allows the save_progress button to be modified on the User Input step when the Save Progress option is set to 'Submit Buttons'.
+				*
+				* @since 1.9.2
 				*
 				* @params string $save_progress_button
 				*/
@@ -877,17 +880,20 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				/**
 				* Allows the submit button label to be modified on the User Input step when the Save Progress option is set to 'Submit Buttons'.
 				*
+				* @since 1.9.2
+				*
 				* @params string $submit_label
 				* @params array  $form The form for the current entry.
 				* @params Gravity_Flow_Step $this The current step.
 				*/
 				$submit_button_text   = apply_filters( 'gravityflow_submit_button_text_user_input', $submit_button_text, $form, $this );
 				$submit_button_click  = "jQuery('#action').val('update'); jQuery('#gravityflow_status_hidden').val('complete'); jQuery('#gform_{$form_id}').submit(); return false;";
-				$submit_button_id     = 'gravityflow_submit_button';
-				$submit_button        = '<input id="' . $submit_button_id . '" disabled="disabled" class="button button-large button-primary" type="submit" tabindex="5" value="' . $submit_button_text . '" name="save" onclick="' . $submit_button_click . '"/>';
+				$submit_button        = '<input id="gravityflow_submit_button" disabled="disabled" class="button button-large button-primary" type="submit" tabindex="5" value="' . $submit_button_text . '" name="save" onclick="' . $submit_button_click . '"/>';
 
 				/**
 				* Allows the submit button to be modified on the User Input step when the Save Progress option is set to 'Submit Buttons'
+				*
+				* @since 1.9.2
 				*
 				* @params string $submit_button
 				*/
@@ -899,6 +905,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				/**
 				* Allows the update button label to be modified on the User Input step when the Save Progress option is set to hidden or either radio button setting.
 				*
+				* @since unknown
+				*
 				* @params string $update_label
 				* @params array  $form The form for the current entry.
 				* @params Gravity_Flow_Step $this The current step.
@@ -907,12 +915,12 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 				$form_id          = absint( $form['id'] );
 				$button_click     = "jQuery('#action').val('update'); jQuery('#gform_{$form_id}').submit(); return false;";
-				$update_button_id = 'gravityflow_update_button';
-
-				$update_button    = '<input id="' . $update_button_id . '" disabled="disabled" class="button button-large button-primary" type="submit" tabindex="4" value="' . $button_text . '" name="save" onclick="' . $button_click . '"/>';
+				$update_button    = '<input id="gravityflow_update_button" disabled="disabled" class="button button-large button-primary" type="submit" tabindex="4" value="' . $button_text . '" name="save" onclick="' . $button_click . '"/>';
 
 				/**
 				* Allows the update button to be modified on the User Input step when the Save Progress option is set to hidden or either radio button setting.
+				*
+				* @since unknown
 				*
 				* @params string $update_button
 				*/
