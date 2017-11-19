@@ -24,20 +24,27 @@ class Gravity_Flow_Email {
 	 * @param array $entry        The current entry.
 	 */
 	public static function send_notification( $notification, $form, $entry ) {
+		gravity_flow()->log_debug( sprintf( '%s(): Running for notification (#%s - %s).', __METHOD__, rgar( $notification, 'id' ), rgar( $notification, 'name' ) ) );
+
 		$result = false;
 
 		if ( $add_on = self::get_add_on_instance() ) {
 			$feed        = self::get_feed( $notification );
 			$add_on_slug = str_replace( 'gravityforms', '', $add_on->get_slug() );
 
+			gravity_flow()->log_debug( sprintf( '%s(): Sending notification via the %s add-on.', __METHOD__, $add_on ) );
+
 			// Attempt to send the email using the email add-on.
 			self::add_email_filter( $add_on_slug, $form['id'], $feed['id'] );
 			$result = $add_on->process_feed( $feed, $entry, $form );
 			self::remove_email_filter( $add_on_slug, $form['id'], $feed['id'] );
+
+			gravity_flow()->log_debug( sprintf( '%s(): Result: %s', __METHOD__, var_export( (bool) $result, 1  ) ) );
 		}
 
 		if ( ! $result ) {
 			// If an add-on was not available or sending by the add-on failed pass the notification to Gravity Forms for sending by wp_mail().
+			gravity_flow()->log_debug( sprintf( '%s(): Sending notification via Gravity Forms and wp_mail().', __METHOD__ ) );
 			GFCommon::send_notification( $notification, $form, $entry );
 		}
 	}
@@ -151,6 +158,8 @@ class Gravity_Flow_Email {
 		if ( ! is_array( $notification_attachments ) ) {
 			return $email;
 		}
+
+		gravity_flow()->log_debug( sprintf( '%s(): Attaching notification files.', __METHOD__ ) );
 
 		$filter_parts = explode( '_', current_filter() );
 		$add_on_slug  = $filter_parts[1];
