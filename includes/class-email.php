@@ -27,10 +27,13 @@ class Gravity_Flow_Email {
 		$result = false;
 
 		if ( $add_on = self::get_add_on_instance() ) {
-			$feed = self::get_feed( $notification );
+			$feed        = self::get_feed( $notification );
+			$add_on_slug = str_replace( 'gravityforms', '', $add_on->get_slug() );
 
 			// Attempt to send the email using the email add-on.
+			self::add_email_filter( $add_on_slug, $form['id'], $feed['id'] );
 			$result = $add_on->process_feed( $feed, $entry, $form );
+			self::remove_email_filter( $add_on_slug, $form['id'], $feed['id'] );
 		}
 
 		if ( ! $result ) {
@@ -88,8 +91,8 @@ class Gravity_Flow_Email {
 	 */
 	public static function get_feed( $notification ) {
 		$feed = array(
-			'id'   => rgar( $notification, 'id' ),
-			'meta' => array(
+			'id'          => rgar( $notification, 'id', '' ),
+			'meta'        => array(
 				'feedName'          => rgar( $notification, 'name' ),
 				'sendTo'            => rgar( $notification, 'to' ),
 				'fromName'          => rgar( $notification, 'fromName' ),
@@ -100,9 +103,97 @@ class Gravity_Flow_Email {
 				'message'           => rgar( $notification, 'message' ),
 				'disableAutoFormat' => rgar( $notification, 'disableAutoformat' ),
 			),
+			'attachments' => rgar( $notification, 'attachments' ),
 		);
 
 		return $feed;
+	}
+
+	/**
+	 * Add the email filter for the current add-on.
+	 *
+	 * @since 1.9.2-dev
+	 *
+	 * @param string $slug    The email add-on slug.
+	 * @param int    $form_id The current form ID.
+	 * @param string $feed_id The current feed ID.
+	 */
+	public static function add_email_filter( $slug, $form_id, $feed_id ) {
+		add_filter( "gform_{$slug}_email_{$form_id}_{$feed_id}", array( __CLASS__, 'filter_email' ), 20, 2 );
+	}
+
+	/**
+	 * Remove the email filter for the current add-on.
+	 *
+	 * @since 1.9.2-dev
+	 *
+	 * @param string $slug    The email add-on slug.
+	 * @param int    $form_id The current form ID.
+	 * @param string $feed_id The current feed ID.
+	 */
+	public static function remove_email_filter( $slug, $form_id, $feed_id ) {
+		remove_filter( "gform_{$slug}_email_{$form_id}_{$feed_id}", array( __CLASS__, 'filter_email' ), 20 );
+	}
+
+
+	/**
+	 * Adds any attachments from the notification to the email during feed processing.
+	 *
+	 * @since 1.9.2-dev
+	 *
+	 * @param array $email The email properties.
+	 * @param array $feed  The current feed.
+	 *
+	 * @return array
+	 */
+	public static function filter_email( $email, $feed ) {
+		$notification_attachments = rgar( $feed, 'attachments' );
+		if ( ! is_array( $notification_attachments ) ) {
+			return $email;
+		}
+
+		$filter_parts = explode( '_', current_filter() );
+		$add_on_slug  = $filter_parts[1];
+
+		switch ( $add_on_slug ) {
+			case 'mailgun' :
+				$email['attachment'] = self::get_attachments( rgar( $email, 'attachment' ), $notification_attachments );
+				break;
+
+			case 'postmark' :
+				$email['Attachments'] = self::get_attachments( rgar( $email, 'Attachments' ), $notification_attachments );
+				break;
+
+			case 'sendgrid' :
+				$email['attachments'] = self::get_attachments( rgar( $email, 'attachments' ), $notification_attachments );
+				break;
+		}
+
+		return $email;
+	}
+
+	/**
+	 * Get the attachments for the current email.
+	 *
+	 * @since 1.9.2-dev
+	 *
+	 * @param array|null $email_attachments        The emails current attachments.
+	 * @param array      $notification_attachments The notification attachments.
+	 *
+	 * @return array
+	 */
+	public static function get_attachments( $email_attachments, $notification_attachments ) {
+		if ( ! is_array( $email_attachments ) ) {
+			$email_attachments = array();
+		}
+
+		$add_on = self::get_add_on_instance();
+
+		foreach ( $notification_attachments as $file_path ) {
+			$email_attachments[] = $add_on->get_attachment( $file_path );
+		}
+
+		return $email_attachments;
 	}
 
 }
