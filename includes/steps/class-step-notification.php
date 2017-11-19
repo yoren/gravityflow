@@ -75,8 +75,11 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 		}
 
 		$entry = $this->get_entry();
+		$form  = $this->get_form();
 
-		$form = $this->get_form();
+		if ( ! class_exists( 'Gravity_Flow_Email' ) ) {
+			require_once( gravity_flow()->get_base_path() . '/includes/class-email.php' );
+		}
 
 		foreach ( $form['notifications'] as $notification ) {
 			$notification_id = $notification['id'];
@@ -86,7 +89,8 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 					$this->log_debug( __METHOD__ . "(): Notification conditional logic not met, not processing notification (#{$notification_id} - {$notification['name']})." );
 					continue;
 				}
-				GFCommon::send_notification( $notification, $form, $entry );
+
+				Gravity_Flow_Email::send_notification( $notification, $form, $entry );
 				$this->log_debug( __METHOD__ . "(): Notification sent (#{$notification_id} - {$notification['name']})." );
 
 				$this->add_note( sprintf( esc_html__( 'Sent Notification: %s', 'gravityflow' ), $notification['name'] ) );
