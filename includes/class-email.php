@@ -32,7 +32,8 @@ class Gravity_Flow_Email {
 			$feed        = self::get_feed( $notification );
 			$add_on_slug = str_replace( 'gravityforms', '', $add_on->get_slug() );
 
-			gravity_flow()->log_debug( sprintf( '%s(): Sending notification via the %s add-on.', __METHOD__, $add_on ) );
+			gravity_flow()->log_debug( sprintf( '%s(): Sending notification via the %s add-on.', __METHOD__, $add_on_slug ) );
+			$add_on->log_debug( sprintf( '%s(): Sending notification (#%s - %s).', __METHOD__, rgar( $notification, 'id' ), rgar( $notification, 'name' ) ) );
 
 			// Attempt to send the email using the email add-on.
 			self::add_email_filter( $add_on_slug, $form['id'], $feed['id'] );
