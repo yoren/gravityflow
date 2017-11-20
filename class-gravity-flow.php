@@ -3992,7 +3992,7 @@ PRIMARY KEY  (id)
 					do_action( 'gravityflow_workflow_complete', $entry_id, $form, $final_status );
 					// Refresh entry after action.
 					$entry = GFAPI::get_entry( $entry_id );
-					GFAPI::send_notifications( $form, $entry, 'workflow_complete' );
+					Gravity_Flow_Email::send_notifications( $form, $entry, 'workflow_complete' );
 				} else {
 					$this->log_debug( __METHOD__ . '() - not ending workflow.' );
 					$step_id = $step->get_id();

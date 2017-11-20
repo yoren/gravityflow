@@ -928,7 +928,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			$this->maybe_perform_post_action( $entry, $this->post_action_on_rejection );
 		}
 		if ( $status == 'approved' || $status == 'rejected' ) {
-			GFAPI::send_notifications( $this->get_form(), $entry, 'workflow_approval' );
+			Gravity_Flow_Email::send_notifications( $this->get_form(), $entry, 'workflow_approval' );
 		}
 		parent::end();
 	}

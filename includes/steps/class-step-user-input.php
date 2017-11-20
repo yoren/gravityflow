@@ -500,7 +500,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		$this->update_step_status( $status );
 		$entry = $this->refresh_entry();
 
-		GFAPI::send_notifications( $form, $entry, 'workflow_user_input' );
+		Gravity_Flow_Email::send_notifications( $form, $entry, 'workflow_user_input' );
 
 		return $feedback;
 	}
