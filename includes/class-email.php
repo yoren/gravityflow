@@ -21,7 +21,7 @@ class Gravity_Flow_Email {
 	 *
 	 * @param array $form The current form.
 	 * @param array $entry The current entry.
-	 * @param array $event The event that triggered the notifications.
+	 * @param string $event The event that triggered the notifications.
 	 */
 	public static function send_notifications( $form, $entry, $event ) {
 		if ( rgempty( 'notifications', $form ) || ! is_array( $form['notifications'] ) ) {
