@@ -76,6 +76,7 @@ class Gravity_Flow_Bootstrap {
 		}
 
 		require_once( dirname( __FILE__ ) . '/includes/class-common.php' );
+		require_once( dirname( __FILE__ ) . '/includes/class-email.php' );
 
 		require_once( 'includes/class-connected-apps.php' );
 		require_once( 'class-gravity-flow.php' );

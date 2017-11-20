@@ -77,10 +77,6 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 		$entry = $this->get_entry();
 		$form  = $this->get_form();
 
-		if ( ! class_exists( 'Gravity_Flow_Email' ) ) {
-			require_once( gravity_flow()->get_base_path() . '/includes/class-email.php' );
-		}
-
 		foreach ( $form['notifications'] as $notification ) {
 			$notification_id = $notification['id'];
 			$setting_key     = 'notification_id_' . $notification_id;
