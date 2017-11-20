@@ -15,6 +15,46 @@ if ( ! class_exists( 'GFForms' ) ) {
 class Gravity_Flow_Email {
 
 	/**
+	 * Sends applicable notifications for the event which occurred.
+	 *
+	 * @since 1.9.2-dev
+	 *
+	 * @param array $form The current form.
+	 * @param array $entry The current entry.
+	 * @param array $event The event that triggered the notifications.
+	 */
+	public static function send_notifications( $form, $entry, $event ) {
+		if ( rgempty( 'notifications', $form ) || ! is_array( $form['notifications'] ) ) {
+			return;
+		}
+
+		gravity_flow()->log_debug( sprintf( '%s(): Processing notifications for %s event for entry #%s (only active/applicable notifications are sent).', __METHOD__, $event, rgar( $entry, 'id' ) ) );
+
+		foreach ( $form['notifications'] as $notification ) {
+			if ( rgar( $notification, 'event' ) != $event ) {
+				continue;
+			}
+
+			if ( gf_apply_filters( array( 'gform_disable_notification', $form['id'] ), false, $notification, $form, $entry ) ) {
+				gravity_flow()->log_debug( sprintf( '%s(): Notification is disabled by gform_disable_notification hook, not processing notification (#%s - %s).', __METHOD__, rgar( $notification, 'id' ), rgar( $notification, 'name' ) ) );
+				continue;
+			}
+
+			if ( rgempty( 'isActive', $notification ) ) {
+				gravity_flow()->log_debug( sprintf( '%s(): Notification is inactive, not processing notification (#%s - %s).', __METHOD__, rgar( $notification, 'id' ), rgar( $notification, 'name' ) ) );
+				continue;
+			}
+
+			if ( ! GFCommon::evaluate_conditional_logic( rgar( $notification, 'conditionalLogic' ), $form, $entry ) ) {
+				gravity_flow()->log_debug( sprintf( '%s(): Notification conditional logic not met, not processing notification (#%s - %s).', __METHOD__, rgar( $notification, 'id' ), rgar( $notification, 'name' ) ) );
+				continue;
+			}
+
+			self::send_notification( $notification, $form, $entry );
+		}
+	}
+
+	/**
 	 * Send the given notification.
 	 *
 	 * @since 1.9.2-dev
