@@ -167,6 +167,8 @@ tr#gaddon-setting-row-step_type label > span > i {
     color:#0074a2;
 }
 
+.gravityflow-step-highlight-type-container,
+.gravityflow-step-highlight-color-container,
 .gravityflow-schedule-type-container,
 .gravityflow-schedule-delay-container,
 .gravityflow-schedule-date-container,
@@ -174,6 +176,10 @@ tr#gaddon-setting-row-step_type label > span > i {
 .gravityflow-expiration-delay-container,
 .gravityflow-expiration-date-container{
     margin: 10px 0 10px 0;
+}
+
+.gravityflow-step-highlight-type-container {
+    display: none; 
 }
 
 .gravityflow_display_fields_selected_container{

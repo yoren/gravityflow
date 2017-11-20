@@ -334,7 +334,10 @@ table.entry-products col.entry-products-col4{
         width:100%!important;
         border-top:1px solid #ddd !important;
     }
-
+    
+    table#gravityflow-inbox td[data-label="Highlight"] {
+        display: none !important;
+    }
 }
 
 div.gf_entry_wrap {
@@ -353,6 +356,12 @@ table#gravityflow-inbox th{
 
 table#gravityflow-inbox{
     border-top:1px solid #ddd!important;
+}
+
+table#gravityflow-inbox tbody tr{
+    border-left-width: 3px;
+    border-left-style: solid;
+    border-left-color: transparent;
 }
 
 #gravityflow-admin-action{

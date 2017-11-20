@@ -306,3 +306,9 @@ span.gf_admin_page_formid {
     cursor:default;
     border-bottom: 1px solid #eee;
 }
+
+/* Step Highlight */
+table#gravityflow-inbox tbody tr{
+    border-left-width: 3px;
+    border-left-style: solid;
+}

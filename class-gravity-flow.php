@@ -443,7 +443,7 @@ PRIMARY KEY  (id)
 				array(
 					'handle'  => 'gravityflow_feed_list',
 					'src'     => $this->get_base_url() . "/js/feed-list{$min}.js",
-					'deps'    => array( 'jquery', 'jquery-ui-sortable' ),
+					'deps'    => array( 'jquery', 'jquery-ui-sortable', 'wp-color-picker' ),
 					'version' => $this->_version,
 					'enqueue' => array(
 						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow' ),
@@ -702,8 +702,11 @@ PRIMARY KEY  (id)
 					'handle'  => 'gravityflow_feed_list',
 					'src'     => $this->get_base_url() . "/css/feed-list{$min}.css",
 					'version' => $this->_version,
+					'deps' => array( 'wp-color-picker' ),
 					'enqueue' => array(
-						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow' ),
+						array(
+							'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow',
+						),
 					),
 				),
 				array(
@@ -874,7 +877,6 @@ PRIMARY KEY  (id)
 		 * @return array
 		 */
 		public function feed_settings_fields() {
-
 			$current_step_id = $this->get_current_feed_id();
 
 			$step_type_choices = array();
@@ -926,6 +928,13 @@ PRIMARY KEY  (id)
 						'type'  => 'textarea',
 					),
 					$step_type_setting,
+					array(
+						'name'                => 'step_highlight',
+						'label'               => esc_html__( 'Highlight', 'gravityflow' ),
+						'type'                => 'step_highlight',
+						'required'            => false,
+						'tooltip'             => esc_html__( 'Highlighting a step will help to differentiate it when editing Workflow Steps. It can also be enabled as a column (highlight) in the Inbox Shortcode to identify the step of each entry.', 'gravityflow' ),
+					),
 					array(
 						'name'           => 'condition',
 						'tooltip'        => esc_html__( "Build the conditional logic that should be applied to this step before it's allowed to be processed. If an entry does not meet the conditions of this step it will fall on to the next step in the list.", 'gravityflow' ),
@@ -1801,6 +1810,91 @@ PRIMARY KEY  (id)
 			<?php
 		}
 
+		public function settings_step_highlight( $field, $echo = true ) {
+			$field = $this->prepare_settings_step_highlight( $field );
+
+			return $this->settings_step_highlight_container( $field, $echo );
+		}
+
+		public function prepare_settings_step_highlight( $field ) {
+			unset( $field['settings'] );
+
+			$step_highlight = array(
+				'name'     => 'step_highlight',
+				'type'     => 'checkbox',
+				'required' => false,
+				'choices'  => array(
+					array(
+						'label' => esc_html__( 'Highlight this step', 'gravityflow' ),
+						'name'  => 'step_highlight',
+					),
+				),
+			);
+			$field['settings']['step_highlight'] = $step_highlight;
+
+			$step_highlight_type = array(
+				'name'           => 'step_highlight_type',
+				'type'           => 'hidden',
+				'default_value'  => 'color',
+				'required'       => true,
+			);
+			$field['settings']['step_highlight_type'] = $step_highlight_type;
+
+			$step_highlight_color = array(
+				'name'                => 'step_highlight_color',
+				'id'                  => 'step_highlight_color',
+				'class'               => 'small-text',
+				'label'               => esc_html__( 'Color', 'gravityflow' ),
+				'type'                => 'text',
+				'required'            => true,
+				'default_value'       => '#dd3333',
+			);
+			$field['settings']['step_highlight_color'] = $step_highlight_color;
+
+			return $field;
+		}
+
+		public function settings_step_highlight_container( $field, $echo = true ) {
+			$form = $this->get_current_form();
+			$step_settings = rgar( $field, 'settings' );
+
+			if ( empty( $step_settings ) ) {
+				return '';
+			}
+
+			$this->settings_checkbox( $step_settings['step_highlight'] );
+
+			$enabled = $this->get_setting( 'step_highlight', false );
+			$step_highlight_style = $enabled ? '' : 'style="display:none;"';
+			$step_highlight_type_setting = $this->get_setting( 'step_highlight_type', 'color' );
+			$step_highlight_color_style = ( $step_highlight_type_setting == 'color' ) ? '' : 'style="display:none;"';
+			?>
+			<div class="gravityflow-step-highlight-settings" <?php echo $step_highlight_style; ?> >
+				<div class="gravityflow-step-highlight-type-container">
+					<?php $this->settings_hidden( $step_settings['step_highlight_type'] ); ?>
+				</div>
+				<div class="gravityflow-step-highlight-color-container" <?php echo $step_highlight_color_style; ?> >
+					<?php
+					$this->settings_text( $step_settings['step_highlight_color'] );
+					?>
+				</div>
+			</div>
+			<script>
+				(function($) {
+					$( '#step_highlight' ).click(function(){
+						$('.gravityflow-step-highlight-settings').slideToggle();
+						$('.gravityflow-step-highlight-color-container').slideToggle();
+					});
+					$(document).ready(function () {
+						$("#step_highlight_color").wpColorPicker();
+					});
+				})(jQuery); 
+			</script>
+			<?php
+
+			return;
+		}
+
 		public function settings_tabs( $tabs_field ) {
 			printf( '<div id="tabs-%s">', $tabs_field['name'] );
 			echo '<ul>';
@@ -1852,7 +1946,6 @@ PRIMARY KEY  (id)
 		 * @return string
 		 */
 		public function settings_checkbox_and_container( $field, $echo = true ) {
-
 			$checkbox_field = rgar( $field, 'checkbox' );
 
 			if ( empty( $checkbox_field ) ) {
@@ -1950,7 +2043,6 @@ PRIMARY KEY  (id)
 		 * @return string
 		 */
 		public function settings_checkbox_and_text( $field, $echo = true ) {
-
 			$text_input = rgars( $field, 'text' );
 
 			$text_field = array(
@@ -1985,7 +2077,6 @@ PRIMARY KEY  (id)
 		 * @return string
 		 */
 		public function settings_checkbox_and_textarea( $field, $echo = true ) {
-
 			$field = $this->prepare_settings_checkbox_and_textarea( $field );
 
 			return $this->settings_checkbox_and_container( $field, $echo );
@@ -2008,6 +2099,7 @@ PRIMARY KEY  (id)
 			unset( $field['textarea'] );
 
 			$field['settings'] = array( 'textarea' => $textarea_field );
+
 			return $field;
 		}
 
@@ -2019,6 +2111,29 @@ PRIMARY KEY  (id)
 
 			$this->validate_checkbox_settings( $checkbox_field, $settings );
 			$this->validate_textarea_settings( $textarea_field, $settings );
+		}
+
+		public function validate_step_highlight_settings( $field, $settings ) {
+			$field = $this->prepare_settings_step_highlight( $field );
+
+			$checkbox_field = $field['settings']['step_highlight'];
+			$this->validate_checkbox_settings( $checkbox_field, $settings );
+
+			$radio_field = $field['settings']['step_highlight_type'];
+			$this->validate_radio_settings( $radio_field, $settings );
+
+			$color_field = $field['settings']['step_highlight_color'];
+			$this->validate_text_settings( $color_field, $settings );
+			$this->validate_step_highlight_color_settings( $color_field, $settings );
+
+		}
+
+		public function validate_step_highlight_color_settings( $field, $settings ) {
+
+			if ( ! preg_match( '/^#[a-f0-9]{6}$/i', $settings['step_highlight_color'] ) ) {
+				$this->set_field_error( $field, __( 'You must provide a color value for the highlight.', 'gravityflow' ) );
+			}
+
 		}
 
 		public function settings_visual_editor( $field ) {
@@ -2101,9 +2216,9 @@ PRIMARY KEY  (id)
 		 * @return array
 		 */
 		public function feed_list_columns() {
-
 			$columns = array(
 				'step_name' => __( 'Step name', 'gravityflow' ),
+				'step_highlight' => '',
 				'step_type' => esc_html__( 'Step Type', 'gravityflow' ),
 			);
 
@@ -2143,6 +2258,32 @@ PRIMARY KEY  (id)
 			$url = admin_url( 'admin.php?page=gf_entries&view=entries&id='. $form_id . '&field_id=workflow_step&operator=is&s=' . $step_id );
 			$link = sprintf( '<a href="%s">%d</a>', $url, $count );
 			return $link;
+		}
+
+		public function get_column_value_step_highlight( $item ) {
+			$step_highlight = '';
+
+			if ( ! empty( $item['meta']['step_highlight'] ) ) {
+				switch ( $item['meta']['step_highlight_type'] ) :
+
+					case 'color':
+						if ( preg_match( '/^#[a-f0-9]{6}$/i', $item['meta']['step_highlight_color'] ) ) {
+							$step_highlight = '<div class="step_highlight step_highlight_color" style="background-color: ' . $item['meta']['step_highlight_color'] . ';">&nbsp;</div>';
+						}
+						break;
+
+					case 'text':
+						$step_highlight = '<div class="step_highlight step_highlight_text">' . $item['meta']['step_highlight_text'] . '</div>';
+						break;
+
+					case 'icon':
+						$step_highlight = $item['meta']['step_highlight_icon'];
+						break;
+
+				endswitch;
+			}
+
+			return $step_highlight;
 		}
 
 		public function feed_list_no_item_message() {
@@ -3420,6 +3561,7 @@ PRIMARY KEY  (id)
 				'check_permissions'    => true,
 				'show_header'          => true,
 				'timeline'             => true,
+				'step_highlight'       => true,
 			);
 
 			$args = array_merge( $defaults, $args );
@@ -4126,6 +4268,7 @@ PRIMARY KEY  (id)
 				'step_status'      => true,
 				'workflow_info'    => true,
 				'sidebar'          => true,
+				'step_highlight'   => true,
 			);
 
 			return $defaults;
@@ -4162,7 +4305,6 @@ PRIMARY KEY  (id)
 		public function get_shortcode_inbox_page( $a ) {
 			wp_enqueue_script( 'gravityflow_entry_detail' );
 			wp_enqueue_script( 'gravityflow_status_list' );
-
 			$args = array(
 				'form_id'              => $a['form'],
 				'id_column'            => $a['id_column'],
@@ -4177,6 +4319,7 @@ PRIMARY KEY  (id)
 				'step_status'          => $a['step_status'],
 				'workflow_info'        => $a['workflow_info'],
 				'sidebar'              => $a['sidebar'],
+				'step_highlight'       => $a['step_highlight'],
 			);
 
 			ob_start();

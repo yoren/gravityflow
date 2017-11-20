@@ -5,6 +5,11 @@
         if ( $('table.wp-list-table tbody tr').length == 1 ) {
             return;
         }
+
+        $.each( $('.wp-list-table tbody tr'), function() { 
+            $( this ).css( 'border-left', '5px solid ' + $(this).find('.step_highlight_color').css( 'background-color' ) );
+        });
+
         var sortHandleMarkup = '<td class="sort-column"><i class="fa fa-bars feed-sort-handle"></i></td>';
         $('.wp-list-table thead tr, .wp-list-table tfoot tr').append('<th class="sort-column"></th>');
         $('.wp-list-table tbody tr').append(sortHandleMarkup);

@@ -93,14 +93,16 @@ class Gravity_Flow_Inbox {
 			'display_empty_fields' => true,
 			'id_column'            => true,
 			'submitter_column'     => true,
-			'actions_column' => false,
+			'actions_column'       => false,
 			'step_column'          => true,
 			'check_permissions'    => true,
 			'form_id'              => absint( rgar( $filter, 'form_id' ) ),
 			'field_ids'            => $field_ids,
 			'detail_base_url'      => admin_url( 'admin.php?page=gravityflow-inbox&view=entry' ),
 			'last_updated'         => false,
+			'step_highlight'       => true,
 		);
+
 	}
 
 	/**
@@ -192,6 +194,9 @@ class Gravity_Flow_Inbox {
 	 */
 	public static function get_columns( $args ) {
 		$columns = array();
+		if ( $args['step_highlight'] ) {
+			$columns['step_highlight'] = 'step_highlight';
+		}
 
 		if ( $args['id_column'] ) {
 			$columns['id'] = __( 'ID', 'gravityflow' );
@@ -232,7 +237,10 @@ class Gravity_Flow_Inbox {
 		echo '<thead><tr>';
 
 		foreach ( $columns as $label ) {
-			echo sprintf( '<th data-label="%s">%s</th>', esc_attr( $label ), esc_html( $label ) );
+
+			if ( $label !== 'step_highlight' ) {
+				echo sprintf( '<th data-label="%s">%s</th>', esc_attr( $label ), esc_html( $label ) );
+			}
 		}
 
 		echo '</tr></thead>';
@@ -262,7 +270,35 @@ class Gravity_Flow_Inbox {
 		 */
 		$link = apply_filters( 'gravityflow_entry_link_inbox_table', $link, $url_entry, $entry, $args );
 
-		echo '<tr>';
+		$step_highlight_color = '';
+		if ( array_key_exists( 'step_highlight', $columns ) && isset( $entry['workflow_step'] ) ) {
+			$step = gravity_flow()->get_step( $entry['workflow_step'] );
+			if ( $step ) {
+				$meta = $step->get_feed_meta();
+				if ( $meta && isset( $meta['step_highlight_type'] ) ) {
+					if ( isset( $meta['step_highlight_color'] ) && preg_match( '/^#[a-f0-9]{6}$/i', $meta['step_highlight_color'] ) ) {
+						$step_highlight_color = $meta['step_highlight_color'];
+					}
+				}
+			}
+		}
+		/**
+		 * Allow the Step Highlight colour to be overridden.
+		 *
+		 * @since 1.9.2
+		 *
+		 * @param string $highlight The highlight color (hex value) of the row currently being processed.
+		 * @param int $form['id'] The ID of form currently being processed.
+		 * @param array $entry The entry object for the row currently being processed.
+		 */
+		$step_highlight = apply_filters( 'gravityflow_step_highlight_color_inbox', $step_highlight_color, $form['id'], $entry );
+
+		if ( strlen( $step_highlight_color ) > 0 ) {
+			echo '<tr style="border-left-color: ' . $step_highlight_color . ';">';
+			unset( $columns['step_highlight'] );
+		} else {
+			echo '<tr>';
+		}
 
 		foreach ( $columns as $id => $label ) {
 			$value = self::get_column_value( $id, $form, $entry, $columns );
