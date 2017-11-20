@@ -29,8 +29,8 @@ class Gravity_Flow_Email {
 		$result = false;
 
 		if ( $add_on = self::get_add_on_instance() ) {
-			$feed        = self::get_feed( $notification );
 			$add_on_slug = str_replace( 'gravityforms', '', $add_on->get_slug() );
+			$feed        = self::get_feed( $notification, $add_on_slug );
 
 			gravity_flow()->log_debug( sprintf( '%s(): Sending notification via the %s add-on.', __METHOD__, $add_on_slug ) );
 			$add_on->log_debug( sprintf( '%s(): Sending notification (#%s - %s).', __METHOD__, rgar( $notification, 'id' ), rgar( $notification, 'name' ) ) );
@@ -40,7 +40,7 @@ class Gravity_Flow_Email {
 			$result = $add_on->process_feed( $feed, $entry, $form );
 			self::remove_email_filter( $add_on_slug, $form['id'], $feed['id'] );
 
-			gravity_flow()->log_debug( sprintf( '%s(): Result: %s', __METHOD__, var_export( (bool) $result, 1  ) ) );
+			gravity_flow()->log_debug( sprintf( '%s(): Result: %s', __METHOD__, var_export( (bool) $result, 1 ) ) );
 		}
 
 		if ( ! $result ) {
@@ -93,11 +93,12 @@ class Gravity_Flow_Email {
 	 *
 	 * @since 1.9.2-dev
 	 *
-	 * @param array $notification The notification properties.
+	 * @param array  $notification The notification properties.
+	 * @param string $slug         The email add-on slug.
 	 *
 	 * @return array
 	 */
-	public static function get_feed( $notification ) {
+	public static function get_feed( $notification, $slug ) {
 		$feed = array(
 			'id'          => rgar( $notification, 'id', '' ),
 			'meta'        => array(
@@ -111,6 +112,7 @@ class Gravity_Flow_Email {
 				'message'           => rgar( $notification, 'message' ),
 				'disableAutoFormat' => rgar( $notification, 'disableAutoformat' ),
 			),
+			'addon_slug'  => $slug,
 			'attachments' => rgar( $notification, 'attachments' ),
 		);
 
@@ -143,7 +145,6 @@ class Gravity_Flow_Email {
 		remove_filter( "gform_{$slug}_email_{$form_id}_{$feed_id}", array( __CLASS__, 'filter_email' ), 20 );
 	}
 
-
 	/**
 	 * Adds any attachments from the notification to the email during feed processing.
 	 *
@@ -160,26 +161,33 @@ class Gravity_Flow_Email {
 			return $email;
 		}
 
-		gravity_flow()->log_debug( sprintf( '%s(): Attaching notification files.', __METHOD__ ) );
+		$key = self::get_attachment_key( $feed['addon_slug'] );
 
-		$filter_parts = explode( '_', current_filter() );
-		$add_on_slug  = $filter_parts[1];
-
-		switch ( $add_on_slug ) {
-			case 'mailgun' :
-				$email['attachment'] = self::get_attachments( rgar( $email, 'attachment' ), $notification_attachments );
-				break;
-
-			case 'postmark' :
-				$email['Attachments'] = self::get_attachments( rgar( $email, 'Attachments' ), $notification_attachments );
-				break;
-
-			case 'sendgrid' :
-				$email['attachments'] = self::get_attachments( rgar( $email, 'attachments' ), $notification_attachments );
-				break;
+		if ( $key ) {
+			gravity_flow()->log_debug( sprintf( '%s(): Attaching notification files.', __METHOD__ ) );
+			$email[ $key ] = self::get_attachments( rgar( $email, $key ), $notification_attachments );
 		}
 
 		return $email;
+	}
+
+	/**
+	 * Get the key to use when adding the attachments to the $email array.
+	 *
+	 * @since 1.9.2-dev
+	 *
+	 * @param string $slug The email add-on slug.
+	 *
+	 * @return string
+	 */
+	public static function get_attachment_key( $slug ) {
+		$keys = array(
+			'mailgun'  => 'attachment',
+			'postmark' => 'Attachments',
+			'sendgrid' => 'attachments',
+		);
+
+		return rgar( $keys, $slug );
 	}
 
 	/**
