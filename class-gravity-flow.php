@@ -131,7 +131,6 @@ if ( class_exists( 'GFForms' ) ) {
 			parent::init_admin();
 
 			add_action( 'gform_entry_detail_sidebar_middle', array( $this, 'entry_detail_status_box' ), 10, 2 );
-			add_filter( 'gform_notification_events', array( $this, 'add_notification_event' ), 10, 2 );
 
 			add_filter( 'set-screen-option', array( $this, 'set_option' ), 10, 3 );
 			add_action( 'load-workflow_page_gravityflow-status', array( $this, 'load_screen_options' ) );
@@ -3828,7 +3827,16 @@ PRIMARY KEY  (id)
 			return $feedback;
 		}
 
-		public function add_notification_event( $events, $form ) {
+		/**
+		 * Register the supported notification events.
+		 *
+		 * @param array $form The form currently being processed.
+		 *
+		 * @return array
+		 */
+		public function supported_notification_events( $form ) {
+			$events = array();
+
 			if ( $this->has_feed( $form['id'] ) ) {
 				$events['workflow_approval']   = __( 'Workflow: approved or rejected', 'gravityflow' );
 				$events['workflow_user_input'] = __( 'Workflow: user input', 'gravityflow' );
