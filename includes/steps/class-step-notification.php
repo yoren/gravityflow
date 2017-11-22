@@ -46,6 +46,28 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 			),
 		);
 
+		if ( $email_add_on = Gravity_Flow_Email::get_add_on_instance() ) {
+			$feeds        = $email_add_on->get_feeds( $form['id'] );
+			$feed_choices = array();
+
+			foreach ( $feeds as $feed ) {
+				if ( $feed['is_active'] ) {
+					$feed_choices[] = array(
+						'label' => $feed['meta']['feedName'],
+						'name'  => 'feed_' . $feed['id'],
+					);
+				}
+			}
+
+			$fields[] = array(
+				'name'     => $email_add_on->get_slug() . '_feeds',
+				'label'    => $email_add_on->get_short_title() . esc_html__( 'Feeds', 'gravityflow' ),
+				'type'     => 'checkbox',
+				'required' => false,
+				'choices'  => $feed_choices,
+			);
+		}
+
 		$settings_api                 = $this->get_common_settings_api();
 		$workflow_notification_fields = $settings_api->get_setting_notification( array(
 			'name_prefix'      => 'workflow',
@@ -66,6 +88,14 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 	function process() {
 		$this->log_debug( __METHOD__ . '(): starting' );
 
+		$this->send_form_notifications();
+		$this->send_workflow_notification();
+		$this->process_email_add_on_feeds();
+
+		return true;
+	}
+
+	public function send_form_notifications() {
 		/* Ensure compatibility with Gravity PDF 3.x */
 		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-beta1', '<' ) && class_exists( 'GFPDF_Core' ) ) {
 			global $gfpdf;
@@ -92,10 +122,6 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 				$this->add_note( sprintf( esc_html__( 'Sent Notification: %s', 'gravityflow' ), $notification['name'] ) );
 			}
 		}
-
-		$this->send_workflow_notification();
-
-		return true;
 	}
 
 	public function send_workflow_notification() {
@@ -119,6 +145,35 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 
 	}
 
+	public function process_email_add_on_feeds() {
+		$email_add_on = Gravity_Flow_Email::get_add_on_instance();
+
+		if ( ! $email_add_on ) {
+			return;
+		}
+
+		$entry = $this->get_entry();
+		$form  = $this->get_form();
+		$feeds = $email_add_on->get_feeds( $form['id'] );
+
+		foreach ( $feeds as $feed ) {
+			$setting_key = 'feed_' . $feed['id'];
+			if ( $this->{$setting_key} ) {
+				$label = $feed['meta']['feedName'];
+
+				if ( gravity_flow()->is_feed_condition_met( $feed, $form, $entry ) ) {
+					$email_add_on->process_feed( $feed, $entry, $form );
+					$note = sprintf( esc_html__( 'Processed: %s', 'gravityflow' ), $label );
+					$this->log_debug( __METHOD__ . '() - Feed processed: ' . $label );
+					$this->add_note( $note );
+				} else {
+					$this->log_debug( __METHOD__ . '() - Feed condition not met: ' . $label );
+				}
+			}
+		}
+
+	}
+
 	/**
 	 * Prevent the notifications assigned to the current step from being sent during form submission.
 	 */
@@ -130,7 +185,7 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 	/**
 	 * Prevents the current notification from being sent during form submission if it is selected for this step.
 	 *
-	 * @param bool $is_disabled Indicates if the current notification has already been disabled.
+	 * @param bool  $is_disabled  Indicates if the current notification has already been disabled.
 	 * @param array $notification The current notifications properties.
 	 *
 	 * @return bool
