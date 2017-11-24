@@ -6,7 +6,7 @@
  * Test details:
  * - Fill in the form fields: Firs and Last name, Department (drop down), Extra text field, Start and End dates, Comments
  * - Login to back-end, go to Inbox
- * - Click on the 'Vacation Request' Workflow
+ * - Click on the 'Vacation Request Reject Note' Workflow
  * - Click on the 'Reject' button
  * - See "A note is required"
  * - Add reject note
@@ -19,7 +19,7 @@ $I->wantTo( 'Test the vacation request form with rejected note' );
 
 // Submit the form
 $I->amOnPage( '/vacation-request-reject-note' );
-$I->see( 'Vacation Request' );
+$I->see( 'Vacation Request Reject Note' );
 $I->scrollTo( [ 'css' => '.gform_title' ] );
 $I->fillField('First', 'Some');
 $I->fillField('Last', 'Text');
