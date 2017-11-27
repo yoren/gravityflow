@@ -583,7 +583,7 @@ class Gravity_Flow_Entry_Editor {
 				$display_field = false;
 			}
 		} else {
-			if ( GFFormsModel::is_field_hidden( $this->form, $field, array(), $this->entry ) ) {
+			if ( $field->type !== 'section' && GFFormsModel::is_field_hidden( $this->form, $field, array(), $this->entry ) ) {
 				$display_field = false;
 			}
 			$display_field = (bool) apply_filters( 'gravityflow_workflow_detail_display_field', $display_field, $field, $this->form, $this->entry, $this->step );
