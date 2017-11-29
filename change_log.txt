@@ -7,3 +7,4 @@
 - Fixed a fatal error which could occur when processing the shortcode with the form attribute and the specified entry can't be retrieved.
 - Fixed an issue with the timeline notes for Approval and User Input steps where the step icon is used instead of the user avatar.
 - Fixed an issue with the conditional logic for Section fields on the User Input step.
+- Fixed an issue that feed IDs (step IDs) in feed condition weren't updated after forms imported.
