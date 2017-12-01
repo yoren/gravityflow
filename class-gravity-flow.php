@@ -4856,7 +4856,7 @@ AND m.meta_value='queued'";
 					// Remove the token from the URL to avoid accidental sharing.
 					$secure = ( 'https' === parse_url( home_url(), PHP_URL_SCHEME ) );
 					$sanitized_cookie = sanitize_text_field( $_GET['gflow_access_token'] );
-					setcookie( 'gflow_access_token', $sanitized_cookie, null, SITECOOKIEPATH, null, $secure, true );
+					setcookie( 'gflow_access_token', $sanitized_cookie, null, $this->get_cookie_path(), null, $secure, true );
 
 					$request_uri = remove_query_arg( 'gflow_access_token' );
 
@@ -5164,7 +5164,7 @@ AND m.meta_value='queued'";
 
 		public function filter_wp_login() {
 			unset( $_COOKIE['gflow_access_token'] );
-			setcookie( 'gflow_access_token', null, - 1, SITECOOKIEPATH );
+			setcookie( 'gflow_access_token', null, - 1, $this->get_cookie_path() );
 		}
 
 		public function format_duration( $seconds ) {
@@ -6394,6 +6394,24 @@ AND m.meta_value='queued'";
 						<div class="gform_tab_content" id="tab_<?php echo $current_tab ?>">
 
 		<?php
+		}
+
+		/**
+		 * Get the site cookie path.
+		 *
+		 * @return string
+		 */
+		public function get_cookie_path() {
+			$site_cookie_path = SITECOOKIEPATH;
+
+			/**
+			 * Allow the site cookie path to be overridden.
+			 *
+			 * @since 1.9.2-dev
+			 *
+			 * @param string $site_cookie_path The site cookie path.
+			 */
+			return apply_filters( 'gravityflow_site_cookie_path', $site_cookie_path );
 		}
 	}
 }
