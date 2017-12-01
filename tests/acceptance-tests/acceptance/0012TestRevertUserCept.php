@@ -1,16 +1,6 @@
 <?php
-//$scenario->skip();
 /*
- * Test summary: Test Revert to User with 2 page form and 2 level approval
- *
- * Test details:
- * - Fill up the fields (2 pages)
- * - Submit form
- * - 'First approval' step: Approve the form content (including 'Number' field)
- * - 'Send for number check' step: Modify 'Number' field and click Update
- * - 'Final approval' step: Revert
- * - 'Send for number check' step: update the field number
- * - 'Final approval' step: Accept field value
+ * Purpose: Test revert user
  */
 
 $I = new AcceptanceTester( $scenario );
@@ -18,7 +8,7 @@ $I = new AcceptanceTester( $scenario );
 $I->wantTo( 'Test Revert User' );
 
 // Submit the form
-$I->amOnPage( '/test-revert-user' );
+$I->amOnPage( '/0012-test-revert-user' );
 
 $I->see( 'Test Revert User' );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
@@ -38,7 +28,7 @@ $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->amOnWorkflowPage( 'Inbox' );
-$I->click( 'Test Revert User' );
+$I->click( '0012 Test Revert User' );
 
 // Approve
 $I->waitForElement( 'button[value=approved]', 3 );
@@ -61,3 +51,4 @@ $I->click( 'Submit' );
 // Approve
 $I->waitForElement( 'button[value=approved]', 3 );
 $I->click( 'button[value=approved]' );
+$I->see( 'Entry Approved' );

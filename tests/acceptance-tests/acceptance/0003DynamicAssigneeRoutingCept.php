@@ -1,12 +1,14 @@
 <?php
-//$scenario->skip();
+/*
+ * Purpose: Test assignee routing based on the value of a checkbox field
+ */
 
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test assignee routing based on the value of a checkbox field' );
 
 // Submit the form
-$I->amOnPage( '/dynamic-assignee-routing' );
+$I->amOnPage( '/0003-dynamic-assignee-routing' );
 
 $I->scrollTo( [ 'css' => '.gform_title' ] );
 
@@ -21,7 +23,7 @@ $I->loginAsAdmin();
 
 $I->amOnWorkflowPage( 'Inbox' );
 
-$I->click( 'Dynamic assignee routing' );
+$I->click( 'Dynamic Assignee Routing' );
 
 $I->waitForText( 'User: admin1 admin1 (Pending)', 3 );
 $I->see( 'User: admin3 admin3 (Pending)' );

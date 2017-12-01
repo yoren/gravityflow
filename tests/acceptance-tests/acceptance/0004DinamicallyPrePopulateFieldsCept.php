@@ -1,26 +1,16 @@
 <?php
-//$scenario->skip();
 /*
- * Test summary: Dynamically pre populate fields
- *
- * Test details:
- * - Dynamically Fill up the fields
- * - Submit form
- * - log in as admin2 and update the quantity
- * - 'Validate inserted values' step: first approval depending on the User Condition (should not be admin)
- * - log in as admin and Approve
- * - Workflow complete
- * - Check if status is Approved
+ * Purpose: Test dynamically pre populate fields
  */
 
 $I = new AcceptanceTester( $scenario );
 
-$I->wantTo( 'Dynamically pre populate fields' );
+$I->wantTo( 'Test dynamically pre populate fields' );
 
 // Submit the form
-$I->amOnPage( '/dynamically-pre-populate-fields/?quant=10&prodname=Test product&prodprice=25' );
+$I->amOnPage( '/0004-dynamically-pre-populate-fields/?quant=10&prodname=Test product&prodprice=25' );
 
-$I->waitForText( 'Dynamically pre populate fields', 3 );
+$I->waitForText( 'Dynamically Pre Populate Fields', 3 );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
 $I->selectOption( 'input[name="input_3.1"]', 'First Option' );
 $I->selectOption( 'input[name="input_3.2"]', 'Second Option' );
@@ -41,7 +31,7 @@ $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->amOnWorkflowPage( 'Inbox' );
-$I->click( 'Dynamically pre populate fields' );
+$I->click( 'Dynamically Pre Populate Fields' );
 $I->fillField( 'input[name="input_2"]', '11' );
 $I->fillField( 'textarea[name="gravityflow_note"]', 'Quantity updated!' );
 $I->click( 'Submit' );
@@ -55,7 +45,7 @@ $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->amOnWorkflowPage( 'Inbox' );
-$I->click( 'Dynamically pre populate fields' );
+$I->click( 'Dynamically Pre Populate Fields' );
 
 // Approve
 $I->fillField( 'textarea[name="gravityflow_note"]', 'Order approved' );

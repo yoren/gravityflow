@@ -1,17 +1,6 @@
 <?php
-//$scenario->skip();
 /*
- * Test summary: two pages form, with rejected approval
- *
- * Test details:
- * - Select Third Choice radio button
- * - Go to step 2
- * - Select Third Choice from select box
- * - Login to back-end, go to Inbox
- * - Click on the 'Two pages rejected' Workflow
- * - Check if Reject button is shown
- * - Click on Reject button
- * -
+ * Purpose: Test the two pages on the user input step
  */
 
 $I = new AcceptanceTester( $scenario );
@@ -19,11 +8,11 @@ $I = new AcceptanceTester( $scenario );
 $I->wantTo( 'Test the two pages on the user input step' );
 
 // Submit the form
-$I->amOnPage( '/two-pages-rejected' );
+$I->amOnPage( '/0014-two-pages-rejected' );
 
 $I->makeScreenshot( 'Form loaded.' );
 
-$I->see( 'Two pages rejected' );
+$I->see( '0014 Two Pages Rejected' );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
 $I->selectOption( 'input[name=input_7]', 'Third Choice' );
 $I->scrollTo( [ 'css' => '.gform_page_footer .gform_next_button' ], 20, 50 ); // needed for chromedriver
@@ -45,7 +34,7 @@ $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->amOnWorkflowPage( 'Inbox' );
-$I->click( 'Two pages rejected' );
+$I->click( '0014 Two Pages Rejected' );
 
 // Reject
 $I->click( 'Reject' );

@@ -1,21 +1,16 @@
 <?php
-//$scenario->skip();
 /*
- * Test summary: Schedule step
- *
- * Test details:
- * - Fill up fields
- * - Send notification after 2 minutes after the workflow step is triggered
+ * Purpose: Test scheduling a step
  */
 
 $I = new AcceptanceTester( $scenario );
 
-$I->wantTo( 'Schedule step' );
+$I->wantTo( 'Test scheduling a step' );
 
 // Submit the form
-$I->amOnPage( '/schedule-step' );
+$I->amOnPage( '/0009-schedule-step' );
 
-$I->waitForText( 'Schedule step', 3 );
+$I->waitForText( 'Schedule Step', 3 );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
 
 $I->fillField( 'input[name="input_1"]', 'Some text' );
@@ -30,6 +25,6 @@ $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Status
 $I->amOnWorkflowPage( 'Status' );
-$I->waitForText( 'Schedule step', 3 );
-$I->click( 'Schedule step' );
+$I->waitForText( 'Schedule Step', 3 );
+$I->click( '0009 Schedule Step' );
 $I->waitForText( 'Send schedule notification (Queued)', 3 );

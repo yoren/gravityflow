@@ -1,31 +1,14 @@
 <?php
-//$scenario->skip();
 /*
- * Test summary: Job Apply Agency - test conditional routing, conditional field editing, revert
- *
- * Test details:
- * - Fill up the fields
- * - Submit form
- * - Log in as admin2
- * - 'Get approval' step - conditional routing to specific user based on filled fields
- * - 'Data validation' step - conditional execution of step if phone/email is empty
- * - Modify phone number (Condition editing of fields)
- * - Log in as admin1
- * - Modify email (Condition editing of fields)
- * - Log in as admin
- * - 'Admin approval' step
- * - Press Revert
- * - 'Data validation' step: Edit phone again and add note
- * - 'Admin approval' step: Final approval
- * - Send notification
+ * Purpose: Test the job apply workflow
  */
 
 $I = new AcceptanceTester( $scenario );
 
-$I->wantTo( 'Job Apply Agency' );
+$I->wantTo( 'Test the job apply workflow' );
 
 // Submit the form
-$I->amOnPage( '/job-apply-agency' );
+$I->amOnPage( '/0007-job-apply-agency' );
 
 $I->see( 'Job Apply Agency' );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
@@ -46,7 +29,7 @@ $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->amOnWorkflowPage( 'Inbox' );
-$I->click( 'Job apply agency' );
+$I->click( '0007 Job Apply Agency' );
 
 // Approve
 $I->fillField( 'textarea[name="gravityflow_note"]', 'Added to DB' );
@@ -68,7 +51,7 @@ $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->amOnWorkflowPage( 'Inbox' );
-$I->click( 'Job apply agency' );
+$I->click( '0007 Job Apply Agency' );
 
 // Check data
 $I->fillField( 'input[name="input_5"]', 'example@example.com' );
@@ -84,7 +67,7 @@ $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->amOnWorkflowPage( 'Inbox' );
-$I->click( 'Job apply agency' );
+$I->click( '0007 Job Apply Agency' );
 
 // Approve
 $I->fillField( 'textarea[name="gravityflow_note"]', 'Entry approved' );

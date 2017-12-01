@@ -1,16 +1,6 @@
 <?php
-//$scenario->skip();
 /*
- * Test summary: submit vacation request then reject it with a note
- *
- * Test details:
- * - Fill in the form fields: Firs and Last name, Department (drop down), Extra text field, Start and End dates, Comments
- * - Login to back-end, go to Inbox
- * - Click on the 'Vacation Request Reject Note' Workflow
- * - Click on the 'Reject' button
- * - See "A note is required"
- * - Add reject note
- * - Click on the 'Reject' button
+ * Purpose: Test the vacation request form with rejected note
  */
 
 $I = new AcceptanceTester( $scenario );
@@ -18,8 +8,8 @@ $I = new AcceptanceTester( $scenario );
 $I->wantTo( 'Test the vacation request form with rejected note' );
 
 // Submit the form
-$I->amOnPage( '/vacation-request-reject-note' );
-$I->see( 'Vacation Request Reject Note' );
+$I->amOnPage( '/0018-vacation-request-reject-note' );
+$I->see( '0018 Vacation Request Reject Note' );
 $I->scrollTo( [ 'css' => '.gform_title' ] );
 $I->fillField('First', 'Some');
 $I->fillField('Last', 'Text');
@@ -48,3 +38,4 @@ $I->waitForElement( 'button[value=rejected]', 3 );
 $I->see( 'A note is required' );
 $I->fillField( ['name' => 'gravityflow_note'], 'Dates are expired.' );
 $I->click( 'button[value=rejected]' );
+$I->see( 'Entry Rejected' );

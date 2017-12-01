@@ -1,25 +1,16 @@
 <?php
-//$scenario->skip();
 /*
- * Test summary: Display Total depending on Quantity
- *
- * Test details:
- * - Fill up fields
- * - Enter Quantity equal 1
- * - Select Shipping method
- * - Go to back-end and deny
- * - Send back for rectification
- * - Aprove by all
+ * Purpose: Test total depending on quantity
  */
 
 $I = new AcceptanceTester( $scenario );
 
-$I->wantTo( 'Total depending on Quantity' );
+$I->wantTo( 'Test total depending on quantity' );
 
 // Submit the form
-$I->amOnPage( '/total-depending-on-quantity' );
+$I->amOnPage( '/0013-total-depending-on-quantity' );
 
-$I->see( 'Total depending on Quantity' );
+$I->see( '0013 Total Depending On Quantity' );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
 
 $I->fillField( 'input[name="input_1"]', 'Some text' );
@@ -41,7 +32,7 @@ $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->amOnWorkflowPage( 'Inbox' );
-$I->click( 'Total depending on Quantity' );
+$I->click( '0013 Total Depending On Quantity' );
 
 // Approve
 $I->fillField( 'textarea[name="gravityflow_note"]', 'Change quantity to 2' );
@@ -57,3 +48,4 @@ $I->click( 'Submit' );
 $I->waitForText( '$44.00', 3 );
 $I->seeElement( 'button[value=approved]' );
 $I->click( 'button[value=approved]' );
+$I->see( 'Entry Approved' );

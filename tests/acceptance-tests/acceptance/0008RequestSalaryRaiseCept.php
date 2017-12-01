@@ -1,19 +1,6 @@
 <?php
-//$scenario->skip();
 /*
- * Test summary: Test chained (multiple) approvals through a salary rise document
- *
- * Test details:
- * - Enter number
- * - Select department
- * - Fill Number input with wrong value
- * - If validation error appears, entry numeric only
- * - Submit
- * - Login to back-end, go to Inbox
- * - Click on the 'Request salary raise' Workflow
- * - Aprove request
- * - Send request to CEO
- * - Aprove request by CEO
+ * Purpose: Test the approval steps
  */
 
 $I = new AcceptanceTester( $scenario );
@@ -21,9 +8,9 @@ $I = new AcceptanceTester( $scenario );
 $I->wantTo( 'Test the approval steps' );
 
 // Submit the form
-$I->amOnPage( '/request-salary-raise' );
+$I->amOnPage( '/0008-request-salary-raise' );
 
-$I->waitForText( 'Request salary raise', 3 );
+$I->waitForText( 'Request Salary Raise', 3 );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
 $I->fillField( 'input[name=input_1]', '20%' );
 $I->selectOption( 'select[name=input_2]', 'Third Choice' );
@@ -44,8 +31,8 @@ $I->loginAsAdmin();
 
 // Go to Inbox
 $I->amOnWorkflowPage( 'Inbox' );
-$I->waitForText( 'Request salary raise', 3 );
-$I->click( 'Request salary raise' );
+$I->waitForText( 'Request Salary Raise', 3 );
+$I->click( '0008 Request Salary Raise' );
 
 // Approve
 $I->waitForElement( 'button[value=approved]', 3 );
@@ -58,3 +45,5 @@ $I->click( 'Apply' );
 // Approve
 $I->waitForElement( 'button[value=approved]', 3 );
 $I->click( 'button[value=approved]' );
+
+$I->waitForText( 'Status: Approved', 3 );

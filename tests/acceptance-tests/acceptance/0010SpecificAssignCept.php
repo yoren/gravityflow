@@ -1,27 +1,16 @@
 <?php
-//$scenario->skip();
 /*
- * Test summary: Specific assign
- *
- * Test details:
- * - Fill the fields
- * - Go to back-end to inbox and approve as User admin
- * - Logout
- * - Login as admin2
- * - Go to back-end to inbox and approve as User admin2
- * - Logout
- * - Login as admin3
- * - Go to back-end to inbox and approve as User admin3
+ * Purpose: Test specific assign
  */
 
 $I = new AcceptanceTester( $scenario );
 
-$I->wantTo( 'Specific assign' );
+$I->wantTo( 'Test specific assign' );
 
 // Submit the form
-$I->amOnPage( '/specific-assign' );
+$I->amOnPage( '/0010-specific-assign' );
 
-$I->see( 'Specific assign' );
+$I->see( 'Specific Assign' );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
 
 $I->fillField( 'input[name="input_1"]', 'Some text' );
@@ -41,7 +30,7 @@ $I->seeInCurrentUrl( '/wp-admin/' );
 $I->click( 'Workflow' );
 $I->click( 'Inbox' );
 $I->see( 'Workflow Inbox' );
-$I->click( 'Specific assign' );
+$I->click( 'Specific Assign' );
 
 // Approve
 $I->seeElement( 'button[value=approved]' );
@@ -56,7 +45,7 @@ $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->amOnWorkflowPage( 'Inbox' );
-$I->click( 'Specific assign' );
+$I->click( 'Specific Assign' );
 
 // Approve
 $I->waitForElement( 'button[value=approved]', 3 );
@@ -71,7 +60,7 @@ $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->amOnWorkflowPage( 'Inbox' );
-$I->click( 'Specific assign' );
+$I->click( 'Specific Assign' );
 
 // Approve
 $I->waitForElement( 'button[value=approved]', 3 );

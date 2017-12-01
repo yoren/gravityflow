@@ -1,13 +1,16 @@
 <?php
-//$scenario->skip();
+/*
+ * Purpose: Test the section field conditional logic on the user input step
+ */
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test the section field conditional logic on the user input step' );
 
 // Submit the form
-$I->amOnPage( '/hs4878-user-input-section-logic' );
+$I->amOnPage( '/0021-hs4878-user-input-section-logic' );
 
-$I->see( 'HS4878 User Input Section Logic' );
+$I->see( '0021 HS4878 User Input Section Logic' );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
 $I->checkOption( 'input[name=input_1\\.2]' );
 $I->click( 'input[type=submit]' );

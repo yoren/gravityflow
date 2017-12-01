@@ -1,26 +1,16 @@
 <?php
-//$scenario->skip();
 /*
- * Test summary: Workflow required fields
- *
- * Test details:
- * - Fill up the fields
- * - Submit form
- * - First approval force adding note
- * - User input note require if In progress
- * - Add second note
- * - Select Complete
- * - Outgoing JSON Webhook
+ * Purpose: Test workflow required fields
  */
 
 $I = new AcceptanceTester( $scenario );
 
-$I->wantTo( 'Workflow required fields' );
+$I->wantTo( 'Test workflow required fields' );
 
 // Submit the form
-$I->amOnPage( '/workflow-required-fields' );
+$I->amOnPage( '/0017-workflow-required-fields' );
 
-$I->see( 'Workflow required fields' );
+$I->see( '0017 Workflow Required Fields' );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
 
 $I->fillField( 'input[name="input_2"]', 'Text' );
@@ -35,7 +25,7 @@ $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->amOnWorkflowPage( 'Inbox' );
-$I->click( 'Workflow required fields' );
+$I->click( '0017 Workflow Required Fields' );
 $I->see( 'Instructions: please review the values in the fields below and click on the Approve or Reject button' );
 
 $I->seeElement( 'button[value=approved]' );

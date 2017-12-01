@@ -1,12 +1,15 @@
 <?php
-//$scenario->skip();
+/*
+ * Purpose: Test the field conditional logic on the user input step
+ */
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test the field conditional logic on the user input step' );
 
 
 // Submit the form
-$I->amOnPage( '/conditional-logic' );
+$I->amOnPage( '/0002-conditional-logic' );
 
 $I->see( 'Conditional Logic' );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver

@@ -1,16 +1,16 @@
 <?php
-//$scenario->skip();
-
+/*
+ * Purpose: Test the field conditional logic on the user input step
+ */
 
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test the field conditional logic on the user input step' );
 
-
 // Submit the form
-$I->amOnPage( '/user-input' );
+$I->amOnPage( '/0015-user-input' );
 
-$I->see( 'User Input' );
+$I->see( '0015 User Input' );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
 $I->fillField( 'Paragraph', 'Some text' );
 $I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 ); // needed for chromedriver
@@ -24,7 +24,7 @@ $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->amOnWorkflowPage( 'Inbox' );
-$I->click( 'User Input' );
+$I->click( '0015 User Input' );
 
 $I->selectOption( 'input[name=gravityflow_status]', 'complete' );
 $I->click( 'Update' );

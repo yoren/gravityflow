@@ -1,20 +1,6 @@
 <?php
-//$scenario->skip();
 /*
- * Test summary: conditional field & numeric validation
- *
- * Test details:
- * - Select Second Choice radio button
- * - Check for Select box
- * - Select Second Choice select box
- * - Check for Number field
- * - Number field appears
- * - Fill Number input with wrong value
- * - If validation error appears, entry numeric only
- * - Submit
- * - Login to back-end, go to Status
- * - Click on the 'Conditional field' Workflow
- * - See if Status is Completed
+ * Purpose: Test the field conditional logic and the numeric input validation
  */
 
 $I = new AcceptanceTester( $scenario );
@@ -22,9 +8,9 @@ $I = new AcceptanceTester( $scenario );
 $I->wantTo( 'Test the field conditional logic and the numeric input validation' );
 
 // Submit the form
-$I->amOnPage( '/conditional-field' );
+$I->amOnPage( '/0001-conditional-field' );
 
-$I->see( 'Conditional field' );
+$I->see( 'Conditional Field' );
 $I->scrollTo( [ 'css' => '.gform_title' ] ); // needed for chromedriver
 $I->selectOption( 'input[name=input_1]', 'Second Choice' );
 $I->seeElement('select[name="input_3"]');
@@ -47,5 +33,5 @@ $I->loginAsAdmin();
 
 // Go to Status
 $I->amOnWorkflowPage( 'Status' );
-$I->click( 'Conditional field' );
+$I->click( 'Conditional Field' );
 $I->waitForText( 'Status: Complete', 3 );

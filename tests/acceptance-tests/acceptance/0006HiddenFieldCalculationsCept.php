@@ -1,9 +1,13 @@
 <?php
+/*
+ * Purpose: Test calculations that use fields that are not editable or displayed
+ */
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test calculations that use fields that are not editable or displayed.');
 
-$I->amOnPage( '/hidden-field-calculations' );
+$I->amOnPage( '/0006-hidden-field-calculations' );
 
 $I->fillField( 'Single Line', 'Test' );
 $I->fillField( 'Number', 2 );
