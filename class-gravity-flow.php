@@ -4845,7 +4845,7 @@ AND m.meta_value='queued'";
 				$logic                = rgars( $new_step_meta, 'feed_condition_conditional_logic_object/conditionalLogic' );
 				if ( $is_condition_enabled && ! empty( $logic ) ) {
 					foreach ( $new_step_meta['feed_condition_conditional_logic_object']['conditionalLogic']['rules'] as $key => $rule ) {
-						if ( strstr( $rule['fieldId'], 'workflow_step_status_' ) ) {
+						if ( 0 === strpos( $rule['fieldId'], 'workflow_step_status_' ) ) {
 							$old_feed_id = explode( '_', $rule['fieldId'] ); // fieldId is in the format of "workflow_step_status_30"
 							$new_step_meta['feed_condition_conditional_logic_object']['conditionalLogic']['rules'][$key]['fieldId'] = 'workflow_step_status_' . $feed_id_mappings[$old_feed_id[3]];
 							$step_ids_updated = true;
