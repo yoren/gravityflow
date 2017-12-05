@@ -616,7 +616,7 @@ PRIMARY KEY  (id)
 
 		public function feed_list_title() {
 			$url = add_query_arg( array( 'fid' => '0' ) );
-			$url = esc_html( $url );
+			$url = esc_url( $url );
 			return esc_html__( 'Workflow Steps', 'gravityflow' ) . " <a class='add-new-h2' href='{$url}'>" . __( 'Add New' , 'gravityflow' ) . '</a>';
 		}
 
