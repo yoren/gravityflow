@@ -1,5 +1,7 @@
 version: "2"
 plugins:
+  csslint:
+    enabled: true
   phpcodesniffer:
     enabled: true
     config:
@@ -13,3 +15,4 @@ exclude_patterns:
 - "tests/"
 - "languages/"
 - "**/index.php"
+- "Gruntfile.js"
