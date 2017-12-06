@@ -933,7 +933,7 @@ PRIMARY KEY  (id)
 						'label'               => esc_html__( 'Highlight', 'gravityflow' ),
 						'type'                => 'step_highlight',
 						'required'            => false,
-						'tooltip'             => esc_html__( 'Highlighting a step will help to differentiate it when editing Workflow Steps. It can also be enabled as a column (highlight) in the Inbox Shortcode to identify the step of each entry.', 'gravityflow' ),
+						'tooltip'             => esc_html__( 'Highlighted steps will stand out in both the workflow inbox and the step list. Use highlighting to bring attention to important tasks and to help organise complex workflows.', 'gravityflow' ),
 					),
 					array(
 						'name'           => 'condition',
