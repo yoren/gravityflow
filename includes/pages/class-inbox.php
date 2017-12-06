@@ -276,8 +276,8 @@ class Gravity_Flow_Inbox {
 			if ( $step ) {
 				$meta = $step->get_feed_meta();
 
-				if ( $meta && isset( $meta['step_highlight'] ) && $meta['step_highlight']) {
-					if( isset( $meta['step_highlight_type'] ) && $meta['step_highlight_type'] == 'color' ) {
+				if ( $meta && isset( $meta['step_highlight'] ) && $meta['step_highlight'] ) {
+					if ( isset( $meta['step_highlight_type'] ) && $meta['step_highlight_type'] == 'color' ) {
 						if ( isset( $meta['step_highlight_color'] ) && preg_match( '/^#[a-f0-9]{6}$/i', $meta['step_highlight_color'] ) ) {
 							$step_highlight_color = $meta['step_highlight_color'];
 						}

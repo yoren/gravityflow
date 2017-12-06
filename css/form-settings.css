@@ -186,6 +186,10 @@ tr#gaddon-setting-row-step_type label > span > i {
     margin-top:5px;
 }
 
+.gravityflow-step-highlight-color-container .wp-picker-container {
+    margin-top: 5px;
+}
+
 .settings-field-map-table .custom-value-reset {
     background: url( ../images/xit.gif ) no-repeat scroll 0 0 transparent;
     cursor:pointer;

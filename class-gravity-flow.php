@@ -1842,7 +1842,6 @@ PRIMARY KEY  (id)
 					array(
 						'label'         => esc_html__( 'Highlight this step', 'gravityflow' ),
 						'name'          => 'step_highlight',
-						'default_value' => true,
 					),
 				),
 			);
@@ -1886,7 +1885,7 @@ PRIMARY KEY  (id)
 
 			$this->settings_checkbox( $step_settings['step_highlight'] );
 
-			$enabled = $this->get_setting( 'step_highlight', true );
+			$enabled = $this->get_setting( 'step_highlight', false );
 			$step_highlight_style = $enabled ? '' : 'style="display:none;"';
 			$step_highlight_type_setting = $this->get_setting( 'step_highlight_type', 'color' );
 			$step_highlight_color_style = ( $step_highlight_type_setting == 'color' ) ? '' : 'style="display:none;"';
