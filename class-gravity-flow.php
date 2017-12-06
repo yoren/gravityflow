@@ -1810,23 +1810,39 @@ PRIMARY KEY  (id)
 			<?php
 		}
 
-		public function settings_step_highlight( $field, $echo = true ) {
+		/**
+		 * Prepare and render markup for the step_highlight composite setting.
+		 *
+		 * The container will be displayed or hidden depending on the value of the step_highlight checkbox field.
+		 *
+		 * @since 1.9.2
+		 *
+		 * @param array $field
+		 */
+		public function settings_step_highlight( $field ) {
 			$field = $this->prepare_settings_step_highlight( $field );
 
-			return $this->settings_step_highlight_container( $field, $echo );
+			return $this->settings_step_highlight_container( $field );
 		}
 
+		/**
+		* Prepare the step_highlight composite settings to be accessible for every field in the composite
+		*
+		* @param array $field The step_highlight field
+		*
+		* @return array
+		*/
 		public function prepare_settings_step_highlight( $field ) {
 			unset( $field['settings'] );
 
 			$step_highlight = array(
 				'name'     => 'step_highlight',
 				'type'     => 'checkbox',
-				'required' => false,
 				'choices'  => array(
 					array(
-						'label' => esc_html__( 'Highlight this step', 'gravityflow' ),
-						'name'  => 'step_highlight',
+						'label'         => esc_html__( 'Highlight this step', 'gravityflow' ),
+						'name'          => 'step_highlight',
+						'default_value' => true,
 					),
 				),
 			);
@@ -1846,7 +1862,6 @@ PRIMARY KEY  (id)
 				'class'               => 'small-text',
 				'label'               => esc_html__( 'Color', 'gravityflow' ),
 				'type'                => 'text',
-				'required'            => true,
 				'default_value'       => '#dd3333',
 			);
 			$field['settings']['step_highlight_color'] = $step_highlight_color;
@@ -1854,7 +1869,14 @@ PRIMARY KEY  (id)
 			return $field;
 		}
 
-		public function settings_step_highlight_container( $field, $echo = true ) {
+		/**
+		* Generate the step_highlight composite setting container
+		*
+		* The container will be displayed or hidden depending on the value of the step_highlight checkbox field.
+		*
+		* @param array $field The step_highlight field
+		*/
+		public function settings_step_highlight_container( $field ) {
 			$form = $this->get_current_form();
 			$step_settings = rgar( $field, 'settings' );
 
@@ -1864,7 +1886,7 @@ PRIMARY KEY  (id)
 
 			$this->settings_checkbox( $step_settings['step_highlight'] );
 
-			$enabled = $this->get_setting( 'step_highlight', false );
+			$enabled = $this->get_setting( 'step_highlight', true );
 			$step_highlight_style = $enabled ? '' : 'style="display:none;"';
 			$step_highlight_type_setting = $this->get_setting( 'step_highlight_type', 'color' );
 			$step_highlight_color_style = ( $step_highlight_type_setting == 'color' ) ? '' : 'style="display:none;"';
@@ -1883,7 +1905,6 @@ PRIMARY KEY  (id)
 				(function($) {
 					$( '#step_highlight' ).click(function(){
 						$('.gravityflow-step-highlight-settings').slideToggle();
-						$('.gravityflow-step-highlight-color-container').slideToggle();
 					});
 					$(document).ready(function () {
 						$("#step_highlight_color").wpColorPicker();
@@ -2113,14 +2134,21 @@ PRIMARY KEY  (id)
 			$this->validate_textarea_settings( $textarea_field, $settings );
 		}
 
+		/**
+		 * Validate step_highlight composite setting
+		 *
+		 * Validate the sub-settings are of appropriate type and required status
+		 * 
+		 * @since 1.9.2
+		 *
+		 * @param array $field The field properties.
+		 * @param array $settings The settings to be potentially saved.
+		 */
 		public function validate_step_highlight_settings( $field, $settings ) {
 			$field = $this->prepare_settings_step_highlight( $field );
 
 			$checkbox_field = $field['settings']['step_highlight'];
 			$this->validate_checkbox_settings( $checkbox_field, $settings );
-
-			$radio_field = $field['settings']['step_highlight_type'];
-			$this->validate_radio_settings( $radio_field, $settings );
 
 			$color_field = $field['settings']['step_highlight_color'];
 			$this->validate_text_settings( $color_field, $settings );
@@ -2128,10 +2156,18 @@ PRIMARY KEY  (id)
 
 		}
 
+		/**
+		 * Validate step_highlight_color is a hexadecimal code
+		 *
+		 * @since 1.9.2
+		 *
+		 * @param array $field The field properties.
+		 * @param array $settings The settings to be potentially saved.
+		 */
 		public function validate_step_highlight_color_settings( $field, $settings ) {
 
-			if ( ! preg_match( '/^#[a-f0-9]{6}$/i', $settings['step_highlight_color'] ) ) {
-				$this->set_field_error( $field, __( 'You must provide a color value for the highlight.', 'gravityflow' ) );
+			if( $settings['step_highlight'] && ! preg_match( '/^#[a-f0-9]{6}$/i', $settings['step_highlight_color'] ) ) {
+				$this->set_field_error( $field, __( 'You must provide a color value for the active highlight to apply.', 'gravityflow' ) );
 			}
 
 		}
@@ -2260,6 +2296,15 @@ PRIMARY KEY  (id)
 			return $link;
 		}
 
+		/**
+		 * Return value of step_highlight composite setting for display on feed list
+		 *
+		 * @since 1.9.2
+		 *
+		 * @param array $item Current workflow step
+		 *
+		 * @return string
+		 */
 		public function get_column_value_step_highlight( $item ) {
 			$step_highlight = '';
 

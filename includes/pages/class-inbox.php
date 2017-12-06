@@ -275,9 +275,12 @@ class Gravity_Flow_Inbox {
 			$step = gravity_flow()->get_step( $entry['workflow_step'] );
 			if ( $step ) {
 				$meta = $step->get_feed_meta();
-				if ( $meta && isset( $meta['step_highlight_type'] ) ) {
-					if ( isset( $meta['step_highlight_color'] ) && preg_match( '/^#[a-f0-9]{6}$/i', $meta['step_highlight_color'] ) ) {
-						$step_highlight_color = $meta['step_highlight_color'];
+
+				if ( $meta && isset( $meta['step_highlight'] ) && $meta['step_highlight']) {
+					if( isset( $meta['step_highlight_type'] ) && $meta['step_highlight_type'] == 'color' ) {
+						if ( isset( $meta['step_highlight_color'] ) && preg_match( '/^#[a-f0-9]{6}$/i', $meta['step_highlight_color'] ) ) {
+							$step_highlight_color = $meta['step_highlight_color'];
+						}
 					}
 				}
 			}
@@ -298,6 +301,7 @@ class Gravity_Flow_Inbox {
 			unset( $columns['step_highlight'] );
 		} else {
 			echo '<tr>';
+			unset( $columns['step_highlight'] );
 		}
 
 		foreach ( $columns as $id => $label ) {
