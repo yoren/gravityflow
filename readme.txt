@@ -55,6 +55,25 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 2.0.0 =
+- Added the highlight setting to all the step settings.
+- Added the gravityflow_pre_cancel_workflow action.
+- Added the gravityflow_timeline_step_icon filter.
+- Added the sent status of a sliced invoice to the workflow detail page.
+- Added the gravityflow_entry_link_inbox_table filter.
+- Added the gravityflow_site_cookie_path filter.
+- Added the gravityflow_step_highlight_color_inbox filter.
+- Added support for save and submit buttons on the User Input step.
+- Added the entry_id attribute to the shortcode for direct access to the workflow entry detail page. e.g. [gravityflow entry_id=123]
+- Added the "View more" link to the discussion field for discussions with more than 10 messages.
+- Updated to support Gravity Forms version 2.3.
+- Fixed the HubSpot step for the "HubSpot for Gravity Forms" plugin versions 3.0+.
+- Fixed a fatal error which could occur when processing the shortcode with the form attribute and the specified entry can't be retrieved.
+- Fixed an issue with the timeline notes for Approval and User Input steps where the step icon is used instead of the user avatar.
+- Fixed an issue with the conditional logic for Section fields on the User Input step.
+- Fixed an issue that step IDs in feed conditions weren't updated after forms duplicated or imported.
+
+
 = 1.9.1 =
 - Fixed an issue which can cause the settings tabs not to appear on some installations.
 
