@@ -1828,6 +1828,8 @@ PRIMARY KEY  (id)
 		/**
 		* Prepare the step_highlight composite settings to be accessible for every field in the composite
 		*
+		* @since 1.9.2
+		*
 		* @param array $field The step_highlight field
 		*
 		* @return array
@@ -1872,6 +1874,8 @@ PRIMARY KEY  (id)
 		* Generate the step_highlight composite setting container
 		*
 		* The container will be displayed or hidden depending on the value of the step_highlight checkbox field.
+		*
+		* @since 1.9.2
 		*
 		* @param array $field The step_highlight field
 		*/

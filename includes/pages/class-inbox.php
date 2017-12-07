@@ -293,16 +293,18 @@ class Gravity_Flow_Inbox {
 		 * @param string $highlight The highlight color (hex value) of the row currently being processed.
 		 * @param int $form['id'] The ID of form currently being processed.
 		 * @param array $entry The entry object for the row currently being processed.
+		 *
+		 * @return string
 		 */
-		$step_highlight = apply_filters( 'gravityflow_step_highlight_color_inbox', $step_highlight_color, $form['id'], $entry );
+		$step_highlight_color = apply_filters( 'gravityflow_step_highlight_color_inbox', $step_highlight_color, $form['id'], $entry );
 
 		if ( strlen( $step_highlight_color ) > 0 ) {
 			echo '<tr style="border-left-color: ' . $step_highlight_color . ';">';
-			unset( $columns['step_highlight'] );
 		} else {
 			echo '<tr>';
-			unset( $columns['step_highlight'] );
 		}
+
+		unset( $columns['step_highlight'] );
 
 		foreach ( $columns as $id => $label ) {
 			$value = self::get_column_value( $id, $form, $entry, $columns );
