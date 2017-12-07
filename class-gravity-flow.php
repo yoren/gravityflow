@@ -1818,6 +1818,8 @@ PRIMARY KEY  (id)
 		 * @since 1.9.2
 		 *
 		 * @param array $field
+		 *
+		 * @return string|void
 		 */
 		public function settings_step_highlight( $field ) {
 			$field = $this->prepare_settings_step_highlight( $field );
@@ -1871,16 +1873,17 @@ PRIMARY KEY  (id)
 		}
 
 		/**
-		* Generate the step_highlight composite setting container
-		*
-		* The container will be displayed or hidden depending on the value of the step_highlight checkbox field.
-		*
-		* @since 1.9.2
-		*
-		* @param array $field The step_highlight field
-		*/
+		 * Generate the step_highlight composite setting container
+		 *
+		 * The container will be displayed or hidden depending on the value of the step_highlight checkbox field.
+		 *
+		 * @since 1.9.2
+		 *
+		 * @param array $field The step_highlight field
+		 *
+		 * @return string|void
+		 */
 		public function settings_step_highlight_container( $field ) {
-			$form = $this->get_current_form();
 			$step_settings = rgar( $field, 'settings' );
 
 			if ( empty( $step_settings ) ) {
