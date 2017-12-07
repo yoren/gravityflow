@@ -1,3 +1,4 @@
+- Added the highlight setting to all the step settings.
 - Added the gravityflow_pre_cancel_workflow action.
 - Added the gravityflow_timeline_step_icon filter.
 - Added the sent status of a sliced invoice to the workflow detail page.
@@ -6,7 +7,6 @@
 - Added support for save and submit buttons on the User Input step.
 - Added the entry_id attribute to the shortcode for direct access to the workflow entry detail page. e.g. [gravityflow entry_id=123]
 - Added the "View more" link to the discussion field for discussions with more than 10 messages.
-
 - Updated to support Gravity Forms version 2.3.
 - Fixed the HubSpot step for the "HubSpot for Gravity Forms" plugin versions 3.0+.
 - Fixed a fatal error which could occur when processing the shortcode with the form attribute and the specified entry can't be retrieved.
