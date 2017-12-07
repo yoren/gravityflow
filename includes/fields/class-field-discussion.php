@@ -1,7 +1,7 @@
 <?php
 
 if ( ! class_exists( 'GFForms' ) ) {
-	die();
+    die();
 }
 
 /**
@@ -169,17 +169,63 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 				$discussion = array_reverse( $discussion );
 			}
 
-			$count = 0;
+			$count                 = 0;
+			$recent_display_limit  = 0;
+			$display_items         = '';
+			$hidden_items          = '';
+
+			if ( $entry_id && ! $this->is_form_editor() ) {
+
+				/**
+				* Set the amount of discussion items to be shown on active user input step without toggle.
+				*
+				* @param int $max_display_limit Amount of comments to be shown. Default is 10.
+				* @param Gravity_Flow_Field_Discussion $this The field currently being processed.
+				*
+				* @since 1.9.2-dev
+				*/
+				$max_display_limit = apply_filters( 'gravityflow_discussion_items_display_limit', 10, $this );
+
+				if ( count( $discussion ) > $max_display_limit ) {
+
+					$recent_display_limit = count( $discussion ) - $max_display_limit;
+
+					$view_more_label = esc_attr__( 'View More', 'gravityflow' );
+					$view_less_label = esc_attr__( 'View Less', 'gravityflow' );
+
+					$return .= sprintf( "<a href='javascript:void(0);' title='%s' data-title='%s' onclick='GravityFlowEntryDetail.displayDiscussionItemToggle(%d, %d, %d);'  class='gravityflow-dicussion-item-toggle-display'>%s</a>", $view_more_label, $view_less_label, $this['formId'], $this['id'], $recent_display_limit, __( 'View More', 'gravityflow' ) );
+
+				}
+			}
 
 			foreach ( $discussion as $item ) {
+
 				if ( $has_limit && $count === $limit ) {
 					break;
 				}
 
-				$return .= $this->format_discussion_item( $item, $format, $entry_id );
+				if ( false === $this->is_form_editor() || $recent_display_limit > 0 ) {
+					if ( $format === 'html' && $count >= $recent_display_limit ) {
+						$display_items .= $this->format_discussion_item( $item, $format, $entry_id );
+					} else {
+						$hidden_items .= $this->format_discussion_item( $item, $format, $entry_id );
+					}
+				} else {
+					$display_items .= $this->format_discussion_item( $item, $format, $entry_id );
+				}
+
 				$count ++;
 			}
 
+			if ( $format === 'html' ) {
+				if ( count( $hidden_items ) ) {
+					$return .= '<div class="gravityflow-dicussion-item-hidden" style="display: none;">' . $hidden_items . '</div>' . $display_items;
+				} else {
+					$return .= $display_items;
+				}
+			} else {
+				$return .= $hidden_items . $display_items;
+			}
 		}
 
 		return $return;
@@ -205,7 +251,6 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	 * @param array    $item     The properties of the item to be processed.
 	 * @param string   $format   The requested format for the value; html or text.
 	 * @param int|null $entry_id The ID of the entry currently being edited or null in other locations.
-	 *
 	 * @since 1.7.1-dev
 	 *
 	 * @return string
@@ -225,7 +270,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 		$return = '';
 
 		$display_name = apply_filters( 'gravityflowdiscussion_display_name_discussion_field', $display_name, $item, $this );
-		if ( $format == 'html' ) {
+		if ( $format === 'html' ) {
 			$content = sprintf( '<div class="gravityflow-dicussion-item-header">
 <span class="gravityflow-dicussion-item-name">%s</span> <span class="gravityflow-dicussion-item-date">%s</span>
 %s</div>
@@ -234,7 +279,8 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 </div>', $display_name, $date, $this->get_delete_button( $item['id'], $entry_id ), $this->format_comment_value( $item['value'] ) );
 
 			$return .= sprintf( '<div id="gravityflow-discussion-item-%s" class="gravityflow-discussion-item">%s</div>', sanitize_key( $item['id'] ), $content );
-		} elseif ( $format == 'text' ) {
+
+		} elseif ( $format === 'text' ) {
 			$return = $date . ': ' . $display_name . "\n";
 			$return .= $item['value'];
 		}
@@ -246,7 +292,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	 * Prepares the markup for the delete comment button when on the entry detail edit page.
 	 *
 	 * @param string $item_id The ID of the comment currently being processed.
-	 * @param int $entry_id The ID of the entry currently being processed.
+	 * @param int    $entry_id The ID of the entry currently being processed.
 	 *
 	 * @since 1.4.2-dev
 	 *
