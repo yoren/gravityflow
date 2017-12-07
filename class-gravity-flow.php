@@ -1912,7 +1912,7 @@ PRIMARY KEY  (id)
 					$(document).ready(function () {
 						$("#step_highlight_color").wpColorPicker();
 					});
-				})(jQuery); 
+				})(jQuery);
 			</script>
 			<?php
 
@@ -2141,7 +2141,7 @@ PRIMARY KEY  (id)
 		 * Validate step_highlight composite setting
 		 *
 		 * Validate the sub-settings are of appropriate type and required status
-		 * 
+		 *
 		 * @since 1.9.2
 		 *
 		 * @param array $field The field properties.
@@ -2778,7 +2778,7 @@ PRIMARY KEY  (id)
 				'value' => 'restart_workflow',
 			);
 
-			if ( $current_step && count( $steps ) > 1 ) {
+			if ( count( $steps ) > 1 ) {
 				$choices = array();
 				foreach ( $steps as $step ) {
 					if ( ! $step->is_active() ) {
