@@ -2793,10 +2793,12 @@ PRIMARY KEY  (id)
 					}
 				}
 
-				$admin_actions[] = array(
-					'label'   => esc_html__( 'Send to step:', 'gravityflow' ),
-					'choices' => $choices,
-				);
+				if ( ! empty( $choices ) ) {
+					$admin_actions[] = array(
+						'label'   => esc_html__( 'Send to step:', 'gravityflow' ),
+						'choices' => $choices,
+					);
+				}
 			}
 
 			/**
