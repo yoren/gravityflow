@@ -11,6 +11,12 @@ table#gravityflow-inbox tr:nth-child(odd) {
     background: #FFF
 }
 
+table#gravityflow-inbox tbody tr{
+    border-left-width: 5px;
+    border-left-style: solid;
+    border-left-color: transparent;
+}
+
 table#gravityflow-inbox {
     border-collapse: collapse;
     margin-top:10px;

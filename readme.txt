@@ -33,7 +33,7 @@ Twitter: [Gravity Flow](https://twitter.com/GravityFlow_io)
 
 1. [Purchase and install Gravity Forms](https://gravityflow.io/out/gravityforms)
 2. Wordpress 4.2+
-3. Gravity Forms 1.9.14+
+3. Gravity Forms 2.1+
 
 
 = Support =

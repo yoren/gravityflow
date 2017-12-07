@@ -42,6 +42,10 @@
     padding:10px;
 }
 
+#gravityflow_save_progress_button {
+    margin-right:10px;
+}
+
 /* Notes */
 
 .gravityflow-note-avatar{
@@ -305,4 +309,10 @@ span.gf_admin_page_formid {
 .gravityflow-box-title{
     cursor:default;
     border-bottom: 1px solid #eee;
+}
+
+/* Step Highlight */
+table#gravityflow-inbox tbody tr{
+    border-left-width: 3px;
+    border-left-style: solid;
 }
