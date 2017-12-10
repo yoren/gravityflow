@@ -8,6 +8,7 @@
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public Licenses
  * @since       1.0
  **/
+
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
@@ -101,7 +102,7 @@ class Gravity_Flow_Oauth1_Client {
 	/**
 	 * Request token i.e. temporary credentials using consumer key and secret.
 	 *
-	 * @throws Exception If request for temporary credentials fails
+	 * @throws Exception If request for temporary credentials fails.
 	 *
 	 * @return array
 	 */
