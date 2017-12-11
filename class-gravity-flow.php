@@ -3709,7 +3709,7 @@ PRIMARY KEY  (id)
 					$entry = GFAPI::get_entry( $entry_id ); // refresh entry
 
 					?>
-					<div class="updated notice notice-success is-dismissible" style="padding:6px;">
+					<div class="gravityflow_workflow_notice updated notice notice-success is-dismissible" style="padding:6px;">
 						<?php echo $feedback; ?>
 					</div>
 					<?php
