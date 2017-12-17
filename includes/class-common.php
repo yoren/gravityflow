@@ -341,7 +341,7 @@ class Gravity_Flow_Common {
 		if ( $display_fields_mode === 'selected_fields' ) {
 			$display_fields_selected = $current_step && is_array( $current_step->display_fields_selected ) ? $current_step->display_fields_selected : array();
 
-			if ( ! in_array( $field->id, $display_fields_selected ) ) {
+			if ( $field->type !== 'section' && ! in_array( $field->id, $display_fields_selected ) ) {
 				$display_field = false;
 			}
 		} else {
