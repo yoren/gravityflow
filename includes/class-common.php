@@ -345,7 +345,7 @@ class Gravity_Flow_Common {
 				$display_field = false;
 			}
 		} else {
-			if ( GFFormsModel::is_field_hidden( $form, $field, array(), $entry ) || $is_product_field ) {
+			if ( $field->type !== 'section' && GFFormsModel::is_field_hidden( $form, $field, array(), $entry ) || $is_product_field ) {
 				$display_field = false;
 			}
 		}
