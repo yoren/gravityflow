@@ -9,7 +9,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Fields extends Gravity_Flow_Merge_Tag {
 	/**
 	 * The name of the merge tag.
 	 *
-	 * @since 1.9.2-dev
+	 * @since 2.0.1-dev
 	 *
 	 * @var null
 	 */
@@ -18,7 +18,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Fields extends Gravity_Flow_Merge_Tag {
 	/**
 	 * The regular expression to use for the matching.
 	 *
-	 * @since 1.9.2-dev
+	 * @since 2.0.1-dev
 	 *
 	 * @var string
 	 */
@@ -27,7 +27,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Fields extends Gravity_Flow_Merge_Tag {
 	/**
 	 * Replace the {workflow_fields} merge tags with the field values for the current steps display/editable fields.
 	 *
-	 * @since 1.9.2-dev
+	 * @since 2.0.1-dev
 	 *
 	 * @param string $text  The text to be processed.
 	 *
@@ -51,12 +51,14 @@ class Gravity_Flow_Merge_Tag_Workflow_Fields extends Gravity_Flow_Merge_Tag {
 				$modifiers = rgar( $match, 2 );
 
 				$a = $this->get_attributes( $modifiers, array(
-					'empty' => false, // output empty fields
-					'value' => false, // output choice values
-					'admin' => false, // output admin labels
+					'empty'    => false, // output empty fields
+					'value'    => false, // output choice values
+					'admin'    => false, // output admin labels
+					'editable' => true,
+					'display'  => true,
 				) );
 
-				$replacement = GFCommon::get_submitted_fields( $this->form, $entry, $a['empty'], ! $a['value'], $this->format, $a['admin'], $this->name );
+				$replacement = GFCommon::get_submitted_fields( $this->form, $entry, $a['empty'], ! $a['value'], $this->format, $a['admin'], $this->name, $this->get_options_string( $a ) );
 				$text        = str_replace( $full_tag, $replacement, $text );
 			}
 
@@ -67,9 +69,24 @@ class Gravity_Flow_Merge_Tag_Workflow_Fields extends Gravity_Flow_Merge_Tag {
 	}
 
 	/**
+	 * Prepare a comma separated string containing only those attributes set to true.
+	 *
+	 * @since 2.0.1-dev
+	 *
+	 * @param array $attributes The merge tag attributes.
+	 *
+	 * @return string
+	 */
+	public function get_options_string( $attributes ) {
+		$options = implode( ',', array_keys( array_filter( $attributes ) ) );
+
+		return $options;
+	}
+
+	/**
 	 * Prevents GFCommon::get_submitted_fields including non-editable and non-display fields in the content replacing the merge tag.
 	 *
-	 * @since 1.9.2-dev
+	 * @since 2.0.1-dev
 	 *
 	 * @param string   $value     The current merge tag value for the field.
 	 * @param string   $merge_tag The current merge tag name.
@@ -79,8 +96,12 @@ class Gravity_Flow_Merge_Tag_Workflow_Fields extends Gravity_Flow_Merge_Tag {
 	 * @return bool
 	 */
 	public function merge_tag_filter( $value, $merge_tag, $modifiers, $field ) {
-		if ( ! $this->step->is_editable_field( $field ) && ! Gravity_Flow_Common::is_display_field( $field, $this->step, $this->form, $this->entry ) ) {
-			$this->step->log_debug( __METHOD__ . '(): removing field.' );
+		$modifiers_array        = $field->get_modifiers();
+		$display_editable_field = in_array( 'editable', $modifiers_array ) && $this->step->is_editable_field( $field );
+		$display_display_field  = in_array( 'display', $modifiers_array ) && Gravity_Flow_Common::is_display_field( $field, $this->step, $this->form, $this->entry );
+
+		if ( ! $display_editable_field && ! $display_display_field ) {
+			// Removing non-editable and non-display field from merge tag output.
 			return false;
 		}
 
