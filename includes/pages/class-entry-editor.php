@@ -591,7 +591,7 @@ class Gravity_Flow_Entry_Editor {
 	 * @return bool
 	 */
 	public function is_editable_field( $field ) {
-		return in_array( $field->id, $this->_editable_fields );
+		return Gravity_Flow_Common::is_editable_field( $field, $this->step );
 	}
 
 	/**

@@ -324,7 +324,7 @@ class Gravity_Flow_Common {
 	/**
 	 * Determines if a field should be displayed.
 	 *
-	 * @since 1.9.2-dev
+	 * @since 2.0.1-dev
 	 *
 	 * @param GF_Field               $field            The field properties.
 	 * @param Gravity_Flow_Step|null $current_step     The current step for this entry.
@@ -353,6 +353,20 @@ class Gravity_Flow_Common {
 		$display_field = (bool) apply_filters( 'gravityflow_workflow_detail_display_field', $display_field, $field, $form, $entry, $current_step );
 
 		return $display_field;
+	}
+
+	/**
+	 * Checks whether a field is an editable field.
+	 *
+	 * @since 2.0.1-dev
+	 *
+	 * @param GF_Field          $field        The field to be checked.
+	 * @param Gravity_Flow_Step $current_step The current step.
+	 *
+	 * @return bool
+	 */
+	public static function is_editable_field( $field, $current_step ) {
+		return in_array( $field->id, $current_step->get_editable_fields() );
 	}
 
 }

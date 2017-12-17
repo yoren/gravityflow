@@ -109,7 +109,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Fields extends Gravity_Flow_Merge_Tag {
 	 */
 	public function merge_tag_filter( $value, $merge_tag, $modifiers, $field ) {
 		$modifiers_array        = $field->get_modifiers();
-		$display_editable_field = in_array( 'editable', $modifiers_array ) && $this->step->is_editable_field( $field );
+		$display_editable_field = in_array( 'editable', $modifiers_array ) && Gravity_Flow_Common::is_editable_field( $field, $this->step );
 		$display_display_field  = in_array( 'display', $modifiers_array ) && Gravity_Flow_Common::is_display_field( $field, $this->step, $this->form, $this->entry );
 
 		if ( ! $display_editable_field && ! $display_display_field ) {

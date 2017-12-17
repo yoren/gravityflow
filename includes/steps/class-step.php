@@ -2138,18 +2138,5 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return $validation_result;
 	}
 
-	/**
-	 * Checks whether a field is an editable field.
-	 *
-	 * @since 1.9.2-dev
-	 *
-	 * @param GF_Field $field The field to be checked.
-	 *
-	 * @return bool
-	 */
-	public function is_editable_field( $field ) {
-		return in_array( $field->id, $this->get_editable_fields() );
-	}
-
 }
 
