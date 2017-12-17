@@ -1,9 +1,21 @@
 <?php
+/**
+ * Gravity Flow Workflow Fields Merge Tag
+ *
+ * @package     GravityFlow
+ * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+/**
+ * Class Gravity_Flow_Merge_Tag_Workflow_Fields
+ *
+ * @since 2.0.1-dev
+ */
 class Gravity_Flow_Merge_Tag_Workflow_Fields extends Gravity_Flow_Merge_Tag {
 
 	/**
@@ -51,11 +63,11 @@ class Gravity_Flow_Merge_Tag_Workflow_Fields extends Gravity_Flow_Merge_Tag {
 				$modifiers = rgar( $match, 2 );
 
 				$a = $this->get_attributes( $modifiers, array(
-					'empty'    => false, // output empty fields
-					'value'    => false, // output choice values
-					'admin'    => false, // output admin labels
-					'editable' => true,
-					'display'  => true,
+					'empty'    => false, // Output empty fields.
+					'value'    => false, // Output choice values.
+					'admin'    => false, // Output admin labels.
+					'editable' => true, // Output the steps editable fields.
+					'display'  => true, // Output the steps display fields.
 				) );
 
 				$replacement = GFCommon::get_submitted_fields( $this->form, $entry, $a['empty'], ! $a['value'], $this->format, $a['admin'], $this->name, $this->get_options_string( $a ) );
