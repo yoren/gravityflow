@@ -1,5 +1,9 @@
 /* ENTRY DETAIL */
 
+html[dir="rtl"] body.rtl * {
+    direction: rtl !important;
+}
+
 table.entry-detail-view {
     width:100%;
     border:0;
