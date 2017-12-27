@@ -579,7 +579,7 @@ class Gravity_Flow_Entry_Editor {
 		$display_fields_selected = is_array( $this->step->display_fields_selected ) ? $this->step->display_fields_selected : array();
 
 		if ( $display_fields_mode == 'selected_fields' ) {
-			if ( ! in_array( $field->id, $display_fields_selected ) ) {
+			if ( $field->type !== 'section' && ! in_array( $field->id, $display_fields_selected ) ) {
 				$display_field = false;
 			}
 		} else {
