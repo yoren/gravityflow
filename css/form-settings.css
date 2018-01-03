@@ -50,6 +50,7 @@
 .rtl #assignees,
 .rtl #editable_fields{
     right: -9999px;
+    left: auto;
 }
 
 table.gforms_form_settings th{
@@ -236,6 +237,7 @@ tr#gaddon-setting-row-step_type label > span > i {
 
 .rtl .settings-field-map-table .custom-value-reset {
     background: url( ../images/xit.gif ) no-repeat scroll 100% 0 transparent;
+    text-indent:9999px;
 }
 
 .settings-field-map-table .custom-value-reset {
