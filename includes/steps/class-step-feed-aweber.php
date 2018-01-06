@@ -2,7 +2,6 @@
 /**
  * Gravity Flow Step Feed AWeber
  *
- *
  * @package     GravityFlow
  * @subpackage  Classes/Gravity_Flow_Step_Feed_AWeber
  * @copyright   Copyright (c) 2016-2018, Steven Henty S.L.
@@ -14,11 +13,30 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+/**
+ * Class Gravity_Flow_Step_Feed_AWeber
+ */
 class Gravity_Flow_Step_Feed_AWeber extends Gravity_Flow_Step_Feed_Add_On {
+
+	/**
+	 * The step type.
+	 *
+	 * @var string
+	 */
 	public $_step_type = 'aweber';
 
+	/**
+	 * The name of the class used by the add-on.
+	 *
+	 * @var string
+	 */
 	protected $_class_name = 'GFAWeber';
 
+	/**
+	 * Returns the step label.
+	 *
+	 * @return string
+	 */
 	public function get_label() {
 		return 'AWeber';
 	}
