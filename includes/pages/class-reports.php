@@ -10,7 +10,7 @@ if ( ! class_exists( 'GFForms' ) ) {
  *
  * @package     GravityFlow
  * @subpackage  Classes/Gravity_Flow_Reports
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */

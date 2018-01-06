@@ -69,4 +69,4 @@ Thanks to [BrowserStack](https://www.browserstack.com) for automated browser tes
 
 Thank you to all my colleagues at Rocketgenius, Zack Katz (GravityView), Naomi C Bush (Gravity Plus) and Jake Jackson (Gravity PDF) for all their collaboration, advice, support and encouragement.
 
-Copyright 2015-2017 Steven Henty, S.L.
+Copyright 2015-2018 Steven Henty, S.L.

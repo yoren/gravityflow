@@ -3,7 +3,7 @@
  * Integrates Gravity Flow with GravityView.
  *
  * @package     GravityFlow
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.5.1-dev
  */
@@ -15,7 +15,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 /**
  * Add custom options for workflow_detail_link fields
  *
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
 class Gravity_Flow_GravityView_Workflow_Detail_Link extends GravityView_Field {
