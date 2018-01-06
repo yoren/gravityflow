@@ -2,14 +2,12 @@
 /**
  * Gravity_Flow_Step_Feed_Add_On
  *
- *
  * @package     GravityFlow
  * @subpackage  Classes/Step_Feed_Add_On
  * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
-
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
@@ -192,7 +190,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	/**
 	 * Processes the given feed for the add-on.
 	 *
-	 * @param $feed
+	 * @param array $feed The add-on feed properties.
 	 *
 	 * @return bool Is feed processing complete?
 	 */
@@ -218,9 +216,9 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	/**
 	 * Returns the label of the given feed.
 	 *
-	 * @param $feed
+	 * @param array $feed The add-on feed properties.
 	 *
-	 * @return mixed
+	 * @return string
 	 */
 	public function get_feed_label( $feed ) {
 		$label = $feed['meta']['feedName'];
@@ -231,8 +229,8 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	/**
 	 * Determines if the supplied feed should be processed.
 	 *
-	 * @param array $feed The current feed.
-	 * @param array $form The current form.
+	 * @param array $feed  The current feed.
+	 * @param array $form  The current form.
 	 * @param array $entry The current entry.
 	 *
 	 * @return bool
@@ -352,7 +350,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	 * Add the ID of the current feed to the processed feeds array for the current add-on.
 	 *
 	 * @param array $add_on_feeds The IDs of the processed feeds.
-	 * @param int $feed_id The ID of the processed feed.
+	 * @param int   $feed_id      The ID of the processed feed.
 	 *
 	 * @return array
 	 */
@@ -368,7 +366,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	 * If necessary remove the current feed from the processed feeds array for the current add-on.
 	 *
 	 * @param array $add_on_feeds The IDs of the processed feeds.
-	 * @param int $feed_id The ID of the processed feed.
+	 * @param int   $feed_id      The ID of the processed feed.
 	 *
 	 * @return array
 	 */
@@ -386,8 +384,8 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	/**
 	 * Update the processed_feeds array for the current entry.
 	 *
-	 * @param array $add_on_feeds The IDs of the processed feeds for the current add-on.
-	 * @param bool|int $entry_id False or the ID of the entry the meta should be saved for.
+	 * @param array    $add_on_feeds The IDs of the processed feeds for the current add-on.
+	 * @param bool|int $entry_id     False or the ID of the entry the meta should be saved for.
 	 */
 	public function update_processed_feeds( $add_on_feeds, $entry_id = false ) {
 		if ( ! $entry_id ) {
