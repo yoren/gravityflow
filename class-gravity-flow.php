@@ -4803,6 +4803,11 @@ PRIMARY KEY  (id)
 		public function cron() {
 			$this->log_debug( __METHOD__ . '() Starting cron.' );
 
+			if ( method_exists( 'GF_Upgrade', 'get_submissions_block' ) && gf_upgrade()->get_submissions_block() ) {
+				$this->log_debug( __METHOD__ . '(): submissions are blocked because an upgrade of Gravity Forms is in progress' );
+				return;
+			}
+
 			$this->maybe_process_queued_entries();
 			$this->maybe_process_expiration_and_reminders();
 
