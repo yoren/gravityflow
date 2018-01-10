@@ -28,28 +28,38 @@ $I->amOnWorkflowPage( 'Inbox' );
 // Test - Submit Buttons
 $I->click( '0023 - User Input Save Progress' );
 $I->waitForText( 'Save Progress - Submit Buttons (Pending Input)' );
+$I->see( 'Save Progress - Submit Buttons (Pending Input)' );
 $I->click( '#gravityflow_save_progress_button' );
 $I->waitForText( 'Entry updated - in progress.' );
+$I->see( 'Entry updated - in progress.' );
 $I->click( '#gravityflow_submit_button' );
 $I->waitForText( 'Entry updated and marked complete.' );
+$I->see( 'Entry updated and marked complete.' );
 
 // Test - Radio Buttons - In Progress
 $I->waitForText( 'Save Progress - Radio Buttons - In Progress Default (Pending Input)' );
+$I->see( 'Save Progress - Radio Buttons - In Progress Default (Pending Input)' );
 $I->seeOptionIsSelected( 'input[name=gravityflow_status]', 'in_progress' );
 $I->click( '#gravityflow_update_button' );
 $I->waitForText( 'Entry updated - in progress.' );
+$I->see( 'Entry updated - in progress.' );
 $I->click( 'input#gravityflow_complete' );
 $I->click( '#gravityflow_update_button' );
 $I->waitForText( 'Entry updated and marked complete.' );
+$I->see( 'Entry updated and marked complete.' );
 
 // Test - Radio Buttons - Complete
 $I->waitForText( 'Save Progress - Radio Buttons - Complete Default (Pending Input)' );
+$I->see( 'Save Progress - Radio Buttons - Complete Default (Pending Input)' );
 $I->seeOptionIsSelected( 'input[name=gravityflow_status]', 'complete' );
 $I->click( '#gravityflow_update_button' );
 $I->waitForText( 'Entry updated and marked complete.' );
+$I->see( 'Entry updated and marked complete.' );
 
 // Test - Disabled
 $I->waitForText( 'Save Progress - Disabled (Pending Input)' );
+$I->see( 'Save Progress - Disabled (Pending Input)' );
 $I->dontSeeElement( 'input[name=gravityflow_status]' );
 $I->click( '#gravityflow_update_button' );
 $I->waitForText( 'Entry updated and marked complete.' );
+$I->see( 'Entry updated and marked complete.' );
