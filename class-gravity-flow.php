@@ -2605,6 +2605,12 @@ PRIMARY KEY  (id)
 			}
 
 			printf( '%s: %s<br/><br/>', esc_html__( 'Entry ID', 'gravityflow' ), $entry_id_link );
+
+			/**
+			 * Allows the format for dates within the entry detail workflow info box to be modified.
+			*
+			* @param string $date_format A date format string - defaults to 'Y/m/d'
+			*/
 			$date_created_format = apply_filters( 'gravityflow_date_format_entry_detail', 'Y/m/d' );
 			printf( '%s: %s', esc_html__( 'Submitted', 'gravityflow' ), esc_html( GFCommon::format_date( $entry['date_created'], true, $date_created_format ) ) );
 
@@ -2612,6 +2618,11 @@ PRIMARY KEY  (id)
 				$last_updated = date( 'Y-m-d H:i:s', $entry['workflow_timestamp'] );
 				if ( $entry['date_created'] != $last_updated ) {
 					echo '<br /><br />';
+					/**
+					* Allows the format for dates within the entry detail workflow info box to be modified.
+					*
+					* @param string $date_format A date format string - defaults to 'Y/m/d'
+					*/
 					$date_updated_format = apply_filters( 'gravityflow_date_format_entry_detail', 'Y/m/d' );
 					esc_html_e( 'Last updated', 'gravityflow' ); ?>: <?php echo esc_html( GFCommon::format_date( $last_updated, true, $date_updated_format ) );
 				}
