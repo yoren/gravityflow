@@ -5825,6 +5825,18 @@ AND m.meta_value='queued'";
 				$has_product_field = GFCommon::is_product_field( $field->type ) ? true : $has_product_field;
 			}
 
+			/**
+			 * Allow the display fields to be filtered
+			 *
+			 * @param array $fields_as_choices The Gravity Forms fields to be shown in the Display Fields settings
+			 * @param array $form The current Gravity Forms object
+			 * @param array|false $feed The current feed being processed. If $feed is false, use the $_POST data.
+			 *
+			 * @since 2.0.1
+			 */
+			$feed = $this->get_current_feed();
+			$fields_as_choices = apply_filters( 'gravityflow_display_field_choices', $fields_as_choices, $form, $feed );
+
 			$mode_value = $this->get_setting( 'display_fields_mode', 'all_fields' );
 
 			$multiselect_field = array(
