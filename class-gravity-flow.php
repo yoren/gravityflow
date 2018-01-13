@@ -1915,7 +1915,7 @@ PRIMARY KEY  (id)
 					$(document).ready(function () {
 						$("#step_highlight_color").wpColorPicker();
 					});
-				})(jQuery); 
+				})(jQuery);
 			</script>
 			<?php
 
@@ -2144,7 +2144,7 @@ PRIMARY KEY  (id)
 		 * Validate step_highlight composite setting
 		 *
 		 * Validate the sub-settings are of appropriate type and required status
-		 * 
+		 *
 		 * @since 1.9.2
 		 *
 		 * @param array $field The field properties.
@@ -2781,7 +2781,7 @@ PRIMARY KEY  (id)
 				'value' => 'restart_workflow',
 			);
 
-			if ( $current_step && count( $steps ) > 1 ) {
+			if ( count( $steps ) > 1 ) {
 				$choices = array();
 				foreach ( $steps as $step ) {
 					if ( ! $step->is_active() ) {
@@ -2796,10 +2796,12 @@ PRIMARY KEY  (id)
 					}
 				}
 
-				$admin_actions[] = array(
-					'label'   => esc_html__( 'Send to step:', 'gravityflow' ),
-					'choices' => $choices,
-				);
+				if ( ! empty( $choices ) ) {
+					$admin_actions[] = array(
+						'label'   => esc_html__( 'Send to step:', 'gravityflow' ),
+						'choices' => $choices,
+					);
+				}
 			}
 
 			/**
@@ -4803,6 +4805,11 @@ PRIMARY KEY  (id)
 		public function cron() {
 			$this->log_debug( __METHOD__ . '() Starting cron.' );
 
+			if ( method_exists( 'GF_Upgrade', 'get_submissions_block' ) && gf_upgrade()->get_submissions_block() ) {
+				$this->log_debug( __METHOD__ . '(): submissions are blocked because an upgrade of Gravity Forms is in progress' );
+				return;
+			}
+
 			$this->maybe_process_queued_entries();
 			$this->maybe_process_expiration_and_reminders();
 
@@ -5819,6 +5826,18 @@ AND m.meta_value='queued'";
 				$fields_as_choices[] = array( 'label' => $field->get_field_label( false, null ), 'value' => $field->id );
 				$has_product_field = GFCommon::is_product_field( $field->type ) ? true : $has_product_field;
 			}
+
+			/**
+			 * Allow the display fields to be filtered
+			 *
+			 * @param array $fields_as_choices The Gravity Forms fields to be shown in the Display Fields settings
+			 * @param array $form The current Gravity Forms object
+			 * @param array|false $feed The current feed being processed. If $feed is false, use the $_POST data.
+			 *
+			 * @since 2.0.1
+			 */
+			$feed = $this->get_current_feed();
+			$fields_as_choices = apply_filters( 'gravityflow_display_field_choices', $fields_as_choices, $form, $feed );
 
 			$mode_value = $this->get_setting( 'display_fields_mode', 'all_fields' );
 

@@ -2147,7 +2147,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		if ( ! $valid ) {
 			$form['workflow_note'] = array(
 				'failed_validation'  => true,
-				'validation_message' => esc_html__( 'A note is required' )
+				'validation_message' => esc_html__( 'A note is required', 'gravityflow' )
 			);
 		}
 

@@ -919,23 +919,7 @@ class Gravity_Flow_Entry_Detail {
 	 * @return bool
 	 */
 	public static function is_display_field( $field, $current_step, $form, $entry, $is_product_field ) {
-		$display_field           = true;
-		$display_fields_mode     = $current_step ? $current_step->display_fields_mode : 'all_fields';
-		$display_fields_selected = $current_step && is_array( $current_step->display_fields_selected ) ? $current_step->display_fields_selected : array();
-
-		if ( $display_fields_mode == 'selected_fields' ) {
-			if ( ! in_array( $field->id, $display_fields_selected ) ) {
-				$display_field = false;
-			}
-		} else {
-			if ( GFFormsModel::is_field_hidden( $form, $field, array(), $entry ) || $is_product_field ) {
-				$display_field = false;
-			}
-		}
-
-		$display_field = (bool) apply_filters( 'gravityflow_workflow_detail_display_field', $display_field, $field, $form, $entry, $current_step );
-
-		return $display_field;
+		return Gravity_Flow_Common::is_display_field( $field, $current_step, $form, $entry, $is_product_field );
 	}
 
 	/**
