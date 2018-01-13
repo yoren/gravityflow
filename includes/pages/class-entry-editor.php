@@ -1,18 +1,20 @@
 <?php
-
-if ( ! class_exists( 'GFForms' ) ) {
-	die();
-}
-
 /**
  * Gravity Flow Entry Editor
- *
  *
  * @package     GravityFlow
  * @subpackage  Classes/Gravity_Flow_Entry_Editor
  * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.2.0.30
+ */
+
+if ( ! class_exists( 'GFForms' ) ) {
+	die();
+}
+
+/**
+ * Class Gravity_Flow_Entry_Editor
  */
 class Gravity_Flow_Entry_Editor {
 
@@ -25,11 +27,13 @@ class Gravity_Flow_Entry_Editor {
 
 	/**
 	 * The Gravity Forms Entry array.
-	 * @var
+	 *
+	 * @var array
 	 */
 	public $entry;
 
 	/**
+	 * The current step.
 	 *
 	 * @var Gravity_Flow_Step $step
 	 */
@@ -45,7 +49,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Flag set in the constructor to control the visibility of empty fields.
 	 *
-	 * @var
+	 * @var bool
 	 */
 	public $display_empty_fields;
 
@@ -110,10 +114,10 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Gravity_Flow_Entry_Editor constructor.
 	 *
-	 * @param array $form
-	 * @param array $entry
-	 * @param Gravity_Flow_Step $step
-	 * @param bool $display_empty_fields
+	 * @param array             $form                 The current form.
+	 * @param array             $entry                The current entry.
+	 * @param Gravity_Flow_Step $step                 The current step.
+	 * @param bool              $display_empty_fields Indicates if empty fields should be displayed.
 	 */
 	public function __construct( $form, $entry, $step, $display_empty_fields ) {
 		$this->form                                  = $form;
@@ -131,7 +135,7 @@ class Gravity_Flow_Entry_Editor {
 	public function render_edit_form() {
 		$this->add_hooks();
 
-		// Impersonate front-end form
+		// Impersonate front-end form.
 		unset( $_GET['page'] );
 
 		require_once( GFCommon::get_base_path() . '/form_display.php' );
@@ -181,9 +185,9 @@ class Gravity_Flow_Entry_Editor {
 	 * Target of the gform_pre_render filter.
 	 * Removes the page fields from the form.
 	 *
-	 * @param array $form
+	 * @param array $form The current form.
 	 *
-	 * @return array the filtered form
+	 * @return array The filtered form.
 	 */
 	public function filter_gform_pre_render( $form ) {
 		$form                              = $this->remove_page_fields( $form );
@@ -198,7 +202,6 @@ class Gravity_Flow_Entry_Editor {
 		foreach ( $form['fields'] as $field ) {
 			if ( $field->type == 'section' ) {
 				// Unneeded section fields will be removed via filter_gform_field_container().
-
 				$field->adminOnly = false;
 				$fields[]         = $field;
 				continue;
@@ -253,7 +256,7 @@ class Gravity_Flow_Entry_Editor {
 			$field->adminLabel = '';
 
 			if ( $field->type === 'hidden' ) {
-				// Render hidden fields as text fields
+				// Render hidden fields as text fields.
 				$field       = new GF_Field_Text( $field );
 				$field->type = 'text';
 			}
@@ -367,7 +370,7 @@ class Gravity_Flow_Entry_Editor {
 	 *
 	 * Handles the construction of the field input. Returns markup for the editable field or the display value.
 	 *
-	 * @param string $html The field input markup.
+	 * @param string   $html  The field input markup.
 	 * @param GF_Field $field The current field.
 	 *
 	 * @return string
@@ -379,13 +382,13 @@ class Gravity_Flow_Entry_Editor {
 		}
 
 		if ( ! empty( $html ) ) {
-			// the field input has already been set via the gform_field_input filter. e.g. the Signature Add-On < v3
+			// the field input has already been set via the gform_field_input filter. e.g. the Signature Add-On < v3.
 			return $html;
 		}
 
 		$posted_form_id = rgpost( 'gravityflow_submit' );
 		if ( $posted_form_id == $this->form['id'] && rgpost( 'step_id' ) == $this->step->get_id() ) {
-			// updated or failed validation
+			// Updated or failed validation.
 			$value = GFFormsModel::get_field_value( $field );
 		} else {
 			$value = GFFormsModel::get_lead_field_value( $this->entry, $field );
@@ -466,7 +469,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Generates and returns the markup for a display field.
 	 *
-	 * @param GF_Field $field
+	 * @param GF_Field $field The current field object.
 	 *
 	 * @return string
 	 */
@@ -530,7 +533,7 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * If this is a calculated product field ensure the input values are set.
 	 *
-	 * @param mixed $value The field value.
+	 * @param mixed    $value The field value.
 	 * @param GF_Field $field The current field object.
 	 *
 	 * @return mixed
@@ -560,8 +563,8 @@ class Gravity_Flow_Entry_Editor {
 	/**
 	 * Checks whether the given field is a display field and whether it should be displayed.
 	 *
-	 * @param GF_Field $field The field to be checked.
-	 * @param bool $is_init Return after checking the $_display_fields array? Default is false.
+	 * @param GF_Field $field   The field to be checked.
+	 * @param bool     $is_init Return after checking the $_display_fields array? Default is false.
 	 *
 	 * @return bool
 	 */
@@ -645,8 +648,8 @@ class Gravity_Flow_Entry_Editor {
 	 *
 	 * Hidden sections contain no editable fields and no non-empty display fields.
 	 *
-	 * @param GF_Field_Section $section_field The current section field.
-	 * @param GF_Field[] $section_fields The fields located in the current section.
+	 * @param GF_Field_Section $section_field  The current section field.
+	 * @param GF_Field[]       $section_fields The fields located in the current section.
 	 *
 	 * @return bool
 	 */
@@ -692,8 +695,8 @@ class Gravity_Flow_Entry_Editor {
 	 *
 	 * Fields with conditional logic remain on the form to avoid JS errors.
 	 *
-	 * @param $field_container
-	 * @param $field
+	 * @param string   $field_container The field container HTML.
+	 * @param GF_Field $field           The current field object.
 	 *
 	 * @return string
 	 */
@@ -702,7 +705,7 @@ class Gravity_Flow_Entry_Editor {
 			$section_fields = $this->get_section_fields( $field->id );
 
 			if ( $this->section_fields_hidden( $section_fields )
-			     || ( $this->is_section_hidden( $field, $section_fields ) && empty( $field->conditionalLogic ) ) // Section fields with conditional logic must be added to the form so fields inside the section can be hidden or displayed dynamically
+			     || ( $this->is_section_hidden( $field, $section_fields ) && empty( $field->conditionalLogic ) ) // Section fields with conditional logic must be added to the form so fields inside the section can be hidden or displayed dynamically.
 			) {
 				return '';
 			}
@@ -732,8 +735,8 @@ class Gravity_Flow_Entry_Editor {
 	 *
 	 * Checks the step settings and adds the appropriate classes.
 	 *
-	 * @param $classes
-	 * @param $field
+	 * @param string   $classes The field classes.
+	 * @param GF_Field $field   The current field object.
 	 *
 	 * @return string
 	 */
