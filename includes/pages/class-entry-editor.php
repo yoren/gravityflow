@@ -574,20 +574,7 @@ class Gravity_Flow_Entry_Editor {
 			return false;
 		}
 
-		$display_field           = true;
-		$display_fields_mode     = $this->step->display_fields_mode;
-		$display_fields_selected = is_array( $this->step->display_fields_selected ) ? $this->step->display_fields_selected : array();
-
-		if ( $display_fields_mode == 'selected_fields' ) {
-			if ( $field->type !== 'section' && ! in_array( $field->id, $display_fields_selected ) ) {
-				$display_field = false;
-			}
-		} else {
-			if ( $field->type !== 'section' && GFFormsModel::is_field_hidden( $this->form, $field, array(), $this->entry ) ) {
-				$display_field = false;
-			}
-			$display_field = (bool) apply_filters( 'gravityflow_workflow_detail_display_field', $display_field, $field, $this->form, $this->entry, $this->step );
-		}
+		$display_field = Gravity_Flow_Common::is_display_field( $field, $this->step, $this->form, $this->entry );
 
 		if ( $display_field ) {
 			$this->_display_fields[] = $field->id;
@@ -604,7 +591,7 @@ class Gravity_Flow_Entry_Editor {
 	 * @return bool
 	 */
 	public function is_editable_field( $field ) {
-		return in_array( $field->id, $this->_editable_fields );
+		return Gravity_Flow_Common::is_editable_field( $field, $this->step );
 	}
 
 	/**
