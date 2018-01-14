@@ -1,2 +1,0 @@
- - Added 'Send to step' to admin action when workflow completed.
- - Added CSS RTL improvements.
