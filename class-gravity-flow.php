@@ -1347,19 +1347,19 @@ PRIMARY KEY  (id)
 			}
 		}
 
-		/***
+		/**
 		 * Renders and initializes a radio field or a collection of radio fields based on the $field array.
 		 * Images/icons are used in place of the HTML radio buttons.
 		 *
-		 * @param array $field - Field array containing the configuration options of this field
-		 * @param bool  $echo  = true - true to echo the output to the screen, false to simply return the contents as a string
+		 * @param array $field Field array containing the configuration options of this field.
+		 * @param bool  $echo  True to echo the output to the screen, false to simply return the contents as a string.
 		 *
-		 * @return string Returns the markup for the radio buttons
+		 * @return string Returns the markup for the radio buttons.
 		 *
 		 */
 		protected function settings_radio_image( $field, $echo = true ) {
 
-			$field['type'] = 'radio'; //making sure type is set to radio
+			$field['type'] = 'radio'; // Making sure type is set to radio.
 
 			$selected_value   = $this->get_setting( $field['name'], rgar( $field, 'default_value' ) );
 			$field_attributes = $this->get_field_attributes( $field );
@@ -1417,6 +1417,11 @@ PRIMARY KEY  (id)
 			return $html;
 		}
 
+		/**
+		 * Renders the HTML for the schedule setting.
+		 *
+		 * @param array $field The field properties.
+		 */
 		public function settings_schedule( $field ) {
 
 			$form = $this->get_current_form();
@@ -1599,6 +1604,11 @@ PRIMARY KEY  (id)
 
 		}
 
+		/**
+		 * Renders the HTML for the expiration setting.
+		 *
+		 * @param array $field The field properties.
+		 */
 		public function settings_expiration( $field ) {
 
 			$form = $this->get_current_form();
@@ -1817,9 +1827,9 @@ PRIMARY KEY  (id)
 		 *
 		 * @since 1.9.2
 		 *
-		 * @param array $field
+		 * @param array $field The field properties.
 		 *
-		 * @return string|void
+		 * @return string
 		 */
 		public function settings_step_highlight( $field ) {
 			$field = $this->prepare_settings_step_highlight( $field );
@@ -1828,11 +1838,11 @@ PRIMARY KEY  (id)
 		}
 
 		/**
-		* Prepare the step_highlight composite settings to be accessible for every field in the composite
+		* Prepare the step_highlight composite settings to be accessible for every field in the composite.
 		*
 		* @since 1.9.2
 		*
-		* @param array $field The step_highlight field
+		* @param array $field The field properties.
 		*
 		* @return array
 		*/
@@ -1873,13 +1883,13 @@ PRIMARY KEY  (id)
 		}
 
 		/**
-		 * Generate the step_highlight composite setting container
+		 * Generate the step_highlight composite setting container.
 		 *
 		 * The container will be displayed or hidden depending on the value of the step_highlight checkbox field.
 		 *
 		 * @since 1.9.2
 		 *
-		 * @param array $field The step_highlight field
+		 * @param array $field The field properties.
 		 *
 		 * @return string|void
 		 */
@@ -1922,6 +1932,11 @@ PRIMARY KEY  (id)
 			return;
 		}
 
+		/**
+		 * Renders the tabs setting.
+		 *
+		 * @param array $tabs_field The field properties.
+		 */
 		public function settings_tabs( $tabs_field ) {
 			printf( '<div id="tabs-%s">', $tabs_field['name'] );
 			echo '<ul>';
@@ -1967,8 +1982,8 @@ PRIMARY KEY  (id)
 		 *
 		 * @since 1.5.1
 		 *
-		 * @param array $field
-		 * @param bool  $echo
+		 * @param array $field The field properties.
+		 * @param bool  $echo  Indicates if the HTML should be echoed.
 		 *
 		 * @return string
 		 */
@@ -2064,8 +2079,8 @@ PRIMARY KEY  (id)
 		 * @since 1.5.1 Updated to use Gravity_Flow::settings_checkbox_and_container()
 		 * @since unknown
 		 *
-		 * @param array $field
-		 * @param bool  $echo
+		 * @param array $field The field properties.
+		 * @param bool  $echo  Indicates if the HTML should be echoed.
 		 *
 		 * @return string
 		 */
@@ -2098,8 +2113,8 @@ PRIMARY KEY  (id)
 		 * @since 1.5.1 Updated to use Gravity_Flow::settings_checkbox_and_container()
 		 * @since unknown
 		 *
-		 * @param array $field
-		 * @param bool  $echo
+		 * @param array $field The field properties.
+		 * @param bool  $echo  Indicates if the HTML should be echoed.
 		 *
 		 * @return string
 		 */
@@ -2109,6 +2124,13 @@ PRIMARY KEY  (id)
 			return $this->settings_checkbox_and_container( $field, $echo );
 		}
 
+		/**
+		 * Adds the textarea settings to the field properties array.
+		 *
+		 * @param array $field The field properties.
+		 *
+		 * @return array
+		 */
 		public function prepare_settings_checkbox_and_textarea( $field ) {
 			$textarea_input = rgars( $field, 'textarea' );
 
@@ -2130,6 +2152,12 @@ PRIMARY KEY  (id)
 			return $field;
 		}
 
+		/**
+		 * Validate the combined checkbox and textarea setting.
+		 *
+		 * @param array $field    The field properties.
+		 * @param array $settings The settings to be potentially saved.
+		 */
 		public function validate_checkbox_and_textarea_settings( $field, $settings ) {
 			$field = $this->prepare_settings_checkbox_and_textarea( $field );
 
@@ -2141,13 +2169,13 @@ PRIMARY KEY  (id)
 		}
 
 		/**
-		 * Validate step_highlight composite setting
+		 * Validate step_highlight composite setting.
 		 *
-		 * Validate the sub-settings are of appropriate type and required status
+		 * Validate the sub-settings are of appropriate type and required status.
 		 *
 		 * @since 1.9.2
 		 *
-		 * @param array $field The field properties.
+		 * @param array $field    The field properties.
 		 * @param array $settings The settings to be potentially saved.
 		 */
 		public function validate_step_highlight_settings( $field, $settings ) {
@@ -2163,11 +2191,11 @@ PRIMARY KEY  (id)
 		}
 
 		/**
-		 * Validate step_highlight_color is a hexadecimal code
+		 * Validate step_highlight_color is a hexadecimal code.
 		 *
 		 * @since 1.9.2
 		 *
-		 * @param array $field The field properties.
+		 * @param array $field    The field properties.
 		 * @param array $settings The settings to be potentially saved.
 		 */
 		public function validate_step_highlight_color_settings( $field, $settings ) {
@@ -2178,6 +2206,11 @@ PRIMARY KEY  (id)
 
 		}
 
+		/**
+		 * Renders the HTML for the visual editor setting.
+		 *
+		 * @param array $field The field properties.
+		 */
 		public function settings_visual_editor( $field ) {
 
 			$default_value = rgar( $field, 'value' ) ? rgar( $field, 'value' ) : rgar( $field, 'default_value' );
@@ -2190,6 +2223,9 @@ PRIMARY KEY  (id)
 			) );
 		}
 
+		/**
+		 * Renders the HTML for the routing setting.
+		 */
 		public function settings_routing() {
 			echo '<div id="gform_routing_setting" class="gravityflow-routing" data-field_name="_gaddon_setting_routing" data-field_id="routing" ></div>';
 			$field['name'] = 'routing';
@@ -2197,6 +2233,11 @@ PRIMARY KEY  (id)
 			$this->settings_hidden( $field );
 		}
 
+		/**
+		 * Renders the HTML for the user routing setting.
+		 *
+		 * @param array $field The field properties.
+		 */
 		public function settings_user_routing( $field ) {
 			$name = $field['name'];
 			$id = isset( $field['id'] ) ?  $field['id'] : 'gform_user_routing_setting_' . $name;
@@ -2206,6 +2247,11 @@ PRIMARY KEY  (id)
 			$this->settings_hidden( $field );
 		}
 
+		/**
+		 * Renders the HTML for the step selector setting.
+		 *
+		 * @param array $field The field properties.
+		 */
 		public function settings_step_selector( $field ) {
 			$form = $this->get_current_form();
 			$feed_id = $this->get_current_feed_id();
@@ -2234,6 +2280,11 @@ PRIMARY KEY  (id)
 			$this->settings_select( $step_selector_field );
 		}
 
+		/**
+		 * Renders the HTML for the editable fields setting.
+		 *
+		 * @param array $field The field properties.
+		 */
 		public function settings_editable_fields( $field ) {
 			$form = $this->get_current_form();
 			$choices = array();
@@ -2253,7 +2304,7 @@ PRIMARY KEY  (id)
 		/**
 		 * Adds columns to the list of feeds.
 		 *
-		 * setting name => label
+		 * setting name => label.
 		 *
 		 * @return array
 		 */
@@ -2271,6 +2322,13 @@ PRIMARY KEY  (id)
 			return $columns;
 		}
 
+		/**
+		 * Returns the value to be displayed in the step type column of the feeds list.
+		 *
+		 * @param array $item The current feed.
+		 *
+		 * @return string
+		 */
 		public function get_column_value_step_type( $item ) {
 			$step       = $this->get_step( $item['id'] );
 			$step_label = empty( $step ) ? $item['meta']['step_type'] : $step->get_label();
@@ -2286,7 +2344,13 @@ PRIMARY KEY  (id)
 			return $icon_html . $step_label;
 		}
 
-
+		/**
+		 * Returns the value to be displayed in the entry count column of the feeds list.
+		 *
+		 * @param array $item The current feed.
+		 *
+		 * @return string
+		 */
 		public function get_column_value_entry_count( $item ) {
 			$count_entries = apply_filters( 'gravityflow_entry_count_step_list', true );
 			if ( ! $count_entries ) {
@@ -2303,11 +2367,11 @@ PRIMARY KEY  (id)
 		}
 
 		/**
-		 * Return value of step_highlight composite setting for display on feed list
+		 * Return value of step_highlight composite setting for display on feed list.
 		 *
 		 * @since 1.9.2
 		 *
-		 * @param array $item Current workflow step
+		 * @param array $item Current workflow step.
 		 *
 		 * @return string
 		 */
@@ -2337,11 +2401,15 @@ PRIMARY KEY  (id)
 			return $step_highlight;
 		}
 
+		/**
+		 * Returns the message to be displayed in the feeds list when no steps have been configured for the form.
+		 *
+		 * @return string
+		 */
 		public function feed_list_no_item_message() {
 			$url = add_query_arg( array( 'fid' => 0 ) );
 			return sprintf( __( "You don't have any steps configured. Let's go %screate one%s!", 'gravityflow' ), "<a href='" . esc_url( $url ) . "'>", '</a>' );
 		}
-
 
 		/**
 		 * Entry meta data is custom data that's stored and retrieved along with the entry object.
@@ -2363,7 +2431,7 @@ PRIMARY KEY  (id)
 		 *
 		 *
 		 * @param array $entry_meta An array of entry meta already registered with the gform_entry_meta filter.
-		 * @param int $form_id The Form ID
+		 * @param int   $form_id    The Form ID.
 		 *
 		 * @return array The filtered entry meta array.
 		 */
@@ -2394,7 +2462,7 @@ PRIMARY KEY  (id)
 				$entry_meta[ 'workflow_step_status_' . $step_id ] = array(
 					'label'             => __( 'Status:', 'gravityflow' ) . ' ' . $step_name,
 					'is_numeric'        => false,
-					'is_default_column' => false, // this column will not be displayed by default on the entry list
+					'is_default_column' => false, // This column will not be displayed by default on the entry list.
 					'filter'            => array(
 						'operators' => array( 'is', 'isnot' ),
 						'choices'   => $status_choices,
@@ -2421,7 +2489,7 @@ PRIMARY KEY  (id)
 					'text' => $this->translate_status_label( 'cancelled' ),
 				);
 
-				// Remove duplicates
+				// Remove duplicates.
 				$workflow_final_status_options = array_map( 'unserialize', array_unique( array_map( 'serialize', $workflow_final_status_options ) ) );
 
 				$workflow_final_status_options = array_values( $workflow_final_status_options );
@@ -2430,7 +2498,7 @@ PRIMARY KEY  (id)
 					'label'                      => 'Final Status',
 					'is_numeric'                 => false,
 					'update_entry_meta_callback' => array( $this, 'callback_update_entry_meta_workflow_final_status' ),
-					'is_default_column'          => true, // this column will be displayed by default on the entry list
+					'is_default_column'          => true, // This column will be displayed by default on the entry list.
 					'filter'                     => array(
 						'operators' => array( 'is', 'isnot' ),
 						'choices'   => $workflow_final_status_options,
@@ -2441,7 +2509,7 @@ PRIMARY KEY  (id)
 					'label'                      => 'Workflow Step',
 					'is_numeric'                 => false,
 					'update_entry_meta_callback' => array( $this, 'callback_update_entry_meta_workflow_step' ),
-					'is_default_column'          => true, // this column will be displayed by default on the entry list
+					'is_default_column'          => true, // This column will be displayed by default on the entry list.
 					'filter'                     => array(
 						'operators' => array( 'is', 'isnot' ),
 						'choices'   => $step_choices,
@@ -2452,7 +2520,7 @@ PRIMARY KEY  (id)
 					'label'                      => 'Timestamp',
 					'is_numeric'                 => true,
 					'update_entry_meta_callback' => array( $this, 'callback_update_entry_meta_timestamp' ),
-					'is_default_column'          => false, // this column will not be displayed by default on the entry list
+					'is_default_column'          => false, // This column will not be displayed by default on the entry list.
 				);
 			}
 
@@ -2462,9 +2530,9 @@ PRIMARY KEY  (id)
 		/**
 		 * The target of callback_update_entry_meta_workflow_step.
 		 *
-		 * @param string $key The entry meta key
-		 * @param array $entry The Entry Object
-		 * @param array $form The Form Object
+		 * @param string $key   The entry meta key.
+		 * @param array  $entry The Entry Object.
+		 * @param array  $form  The Form Object.
 		 *
 		 * @return string|void
 		 */
@@ -2488,9 +2556,9 @@ PRIMARY KEY  (id)
 		/**
 		 * The target of callback_update_entry_meta_workflow_current_status.
 		 *
-		 * @param string $key The entry meta key
-		 * @param array $entry The Entry Object
-		 * @param array $form The Form Object
+		 * @param string $key   The entry meta key.
+		 * @param array  $entry The Entry Object.
+		 * @param array  $form  The Form Object.
 		 *
 		 * @return string|void
 		 */
@@ -2510,9 +2578,9 @@ PRIMARY KEY  (id)
 		/**
 		 * The target of callback_update_entry_meta_workflow_final_status.
 		 *
-		 * @param string $key The entry meta key
-		 * @param array $entry The Entry Object
-		 * @param array $form The Form Object
+		 * @param string $key   The entry meta key.
+		 * @param array  $entry The Entry Object.
+		 * @param array  $form  The Form Object.
 		 *
 		 * @return string|void
 		 */
@@ -2532,9 +2600,9 @@ PRIMARY KEY  (id)
 		/**
 		 * The target of update_entry_meta_callback.
 		 *
-		 * @param string $key The entry meta key
-		 * @param array $entry The Entry Object
-		 * @param array $form The Form Object
+		 * @param string $key   The entry meta key.
+		 * @param array  $entry The Entry Object.
+		 * @param array  $form  The Form Object.
 		 *
 		 * @return string|void
 		 */
@@ -2545,7 +2613,14 @@ PRIMARY KEY  (id)
 			return ! isset( $entry['workflow_timestamp'] ) ? strtotime( $entry['date_created'] ) : time();
 		}
 
-
+		/**
+		 * Displays the workflow info on the entry detail page, if enabled.
+		 *
+		 * @param array $form The current form.
+		 * @param array                  $entry        The current step.
+		 * @param null|Gravity_Flow_Step $current_step Null or the current step.
+		 * @param array                  $args         The page arguments.
+		 */
 		public function workflow_entry_detail_status_box( $form, $entry, $current_step = null, $args = array() ) {
 
 			if ( is_null( $current_step ) ) {
@@ -2586,9 +2661,9 @@ PRIMARY KEY  (id)
 		 * Displays the workflow info on the entry detail page, if enabled.
 		 *
 		 * @param Gravity_Flow_Step $current_step The current step for this entry.
-		 * @param array $form The form which created this entry.
-		 * @param array $entry The entry currently being displayed.
-		 * @param array $args The properties for the page currently being displayed.
+		 * @param array             $form         The form which created this entry.
+		 * @param array             $entry        The entry currently being displayed.
+		 * @param array             $args         The properties for the page currently being displayed.
 		 */
 		public function maybe_display_entry_detail_workflow_info( $current_step, $form, $entry, $args ) {
 			$display_workflow_info = (bool) $args['workflow_info'];
@@ -2608,9 +2683,9 @@ PRIMARY KEY  (id)
 
 			/**
 			 * Allows the format for dates within the entry detail workflow info box to be modified.
-			*
-			* @param string $date_format A date format string - defaults to 'Y/m/d'
-			*/
+			 *
+			 * @param string $date_format A date format string - defaults to 'Y/m/d'
+			 */
 			$date_format = apply_filters( 'gravityflow_date_format_entry_detail', 'Y/m/d' );
 			printf( '%s: %s', esc_html__( 'Submitted', 'gravityflow' ), esc_html( GFCommon::format_date( $entry['date_created'], true, $date_format ) ) );
 
@@ -2647,8 +2722,8 @@ PRIMARY KEY  (id)
 			/**
 			 * Allows content to be added in the workflow box below the workflow status info.
 			 *
-			 * @param array $form The form which created this entry.
-			 * @param array $entry The entry currently being displayed.
+			 * @param array             $form         The form which created this entry.
+			 * @param array             $entry        The entry currently being displayed.
 			 * @param Gravity_Flow_Step $current_step The current step for this entry.
 			 */
 			do_action( 'gravityflow_below_workflow_info_entry_detail', $form, $entry, $current_step );
@@ -2658,9 +2733,9 @@ PRIMARY KEY  (id)
 		 * Displays the step status on the entry detail page.
 		 *
 		 * @param Gravity_Flow_Step $current_step The current step for this entry.
-		 * @param array $form The form which created this entry.
-		 * @param array $entry The entry currently being displayed.
-		 * @param array $args The properties for the page currently being displayed.
+		 * @param array             $form         The form which created this entry.
+		 * @param array             $entry        The entry currently being displayed.
+		 * @param array             $args         The properties for the page currently being displayed.
 		 */
 		public function maybe_display_entry_detail_step_status( $current_step, $form, $entry, $args ) {
 			if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step ) {
@@ -2712,8 +2787,8 @@ PRIMARY KEY  (id)
 		 * Display the details for the expired step.
 		 *
 		 * @param Gravity_Flow_Step $current_step The current step for this entry.
-		 * @param array $form The form which created this entry.
-		 * @param integer $entry_id The ID of the current entry.
+		 * @param array             $form         The form which created this entry.
+		 * @param integer           $entry_id     The ID of the current entry.
 		 */
 		public function display_expired_step_details( $current_step, $form, $entry_id ) {
 			$current_step->log_event( esc_html__( 'Step expired', 'gravityflow' ) );
@@ -2728,8 +2803,8 @@ PRIMARY KEY  (id)
 		 * Displays the admin actions drop down on the entry detail page, if applicable.
 		 *
 		 * @param Gravity_Flow_Step $current_step The current step for this entry.
-		 * @param array $form The form which created this entry.
-		 * @param array $entry The entry currently being displayed.
+		 * @param array             $form         The form which created this entry.
+		 * @param array             $entry        The entry currently being displayed.
 		 */
 		public function maybe_display_entry_detail_admin_actions( $current_step, $form, $entry ) {
 			$steps = $this->get_steps( $form['id'] );
@@ -2761,9 +2836,9 @@ PRIMARY KEY  (id)
 		 * Prepares a string containing the HTML options and optgroups for the admin actions drop down.
 		 *
 		 * @param bool|Gravity_Flow_Step $current_step The current step.
-		 * @param Gravity_Flow_Step[] $steps The steps for this form.
-		 * @param array $form The current form.
-		 * @param array $entry The current entry,
+		 * @param Gravity_Flow_Step[]    $steps        The steps for this form.
+		 * @param array                  $form         The current form.
+		 * @param array                  $entry        The current entry,
 		 *
 		 * @return string
 		 */
@@ -2815,17 +2890,23 @@ PRIMARY KEY  (id)
 			/**
 			 * Filter the choices which appear in the admin actions drop down.
 			 *
-			 * @param array $admin_actions Contains the properties for the options and optgroups.
-			 * @param bool|Gravity_Flow_Step $current_step The current step.
-			 * @param Gravity_Flow_Step[] $steps The steps for this form.
-			 * @param array $form The current form.
-			 * @param array $entry The current entry,
+			 * @param array                  $admin_actions Contains the properties for the options and optgroups.
+			 * @param bool|Gravity_Flow_Step $current_step  The current step.
+			 * @param Gravity_Flow_Step[]    $steps         The steps for this form.
+			 * @param array                  $form          The current form.
+			 * @param array                  $entry         The current entry,
 			 */
 			$admin_actions = apply_filters( 'gravityflow_admin_actions_workflow_detail', $admin_actions, $current_step, $steps, $form, $entry );
 
 			return $this->get_select_options( $admin_actions, '' );
 		}
 
+		/**
+		 * Displays the entry detail status box, if appropriate.
+		 *
+		 * @param array $form  The current form.
+		 * @param array $entry The current entry.
+		 */
 		public function entry_detail_status_box( $form, $entry ) {
 
 			if ( ! isset( $entry['workflow_final_status'] ) ) {
@@ -2857,6 +2938,14 @@ PRIMARY KEY  (id)
 			<?php
 		}
 
+		/**
+		 * Returns the current step object for the supplied form and entry.
+		 *
+		 * @param array $form  The current form.
+		 * @param array $entry The current entry.
+		 *
+		 * @return bool|Gravity_Flow_Step
+		 */
 		public function get_current_step( $form, $entry ) {
 
 			if ( ! isset( $entry['workflow_step'] ) ) {
@@ -2873,9 +2962,11 @@ PRIMARY KEY  (id)
 		}
 
 		/**
-		 * @param Gravity_Flow_Step $step
-		 * @param $entry
-		 * @param $form
+		 * Returns the next step for the supplied entry.
+		 *
+		 * @param Gravity_Flow_Step $step The current step.
+		 * @param array             $entry The current entry.
+		 * @param array             $form  The current form.
 		 *
 		 * @return bool|Gravity_Flow_Step
 		 */
@@ -2916,6 +3007,14 @@ PRIMARY KEY  (id)
 			return $step;
 		}
 
+		/**
+		 * Initializes and returns the step object for the supplied step id and optional entry.
+		 *
+		 * @param int        $step_id The step ID.
+		 * @param null|array $entry   Null or the current entry.
+		 *
+		 * @return bool|Gravity_Flow_Step
+		 */
 		public function get_step( $step_id, $entry = null ) {
 
 			$feed = $this->get_feed( $step_id );
@@ -2931,10 +3030,10 @@ PRIMARY KEY  (id)
 		/**
 		 * Returns the next step in the list. FALSE if there isn't a next step.
 		 *
-		 * @param array $form
-		 * @param Gravity_Flow_Step $current_step
-		 * @param array $entry
-		 * @param array $steps
+		 * @param array               $form         The current form.
+		 * @param Gravity_Flow_Step   $current_step The current step.
+		 * @param array               $entry        The current entry.
+		 * @param Gravity_Flow_Step[] $steps        The steps for the current form. Optional.
 		 *
 		 * @return bool|Gravity_Flow_Step
 		 */
@@ -2960,6 +3059,11 @@ PRIMARY KEY  (id)
 			return false;
 		}
 
+		/**
+		 * Returns an array of pages to appear in the app menu.
+		 *
+		 * @return array
+		 */
 		public function get_app_menu_items() {
 			$menu_items = array();
 
@@ -3020,9 +3124,12 @@ PRIMARY KEY  (id)
 			return $menu_items;
 		}
 
+		/**
+		 * Build left side options, always have app Settings first and Uninstall last, put extensions in the middle.
+		 *
+		 * @return array
+		 */
 		public function get_app_settings_tabs() {
-
-			//build left side options, always have app Settings first and Uninstall last, put extensions in the middle
 
 			$setting_tabs = array(
 				array(
@@ -3180,6 +3287,9 @@ PRIMARY KEY  (id)
 			gravityflow_connected_apps()->settings_tab();
 		}
 
+		/**
+		 * Render the content for the tools page.
+		 */
 		public function app_tools_tab() {
 			$message = '';
 			$success = null;
@@ -3232,6 +3342,11 @@ PRIMARY KEY  (id)
 			<?php
 		}
 
+		/**
+		 * Get an array of form IDs selected for display on the submit page.
+		 *
+		 * @return array
+		 */
 		public function get_published_form_ids() {
 			$settings = $this->get_app_settings();
 
@@ -3261,6 +3376,11 @@ PRIMARY KEY  (id)
 			return $published_form_ids;
 		}
 
+		/**
+		 * Target for the load-workflow_page_gravityflow-status hook.
+		 *
+		 * Adds the screen options to the status page.
+		 */
 		public function load_screen_options() {
 
 			$screen = get_current_screen();
@@ -3280,10 +3400,20 @@ PRIMARY KEY  (id)
 
 		}
 
+		/**
+		 * Determines if the current location is the status page.
+		 *
+		 * @return bool
+		 */
 		public function is_status_page() {
 			return rgget( 'page' ) == 'gravityflow-status';
 		}
 
+		/**
+		 * Returns the settings to be displayed on the app settings page.
+		 *
+		 * @return array
+		 */
 		public function app_settings_fields() {
 
 			$forms = GFAPI::get_forms();
@@ -3425,6 +3555,14 @@ PRIMARY KEY  (id)
 
 		}
 
+		/**
+		 * Determines if the license is valid so the correct feedback icon can be displayed next to the setting.
+		 *
+		 * @param string $value The license key.
+		 * @param array  $field The field properties.
+		 *
+		 * @return bool|null
+		 */
 		public function license_feedback( $value, $field ) {
 
 			if ( empty( $value ) ) {
@@ -3444,6 +3582,13 @@ PRIMARY KEY  (id)
 
 		}
 
+		/**
+		 * Performs the remote request to check if the license key is activated, valid, and not expired.
+		 *
+		 * @param string $value The license key.
+		 *
+		 * @return array|object
+		 */
 		public function check_license( $value = '' ) {
 			if ( empty( $value ) ) {
 				$value = $this->get_app_setting( 'license_key' );
@@ -3454,11 +3599,17 @@ PRIMARY KEY  (id)
 			return json_decode( wp_remote_retrieve_body( $response ) );
 		}
 
+		/**
+		 * Deactivates the old license key and triggers activation of the new license key.
+		 *
+		 * @param array  $field         The license field properties.
+		 * @param string $field_setting The license key to be validated.
+		 */
 		public function license_validation( $field, $field_setting ) {
 			$old_license = $this->get_app_setting( 'license_key' );
 
 			if ( $old_license && $field_setting != $old_license ) {
-				// deactivate the old site
+				// Deactivate the old site.
 				$response = $this->perform_edd_license_request( 'deactivate_license', $old_license );
 				$this->log_debug( __METHOD__ . '() - response: ' . print_r( $response, 1 ) );
 			}
@@ -3472,6 +3623,13 @@ PRIMARY KEY  (id)
 
 		}
 
+		/**
+		 * Activates the license key for this site and clears the cached version info,
+		 *
+		 * @param string $license_key The license key to be activated.
+		 *
+		 * @return array|object
+		 */
 		public function activate_license( $license_key ) {
 			$response = $this->perform_edd_license_request( 'activate_license', $license_key );
 
