@@ -578,6 +578,13 @@ PRIMARY KEY  (id)
 			}
 		}
 
+		/**
+		 * Adds the enhanced ui init scripts for the workflow fields.
+		 *
+		 * @param array $form         The current form.
+		 * @param array $field_values The dynamic population field values.
+		 * @param bool  $is_ajax      Indicates if Ajax is enabled for this form.
+		 */
 		public function filter_gform_register_init_scripts( $form, $field_values, $is_ajax ) {
 
 			if ( $this->has_enhanced_dropdown( $form ) ) {
@@ -587,6 +594,13 @@ PRIMARY KEY  (id)
 			}
 		}
 
+		/**
+		 * Returns the enhanced ui init script for the workflow field.
+		 *
+		 * @param array $form The current form.
+		 *
+		 * @return string
+		 */
 		public static function get_chosen_init_script( $form ) {
 			$chosen_fields = array();
 			foreach ( $form['fields'] as $field ) {
@@ -599,6 +613,13 @@ PRIMARY KEY  (id)
 			return "gformInitChosenFields('" . implode( ',', $chosen_fields ) . "','" . esc_attr( apply_filters( "gform_dropdown_no_results_text_{$form['id']}", apply_filters( 'gform_dropdown_no_results_text', __( 'No results matched', 'gravityflow' ), $form['id'] ), $form['id'] ) ) . "');";
 		}
 
+		/**
+		 * Determines if the enhanced UI is enabled on at least one of the workflow fields.
+		 *
+		 * @param array $form The current form.
+		 *
+		 * @return bool
+		 */
 		public function has_enhanced_dropdown( $form ) {
 
 			if ( ! is_array( $form['fields'] ) ) {
@@ -614,12 +635,22 @@ PRIMARY KEY  (id)
 			return false;
 		}
 
+		/**
+		 * The feeds list page title.
+		 *
+		 * @return string
+		 */
 		public function feed_list_title() {
 			$url = add_query_arg( array( 'fid' => '0' ) );
 			$url = esc_url( $url );
 			return esc_html__( 'Workflow Steps', 'gravityflow' ) . " <a class='add-new-h2' href='{$url}'>" . __( 'Add New' , 'gravityflow' ) . '</a>';
 		}
 
+		/**
+		 * The stylesheets to be enqueued.
+		 *
+		 * @return array
+		 */
 		public function styles() {
 
 			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
@@ -759,10 +790,26 @@ PRIMARY KEY  (id)
 			return array_merge( parent::styles(), $styles );
 		}
 
+		/**
+		 * The feed settings page title.
+		 *
+		 * @return string
+		 */
 		public function feed_settings_title() {
 			return esc_html__( 'Workflow Step Settings', 'gravityflow' );
 		}
 
+		/**
+		 * Target for the set-screen-option hook.
+		 *
+		 * Sets the value of the entries_per_page option.
+		 *
+		 * @param bool|int $status False or the screen option value.
+		 * @param string   $option The option name.
+		 * @param int      $value  Screen option value.
+		 *
+		 * @return mixed
+		 */
 		public function set_option( $status, $option, $value ) {
 			if ( 'entries_per_page' == $option ) {
 				return $value;
@@ -771,6 +818,11 @@ PRIMARY KEY  (id)
 			return $status;
 		}
 
+		/**
+		 * Returns a choices array containing users, roles, and applicable form fields.
+		 *
+		 * @return array
+		 */
 		public function get_users_as_choices() {
 
 			$role_choices = Gravity_Flow_Common::get_roles_as_choices( true, true );
@@ -829,6 +881,13 @@ PRIMARY KEY  (id)
 			return $choices;
 		}
 
+		/**
+		 * Returns a choices array containing the forms assignee fields.
+		 *
+		 * @param null|array $form Null or the form to retrieve the assignee fields from.
+		 *
+		 * @return array
+		 */
 		public function get_assignee_fields_as_choices( $form = null ) {
 			if ( empty( $form ) ) {
 				$form_id = absint( rgget( 'id' ) );
@@ -852,7 +911,14 @@ PRIMARY KEY  (id)
 			return $assignee_fields;
 		}
 
-		public function get_email_fields_as_choices( $form = null) {
+		/**
+		 * Returns a choices array containing the forms email fields.
+		 *
+		 * @param null|array $form Null or the form to retrieve the email fields from.
+		 *
+		 * @return array
+		 */
+		public function get_email_fields_as_choices( $form = null ) {
 			if ( empty( $form ) ) {
 				$form_id = absint( rgget( 'id' ) );
 				$form = GFAPI::get_form( $form_id );
@@ -871,8 +937,7 @@ PRIMARY KEY  (id)
 		}
 
 		/**
-		 * Override the feed_settings_field() function and return the configuration for the Feed Settings.
-		 * Updating is handled by the Framework.
+		 * The settings to appear on the edit feed page.
 		 *
 		 * @return array
 		 */
@@ -1022,6 +1087,9 @@ PRIMARY KEY  (id)
 			return $settings;
 		}
 
+		/**
+		 * Ajax handler the for the feed message request.
+		 */
 		public function ajax_feed_message() {
 			$html            = '';
 			$warning         = false;
@@ -1051,6 +1119,14 @@ PRIMARY KEY  (id)
 			die();
 		}
 
+		/**
+		 * Sets the _assignee_settings_md5 class property on feed validation, if there are entries on this step.
+		 *
+		 * @param array  $field         The field properties.
+		 * @param string $field_setting The field value.
+		 *
+		 * @return bool
+		 */
 		public function save_feed_validation_callback( $field, $field_setting ) {
 
 			$current_step_id = $this->get_current_feed_id();
@@ -1079,6 +1155,12 @@ PRIMARY KEY  (id)
 			return true;
 		}
 
+		/**
+		 * Updates the feed properties and triggers the assignee refresh.
+		 *
+		 * @param int   $id   The feed ID.
+		 * @param array $meta The feed properties.
+		 */
 		public function update_feed_meta( $id, $meta ) {
 			parent::update_feed_meta( $id, $meta );
 			$results = $this->maybe_refresh_assignees();
@@ -1088,6 +1170,11 @@ PRIMARY KEY  (id)
 			}
 		}
 
+		/**
+		 * Triggers the assignees refresh of the current forms active entries, if applicable.
+		 *
+		 * @return array
+		 */
 		public function maybe_refresh_assignees() {
 			$results = array(
 				'removed' => array(),
@@ -1119,6 +1206,11 @@ PRIMARY KEY  (id)
 			return $results;
 		}
 
+		/**
+		 * Refreshes the assignees for active entries for the current form.
+		 *
+		 * @return array
+		 */
 		public function refresh_assignees() {
 			$results = array(
 				'removed' => array(),
@@ -1131,7 +1223,7 @@ PRIMARY KEY  (id)
 			$entry_count = $current_step->entry_count();
 
 			if ( $entry_count == 0 ) {
-				// Nothing to do
+				// Nothing to do.
 				return $results;
 			}
 
@@ -1170,7 +1262,7 @@ PRIMARY KEY  (id)
 							continue 2;
 						}
 					}
-					// No longer an assignee - remove
+					// No longer an assignee - remove.
 					$old_assignee = new Gravity_Flow_Assignee( $old_assignee_key, $step_for_entry );
 					$old_assignee->remove();
 					$old_assignee->log_event( 'removed' );
@@ -1186,6 +1278,13 @@ PRIMARY KEY  (id)
 			return $results;
 		}
 
+		/**
+		 * Queries the database for assigned active entries for the specified form.
+		 *
+		 * @param int $form_id The form ID.
+		 *
+		 * @return array
+		 */
 		public function get_asssignee_status_by_entry( $form_id ) {
 			global $wpdb;
 			$assignee_status_by_entry = array();
@@ -1258,6 +1357,18 @@ PRIMARY KEY  (id)
 			return $assignee_status_by_entry;
 		}
 
+		/**
+		 * Target for the gform_entries_field_value hook.
+		 *
+		 * Sets the value for the workflow_step column.
+		 *
+		 * @param string $value    The entry value to be filtered.
+		 * @param int    $form_id  The current form ID.
+		 * @param int    $field_id The current field ID.
+		 * @param array  $entry    The current entry.
+		 *
+		 * @return string
+		 */
 		public function filter_gform_entries_field_value( $value, $form_id, $field_id, $entry ) {
 			if ( $field_id == 'workflow_step' ) {
 				if ( empty( $value ) ) {
@@ -1272,6 +1383,9 @@ PRIMARY KEY  (id)
 			return $value;
 		}
 
+		/**
+		 * Ajax handler for the request to save the custom feed order.
+		 */
 		public function ajax_save_feed_order() {
 			$feed_ids = rgpost( 'feed_ids' );
 			$form_id  = absint( rgpost( 'form_id' ) );
@@ -1284,12 +1398,22 @@ PRIMARY KEY  (id)
 			die();
 		}
 
+		/**
+		 * Ajax handler for the print entries request, triggers output of the selected entries.
+		 */
 		public function ajax_print_entries() {
 			require_once( $this->get_base_path() . '/includes/pages/class-print-entries.php' );
 			Gravity_Flow_Print_Entries::render();
 			exit();
 		}
 
+		/**
+		 * Get the feeds for the specified form and sort them if applicable.
+		 *
+		 * @param null|int $form_id Null or the form ID.
+		 *
+		 * @return array
+		 */
 		public function get_feeds( $form_id = null ) {
 
 			$feeds = parent::get_feeds( $form_id );
@@ -1311,8 +1435,10 @@ PRIMARY KEY  (id)
 		}
 
 		/**
-		 * @param null $form_id
-		 * @param null $entry
+		 * Get the workflow steps.
+		 *
+		 * @param null|int   $form_id Null or the form ID.
+		 * @param null|array $entry   Null or the entry to initialize the steps for.
 		 *
 		 * @return Gravity_Flow_Step[]
 		 */
@@ -1331,6 +1457,14 @@ PRIMARY KEY  (id)
 			return $steps;
 		}
 
+		/**
+		 * The usort() callback for sorting the feeds.
+		 *
+		 * @param array $a The first feed to compare.
+		 * @param array $b The second feed to compare.
+		 *
+		 * @return bool|int
+		 */
 		public function sort_feeds( $a, $b ) {
 			$order = $this->step_order;
 			$a     = array_search( $a['id'], $order );
