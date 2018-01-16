@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * Gravity Flow
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
 
 // Make sure Gravity Forms is active and already loaded.
 if ( class_exists( 'GFForms' ) ) {
@@ -9,36 +17,73 @@ if ( class_exists( 'GFForms' ) ) {
 	GFForms::include_feed_addon_framework();
 
 	/**
-	 * Gravity Flow
-	 *
-	 *
-	 * @package     GravityFlow
-	 * @subpackage  Classes/Gravity_Flow
-	 * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
-	 * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
-	 * @since       1.0
+	 * Class Gravity_Flow
 	 */
 	class Gravity_Flow extends GFFeedAddOn {
 
+		/**
+		 * The instance of this class.
+		 *
+		 * @var null|Gravity_Flow
+		 */
 		private static $_instance = null;
 
+		/**
+		 * Defines the add-on version.
+		 *
+		 * @var string
+		 */
 		public $_version = GRAVITY_FLOW_VERSION;
 
-		// The Framework will display an appropriate message on the plugins page if necessary
+		/**
+		 * The minimum Gravity Forms version required.
+		 *
+		 * The Framework will display an appropriate message on the plugins page if necessary
+		 *
+		 * @var string
+		 */
 		protected $_min_gravityforms_version = '2.1';
 
+		/**
+		 * The add-on slug.
+		 *
+		 * @var string
+		 */
 		protected $_slug = 'gravityflow';
 
+		/**
+		 * The path to the main plugin file, relative to the WordPress plugins folder.
+		 *
+		 * @var string
+		 */
 		protected $_path = 'gravityflow/gravityflow.php';
 
+		/**
+		 * The full path to this file.
+		 *
+		 * @var string
+		 */
 		protected $_full_path = __FILE__;
 
-		// Title of the plugin to be used on the settings page, form settings and plugins page.
+		/**
+		 * Title of the plugin to be used on the settings page, form settings and plugins page.
+		 *
+		 * @var string
+		 */
 		protected $_title = 'Gravity Flow';
 
-		// Short version of the plugin title to be used on menus and other places where a less verbose string is useful.
+		/**
+		 * Short version of the plugin title to be used on menus and other places where a less verbose string is useful.
+		 *
+		 * @var string
+		 */
 		protected $_short_title = 'Workflow';
 
+		/**
+		 * The capabilities to be listed by the Members plugin.
+		 *
+		 * @var array
+		 */
 		protected $_capabilities = array(
 			'gravityflow_uninstall',
 			'gravityflow_settings',
@@ -52,8 +97,25 @@ if ( class_exists( 'GFForms' ) ) {
 			'gravityflow_workflow_detail_admin_actions',
 		);
 
+		/**
+		 * The capability required to access the app settings.
+		 *
+		 * @var string
+		 */
 		protected $_capabilities_app_settings = 'gravityflow_settings';
+
+		/**
+		 * The capability required to create steps.
+		 *
+		 * @var string
+		 */
 		protected $_capabilities_form_settings = 'gravityflow_create_steps';
+
+		/**
+		 * The app menu capabilities.
+		 *
+		 * @var array
+		 */
 		protected $_capabilities_app_menu = array(
 			'gravityflow_uninstall',
 			'gravityflow_settings',
@@ -64,8 +126,19 @@ if ( class_exists( 'GFForms' ) ) {
 			'gravityflow_activity',
 			'gravityflow_reports',
 		);
+
+		/**
+		 * The capability required to uninstall the plugin.
+		 *
+		 * @var string
+		 */
 		protected $_capabilities_uninstall = 'gravityflow_uninstall';
 
+		/**
+		 * Returns an instance of this class, and stores it in the $_instance property.
+		 *
+		 * @return null|Gravity_Flow
+		 */
 		public static function get_instance() {
 			if ( self::$_instance == null ) {
 				self::$_instance = new Gravity_Flow();
@@ -74,12 +147,22 @@ if ( class_exists( 'GFForms' ) ) {
 			return self::$_instance;
 		}
 
+		/**
+		 * The assignee status feedback.
+		 *
+		 * @var null|string
+		 */
 		private $_custom_page_content = null;
 
+		/**
+		 * Disallow cloning of the class.
+		 */
 		private function __clone() {
-		} /* do nothing */
+		}
 
-
+		/**
+		 * Adds hooks which need to be included before the init hook is triggered.
+		 */
 		public function pre_init() {
 			add_filter( 'gform_export_form', array( $this, 'filter_gform_export_form' ) );
 			add_action( 'gform_forms_post_import', array( $this, 'action_gform_forms_post_import' ) );
@@ -93,6 +176,9 @@ if ( class_exists( 'GFForms' ) ) {
 			add_action( 'wp', array( $this, 'filter_wp' ) );
 		}
 
+		/**
+		 * Adds hooks required in both the front-end and the admin.
+		 */
 		public function init() {
 			parent::init();
 
@@ -121,12 +207,15 @@ if ( class_exists( 'GFForms' ) ) {
 				)
 			);
 
-			// GravityView Integration
+			// GravityView Integration.
 			add_filter( 'gravityview/adv_filter/field_filters', array( $this, 'filter_gravityview_adv_filter_field_filters' ), 10, 2 );
 			add_filter( 'gravityview_search_criteria', array( $this, 'filter_gravityview_search_criteria' ), 999, 3 );
 			add_filter( 'gravityview/common/get_entry/check_entry_display', array( $this, 'filter_gravityview_common_get_entry_check_entry_display' ), 999, 2 );
 		}
 
+		/**
+		 * Adds the admin side hooks.
+		 */
 		public function init_admin() {
 			parent::init_admin();
 
@@ -157,6 +246,9 @@ if ( class_exists( 'GFForms' ) ) {
 			}
 		}
 
+		/**
+		 * Adds the Ajax hooks.
+		 */
 		public function init_ajax() {
 			parent::init_ajax();
 			add_action( 'wp_ajax_gravityflow_save_feed_order', array( $this, 'ajax_save_feed_order' ) );
@@ -170,6 +262,9 @@ if ( class_exists( 'GFForms' ) ) {
 			add_action( 'wp_ajax_gravityflow_download_export', array( $this, 'ajax_download_export' ) );
 		}
 
+		/**
+		 * Adds the front-end hooks.
+		 */
 		public function init_frontend() {
 			parent::init_frontend();
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_scripts' ), 10 );
@@ -180,20 +275,33 @@ if ( class_exists( 'GFForms' ) ) {
 			}
 		}
 
+		/**
+		 * Returns the plugin short title.
+		 *
+		 * @return string
+		 */
 		public function get_short_title() {
 			return $this->translate_navigation_label( 'workflow' );
 		}
 
+		/**
+		 * Installs or upgrades the plugin.
+		 */
 		public function setup() {
 			parent::setup();
 		}
 
+		/**
+		 * Performs installation or upgrade tasks.
+		 *
+		 * @param string $previous_version The previously installed version number.
+		 */
 		public function upgrade( $previous_version ) {
 
 			wp_cache_flush();
 
 			if ( empty( $previous_version ) ) {
-				// New installation
+				// New installation.
 				$settings = $this->get_app_settings();
 				if ( defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ) {
 					$settings['license_key'] = GRAVITY_FLOW_LICENSE_KEY;
@@ -204,7 +312,7 @@ if ( class_exists( 'GFForms' ) ) {
 				$this->update_app_settings( $settings );
 
 			} else {
-				// Upgrade
+				// Upgrade.
 				if ( version_compare( $previous_version,'1.5.1', '<' ) ) {
 					$this->fix_workflow_field_choices();
 				}
@@ -219,10 +327,13 @@ if ( class_exists( 'GFForms' ) ) {
 			$this->setup_db();
 		}
 
+		/**
+		 * Creates the activity log table.
+		 */
 		private function setup_db() {
 			global $wpdb;
 
-			// Default collatation
+			// Default collation.
 			$charset_collate = 'utf8_unicode_ci';
 
 			require_once( ABSPATH . '/wp-admin/includes/upgrade.php' );
@@ -254,7 +365,7 @@ PRIMARY KEY  (id)
 			if ( class_exists( 'GF_Upgrade' ) ) {
 				add_filter( 'dbdelta_create_queries', array( gf_upgrade(), 'dbdelta_fix_case' ) );
 			} else {
-				// deprecated since Gravity Forms 2.2
+				// Deprecated since Gravity Forms 2.2.
 				add_filter( 'dbdelta_create_queries', array( 'RGForms', 'dbdelta_fix_case' ) );
 			}
 
@@ -263,7 +374,7 @@ PRIMARY KEY  (id)
 			if ( class_exists( 'GF_Upgrade' ) ) {
 				remove_filter( 'dbdelta_create_queries', array( gf_upgrade(), 'dbdelta_fix_case' ) );
 			} else {
-				// deprecated since Gravity Forms 2.2
+				// Deprecated since Gravity Forms 2.2.
 				remove_filter( 'dbdelta_create_queries', array( 'RGForms', 'dbdelta_fix_case' ) );
 			}
 		}
@@ -280,7 +391,7 @@ PRIMARY KEY  (id)
 				$form_dirty = false;
 				if ( isset( $form['fields'] ) && is_array( $form['fields'] ) ) {
 					foreach ( $form['fields'] as $field ) {
-						/** @var GF_Field $field */
+						/* @var GF_Field $field */
 						if ( in_array( $field->type, array( 'workflow_assignee_select', 'workflow_user', 'workflow_role' ) ) ) {
 							if ( is_array( $field->choices ) ) {
 								$field->choices = '';
@@ -295,6 +406,9 @@ PRIMARY KEY  (id)
 			}
 		}
 
+		/**
+		 * Updates the steps in the database for compatibility with versions 1.7.1 and greater.
+		 */
 		public function upgrade_171() {
 			$steps = $this->get_steps();
 
@@ -328,7 +442,11 @@ PRIMARY KEY  (id)
 			}
 		}
 
-		// Enqueue the JavaScript and output the root url and the nonce.
+		/**
+		 * Enqueue the JavaScript and output the root url and the nonce.
+		 *
+		 * @return array
+		 */
 		public function scripts() {
 			$form_id        = absint( rgget( 'id' ) );
 			$form           = GFAPI::get_form( $form_id );
@@ -508,6 +626,11 @@ PRIMARY KEY  (id)
 			return array_merge( parent::scripts(), $scripts );
 		}
 
+		/**
+		 * Target for the wp_enqueue_scripts hook.
+		 *
+		 * Enqueues the required front-end scripts when the shortcode is found in the post content.
+		 */
 		public function enqueue_frontend_scripts() {
 			global $wp_query;
 			if ( isset( $wp_query->posts ) && is_array( $wp_query->posts ) ) {
@@ -543,6 +666,11 @@ PRIMARY KEY  (id)
 			}
 		}
 
+		/**
+		 * Determines if the gravityflow shortcode is used in the post content.
+		 *
+		 * @return bool
+		 */
 		public function look_for_shortcode() {
 			global $wp_query;
 
@@ -556,6 +684,15 @@ PRIMARY KEY  (id)
 			return $shortcode_found;
 		}
 
+		/**
+		 * Target of the nonce_user_logged_out hook.
+		 *
+		 * Sets the uid used in the logged out user nonce to the assignee key.
+		 *
+		 * @param int $uid ID of the nonce-owning user.
+		 *
+		 * @return int|string Zero or the assignee key.
+		 */
 		public function filter_nonce_user_logged_out( $uid ) {
 			if ( empty( $uid ) ) {
 				$assignee_key = $this->get_current_user_assignee_key();
@@ -566,6 +703,14 @@ PRIMARY KEY  (id)
 			return $uid;
 		}
 
+		/**
+		 * Target of the gform_enqueue_scripts hook.
+		 *
+		 * Enqueues the chosen script if a workflow field has the enhanced ui enabled.
+		 *
+		 * @param array $form    The current form.
+		 * @param bool  $is_ajax Indicates if Ajax is enabled for this form.
+		 */
 		public function filter_gform_enqueue_scripts( $form, $is_ajax ) {
 
 			if ( $this->has_enhanced_dropdown( $form ) ) {
@@ -1246,7 +1391,7 @@ PRIMARY KEY  (id)
 					$assignee_key = $assignee->get_key();
 
 					if ( ! isset( $assignee_status[ $assignee_key ] ) ) {
-						// New assignee
+						// New assignee.
 						$step = $this->get_step( $current_step_id, $entry );
 						$assignee->update_status( 'pending' );
 						$step->end_if_complete();
@@ -1489,7 +1634,6 @@ PRIMARY KEY  (id)
 		 * @param bool  $echo  True to echo the output to the screen, false to simply return the contents as a string.
 		 *
 		 * @return string Returns the markup for the radio buttons.
-		 *
 		 */
 		protected function settings_radio_image( $field, $echo = true ) {
 
@@ -1972,14 +2116,14 @@ PRIMARY KEY  (id)
 		}
 
 		/**
-		* Prepare the step_highlight composite settings to be accessible for every field in the composite.
-		*
-		* @since 1.9.2
-		*
-		* @param array $field The field properties.
-		*
-		* @return array
-		*/
+		 * Prepare the step_highlight composite settings to be accessible for every field in the composite.
+		 *
+		 * @since 1.9.2
+		 *
+		 * @param array $field The field properties.
+		 *
+		 * @return array
+		 */
 		public function prepare_settings_step_highlight( $field ) {
 			unset( $field['settings'] );
 
@@ -2438,7 +2582,7 @@ PRIMARY KEY  (id)
 		/**
 		 * Adds columns to the list of feeds.
 		 *
-		 * setting name => label.
+		 * Setting name => label.
 		 *
 		 * @return array
 		 */
@@ -2562,7 +2706,6 @@ PRIMARY KEY  (id)
 		 * filter
 		 * - (array) An array containing the configuration for the filter used on the results pages, the entry list search and export entries page.
 		 *           The array should contain one element: operators. e.g. 'operators' => array('is', 'isnot', '>', '<')
-		 *
 		 *
 		 * @param array $entry_meta An array of entry meta already registered with the gform_entry_meta filter.
 		 * @param int   $form_id    The Form ID.
@@ -2750,7 +2893,7 @@ PRIMARY KEY  (id)
 		/**
 		 * Displays the workflow info on the entry detail page, if enabled.
 		 *
-		 * @param array $form The current form.
+		 * @param array                  $form         The current form.
 		 * @param array                  $entry        The current step.
 		 * @param null|Gravity_Flow_Step $current_step Null or the current step.
 		 * @param array                  $args         The page arguments.
@@ -2972,7 +3115,7 @@ PRIMARY KEY  (id)
 		 * @param bool|Gravity_Flow_Step $current_step The current step.
 		 * @param Gravity_Flow_Step[]    $steps        The steps for this form.
 		 * @param array                  $form         The current form.
-		 * @param array                  $entry        The current entry,
+		 * @param array                  $entry        The current entry.
 		 *
 		 * @return string
 		 */
@@ -3302,6 +3445,11 @@ PRIMARY KEY  (id)
 			return $setting_tabs;
 		}
 
+		/**
+		 * Returns the base64 encoded svg+xml icon to appear in the app menu.
+		 *
+		 * @return string
+		 */
 		public function get_app_menu_icon() {
 			$admin_icon = $this->get_admin_icon_b64();
 			return $admin_icon;
@@ -4178,6 +4326,11 @@ PRIMARY KEY  (id)
 			$this->reports_page();
 		}
 
+		/**
+		 * Renders the reports page.
+		 *
+		 * @param array $args The reports page arguments.
+		 */
 		public function reports_page( $args = array() ) {
 			$defaults = array(
 				'display_header' => true,
@@ -4509,7 +4662,7 @@ PRIMARY KEY  (id)
 
 				if ( empty( $step_id ) && ( empty( $entry['workflow_final_status'] ) || $entry['workflow_final_status'] == 'pending') ) {
 					$this->log_debug( __METHOD__ . '() - not yet started workflow. starting.' );
-					// Starting workflow
+					// Starting workflow.
 					$form_id = absint( $form['id'] );
 					$step = $this->get_first_step( $form_id, $entry );
 					$this->log_event( 'workflow', 'started', $form['id'], $entry_id );
@@ -5493,7 +5646,7 @@ AND m.meta_value='queued'";
 		 *
 		 * @param array  $action_links The feed action links.
 		 * @param array  $item         The feed.
-		 * @param string $column       The column ID
+		 * @param string $column       The column ID.
 		 *
 		 * @return array
 		 */
@@ -5833,8 +5986,8 @@ AND m.meta_value='queued'";
 		/**
 		 * Decodes the access token.
 		 *
-		 * @param bool|string $token The access token or false.
-		 * @param bool $validate Indicates if the access token should be validated.
+		 * @param bool|string $token    The access token or false.
+		 * @param bool        $validate Indicates if the access token should be validated.
 		 *
 		 * @return array|bool
 		 */
@@ -6086,12 +6239,12 @@ AND m.meta_value='queued'";
 			return $schedules;
 		}
 
-		/***
+		/**
 		 * Retrieves the setting for a specific field/input
 		 *
-		 * @param string     $setting_name  The field or input name
-		 * @param string     $default_value Optional. The default value
-		 * @param bool|array $settings      Optional. THe settings array
+		 * @param string     $setting_name  The field or input name.
+		 * @param string     $default_value Optional. The default value.
+		 * @param bool|array $settings      Optional. THe settings array.
 		 *
 		 * @return string|array
 		 */
@@ -6558,7 +6711,7 @@ AND m.meta_value='queued'";
 			$custom_value_field['class'] = 'custom_value custom_value_{i}';
 			$custom_value_field['value'] = '{custom_value}';
 
-			// Remove unneeded values
+			// Remove unneeded values.
 			$unneeded_values = array( 'field_map', 'key_choices', 'value_choices', 'callback' );
 			foreach ( $unneeded_values as $unneeded_value ) {
 				unset( $field[ $unneeded_value ] );
@@ -6663,7 +6816,7 @@ AND m.meta_value='queued'";
 		 * @return string
 		 */
 		public function get_generic_map_field( $type, $select_field, $text_field ) {
-			// Build key cell based on available field map choices
+			// Build key cell based on available field map choices.
 			if ( empty( $select_field['choices'] ) ) {
 
 				// Set key field value to "gf_custom" so custom key is used.
