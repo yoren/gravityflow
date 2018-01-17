@@ -2,23 +2,28 @@
 /**
  * Gravity Flow Step Approval
  *
- *
  * @package     GravityFlow
  * @subpackage  Classes/Gravity_Flow_Step_Approval
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
-
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+/**
+ * Class Gravity_Flow_Step_Approval
+ */
 class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
+	/**
+	 * The step type.
+	 *
+	 * @var string
+	 */
 	public $_step_type = 'approval';
-
 
 	/**
 	 * The resource slug for the REST API.
@@ -27,6 +32,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 */
 	protected $_rest_base = 'approvals';
 
+	/**
+	 * Returns an array of statuses and their properties.
+	 *
+	 * @return array
+	 */
 	public function get_status_config() {
 		return array(
 			array(
@@ -81,7 +91,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 *
 	 * @since 1.7.1
 	 *
-	 * @param WP_REST_Request $request
+	 * @param WP_REST_Request $request Full data about the request.
 	 *
 	 * @return WP_REST_Response|mixed If response generated an error, WP_Error, if response
 	 *                                is already an instance, WP_HTTP_Response, otherwise
@@ -132,18 +142,38 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return $response;
 	}
 
+	/**
+	 * Indicates this step supports expiration.
+	 *
+	 * @return bool
+	 */
 	public function supports_expiration() {
 		return true;
 	}
 
+	/**
+	 * Returns the step label.
+	 *
+	 * @return string
+	 */
 	public function get_label() {
 		return esc_html__( 'Approval', 'gravityflow' );
 	}
 
+	/**
+	 * Returns the HTML for the step icon.
+	 *
+	 * @return string
+	 */
 	public function get_icon_url() {
 		return '<i class="fa fa-check" style="color:darkgreen;"></i>';
 	}
 
+	/**
+	 * Returns an array of settings for this step type.
+	 *
+	 * @return array
+	 */
 	public function get_settings() {
 		$settings_api = $this->get_common_settings_api();
 
@@ -300,16 +330,31 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return $settings;
 	}
 
+	/**
+	 * Set the assignees for this step.
+	 *
+	 * @return bool
+	 */
 	public function process() {
 		return $this->assign();
 	}
 
+	/**
+	 * Determines if the current step has been completed.
+	 *
+	 * @return bool
+	 */
 	public function is_complete() {
 		$status = $this->evaluate_status();
 
 		return ! in_array( $status, array( 'pending', 'queued' ) );
 	}
 
+	/**
+	 * Determines the current status of the step.
+	 *
+	 * @return string
+	 */
 	public function status_evaluation() {
 		$approvers   = $this->get_assignees();
 		$step_status = 'approved';
@@ -337,6 +382,13 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return $step_status;
 	}
 
+	/**
+	 * Decodes and validates the supplied token.
+	 *
+	 * @param array $token The token properties.
+	 *
+	 * @return bool
+	 */
 	public function is_valid_token( $token ) {
 		$token_json  = base64_decode( $token );
 		$token_array = json_decode( $token_json, true );
@@ -374,8 +426,8 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	/**
 	 * Handles POSTed values from the workflow detail page.
 	 *
-	 * @param $form
-	 * @param $entry
+	 * @param array $form  The current form.
+	 * @param array $entry The current entry.
 	 *
 	 * @return string|bool|WP_Error Return a success feedback message safe for page output or a WP_Error instance with an error.
 	 */
@@ -439,9 +491,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	}
 
 	/**
-	 * @param Gravity_Flow_Assignee $assignee
-	 * @param $new_status
-	 * @param $form
+	 * Validates and performs the assignees status update.
+	 *
+	 * @param Gravity_Flow_Assignee $assignee   The assignee properties.
+	 * @param string                $new_status The new status for this step.
+	 * @param array                 $form       The current form.
 	 *
 	 * @return bool|string Return a success feedback message safe for page output or false.
 	 */
@@ -505,8 +559,8 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	/**
 	 * If applicable add a note to the current entry.
 	 *
-	 * @param string $new_status The new status for the step.
-	 * @param Gravity_Flow_Assignee $assignee The step assignee.
+	 * @param string                $new_status The new status for the step.
+	 * @param Gravity_Flow_Assignee $assignee   The step assignee.
 	 */
 	public function add_status_update_note( $new_status, $assignee ) {
 		$note = '';
@@ -544,7 +598,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 * Determine if this step is valid.
 	 *
 	 * @param string $new_status The new status for the current step.
-	 * @param array $form The form currently being processed.
+	 * @param array  $form       The form currently being processed.
 	 *
 	 * @return bool
 	 */
@@ -558,7 +612,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 * Determine if the note is valid.
 	 *
 	 * @param string $new_status The new status for the current step.
-	 * @param string $note The submitted note.
+	 * @param string $note       The submitted note.
 	 *
 	 * @return bool
 	 */
@@ -597,8 +651,8 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	/**
 	 * Allow the validation result to be overridden using the gravityflow_validation_approval filter.
 	 *
-	 * @param array $validation_result The validation result and form currently being processed.
-	 * @param string $new_status The new status for the current step.
+	 * @param array  $validation_result The validation result and form currently being processed.
+	 * @param string $new_status        The new status for the current step.
 	 *
 	 * @return array
 	 */
@@ -608,6 +662,12 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 	}
 
+	/**
+	 * Displays content inside the Workflow metabox on the workflow detail page.
+	 *
+	 * @param array $form The Form array which may contain validation details.
+	 * @param array $args Additional args which may affect the display.
+	 */
 	public function workflow_detail_box( $form, $args ) {
 		$status               = esc_html__( 'Pending Approval', 'gravityflow' );
 		$approve_icon         = '<i class="fa fa-check" style="color:green"></i>';
@@ -635,6 +695,9 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 	}
 
+	/**
+	 * Display the assignee status in the workflow detail status box.
+	 */
 	public function workflow_detail_status_box_status() {
 		?>
 		<ul>
@@ -679,11 +742,15 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		<?php
 	}
 
+	/**
+	 * Displays the note input and step action buttons in the workflow detail status box.
+	 *
+	 * @param array $form The current form.
+	 */
 	public function workflow_detail_status_box_actions( $form ) {
-		$approve_icon = $this->get_approve_icon();
-		$reject_icon  = $this->get_reject_icon();
-		$revert_icon = $this->get_revert_icon();
-
+		$approve_icon         = $this->get_approve_icon();
+		$reject_icon          = $this->get_reject_icon();
+		$revert_icon          = $this->get_revert_icon();
 		$user_approval_status = $this->get_user_status();
 
 		$role_approval_status = false;
@@ -789,6 +856,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		}
 	}
 
+	/**
+	 * Displays content inside the Workflow metabox on the Gravity Forms Entry Detail page.
+	 *
+	 * @param array $form The current form.
+	 */
 	public function entry_detail_status_box( $form ) {
 		$status = $this->evaluate_status();
 		?>
@@ -827,26 +899,34 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 	}
 
+	/**
+	 * Triggers sending of the approval notification.
+	 */
 	public function send_approval_notification() {
 		$this->maybe_send_notification( 'approval' );
 	}
 
+	/**
+	 * Triggers sending of the rejection notification.
+	 */
 	public function send_rejection_notification() {
 		$this->maybe_send_notification( 'rejection' );
 	}
 
 	/**
-	 * @param $text
-	 * @param Gravity_Flow_Assignee $assignee
+	 * Replaces the step merge tags.
 	 *
-	 * @return mixed
+	 * @param string                $text     The text containing merge tags to be processed.
+	 * @param Gravity_Flow_Assignee $assignee The assignee properties.
+	 *
+	 * @return string
 	 */
 	public function replace_variables( $text, $assignee ) {
 		$text = parent::replace_variables( $text, $assignee );
 
 		$args = array(
 			'assignee' => $assignee,
-			'step' => $this,
+			'step'     => $this,
 		);
 
 		$text = Gravity_Flow_Merge_Tags::get( 'workflow_approve_token', $args )->replace( $text );
@@ -860,12 +940,12 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	/**
 	 * Provides a way for a step to process a token action before anything else. If feedback is returned it is displayed and nothing else with be rendered.
 	 *
-	 * @param $action
-	 * @param $token
-	 * @param $form
-	 * @param $entry
+	 * @param array $action The action properties.
+	 * @param array $token  The assignee token properties.
+	 * @param array $form   The current form.
+	 * @param array $entry  The current entry.
 	 *
-	 * @return bool|string|void|WP_Error
+	 * @return bool|string|WP_Error
 	 */
 	public function maybe_process_token_action( $action, $token, $form, $entry ) {
 		$feedback = parent::maybe_process_token_action( $action, $token, $form, $entry );
@@ -917,6 +997,9 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return $feedback;
 	}
 
+	/**
+	 * Triggers actions to be performed when this step ends.
+	 */
 	public function end() {
 		$status = $this->evaluate_status();
 		$entry  = $this->get_entry();
@@ -936,7 +1019,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	/**
 	 * If a post exists for the entry perform the configured approval or rejection action.
 	 *
-	 * @param array $entry The current entry.
+	 * @param array  $entry  The current entry.
 	 * @param string $action The action to perform.
 	 */
 	public function maybe_perform_post_action( $entry, $action ) {
@@ -966,16 +1049,31 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		}
 	}
 
+	/**
+	 * Returns the HTML for the approve icon.
+	 *
+	 * @return string
+	 */
 	public function get_approve_icon() {
 		$approve_icon = '<i class="fa fa-check" style="color:green"></i>';
 		return $approve_icon;
 	}
 
+	/**
+	 * Returns the HTML for the reject icon.
+	 *
+	 * @return string
+	 */
 	public function get_reject_icon() {
 		$reject_icon  = '<i class="fa fa-times" style="color:red"></i>';
 		return $reject_icon;
 	}
 
+	/**
+	 * Returns the HTML for the revert icon.
+	 *
+	 * @return string
+	 */
 	public function get_revert_icon() {
 		$revert_icon  = '<i class="fa fa-undo" style="color:blue"></i>';
 		return $revert_icon;

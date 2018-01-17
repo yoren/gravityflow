@@ -1,5 +1,5 @@
 <?php
-/*
+/**
 Plugin Name: Gravity Flow
 Plugin URI: https://gravityflow.io
 Description: Build Workflow Applications with Gravity Forms.
@@ -25,7 +25,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses.
-*/
+ */
 
 define( 'GRAVITY_FLOW_VERSION', '2.0.2-dev' );
 
@@ -35,8 +35,14 @@ define( 'GRAVITY_FLOW_EDD_ITEM_NAME', 'Gravity Flow' );
 
 add_action( 'gform_loaded', array( 'Gravity_Flow_Bootstrap', 'load' ), 1 );
 
+/**
+ * Class Gravity_Flow_Bootstrap
+ */
 class Gravity_Flow_Bootstrap {
 
+	/**
+	 * Includes the required files and registers the add-on with Gravity Forms.
+	 */
 	public static function load() {
 
 		if ( ! method_exists( 'GFForms', 'include_feed_addon_framework' ) ) {
@@ -89,6 +95,9 @@ class Gravity_Flow_Bootstrap {
 		do_action( 'gravityflow_loaded' );
 	}
 
+	/**
+	 * Includes the step classes.
+	 */
 	public static function include_steps() {
 		require_once( dirname( __FILE__ ) . '/includes/steps/class-step.php' );
 		require_once( dirname( __FILE__ ) . '/includes/steps/class-steps.php' );
@@ -99,6 +108,9 @@ class Gravity_Flow_Bootstrap {
 		}
 	}
 
+	/**
+	 * Includes the field classes.
+	 */
 	public static function include_fields() {
 		require_once( dirname( __FILE__ ) . '/includes/fields/class-fields.php' );
 
@@ -107,6 +119,9 @@ class Gravity_Flow_Bootstrap {
 		}
 	}
 
+	/**
+	 * Includes the merge tag classes.
+	 */
 	public static function include_merge_tags() {
 		require_once( dirname( __FILE__ ) . '/includes/merge-tags/class-merge-tag.php' );
 		require_once( dirname( __FILE__ ) . '/includes/merge-tags/class-merge-tags.php' );
@@ -118,14 +133,24 @@ class Gravity_Flow_Bootstrap {
 
 }
 
+/**
+ * Returns an instance of the Gravity_Flow class.
+ *
+ * @return Gravity_Flow|null
+ */
 function gravity_flow() {
 	if ( class_exists( 'Gravity_Flow' ) ) {
 		return Gravity_Flow::get_instance();
 	}
+
+	return null;
 }
 
 add_action( 'init', 'gravityflow_edd_plugin_updater', 0 );
 
+/**
+ * Initialize the EDD plugin updater.
+ */
 function gravityflow_edd_plugin_updater() {
 
 	$gravity_flow = gravity_flow();

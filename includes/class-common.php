@@ -2,26 +2,30 @@
 /**
  * Gravity Flow Common Functions
  *
- *
  * @package     GravityFlow
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.3.3
  */
-
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+/**
+ * Class Gravity_Flow_Common
+ *
+ * @since 1.3.3
+ */
 class Gravity_Flow_Common {
 
 	/**
 	 * Returns a URl to a workflow page.
 	 *
-	 * @param int|null              $page_id
-	 * @param Gravity_Flow_Assignee $assignee
-	 * @param string                $access_token
+	 * @param array                      $query_args   An associative array of query variables.
+	 * @param int|null                   $page_id      The ID of the WordPress Page where the shortcode is located.
+	 * @param Gravity_Flow_Assignee|null $assignee     The Assignee.
+	 * @param string                     $access_token The access token for the current assignee.
 	 *
 	 * @return string
 	 */
@@ -298,6 +302,11 @@ class Gravity_Flow_Common {
 		return $display_name;
 	}
 
+	/**
+	 * Get the Gravity Forms database version number.
+	 *
+	 * @return string
+	 */
 	public static function get_gravityforms_db_version() {
 
 		if ( method_exists( 'GFFormsModel', 'get_database_version' ) ) {
@@ -309,14 +318,29 @@ class Gravity_Flow_Common {
 		return $db_version;
 	}
 
+	/**
+	 * Get the name of the Gravity Forms table containing the entry properties.
+	 *
+	 * @return string
+	 */
 	public static function get_entry_table_name() {
 		return version_compare( self::get_gravityforms_db_version(), '2.3-dev-1', '<' ) ? GFFormsModel::get_lead_table_name() : GFFormsModel::get_entry_table_name();
 	}
 
+	/**
+	 * Get the name of the Gravity Forms table containing the entry meta.
+	 *
+	 * @return string
+	 */
 	public static function get_entry_meta_table_name() {
 		return version_compare( self::get_gravityforms_db_version(), '2.3-dev-1', '<' ) ? GFFormsModel::get_lead_meta_table_name() : GFFormsModel::get_entry_meta_table_name();
 	}
 
+	/**
+	 * Get the name of the Gravity Forms column containing the entry ID.
+	 *
+	 * @return string
+	 */
 	public static function get_entry_id_column_name() {
 		return version_compare( self::get_gravityforms_db_version(), '2.3-dev-1', '<' ) ? 'lead_id' : 'entry_id';
 	}

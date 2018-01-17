@@ -2,19 +2,20 @@
 /**
  * Gravity Flow Assignee
  *
- *
  * @package     GravityFlow
  * @subpackage  Classes/Assignee
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
-
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+/**
+ * Class Gravity_Flow_Assignee
+ */
 class Gravity_Flow_Assignee {
 
 	/**
@@ -76,10 +77,10 @@ class Gravity_Flow_Assignee {
 	/**
 	 * Gravity_Flow_Assignee constructor.
 	 *
-	 * @throws Exception
+	 * @throws Exception If the assignee can not be instantiated with the passed arguments.
 	 *
-	 * @param string|array $args An assignee key or array
-	 * @param bool|Gravity_Flow_Step $step
+	 * @param string|array           $args An assignee key or array.
+	 * @param bool|Gravity_Flow_Step $step The current step or false.
 	 */
 	public function __construct( $args = array(), $step = false ) {
 		$this->step = $step;
@@ -157,18 +158,38 @@ class Gravity_Flow_Assignee {
 		}
 	}
 
+	/**
+	 * Return the assignee ID.
+	 *
+	 * @return string
+	 */
 	public function get_id() {
 		return $this->id;
 	}
 
+	/**
+	 * Return the assignee key.
+	 *
+	 * @return string
+	 */
 	public function get_key() {
 		return $this->key;
 	}
 
+	/**
+	 * Return the assignee type.
+	 *
+	 * @return string
+	 */
 	public function get_type() {
 		return $this->type;
 	}
 
+	/**
+	 * Return the editable field IDs for this assignee.
+	 *
+	 * @return array
+	 */
 	public function get_editable_fields() {
 		return $this->editable_fields;
 	}
@@ -219,7 +240,9 @@ class Gravity_Flow_Assignee {
 	}
 
 	/**
-	 * @param string|bool $new_assignee_status
+	 * Update the status entry meta items for this assignee.
+	 *
+	 * @param string|bool $new_assignee_status The new status for this assignee or false.
 	 */
 	public function update_status( $new_assignee_status = false ) {
 
@@ -235,6 +258,11 @@ class Gravity_Flow_Assignee {
 		$this->log_event( $new_assignee_status, $duration );
 	}
 
+	/**
+	 * Return the assignee display name.
+	 *
+	 * @return string
+	 */
 	public function get_display_name() {
 		$user = $this->get_user();
 		$name = $user ? $user->display_name : $this->get_id();
@@ -242,6 +270,9 @@ class Gravity_Flow_Assignee {
 		return $name;
 	}
 
+	/**
+	 * Remove the assignee from the current step by deleting the associated entry meta items.
+	 */
 	public function remove() {
 		$key = $this->get_status_key();
 
@@ -282,8 +313,7 @@ class Gravity_Flow_Assignee {
 	/**
 	 * Sets the timestamp for the reminder.
 	 *
-	 * @oaram int $timestamp Unix GMT timestamp
-	 * @return bool|mixed
+	 * @param bool|int $timestamp Unix GMT timestamp or false.
 	 */
 	public function set_reminder_timestamp( $timestamp = false ) {
 
@@ -297,6 +327,12 @@ class Gravity_Flow_Assignee {
 		gform_update_meta( $this->step->get_entry_id(), $timestamp_key, $timestamp );
 	}
 
+	/**
+	 * Log an event for the current assignee.
+	 *
+	 * @param string $status   The assignee status.
+	 * @param int    $duration Time interval in seconds, if any.
+	 */
 	public function log_event( $status, $duration = 0 ) {
 		gravity_flow()->log_event( 'assignee', 'status', $this->step->get_form_id(), $this->step->get_entry_id(), $status, $this->step->get_id(), $duration, $this->get_id(), $this->get_type(), $this->get_display_name() );
 	}
