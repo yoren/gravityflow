@@ -1956,6 +1956,11 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 				$col_val = null;
 				if ( array_key_exists( $column_key, $item ) ) {
 					switch ( $column_key ) {
+						case 'form_id' :
+						$form_id = rgar( $item, 'form_id' );
+							$form = $this->get_form( $form_id );
+							$col_val = $form_id . ' - ' . $form['title'];
+						break;
 						case 'created_by' :
 							$user_id = $item['created_by'];
 							if ( $user_id ) {
