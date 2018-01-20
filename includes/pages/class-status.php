@@ -1953,6 +1953,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		foreach ( $this->items as $item ) {
 			$row_values = array();
 			foreach ( $column_keys as $column_key ) {
+				$col_val = null;
 				if ( array_key_exists( $column_key, $item ) ) {
 					switch ( $column_key ) {
 						case 'created_by' :
@@ -1976,7 +1977,20 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 						default :
 							$col_val = $item[ $column_key ];
 					}
-
+				} else {
+					/**
+					 * Allows the field value to be filtered in the status table.
+					 *
+					 * @since 1.7.1
+					 *
+					 * @param string $label The value to be displayed
+					 * @param int $item['form_id'] The Form ID
+					 * @param string 'id'
+					 * @param array $item The entry array.
+					 */
+					$col_val = apply_filters( 'gravityflow_field_value_status_table', null, $item['form_id'], $column_key, $item );
+				}
+				if ( null !== $col_val ) {
 					$row_values[] = '"' . addslashes( $col_val ) . '"';
 				}
 			}
