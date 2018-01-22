@@ -1,31 +1,40 @@
 <?php
-
 /**
  * Gravity Flow
  *
  * @package     GravityFlow
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.8.1
+ */
+
+if ( ! class_exists( 'GFForms' ) ) {
+	die();
+}
+
+/**
+ * Class Gravity_Flow_Connected_Apps
+ *
+ * @since 1.8.1
  */
 class Gravity_Flow_Connected_Apps {
 
 	/**
-	 * Holds connection status keys and details
+	 * Holds connection status keys and details.
 	 *
 	 * @var array
 	 */
 	protected $oauth_connection_statuses = array();
 
 	/**
-	 * A holder for the instance
+	 * A holder for the instance.
 	 *
 	 * @var object
 	 */
 	public static $_instance;
 
 	/**
-	 * The Oauth1 Client
+	 * The Oauth1 Client.
 	 *
 	 * @var Gravity_Flow_Oauth1_Client
 	 */
@@ -47,7 +56,6 @@ class Gravity_Flow_Connected_Apps {
 
 	/**
 	 * Add actions and set up connection statuses.
-	 *
 	 */
 	function __construct() {
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
@@ -70,7 +78,6 @@ class Gravity_Flow_Connected_Apps {
 
 	/**
 	 * Clears the current credentials so that it can be reauthorized.
-	 *
 	 */
 	function reauthorize_app() {
 		check_admin_referer( 'gflow_settings_js', 'security' );
@@ -90,6 +97,9 @@ class Gravity_Flow_Connected_Apps {
 		) );
 	}
 
+	/**
+	 * If appropriate trigger processing of the auth settings or app authorization.
+	 */
 	function maybe_process_auth_flow() {
 		if ( ( isset( $_POST['gflow_add_app'] )
 		         || isset( $_POST['gflow_authorize_app'] )
@@ -102,7 +112,6 @@ class Gravity_Flow_Connected_Apps {
 	/**
 	 * Processes Auth settings, initial run creates unique_id and app
 	 * subsequent run processes the authorization
-	 *
 	 */
 	function process_auth_flow() {
 
@@ -157,7 +166,6 @@ class Gravity_Flow_Connected_Apps {
 	 * The callback_url in the client constructor must be registered in the WP-Api application callback_url
 	 * So for the docs the current web address of the step setting form is taken and used to setup the application and put into
 	 * the callback url field.
-	 *
 	 */
 	public function process_auth_wp_oauth1() {
 
@@ -202,7 +210,6 @@ class Gravity_Flow_Connected_Apps {
 
 	/**
 	 * Process oauth1 - authorize returning user
-	 *
 	 */
 	function process_oauth1_return_legs() {
 		$status = $this->status_keys[1];
@@ -233,7 +240,6 @@ class Gravity_Flow_Connected_Apps {
 
 	/**
 	 * Process oauth1 - sending user to site for authorization
-	 *
 	 */
 	function process_oauth1_outward_leg() {
 		$status = $this->status_keys[0];
@@ -306,9 +312,9 @@ class Gravity_Flow_Connected_Apps {
 	}
 
 	/**
-	 * Instantiate class from outside
+	 * Instantiate class from outside.
 	 *
-	 * @return object
+	 * @return Gravity_Flow_Connected_Apps
 	 */
 	public static function instance() {
 		if ( is_null( self::$_instance ) ) {
@@ -332,6 +338,8 @@ class Gravity_Flow_Connected_Apps {
 
 	/**
 	 * Returns an array of connected apps.
+	 *
+	 * @return array
 	 */
 	function get_connected_apps() {
 		global $wpdb;
@@ -357,7 +365,9 @@ class Gravity_Flow_Connected_Apps {
 	}
 
 	/**
-	 * @param $app_id
+	 * Get the app settings.
+	 *
+	 * @param string $app_id The app ID.
 	 *
 	 * @return array
 	 */
@@ -365,6 +375,13 @@ class Gravity_Flow_Connected_Apps {
 		return get_option( 'gflow_conn_app_config_' . $app_id, array() );
 	}
 
+	/**
+	 * Delete the app settings.
+	 *
+	 * @param string $app_id The app ID.
+	 *
+	 * @return bool
+	 */
 	function delete_app( $app_id ) {
 
 		if ( empty( $app_id ) || ! is_string( $app_id ) ) {
@@ -374,7 +391,7 @@ class Gravity_Flow_Connected_Apps {
 		// Delete the option with the app settings.
 		delete_option( 'gflow_conn_app_config_' . $app_id );
 
-		// Delete statuses
+		// Delete statuses.
 		$statuses = $this->get_connection_statuses();
 		foreach ( array_keys( $statuses ) as $key ) {
 			delete_option( 'gflow_conn_app_status_' . $app_id . $key );
@@ -385,7 +402,7 @@ class Gravity_Flow_Connected_Apps {
 	/**
 	 * Adds an app.
 	 *
-	 * @param $app_config
+	 * @param array $app_config The app settings.
 	 *
 	 * @return string
 	 */
@@ -399,7 +416,8 @@ class Gravity_Flow_Connected_Apps {
 	/**
 	 * Updates an app.
 	 *
-	 * @param $app_config
+	 * @param string $app_id     The app ID.
+	 * @param array  $app_config The app settings.
 	 *
 	 * @return string
 	 */
@@ -409,6 +427,9 @@ class Gravity_Flow_Connected_Apps {
 		return $app_id;
 	}
 
+	/**
+	 * Output the HTML markup for the settings tab.
+	 */
 	public function settings_tab() {
 		add_thickbox();
 
@@ -624,6 +645,8 @@ gravityflow_connected_apps();
 class Gravity_Flow_Connected_Apps_Table extends WP_List_Table {
 
 	/**
+	 * An array of connected apps.
+	 *
 	 * @var array
 	 */
 	protected $_apps = array();
@@ -631,7 +654,7 @@ class Gravity_Flow_Connected_Apps_Table extends WP_List_Table {
 	/**
 	 * Gravity_Flow_Connected_Apps_Table constructor.
 	 *
-	 * @param array $args
+	 * @param array $args Array of arguments for the current table.
 	 */
 	function __construct( $args = array() ) {
 		$cols = $this->get_columns();
@@ -680,7 +703,7 @@ class Gravity_Flow_Connected_Apps_Table extends WP_List_Table {
 	/**
 	 * Outputs the App Name.
 	 *
-	 * @param $item
+	 * @param array $item The app settings.
 	 */
 	function column_app_name( $item ) {
 		echo $item['app_name'];
@@ -689,7 +712,7 @@ class Gravity_Flow_Connected_Apps_Table extends WP_List_Table {
 	/**
 	 * Outputs the App Type.
 	 *
-	 * @param $item
+	 * @param array $item The app settings.
 	 */
 	function column_app_type( $item ) {
 		switch ( $item['app_type'] ) {
@@ -705,7 +728,7 @@ class Gravity_Flow_Connected_Apps_Table extends WP_List_Table {
 	/**
 	 * Outputs the status.
 	 *
-	 * @param $item
+	 * @param array $item The app settings.
 	 */
 	function column_status( $item ) {
 		echo gravityflow_connected_apps()->wrap_status_message( $item['status'] );
@@ -714,9 +737,9 @@ class Gravity_Flow_Connected_Apps_Table extends WP_List_Table {
 	/**
 	 * Returns the row actions.
 	 *
-	 * @param object $item
-	 * @param string $column_name
-	 * @param string $primary
+	 * @param array  $item        The app settings.
+	 * @param string $column_name The current column name.
+	 * @param string $primary     The primary column name.
 	 *
 	 * @return string
 	 */

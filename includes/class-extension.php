@@ -2,24 +2,35 @@
 /**
  * Gravity Flow Extension Base
  *
- *
  * @package     GravityFlow
  * @subpackage  Classes/ExtensionBase
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
-
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 GFForms::include_addon_framework();
 
+/**
+ * Class Gravity_Flow_Extension
+ *
+ * @since 1.0
+ */
 abstract class Gravity_Flow_Extension extends GFAddOn {
 
+	/**
+	 * The item name used by Easy Digital Downloads.
+	 *
+	 * @var string
+	 */
 	public $edd_item_name = '';
 
+	/**
+	 * If the extensions minimum requirements are met add the general hooks.
+	 */
 	public function init() {
 		parent::init();
 
@@ -32,6 +43,9 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 		add_filter( 'gravityflow_toolbar_menu_items', array( $this, 'toolbar_menu_items' ) );
 	}
 
+	/**
+	 * If the extensions minimum requirements are met add the admin hooks.
+	 */
 	public function init_admin() {
 		parent::init_admin();
 
@@ -69,6 +83,13 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 		return $caps;
 	}
 
+	/**
+	 * Add a tab to the app settings page for this extension.
+	 *
+	 * @param array $settings_tabs The app settings tabs.
+	 *
+	 * @return array
+	 */
 	public function app_settings_tabs( $settings_tabs ) {
 
 		$settings_tabs[] = array(
@@ -80,6 +101,9 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 		return $settings_tabs;
 	}
 
+	/**
+	 * The callback for this extensions app settings tab.
+	 */
 	public function app_settings_tab() {
 
 		require_once( GFCommon::get_base_path() . '/tooltips.php' );
@@ -101,19 +125,19 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 			</div>
 			<?php
 		} else {
-			//saves settings page if save button was pressed
+			// Saves settings page if save button was pressed.
 			$this->maybe_save_app_settings();
 
-			//reads main addon settings
+			// Reads main add-on settings.
 			$settings = $this->get_app_settings();
 			$this->set_settings( $settings );
 
-			//reading addon fields
+			// Reading add-on fields.
 			$sections = $this->app_settings_fields();
 
 			GFCommon::display_admin_message();
 
-			//rendering settings based on fields and current settings
+			// Rendering settings based on fields and current settings.
 			$this->render_settings( $sections );
 
 			$this->render_uninstall();
@@ -153,6 +177,11 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 		<?php
 	}
 
+	/**
+	 * Get the settings for the app settings tab.
+	 *
+	 * @return array
+	 */
 	public function app_settings_fields() {
 		return array(
 			array(
@@ -173,10 +202,23 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 		);
 	}
 
+	/**
+	 * Return the saved settings.
+	 *
+	 * @return mixed
+	 */
 	public function get_app_settings() {
 		return parent::get_app_settings();
 	}
 
+	/**
+	 * Validate the license key setting.
+	 *
+	 * @param string $value The field value; the license key.
+	 * @param array  $field The field properties.
+	 *
+	 * @return bool|null
+	 */
 	public function license_feedback( $value, $field ) {
 
 		if ( empty( $value ) ) {
@@ -196,6 +238,13 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 
 	}
 
+	/**
+	 * Retrieve the license data.
+	 *
+	 * @param string $value The license key for this extension.
+	 *
+	 * @return array|mixed|object
+	 */
 	public function check_license( $value ) {
 		$response = gravity_flow()->perform_edd_license_request( 'check_license', $value, $this->edd_item_name );
 
@@ -203,6 +252,12 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 
 	}
 
+	/**
+	 * Deactivate the old license key and active the new license key.
+	 *
+	 * @param array  $field         The field properties.
+	 * @param string $field_setting The field value; the license key.
+	 */
 	public function license_validation( $field, $field_setting ) {
 		$old_license = $this->get_app_setting( 'license_key' );
 
@@ -219,6 +274,13 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 
 	}
 
+	/**
+	 * Activate the license key.
+	 *
+	 * @param string $license_key The license key for this extension.
+	 *
+	 * @return array|mixed|object
+	 */
 	public function activate_license( $license_key ) {
 		$response = gravity_flow()->perform_edd_license_request( 'activate_license', $license_key, $this->edd_item_name );
 
@@ -230,10 +292,24 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 		return json_decode( wp_remote_retrieve_body( $response ) );
 	}
 
+	/**
+	 * Override to add menu items to the Gravity Flow app menu.
+	 *
+	 * @param array $menu_items The app menu items.
+	 *
+	 * @return array
+	 */
 	public function menu_items( $menu_items ) {
 		return $menu_items;
 	}
 
+	/**
+	 * Override to add menu items to the Gravity Flow toolbar.
+	 *
+	 * @param array $menu_items The toolbar menu items.
+	 *
+	 * @return array
+	 */
 	public function toolbar_menu_items( $menu_items ) {
 		return $menu_items;
 	}

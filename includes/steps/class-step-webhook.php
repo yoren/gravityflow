@@ -2,10 +2,9 @@
 /**
  * Gravity Flow Step Webhook
  *
- *
  * @package     GravityFlow
  * @subpackage  Classes/Gravity_Flow_Step_Webhook
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -15,28 +14,54 @@ if ( ! class_exists( 'GFForms' ) ) {
 }
 
 /**
- * Gravity Flow Web Hook
- *
- *
- * @package     GravityFlow
- * @subpackage  Classes/Gravity_Flow_Step_Webhook
- * @copyright   Copyright (c) 2015-2016, Steven Henty
- * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.0
+ * Class Gravity_Flow_Step_Webhook
  */
 class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
+
+	/**
+	 * The step type.
+	 *
+	 * @var string
+	 */
 	public $_step_type = 'webhook';
+
+	/**
+	 * The temporary credentials.
+	 *
+	 * @var array
+	 */
 	protected $temporary_credentials = array();
+
+	/**
+	 * The OAuth1 Client
+	 *
+	 * @var Gravity_Flow_Oauth1_Client
+	 */
 	protected $oauth1_client;
 
+	/**
+	 * Returns the step label.
+	 *
+	 * @return string
+	 */
 	public function get_label() {
 		return esc_html__( 'Outgoing Webhook', 'gravityflow' );
 	}
 
+	/**
+	 * Returns the HTML for the step icon.
+	 *
+	 * @return string
+	 */
 	public function get_icon_url() {
 		return '<i class="fa fa-external-link"></i>';
 	}
 
+	/**
+	 * Returns an array of settings for this step type.
+	 *
+	 * @return array
+	 */
 	public function get_settings() {
 		$connected_apps = gravityflow_connected_apps()->get_connected_apps();
 		$connected_apps_options = array(
@@ -418,8 +443,8 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	 *
 	 * @since 1.8.1
 	 *
-	 * @param $field
-	 * @param $field_setting
+	 * @param array $field         The setting properties.
+	 * @param mixed $field_setting The setting value.
 	 *
 	 * @return string
 	 */
@@ -534,7 +559,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				$this->oauth1_client->config['token']        = $access_credentials['oauth_token'];
 				$this->oauth1_client->config['token_secret'] = $access_credentials['oauth_token_secret'];
 			}
-			// Note we don't send the final $options[] parameter in here because our request is always sent in the body
+			// Note we don't send the final $options[] parameter in here because our request is always sent in the body.
 			$headers['Authorization'] = $this->oauth1_client->get_full_request_header( $this->get_setting( 'url' ), $method );
 		}
 
@@ -584,9 +609,9 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	/**
 	 * Returns the choices for the source field mappings.
 	 *
-	 * @param $form
-	 * @param null|string $field_type
-	 * @param null|array $exclude_field_types
+	 * @param array       $form                The current form.
+	 * @param null|string $field_type          Field types to include as choices. Defaults to null.
+	 * @param null|array  $exclude_field_types Field types to exclude as choices. Defaults to null.
 	 *
 	 * @return array
 	 */
@@ -594,7 +619,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 		$fields = array();
 
-		// Setup first choice
+		// Setup first choice.
 		if ( rgblank( $field_type ) || ( is_array( $field_type ) && count( $field_type ) > 1 ) ) {
 
 			$first_choice_label = __( 'Select a Field', 'gravityflow' );
@@ -610,7 +635,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 		$fields[] = array( 'value' => '', 'label' => $first_choice_label );
 
-		// if field types not restricted add the default fields and entry meta
+		// If field types not restricted add the default fields and entry meta.
 		if ( is_null( $field_type ) ) {
 			$fields[] = array( 'value' => 'id', 'label' => esc_html__( 'Entry ID', 'gravityflow' ) );
 			$fields[] = array( 'value' => 'date_created', 'label' => esc_html__( 'Entry Date', 'gravityflow' ) );
@@ -624,7 +649,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			}
 		}
 
-		// Populate form fields
+		// Populate form fields.
 		if ( is_array( $form['fields'] ) ) {
 			foreach ( $form['fields'] as $field ) {
 				$input_type = $field->get_input_type();
@@ -640,7 +665,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 						$exclude_field = false;
 					}
 				} else {
-					//not array, so should be single string
+					// Not array, so should be single string.
 					if ( $input_type == $exclude_field_types ) {
 						$exclude_field = true;
 					} else {
@@ -649,21 +674,21 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				}
 
 				if ( is_array( $inputs ) && $field_is_valid_type && ! $exclude_field ) {
-					//If this is an address field, add full name to the list
+					// If this is an address field, add full name to the list.
 					if ( $input_type == 'address' ) {
 						$fields[] = array(
 							'value' => $field->id,
 							'label' => GFCommon::get_label( $field ) . ' (' . esc_html__( 'Full', 'gravityflow' ) . ')',
 						);
 					}
-					//If this is a name field, add full name to the list
+					// If this is a name field, add full name to the list.
 					if ( $input_type == 'name' ) {
 						$fields[] = array(
 							'value' => $field->id,
 							'label' => GFCommon::get_label( $field ) . ' (' . esc_html__( 'Full', 'gravityflow' ) . ')',
 						);
 					}
-					//If this is a checkbox field, add to the list
+					// If this is a checkbox field, add to the list.
 					if ( $input_type == 'checkbox' ) {
 						$fields[] = array(
 							'value' => $field->id,
@@ -739,7 +764,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	 * Add the mapped value to the body.
 	 *
 	 * @param array $mapping The properties for the mapping being processed.
-	 * @param array $body The body to sent.
+	 * @param array $body    The body to sent.
 	 *
 	 * @return array
 	 */
@@ -779,9 +804,9 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	 *
 	 * The source field choice unique value will not match the target field unique value.
 	 *
-	 * @param array $entry The entry being processed by this step.
-	 * @param GF_Field $source_field The source field being processed.
-	 * @param string $source_field_id The ID of the source field or input.
+	 * @param array    $entry           The entry being processed by this step.
+	 * @param GF_Field $source_field    The source field being processed.
+	 * @param string   $source_field_id The ID of the source field or input.
 	 *
 	 * @return string
 	 */
@@ -811,8 +836,8 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	/**
 	 * Gets the choice text for the supplied choice value.
 	 *
-	 * @param string $selected_choice The choice value from the source field.
-	 * @param GF_Field $source_field The source field being processed.
+	 * @param string   $selected_choice The choice value from the source field.
+	 * @param GF_Field $source_field    The source field being processed.
 	 *
 	 * @return string
 	 */
@@ -823,10 +848,10 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	/**
 	 * Helper to get the specified choice property for the selected choice.
 	 *
-	 * @param string $selected_choice The selected choice value or text.
-	 * @param array $choices The field choices.
+	 * @param string $selected_choice  The selected choice value or text.
+	 * @param array  $choices          The field choices.
 	 * @param string $compare_property The choice property the $selected_choice is to be compared against.
-	 * @param string $return_property The choice property to be returned.
+	 * @param string $return_property  The choice property to be returned.
 	 *
 	 * @return string
 	 */

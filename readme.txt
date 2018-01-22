@@ -55,6 +55,16 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 2.0.1 =
+- Added the {workflow_fields} merge tag, similar to the {all_fields} merge tag with the following true/false attributes: empty, value, admin, editable and display.
+- Added 'Send to step' to admin action when workflow is complete.
+- Added the gravityflow_display_field_choices filter.
+- Added the gravityflow_date_format_entry_detail filter.
+- Added CSS RTL improvements.
+- Fixed an issue with the cron task to prevent running during the upgrade of Gravity Forms.
+- Fixed an issue where Section Breaks show during the User Input step regardless of being selected in the UI.
+
+
 = 2.0.0 =
 - Added the highlight setting to all the step settings.
 - Added the gravityflow_pre_cancel_workflow action.

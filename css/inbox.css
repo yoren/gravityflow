@@ -17,6 +17,12 @@ table#gravityflow-inbox tbody tr{
     border-left-color: transparent;
 }
 
+.rtl table#gravityflow-inbox tbody tr{
+    border-right-width: 5px;
+    border-right-style: solid;
+    border-right-color: transparent;
+}
+
 table#gravityflow-inbox {
     border-collapse: collapse;
     margin-top:10px;
@@ -81,8 +87,17 @@ table#gravityflow-inbox td[data-label="ID"] {
     margin-right: 5px;
 }
 
+.rtl .gravityflow-action,
+.rtl .gravityflow-actions-unlock{
+    margin-left: 5px;
+}
+
 .gravityflow-actions-lock{
     margin-right: 5px;
+}
+
+.rtl .gravityflow-actions-lock{
+    margin-left: 5px;
 }
 
 .gravityflow-actions{
@@ -106,8 +121,12 @@ table#gravityflow-inbox td[data-label="ID"] {
     background-color: white;
     border:1px solid silver;
     padding: 5px;
-
 }
+
+.rtl .gravityflow-actions-note-field-container{
+    text-align: right;
+}
+
 .gravityflow-actions-note-field-container textarea {
     width:200px;
 }

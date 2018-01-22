@@ -1,4 +1,11 @@
 <?php
+/**
+ * Gravity Flow Discussion Field
+ *
+ * @package     GravityFlow
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
     die();
@@ -6,12 +13,14 @@ if ( ! class_exists( 'GFForms' ) ) {
 
 /**
  * Class Gravity_Flow_Field_Discussion
- *
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
- * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
 class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 
+	/**
+	 * The field type.
+	 *
+	 * @var string
+	 */
 	public $type = 'workflow_discussion';
 
 	/**
@@ -23,12 +32,24 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	 */
 	private $_clear_input_value = false;
 
+	/**
+	 * Adds the Workflow Fields group to the form editor.
+	 *
+	 * @param array $field_groups The properties for the field groups.
+	 *
+	 * @return array
+	 */
 	public function add_button( $field_groups ) {
 		$field_groups = Gravity_Flow_Fields::maybe_add_workflow_field_group( $field_groups );
 
 		return parent::add_button( $field_groups );
 	}
 
+	/**
+	 * Returns the field button properties for the form editor.
+	 *
+	 * @return array
+	 */
 	public function get_form_editor_button() {
 		return array(
 			'group' => 'workflow_fields',
@@ -36,6 +57,11 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 		);
 	}
 
+	/**
+	 * Returns the class names of the settings which should be available on the field in the form editor.
+	 *
+	 * @return array
+	 */
 	function get_form_editor_field_settings() {
 		return array(
 			'conditional_logic_field_setting',
@@ -58,10 +84,26 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 		);
 	}
 
+	/**
+	 * Returns the field title.
+	 *
+	 * @return string
+	 */
 	public function get_form_editor_field_title() {
 		return __( 'Discussion', 'gravityflow' );
 	}
 
+	/**
+	 * Return the entry value for display on the entries list page.
+	 *
+	 * @param string|array $value    The field value.
+	 * @param array        $entry    The Entry Object currently being processed.
+	 * @param string       $field_id The field or input ID currently being processed.
+	 * @param array        $columns  The properties for the columns being displayed on the entry list page.
+	 * @param array        $form     The Form Object currently being processed.
+	 *
+	 * @return string
+	 */
 	public function get_value_entry_list( $value, $entry, $field_id, $columns, $form ) {
 		$return = $value;
 		if ( $return ) {
@@ -75,18 +117,54 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 		return esc_html( $return );
 	}
 
+	/**
+	 * Return the entry value which will replace the field merge tag.
+	 *
+	 * @param string       $value      The field value. Depending on the location the merge tag is being used the following functions may have already been applied to the value: esc_html, nl2br, and urlencode.
+	 * @param string       $input_id   The field or input ID from the merge tag currently being processed.
+	 * @param array        $entry      The Entry Object currently being processed.
+	 * @param array        $form       The Form Object currently being processed.
+	 * @param string       $modifier   The merge tag modifier. e.g. value.
+	 * @param string|array $raw_value  The raw field value from before any formatting was applied to $value.
+	 * @param bool         $url_encode Indicates if the urlencode function may have been applied to the $value.
+	 * @param bool         $esc_html   Indicates if the esc_html function may have been applied to the $value.
+	 * @param string       $format     The format requested for the location the merge is being used. Possible values: html, text or url.
+	 * @param bool         $nl2br      Indicates if the nl2br function may have been applied to the $value.
+	 *
+	 * @return string
+	 */
 	public function get_value_merge_tag( $value, $input_id, $entry, $form, $modifier, $raw_value, $url_encode, $esc_html, $format, $nl2br ) {
 		$value = $this->format_discussion_value( $raw_value, $format );
 
 		return $value;
 	}
 
+	/**
+	 * Return the entry value for display on the entry detail page and for the {all_fields} merge tag.
+	 *
+	 * @param string     $value    The field value.
+	 * @param string     $currency The entry currency code.
+	 * @param bool|false $use_text When processing choice based fields should the choice text be returned instead of the value.
+	 * @param string     $format   The format requested for the location the merge is being used. Possible values: html, text or url.
+	 * @param string     $media    The location where the value will be displayed. Possible values: screen or email.
+	 *
+	 * @return string
+	 */
 	public function get_value_entry_detail( $value, $currency = '', $use_text = false, $format = 'html', $media = 'screen' ) {
 		$value = $this->format_discussion_value( $value, $format );
 
 		return $value;
 	}
 
+	/**
+	 * Returns the field inner markup.
+	 *
+	 * @param array        $form  The Form Object currently being processed.
+	 * @param string|array $value The field value. From default/dynamic population, $_POST, or a resumed incomplete submission.
+	 * @param null|array   $entry Null or the Entry Object currently being edited.
+	 *
+	 * @return string
+	 */
 	public function get_field_input( $form, $value = '', $entry = null ) {
 		$input          = '';
 		$is_form_editor = $this->is_form_editor();
@@ -121,8 +199,8 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	/**
 	 * Prepares the field entry value for output.
 	 *
-	 * @param string $value The entry value for the current field.
-	 * @param string $format The requested format for the value; html or text.
+	 * @param string   $value    The entry value for the current field.
+	 * @param string   $format   The requested format for the value; html or text.
 	 * @param int|null $entry_id The ID of the entry currently being edited or null in other locations.
 	 *
 	 * @since 1.4.2-dev Added the $entry_id param.
@@ -158,9 +236,9 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 			/**
 			 * Allow the order of the discussion field comments to be reversed.
 			 *
-			 * @param bool $reverse_comment_order Should the comment order be reversed? Default is false.
-			 * @param Gravity_Flow_Field_Discussion $this The field currently being processed.
-			 * @param string $format The requested format for the value; html or text.
+			 * @param bool                          $reverse_comment_order Should the comment order be reversed? Default is false.
+			 * @param Gravity_Flow_Field_Discussion $this                  The field currently being processed.
+			 * @param string                        $format                The requested format for the value; html or text.
 			 *
 			 * @since 1.4.2-dev
 			 */
@@ -177,13 +255,13 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 			if ( $entry_id && ! $this->is_form_editor() ) {
 
 				/**
-				* Set the amount of discussion items to be shown on active user input step without toggle.
-				*
-				* @param int $max_display_limit Amount of comments to be shown. Default is 10.
-				* @param Gravity_Flow_Field_Discussion $this The field currently being processed.
-				*
-				* @since 1.9.2-dev
-				*/
+				 * Set the amount of discussion items to be shown on active user input step without toggle.
+				 *
+				 * @param int                           $max_display_limit Amount of comments to be shown. Default is 10.
+				 * @param Gravity_Flow_Field_Discussion $this              The field currently being processed.
+				 *
+				 * @since 1.9.2-dev
+				 */
 				$max_display_limit = apply_filters( 'gravityflow_discussion_items_display_limit', 10, $this );
 
 				if ( count( $discussion ) > $max_display_limit ) {
@@ -251,6 +329,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	 * @param array    $item     The properties of the item to be processed.
 	 * @param string   $format   The requested format for the value; html or text.
 	 * @param int|null $entry_id The ID of the entry currently being edited or null in other locations.
+	 *
 	 * @since 1.7.1-dev
 	 *
 	 * @return string
@@ -291,7 +370,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	/**
 	 * Prepares the markup for the delete comment button when on the entry detail edit page.
 	 *
-	 * @param string $item_id The ID of the comment currently being processed.
+	 * @param string $item_id  The ID of the comment currently being processed.
 	 * @param int    $entry_id The ID of the entry currently being processed.
 	 *
 	 * @since 1.4.2-dev
@@ -334,6 +413,17 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 		return $return;
 	}
 
+	/**
+	 * Format the value for saving to the Entry Object.
+	 *
+	 * @param array|string $value      The value to be saved.
+	 * @param array        $form       The Form Object currently being processed.
+	 * @param string       $input_name The input name used when accessing the $_POST.
+	 * @param int          $entry_id   The ID of the Entry currently being processed.
+	 * @param array        $entry      The Entry Object currently being processed.
+	 *
+	 * @return string
+	 */
 	public function get_value_save_entry( $value, $form, $input_name, $entry_id, $entry ) {
 		$value = $this->sanitize_entry_value( $value, $form['id'] );
 
@@ -373,10 +463,10 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	/**
 	 * Format the entry value before it is used in entry exports and by framework add-ons using GFAddOn::get_field_value().
 	 *
-	 * @param array $entry The entry currently being processed.
-	 * @param string $input_id The field or input ID.
+	 * @param array      $entry    The entry currently being processed.
+	 * @param string     $input_id The field or input ID.
 	 * @param bool|false $use_text When processing choice based fields should the choice text be returned instead of the value.
-	 * @param bool|false $is_csv Is the value going to be used in the .csv entries export?
+	 * @param bool|false $is_csv   Indicates if the value is going to be used in the .csv entries export.
 	 *
 	 * @return string
 	 */
@@ -384,6 +474,9 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 		return $this->format_discussion_value( rgar( $entry, $input_id ), 'text' );
 	}
 
+	/**
+	 * Sanitize the field settings when the form is saved.
+	 */
 	public function sanitize_settings() {
 		parent::sanitize_settings();
 		if ( ! empty( $this->gravityflowDiscussionTimestampFormat ) ) {
@@ -394,7 +487,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	/**
 	 * Deletes the specified comment and updates the entry in the database.
 	 *
-	 * @param array $entry The entry containing the comment to be deleted.
+	 * @param array  $entry   The entry containing the comment to be deleted.
 	 * @param string $item_id The ID of the comment to be deleted.
 	 *
 	 * @since 1.4.2-dev

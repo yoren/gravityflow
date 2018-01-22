@@ -2,10 +2,9 @@
 /**
  * Gravity Flow Step Feed Sliced Invoices
  *
- *
  * @package     GravityFlow
  * @subpackage  Classes/Gravity_Flow_Step_Feed_Sliced_Invoices
- * @copyright   Copyright (c) 2016-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2016-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.3.3-dev
  */
@@ -14,10 +13,30 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+/**
+ * Class Gravity_Flow_Step_Feed_Sliced_Invoices
+ */
 class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_On {
+
+	/**
+	 * The step type.
+	 *
+	 * @var string
+	 */
 	public $_step_type = 'slicedinvoices';
 
+	/**
+	 * The name of the class used by the add-on.
+	 *
+	 * @var string
+	 */
 	protected $_class_name = 'Sliced_Invoices_GF';
+
+	/**
+	 * The slug used by the add-on.
+	 *
+	 * @var string
+	 */
 	protected $_slug = 'slicedinvoices';
 
 	/**
@@ -31,10 +50,20 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 		return true;
 	}
 
+	/**
+	 * Returns the step label.
+	 *
+	 * @return string
+	 */
 	public function get_label() {
 		return 'Sliced Invoices';
 	}
 
+	/**
+	 * Returns the URL for the step icon.
+	 *
+	 * @return string
+	 */
 	public function get_icon_url() {
 		return $this->get_base_url() . '/images/sliced-invoices-icon.svg';
 	}
@@ -166,7 +195,7 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 	 *
 	 * @since 1.6.1-dev-2
 	 *
-	 * @param int $id The invoice (post) ID.
+	 * @param int   $id    The invoice (post) ID.
 	 * @param array $entry The entry which created the invoice.
 	 */
 	public function maybe_set_line_items( $id, $entry ) {
