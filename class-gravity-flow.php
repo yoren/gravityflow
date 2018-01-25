@@ -4689,10 +4689,13 @@ PRIMARY KEY  (id)
 
 					$this->log_debug( __METHOD__ . '() - getting next step.' );
 
-					$step = $this->get_next_step( $step, $entry, $form );
+					// Refresh the entry before getting the next step.
+					$entry         = GFAPI::get_entry( $entry_id );
+					$step          = $this->get_next_step( $step, $entry, $form );
 					$step_complete = false;
+
 					if ( $step ) {
-						$step_id = $step->get_id();
+						$step_id       = $step->get_id();
 						$step_complete = $step->start();
 						if ( $step_complete ) {
 							$step->end();
