@@ -1950,6 +1950,10 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$columns     = $this->get_columns();
 		$column_keys = array_keys( $columns );
 
+		if ( ( $cb = array_search( 'cb', $column_keys ) ) !== false ) {
+			unset( $column_keys[ $cb ] );
+		}
+
 		foreach ( $this->items as $item ) {
 			$row_values = array();
 			foreach ( $column_keys as $column_key ) {
