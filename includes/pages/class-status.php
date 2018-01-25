@@ -1969,7 +1969,11 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 							$user_id = $item['created_by'];
 							if ( $user_id ) {
 								$user         = get_user_by( 'id', $user_id );
-								$col_val = $user->display_name;
+								if ( empty( $user ) || is_wp_error( $user ) ) {
+									$col_val = $user_id . ' ' . esc_html__( '(deleted)', 'gravityflow' );
+								} else {
+									$col_val = $user->display_name;
+								}
 							} else {
 								$col_val = $item['ip'];
 							}
