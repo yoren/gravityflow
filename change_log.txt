@@ -1,1 +1,2 @@
+- Status Page - Updated export to match table display and run gravityflow_field_value_status_table filter
 - Fixed an issue where, in some situations, getting the next step was not using the latest version of the entry.
