@@ -1950,16 +1950,30 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$columns     = $this->get_columns();
 		$column_keys = array_keys( $columns );
 
+		if ( ( $cb = array_search( 'cb', $column_keys ) ) !== false ) {
+			unset( $column_keys[ $cb ] );
+		}
+
 		foreach ( $this->items as $item ) {
 			$row_values = array();
 			foreach ( $column_keys as $column_key ) {
+				$col_val = null;
 				if ( array_key_exists( $column_key, $item ) ) {
 					switch ( $column_key ) {
+						case 'form_id' :
+							$form_id = rgar( $item, 'form_id' );
+							$form = $this->get_form( $form_id );
+							$col_val = $form['title'];
+						break;
 						case 'created_by' :
 							$user_id = $item['created_by'];
 							if ( $user_id ) {
 								$user         = get_user_by( 'id', $user_id );
-								$col_val = $user->display_name;
+								if ( empty( $user ) || is_wp_error( $user ) ) {
+									$col_val = $user_id . ' ' . esc_html__( '(deleted)', 'gravityflow' );
+								} else {
+									$col_val = $user->display_name;
+								}
 							} else {
 								$col_val = $item['ip'];
 							}
@@ -1976,7 +1990,21 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 						default :
 							$col_val = $item[ $column_key ];
 					}
+				}
 
+				/**
+				 * Allows the field value to be filtered in the status table.
+				 *
+				 * @since 1.7.1
+				 *
+				 * @param string $label The value to be displayed
+				 * @param int $item['form_id'] The Form ID
+				 * @param string 'id'
+				 * @param array $item The entry array.
+				 */
+				$col_val = apply_filters( 'gravityflow_field_value_status_table', $col_val, $item['form_id'], $column_key, $item );
+
+				if ( null !== $col_val ) {
 					$row_values[] = '"' . addslashes( $col_val ) . '"';
 				}
 			}
