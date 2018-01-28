@@ -1179,7 +1179,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			 */
 			foreach ( $calculation_fields as $calculation_field ) {
 				// Make sure that the value gets recalculated.
-				$calculation_field->conditionalLogic = null;
+				if ( ! $this->conditional_logic_editable_fields_enabled ) {
+					$calculation_field->conditionalLogic = null;
+				}
 
 				$inputs = $calculation_field->get_entry_inputs();
 
