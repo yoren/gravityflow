@@ -320,6 +320,10 @@ if ( class_exists( 'GFForms' ) ) {
 				if ( version_compare( $previous_version,'1.7.1-dev', '<' ) ) {
 					$this->upgrade_171();
 				}
+
+				if ( version_compare( $previous_version, '2.0.2-dev', '<' ) ) {
+					$this->upgrade_202();
+				}
 			}
 
 			wp_cache_flush();
@@ -438,6 +442,43 @@ PRIMARY KEY  (id)
 
 				if ( $step_dirty ) {
 					$this->save_feed_settings( $step->get_id(), $step->get_form_id(), $step->get_feed_meta() );
+				}
+			}
+		}
+
+		/**
+		 * Migrate the custom settings added by Gravity_Flow_Step_Feed_Sliced_Invoices to their equivalent settings in the Sliced Invoices add-on.
+		 */
+		public function upgrade_202() {
+			$feeds = $this->get_feeds_by_slug( 'slicedinvoices' );
+
+			foreach ( $feeds as $feed ) {
+				$feed_dirty = false;
+				$feed_meta  = $feed['meta'];
+
+				$quote_status = rgar( $feed_meta, 'quote_status' );
+				if ( $quote_status ) {
+					$feed_meta['set_quote_status'] = $quote_status;
+					unset( $feed_meta['quote_status'] );
+					$feed_dirty = true;
+				}
+
+				$invoice_status = rgar( $feed_meta, 'invoice_status' );
+				if ( $quote_status ) {
+					$feed_meta['set_invoice_status'] = $invoice_status;
+					unset( $feed_meta['invoice_status'] );
+					$feed_dirty = true;
+				}
+
+				$line_items = rgar( $feed_meta, 'mappedFields_line_items' );
+				if ( $line_items === 'entry_order_summary' ) {
+					$feed_meta['use_product_fields']      = true;
+					$feed_meta['mappedFields_line_items'] = '';
+					$feed_dirty                           = true;
+				}
+
+				if ( $feed_dirty ) {
+					$this->update_feed_meta( $feed['id'], $feed_meta );
 				}
 			}
 		}

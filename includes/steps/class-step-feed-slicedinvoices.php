@@ -139,11 +139,6 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 	 * @return bool Returning false if the feed created an invoice to ensure the next step is not processed until after the invoice is paid.
 	 */
 	public function process_feed( $feed ) {
-		if ( rgars( $feed, 'meta/mappedFields_line_items' ) == 'entry_order_summary' ) {
-			// The sliced add-on is expecting a list field, prevent it from attempting to process the field value and setting the line items.
-			$feed['meta']['mappedFields_line_items'] = '';
-			$this->product_line_items_enabled        = true;
-		}
 
 		add_action( 'sliced_gravityforms_feed_processed', array( $this, 'sliced_gravityforms_feed_processed' ), 1, 3 );
 		parent::process_feed( $feed );
@@ -163,86 +158,14 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 	 * @param array $entry The entry which created the invoice.
 	 */
 	public function sliced_gravityforms_feed_processed( $id, $feed, $entry ) {
-
-		$this->maybe_set_line_items( $id, $entry );
-
-		if ( rgars( $feed, 'meta/post_type' ) === 'invoice' ) {
-			if ( $this->post_feed_completion === 'delayed' ) {
-				// Store the IDs so we can complete the step once the invoice is paid.
-				update_post_meta( $id, '_gform-entry-id', rgar( $entry, 'id' ) );
-				update_post_meta( $id, '_gform-feed-id', rgar( $feed, 'id' ) );
-				update_post_meta( $id, '_gravityflow-step-id', $this->get_id() );
-				if ( function_exists( 'sliced_get_accepted_payment_methods' ) ) {
-					update_post_meta( $id, '_sliced_payment_methods', array_keys( sliced_get_accepted_payment_methods() ) );
-				}
+		if ( rgars( $feed, 'meta/post_type' ) === 'invoice' && $this->post_feed_completion === 'delayed' ) {
+			// Store the IDs so we can complete the step once the invoice is paid.
+			update_post_meta( $id, '_gform-entry-id', rgar( $entry, 'id' ) );
+			update_post_meta( $id, '_gform-feed-id', rgar( $feed, 'id' ) );
+			update_post_meta( $id, '_gravityflow-step-id', $this->get_id() );
+			if ( function_exists( 'sliced_get_accepted_payment_methods' ) ) {
+				update_post_meta( $id, '_sliced_payment_methods', array_keys( sliced_get_accepted_payment_methods() ) );
 			}
-
-			$invoice_status = rgars( $feed, 'meta/invoice_status' );
-			if ( $invoice_status && class_exists( 'Sliced_Invoice' ) ) {
-				Sliced_Invoice::set_status( $invoice_status, $id );
-			}
-		} else {
-			$quote_status = rgars( $feed, 'meta/quote_status' );
-			if ( $quote_status && class_exists( 'Sliced_Quote' ) ) {
-				// Args are reversed, not a typo.
-				Sliced_Quote::set_status( $id, $quote_status );
-			}
-		}
-	}
-
-	/**
-	 * Set the invoice/quote line items from the entry products, if enabled.
-	 *
-	 * @since 1.6.1-dev-2
-	 *
-	 * @param int   $id    The invoice (post) ID.
-	 * @param array $entry The entry which created the invoice.
-	 */
-	public function maybe_set_line_items( $id, $entry ) {
-		if ( ! $this->product_line_items_enabled ) {
-			return;
-		}
-
-		$products = GFCommon::get_product_fields( $this->get_form(), $entry );
-
-		if ( empty( $products['products'] ) ) {
-			return;
-		}
-
-		$line_items = array();
-
-		foreach ( $products['products'] as $product ) {
-			$options = array();
-			if ( is_array( rgar( $product, 'options' ) ) ) {
-				foreach ( $product['options'] as $option ) {
-					$options[] = $option['option_name'];
-				}
-			}
-
-			$description = '';
-			if ( ! empty( $options ) ) {
-				$description = esc_html__( 'options: ', 'gravityflow' ) . ' ' . implode( ', ', $options );
-			}
-
-			$line_items[] = array(
-				'qty'         => esc_html( rgar( $product, 'quantity' ) ),
-				'title'       => esc_html( rgar( $product, 'name' ) ),
-				'description' => wp_kses_post( $description ),
-				'amount'      => GFCommon::to_number( rgar( $product, 'price', 0 ), $entry['currency'] ),
-			);
-		}
-
-		if ( ! empty( $products['shipping']['name'] ) ) {
-			$line_items[] = array(
-				'qty'         => 1,
-				'title'       => esc_html( $products['shipping']['name'] ),
-				'description' => '',
-				'amount'      => GFCommon::to_number( rgar( $products['shipping'], 'price', 0 ), $entry['currency'] ),
-			);
-		}
-
-		if ( ! empty( $line_items ) ) {
-			update_post_meta( $id, '_sliced_items', $line_items );
 		}
 	}
 
@@ -394,112 +317,8 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 		}
 	}
 
-	/**
-	 * Gets the choices array for the default status settings.
-	 *
-	 * @param string $type The object type; invoice or quote.
-	 *
-	 * @since 1.6.1-dev-2
-	 *
-	 * @return array
-	 */
-	public static function get_sliced_status_choices( $type ) {
-		$terms   = get_terms( array( 'taxonomy' => $type . '_status', 'hide_empty' => 0 ) );
-		$choices = array();
-
-		if ( ! is_wp_error( $terms ) ) {
-			/* @var WP_Term $term */
-			foreach ( $terms as $term ) {
-				$choices[] = array(
-					'label' => $term->name,
-					'value' => $term->slug !== 'draft' ? $term->slug : ''
-				);
-			}
-		}
-
-		return $choices;
-	}
-
-	/**
-	 * Override the settings on the Sliced Invoices add-on feed configuration page.
-	 *
-	 * @since 1.6.1-dev-2
-	 *
-	 * @param array              $feed_settings_fields The array of feed settings fields which will be displayed on the add-ons feed configuration page.
-	 * @param Sliced_Invoices_GF $add_on               The current instance of the add-on.
-	 *
-	 * @return array
-	 */
-	public static function feed_settings_fields( $feed_settings_fields, $add_on ) {
-		$field = $add_on->get_field( 'mappedFields', $feed_settings_fields );
-
-		if ( isset( $field['field_map'] ) && is_array( $field['field_map'] ) ) {
-			foreach ( $field['field_map'] as &$child_field ) {
-				if ( rgar( $child_field, 'name' ) !== 'line_items' ) {
-					continue;
-				}
-
-				$child_field['field_type'] = array( 'list', 'entry_order_summary' );
-			}
-
-			$feed_settings_fields = $add_on->replace_field( 'mappedFields', $field, $feed_settings_fields );
-		}
-
-		$new_settings = array(
-			array(
-				'name'       => 'quote_status',
-				'type'       => 'select',
-				'label'      => __( 'Default Status', 'gravityflow' ),
-				'choices'    => self::get_sliced_status_choices( 'quote' ),
-				'dependency' => array(
-					'field'  => 'post_type',
-					'values' => 'quote',
-				)
-			),
-			array(
-				'name'       => 'invoice_status',
-				'type'       => 'select',
-				'label'      => __( 'Default Status', 'gravityflow' ),
-				'choices'    => self::get_sliced_status_choices( 'invoice' ),
-				'dependency' => array(
-					'field'  => 'post_type',
-					'values' => 'invoice',
-				)
-			)
-		);
-
-		$feed_settings_fields = $add_on->add_field_before( 'mappedFields', $new_settings, $feed_settings_fields );
-
-
-		return $feed_settings_fields;
-	}
-
-	/**
-	 * Override the map choices for the Line Item field on the Sliced Invoices add-on feed configuration page.
-	 *
-	 * @since 1.6.1-dev-2
-	 *
-	 * @param array      $fields     The value and label properties for each choice.
-	 * @param int        $form_id    The ID of the form currently being configured.
-	 * @param null|array $field_type Null or the field types to be included in the drop down.
-	 *
-	 * @return array
-	 */
-	public static function field_map_choices( $fields, $form_id, $field_type ) {
-		if ( is_array( $field_type ) && in_array( 'entry_order_summary', $field_type ) ) {
-			$fields[] = array(
-				'label' => __( 'Entry Order Summary', 'gravityflow' ),
-				'value' => 'entry_order_summary'
-			);
-		}
-
-		return $fields;
-	}
-
 }
 
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_Sliced_Invoices() );
 
 add_action( 'sliced_invoice_status_update', array( 'Gravity_Flow_Step_Feed_Sliced_Invoices', 'invoice_status_update' ), 10, 2 );
-add_filter( 'gform_slicedinvoices_feed_settings_fields', array( 'Gravity_Flow_Step_Feed_Sliced_Invoices', 'feed_settings_fields' ), 10, 2 );
-add_filter( 'gform_slicedinvoices_field_map_choices', array( 'Gravity_Flow_Step_Feed_Sliced_Invoices', 'field_map_choices' ), 10, 3 );
