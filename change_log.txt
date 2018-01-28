@@ -1,2 +1,4 @@
 - Status Page - Updated export to match table display and run gravityflow_field_value_status_table filter
 - Fixed an issue where, in some situations, getting the next step was not using the latest version of the entry.
+- Fixed an issue where calculated product fields hidden by conditional logic could appear in order summary when the entry is updated on the User Input step.
+- Updated the Sliced Invoices integration.
