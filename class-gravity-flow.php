@@ -4174,7 +4174,23 @@ PRIMARY KEY  (id)
 							$api = new Gravity_Flow_API( $form_id );
 							$result = $api->cancel_workflow( $entry );
 							if ( $result ) {
-								esc_html_e( 'Workflow Cancelled', 'gravityflow' );
+								$feedback = esc_html__( 'Workflow Cancelled', 'gravityflow' );
+								/**
+								 * Allows the user feedback to be modified after cancelling the workflow with the cancel link.
+								 *
+								 * Return a sanitized string.
+								 *
+								 * @since 2.0.2
+								 *
+								 * @param string                $feedback   The sanitized feedback to send to the browser.
+								 * @param array                 $entry      The current entry array.
+								 * @param Gravity_Flow_Assignee $assignee   The assignee object.
+								 * @param string                $new_status The new status
+								 * @param array                 $form       The current form array.
+								 * @param Gravity_Flow_Step     $step       The current step
+								 */
+								$feedback = apply_filters( 'gravityflow_feedback_cancel_workflow', $feedback, $entry, $form, $step );
+								echo $feedback;
 							}
 							return;
 						}

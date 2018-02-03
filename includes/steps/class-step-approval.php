@@ -483,7 +483,20 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 			do_action( 'gravityflow_post_status_update_approval', $entry, $assignee, $new_status, $form );
 
-			$feedback = apply_filters( 'gravityflow_feedback_approval', $feedback, $entry, $assignee, $new_status, $form );
+			/**
+			 * Allows the user feedback to be modified after processing the approval status update.
+			 *
+			 * @since 2.0.2 Added the current step
+			 * @since 1.7.1
+			 *
+			 * @param string                $feedback   The feedback to send to the browser.
+			 * @param array                 $entry      The current entry array.
+			 * @param Gravity_Flow_Assignee $assignee   The assignee object.
+			 * @param string                $new_status The new status
+			 * @param array                 $form       The current form array.
+			 * @param Gravity_Flow_Step     $step       The current step
+			 */
+			$feedback = apply_filters( 'gravityflow_feedback_approval', $feedback, $entry, $assignee, $new_status, $form, $this );
 
 		}
 
@@ -984,6 +997,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		/**
 		 * Allows the user feedback to be modified after processing the token action.
 		 *
+		 * @since 2.0.2 Added the current step
 		 * @since 1.7.1
 		 *
 		 * @param string                $feedback   The feedback to send to the browser.
@@ -991,8 +1005,9 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		 * @param Gravity_Flow_Assignee $assignee   The assignee object.
 		 * @param string                $new_status The new status
 		 * @param array                 $form       The current form array.
+		 * @param Gravity_Flow_Step     $step       The current step
 		 */
-		$feedback = apply_filters( 'gravityflow_feedback_approval_token', $feedback, $entry, $assignee, $new_status, $form );
+		$feedback = apply_filters( 'gravityflow_feedback_approval_token', $feedback, $entry, $assignee, $new_status, $form, $this );
 
 		return $feedback;
 	}
