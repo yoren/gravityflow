@@ -654,6 +654,18 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$schedule_date_gmt = get_gmt_from_date( $schedule_date );
 			$schedule_datetime = strtotime( $schedule_date_gmt );
 
+			/**
+			 * Allows the scheduled date/timestamp to be custom defined.
+			 *
+			 * @since 2.0.2-dev
+			 *
+			 * @param int                  $schedule_timestamp The current scheduled timestamp (UTC)
+			 * @param string               $schedule_type      The type of schedule defined in step settings.
+			 * @param Gravity_Flow_Step    $this               The current step.
+			 *
+			 * @return int
+			 */
+			$schedule_datetime = apply_filters( 'gravityflow_step_schedule_timestamp', $schedule_datetime, $this->schedule_type, $this );
 			return $schedule_datetime;
 		}
 
@@ -694,6 +706,18 @@ abstract class Gravity_Flow_Step extends stdClass {
 				}
 			}
 
+			/**
+			 * Allows the scheduled date/timestamp to be custom defined.
+			 *
+			 * @since 2.0.2-dev
+			 *
+			 * @param int                  $schedule_timestamp The current scheduled timestamp (UTC)
+			 * @param string               $schedule_type      The type of schedule defined in step settings.
+			 * @param Gravity_Flow_Step    $this               The current step.
+			 *
+			 * @return int
+			 */
+			$schedule_datetime = apply_filters( 'gravityflow_step_schedule_timestamp', $schedule_datetime, $this->schedule_type, $this );
 			return $schedule_datetime;
 		}
 
@@ -716,6 +740,18 @@ abstract class Gravity_Flow_Step extends stdClass {
 				break;
 		}
 
+		/**
+		 * Allows the scheduled date/timestamp to be custom defined.
+		 *
+		 * @since 2.0.2-dev
+		 *
+		 * @param int                  $schedule_timestamp The current scheduled timestamp (UTC)
+		 * @param string               $schedule_type      The type of schedule defined in step settings.
+		 * @param Gravity_Flow_Step    $this               The current step.
+		 *
+		 * @return int
+		 */
+		$schedule_timestamp = apply_filters( 'gravityflow_step_schedule_timestamp', $schedule_timestamp, $this->schedule_type, $this );
 		return $schedule_timestamp;
 	}
 
