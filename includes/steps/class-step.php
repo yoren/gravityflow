@@ -659,13 +659,13 @@ abstract class Gravity_Flow_Step extends stdClass {
 			 *
 			 * @since 2.0.2-dev
 			 *
-			 * @param timestamp            $schedule_timestamp The current scheduled timestamp.
+			 * @param int                  $schedule_timestamp The current scheduled timestamp (UTC)
 			 * @param string               $schedule_type      The type of schedule defined in step settings.
 			 * @param Gravity_Flow_Step    $this               The current step.
 			 *
-			 * @return timestamp
+			 * @return int
 			 */
-			$schedule_datetime = apply_filters( 'gravityflow_schedule_timestamp', $schedule_datetime, $this->schedule_type, $this );
+			$schedule_datetime = apply_filters( 'gravityflow_step_schedule_timestamp', $schedule_datetime, $this->schedule_type, $this );
 			return $schedule_datetime;
 		}
 
@@ -711,13 +711,13 @@ abstract class Gravity_Flow_Step extends stdClass {
 			 *
 			 * @since 2.0.2-dev
 			 *
-			 * @param timestamp            $schedule_timestamp The current scheduled timestamp.
+			 * @param int                  $schedule_timestamp The current scheduled timestamp (UTC)
 			 * @param string               $schedule_type      The type of schedule defined in step settings.
 			 * @param Gravity_Flow_Step    $this               The current step.
 			 *
-			 * @return timestamp
+			 * @return int
 			 */
-			$schedule_datetime = apply_filters( 'gravityflow_schedule_timestamp', $schedule_datetime, $this->schedule_type, $this );
+			$schedule_datetime = apply_filters( 'gravityflow_step_schedule_timestamp', $schedule_datetime, $this->schedule_type, $this );
 			return $schedule_datetime;
 		}
 
@@ -745,13 +745,13 @@ abstract class Gravity_Flow_Step extends stdClass {
 		 *
 		 * @since 2.0.2-dev
 		 *
-		 * @param timestamp            $schedule_timestamp The current scheduled timestamp.
+		 * @param int                  $schedule_timestamp The current scheduled timestamp (UTC)
 		 * @param string               $schedule_type      The type of schedule defined in step settings.
 		 * @param Gravity_Flow_Step    $this               The current step.
 		 *
-		 * @return timestamp
+		 * @return int
 		 */
-		$schedule_timestamp = apply_filters( 'gravityflow_schedule_timestamp', $schedule_timestamp, $this->schedule_type, $this );
+		$schedule_timestamp = apply_filters( 'gravityflow_step_schedule_timestamp', $schedule_timestamp, $this->schedule_type, $this );
 		return $schedule_timestamp;
 	}
 
