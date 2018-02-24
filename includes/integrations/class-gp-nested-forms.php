@@ -161,7 +161,7 @@ class Gravity_Flow_GP_Nested_Forms {
 	 * @return bool
 	 */
 	private function is_current_step_submission() {
-		return rgpost( 'gravityflow_submit' ) == $this->get_form()['id'] && $this->get_step_id() == $this->get_current_step()->get_id();
+		return rgpost( 'gravityflow_submit' ) == rgar( $this->get_form(), 'id' ) && $this->get_step_id() == $this->get_current_step()->get_id();
 	}
 
 	/**
