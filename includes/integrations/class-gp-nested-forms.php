@@ -345,7 +345,7 @@ class Gravity_Flow_GP_Nested_Forms {
 	 */
 	private function maybe_process_nested_form_workflows( $entry, $form ) {
 		foreach ( $form['fields'] as $field ) {
-			if ( $field->type !== 'form' ) {
+			if ( $field->type !== 'form' || $field->gpnfFeedProcessing === 'child' ) {
 				continue;
 			}
 
