@@ -328,9 +328,9 @@ class Gravity_Flow_GP_Nested_Forms {
 			$current_step->log_debug( __METHOD__ . '(): triggering processing of delayed nested form notifications and feeds.' );
 			$entry = $current_step->get_entry();
 			$form  = $current_step->get_form();
+			$this->maybe_process_nested_form_workflows( $entry, $form );
 			gpnf_notification_processing()->maybe_send_child_notifications( $entry, $form );
 			gpnf_feed_processing()->process_feeds( $entry, $form );
-			$this->maybe_process_nested_form_workflows( $entry, $form );
 			gform_delete_meta( $entry_id, $meta_key );
 		}
 	}
@@ -344,20 +344,26 @@ class Gravity_Flow_GP_Nested_Forms {
 	 * @param array $form  The parent form.
 	 */
 	private function maybe_process_nested_form_workflows( $entry, $form ) {
+		remove_filter( 'gravityflow_is_delayed_pre_process_workflow', array(
+			$this,
+			'filter_gravityflow_is_delayed_pre_process_workflow'
+		) );
+
 		foreach ( $form['fields'] as $field ) {
 			if ( $field->type !== 'form' || $field->gpnfFeedProcessing === 'child' ) {
 				continue;
 			}
 
-			$entry_ids = array_map( 'trim', explode( ',', rgar( $entry, $field->id, '' ) ) );
-			if ( empty( $entry_ids ) ) {
+			$entries = gp_nested_forms()->get_entries( rgar( $entry, $field->id ) );
+			if ( empty( $entries ) ) {
 				continue;
 			}
 
 			$nested_form = GFAPI::get_form( $field->gpnfForm );
 
-			foreach ( $entry_ids as $entry_id ) {
-				gravity_flow()->process_workflow( $nested_form, $entry_id );
+			foreach ( $entries as $entry ) {
+				gravity_flow()->action_entry_created( $entry, $nested_form );
+				gravity_flow()->process_workflow( $nested_form, $entry['id'] );
 			}
 		}
 	}
