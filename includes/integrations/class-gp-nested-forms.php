@@ -179,6 +179,7 @@ class Gravity_Flow_GP_Nested_Forms {
 
 		add_filter( 'gravityflow_field_value_entry_editor', array( $this, 'filter_gravityflow_field_value_entry_editor' ), 10, 5 );
 		add_filter( 'gravityflow_is_delayed_pre_process_workflow', array( $this, 'filter_gravityflow_is_delayed_pre_process_workflow' ) );
+		add_filter( 'gpnf_entry_url', array( $this, 'filter_gpnf_entry_url' ), 10, 3 );
 	}
 
 	/**
@@ -198,6 +199,21 @@ class Gravity_Flow_GP_Nested_Forms {
 		}
 
 		return $is_delayed;
+	}
+
+	/**
+	 * Replaces the entry detail page URL with the workflow detail page URL for the child entry.
+	 *
+	 * @since 2.0.2-dev
+	 *
+	 * @param string $url      The entry detail page URL.
+	 * @param int    $entry_id The child entry ID.
+	 * @param int    $form_id  The Nested Form form ID.
+	 *
+	 * @return string
+	 */
+	public function filter_gpnf_entry_url( $url, $entry_id, $form_id ) {
+		return add_query_arg( array( 'id' => $form_id, 'lid' => $entry_id ) );
 	}
 
 	/**
