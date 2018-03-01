@@ -170,12 +170,16 @@ class Gravity_Flow_GP_Nested_Forms {
 	 * @since 2.0.2-dev
 	 */
 	private function maybe_delete_cookie() {
-		if ( ! $this->is_current_step_submission() || empty( GFAPI::get_fields_by_type( $this->get_form(), 'form' ) ) ) {
+		if ( ! $this->is_current_step_submission() ) {
 			return;
 		}
 
-		$session = new GPNF_Session( $this->get_form_id() );
-		$session->delete_cookie();
+		$nested_fields = GFAPI::get_fields_by_type( $this->get_form(), 'form' );
+
+		if ( ! empty( $nested_fields ) ) {
+			$session = new GPNF_Session( $this->get_form_id() );
+			$session->delete_cookie();
+		}
 	}
 
 	/**
