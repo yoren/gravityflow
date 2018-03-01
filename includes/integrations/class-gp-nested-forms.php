@@ -161,7 +161,21 @@ class Gravity_Flow_GP_Nested_Forms {
 	 * @return bool
 	 */
 	private function is_current_step_submission() {
-		return rgpost( 'gravityflow_submit' ) == rgar( $this->get_form(), 'id' ) && $this->get_step_id() == $this->get_current_step()->get_id();
+		return ! empty( $_POST ) && rgpost( 'gravityflow_submit' ) == rgar( $this->get_form(), 'id' ) && $this->get_step_id() == $this->get_current_step()->get_id();
+	}
+
+	/**
+	 * If this is a workflow detail page submission and the form has a Nested Form field delete the cookie set by the perk.
+	 *
+	 * @since 2.0.2-dev
+	 */
+	private function maybe_delete_cookie() {
+		if ( ! $this->is_current_step_submission() || empty( GFAPI::get_fields_by_type( $this->get_form(), 'form' ) ) ) {
+			return;
+		}
+
+		$session = new GPNF_Session( $this->get_form_id() );
+		$session->delete_cookie();
 	}
 
 	/**
@@ -177,9 +191,17 @@ class Gravity_Flow_GP_Nested_Forms {
 		add_action( 'gform_after_update_entry', array( $this, 'action_gform_after_update_entry' ), 10, 3 );
 		add_action( 'gravityflow_step_complete', array( $this, 'action_gravityflow_step_complete' ), 10, 5 );
 
-		add_filter( 'gravityflow_field_value_entry_editor', array( $this, 'filter_gravityflow_field_value_entry_editor' ), 10, 5 );
-		add_filter( 'gravityflow_is_delayed_pre_process_workflow', array( $this, 'filter_gravityflow_is_delayed_pre_process_workflow' ) );
+		add_filter( 'gravityflow_field_value_entry_editor', array(
+			$this,
+			'filter_gravityflow_field_value_entry_editor'
+		), 10, 5 );
+		add_filter( 'gravityflow_is_delayed_pre_process_workflow', array(
+			$this,
+			'filter_gravityflow_is_delayed_pre_process_workflow'
+		) );
 		add_filter( 'gpnf_entry_url', array( $this, 'filter_gpnf_entry_url' ), 10, 3 );
+
+		$this->maybe_delete_cookie();
 	}
 
 	/**
@@ -252,7 +274,10 @@ class Gravity_Flow_GP_Nested_Forms {
 		// Removing to prevent the child form markup being generated before the entry editor filters are removed.
 		remove_action( 'gform_get_form_filter', array( gp_nested_forms(), 'handle_nested_forms_markup' ) );
 
-		add_filter( "gpnf_init_script_args_{$form_id}_{$field_id}", array( $this, 'filter_gpnf_init_script_args' ), 10, 2 );
+		add_filter( "gpnf_init_script_args_{$form_id}_{$field_id}", array(
+			$this,
+			'filter_gpnf_init_script_args'
+		), 10, 2 );
 
 		if ( ! has_action( 'admin_footer', array( $this, 'output_nested_forms_markup' ) ) ) {
 			add_action( 'admin_footer', array( $this, 'output_nested_forms_markup' ) );
