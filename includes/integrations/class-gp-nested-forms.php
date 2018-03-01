@@ -183,12 +183,63 @@ class Gravity_Flow_GP_Nested_Forms {
 	}
 
 	/**
-	 * If the GP Nested Forms add-on is available and this is the workflow detail page add the hooks which need loading first.
+	 * If the GP Nested Forms add-on is available add the appropriate hooks for the current location.
 	 *
 	 * @since 2.0.2-dev
 	 */
 	public function maybe_add_hooks() {
-		if ( ! function_exists( 'gp_nested_forms' ) || ! gravity_flow()->is_workflow_detail_page() ) {
+		if ( ! function_exists( 'gp_nested_forms' ) ) {
+			return;
+		}
+
+		if ( gravity_flow()->is_status_page() ) {
+			add_filter( 'gravityflow_status_filter', array( $this, 'filter_gravityflow_status_filter' ) );
+
+			return;
+		}
+
+		$this->maybe_add_detail_page_hooks();
+	}
+
+	/**
+	 * If the Nested Forms query string parameters are present use them to configure the constraint filters.
+	 *
+	 * Ensures only the child entries belonging to specified parent entry are listed.
+	 *
+	 * @since 2.0.2-dev
+	 *
+	 * @param array $args The status page constraint filters.
+	 *
+	 * @return array
+	 */
+	public function filter_gravityflow_status_filter( $args ) {
+		$parent_entry_id      = rgget( GPNF_Entry::ENTRY_PARENT_KEY );
+		$nested_form_field_id = rgget( GPNF_Entry::ENTRY_NESTED_FORM_FIELD_KEY );
+
+		if ( ! $parent_entry_id || ! $nested_form_field_id ) {
+			return $args;
+		}
+
+		$args['form_id']         = rgget( 'id' );
+		$args['field_filters'][] = array(
+			'key'   => GPNF_Entry::ENTRY_PARENT_KEY,
+			'value' => $parent_entry_id
+		);
+		$args['field_filters'][] = array(
+			'key'   => GPNF_Entry::ENTRY_NESTED_FORM_FIELD_KEY,
+			'value' => $nested_form_field_id
+		);
+
+		return $args;
+	}
+
+	/**
+	 * If this is the workflow detail page add the hooks which need loading first.
+	 *
+	 * @since 2.0.2-dev
+	 */
+	private function maybe_add_detail_page_hooks() {
+		if ( ! gravity_flow()->is_workflow_detail_page() ) {
 			return;
 		}
 
@@ -204,6 +255,7 @@ class Gravity_Flow_GP_Nested_Forms {
 			'filter_gravityflow_is_delayed_pre_process_workflow'
 		) );
 		add_filter( 'gpnf_entry_url', array( $this, 'filter_gpnf_entry_url' ), 10, 3 );
+		add_filter( 'gpnf_template_args', array( $this, 'filter_gpnf_template_args' ), 10, 2 );
 
 		$this->maybe_delete_cookie();
 	}
@@ -240,6 +292,33 @@ class Gravity_Flow_GP_Nested_Forms {
 	 */
 	public function filter_gpnf_entry_url( $url, $entry_id, $form_id ) {
 		return add_query_arg( array( 'id' => $form_id, 'lid' => $entry_id ) );
+	}
+
+	/**
+	 * Replaces the entries list page URL with the status page URL.
+	 *
+	 * @since 2.0.2-dev
+	 *
+	 * @param array    $args  The arguments that will be used to render the Nested Form field template.
+	 * @param GF_Field $field The Nested Form field.
+	 *
+	 * @return array
+	 */
+	public function filter_gpnf_template_args( $args, $field ) {
+		$related_entries_link = sprintf(
+			'<a class="gpnf-related-entries-link" href="%s">%s</a>',
+			add_query_arg( array(
+				'page'                                  => 'gravityflow-status',
+				'id'                                    => $field->gpnfForm,
+				GPNF_Entry::ENTRY_PARENT_KEY            => rgget( 'lid' ),
+				GPNF_Entry::ENTRY_NESTED_FORM_FIELD_KEY => $field->id,
+			) ),
+			sprintf( __( 'View Expanded %s List', 'gp-nested-forms' ), $field->get_item_label() )
+		);
+
+		$args['related_entries_link'] = $related_entries_link;
+
+		return $args;
 	}
 
 	/**
