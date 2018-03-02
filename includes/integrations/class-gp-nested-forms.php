@@ -192,11 +192,7 @@ class Gravity_Flow_GP_Nested_Forms {
 			return;
 		}
 
-		if ( gravity_flow()->is_status_page() ) {
-			add_filter( 'gravityflow_status_filter', array( $this, 'filter_gravityflow_status_filter' ) );
-
-			return;
-		}
+		add_filter( 'gravityflow_status_filter', array( $this, 'filter_gravityflow_status_filter' ) );
 
 		$this->maybe_add_detail_page_hooks();
 	}
@@ -305,20 +301,48 @@ class Gravity_Flow_GP_Nested_Forms {
 	 * @return array
 	 */
 	public function filter_gpnf_template_args( $args, $field ) {
-		$related_entries_link = sprintf(
-			'<a class="gpnf-related-entries-link" href="%s">%s</a>',
-			add_query_arg( array(
-				'page'                                  => 'gravityflow-status',
-				'id'                                    => $field->gpnfForm,
-				GPNF_Entry::ENTRY_PARENT_KEY            => rgget( 'lid' ),
-				GPNF_Entry::ENTRY_NESTED_FORM_FIELD_KEY => $field->id,
-			) ),
-			sprintf( __( 'View Expanded %s List', 'gp-nested-forms' ), $field->get_item_label() )
-		);
-
-		$args['related_entries_link'] = $related_entries_link;
+		$url                          = $this->get_related_entries_url( $field );
+		$args['related_entries_link'] = $url ? preg_replace( '~href=".+"~', 'href="' . $url . '"', $args['related_entries_link'] ) : '';
 
 		return $args;
+	}
+
+	/**
+	 * Returns the Status page URL configured with the Nested Forms query arguments for listing the child entries.
+	 *
+	 * @since 2.0.2-dev
+	 *
+	 * @param GF_Field $field The Nested Form field.
+	 *
+	 * @return bool|string
+	 */
+	public function get_related_entries_url( $field ) {
+		if ( ! GFAPI::current_user_can_any( array( 'gravityflow_status', 'gravityflow_status_view_all' ) ) ) {
+			return false;
+		}
+
+		$url        = false;
+		$query_args = array(
+			'page'                                  => 'gravityflow-status',
+			'id'                                    => $field->gpnfForm,
+			GPNF_Entry::ENTRY_PARENT_KEY            => rgget( 'lid' ),
+			GPNF_Entry::ENTRY_NESTED_FORM_FIELD_KEY => $field->id,
+		);
+
+		if ( ! is_admin() ) {
+			$page_id = gravity_flow()->get_app_setting( 'status_page' );
+			if ( $page_id !== 'admin' ) {
+				$url = get_permalink( $page_id );
+			}
+
+			if ( ! $url ) {
+				return false;
+			}
+
+			$query_args['page'] = false;
+		}
+
+		return add_query_arg( $query_args, $url );
 	}
 
 	/**
