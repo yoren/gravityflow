@@ -301,8 +301,10 @@ class Gravity_Flow_GP_Nested_Forms {
 	 * @return array
 	 */
 	public function filter_gpnf_template_args( $args, $field ) {
-		$url                          = $this->get_related_entries_url( $field );
-		$args['related_entries_link'] = $url ? preg_replace( '~href=".+"~', 'href="' . $url . '"', $args['related_entries_link'] ) : '';
+		if ( isset( $args['related_entries_link'] ) ) {
+			$url                          = $this->get_related_entries_url( $field );
+			$args['related_entries_link'] = $url ? preg_replace( '~href=".+"~', 'href="' . $url . '"', $args['related_entries_link'] ) : '';
+		}
 
 		return $args;
 	}
