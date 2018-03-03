@@ -48,6 +48,15 @@ class Gravity_Flow_GP_Nested_Forms {
 	private $_current_step = false;
 
 	/**
+	 * The Nested Form IDs.
+	 *
+	 * @since 2.0.2-dev
+	 *
+	 * @var array
+	 */
+	private $_nested_forms = array();
+
+	/**
 	 * Gravity_Flow_GP_Nested_Forms constructor.
 	 *
 	 * Adds the hooks on the init action, after the GP Nested Form add-on has been loaded.
@@ -362,9 +371,10 @@ class Gravity_Flow_GP_Nested_Forms {
 	 */
 	public function filter_gravityflow_field_value_entry_editor( $value, $field, $form, $entry, $current_step ) {
 		if ( $field->type === 'form' ) {
-			$this->_form         = $form;
-			$this->_entry        = $entry;
-			$this->_current_step = $current_step;
+			$this->_form           = $form;
+			$this->_entry          = $entry;
+			$this->_current_step   = $current_step;
+			$this->_nested_forms[] = $field->gpnfForm;
 			$this->add_late_hooks( $form['id'], $field->id );
 		}
 
@@ -403,7 +413,14 @@ class Gravity_Flow_GP_Nested_Forms {
 	 * @since 2.0.2-dev
 	 */
 	public function output_nested_forms_markup() {
+		unset( $_GET['view'] );
 		echo gp_nested_forms()->get_nested_forms_markup( $this->get_form() );
+
+		if ( is_admin() ) {
+			foreach ( $this->_nested_forms as $nested_form_id ) {
+				GFFormDisplay::footer_init_scripts( $nested_form_id );
+			}
+		}
 	}
 
 	/**
