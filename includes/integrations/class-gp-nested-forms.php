@@ -413,10 +413,13 @@ class Gravity_Flow_GP_Nested_Forms {
 	 * @since 2.0.2-dev
 	 */
 	public function output_nested_forms_markup() {
+		// Prevent GFCommon::get_field_input() displaying the "Product fields are not editable" message.
 		unset( $_GET['view'] );
 		echo gp_nested_forms()->get_nested_forms_markup( $this->get_form() );
 
 		if ( is_admin() ) {
+			// GP Nested Forms forces the child form init scripts into the footer and uses gform_footer_init_scripts_filter to modify them.
+			// GFForms::get_form() does not call GFFormDisplay::footer_init_scripts() in the admin.
 			foreach ( $this->_nested_forms as $nested_form_id ) {
 				GFFormDisplay::footer_init_scripts( $nested_form_id );
 			}
