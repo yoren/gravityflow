@@ -57,13 +57,37 @@ class Gravity_Flow_GP_Nested_Forms {
 	private $_nested_forms = array();
 
 	/**
+	 * The instance of this class.
+	 *
+	 * @since 2.0.2-dev
+	 *
+	 * @var null|Gravity_Flow_GP_Nested_Forms
+	 */
+	private static $_instance = null;
+
+	/**
+	 * Returns an instance of this class, and stores it in the $_instance property.
+	 *
+	 * @since 2.0.2-dev
+	 *
+	 * @return null|Gravity_Flow_GP_Nested_Forms
+	 */
+	public static function get_instance() {
+		if ( self::$_instance === null ) {
+			self::$_instance = new self();
+		}
+
+		return self::$_instance;
+	}
+
+	/**
 	 * Gravity_Flow_GP_Nested_Forms constructor.
 	 *
 	 * Adds the hooks on the init action, after the GP Nested Form add-on has been loaded.
 	 *
 	 * @since 2.0.2-dev
 	 */
-	public function __construct() {
+	private function __construct() {
 		add_action( 'init', array( $this, 'maybe_add_hooks' ) );
 	}
 
@@ -577,4 +601,4 @@ class Gravity_Flow_GP_Nested_Forms {
 
 }
 
-new Gravity_Flow_GP_Nested_Forms();
+Gravity_Flow_GP_Nested_Forms::get_instance();
