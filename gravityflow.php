@@ -73,10 +73,6 @@ class Gravity_Flow_Bootstrap {
 			include( dirname( __FILE__ ) . '/includes/class-feed-extension.php' );
 		}
 
-		if ( ! class_exists( 'Gravity_Flow_Assignee' ) ) {
-			include( dirname( __FILE__ ) . '/includes/class-assignee.php' );
-		}
-
 		if ( class_exists( 'GravityView_Field' ) ) {
 			include( dirname( __FILE__ ) . '/includes/class-gravityview-detail-link.php' );
 		}
@@ -86,15 +82,23 @@ class Gravity_Flow_Bootstrap {
 		require_once( 'includes/class-connected-apps.php' );
 		require_once( 'class-gravity-flow.php' );
 		require_once( 'includes/models/class-activity.php' );
-
 		require_once( 'includes/integrations/class-gp-nested-forms.php' );
 
+		self::include_assignees();
 		self::include_steps();
 		self::include_fields();
 		self::include_merge_tags();
 
 		GFAddOn::register( 'Gravity_Flow' );
 		do_action( 'gravityflow_loaded' );
+	}
+
+	/**
+	 * Includes the assignee classes.
+	 */
+	public static function include_assignees() {
+		require_once( dirname( __FILE__ ) . '/includes/assignees/class-assignees.php' );
+		require_once( dirname( __FILE__ ) . '/includes/assignees/class-assignee.php' );
 	}
 
 	/**
