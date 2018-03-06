@@ -46,7 +46,7 @@ class Gravity_Flow_Activity_List {
 		*
 		* @param int $limit The limit of events.
 		*/
-		$limit = (int) apply_filters( 'gravitylow_event_limit_activity_page', 400 );
+		$limit = (int) apply_filters( 'gravityflow_event_limit_activity_page', 400 );
 
 		$events = Gravity_Flow_Activity::get_events( $limit );
 
