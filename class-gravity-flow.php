@@ -4673,13 +4673,25 @@ PRIMARY KEY  (id)
 				$feed = gf_paypal()->get_single_submission_feed( $entry, $form );
 
 				if ( ! empty( $feed ) && $this->is_delayed( $feed ) && $this->has_paypal_payment( $feed, $form, $entry ) ) {
-					$this->log_debug( __METHOD__ . '() - processing delayed pending PayPal payment for entry id ' . $entry['id'] );
-					remove_action( 'gform_after_submission', array( $this, 'after_submission' ), 9 );
 					$is_delayed = true;
 				}
 			}
 
-			if ( ! $is_delayed ) {
+			/**
+			 * Allow processing of the workflow to be delayed.
+			 *
+			 * @since 2.0.2-dev
+			 *
+			 * @param bool  $is_delayed Indicates if processing of the workflow should be delayed.
+			 * @param array $entry      The current entry.
+			 * @param array $form       The current form.
+			 */
+			$is_delayed = apply_filters( 'gravityflow_is_delayed_pre_process_workflow', $is_delayed, $entry, $form );
+
+			if ( $is_delayed ) {
+				$this->log_debug( __METHOD__ . '() - processing delayed for entry id ' . $entry['id'] );
+				remove_action( 'gform_after_submission', array( $this, 'after_submission' ), 9 );
+			} else {
 				gform_update_meta( $entry['id'], "{$this->_slug}_is_fulfilled", true );
 			}
 		}
