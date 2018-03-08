@@ -1,3 +1,4 @@
+- Added support for the Gravity Perks Nested Forms add-on.
 - Added the current step as parameters to the gravityflow_feedback_approval_token and gravityflow_feedback_approval filters.
 - Added the gravityflow_feedback_cancel_workflow filter to allow the user feedback to be modified when the workflow is cancelled using the cancel workflow link.
 - Added the gravityflow_inbox_search_criteria filter to allow the search criteria to be modify.
