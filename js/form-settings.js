@@ -7,8 +7,8 @@
 		$('#editable_fields, #workflow_notification_users, .gravityflow-multiselect-ui').multiSelect();
 
         $('#assignees').multiSelect({
-            selectableHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='Type to search'>",
-            selectionHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='Type to search'>",
+            selectableHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='"+gravityflow_form_settings_js_strings.assigneeSearchPlaceholder+"'>",
+            selectionHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='"+gravityflow_form_settings_js_strings.assigneeSearchPlaceholder+"'>",
             afterInit: function(ms){
                 var that = this,
                     $selectableSearch = that.$selectableUl.prev(),

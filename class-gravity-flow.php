@@ -598,6 +598,7 @@ PRIMARY KEY  (id)
 						'feedId'         => absint( rgget( 'fid' ) ),
 						'formId'         => absint( rgget( 'id' ) ),
 						'mergeTagLabels' => $this->get_form_settings_js_merge_tag_labels(),
+						'assigneeSearchPlaceholder' => esc_attr__( 'Type to search', 'gravityflow' ),
 					),
 				),
 				array(
