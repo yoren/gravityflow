@@ -1,15 +1,15 @@
 # Copyright 2015-2017 Steven Henty.
 # Translators:
-# FX Bénard <fxb@wp-translations.org>, 2015-2017
+# FX Bénard <fxb@wp-translations.org>, 2015-2018
 # Julien Tissier <tefa24600@hotmail.fr>, 2017
 # Matthieu <matthieu@lfm.ch>, 2015
-# Ⓦolforg <contact@wolforg.eu>, 2017
+# Ⓦolforg <contact@wolforg.eu>, 2017-2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
 "POT-Creation-Date: 2017-12-07 10:59:04+00:00\n"
-"PO-Revision-Date: 2017-12-07 17:04+0000\n"
+"PO-Revision-Date: 2018-01-26 13:45+0000\n"
 "Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
 "Language-Team: French (France) (http://www.transifex.com/gravityflow/gravityflow/language/fr_FR/)\n"
 "MIME-Version: 1.0\n"
@@ -108,14 +108,14 @@ msgstr "Description"
 
 #: class-gravity-flow.php:933
 msgid "Highlight"
-msgstr ""
+msgstr "Mettre en évidence"
 
 #: class-gravity-flow.php:936
 msgid ""
 "Highlighted steps will stand out in both the workflow inbox and the step "
 "list. Use highlighting to bring attention to important tasks and to help "
 "organise complex workflows."
-msgstr ""
+msgstr "Les étapes mises en évidence se démarqueront dans la boîte de réception du flux de travail et la liste des étapes. Utilisez la mise en évidence pour attirer l’attention sur des tâches importantes et pour aider à organiser des flux de travail complexes."
 
 #: class-gravity-flow.php:940
 msgid ""
@@ -301,11 +301,11 @@ msgstr "Étape suivante si expiré"
 
 #: class-gravity-flow.php:1845
 msgid "Highlight this step"
-msgstr ""
+msgstr "Mettre en évidence cette étape"
 
 #: class-gravity-flow.php:1864
 msgid "Color"
-msgstr ""
+msgstr "Couleur"
 
 #: class-gravity-flow.php:1982 includes/steps/class-step-approval.php:231
 #: includes/steps/class-step-user-input.php:127
@@ -314,7 +314,7 @@ msgstr "Activer"
 
 #: class-gravity-flow.php:2173
 msgid "You must provide a color value for the active highlight to apply."
-msgstr ""
+msgstr "Vous devez fournir une valeur de couleur à appliquer pour la mise en évidence active."
 
 #: class-gravity-flow.php:2213 class-gravity-flow.php:4011
 msgid "Workflow Complete"
@@ -1105,7 +1105,7 @@ msgstr "Type"
 
 #: includes/class-connected-apps.php:677
 msgid "You don't have any Connected Apps configured."
-msgstr ""
+msgstr "Vous n’avez pas configuré d’app connectée."
 
 #: includes/class-connected-apps.php:737
 #: includes/steps/class-step-feed-slicedinvoices.php:280
@@ -1185,11 +1185,11 @@ msgstr "Exemple de commentaire."
 #: includes/fields/class-field-discussion.php:193
 #: includes/fields/class-field-discussion.php:196
 msgid "View More"
-msgstr ""
+msgstr "Voir plus"
 
 #: includes/fields/class-field-discussion.php:194
 msgid "View Less"
-msgstr ""
+msgstr "Voir moins"
 
 #: includes/fields/class-field-discussion.php:306
 msgid "Delete Comment"
@@ -2023,7 +2023,7 @@ msgstr "Nombre"
 
 #: includes/steps/class-step-feed-slicedinvoices.php:272
 msgid "Invoice Sent"
-msgstr ""
+msgstr "Facture envoyée"
 
 #: includes/steps/class-step-feed-slicedinvoices.php:282
 #: includes/steps/class-step-feed-wp-e-signature.php:191
@@ -2203,7 +2203,7 @@ msgstr "Arrière-plan vert"
 
 #: includes/steps/class-step-user-input.php:151
 msgid "Save Progress"
-msgstr ""
+msgstr "Enregistrer la progression"
 
 #: includes/steps/class-step-user-input.php:152
 msgid ""
@@ -2227,7 +2227,7 @@ msgstr "Boutons radio (par défaut : Terminer)"
 
 #: includes/steps/class-step-user-input.php:158
 msgid "Submit buttons (Save and Submit)"
-msgstr ""
+msgstr "Boutons d’envoi (Enregistrer et envoyer)"
 
 #: includes/steps/class-step-user-input.php:170
 msgid "Always Required"
@@ -2308,7 +2308,7 @@ msgstr "En cours"
 
 #: includes/steps/class-step-user-input.php:854
 msgid "Save"
-msgstr ""
+msgstr "Enregistrer"
 
 #: includes/steps/class-step-webhook.php:33
 #: includes/steps/class-step-webhook.php:56
@@ -2346,7 +2346,7 @@ msgstr "App connectée"
 #: includes/steps/class-step-webhook.php:136
 msgid ""
 "Manage your Connected Apps in the Workflow->Settings->Connected Apps page. "
-msgstr ""
+msgstr "Gérer vos app connectée dans Workflow->Réglages->Page des apps connectées."
 
 #: includes/steps/class-step-webhook.php:146
 #: includes/steps/class-step-webhook.php:153

@@ -1,15 +1,15 @@
 # Copyright 2015-2017 Steven Henty.
 # Translators:
-# Ecron <ecron_89@hotmail.com>, 2017
-# FX Bénard <fxb@wp-translations.org>, 2017
+# Ecron <ecron_89@hotmail.com>, 2017-2018
+# FX Bénard <fxb@wp-translations.org>, 2017-2018
 # Xavi Ivars <xavi.ivars@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
 "POT-Creation-Date: 2017-12-07 10:59:04+00:00\n"
-"PO-Revision-Date: 2017-12-07 17:04+0000\n"
-"Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
+"PO-Revision-Date: 2018-01-29 20:01+0000\n"
+"Last-Translator: Xavi Ivars <xavi.ivars@gmail.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/gravityflow/gravityflow/language/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -107,14 +107,14 @@ msgstr "Descripció"
 
 #: class-gravity-flow.php:933
 msgid "Highlight"
-msgstr ""
+msgstr "Destaca"
 
 #: class-gravity-flow.php:936
 msgid ""
 "Highlighted steps will stand out in both the workflow inbox and the step "
 "list. Use highlighting to bring attention to important tasks and to help "
 "organise complex workflows."
-msgstr ""
+msgstr "Els passos destacats sobreeixiran tant a la safata del flux de treball com a la llista de passos. Destaqueu elements per a ressaltar tasques importants i per a ajudar a organitzar fluxos de treball complexos."
 
 #: class-gravity-flow.php:940
 msgid ""
@@ -300,11 +300,11 @@ msgstr "Següent pas si venç"
 
 #: class-gravity-flow.php:1845
 msgid "Highlight this step"
-msgstr ""
+msgstr "Destaca aquest pas"
 
 #: class-gravity-flow.php:1864
 msgid "Color"
-msgstr ""
+msgstr "Color"
 
 #: class-gravity-flow.php:1982 includes/steps/class-step-approval.php:231
 #: includes/steps/class-step-user-input.php:127
@@ -313,7 +313,7 @@ msgstr "Activa"
 
 #: class-gravity-flow.php:2173
 msgid "You must provide a color value for the active highlight to apply."
-msgstr ""
+msgstr "Cal que indiqueu un valor del color per a que s'apliqui el destacat."
 
 #: class-gravity-flow.php:2213 class-gravity-flow.php:4011
 msgid "Workflow Complete"
@@ -1104,7 +1104,7 @@ msgstr "Tipus"
 
 #: includes/class-connected-apps.php:677
 msgid "You don't have any Connected Apps configured."
-msgstr ""
+msgstr "No teniu configurada cap aplicació connectada."
 
 #: includes/class-connected-apps.php:737
 #: includes/steps/class-step-feed-slicedinvoices.php:280
@@ -1184,11 +1184,11 @@ msgstr "Exemple de comentari."
 #: includes/fields/class-field-discussion.php:193
 #: includes/fields/class-field-discussion.php:196
 msgid "View More"
-msgstr ""
+msgstr "Mostra'n més"
 
 #: includes/fields/class-field-discussion.php:194
 msgid "View Less"
-msgstr ""
+msgstr "Mostra'n menys"
 
 #: includes/fields/class-field-discussion.php:306
 msgid "Delete Comment"
@@ -2022,7 +2022,7 @@ msgstr "Número"
 
 #: includes/steps/class-step-feed-slicedinvoices.php:272
 msgid "Invoice Sent"
-msgstr ""
+msgstr "S'ha enviat la factura"
 
 #: includes/steps/class-step-feed-slicedinvoices.php:282
 #: includes/steps/class-step-feed-wp-e-signature.php:191
@@ -2202,7 +2202,7 @@ msgstr "Fons verd"
 
 #: includes/steps/class-step-user-input.php:151
 msgid "Save Progress"
-msgstr ""
+msgstr "Desa el progrés"
 
 #: includes/steps/class-step-user-input.php:152
 msgid ""
@@ -2226,7 +2226,7 @@ msgstr "Botons d'opció (predeterminat: Complet)"
 
 #: includes/steps/class-step-user-input.php:158
 msgid "Submit buttons (Save and Submit)"
-msgstr ""
+msgstr "Botons d'enviament (Desa i Envia)"
 
 #: includes/steps/class-step-user-input.php:170
 msgid "Always Required"
@@ -2307,7 +2307,7 @@ msgstr "En progrés"
 
 #: includes/steps/class-step-user-input.php:854
 msgid "Save"
-msgstr ""
+msgstr "Desa"
 
 #: includes/steps/class-step-webhook.php:33
 #: includes/steps/class-step-webhook.php:56
@@ -2345,7 +2345,7 @@ msgstr "Aplicacions connectades"
 #: includes/steps/class-step-webhook.php:136
 msgid ""
 "Manage your Connected Apps in the Workflow->Settings->Connected Apps page. "
-msgstr ""
+msgstr "Gestioneu les aplicacions connectades a la pàgina Flux de treball -> Paràmetres -> Aplicacions connectades."
 
 #: includes/steps/class-step-webhook.php:146
 #: includes/steps/class-step-webhook.php:153
