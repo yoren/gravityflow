@@ -1,21 +1,22 @@
 # Copyright 2015-2017 Steven Henty.
 # Translators:
-# Emre Erkan <kara+transifex@karalamalar.net>, 2017
+# Emre Erkan <kara+transifex@karalamalar.net>, 2017-2018
+# FX Bénard <fxb@wp-translations.org>, 2017
 # Süha Karalar <suhakaralar@gmail.com>, 2016-2017
-# Türker YILDIRIM <turker.biz@gmail.com>, 2017
+# Türker YILDIRIM <turker.biz@gmail.com>, 2017-2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
 "POT-Creation-Date: 2017-12-07 10:59:04+00:00\n"
-"PO-Revision-Date: 2017-12-07 17:04+0000\n"
-"Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
+"PO-Revision-Date: 2018-01-26 15:44+0000\n"
+"Last-Translator: Türker YILDIRIM <turker.biz@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/gravityflow/gravityflow/language/tr_TR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: tr_TR\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Gravity Flow Build Server\n"
 "X-Poedit-Basepath: ../\n"
 "X-Poedit-Bookmarks: \n"
@@ -107,14 +108,14 @@ msgstr "Açıklama"
 
 #: class-gravity-flow.php:933
 msgid "Highlight"
-msgstr ""
+msgstr "Öne çıkar"
 
 #: class-gravity-flow.php:936
 msgid ""
 "Highlighted steps will stand out in both the workflow inbox and the step "
 "list. Use highlighting to bring attention to important tasks and to help "
 "organise complex workflows."
-msgstr ""
+msgstr "Öne çıkarılmış adımlar hem akış diyagramı gelen kutusunda hem de adım listesinde kendini belli eder. Öne çıkarmayı kullanarak önemli görevlere dikkat çekin ve karışık akış diyagramlarının organize edilmesine yardımcı olun."
 
 #: class-gravity-flow.php:940
 msgid ""
@@ -202,6 +203,7 @@ msgid_plural ""
 "There are %s entries currently on this step. These entries may be affected "
 "if the settings are changed."
 msgstr[0] "Bu adımda %s kayıt bulunmaktadır. Ayarlar değişirse bu bu kayıtlar etkilenebilir."
+msgstr[1] "Bu adımda %s kayıt bulunmaktadır. Ayarlar değişirse bu bu kayıtlar etkilenebilir."
 
 #: class-gravity-flow.php:1429
 msgid "Schedule this step"
@@ -299,11 +301,11 @@ msgstr "Zamanı dolduysa sonraki adıma geç"
 
 #: class-gravity-flow.php:1845
 msgid "Highlight this step"
-msgstr ""
+msgstr "Bu adımı öne çıkar"
 
 #: class-gravity-flow.php:1864
 msgid "Color"
-msgstr ""
+msgstr "Renk"
 
 #: class-gravity-flow.php:1982 includes/steps/class-step-approval.php:231
 #: includes/steps/class-step-user-input.php:127
@@ -312,7 +314,7 @@ msgstr "Etkinleştir"
 
 #: class-gravity-flow.php:2173
 msgid "You must provide a color value for the active highlight to apply."
-msgstr ""
+msgstr "Etkin öne çıkarmaya uygulanması için bir renk değeri sağlamalısınız."
 
 #: class-gravity-flow.php:2213 class-gravity-flow.php:4011
 msgid "Workflow Complete"
@@ -713,11 +715,13 @@ msgstr "Dikkat! TÜM Gravity Flow verisi silinecektir. Bu geri alınamaz.  Silme
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "%d yıl"
+msgstr[1] "%d yıl"
 
 #: class-gravity-flow.php:5420
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "%d ay"
+msgstr[1] "%d ay"
 
 #: class-gravity-flow.php:5424
 msgid "%dd"
@@ -1101,7 +1105,7 @@ msgstr "Tür"
 
 #: includes/class-connected-apps.php:677
 msgid "You don't have any Connected Apps configured."
-msgstr ""
+msgstr "Ayarlanmış bağlantılı uygulamanız bulunmamaktadır."
 
 #: includes/class-connected-apps.php:737
 #: includes/steps/class-step-feed-slicedinvoices.php:280
@@ -1181,11 +1185,11 @@ msgstr "Örnek yorum."
 #: includes/fields/class-field-discussion.php:193
 #: includes/fields/class-field-discussion.php:196
 msgid "View More"
-msgstr ""
+msgstr "Daha fazla göster"
 
 #: includes/fields/class-field-discussion.php:194
 msgid "View Less"
-msgstr ""
+msgstr "Daha az göster"
 
 #: includes/fields/class-field-discussion.php:306
 msgid "Delete Comment"
@@ -2019,7 +2023,7 @@ msgstr "Sayı"
 
 #: includes/steps/class-step-feed-slicedinvoices.php:272
 msgid "Invoice Sent"
-msgstr ""
+msgstr "Fatura gönderildi"
 
 #: includes/steps/class-step-feed-slicedinvoices.php:282
 #: includes/steps/class-step-feed-wp-e-signature.php:191
@@ -2199,7 +2203,7 @@ msgstr "Yeşil arka plan"
 
 #: includes/steps/class-step-user-input.php:151
 msgid "Save Progress"
-msgstr ""
+msgstr "İlerlemeyi kaydet"
 
 #: includes/steps/class-step-user-input.php:152
 msgid ""
@@ -2223,7 +2227,7 @@ msgstr "Radyo düğmeleri (varsayılan: Tamamlandı)"
 
 #: includes/steps/class-step-user-input.php:158
 msgid "Submit buttons (Save and Submit)"
-msgstr ""
+msgstr "Gönderim tuşları (Kaydet ve Gönder)"
 
 #: includes/steps/class-step-user-input.php:170
 msgid "Always Required"
@@ -2304,7 +2308,7 @@ msgstr "İşlem sürüyor"
 
 #: includes/steps/class-step-user-input.php:854
 msgid "Save"
-msgstr ""
+msgstr "Kaydet"
 
 #: includes/steps/class-step-webhook.php:33
 #: includes/steps/class-step-webhook.php:56
@@ -2342,7 +2346,7 @@ msgstr "Bağlantılı uygulama"
 #: includes/steps/class-step-webhook.php:136
 msgid ""
 "Manage your Connected Apps in the Workflow->Settings->Connected Apps page. "
-msgstr ""
+msgstr "Bağlantılı uygulamalarınızı İş akışı -> Ayarlar -> Bağlantılı uygulamalar sayfasından yönetin."
 
 #: includes/steps/class-step-webhook.php:146
 #: includes/steps/class-step-webhook.php:153

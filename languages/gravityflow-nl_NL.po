@@ -3,13 +3,13 @@
 # Erik van Beek <erik@aiwos.nl>, 2015-2017
 # FX Bénard <fxb@wp-translations.org>, 2017
 # Steve Henty, 2015
-# Thom, 2017
+# Thom, 2017-2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
 "POT-Creation-Date: 2017-12-07 10:59:04+00:00\n"
-"PO-Revision-Date: 2017-12-29 09:39+0000\n"
+"PO-Revision-Date: 2018-01-30 16:14+0000\n"
 "Last-Translator: Chantal Coolsma <chantalcoolsma@me.com>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/gravityflow/gravityflow/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
@@ -115,7 +115,7 @@ msgid ""
 "Highlighted steps will stand out in both the workflow inbox and the step "
 "list. Use highlighting to bring attention to important tasks and to help "
 "organise complex workflows."
-msgstr "Gemarkeerde stappen worden benadrukt in zowel de workflow inbox als de stappen lijst. Gebruik markeren om aandacht te vestigen op belangrijke taken en om complexe workflows te organiseren."
+msgstr "Gemarkeerde stappen worden benadrukt in zowel de workflow inbox als de stappenlijst. Gebruik markering om aandacht te vestigen op belangrijke taken en om te helpen bij het organiseren van complexe workflows."
 
 #: class-gravity-flow.php:940
 msgid ""
@@ -314,7 +314,7 @@ msgstr "Inschakelen"
 
 #: class-gravity-flow.php:2173
 msgid "You must provide a color value for the active highlight to apply."
-msgstr "Geef een kleur op om te tonen als deze stap gemarkeerd is. "
+msgstr "Je moet een kleurwaarde voor de actieve markering opgeven om toe te passen."
 
 #: class-gravity-flow.php:2213 class-gravity-flow.php:4011
 msgid "Workflow Complete"
@@ -1105,7 +1105,7 @@ msgstr "Type"
 
 #: includes/class-connected-apps.php:677
 msgid "You don't have any Connected Apps configured."
-msgstr "Er zijn geen verbonden apps ingesteld."
+msgstr "Je hebt nog geen verbonden apps geconfigureerd."
 
 #: includes/class-connected-apps.php:737
 #: includes/steps/class-step-feed-slicedinvoices.php:280
@@ -2203,7 +2203,7 @@ msgstr "Groene achtergrond"
 
 #: includes/steps/class-step-user-input.php:151
 msgid "Save Progress"
-msgstr "Opslaan"
+msgstr "Voortgang opslaan"
 
 #: includes/steps/class-step-user-input.php:152
 msgid ""
@@ -2227,7 +2227,7 @@ msgstr "Keuzerondjes (standaard: Voltooid)"
 
 #: includes/steps/class-step-user-input.php:158
 msgid "Submit buttons (Save and Submit)"
-msgstr "Verzend buttons (Opslaan en Verzenden)"
+msgstr "Verstuur-knoppen (opslaan en versturen)"
 
 #: includes/steps/class-step-user-input.php:170
 msgid "Always Required"
@@ -2346,7 +2346,7 @@ msgstr "Verbonden app"
 #: includes/steps/class-step-webhook.php:136
 msgid ""
 "Manage your Connected Apps in the Workflow->Settings->Connected Apps page. "
-msgstr "Bewerk verbonden apps in de Workflow->Settings->Connected Apps page. "
+msgstr "Beheer je verbonden apps in de Workflow->Instellingen->Verbonden apps-pagina."
 
 #: includes/steps/class-step-webhook.php:146
 #: includes/steps/class-step-webhook.php:153

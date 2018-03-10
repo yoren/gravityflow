@@ -1,6 +1,8 @@
 # Copyright 2015-2017 Steven Henty.
 # Translators:
-# Johan Yourstone <johan.yourstone@gmail.com>, 2017
+# FX Bénard <fxb@wp-translations.org>, 2017
+# Johan Yourstone <johan.yourstone@gmail.com>, 2017-2018
+# RichardD <richard@webdesignern.se>, 2017
 # Rickard Norberg, 2017
 # Rickard Norberg, 2017
 # Tor-Bjorn Fjellner, 2017
@@ -10,8 +12,8 @@ msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
 "POT-Creation-Date: 2017-12-07 10:59:04+00:00\n"
-"PO-Revision-Date: 2017-12-07 17:04+0000\n"
-"Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
+"PO-Revision-Date: 2018-02-07 14:42+0000\n"
+"Last-Translator: Johan Yourstone <johan.yourstone@gmail.com>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/gravityflow/gravityflow/language/sv_SE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -109,14 +111,14 @@ msgstr "Beskrivning"
 
 #: class-gravity-flow.php:933
 msgid "Highlight"
-msgstr ""
+msgstr "Viktigt"
 
 #: class-gravity-flow.php:936
 msgid ""
 "Highlighted steps will stand out in both the workflow inbox and the step "
 "list. Use highlighting to bring attention to important tasks and to help "
 "organise complex workflows."
-msgstr ""
+msgstr "Viktiga steg kommer att markeras med extra synlighet i arbetsflödets inkorg och i listan med steg. Använd markeringen ”Viktigt” för att uppmärksamma viktiga arbetsuppgifter och göra komplicerade arbetsflöden mer organiserade."
 
 #: class-gravity-flow.php:940
 msgid ""
@@ -302,11 +304,11 @@ msgstr "Nästa steg om detta löpt ut"
 
 #: class-gravity-flow.php:1845
 msgid "Highlight this step"
-msgstr ""
+msgstr "Markera detta steg som viktigt"
 
 #: class-gravity-flow.php:1864
 msgid "Color"
-msgstr ""
+msgstr "Färg"
 
 #: class-gravity-flow.php:1982 includes/steps/class-step-approval.php:231
 #: includes/steps/class-step-user-input.php:127
@@ -315,7 +317,7 @@ msgstr "Aktivera"
 
 #: class-gravity-flow.php:2173
 msgid "You must provide a color value for the active highlight to apply."
-msgstr ""
+msgstr "Du måste ange ett färgvärde som kommer att användas för märkning av aktiva viktig-markeringar."
 
 #: class-gravity-flow.php:2213 class-gravity-flow.php:4011
 msgid "Workflow Complete"
@@ -1106,7 +1108,7 @@ msgstr "Typ"
 
 #: includes/class-connected-apps.php:677
 msgid "You don't have any Connected Apps configured."
-msgstr ""
+msgstr "Du har inte konfigurerat några Anslutna appar."
 
 #: includes/class-connected-apps.php:737
 #: includes/steps/class-step-feed-slicedinvoices.php:280
@@ -1186,11 +1188,11 @@ msgstr "Exempelkommentar."
 #: includes/fields/class-field-discussion.php:193
 #: includes/fields/class-field-discussion.php:196
 msgid "View More"
-msgstr ""
+msgstr "Visa mer"
 
 #: includes/fields/class-field-discussion.php:194
 msgid "View Less"
-msgstr ""
+msgstr "Visa mindre"
 
 #: includes/fields/class-field-discussion.php:306
 msgid "Delete Comment"
@@ -2024,7 +2026,7 @@ msgstr "Nummer"
 
 #: includes/steps/class-step-feed-slicedinvoices.php:272
 msgid "Invoice Sent"
-msgstr ""
+msgstr "Faktura har skickats"
 
 #: includes/steps/class-step-feed-slicedinvoices.php:282
 #: includes/steps/class-step-feed-wp-e-signature.php:191
@@ -2204,7 +2206,7 @@ msgstr "Grön bakgrund"
 
 #: includes/steps/class-step-user-input.php:151
 msgid "Save Progress"
-msgstr ""
+msgstr "Spara ärendestatus"
 
 #: includes/steps/class-step-user-input.php:152
 msgid ""
@@ -2228,7 +2230,7 @@ msgstr "Radioknappar (standardvärde: färdigt)"
 
 #: includes/steps/class-step-user-input.php:158
 msgid "Submit buttons (Save and Submit)"
-msgstr ""
+msgstr "Skicka-knappar (spara och skicka)"
 
 #: includes/steps/class-step-user-input.php:170
 msgid "Always Required"
@@ -2309,7 +2311,7 @@ msgstr "Pågår"
 
 #: includes/steps/class-step-user-input.php:854
 msgid "Save"
-msgstr ""
+msgstr "Spara"
 
 #: includes/steps/class-step-webhook.php:33
 #: includes/steps/class-step-webhook.php:56
@@ -2347,7 +2349,7 @@ msgstr "Ansluten app"
 #: includes/steps/class-step-webhook.php:136
 msgid ""
 "Manage your Connected Apps in the Workflow->Settings->Connected Apps page. "
-msgstr ""
+msgstr "Hantera dina anslutna appar på sidan Arbetsflöde->Inställningar->Anslutna appar."
 
 #: includes/steps/class-step-webhook.php:146
 #: includes/steps/class-step-webhook.php:153

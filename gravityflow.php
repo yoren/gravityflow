@@ -3,7 +3,7 @@
 Plugin Name: Gravity Flow
 Plugin URI: https://gravityflow.io
 Description: Build Workflow Applications with Gravity Forms.
-Version: 2.0.2-dev
+Version: 2.1.1-dev
 Author: Gravity Flow
 Author URI: https://gravityflow.io
 License: GPL-3.0+
@@ -27,7 +27,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses.
  */
 
-define( 'GRAVITY_FLOW_VERSION', '2.0.2-dev' );
+define( 'GRAVITY_FLOW_VERSION', '2.1.1-dev' );
 
 define( 'GRAVITY_FLOW_EDD_STORE_URL', 'https://gravityflow.io' );
 
@@ -73,10 +73,6 @@ class Gravity_Flow_Bootstrap {
 			include( dirname( __FILE__ ) . '/includes/class-feed-extension.php' );
 		}
 
-		if ( ! class_exists( 'Gravity_Flow_Assignee' ) ) {
-			include( dirname( __FILE__ ) . '/includes/class-assignee.php' );
-		}
-
 		if ( class_exists( 'GravityView_Field' ) ) {
 			include( dirname( __FILE__ ) . '/includes/class-gravityview-detail-link.php' );
 		}
@@ -86,13 +82,23 @@ class Gravity_Flow_Bootstrap {
 		require_once( 'includes/class-connected-apps.php' );
 		require_once( 'class-gravity-flow.php' );
 		require_once( 'includes/models/class-activity.php' );
+		require_once( 'includes/integrations/class-gp-nested-forms.php' );
 
+		self::include_assignees();
 		self::include_steps();
 		self::include_fields();
 		self::include_merge_tags();
 
 		GFAddOn::register( 'Gravity_Flow' );
 		do_action( 'gravityflow_loaded' );
+	}
+
+	/**
+	 * Includes the assignee classes.
+	 */
+	public static function include_assignees() {
+		require_once( dirname( __FILE__ ) . '/includes/assignees/class-assignees.php' );
+		require_once( dirname( __FILE__ ) . '/includes/assignees/class-assignee.php' );
 	}
 
 	/**

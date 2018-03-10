@@ -1,16 +1,19 @@
 # Copyright 2015-2017 Steven Henty.
 # Translators:
-# Ibon Azkoitia <ibon@kreatidos.com>, 2017
-# Luis Rull <luisrull@gmail.com>, 2017
+# FX Bénard <fxb@wp-translations.org>, 2017
+# Ibon Azkoitia <ibon@kreatidos.com>, 2017-2018
+# Joan Sierra <ventas@1andweb.com>, 2017
+# Luis Rull <luisrull@gmail.com>, 2017-2018
 # Samuel Aguilera 🚀 <registros@samuelaguilera.com>, 2016
 # Samuel Aguilera 🚀 <registros@samuelaguilera.com>, 2017
+# Vincent Mimoun-Prat <vpratfr@yahoo.fr>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
 "POT-Creation-Date: 2017-12-07 10:59:04+00:00\n"
-"PO-Revision-Date: 2017-12-07 17:04+0000\n"
-"Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
+"PO-Revision-Date: 2018-01-25 19:00+0000\n"
+"Last-Translator: Ibon Azkoitia <ibon@kreatidos.com>\n"
 "Language-Team: Spanish (Spain) (http://www.transifex.com/gravityflow/gravityflow/language/es_ES/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -108,14 +111,14 @@ msgstr "Descripción"
 
 #: class-gravity-flow.php:933
 msgid "Highlight"
-msgstr ""
+msgstr "Destacar"
 
 #: class-gravity-flow.php:936
 msgid ""
 "Highlighted steps will stand out in both the workflow inbox and the step "
 "list. Use highlighting to bring attention to important tasks and to help "
 "organise complex workflows."
-msgstr ""
+msgstr "Los pasos destacados resaltarán tanto en la bandeja de entrada del flujo de trabajo como en la lista de pasos. Utilízalo para llamar la atención sobre tareas importantes y para ayudar a organizar los flujos de trabajos complejos."
 
 #: class-gravity-flow.php:940
 msgid ""
@@ -301,11 +304,11 @@ msgstr "Siguiente paso si caduca"
 
 #: class-gravity-flow.php:1845
 msgid "Highlight this step"
-msgstr ""
+msgstr "Destacar este paso"
 
 #: class-gravity-flow.php:1864
 msgid "Color"
-msgstr ""
+msgstr "Color"
 
 #: class-gravity-flow.php:1982 includes/steps/class-step-approval.php:231
 #: includes/steps/class-step-user-input.php:127
@@ -314,7 +317,7 @@ msgstr "Activar"
 
 #: class-gravity-flow.php:2173
 msgid "You must provide a color value for the active highlight to apply."
-msgstr ""
+msgstr "Debes proporcionar un valor de color para que se aplique el destacado activo."
 
 #: class-gravity-flow.php:2213 class-gravity-flow.php:4011
 msgid "Workflow Complete"
@@ -1105,7 +1108,7 @@ msgstr "Tipo"
 
 #: includes/class-connected-apps.php:677
 msgid "You don't have any Connected Apps configured."
-msgstr ""
+msgstr "No tienes Apps conectadas configuradas"
 
 #: includes/class-connected-apps.php:737
 #: includes/steps/class-step-feed-slicedinvoices.php:280
@@ -1185,11 +1188,11 @@ msgstr "Comentario de ejemplo."
 #: includes/fields/class-field-discussion.php:193
 #: includes/fields/class-field-discussion.php:196
 msgid "View More"
-msgstr ""
+msgstr "Ver más"
 
 #: includes/fields/class-field-discussion.php:194
 msgid "View Less"
-msgstr ""
+msgstr "Ver menos"
 
 #: includes/fields/class-field-discussion.php:306
 msgid "Delete Comment"
@@ -2023,7 +2026,7 @@ msgstr "Número"
 
 #: includes/steps/class-step-feed-slicedinvoices.php:272
 msgid "Invoice Sent"
-msgstr ""
+msgstr "Factura enviada"
 
 #: includes/steps/class-step-feed-slicedinvoices.php:282
 #: includes/steps/class-step-feed-wp-e-signature.php:191
@@ -2203,7 +2206,7 @@ msgstr "Fondo verde"
 
 #: includes/steps/class-step-user-input.php:151
 msgid "Save Progress"
-msgstr ""
+msgstr "Guardar progreso"
 
 #: includes/steps/class-step-user-input.php:152
 msgid ""
@@ -2227,7 +2230,7 @@ msgstr "Botones de selección (por defecto: Completado)"
 
 #: includes/steps/class-step-user-input.php:158
 msgid "Submit buttons (Save and Submit)"
-msgstr ""
+msgstr "Botones de envío (Guardar y enviar)"
 
 #: includes/steps/class-step-user-input.php:170
 msgid "Always Required"
@@ -2308,7 +2311,7 @@ msgstr "En progreso"
 
 #: includes/steps/class-step-user-input.php:854
 msgid "Save"
-msgstr ""
+msgstr "Guardar"
 
 #: includes/steps/class-step-webhook.php:33
 #: includes/steps/class-step-webhook.php:56
@@ -2346,7 +2349,7 @@ msgstr "App conectada"
 #: includes/steps/class-step-webhook.php:136
 msgid ""
 "Manage your Connected Apps in the Workflow->Settings->Connected Apps page. "
-msgstr ""
+msgstr "Gestiona tus Apps conectadas en Flujo de trabajo->Ajustes->Apps conectadas"
 
 #: includes/steps/class-step-webhook.php:146
 #: includes/steps/class-step-webhook.php:153
