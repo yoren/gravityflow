@@ -75,6 +75,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Updated the Outgoing Webhook Step to handle multiple response codes appropriate statuses: 2xx (complete), 4xx (error_client), 5xx (error_server), other (error)
 - Fixed an issue where, in some situations, getting the next step was not using the latest version of the entry.
 - Fixed an issue where calculated product fields hidden by conditional logic could appear in order summary when the entry is updated on the User Input step.
+- Fixed an issue where feeds with conditional logic can block the progress of the workflow if the conditional is not met.
 - API: Updated the way assignees are handled to allow the base assignee class to be extended so new types of assignees can be created.
 
 
