@@ -13,8 +13,12 @@
 				var that = this,
 					$selectableSearch = that.$selectableUl.prev(),
 					$selectionSearch = that.$selectionUl.prev(),
-					selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
-					selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+					selectableSearchString = '#'+ms.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+					selectionSearchString = '#'+ms.attr('id')+' .ms-elem-selection.ms-selected';
+
+				if ( $('#'+ms.attr('id')+' .ms-elem-selectable').length > 10 ) {
+					$('.ms-container .search-input').show();
+				}
 
 				that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
 					.on('keydown', function(e){
