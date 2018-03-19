@@ -4,9 +4,9 @@
 
 	$(document).ready(function () {
 
-		$('#editable_fields, #workflow_notification_users, .gravityflow-multiselect-ui').multiSelect();
+		$('#editable_fields, .gravityflow-multiselect-ui').multiSelect();
 
-		$('#assignees').multiSelect({
+		$('#workflow_notification_users, #assignees, #rejection_notification_users, #approval_notification_users').multiSelect({
 			selectableHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='"+gravityflow_form_settings_js_strings.assigneeSearchPlaceholder+"'>",
 			selectionHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='"+gravityflow_form_settings_js_strings.assigneeSearchPlaceholder+"'>",
 			afterInit: function(ms){
