@@ -6,7 +6,7 @@
 
 		$('#editable_fields, .gravityflow-multiselect-ui').multiSelect();
 
-		$('#workflow_notification_users, #assignees, #rejection_notification_users, #approval_notification_users').multiSelect({
+		var multiSelectWithSearch = {
 			selectableHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='"+gravityflow_form_settings_js_strings.assigneeSearchPlaceholder+"'>",
 			selectionHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='"+gravityflow_form_settings_js_strings.assigneeSearchPlaceholder+"'>",
 			afterInit: function(ms){
@@ -44,7 +44,9 @@
 				this.qs1.cache();
 				this.qs2.cache();
 			}
-		});
+		};
+
+		$('#assignees').multiSelect(multiSelectWithSearch);
 
 		var gravityFlowIsDirty = false, gravityFlowSubmitted = false;
 
@@ -234,7 +236,7 @@
 		// Notification Tabs
 
 		GravityFlowFeedSettings.initNotificationTab = function (type) {
-			$('#' + type + '_notification_users').multiSelect();
+			$('#' + type + '_notification_users').multiSelect(multiSelectWithSearch);
 
 			var $enabledSetting = $('#' + type + '_notification_enabled');
 
